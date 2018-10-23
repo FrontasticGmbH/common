@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Frontastic Library Common" basedir="./" default="test">
 
+    <property name="frontastic_basedir" value="${basedir}/../../.." />
+
     <!--
         Include local project properties.
     -->
@@ -12,17 +14,17 @@
     <!--
         Import main target defintions (extension points)
     -->
-    <import file="${basedir}/../../integration/main.xml" />
+    <import file="${frontastic_basedir}/integration/main.xml" />
 
     <!--
         Enable used modules
     -->
-    <import file="${basedir}/../../integration/build-commons/modules/composer.xml" />
-    <import file="${basedir}/../../integration/build-commons/modules/phpunit.xml" />
-    <import file="${basedir}/../../integration/build-commons/modules/checkstyle.xml" />
-    <import file="${basedir}/../../integration/build-commons/modules/pdepend.xml" />
-    <import file="${basedir}/../../integration/build-commons/modules/phpcpd.xml" />
-    <import file="${basedir}/../../integration/build-commons/modules/phpmd.xml" />
+    <import file="${frontastic_basedir}/integration/build-commons/modules/composer.xml" />
+    <import file="${frontastic_basedir}/integration/build-commons/modules/phpunit.xml" />
+    <import file="${frontastic_basedir}/integration/build-commons/modules/checkstyle.xml" />
+    <import file="${frontastic_basedir}/integration/build-commons/modules/pdepend.xml" />
+    <import file="${frontastic_basedir}/integration/build-commons/modules/phpcpd.xml" />
+    <import file="${frontastic_basedir}/integration/build-commons/modules/phpmd.xml" />
 
     <!--
         Custom modules
