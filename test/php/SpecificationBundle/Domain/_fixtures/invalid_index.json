@@ -1,0 +1,37 @@
+{
+    "identifier": "invalid_index",
+    "name": "invalid_index",
+    "fields": [
+        {
+            "label": "Name",
+            "field": "name"
+        }
+    ],
+    "schema": [
+        {
+            "name": "Base Data",
+            "fields": [
+                {
+                    "label": "Name",
+                    "field": "name",
+                    "required": true,
+                    "type": "string"
+                },
+                {
+                    "label": "Description",
+                    "field": "description",
+                    "type": "markdown"
+                }
+            ]
+        }
+    ],
+    "indexes": [
+        {
+            "name": "Location",
+            "fields": [
+                "latitude",
+                "longitude"
+            ]
+        }
+    ]
+}

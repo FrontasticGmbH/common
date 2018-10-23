@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Frontastic Library Common" basedir="./" default="test">
+
+    <!--
+        Include local project properties.
+    -->
+    <property file="${basedir}/environment.local" />
+    <property file="${basedir}/../../environment.local" />
+    <property file="${basedir}/environment" />
+    <property file="${basedir}/../../environment" />
+
+    <!--
+        Import main target defintions (extension points)
+    -->
+    <import file="${basedir}/../../integration/main.xml" />
+
+    <!--
+        Enable used modules
+    -->
+    <import file="${basedir}/../../integration/build-commons/modules/composer.xml" />
+    <import file="${basedir}/../../integration/build-commons/modules/phpunit.xml" />
+    <import file="${basedir}/../../integration/build-commons/modules/checkstyle.xml" />
+    <import file="${basedir}/../../integration/build-commons/modules/pdepend.xml" />
+    <import file="${basedir}/../../integration/build-commons/modules/phpcpd.xml" />
+    <import file="${basedir}/../../integration/build-commons/modules/phpmd.xml" />
+
+    <!--
+        Custom modules
+    -->
+    <import file="${basedir}/src/ant/javascript.xml" />
+</project>

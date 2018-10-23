@@ -1,0 +1,57 @@
+{
+    "title": "Tastic Schema",
+    "description": "A Frontastic tastic definition",
+    "type": "object",
+    "properties": {
+        "tasticType": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string"
+        },
+        "description": {
+            "type": "string"
+        },
+        "schema": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "fields": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "label": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": "string"
+                                },
+                                "field": {
+                                    "type": "string"
+                                },
+                                "translatable": {
+                                    "type": "boolean"
+                                },
+                                "required": {
+                                    "type": "boolean"
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "enum": ["string", "text", "integer", "markdown", "boolean", "enum", "stream", "node", "tree", "media", "decimal", "custom", "group", "reference"]
+                                }
+                            },
+                            "required": ["label", "field", "type"]
+                        }
+                    }
+                },
+                "required": ["name", "fields"]
+            }
+        }
+    },
+    "required": ["tasticType", "name", "schema"]
+}

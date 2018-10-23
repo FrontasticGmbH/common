@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="Frontastic.CartApi.Cart.get" path="/cart">
+        <default key="_controller">Frontastic\Common\CartApiBundle\Controller\CartController::getAction</default>
+    </route>
+
+    <route id="Frontastic.CartApi.Cart.getOrder" path="/order/{order}">
+        <default key="_controller">Frontastic\Common\CartApiBundle\Controller\CartController::getOrderAction</default>
+    </route>
+
+    <route id="Frontastic.CartApi.Cart.add" path="/cart/add" methods="POST">
+        <default key="_controller">Frontastic\Common\CartApiBundle\Controller\CartController::addAction</default>
+    </route>
+
+    <route id="Frontastic.CartApi.Cart.updateLineItem" path="/cart/lineItem" methods="POST">
+        <default key="_controller">Frontastic\Common\CartApiBundle\Controller\CartController::updateLineItemAction</default>
+    </route>
+
+    <route id="Frontastic.CartApi.Cart.removeLineItem" path="/cart/lineItem/remove" methods="POST">
+        <default key="_controller">Frontastic\Common\CartApiBundle\Controller\CartController::removeLineItemAction</default>
+    </route>
+
+    <route id="Frontastic.CartApi.Cart.checkout" path="/cart/checkout" methods="POST">
+        <default key="_controller">Frontastic\Common\CartApiBundle\Controller\CartController::checkoutAction</default>
+    </route>
+</routes>

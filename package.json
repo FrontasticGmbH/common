@@ -1,0 +1,83 @@
+{
+  "name": "frontastic-common",
+  "private": true,
+  "version": "1.0.0-alpha",
+  "devDependencies": {
+    "babel-core": "6.26.3",
+    "babel-eslint": "8.2.6",
+    "babel-jest": "23.4.0",
+    "babel-loader": "7.1.5",
+    "babel-preset-react-app": "^3.1.2",
+    "babel-runtime": "6.26.0",
+    "eslint": "5.1.0",
+    "eslint-config-react": "^1.1.7",
+    "eslint-config-react-app": "^2.1.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-loader": "2.0.0",
+    "eslint-plugin-flowtype": "2.50.0",
+    "eslint-plugin-import": "2.13.0",
+    "eslint-plugin-jsx-a11y": "6.1.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-react": "7.10.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "jest": "^23.4.0",
+    "webpack": "4.16.0",
+    "whatwg-fetch": "2.0.4"
+  },
+  "dependencies": {
+    "babel-preset-env": "^1.7.0",
+    "cloudinary-core": "^2.5.0",
+    "eslint-config-standard-react": "^7.0.0",
+    "lodash": "^4.17.10"
+  },
+  "peerDependencies": {
+    "lodash": "^4"
+  },
+  "main": "src/js/frontastic-common.js",
+  "module": "src/js/index.js",
+  "scripts": {
+    "build": "webpack",
+    "test": "node bin/test.js --env=jsdom",
+    "check": "node node_modules/.bin/eslint --ext .js --ext .jsx -c ../../integration/eslint.config.json --ignore-pattern frontastic-common.js src/js/ test/js/"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "<rootDir>/src/js/**/*.{js,jsx}"
+    ],
+    "setupFiles": [
+      "<rootDir>/bin/config/polyfills.js"
+    ],
+    "testMatch": [
+      "<rootDir>/test/js/**/*.js?(x)"
+    ],
+    "testEnvironment": "node",
+    "testURL": "http://localhost",
+    "transform": {
+      "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest",
+      "^.+\\.css$": "<rootDir>/bin/config/jest/cssTransform.js",
+      "^(?!.*\\.(js|jsx|css|json)$)": "<rootDir>/bin/config/jest/fileTransform.js"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
+    ],
+    "moduleNameMapper": {
+      "^react-native$": "react-native-web"
+    },
+    "moduleFileExtensions": [
+      "web.js",
+      "js",
+      "json",
+      "web.jsx",
+      "jsx"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  }
+}

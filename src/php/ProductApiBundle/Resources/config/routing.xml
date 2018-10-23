@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="Frontastic.ProductApi.Api.categories" path="/categories">
+        <default key="_controller">Frontastic\Common\ProductApiBundle\Controller\CategoryController::listAction</default>
+    </route>
+
+    <route id="Frontastic.ProductApi.Api.productTypes" path="/productTypes">
+        <default key="_controller">Frontastic\Common\ProductApiBundle\Controller\ProductTypeController::listAction</default>
+    </route>
+
+    <route id="Frontastic.ProductApi.Api.search" path="/search" methods="POST">
+        <default key="_controller">Frontastic\Common\ProductApiBundle\Controller\SearchController::listAction</default>
+    </route>
+</routes>

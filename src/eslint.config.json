@@ -1,0 +1,26 @@
+{
+    "extends": ["standard", "react"],
+    "ecmaFeatures": {
+        "jsx": true,
+        "modules": true
+    },
+    "env": {
+        "es6": true
+    },
+    "rules": {
+        "indent": [2, 4],
+        "comma-dangle": [2, "always-multiline"],
+        "prefer-reflect": 0,
+        "operator-linebreak": [2, "after", { "overrides": { ":": "ignore", "?": "ignore" } }],
+        "no-nested-ternary": 0,
+        "no-use-before-define": 0,
+        "react/sort-comp": 0,
+        "no-unused-vars": 1,
+        "strict": 1,
+        "no-cond-assign": 1,
+        "default-case": 1
+    },
+    "globals": {
+        "window": true
+    }
+}

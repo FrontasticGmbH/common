@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="JavaScript Build">
+    <target name="yarn:link" unless="${production}" extensionOf="-prepare:after~hook">
+        <tool-exists executable="yarn" />
+
+        <exec executable="yarn" failonerror="true" dir="${basedir}">
+            <env key="CI" value="true" />
+
+            <arg value="install" />
+        </exec>
+
+        <exec executable="yarn" failonerror="true" dir="${basedir}">
+            <env key="CI" value="true" />
+
+            <arg value="link" />
+        </exec>
+    </target>
+
+    <target name="yarn:test" unless="${production}" extensionOf="-test-unit:main~hook">
+        <tool-exists executable="yarn" />
+
+        <exec executable="yarn" failonerror="true" dir="${basedir}">
+            <env key="CI" value="true" />
+
+            <arg value="run" />
+            <arg value="test" />
+        </exec>
+    </target>
+
+    <target name="yarn:check" unless="${production}" extensionOf="-test-static:main~hook">
+        <tool-exists executable="yarn" />
+
+        <exec executable="yarn" failonerror="true" dir="${basedir}">
+            <env key="CI" value="true" />
+
+            <arg value="run" />
+            <arg value="check" />
+        </exec>
+    </target>
+
+    <target name="yarn:package" unless="${production}" extensionOf="-package:before~hook">
+        <tool-exists executable="yarn" />
+
+        <exec executable="yarn" failonerror="true" dir="${basedir}">
+            <env key="CI" value="true" />
+
+            <arg value="run" />
+            <arg value="build" />
+        </exec>
+
+        <exec executable="git" failonerror="true" dir="${basedir}">
+            <arg value="add" />
+            <arg value="${basedir}/src/js/frontastic-common.js" />
+        </exec>
+    </target>
+</project>

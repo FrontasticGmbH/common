@@ -1,0 +1,169 @@
+{
+    "title": "Custom Application Schema",
+    "description": "A Frontastic custom application definition",
+    "type": "object",
+    "definitions": {
+        "field": {
+            "type": "object",
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "field": {
+                    "type": "string",
+                    "not": {
+                        "enum": ["id", "sequence", "locale", "is_deleted"]
+                    }
+                },
+                "translatable": {
+                    "type": "boolean"
+                },
+                "required": {
+                    "type": "boolean"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": ["string", "text", "integer", "markdown", "boolean", "enum", "stream", "node", "media", "decimal", "reference"]
+                }
+            },
+            "required": ["label", "field", "type"]
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": ["image"]
+                }
+            },
+            "required": ["url", "type"]
+        },
+        "description": {
+            "type": "object",
+            "properties": {
+                "text": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": ["description"]
+                }
+            },
+            "required": ["text", "type"]
+        }
+    },
+    "properties": {
+        "identifier": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string"
+        },
+        "icon": {
+            "type": "string"
+        },
+        "description": {
+            "type": "string"
+        },
+        "fields": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "label": {
+                        "type": "string"
+                    },
+                    "field": {
+                        "type": "string"
+                    }
+                },
+                "required": ["label", "field"]
+            }
+        },
+        "schema": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "fields": {
+                        "type": "array",
+                        "items": {
+                            "oneOf": [
+                                {"$ref": "#/definitions/field"},
+                                {"$ref": "#/definitions/image"},
+                                {"$ref": "#/definitions/description"},
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "label": {
+                                            "type": "string"
+                                        },
+                                        "description": {
+                                            "type": "string"
+                                        },
+                                        "field": {
+                                            "type": "string"
+                                        },
+                                        "itemLabelField": {
+                                            "type": "string"
+                                        },
+                                        "min": {
+                                            "type": "integer"
+                                        },
+                                        "max": {
+                                            "type": "integer"
+                                        },
+                                        "fields": {
+                                            "type": "array",
+                                            "items": {
+                                                "oneOf": [
+                                                    {"$ref": "#/definitions/field"},
+                                                    {"$ref": "#/definitions/image"},
+                                                    {"$ref": "#/definitions/description"}
+                                                ]
+                                            }
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "enum": ["group"]
+                                        }
+                                    },
+                                    "required": ["label", "field", "itemLabelField", "type"]
+                                }
+                            ]
+                        }
+                    }
+                },
+                "required": ["name", "fields"]
+            }
+        },
+        "indexes": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "fields": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": ["name", "fields"]
+            }
+        }
+    },
+    "required": ["identifier", "name", "fields", "schema"]
+}

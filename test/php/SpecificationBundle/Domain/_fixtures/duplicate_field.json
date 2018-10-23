@@ -1,0 +1,47 @@
+{
+    "identifier": "duplicate_field",
+    "name": "duplicate_field",
+    "fields": [
+        {
+            "label": "Name",
+            "field": "name"
+        }
+    ],
+    "schema": [
+        {
+            "name": "Base Data",
+            "fields": [
+                {
+                    "label": "Name",
+                    "field": "name",
+                    "required": true,
+                    "type": "string"
+                },
+                {
+                    "label": "Description",
+                    "field": "description",
+                    "type": "markdown"
+                }
+            ]
+        },
+        {
+            "name": "Contact",
+            "fields": [
+                {
+                    "label": "Full Name",
+                    "field": "name",
+                    "type": "string"
+                }
+            ]
+        }
+    ],
+    "indexes": [
+        {
+            "name": "Location",
+            "fields": [
+                "latitude",
+                "longitude"
+            ]
+        }
+    ]
+}
