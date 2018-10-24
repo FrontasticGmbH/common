@@ -14,17 +14,17 @@
     <!--
         Import main target defintions (extension points)
     -->
-    <import file="${frontastic_basedir}/integration/main.xml" />
+    <import file="${frontastic_basedir}/paas/integration/main.xml" />
 
     <!--
         Enable used modules
     -->
-    <import file="${frontastic_basedir}/integration/build-commons/modules/composer.xml" />
-    <import file="${frontastic_basedir}/integration/build-commons/modules/phpunit.xml" />
-    <import file="${frontastic_basedir}/integration/build-commons/modules/checkstyle.xml" />
-    <import file="${frontastic_basedir}/integration/build-commons/modules/pdepend.xml" />
-    <import file="${frontastic_basedir}/integration/build-commons/modules/phpcpd.xml" />
-    <import file="${frontastic_basedir}/integration/build-commons/modules/phpmd.xml" />
+    <import file="${frontastic_basedir}/paas/integration/build-commons/modules/composer.xml" />
+    <import file="${frontastic_basedir}/paas/integration/build-commons/modules/phpunit.xml" />
+    <import file="${frontastic_basedir}/paas/integration/build-commons/modules/checkstyle.xml" />
+    <import file="${frontastic_basedir}/paas/integration/build-commons/modules/pdepend.xml" />
+    <import file="${frontastic_basedir}/paas/integration/build-commons/modules/phpcpd.xml" />
+    <import file="${frontastic_basedir}/paas/integration/build-commons/modules/phpmd.xml" />
 
     <!--
         Custom modules
