@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="Frontastic.AccountApi.Account.get" path="/account">
+        <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountController::getAction</default>
+    </route>
+
+    <route id="Frontastic.AccountApi.Account.getOrder" path="/order/{order}">
+        <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountController::getOrderAction</default>
+    </route>
+
+    <route id="Frontastic.AccountApi.Account.add" path="/account/add" methods="POST">
+        <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountController::addAction</default>
+    </route>
+
+    <route id="Frontastic.AccountApi.Account.updateLineItem" path="/account/lineItem" methods="POST">
+        <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountController::updateLineItemAction</default>
+    </route>
+
+    <route id="Frontastic.AccountApi.Account.removeLineItem" path="/account/lineItem/remove" methods="POST">
+        <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountController::removeLineItemAction</default>
+    </route>
+
+    <route id="Frontastic.AccountApi.Account.checkout" path="/account/checkout" methods="POST">
+        <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountController::checkoutAction</default>
+    </route>
+</routes>
