@@ -2,179 +2,157 @@
 
 namespace Frontastic\Common\AccountApiBundle\Controller;
 
-use Frontastic\Common\AccountApiBundle\Domain\Payment;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-use Frontastic\Common\CoreBundle\Controller\CrudController;
-use Frontastic\Common\ProductApiBundle\Domain\Variant;
-use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
+use QafooLabs\MVC\RedirectRoute;
+
+use Frontastic\Common\AccountApiBundle\Security\Authenticator;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
-use Frontastic\Common\AccountApiBundle\Domain\LineItem;
-use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
+use Frontastic\Common\AccountApiBundle\Domain\Session;
+use Frontastic\Common\AccountApiBundle\Domain\AuthentificationInformation;
 
-class AccountController extends CrudController
+use Frontastic\Common\CoreBundle\Domain\ErrorResult;
+
+class AccountController extends Controller
 {
-    /**
-     * @var AccountApi
-     */
-    protected $accountApi;
-
-    public function getAction(Context $context): array
+    public function indexAction(Request $request, UserInterface $user = null): JsonResponse
     {
-        return [
-            'account' => $this->getAccount($context),
-        ];
+        $userService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
+        return new JsonResponse($userService->getSessionFor($user));
     }
 
-    public function getOrderAction(Context $context, string $order): array
+    public function getAction(string $email): JsonResponse
     {
-        $accountApi = $this->getAccountApi($context);
-        return [
-            'order' => $accountApi->getOrder($order),
-        ];
+        $userService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
+        return new JsonResponse($userService->get($email));
     }
 
-    public function addAction(Context $context, Request $request): array
+    public function registerAction(Request $request): JsonResponse
     {
-        $payload = $this->getJsonContent($request);
-        $accountApi = $this->getAccountApi($context);
+        $userService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
 
-        $account = $this->getAccount($context);
-        $accountApi->startTransaction($account);
-        $account = $accountApi->addToAccount(
-            $account,
-            new LineItem\Variant([
-                'variant' => new Variant(['sku' => $payload['variant']['sku']]),
-                'custom' => $payload['option'] ?: [],
-                'count' => $payload['count']
-            ])
-        );
-        $account = $accountApi->commit();
+        $body = $this->getJsonBody($request);
+        $authentificationInformation = new AuthentificationInformation($body);
 
-        return [
-            'account' => $account,
-        ];
-    }
-
-    public function updateLineItemAction(Context $context, Request $request): array
-    {
-        $payload = $this->getJsonContent($request);
-        $accountApi = $this->getAccountApi($context);
-
-        $account = $this->getAccount($context);
-        $accountApi->startTransaction($account);
-        $account = $accountApi->updateLineItem(
-            $account,
-            $this->getLineItem($account, $payload['lineItemId']),
-            $payload['count']
-        );
-        $account = $accountApi->commit();
-
-        return [
-            'account' => $account,
-        ];
-    }
-
-    public function removeLineItemAction(Context $context, Request $request): array
-    {
-        $payload = $this->getJsonContent($request);
-        $accountApi = $this->getAccountApi($context);
-
-        $account = $this->getAccount($context);
-        $accountApi->startTransaction($account);
-        $account = $accountApi->removeLineItem(
-            $account,
-            $this->getLineItem($account, $payload['lineItemId'])
-        );
-        $account = $accountApi->commit();
-
-        return [
-            'account' => $account,
-        ];
-    }
-
-    private function getLineItem(Account $account, string $lineItemId): LineItem
-    {
-        foreach ($account->lineItems as $lineItem) {
-            if ($lineItem->lineItemId === $lineItemId) {
-                return $lineItem;
-            }
+        if ($userService->exists($authentificationInformation->email)) {
+            return new JsonResponse(new ErrorResult(['message' => "Die E-Mail-Adresse wird bereits verwendet."]), 409);
         }
 
-        throw new \OutOfBoundsException("Could not find line item with ID $lineItemId");
+        $user = new Account();
+        $user->email = $authentificationInformation->email;
+        $user->displayName = substr($user->email, 0, strrpos($user->email, '@'));
+        $user->setPassword($authentificationInformation->password);
+
+        $userService->sendConfirmationMail($user);
+
+        $user = $userService->store($user);
+
+        $loginResponse = $this->loginUser($user, $request);
+        $loginResponse->setStatusCode(201);
+        return $loginResponse;
     }
 
-    public function checkoutAction(Context $context, Request $request): array
+    public function confirmAction(Request $request, string $token): JsonResponse
     {
-        $payload = $this->getJsonContent($request);
-        $accountApi = $this->getAccountApi($context);
+        $userService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
+        $user = $userService->getByConfirmationToken($token);
+        if (!$user->isValidConfirmationToken($token)) {
+            throw new AuthenticationException('Invalid confirmation token provided.');
+        }
 
-        // @TODO:
-        // [ ] Create new user, if requested
-        // [ ] Register for newsletter if requested
+        $user->confirmed = true;
+        $user->clearConfirmationToken();
+        $user = $userService->store($user);
 
-        $account = $this->getAccount($context);
-        $accountApi->startTransaction($account);
-        $account = $accountApi->setEmail(
-            $account,
-            $payload['user']['email']
-        );
-        $account = $accountApi->setShippingAddress(
-            $account,
-            $payload['shipping']
-        );
-        $account = $accountApi->setBillingAddress(
-            $account,
-            $payload['billing'] ?: $payload['shipping']
-        );
-        $account = $accountApi->setPayment(
-            $account,
-            new Payment([
-                'paymentProvider' => $payload['payment']['provider'],
-                'paymentId' => $payload['payment']['id'],
-                'amount' => $this->getAccount($context)->sum,
-                'currency' => $context->currency
-            ])
-        );
-        $account = $accountApi->commit();
+        return $this->loginUser($user, $request);
+    }
 
-        $order = $accountApi->order($account);
+    public function requestResetAction(Request $request): RedirectRoute
+    {
+        $userService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
 
-        // @HACK: Regenerate session ID to get a "new" account:
-        session_regenerate_id();
+        $body = $this->getJsonBody($request);
+        $authentificationInformation = new AuthentificationInformation($body);
+        $user = $userService->get($authentificationInformation->email);
+        $userService->sendPasswordResetMail($user);
+        $user = $userService->store($user);
 
-        return [
-            'order' => $order,
+        return new RedirectRoute('Frontastic.AccountBundle.Account.logout');
+    }
+
+    public function resetAction(Request $request, string $token): JsonResponse
+    {
+        $userService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
+        $user = $userService->getByConfirmationToken($token);
+        if (!$user->isValidConfirmationToken($token)) {
+            throw new AuthenticationException('Invalid password reset token provided.');
+        }
+
+        $body = $this->getJsonBody($request);
+        $authentificationInformation = new AuthentificationInformation($body);
+
+        $user->confirmed = true;
+        $user->clearConfirmationToken();
+        $user->setPassword($authentificationInformation->password);
+        $user = $userService->store($user);
+
+        $body['email'] = $user->email;
+
+        $response = $this->loginUser($user, $this->cloneRequest($request, $body));
+        return $response;
+    }
+
+    public function changePasswordAction(Request $request, UserInterface $user = null): JsonResponse
+    {
+        if ($user === null) {
+            throw new AuthenticationException('Not logged in.');
+        }
+
+        $userService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
+
+        $body = $this->getJsonBody($request);
+        $authentificationInformation = new AuthentificationInformation($body);
+
+        if (!$user->confirmed ||
+            !$user->isValidPassword($authentificationInformation->password)) {
+            throw new \RuntimeException('Invalid login data provided.');
+        }
+
+        $user->setPassword($authentificationInformation->newPassword);
+        $user = $userService->store($user);
+
+        return $this->loginUser($user, $this->cloneRequest($request, $body));
+    }
+
+    public function updateAction(Request $request, UserInterface $user = null): JsonResponse
+    {
+        if ($user === null) {
+            throw new AuthenticationException('Not logged in.');
+        }
+
+        $userService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
+
+        $body = $this->getJsonBody($request);
+
+        $propertiesToUpdate = [
+            'displayName' => true,
+            'data' => true,
         ];
-    }
-
-    protected function getAccountApi(Context $context): AccountApi
-    {
-        if ($this->accountApi) {
-            return $this->accountApi;
+        foreach (array_intersect_key($body, $propertiesToUpdate) as $key => $value) {
+            $user->$key = $value;
         }
+        $user = $userService->store($user);
 
-        /** @var \Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory $accountApiFactory */
-        $accountApiFactory = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory');
-        return $this->accountApi = $accountApiFactory->factor($context->customer);
+        return new JsonResponse($user, 200);
     }
 
-    protected function getAccount(Context $context): Account
-    {
-        $accountApi = $this->getAccountApi($context);
-        if ($context->session->loggedIn) {
-            return $accountApi->getForUser($context->session->user);
-        } else {
-            return $accountApi->getAnonymous(session_id());
-        }
-    }
-
-    /**
-     * @param Request $request
-     * @return array|mixed
-     */
-    protected function getJsonContent(Request $request)
+    private function getJsonBody(Request $request): array
     {
         if (!$request->getContent() ||
             !($body = json_decode($request->getContent(), true))) {
@@ -182,5 +160,30 @@ class AccountController extends CrudController
         }
 
         return $body;
+    }
+
+    private function cloneRequest(Request $request, $newBody): Request
+    {
+        // Dirty hack to override the body
+        return Request::create(
+            $request->getUri(),
+            $request->getMethod(),
+            $request->request->all(),
+            $request->cookies->all(),
+            $request->files->all(),
+            $request->server->all(),
+            json_encode($newBody)
+        );
+    }
+
+    private function loginUser(Account $user, Request $request): Response
+    {
+        /** @var Response $loginResponse */
+        return $this->get('frontastic.user.guard_handler')->authenticateUserAndHandleSuccess(
+            $user,
+            $request,
+            $this->get(Authenticator::class),
+            'api'
+        );
     }
 }

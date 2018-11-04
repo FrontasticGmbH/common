@@ -4,27 +4,43 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <route id="Frontastic.AccountApi.Account.get" path="/account">
-        <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountController::getAction</default>
+    <route id="Frontastic.UserBundle.User.session" path="/">
+        <default key="_controller">Frontastic\Backstage\UserBundle\Controller\UserController::indexAction</default>
     </route>
 
-    <route id="Frontastic.AccountApi.Account.getOrder" path="/order/{order}">
-        <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountController::getOrderAction</default>
+    <route id="Frontastic.UserBundle.User.get" path="/get/{email}" methods="GET">
+        <default key="_controller">Frontastic\Backstage\UserBundle\Controller\UserController::getAction</default>
     </route>
 
-    <route id="Frontastic.AccountApi.Account.add" path="/account/add" methods="POST">
-        <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountController::addAction</default>
+    <route id="Frontastic.UserBundle.User.register" path="/register" methods="PUT">
+        <default key="_controller">Frontastic\Backstage\UserBundle\Controller\UserController::registerAction</default>
     </route>
 
-    <route id="Frontastic.AccountApi.Account.updateLineItem" path="/account/lineItem" methods="POST">
-        <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountController::updateLineItemAction</default>
+    <route id="Frontastic.UserBundle.User.login" path="/login" methods="POST">
+        <default key="_controller">Frontastic\Backstage\UserBundle\Controller\UserController::loginAction</default>
     </route>
 
-    <route id="Frontastic.AccountApi.Account.removeLineItem" path="/account/lineItem/remove" methods="POST">
-        <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountController::removeLineItemAction</default>
+    <route id="Frontastic.UserBundle.User.logout" path="/logout">
+        <default key="_controller">Frontastic\Backstage\UserBundle\Controller\UserController::logoutAction</default>
     </route>
 
-    <route id="Frontastic.AccountApi.Account.checkout" path="/account/checkout" methods="POST">
-        <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountController::checkoutAction</default>
+    <route id="Frontastic.UserBundle.User.confirm" path="/confirm/{token}" methods="POST">
+        <default key="_controller">Frontastic\Backstage\UserBundle\Controller\UserController::confirmAction</default>
+    </route>
+
+    <route id="Frontastic.UserBundle.User.request" path="/request" methods="POST">
+        <default key="_controller">Frontastic\Backstage\UserBundle\Controller\UserController::requestResetAction</default>
+    </route>
+
+    <route id="Frontastic.UserBundle.User.reset" path="/reset/{token}" methods="POST">
+        <default key="_controller">Frontastic\Backstage\UserBundle\Controller\UserController::resetAction</default>
+    </route>
+
+    <route id="Frontastic.UserBundle.User.changePassword" path="/password" methods="POST">
+        <default key="_controller">Frontastic\Backstage\UserBundle\Controller\UserController::changePasswordAction</default>
+    </route>
+
+    <route id="Frontastic.UserBundle.User.update" path="/update" methods="POST">
+        <default key="_controller">Frontastic\Backstage\UserBundle\Controller\UserController::updateAction</default>
     </route>
 </routes>
