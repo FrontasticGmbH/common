@@ -1,22 +1,22 @@
 <?php
 
-namespace Frontastic\Backstage\UserBundle\Domain;
+namespace Frontastic\Common\AccountApiBundle\Domain;
 
 use Symfony\Component\HttpFoundation\Request;
-use QafooLabs\MVC\Exception\UnauthenticatedUserException;
+use QafooLabs\MVC\Exception\UnauthenticatedAccountException;
 
-use Frontastic\Backstage\UserBundle\Gateway\UserGateway;
+use Frontastic\Common\AccountApiBundle\Gateway\AccountGateway;
 use Frontastic\Common\CoreBundle\Domain\Mailer;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
-class UserService
+class AccountService
 {
     /**
-     * User gateway
+     * Account gateway
      *
-     * @var UserGateway
+     * @var AccountGateway
      */
-    private $userGateway;
+    private $accountGateway;
 
     /**
      * @var Mailer
@@ -28,10 +28,10 @@ class UserService
      */
     private $tokenStorage;
 
-    public function __construct(UserGateway $userGateway, Mailer $mailer, TokenStorage $tokenStorage)
+    public function __construct(/* AccountGateway $accountGateway, Mailer $mailer, */ TokenStorage $tokenStorage)
     {
-        $this->userGateway = $userGateway;
-        $this->mailer = $mailer;
+        $this->accountGateway = $accountGateway ?? null;
+        $this->mailer = $mailer ?? null;
         $this->tokenStorage = $tokenStorage;
     }
 
@@ -47,17 +47,17 @@ class UserService
             if ($token === null) {
                 return new Session([
                     'loggedIn' => false,
-                    'user' => null,
+                    'account' => null,
                 ]);
             }
 
-            $user = $token->getUser();
+            $account = $token->getUser();
 
-            if (!($user instanceof User)) {
-                $user = null;
+            if (!($account instanceof Account)) {
+                $account = null;
             }
 
-            return $this->getSessionFor($user);
+            return $this->getSessionFor($account);
         } catch (UnauthenticatedUserException $e) {
             return new Session([
                 'loggedIn' => false,
@@ -66,71 +66,55 @@ class UserService
         }
     }
 
-    public function getSessionFor(User $user = null)
+    public function getSessionFor(Account $account = null)
     {
         return new Session([
-            'loggedIn' => (bool) $user,
-            'user' => $user,
+            'loggedIn' => (bool) $account,
+            'account' => $account,
         ]);
     }
 
-    public function getSystemSession(): Session
+    public function sendConfirmationMail(Account $account)
     {
-        return new Session([
-            'loggedIn' => true,
-            'user' => $this->getSystemUser()
-        ]);
+        $token = $account->generateConfirmationToken('P14D');
+
+        $this->mailer->sendToUser($account, 'register', 'Willkommen bei Frontastic', ['token' => $token]);
     }
 
-    public function getSystemUser(): User
+    public function sendPasswordResetMail(Account $account)
     {
-        return new User([
-            'email' => 'system@frontastic.cloud',
-            'displayName' => 'System',
-        ]);
+        $token = $account->generateConfirmationToken('P2D');
+
+        $this->mailer->sendToUser($account, 'reset', 'Ihr neues Passwort', ['token' => $token]);
     }
 
-    public function sendConfirmationMail(User $user)
+    public function get(string $email): Account
     {
-        $token = $user->generateConfirmationToken('P14D');
-
-        $this->mailer->sendToUser($user, 'register', 'Willkommen bei Frontastic', ['token' => $token]);
-    }
-
-    public function sendPasswordResetMail(User $user)
-    {
-        $token = $user->generateConfirmationToken('P2D');
-
-        $this->mailer->sendToUser($user, 'reset', 'Ihr neues Passwort', ['token' => $token]);
-    }
-
-    public function get(string $email): User
-    {
-        return $this->userGateway->get($email);
+        return $this->accountGateway->get($email);
     }
 
     public function exists(string $email): bool
     {
         try {
-            $this->userGateway->get($email);
+            $this->accountGateway->get($email);
             return true;
         } catch (\OutOfBoundsException $e) {
             return false;
         }
     }
 
-    public function getByConfirmationToken(string $confirmationToken): User
+    public function getByConfirmationToken(string $confirmationToken): Account
     {
-        return $this->userGateway->getByConfirmationToken($confirmationToken);
+        return $this->accountGateway->getByConfirmationToken($confirmationToken);
     }
 
-    public function store(User $user): User
+    public function store(Account $account): Account
     {
-        return $this->userGateway->store($user);
+        return $this->accountGateway->store($account);
     }
 
-    public function remove(User $user)
+    public function remove(Account $account)
     {
-        $this->userGateway->remove($user);
+        $this->accountGateway->remove($account);
     }
 }

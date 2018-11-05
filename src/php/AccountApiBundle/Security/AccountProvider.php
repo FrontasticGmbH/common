@@ -1,20 +1,20 @@
 <?php
 
-namespace Frontastic\Backstage\UserBundle\Security;
+namespace Frontastic\Common\AccountApiBundle\Security;
 
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
-use Frontastic\Backstage\UserBundle\Domain\User;
-use Frontastic\Backstage\UserBundle\Gateway\UserGateway;
+use Frontastic\Common\AccountApiBundle\Domain\Account;
+use Frontastic\Common\AccountApiBundle\Gateway\AccountGateway;
 
-class UserProvider implements UserProviderInterface
+class AccountProvider implements UserProviderInterface
 {
     private $userGateway;
 
-    public function __construct(UserGateway $userGateway)
+    public function __construct($userGateway = null)
     {
         $this->userGateway = $userGateway;
     }
@@ -32,7 +32,7 @@ class UserProvider implements UserProviderInterface
 
     public function refreshUser(UserInterface $user)
     {
-        if (!$user instanceof User) {
+        if (!$user instanceof Account) {
             throw new UnsupportedUserException(
                 sprintf('Instances of "%s" are not supported.', get_class($user))
             );
@@ -43,6 +43,6 @@ class UserProvider implements UserProviderInterface
 
     public function supportsClass($class)
     {
-        return $class === User::class;
+        return $class === Account::class;
     }
 }

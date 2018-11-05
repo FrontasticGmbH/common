@@ -1,6 +1,6 @@
 <?php
 
-namespace Frontastic\Backstage\UserBundle\Security;
+namespace Frontastic\Common\AccountApiBundle\Security;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,27 +12,12 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
-use Frontastic\Backstage\UserBundle\Domain\User;
-use Frontastic\Backstage\UserBundle\Domain\Session;
-use Frontastic\Backstage\UserBundle\Domain\AuthentificationInformation;
+use Frontastic\Common\AccountApiBundle\Domain\User;
+use Frontastic\Common\AccountApiBundle\Domain\Session;
+use Frontastic\Common\AccountApiBundle\Domain\AuthentificationInformation;
 
 class Authenticator extends AbstractGuardAuthenticator
 {
-    private $anonymousRoutes = array(
-        'Frontastic.UserBundle.User.session',
-        'Frontastic.UserBundle.User.register',
-        'Frontastic.UserBundle.User.login',
-        'Frontastic.UserBundle.User.logout',
-        'Frontastic.UserBundle.User.confirm',
-        'Frontastic.UserBundle.User.request',
-        'Frontastic.UserBundle.User.reset',
-    );
-
-    public function __construct(array $anonymousRoutes = [])
-    {
-        $this->anonymousRoutes = array_merge($this->anonymousRoutes, $anonymousRoutes);
-    }
-
     /**
      * Get the authentication credentials from the request and return them
      * as any type (e.g. an associate array). If you return null, authentication
@@ -119,7 +104,7 @@ class Authenticator extends AbstractGuardAuthenticator
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
-        if (!($user instanceof User)) {
+        if (!($user instanceof Account)) {
             return false;
         }
 

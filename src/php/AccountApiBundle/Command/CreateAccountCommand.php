@@ -1,33 +1,33 @@
 <?php
 
-namespace Frontastic\Backstage\UserBundle\Command;
+namespace Frontastic\Common\AccountApiBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use Frontastic\Backstage\UserBundle\Domain\User;
-use Frontastic\Backstage\UserBundle\Domain\AuthentificationInformation;
+use Frontastic\Common\AccountApiBundle\Domain\Account;
+use Frontastic\Common\AccountApiBundle\Domain\AuthentificationInformation;
 
-class CreateUserCommand extends ContainerAwareCommand
+class CreateAccountCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
         $this
-            ->setName('frontastic:user:create')
-            ->setDescription('Create a new user')
-            ->addArgument('email', InputArgument::REQUIRED, 'The email of the user.')
-            ->addArgument('password', InputArgument::OPTIONAL, 'The password of the user.');
+            ->setName('frontastic:account:create')
+            ->setDescription('Create a new account')
+            ->addArgument('email', InputArgument::REQUIRED, 'The email of the account.')
+            ->addArgument('password', InputArgument::OPTIONAL, 'The password of the account.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $userService = $this->getContainer()->get('Frontastic\Backstage\UserBundle\Domain\UserService');
+        $accountService = $this->getContainer()->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
 
         if (!$input->hasArgument('password')) {
             $helper = $this->getHelper('question');
-            $question = new Question('Enter password for user', 'password');
+            $question = new Question('Enter password for account', 'password');
             $password = $helper->ask($input, $output, $question);
         } else {
             $password = $input->getArgument('password');
@@ -38,17 +38,17 @@ class CreateUserCommand extends ContainerAwareCommand
             'password' => $password,
         ]);
 
-        if ($userService->exists($authentificationInformation->email)) {
+        if ($accountService->exists($authentificationInformation->email)) {
             $output->writeln('<error>This email address already is in use.</error>');
             return;
         }
 
-        $user = new User();
-        $user->email = $authentificationInformation->email;
-        $user->displayName = substr($user->email, 0, strrpos($user->email, '@'));
-        $user->setPassword($authentificationInformation->password);
-        $user->confirmed = true;
+        $account = new Account();
+        $account->email = $authentificationInformation->email;
+        $account->displayName = substr($account->email, 0, strrpos($account->email, '@'));
+        $account->setPassword($authentificationInformation->password);
+        $account->confirmed = true;
 
-        $user = $userService->store($user);
+        $account = $accountService->store($account);
     }
 }

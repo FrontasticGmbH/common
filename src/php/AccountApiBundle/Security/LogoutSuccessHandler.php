@@ -1,8 +1,8 @@
 <?php
 
-namespace Frontastic\Backstage\UserBundle\Security;
+namespace Frontastic\Common\AccountApiBundle\Security;
 
-use Frontastic\Backstage\UserBundle\Domain\Session;
+use Frontastic\Common\AccountApiBundle\Domain\Session;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

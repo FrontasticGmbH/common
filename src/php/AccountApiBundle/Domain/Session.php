@@ -12,9 +12,9 @@ class Session extends DataObject
     public $loggedIn = false;
 
     /**
-     * @var User
+     * @var Account
      */
-    public $user = null;
+    public $account = null;
 
     /**
      * @var string
