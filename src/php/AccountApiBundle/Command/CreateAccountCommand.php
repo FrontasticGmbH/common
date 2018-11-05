@@ -49,6 +49,6 @@ class CreateAccountCommand extends ContainerAwareCommand
         $account->setPassword($authentificationInformation->password);
         $account->confirmed = true;
 
-        $account = $accountService->store($account);
+        $account = $accountService->create($account);
     }
 }

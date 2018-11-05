@@ -5,7 +5,6 @@ namespace Frontastic\Common\AccountApiBundle\Domain;
 use Symfony\Component\HttpFoundation\Request;
 use QafooLabs\MVC\Exception\UnauthenticatedAccountException;
 
-use Frontastic\Common\AccountApiBundle\Gateway\AccountGateway;
 use Frontastic\Common\CoreBundle\Domain\Mailer;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
@@ -16,7 +15,7 @@ class AccountService
      *
      * @var AccountGateway
      */
-    private $accountGateway;
+    private $accountApi;
 
     /**
      * @var Mailer
@@ -28,9 +27,9 @@ class AccountService
      */
     private $tokenStorage;
 
-    public function __construct(/* AccountGateway $accountGateway, Mailer $mailer, */ TokenStorage $tokenStorage)
+    public function __construct(AccountApi $accountApi, /* Mailer $mailer, */ TokenStorage $tokenStorage)
     {
-        $this->accountGateway = $accountGateway ?? null;
+        $this->accountApi = $accountApi ?? null;
         $this->mailer = $mailer ?? null;
         $this->tokenStorage = $tokenStorage;
     }
@@ -90,13 +89,13 @@ class AccountService
 
     public function get(string $email): Account
     {
-        return $this->accountGateway->get($email);
+        return $this->accountApi->get($email);
     }
 
     public function exists(string $email): bool
     {
         try {
-            $this->accountGateway->get($email);
+            $this->accountApi->get($email);
             return true;
         } catch (\OutOfBoundsException $e) {
             return false;
@@ -105,16 +104,21 @@ class AccountService
 
     public function getByConfirmationToken(string $confirmationToken): Account
     {
-        return $this->accountGateway->getByConfirmationToken($confirmationToken);
+        return $this->accountApi->getByConfirmationToken($confirmationToken);
     }
 
-    public function store(Account $account): Account
+    public function create(Account $account): Account
     {
-        return $this->accountGateway->store($account);
+        return $this->accountApi->create($account);
+    }
+
+    public function update(Account $account): Account
+    {
+        return $this->accountApi->update($account);
     }
 
     public function remove(Account $account)
     {
-        $this->accountGateway->remove($account);
+        $this->accountApi->remove($account);
     }
 }

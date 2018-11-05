@@ -8,21 +8,21 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
 use Frontastic\Common\AccountApiBundle\Domain\Account;
-use Frontastic\Common\AccountApiBundle\Gateway\AccountGateway;
+use Frontastic\Common\AccountApiBundle\Domain\AccountService;
 
 class AccountProvider implements UserProviderInterface
 {
-    private $userGateway;
+    private $accountService;
 
-    public function __construct($userGateway = null)
+    public function __construct(AccountService $accountService)
     {
-        $this->userGateway = $userGateway;
+        $this->accountService = $accountService;
     }
 
-    public function loadUserByUsername($username)
+    public function loadUserByUsername($username) // No typehint allowed by interfache
     {
         try {
-            return $this->userGateway->get($username);
+            return $this->accountService->get($username);
         } catch (\OutOfBoundsException $e) {
             throw new UsernameNotFoundException(
                 sprintf('Username "%s" does not exist.', $username)

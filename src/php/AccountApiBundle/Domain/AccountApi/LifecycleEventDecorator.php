@@ -28,7 +28,12 @@ class LifecycleEventDecorator implements AccountApi
         $this->listerners[] = $listener;
     }
 
-    public function login(string $email, string $password): Account
+    public function get(string $email): Account
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
+    public function create(Account $account): Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }

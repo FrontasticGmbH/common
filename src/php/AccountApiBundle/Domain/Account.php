@@ -97,7 +97,7 @@ class Account extends DataObject implements UserInterface, \Serializable
 
     public function getPassword()
     {
-        // Dummy method required by Symfony3, but makes no sense
+        return $this->passwordHash;
     }
 
     public function getSalt()

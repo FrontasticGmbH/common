@@ -14,8 +14,16 @@
             <argument type="tagged" tag="accountApi.lifecycleEventListener" />
         </service>
 
+        <service id="Frontastic\Common\AccountApiBundle\Domain\AccountApi">
+            <factory
+                service="Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory"
+                method="factor">
+            </factory>
+            <argument type="expression">service('Frontastic\\Catwalk\\ApiCoreBundle\\Domain\\Context').customer</argument>
+        </service>
+
         <service id="Frontastic\Common\AccountApiBundle\Security\AccountProvider">
-            <argument type="service" id="Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory" />
+            <argument type="service" id="Frontastic\Common\AccountApiBundle\Domain\AccountService" />
         </service>
 
         <service id="Frontastic\Common\AccountApiBundle\Security\Authenticator" />
@@ -23,8 +31,8 @@
         <service id="Frontastic\Common\AccountApiBundle\Security\LogoutSuccessHandler" />
 
         <service id="Frontastic\Common\AccountApiBundle\Domain\AccountService">
+            <argument type="service" id="Frontastic\Common\AccountApiBundle\Domain\AccountApi" />
             <!--
-            <argument type="service" id="Frontastic\Common\AccountApiBundle\Gateway\AccountGateway" />
             <argument type="service" id="Frontastic\Common\CoreBundle\Domain\Mailer" />
             -->
             <argument type="service" id="security.token_storage" />
