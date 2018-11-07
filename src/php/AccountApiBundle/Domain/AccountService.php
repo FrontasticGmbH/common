@@ -6,7 +6,6 @@ use Symfony\Component\HttpFoundation\Request;
 use QafooLabs\MVC\Exception\UnauthenticatedAccountException;
 
 use Frontastic\Common\CoreBundle\Domain\Mailer;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class AccountService
 {
@@ -22,46 +21,10 @@ class AccountService
      */
     private $mailer;
 
-    /**
-     * @var TokenStorage
-     */
-    private $tokenStorage;
-
-    public function __construct(AccountApi $accountApi, /* Mailer $mailer, */ TokenStorage $tokenStorage)
+    public function __construct(AccountApi $accountApi/*, Mailer $mailer*/)
     {
         $this->accountApi = $accountApi ?? null;
         $this->mailer = $mailer ?? null;
-        $this->tokenStorage = $tokenStorage;
-    }
-
-    /**
-     * @param Request $request Deprecated, is not required
-     * @return Session
-     */
-    public function getSession(Request $request): Session
-    {
-        try {
-            $token = $this->tokenStorage->getToken();
-
-            if ($token === null) {
-                return new Session([
-                    'loggedIn' => false,
-                    'account' => null,
-                ]);
-            }
-
-            $account = $token->getUser();
-            if (!($account instanceof Account)) {
-                $account = null;
-            }
-
-            return $this->getSessionFor($account);
-        } catch (UnauthenticatedUserException $e) {
-            return new Session([
-                'loggedIn' => false,
-                'message' => $e->getMessage() ? ('Unauthenticated: ' . $e->getMessage()) : null,
-            ]);
-        }
     }
 
     public function getSessionFor(Account $account = null)
