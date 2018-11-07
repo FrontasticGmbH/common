@@ -164,7 +164,7 @@ class CartController extends CrudController
     {
         $cartApi = $this->getCartApi($context);
         if ($context->session->loggedIn) {
-            return $cartApi->getForUser($context->session->user);
+            return $cartApi->getForUser($context->session->account->accountId);
         } else {
             return $cartApi->getAnonymous(session_id());
         }

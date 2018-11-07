@@ -3,6 +3,7 @@
 namespace Frontastic\Common\CartApiBundle\Domain\CartApi;
 
 use Frontastic\Common\CartApiBundle\Domain\Payment;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
@@ -63,9 +64,24 @@ class Commercetools implements CartApi
 
     public function getForUser(string $userId): Cart
     {
-        return $this->mapCart($this->client->fetch('/carts', [
-            'customerId' => $userId,
-        ]));
+        try {
+            return $this->mapCart($this->client->get('/carts', [
+                'customerId' => $userId,
+            ]));
+        } catch (RequestException $e) {
+            return $this->mapCart($this->client->post(
+                '/carts',
+                ['expand' => self::EXPAND_DISCOUNTS],
+                [],
+                json_encode([
+                    // @TODO: Currency should only be stored in context. Property should be removed.
+                    'currency' => 'EUR',
+                    'country' => 'DE',
+                    'customerId' => $userId,
+                    'state' => 'Active',
+                ])
+            ));
+        }
     }
 
     public function getAnonymous(string $anonymousId): Cart
