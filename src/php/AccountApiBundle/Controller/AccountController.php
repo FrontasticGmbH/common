@@ -27,12 +27,6 @@ class AccountController extends Controller
         return new JsonResponse($userService->getSessionFor($user));
     }
 
-    public function getAction(string $email): JsonResponse
-    {
-        $userService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
-        return new JsonResponse($userService->get($email));
-    }
-
     public function registerAction(Request $request): JsonResponse
     {
         $userService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');

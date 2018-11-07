@@ -51,7 +51,6 @@ class AccountService
             }
 
             $account = $token->getUser();
-
             if (!($account instanceof Account)) {
                 $account = null;
             }
@@ -105,6 +104,11 @@ class AccountService
     public function getByConfirmationToken(string $confirmationToken): Account
     {
         return $this->accountApi->getByConfirmationToken($confirmationToken);
+    }
+
+    public function login(Account $account): bool
+    {
+        return $this->accountApi->login($account);
     }
 
     public function create(Account $account): Account

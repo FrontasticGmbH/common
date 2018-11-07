@@ -56,13 +56,22 @@ class Account extends DataObject implements UserInterface, \Serializable
 
     public function setPassword(string $password)
     {
-        $this->passwordHash = password_hash($password, PASSWORD_DEFAULT);
+        // This must use a deterministic hashing if we want to hash here at
+        // all. Backends like Comemrcetools already hash themselves. With a
+        // dynamic hashing mechanism like password_hash (wandom salt) this
+        // would not verify.
+        //
+        // This hashing is basically just an additional transport hashing and
+        // ensure backends like Commercetools never sees any real password.
+        $this->passwordHash = hash('sha256', $password);
     }
 
     public function isValidPassword(string $password): bool
     {
-        return $this->confirmed &&
-            password_verify($password, $this->passwordHash);
+        // We are not calling isValidPassword since Commercetools also hashes
+        // the password and does not return the original hash, so that we can't
+        // compare hashes any more.
+        return false;
     }
 
     public function generateConfirmationToken($validInterval = 'P7D'): string
@@ -137,7 +146,7 @@ class Account extends DataObject implements UserInterface, \Serializable
      * containing MANY other objects. We should actually only write the user
      * mail (ID) into the session.
      */
-    public function cleanForSession(): User
+    public function cleanForSession(): Account
     {
         $user = clone $this;
 

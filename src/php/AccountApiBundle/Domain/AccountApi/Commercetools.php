@@ -35,7 +35,6 @@ class Commercetools implements AccountApi
 
     public function create(Account $account): Account
     {
-        var_dump($account);
         return $this->mapAccount($this->client->post(
             '/customers',
             [],
@@ -48,12 +47,33 @@ class Commercetools implements AccountApi
         )['customer']);
     }
 
+    public function login(Account $account): bool
+    {
+        try {
+            $account = $this->mapAccount($this->client->post(
+                '/login',
+                [],
+                [],
+                json_encode([
+                    // @TODO: We should pass existing anonymous cart IDs so
+                    // that this cart is merged into the users cart.
+                    'email' => $account->email,
+                    'password' => $account->getPassword(),
+                ])
+            )['customer']);
+
+            return $account->confirmed;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
     private function mapAccount(array $account): Account
     {
-        var_dump($account);
         return new Account([
             'accountId' => $account['id'],
             'email' => $account['email'],
+            'confirmed' => $account['isEmailVerified'],
             // Do NOT map the password back
         ]);
     }

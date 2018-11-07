@@ -26,7 +26,9 @@
             <argument type="service" id="Frontastic\Common\AccountApiBundle\Domain\AccountService" />
         </service>
 
-        <service id="Frontastic\Common\AccountApiBundle\Security\Authenticator" />
+        <service id="Frontastic\Common\AccountApiBundle\Security\Authenticator">
+            <argument type="service" id="Frontastic\Common\AccountApiBundle\Domain\AccountService" />
+        </service>
 
         <service id="Frontastic\Common\AccountApiBundle\Security\LogoutSuccessHandler" />
 

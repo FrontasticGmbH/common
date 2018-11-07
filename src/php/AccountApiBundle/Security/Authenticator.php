@@ -12,12 +12,20 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
-use Frontastic\Common\AccountApiBundle\Domain\User;
+use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Session;
 use Frontastic\Common\AccountApiBundle\Domain\AuthentificationInformation;
+use Frontastic\Common\AccountApiBundle\Domain\AccountService;
 
 class Authenticator extends AbstractGuardAuthenticator
 {
+    private $accountService;
+
+    public function __construct(AccountService $accountService)
+    {
+        $this->accountService = $accountService;
+    }
+
     /**
      * Get the authentication credentials from the request and return them
      * as any type (e.g. an associate array). If you return null, authentication
@@ -52,18 +60,6 @@ class Authenticator extends AbstractGuardAuthenticator
         }
 
         return $content;
-    }
-
-    private function debugData(Request $request)
-    {
-        if ($request->getSession() === null) {
-            return ['request without session'];
-        }
-
-        return ([
-            'sessionId' => $request->getSession()->getId(),
-            'sessionData' => $request->getSession()->all(),
-        ]);
     }
 
     /**
@@ -108,7 +104,11 @@ class Authenticator extends AbstractGuardAuthenticator
             return false;
         }
 
-        return ($user->confirmed && $user->isValidPassword($credentials['password']));
+        // We are not calling isValidPassword since Commercetools also hashes
+        // the password and does not return the original hash, so that we can't
+        // compare hashes any more.
+        $user->setPassword($credentials['password']);
+        return $this->accountService->login($user);
     }
 
     /**
@@ -129,7 +129,7 @@ class Authenticator extends AbstractGuardAuthenticator
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
         return new JsonResponse(new Session([
-            'user' => $token->getUser(),
+            'account' => $token->getUser(),
             'loggedIn' => true,
         ]));
     }
@@ -154,7 +154,7 @@ class Authenticator extends AbstractGuardAuthenticator
                 'loggedIn' => false,
                 'message' => $exception->getMessage() ? ('Unauthenticated: ' . $exception->getMessage()) : null,
             ]),
-            ($request->get('_route') === 'Frontastic.UserBundle.User.logout') ? 200 : 403
+            ($request->get('_route') === 'Frontastic.AccountApi.Api.logout') ? 200 : 403
         );
     }
 
@@ -212,7 +212,7 @@ class Authenticator extends AbstractGuardAuthenticator
      */
     public function supports(Request $request)
     {
-        if ($request->attributes->get('_route') !== 'Frontastic.UserBundle.User.login') {
+        if ($request->attributes->get('_route') !== 'Frontastic.AccountApi.Api.login') {
             return false;
         }
 
