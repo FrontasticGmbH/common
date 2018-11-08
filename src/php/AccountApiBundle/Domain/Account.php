@@ -62,7 +62,7 @@ class Account extends DataObject implements UserInterface, \Serializable
     /**
      * @var string
      */
-    private $confirmationToken;
+    public $confirmationToken;
 
     /**
      * @var string
@@ -128,6 +128,11 @@ class Account extends DataObject implements UserInterface, \Serializable
     public function getPassword()
     {
         return $this->passwordHash;
+    }
+
+    public function getConfirmationToken()
+    {
+        return $this->confirmationToken;
     }
 
     public function getSalt()

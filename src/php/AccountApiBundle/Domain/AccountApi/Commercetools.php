@@ -15,6 +15,10 @@ class Commercetools implements AccountApi
      */
     private $client;
 
+    private $customerType;
+
+    const TYPE_NAME = 'frontastic-customer-type';
+
     public function __construct(Client $client)
     {
         $this->client = $client;
@@ -47,6 +51,14 @@ class Commercetools implements AccountApi
                 'dateOfBirth' => $account->birthday->format('Y-m-d'),
                 'password' => $account->getPassword(),
                 'isEmailVerified' => $account->confirmed,
+                'custom' => [
+                    'type' => $this->getCustomerType(),
+                    'fields' => [
+                        'data' => json_encode($account->data),
+                        'token' => $account->getConfirmationToken(),
+                        'tokenValidUntil' => $account->tokenValidUntil->format('r'),
+                    ],
+                ],
             ])
         )['customer']);
     }
@@ -77,12 +89,15 @@ class Commercetools implements AccountApi
         return new Account([
             'accountId' => $account['id'],
             'email' => $account['email'],
-            'salutation' => $account['salutation'],
-            'prename' => $account['firstName'],
-            'lastname' => $account['lastName'],
-            'birthday' => new \DateTimeImmutable($account['dateOfBirth']),
+            'salutation' => $account['salutation'] ?? null,
+            'prename' => $account['firstName'] ?? null,
+            'lastname' => $account['lastName'] ?? null,
+            'birthday' => isset($account['dateOfBirth']) ? new \DateTimeImmutable($account['dateOfBirth']) : null,
+            'data' => json_decode($account['custom']['data'] ?? '{}'),
             // Do NOT map the password back
+            'confirmationToken' => $account['custom']['token'] ?? null,
             'confirmed' => $account['isEmailVerified'],
+            'tokenValidUntil' => new \DateTimeImmutable($account['custom']['tokenValidUntil'] ?? ''),
         ]);
     }
 
@@ -92,5 +107,55 @@ class Commercetools implements AccountApi
     public function getDangerousInnerClient()
     {
         return $this->client;
+    }
+
+    public function getCustomerType()
+    {
+        if ($this->customerType) {
+            return $this->customerType;
+        }
+
+        try {
+            $customerType = $this->client->get('/types/key=' . self::TYPE_NAME);
+        } catch (RequestException $e) {
+            $customerType = $this->createCustomerType();
+        }
+
+        return $this->customerType = ['id' => $customerType['id']];
+    }
+
+    private function createCustomerType()
+    {
+        return $this->client->post(
+            '/types',
+            [],
+            [],
+            json_encode([
+                'key' => self::TYPE_NAME,
+                'name' => ['de' => 'Frontastic Customer'],
+                'description' => ['de' => 'Additional fields like confirmation tokens'],
+                'resourceTypeIds' => ['customer'],
+                'fieldDefinitions' => [
+                    [
+                        'name' => 'data',
+                        'type' => ['name' => 'String'],
+                        'label' => ['de' => 'Data (JSON)'],
+                        'required' => false,
+                    ],
+                    [
+                        'name' => 'token',
+                        'type' => ['name' => 'String'],
+                        'label' => ['de' => 'Confirmation Token'],
+                        'required' => false,
+                    ],
+                    [
+                        'name' => 'tokenValidUntil',
+                        'type' => ['name' => 'String'],
+                        'label' => ['de' => 'Date until confirmation token is valid'],
+                        'required' => false,
+                    ],
+                ],
+            ])
+        );
     }
 }
