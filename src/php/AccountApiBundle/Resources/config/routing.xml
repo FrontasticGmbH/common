@@ -12,11 +12,11 @@
         <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountController::indexAction</default>
     </route>
 
-    <route id="Frontastic.AccountApi.Api.logout" path="/logout">
+    <route id="Frontastic.AccountApi.Api.logout" path="/logout" methods="POST">
         <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountController::logoutAction</default>
     </route>
 
-    <route id="Frontastic.AccountApi.Api.register" path="/register" methods="PUT">
+    <route id="Frontastic.AccountApi.Api.register" path="/register" methods="POST">
         <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountController::registerAction</default>
     </route>
 

@@ -41,6 +41,10 @@ class Commercetools implements AccountApi
             [],
             json_encode([
                 'email' => $account->email,
+                'salutation' => $account->salutation,
+                'firstName' => $account->prename,
+                'lastName' => $account->lastname,
+                'dateOfBirth' => $account->birthday->format('Y-m-d'),
                 'password' => $account->getPassword(),
                 'isEmailVerified' => $account->confirmed,
             ])
@@ -73,8 +77,12 @@ class Commercetools implements AccountApi
         return new Account([
             'accountId' => $account['id'],
             'email' => $account['email'],
-            'confirmed' => $account['isEmailVerified'],
+            'salutation' => $account['salutation'],
+            'prename' => $account['firstName'],
+            'lastname' => $account['lastName'],
+            'birthday' => new \DateTimeImmutable($account['dateOfBirth']),
             // Do NOT map the password back
+            'confirmed' => $account['isEmailVerified'],
         ]);
     }
 

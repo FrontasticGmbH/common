@@ -22,7 +22,27 @@ class Account extends DataObject implements UserInterface, \Serializable
     /**
      * @var string
      */
-    public $displayName;
+    public $salutation;
+
+    /**
+     * @var string
+     */
+    public $prename;
+
+    /**
+     * @var string
+     */
+    public $lastname;
+
+    /**
+     * @var string
+     */
+    public $phone;
+
+    /**
+     * @var \DateTime
+     */
+    public $birthday;
 
     /**
      * @var array

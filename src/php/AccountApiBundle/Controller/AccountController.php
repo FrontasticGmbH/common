@@ -21,116 +21,117 @@ use Frontastic\Common\CoreBundle\Domain\ErrorResult;
 
 class AccountController extends Controller
 {
-    public function indexAction(Request $request, UserInterface $user = null): JsonResponse
+    public function indexAction(Request $request, UserInterface $account = null): JsonResponse
     {
-        $userService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
-        return new JsonResponse($userService->getSessionFor($user));
+        $accountService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
+        return new JsonResponse($accountService->getSessionFor($account));
     }
 
     public function registerAction(Request $request): JsonResponse
     {
-        $userService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
+        $accountService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
 
         $body = $this->getJsonBody($request);
-        $authentificationInformation = new AuthentificationInformation($body);
+        $account = new Account([
+            'email' => $body['email'],
+            'salutation' => $body['salutation'],
+            'prename' => $body['prename'],
+            'lastname' => $body['lastname'],
+            'phone' => $body['phonePrefix'] . $body['phone'],
+            'birthday' => new \DateTimeImmutable($body['birthdayYear'] . '-' . $body['birthdayMonth'] . '-' . $body['birthdayDay'] . 'T12:00'),
+        ]);
+        $account->setPassword($body['password']);
+        debug($account);
 
-        if ($userService->exists($authentificationInformation->email)) {
+        if ($accountService->exists($account->email)) {
             return new JsonResponse(new ErrorResult(['message' => "Die E-Mail-Adresse wird bereits verwendet."]), 409);
         }
 
-        $user = new Account();
-        $user->email = $authentificationInformation->email;
-        $user->displayName = substr($user->email, 0, strrpos($user->email, '@'));
-        $user->setPassword($authentificationInformation->password);
+        $accountService->sendConfirmationMail($account);
+        $account = $accountService->create($account);
 
-        $userService->sendConfirmationMail($user);
-
-        $user = $userService->store($user);
-
-        $loginResponse = $this->loginUser($user, $request);
-        $loginResponse->setStatusCode(201);
-        return $loginResponse;
+        return new JsonResponse($accountService->getSessionFor($account));
     }
 
     public function confirmAction(Request $request, string $token): JsonResponse
     {
-        $userService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
-        $user = $userService->getByConfirmationToken($token);
-        if (!$user->isValidConfirmationToken($token)) {
+        $accountService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
+        $account = $accountService->getByConfirmationToken($token);
+        if (!$account->isValidConfirmationToken($token)) {
             throw new AuthenticationException('Invalid confirmation token provided.');
         }
 
-        $user->confirmed = true;
-        $user->clearConfirmationToken();
-        $user = $userService->store($user);
+        $account->confirmed = true;
+        $account->clearConfirmationToken();
+        $account = $accountService->store($account);
 
-        return $this->loginUser($user, $request);
+        return $this->loginUser($account, $request);
     }
 
     public function requestResetAction(Request $request): RedirectRoute
     {
-        $userService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
+        $accountService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
 
         $body = $this->getJsonBody($request);
         $authentificationInformation = new AuthentificationInformation($body);
-        $user = $userService->get($authentificationInformation->email);
-        $userService->sendPasswordResetMail($user);
-        $user = $userService->store($user);
+        $account = $accountService->get($authentificationInformation->email);
+        $accountService->sendPasswordResetMail($account);
+        $account = $accountService->store($account);
 
         return new RedirectRoute('Frontastic.AccountBundle.Account.logout');
     }
 
     public function resetAction(Request $request, string $token): JsonResponse
     {
-        $userService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
-        $user = $userService->getByConfirmationToken($token);
-        if (!$user->isValidConfirmationToken($token)) {
+        $accountService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
+        $account = $accountService->getByConfirmationToken($token);
+        if (!$account->isValidConfirmationToken($token)) {
             throw new AuthenticationException('Invalid password reset token provided.');
         }
 
         $body = $this->getJsonBody($request);
         $authentificationInformation = new AuthentificationInformation($body);
 
-        $user->confirmed = true;
-        $user->clearConfirmationToken();
-        $user->setPassword($authentificationInformation->password);
-        $user = $userService->store($user);
+        $account->confirmed = true;
+        $account->clearConfirmationToken();
+        $account->setPassword($authentificationInformation->password);
+        $account = $accountService->store($account);
 
-        $body['email'] = $user->email;
+        $body['email'] = $account->email;
 
-        $response = $this->loginUser($user, $this->cloneRequest($request, $body));
+        $response = $this->loginUser($account, $this->cloneRequest($request, $body));
         return $response;
     }
 
-    public function changePasswordAction(Request $request, UserInterface $user = null): JsonResponse
+    public function changePasswordAction(Request $request, UserInterface $account = null): JsonResponse
     {
-        if ($user === null) {
+        if ($account === null) {
             throw new AuthenticationException('Not logged in.');
         }
 
-        $userService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
+        $accountService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
 
         $body = $this->getJsonBody($request);
         $authentificationInformation = new AuthentificationInformation($body);
 
-        if (!$user->confirmed ||
-            !$user->isValidPassword($authentificationInformation->password)) {
+        if (!$account->confirmed ||
+            !$account->isValidPassword($authentificationInformation->password)) {
             throw new \RuntimeException('Invalid login data provided.');
         }
 
-        $user->setPassword($authentificationInformation->newPassword);
-        $user = $userService->store($user);
+        $account->setPassword($authentificationInformation->newPassword);
+        $account = $accountService->store($account);
 
-        return $this->loginUser($user, $this->cloneRequest($request, $body));
+        return $this->loginUser($account, $this->cloneRequest($request, $body));
     }
 
-    public function updateAction(Request $request, UserInterface $user = null): JsonResponse
+    public function updateAction(Request $request, UserInterface $account = null): JsonResponse
     {
-        if ($user === null) {
+        if ($account === null) {
             throw new AuthenticationException('Not logged in.');
         }
 
-        $userService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
+        $accountService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
 
         $body = $this->getJsonBody($request);
 
@@ -139,11 +140,11 @@ class AccountController extends Controller
             'data' => true,
         ];
         foreach (array_intersect_key($body, $propertiesToUpdate) as $key => $value) {
-            $user->$key = $value;
+            $account->$key = $value;
         }
-        $user = $userService->store($user);
+        $account = $accountService->store($account);
 
-        return new JsonResponse($user, 200);
+        return new JsonResponse($account, 200);
     }
 
     private function getJsonBody(Request $request): array
@@ -170,11 +171,11 @@ class AccountController extends Controller
         );
     }
 
-    private function loginUser(Account $user, Request $request): Response
+    private function loginUser(Account $account, Request $request): Response
     {
         /** @var Response $loginResponse */
         return $this->get('frontastic.user.guard_handler')->authenticateUserAndHandleSuccess(
-            $user,
+            $account,
             $request,
             $this->get(Authenticator::class),
             'api'
