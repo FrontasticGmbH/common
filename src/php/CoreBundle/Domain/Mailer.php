@@ -4,8 +4,6 @@ namespace Frontastic\Common\CoreBundle\Domain;
 
 use Symfony\Component\Templating\EngineInterface;
 
-use Frontastic\UserBundle\Domain\User;
-
 class Mailer
 {
     private $mailer;
@@ -25,7 +23,7 @@ class Mailer
         }
     }
 
-    public function sendToUser(User $user, string $type, string $subject, array $parameters = array())
+    public function sendToUser($user, string $type, string $subject, array $parameters = array())
     {
         $parameters = array_merge(
             $parameters,
