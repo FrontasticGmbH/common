@@ -43,7 +43,7 @@ class Result extends DataObject
             'message' => $e->getMessage(),
         ]);
 
-        if (\AppKernel::getDebug()) {
+        if (\Frontastic\Common\Kernel::getDebug()) {
             $result->file = $e->getFile();
             $result->line = $e->getLine();
             $result->stack = $e->getTraceAsString();

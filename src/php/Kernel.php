@@ -116,7 +116,7 @@ abstract class Kernel extends SymfonyKernel
      */
     public static function getEnvironmentFromConfiguration()
     {
-        return static::getConfiguration()['env'];
+        return getenv('env');
     }
 
     /**

@@ -19,7 +19,7 @@ class RequestVerifier
     {
         if (!$this->isValid($request, $secret)) {
             throw new \DomainException(
-                \AppKernel::getDebug() ?
+                \Frontastic\Common\Kernel::getDebug() ?
                     "Request did not validate against shared secret: $secret" :
                     "Request did not validate against shared secret."
             );
