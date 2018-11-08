@@ -21,7 +21,7 @@ class AccountService
      */
     private $mailer;
 
-    public function __construct(AccountApi $accountApi/*, Mailer $mailer*/)
+    public function __construct(AccountApi $accountApi, Mailer $mailer)
     {
         $this->accountApi = $accountApi ?? null;
         $this->mailer = $mailer ?? null;
@@ -39,18 +39,12 @@ class AccountService
     {
         $token = $account->generateConfirmationToken('P14D');
 
-        // @TODO: Remove disabled mail sending
-        return;
-
         $this->mailer->sendToUser($account, 'register', 'Willkommen bei Frontastic', ['token' => $token]);
     }
 
     public function sendPasswordResetMail(Account $account)
     {
         $token = $account->generateConfirmationToken('P2D');
-
-        // @TODO: Remove disabled mail sending
-        return;
 
         $this->mailer->sendToUser($account, 'reset', 'Ihr neues Passwort', ['token' => $token]);
     }
