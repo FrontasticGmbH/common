@@ -37,16 +37,14 @@ class AccountService
 
     public function sendConfirmationMail(Account $account)
     {
-        $token = $account->generateConfirmationToken('P14D');
-
-        $this->mailer->sendToUser($account, 'register', 'Willkommen bei Frontastic', ['token' => $token]);
+        $this->mailer->sendToUser($account, 'register', 'Willkommen bei Frontastic', ['token' => $account->confirmationToken]);
+        $account->eraseCredentials();
     }
 
     public function sendPasswordResetMail(Account $account)
     {
-        $token = $account->generateConfirmationToken('P2D');
-
         $this->mailer->sendToUser($account, 'reset', 'Ihr neues Passwort', ['token' => $token]);
+        $account->eraseCredentials();
     }
 
     public function get(string $email): Account
@@ -64,9 +62,9 @@ class AccountService
         }
     }
 
-    public function getByConfirmationToken(string $confirmationToken): Account
+    public function confirmEmail(string $confirmationToken): Account
     {
-        return $this->accountApi->getByConfirmationToken($confirmationToken);
+        return $this->accountApi->confirmEmail($confirmationToken);
     }
 
     public function login(Account $account): bool

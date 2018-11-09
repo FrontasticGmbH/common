@@ -41,14 +41,13 @@ class AccountController extends Controller
             'birthday' => new \DateTimeImmutable($body['birthdayYear'] . '-' . $body['birthdayMonth'] . '-' . $body['birthdayDay'] . 'T12:00'),
         ]);
         $account->setPassword($body['password']);
-        debug($account);
 
         if ($accountService->exists($account->email)) {
             return new JsonResponse(new ErrorResult(['message' => "Die E-Mail-Adresse wird bereits verwendet."]), 409);
         }
 
-        $accountService->sendConfirmationMail($account);
         $account = $accountService->create($account);
+        $accountService->sendConfirmationMail($account);
 
         return new JsonResponse($accountService->getSessionFor($account));
     }
@@ -56,16 +55,9 @@ class AccountController extends Controller
     public function confirmAction(Request $request, string $token): JsonResponse
     {
         $accountService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
-        $account = $accountService->getByConfirmationToken($token);
-        if (!$account->isValidConfirmationToken($token)) {
-            throw new AuthenticationException('Invalid confirmation token provided.');
-        }
+        $account = $accountService->confirmEmail($token);
 
-        $account->confirmed = true;
-        $account->clearConfirmationToken();
-        $account = $accountService->store($account);
-
-        return $this->loginUser($account, $request);
+        return $this->loginAccount($account, $request);
     }
 
     public function requestResetAction(Request $request): RedirectRoute
@@ -99,7 +91,7 @@ class AccountController extends Controller
 
         $body['email'] = $account->email;
 
-        $response = $this->loginUser($account, $this->cloneRequest($request, $body));
+        $response = $this->loginAccount($account, $this->cloneRequest($request, $body));
         return $response;
     }
 
@@ -122,7 +114,7 @@ class AccountController extends Controller
         $account->setPassword($authentificationInformation->newPassword);
         $account = $accountService->store($account);
 
-        return $this->loginUser($account, $this->cloneRequest($request, $body));
+        return $this->loginAccount($account, $this->cloneRequest($request, $body));
     }
 
     public function updateAction(Request $request, UserInterface $account = null): JsonResponse
@@ -171,7 +163,7 @@ class AccountController extends Controller
         );
     }
 
-    private function loginUser(Account $account, Request $request): Response
+    private function loginAccount(Account $account, Request $request): Response
     {
         /** @var Response $loginResponse */
         return $this->get('frontastic.user.guard_handler')->authenticateUserAndHandleSuccess(

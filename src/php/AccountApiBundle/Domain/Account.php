@@ -95,26 +95,6 @@ class Account extends DataObject implements UserInterface, \Serializable
         return false;
     }
 
-    public function generateConfirmationToken($validInterval = 'P7D'): string
-    {
-        $this->confirmationToken = md5(microtime());
-        $this->tokenValidUntil = (new \DateTime())->add(new \DateInterval($validInterval));
-
-        return $this->confirmationToken;
-    }
-
-    public function clearConfirmationToken()
-    {
-        $this->confirmationToken = null;
-        $this->tokenValidUntil = null;
-    }
-
-    public function isValidConfirmationToken(string $confirmationToken): bool
-    {
-        return (($this->tokenValidUntil > new \DateTime('now')) &&
-            ($confirmationToken === $this->confirmationToken));
-    }
-
     public function getUsername()
     {
         return $this->email;
@@ -128,11 +108,6 @@ class Account extends DataObject implements UserInterface, \Serializable
     public function getPassword()
     {
         return $this->passwordHash;
-    }
-
-    public function getConfirmationToken()
-    {
-        return $this->confirmationToken;
     }
 
     public function getSalt()

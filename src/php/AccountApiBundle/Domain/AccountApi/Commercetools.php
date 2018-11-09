@@ -33,13 +33,29 @@ class Commercetools implements AccountApi
         if ($result->count >= 1) {
             return $this->mapAccount($result->results[0]);
         } else {
-            throw new \OutOfBoundsException('Could not find user with email ' . $email);
+            throw new \OutOfBoundsException('Could not find account with email ' . $email);
+        }
+    }
+
+    public function confirmEmail(string $token): Account
+    {
+        try {
+            return $this->mapAccount($this->client->post(
+                '/customers/email/confirm',
+                [],
+                [],
+                json_encode([
+                    'tokenValue' => $token,
+                ])
+            ));
+        } catch (RequestException $e) {
+            throw new \OutOfBoundsException('Could not find account with confirmation token ' . $token, 0, $e);
         }
     }
 
     public function create(Account $account): Account
     {
-        return $this->mapAccount($this->client->post(
+        $account = $this->mapAccount($this->client->post(
             '/customers',
             [],
             [],
@@ -55,12 +71,71 @@ class Commercetools implements AccountApi
                     'type' => $this->getCustomerType(),
                     'fields' => [
                         'data' => json_encode($account->data),
-                        'token' => $account->getConfirmationToken(),
-                        'tokenValidUntil' => $account->tokenValidUntil->format('r'),
                     ],
                 ],
             ])
         )['customer']);
+
+        $token = $this->client->post(
+            '/customers/email-token',
+            [],
+            [],
+            json_encode([
+                'id' => $account->accountId,
+                'ttlMinutes' => 2 * 7 * 24 * 60,
+            ])
+        );
+
+        $account->confirmationToken = $token['value'];
+        $account->tokenValidUntil = new \DateTimeImmutable($token['expiresAt']);
+
+        return $account;
+    }
+
+    public function verifyEmail(string $token): Account
+    {
+        return $this->mapAccount($this->client->post(
+            '/customers/email/confirm',
+            [],
+            [],
+            json_encode([
+                'token' => $token,
+            ])
+        ));
+    }
+
+    public function update(Account $account): Account
+    {
+        return $this->mapAccount($this->client->post(
+            '/customers',
+            [],
+            [],
+            json_encode([
+                'actions' => [
+                    [
+                        'action' => 'setFirstName',
+                        'email' => $account->prename,
+                    ],
+                    [
+                        'action' => 'setLastName',
+                        'email' => $account->lastname,
+                    ],
+                    [
+                        'action' => 'setSaluation',
+                        'email' => $account->salutation,
+                    ],
+                    [
+                        'action' => 'setSaluation',
+                        'email' => $account->salutation,
+                    ],
+                    [
+                        'action' => 'setCustomField',
+                        'name' => 'data',
+                        'value' => json_encode($account->data),
+                    ],
+                ],
+            ])
+        ));
     }
 
     public function login(Account $account): bool
@@ -93,11 +168,9 @@ class Commercetools implements AccountApi
             'prename' => $account['firstName'] ?? null,
             'lastname' => $account['lastName'] ?? null,
             'birthday' => isset($account['dateOfBirth']) ? new \DateTimeImmutable($account['dateOfBirth']) : null,
-            'data' => json_decode($account['custom']['data'] ?? '{}'),
+            'data' => json_decode($account['custom']['fields']['data'] ?? '{}'),
             // Do NOT map the password back
-            'confirmationToken' => $account['custom']['token'] ?? null,
             'confirmed' => $account['isEmailVerified'],
-            'tokenValidUntil' => new \DateTimeImmutable($account['custom']['tokenValidUntil'] ?? ''),
         ]);
     }
 
@@ -133,25 +206,13 @@ class Commercetools implements AccountApi
             json_encode([
                 'key' => self::TYPE_NAME,
                 'name' => ['de' => 'Frontastic Customer'],
-                'description' => ['de' => 'Additional fields like confirmation tokens'],
+                'description' => ['de' => 'Additional data fields'],
                 'resourceTypeIds' => ['customer'],
                 'fieldDefinitions' => [
                     [
                         'name' => 'data',
                         'type' => ['name' => 'String'],
                         'label' => ['de' => 'Data (JSON)'],
-                        'required' => false,
-                    ],
-                    [
-                        'name' => 'token',
-                        'type' => ['name' => 'String'],
-                        'label' => ['de' => 'Confirmation Token'],
-                        'required' => false,
-                    ],
-                    [
-                        'name' => 'tokenValidUntil',
-                        'type' => ['name' => 'String'],
-                        'label' => ['de' => 'Date until confirmation token is valid'],
                         'required' => false,
                     ],
                 ],
