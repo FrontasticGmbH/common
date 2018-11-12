@@ -58,6 +58,11 @@ class LifecycleEventDecorator implements AccountApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
+    public function getAddresses(string $accountId): array
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
     public function getDangerousInnerClient()
     {
         return $this->aggregate->getDangerousInnerClient();

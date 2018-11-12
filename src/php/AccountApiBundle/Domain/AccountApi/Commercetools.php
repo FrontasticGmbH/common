@@ -6,6 +6,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestExcept
 use Frontastic\Common\AccountApiBundle\Domain\Payment;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
+use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 
 class Commercetools implements AccountApi
@@ -159,6 +160,11 @@ class Commercetools implements AccountApi
         }
     }
 
+    public function getAddresses(string $accountId): array
+    {
+        return $this->mapAddresses($this->client->get('/customers/' . $accountId));
+    }
+
     private function mapAccount(array $account): Account
     {
         return new Account([
@@ -172,6 +178,16 @@ class Commercetools implements AccountApi
             // Do NOT map the password back
             'confirmed' => $account['isEmailVerified'],
         ]);
+    }
+
+    private function mapAddresses(array $account): array
+    {
+        return array_map(
+            function (array $address): Address {
+                return new Address();
+            },
+            $account['addresses']
+        );
     }
 
     /**
