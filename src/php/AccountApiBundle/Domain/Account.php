@@ -35,11 +35,6 @@ class Account extends DataObject implements UserInterface, \Serializable
     public $lastName;
 
     /**
-     * @var string
-     */
-    public $phone;
-
-    /**
      * @var \DateTime
      */
     public $birthday;

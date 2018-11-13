@@ -19,8 +19,9 @@ use Frontastic\Common\AccountApiBundle\Domain\Session;
 use Frontastic\Common\AccountApiBundle\Domain\AuthentificationInformation;
 
 use Frontastic\Common\CoreBundle\Domain\ErrorResult;
+use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
 
-class AccountController extends Controller
+class AccountAuthController extends Controller
 {
     public function indexAction(Request $request, UserInterface $account = null): JsonResponse
     {
@@ -38,8 +39,11 @@ class AccountController extends Controller
             'salutation' => $body['salutation'],
             'firstName' => $body['firstName'],
             'lastName' => $body['lastName'],
-            'phone' => $body['phonePrefix'] . $body['phone'],
             'birthday' => new \DateTimeImmutable($body['birthdayYear'] . '-' . $body['birthdayMonth'] . '-' . $body['birthdayDay'] . 'T12:00'),
+            'data' => [
+                'phonePrefix' => $body['phonePrefix'],
+                'phone' => $body['phone'],
+            ],
         ]);
         $account->setPassword($body['password']);
 
@@ -118,24 +122,25 @@ class AccountController extends Controller
         return $this->loginAccount($account, $this->cloneRequest($request, $body));
     }
 
-    public function updateAction(Request $request, UserInterface $account = null): JsonResponse
+    public function updateAction(Request $request, Context $context): JsonResponse
     {
-        if ($account === null) {
+        if (!$context->session->loggedIn) {
             throw new AuthenticationException('Not logged in.');
         }
 
         $accountService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
 
         $body = $this->getJsonBody($request);
-
-        $propertiesToUpdate = [
-            'displayName' => true,
-            'data' => true,
+        $account = $accountService->get($context->session->account->email);
+        $account->salutation = $body['salutation'];
+        $account->firstName = $body['firstName'];
+        $account->lastName = $body['lastName'];
+        $account->birthday = new \DateTimeImmutable($body['birthdayYear'] . '-' . $body['birthdayMonth'] . '-' . $body['birthdayDay'] . 'T12:00');
+        $account->data = [
+            'phonePrefix' => $body['phonePrefix'],
+            'phone' => $body['phone'],
         ];
-        foreach (array_intersect_key($body, $propertiesToUpdate) as $key => $value) {
-            $account->$key = $value;
-        }
-        $account = $accountService->store($account);
+        $account = $accountService->update($account);
 
         return new JsonResponse($account, 200);
     }

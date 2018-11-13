@@ -107,27 +107,29 @@ class Commercetools implements AccountApi
 
     public function update(Account $account): Account
     {
+        $accountVersion = $this->client->get('/customers/' . $account->accountId);
         return $this->mapAccount($this->client->post(
             '/customers/' . $account->accountId,
             [],
             [],
             json_encode([
+                'version' => $accountVersion['version'],
                 'actions' => [
                     [
                         'action' => 'setFirstName',
-                        'email' => $account->firstName,
+                        'firstName' => $account->firstName,
                     ],
                     [
                         'action' => 'setLastName',
-                        'email' => $account->lastName,
+                        'lastName' => $account->lastName,
                     ],
                     [
-                        'action' => 'setSaluation',
-                        'email' => $account->salutation,
+                        'action' => 'setSalutation',
+                        'salutation' => $account->salutation,
                     ],
                     [
-                        'action' => 'setSaluation',
-                        'email' => $account->salutation,
+                        'action' => 'setDateOfBirth',
+                        'dateOfBirth' => $account->birthday->format('Y-m-d'),
                     ],
                     [
                         'action' => 'setCustomField',
