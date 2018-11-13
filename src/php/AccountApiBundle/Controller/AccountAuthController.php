@@ -79,23 +79,11 @@ class AccountAuthController extends Controller
     public function resetAction(Request $request, string $token): JsonResponse
     {
         $accountService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
-        $account = $accountService->getByConfirmationToken($token);
-        if (!$account->isValidConfirmationToken($token)) {
-            throw new AuthenticationException('Invalid password reset token provided.');
-        }
 
         $body = $this->getJsonBody($request);
-        $authentificationInformation = new AuthentificationInformation($body);
+        $account = $accountService->resetPassword($token, $body['newPassword']);
 
-        $account->confirmed = true;
-        $account->clearConfirmationToken();
-        $account->setPassword($authentificationInformation->password);
-        $account = $accountService->store($account);
-
-        $body['email'] = $account->email;
-
-        $response = $this->loginAccount($account, $this->cloneRequest($request, $body));
-        return $response;
+        return $this->loginAccount($account, $request);
     }
 
     public function changePasswordAction(Request $request, Context $context): JsonResponse

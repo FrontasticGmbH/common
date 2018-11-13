@@ -175,6 +175,19 @@ class Commercetools implements AccountApi
         return $account;
     }
 
+    public function resetPassword(string $token, string $newPassword): Account
+    {
+        return $this->mapAccount($this->client->post(
+            '/customers/password/reset',
+            [],
+            [],
+            json_encode([
+                'tokenValue' => $token,
+                'newPassword' => $newPassword,
+            ])
+        ));
+    }
+
     public function login(Account $account): bool
     {
         try {

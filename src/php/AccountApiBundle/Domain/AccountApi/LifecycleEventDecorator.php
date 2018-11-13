@@ -60,6 +60,11 @@ class LifecycleEventDecorator implements AccountApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
+    public function resetPassword(string $token, string $newPassword): Account
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
     public function login(Account $account): bool
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
