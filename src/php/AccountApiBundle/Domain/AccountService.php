@@ -43,7 +43,8 @@ class AccountService
 
     public function sendPasswordResetMail(Account $account)
     {
-        $this->mailer->sendToUser($account, 'reset', 'Ihr neues Passwort', ['token' => $token]);
+        $account = $this->accountApi->generatePasswordResetToken($account);
+        $this->mailer->sendToUser($account, 'reset', 'Ihr neues Passwort', ['token' => $account->confirmationToken]);
         $account->eraseCredentials();
     }
 

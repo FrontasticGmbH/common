@@ -157,6 +157,24 @@ class Commercetools implements AccountApi
         ));
     }
 
+    public function generatePasswordResetToken(Account $account): Account
+    {
+        $token = $this->client->post(
+            '/customers/password-token',
+            [],
+            [],
+            json_encode([
+                'email' => $account->email,
+                'ttlMinutes' => 2 * 24 * 60,
+            ])
+        );
+
+        $account->confirmationToken = $token['value'];
+        $account->tokenValidUntil = new \DateTimeImmutable($token['expiresAt']);
+
+        return $account;
+    }
+
     public function login(Account $account): bool
     {
         try {

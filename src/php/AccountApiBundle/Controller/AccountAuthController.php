@@ -70,10 +70,8 @@ class AccountAuthController extends Controller
         $accountService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
 
         $body = $this->getJsonBody($request);
-        $authentificationInformation = new AuthentificationInformation($body);
-        $account = $accountService->get($authentificationInformation->email);
+        $account = $accountService->get($body['email']);
         $accountService->sendPasswordResetMail($account);
-        $account = $accountService->store($account);
 
         return new RedirectRoute('Frontastic.AccountBundle.Account.logout');
     }

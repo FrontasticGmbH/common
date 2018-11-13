@@ -24,7 +24,7 @@
         <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountAuthController::confirmAction</default>
     </route>
 
-    <route id="Frontastic.AccountApi.Api.request" path="/request" methods="POST">
+    <route id="Frontastic.AccountApi.Api.requestReset" path="/request" methods="POST">
         <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountAuthController::requestResetAction</default>
     </route>
 
