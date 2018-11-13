@@ -141,6 +141,22 @@ class Commercetools implements AccountApi
         ));
     }
 
+    public function updatePassword(string $accountId, string $oldPassword, string $newPassword): Account
+    {
+        $account= $this->client->get('/customers/' . $accountId);
+        return $this->mapAccount($this->client->post(
+            '/customers/password',
+            [],
+            [],
+            json_encode([
+                'id' => $accountId,
+                'version' => $account['version'],
+                'currentPassword' => $oldPassword,
+                'newPassword' => $newPassword,
+            ])
+        ));
+    }
+
     public function login(Account $account): bool
     {
         try {

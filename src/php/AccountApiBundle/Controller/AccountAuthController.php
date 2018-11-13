@@ -100,26 +100,18 @@ class AccountAuthController extends Controller
         return $response;
     }
 
-    public function changePasswordAction(Request $request, UserInterface $account = null): JsonResponse
+    public function changePasswordAction(Request $request, Context $context): JsonResponse
     {
-        if ($account === null) {
+        if (!$context->session->loggedIn) {
             throw new AuthenticationException('Not logged in.');
         }
 
         $accountService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
+        $account = $accountService->get($context->session->account->email);
 
         $body = $this->getJsonBody($request);
-        $authentificationInformation = new AuthentificationInformation($body);
-
-        if (!$account->confirmed ||
-            !$account->isValidPassword($authentificationInformation->password)) {
-            throw new \RuntimeException('Invalid login data provided.');
-        }
-
-        $account->setPassword($authentificationInformation->newPassword);
-        $account = $accountService->store($account);
-
-        return $this->loginAccount($account, $this->cloneRequest($request, $body));
+        $account = $accountService->updatePassword($account, $body['oldPassword'], $body['newPassword']);
+        return new JsonResponse($account, 201);
     }
 
     public function updateAction(Request $request, Context $context): JsonResponse
@@ -129,9 +121,9 @@ class AccountAuthController extends Controller
         }
 
         $accountService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
+        $account = $accountService->get($context->session->account->email);
 
         $body = $this->getJsonBody($request);
-        $account = $accountService->get($context->session->account->email);
         $account->salutation = $body['salutation'];
         $account->firstName = $body['firstName'];
         $account->lastName = $body['lastName'];

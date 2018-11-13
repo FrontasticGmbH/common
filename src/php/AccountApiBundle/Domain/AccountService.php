@@ -82,6 +82,11 @@ class AccountService
         return $this->accountApi->update($account);
     }
 
+    public function updatePassword(Account $account, string $oldPassword, string $newPassword): Account
+    {
+        return $this->accountApi->updatePassword($account->accountId, $oldPassword, $newPassword);
+    }
+
     public function remove(Account $account)
     {
         $this->accountApi->remove($account);
