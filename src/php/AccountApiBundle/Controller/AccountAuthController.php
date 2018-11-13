@@ -14,6 +14,7 @@ use QafooLabs\MVC\RedirectRoute;
 
 use Frontastic\Common\AccountApiBundle\Security\Authenticator;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
+use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\AccountApiBundle\Domain\Session;
 use Frontastic\Common\AccountApiBundle\Domain\AuthentificationInformation;
 
@@ -35,8 +36,8 @@ class AccountController extends Controller
         $account = new Account([
             'email' => $body['email'],
             'salutation' => $body['salutation'],
-            'prename' => $body['prename'],
-            'lastname' => $body['lastname'],
+            'firstName' => $body['firstName'],
+            'lastName' => $body['lastName'],
             'phone' => $body['phonePrefix'] . $body['phone'],
             'birthday' => new \DateTimeImmutable($body['birthdayYear'] . '-' . $body['birthdayMonth'] . '-' . $body['birthdayDay'] . 'T12:00'),
         ]);

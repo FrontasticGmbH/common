@@ -27,12 +27,12 @@ class Account extends DataObject implements UserInterface, \Serializable
     /**
      * @var string
      */
-    public $prename;
+    public $firstName;
 
     /**
      * @var string
      */
-    public $lastname;
+    public $lastName;
 
     /**
      * @var string

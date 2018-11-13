@@ -5,9 +5,9 @@ namespace Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use Frontastic\Common\AccountApiBundle\Domain\Payment;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
+use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
-use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 
 class Commercetools implements AccountApi
 {
@@ -63,8 +63,8 @@ class Commercetools implements AccountApi
             json_encode([
                 'email' => $account->email,
                 'salutation' => $account->salutation,
-                'firstName' => $account->prename,
-                'lastName' => $account->lastname,
+                'firstName' => $account->firstName,
+                'lastName' => $account->lastName,
                 'dateOfBirth' => $account->birthday->format('Y-m-d'),
                 'password' => $account->getPassword(),
                 'isEmailVerified' => $account->confirmed,
@@ -108,18 +108,18 @@ class Commercetools implements AccountApi
     public function update(Account $account): Account
     {
         return $this->mapAccount($this->client->post(
-            '/customers',
+            '/customers/' . $account->accountId,
             [],
             [],
             json_encode([
                 'actions' => [
                     [
                         'action' => 'setFirstName',
-                        'email' => $account->prename,
+                        'email' => $account->firstName,
                     ],
                     [
                         'action' => 'setLastName',
-                        'email' => $account->lastname,
+                        'email' => $account->lastName,
                     ],
                     [
                         'action' => 'setSaluation',
@@ -165,14 +165,42 @@ class Commercetools implements AccountApi
         return $this->mapAddresses($this->client->get('/customers/' . $accountId));
     }
 
+    public function addAddress(string $accountId, Address $address): Account
+    {
+        $account = $this->client->get('/customers/' . $accountId);
+        return $this->mapAccount($this->client->post(
+            '/customers/' . $accountId,
+            [],
+            [],
+            json_encode([
+                'version' => $account['version'],
+                'actions' => [
+                    [
+                        'action' => 'addAddress',
+                        'address' => [
+                            'firstName' => $address->firstName,
+                            'lastName' => $address->lastName,
+                            'streetName' => $address->streetName,
+                            'streetNumber' => $address->streetNumber,
+                            'additionalStreetInfo' => $address->additionalStreetInfo,
+                            'postalCode' => $address->postalCode,
+                            'city' => $address->city,
+                            'country' => $address->country,
+                        ],
+                    ],
+                ],
+            ])
+        ));
+    }
+
     private function mapAccount(array $account): Account
     {
         return new Account([
             'accountId' => $account['id'],
             'email' => $account['email'],
             'salutation' => $account['salutation'] ?? null,
-            'prename' => $account['firstName'] ?? null,
-            'lastname' => $account['lastName'] ?? null,
+            'firstName' => $account['firstName'] ?? null,
+            'lastName' => $account['lastName'] ?? null,
             'birthday' => isset($account['dateOfBirth']) ? new \DateTimeImmutable($account['dateOfBirth']) : null,
             'data' => json_decode($account['custom']['fields']['data'] ?? '{}'),
             // Do NOT map the password back
@@ -183,8 +211,18 @@ class Commercetools implements AccountApi
     private function mapAddresses(array $account): array
     {
         return array_map(
-            function (array $address): Address {
-                return new Address();
+            function (array $address): Address {;
+                return new Address([
+                    'addressId' => $address['id'],
+                    'firstName' => $address['firstName'],
+                    'lastName' => $address['lastName'],
+                    'streetName' => $address['streetName'],
+                    'streetNumber' => $address['streetNumber'],
+                    'additionalStreetInfo' => $address['additionalStreetInfo'],
+                    'postalCode' => $address['postalCode'],
+                    'city' => $address['city'],
+                    'country' => $address['country'],
+                ]);
             },
             $account['addresses']
         );

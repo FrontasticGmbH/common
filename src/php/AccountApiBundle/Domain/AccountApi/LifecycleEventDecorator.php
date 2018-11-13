@@ -4,10 +4,7 @@ namespace Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 
 use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
-use Frontastic\Common\AccountApiBundle\Domain\Payment;
-use Frontastic\Common\AccountApiBundle\Domain\Order;
-use Frontastic\Common\AccountApiBundle\Domain\LineItem;
-use Frontastic\Common\ProductApiBundle\Domain\Variant;
+use Frontastic\Common\AccountApiBundle\Domain\Address;
 
 class LifecycleEventDecorator implements AccountApi
 {
@@ -59,6 +56,11 @@ class LifecycleEventDecorator implements AccountApi
     }
 
     public function getAddresses(string $accountId): array
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
+    public function addAddress(string $accountId, Address $address): Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
