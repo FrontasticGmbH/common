@@ -41,6 +41,22 @@
     </route>
 
     <route id="Frontastic.AccountApi.Api.addAddress" path="/address/new" methods="POST">
-        <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountApiController::addAddress</default>
+        <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountApiController::addAddressAction</default>
+    </route>
+
+    <route id="Frontastic.AccountApi.Api.updateAddress" path="/address/update" methods="POST">
+        <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountApiController::updateAddressAction</default>
+    </route>
+
+    <route id="Frontastic.AccountApi.Api.removeAddress" path="/address/remove" methods="POST">
+        <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountApiController::removeAddressAction</default>
+    </route>
+
+    <route id="Frontastic.AccountApi.Api.setDefaultBillingAddress" path="/address/setDefaultBilling" methods="POST">
+        <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountApiController::setDefaultBillingAddressAction</default>
+    </route>
+
+    <route id="Frontastic.AccountApi.Api.setDefaultShippingAddress" path="/address/setDefaultShipping" methods="POST">
+        <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountApiController::setDefaultShippingAddressAction</default>
     </route>
 </routes>

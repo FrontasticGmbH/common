@@ -69,6 +69,11 @@ class Account extends DataObject implements UserInterface, \Serializable
      */
     public $tokenValidUntil;
 
+    /**
+     * @var Address[]
+     */
+    public $addresses = [];
+
     public function setPassword(string $password)
     {
         // This must use a deterministic hashing if we want to hash here at

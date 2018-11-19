@@ -242,6 +242,92 @@ class Commercetools implements AccountApi
         ));
     }
 
+    public function updateAddress(string $accountId, Address $address): Account
+    {
+        $account = $this->client->get('/customers/' . $accountId);
+        return $this->mapAccount($this->client->post(
+            '/customers/' . $accountId,
+            [],
+            [],
+            json_encode([
+                'version' => $account['version'],
+                'actions' => [
+                    [
+                        'action' => 'changeAddress',
+                        'addressId' => $address->addressId,
+                        'address' => [
+                            'firstName' => $address->firstName,
+                            'lastName' => $address->lastName,
+                            'streetName' => $address->streetName,
+                            'streetNumber' => $address->streetNumber,
+                            'additionalStreetInfo' => $address->additionalStreetInfo,
+                            'postalCode' => $address->postalCode,
+                            'city' => $address->city,
+                            'country' => $address->country,
+                        ],
+                    ],
+                ],
+            ])
+        ));
+    }
+
+    public function removeAddress(string $accountId, string $addressId): Account
+    {
+        $account = $this->client->get('/customers/' . $accountId);
+        return $this->mapAccount($this->client->post(
+            '/customers/' . $accountId,
+            [],
+            [],
+            json_encode([
+                'version' => $account['version'],
+                'actions' => [
+                    [
+                        'action' => 'removeAddress',
+                        'addressId' => $addressId,
+                    ],
+                ],
+            ])
+        ));
+    }
+
+    public function setDefaultBillingAddress(string $accountId, string $addressId): Account
+    {
+        $account = $this->client->get('/customers/' . $accountId);
+        return $this->mapAccount($this->client->post(
+            '/customers/' . $accountId,
+            [],
+            [],
+            json_encode([
+                'version' => $account['version'],
+                'actions' => [
+                    [
+                        'action' => 'setDefaultBillingAddress',
+                        'addressId' => $addressId,
+                    ],
+                ],
+            ])
+        ));
+    }
+
+    public function setDefaultShippingAddress(string $accountId, string $addressId): Account
+    {
+        $account = $this->client->get('/customers/' . $accountId);
+        return $this->mapAccount($this->client->post(
+            '/customers/' . $accountId,
+            [],
+            [],
+            json_encode([
+                'version' => $account['version'],
+                'actions' => [
+                    [
+                        'action' => 'setDefaultShippingAddress',
+                        'addressId' => $addressId,
+                    ],
+                ],
+            ])
+        ));
+    }
+
     private function mapAccount(array $account): Account
     {
         return new Account([
@@ -254,13 +340,14 @@ class Commercetools implements AccountApi
             'data' => json_decode($account['custom']['fields']['data'] ?? '{}'),
             // Do NOT map the password back
             'confirmed' => $account['isEmailVerified'],
+            'addresses' => $this->mapAddresses($account),
         ]);
     }
 
     private function mapAddresses(array $account): array
     {
         return array_map(
-            function (array $address): Address {;
+            function (array $address) use ($account): Address {;
                 return new Address([
                     'addressId' => $address['id'],
                     'firstName' => $address['firstName'],
@@ -271,6 +358,8 @@ class Commercetools implements AccountApi
                     'postalCode' => $address['postalCode'],
                     'city' => $address['city'],
                     'country' => $address['country'],
+                    'isDefaultBillingAddress' => ($address['id'] === $account['defaultBillingAddressId']),
+                    'isDefaultShippingAddress' => ($address['id'] === $account['defaultShippingAddressId']),
                 ]);
             },
             $account['addresses']

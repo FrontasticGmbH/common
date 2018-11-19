@@ -50,4 +50,14 @@ class Address extends DataObject
      * @var string
      */
     public $country;
+
+    /**
+     * @var bool
+     */
+    public $isDefaultBillingAddress = false;
+
+    /**
+     * @var bool
+     */
+    public $isDefaultShippingAddress = false;
 }

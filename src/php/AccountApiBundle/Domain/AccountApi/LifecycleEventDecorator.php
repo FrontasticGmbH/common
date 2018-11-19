@@ -80,6 +80,26 @@ class LifecycleEventDecorator implements AccountApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
+    public function updateAddress(string $accountId, Address $address): Account
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
+    public function removeAddress(string $accountId, string $addressId): Account
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
+    public function setDefaultBillingAddress(string $accountId, string $addressId): Account
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
+    public function setDefaultShippingAddress(string $accountId, string $addressId): Account
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
     public function getDangerousInnerClient()
     {
         return $this->aggregate->getDangerousInnerClient();
