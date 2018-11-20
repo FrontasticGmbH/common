@@ -234,14 +234,13 @@ class Commercetools implements WishlistApi
             'wishlistVersion' => $wishlist['version'],
             'anonymousId' => $wishlist['anonymousId'] ?? null,
             'accountId' => $wishlist['customer']['id'] ?? null,
-            'name' => $wishlist['name'] ?? [],
+            'name' => reset($wishlist['name']),
             'lineItems' => $this->mapLineItems($wishlist),
         ]);
     }
 
     private function mapLineItems(array $wishlist): array
     {
-        debug($wishlist);
         $lineItems = array_merge(
             array_map(
                 function (array $lineItem): LineItem {
