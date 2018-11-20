@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="Frontastic.WishlistApi.Wishlist.get" path="/wishlist">
+        <default key="_controller">Frontastic\Common\WishlistApiBundle\Controller\WishlistController::getAction</default>
+    </route>
+
+    <route id="Frontastic.WishlistApi.Wishlist.getOrder" path="/order/{order}">
+        <default key="_controller">Frontastic\Common\WishlistApiBundle\Controller\WishlistController::getOrderAction</default>
+    </route>
+
+    <route id="Frontastic.WishlistApi.Wishlist.add" path="/wishlist/add" methods="POST">
+        <default key="_controller">Frontastic\Common\WishlistApiBundle\Controller\WishlistController::addAction</default>
+    </route>
+
+    <route id="Frontastic.WishlistApi.Wishlist.updateLineItem" path="/wishlist/lineItem" methods="POST">
+        <default key="_controller">Frontastic\Common\WishlistApiBundle\Controller\WishlistController::updateLineItemAction</default>
+    </route>
+
+    <route id="Frontastic.WishlistApi.Wishlist.removeLineItem" path="/wishlist/lineItem/remove" methods="POST">
+        <default key="_controller">Frontastic\Common\WishlistApiBundle\Controller\WishlistController::removeLineItemAction</default>
+    </route>
+
+    <route id="Frontastic.WishlistApi.Wishlist.checkout" path="/wishlist/checkout" methods="POST">
+        <default key="_controller">Frontastic\Common\WishlistApiBundle\Controller\WishlistController::checkoutAction</default>
+    </route>
+</routes>
