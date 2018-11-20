@@ -83,6 +83,11 @@ class LifecycleEventDecorator implements CartApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
+    public function getOrders(string $accountId): array
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
     /**
      * This method is a temporary hack to recieve new orders. The
      * synchronization is based on a locally stored sequence number.

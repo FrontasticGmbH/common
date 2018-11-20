@@ -308,6 +308,21 @@ class Commercetools implements CartApi
         ));
     }
 
+    public function getOrders(string $accountId): array
+    {
+        $result = $this->client->fetch(
+            '/orders',
+            [
+                'where' => 'customerId="' . $accountId . '"',
+            ]
+        );
+
+        return array_map(
+            [$this, 'mapOrder'],
+            $result->results
+        );
+    }
+
     /**
      * This method is a temporary hack to recieve new orders. The
      * synchronization is based on a locally stored sequence number.
@@ -337,7 +352,6 @@ class Commercetools implements CartApi
         /**
          * @TODO:
          *
-         * [ ] Map (and sort) custom line items
          * [ ] Map delivery costs / properties
          * [ ] Map product discounts
          * [ ] Map discount codes
