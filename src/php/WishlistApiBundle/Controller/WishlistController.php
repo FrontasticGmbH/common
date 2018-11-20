@@ -20,18 +20,10 @@ class WishlistController extends CrudController
      */
     protected $wishlistApi;
 
-    public function getAction(Context $context): array
+    public function getAction(Context $context, Request $request): array
     {
         return [
-            'wishlist' => $this->getWishlist($context),
-        ];
-    }
-
-    public function getOrderAction(Context $context, string $order): array
-    {
-        $wishlistApi = $this->getWishlistApi($context);
-        return [
-            'order' => $wishlistApi->getOrder($order),
+            'wishlist' => $this->getWishlist($context, $request->get('wishlist', null)),
         ];
     }
 
@@ -40,17 +32,14 @@ class WishlistController extends CrudController
         $payload = $this->getJsonContent($request);
         $wishlistApi = $this->getWishlistApi($context);
 
-        $wishlist = $this->getWishlist($context);
-        $wishlistApi->startTransaction($wishlist);
+        $wishlist = $this->getWishlist($context, $request->get('wishlist', null));
         $wishlist = $wishlistApi->addToWishlist(
             $wishlist,
             new LineItem\Variant([
                 'variant' => new Variant(['sku' => $payload['variant']['sku']]),
-                'custom' => $payload['option'] ?: [],
                 'count' => $payload['count']
             ])
         );
-        $wishlist = $wishlistApi->commit();
 
         return [
             'wishlist' => $wishlist,
@@ -62,14 +51,12 @@ class WishlistController extends CrudController
         $payload = $this->getJsonContent($request);
         $wishlistApi = $this->getWishlistApi($context);
 
-        $wishlist = $this->getWishlist($context);
-        $wishlistApi->startTransaction($wishlist);
+        $wishlist = $this->getWishlist($context, $request->get('wishlist', null));
         $wishlist = $wishlistApi->updateLineItem(
             $wishlist,
             $this->getLineItem($wishlist, $payload['lineItemId']),
             $payload['count']
         );
-        $wishlist = $wishlistApi->commit();
 
         return [
             'wishlist' => $wishlist,
@@ -81,13 +68,11 @@ class WishlistController extends CrudController
         $payload = $this->getJsonContent($request);
         $wishlistApi = $this->getWishlistApi($context);
 
-        $wishlist = $this->getWishlist($context);
-        $wishlistApi->startTransaction($wishlist);
+        $wishlist = $this->getWishlist($context, $request->get('wishlist', null));
         $wishlist = $wishlistApi->removeLineItem(
             $wishlist,
             $this->getLineItem($wishlist, $payload['lineItemId'])
         );
-        $wishlist = $wishlistApi->commit();
 
         return [
             'wishlist' => $wishlist,
@@ -105,50 +90,6 @@ class WishlistController extends CrudController
         throw new \OutOfBoundsException("Could not find line item with ID $lineItemId");
     }
 
-    public function checkoutAction(Context $context, Request $request): array
-    {
-        $payload = $this->getJsonContent($request);
-        $wishlistApi = $this->getWishlistApi($context);
-
-        // @TODO:
-        // [ ] Create new user, if requested
-        // [ ] Register for newsletter if requested
-
-        $wishlist = $this->getWishlist($context);
-        $wishlistApi->startTransaction($wishlist);
-        $wishlist = $wishlistApi->setEmail(
-            $wishlist,
-            $payload['account']['email']
-        );
-        $wishlist = $wishlistApi->setShippingAddress(
-            $wishlist,
-            $payload['shipping']
-        );
-        $wishlist = $wishlistApi->setBillingAddress(
-            $wishlist,
-            $payload['billing'] ?: $payload['shipping']
-        );
-        $wishlist = $wishlistApi->setPayment(
-            $wishlist,
-            new Payment([
-                'paymentProvider' => $payload['payment']['provider'],
-                'paymentId' => $payload['payment']['id'],
-                'amount' => $this->getWishlist($context)->sum,
-                'currency' => $context->currency
-            ])
-        );
-        $wishlist = $wishlistApi->commit();
-
-        $order = $wishlistApi->order($wishlist);
-
-        // @HACK: Regenerate session ID to get a "new" wishlist:
-        session_regenerate_id();
-
-        return [
-            'order' => $order,
-        ];
-    }
-
     protected function getWishlistApi(Context $context): WishlistApi
     {
         if ($this->wishlistApi) {
@@ -160,13 +101,54 @@ class WishlistController extends CrudController
         return $this->wishlistApi = $wishlistApiFactory->factor($context->customer);
     }
 
-    protected function getWishlist(Context $context): Wishlist
+    /**
+     * The idea behind this method is:
+     *
+     * * If a wishlist has been selected (passed $wishlistId), use that
+     *
+     * * If no wishlist is explicitely selected (no $wishlistId) then:
+     *
+     *   * If the user does not have a wishlist yet, create a default wishlist
+     *
+     *     * This means creating an anonymous wishlist for customers who are
+     *       not logged in
+     *
+     *   * Select the first wishlist, if one exists
+     */
+    protected function getWishlist(Context $context, ?string $wishlistId): Wishlist
     {
         $wishlistApi = $this->getWishlistApi($context);
+
+        if ($wishlistId) {
+            return $wishlistApi->getWishlist($wishlistId);
+        }
+
         if ($context->session->loggedIn) {
-            return $wishlistApi->getForUser($context->session->account->accountId);
+            $wishlists = $wishlistApi->getWishlists($context->session->account->accountId);
+
+            if (count($wishlists)) {
+                return reset($wishlists);
+            }
+
+            return $wishlistApi->create(new Wishlist([
+                'accountId' => $context->session->account->accountId,
+                'name' => [
+                    // @TODO: Use language code from locale and
+                    // provide translation map
+                    'de' => 'Wunschzettel',
+                ],
+            ]));
         } else {
-            return $wishlistApi->getAnonymous(session_id());
+            try {
+                return $wishlistApi->getAnonymous(session_id());
+            } catch (\OutOfBoundsException $e) {
+                return $wishlistApi->create(new Wishlist([
+                    'anonymous' => session_id(),
+                    'name' => [
+                        $context->locale => 'Default Wishlist',
+                    ],
+                ]));
+            }
         }
     }
 

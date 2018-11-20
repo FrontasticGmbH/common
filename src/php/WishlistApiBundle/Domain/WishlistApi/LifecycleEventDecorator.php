@@ -27,6 +27,27 @@ class LifecycleEventDecorator implements WishlistApi
         $this->listerners[] = $listener;
     }
 
+    public function getWishlist(string $orderId): Wishlist
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
+    public function getAnonymous(string $anonymousId): Wishlist
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
+
+    public function getWishlists(string $accountId): array
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
+    public function create(Wishlist $wishlist): Wishlist
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
     public function addToWishlist(Wishlist $wishlist, LineItem $lineItem): Wishlist
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
@@ -38,16 +59,6 @@ class LifecycleEventDecorator implements WishlistApi
     }
 
     public function removeLineItem(Wishlist $wishlist, LineItem $lineItem): Wishlist
-    {
-        return $this->dispatch(__FUNCTION__, func_get_args());
-    }
-
-    public function getWishlist(string $orderId): Wishlist
-    {
-        return $this->dispatch(__FUNCTION__, func_get_args());
-    }
-
-    public function getWishlists(string $accountId): array
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }

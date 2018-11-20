@@ -16,14 +16,78 @@ use Frontastic\Common\WishlistApiBundle\Domain\WishlistApi;
 
 class Commercetools implements WishlistApi
 {
+    const EXPAND_VARIANTS = 'lineItems[*].variant';
+
     /**
      * @var Client
      */
     private $client;
 
-    public function __construct(Client $client)
+    /**
+     * @var Mapper
+     */
+    private $mapper;
+
+    public function __construct(Client $client, Mapper $mapper)
     {
         $this->client = $client;
+        $this->mapper = $mapper;
+    }
+
+    public function getWishlist(string $wishlistId): Wishlist
+    {
+        return $this->mapWishlist($this->client->get(
+            '/shopping-lists/' . $wishlistId,
+            ['expand' => self::EXPAND_VARIANTS]
+        ));
+    }
+
+    public function getAnonymous(string $anonymousId): Wishlist
+    {
+        $result = $this->client->fetch(
+            '/shopping-lists',
+            [
+                'where' => 'anonymousId="' . $anonymousId . '"',
+                'expand' => self::EXPAND_VARIANTS,
+            ]
+        );
+
+        if (!count($result->results)) {
+            throw new \OutOfBoundsException("No wishlist exists yet.");
+        }
+
+        return $this->mapWishlist($result->results[0]);
+    }
+
+    public function getWishlists(string $accountId): array
+    {
+        $result = $this->client->fetch(
+            '/shopping-lists',
+            [
+                'where' => 'customer(id="' . $accountId . '")',
+                'expand' => self::EXPAND_VARIANTS,
+            ]
+        );
+
+        return array_map(
+            [$this, 'mapWishlist'],
+            $result->results
+        );
+    }
+
+    public function create(Wishlist $wishlist): Wishlist
+    {
+        return $this->mapWishlist($this->client->post(
+            '/shopping-lists',
+            ['expand' => self::EXPAND_VARIANTS],
+            [],
+            json_encode([
+                'name' => $wishlist->name,
+                'customer' => $wishlist->accountId ? ['typeId' => 'customer', 'id' => $wishlist->accountId] : null,
+                'anonymousId' => $wishlist->anonymousId ?: null,
+                'deleteDaysAfterLastModification' => $wishlist->anonymousId ? 31 : null,
+            ])
+        ));
     }
 
     public function addToWishlist(Wishlist $wishlist, LineItem $lineItem): Wishlist
@@ -39,7 +103,7 @@ class Commercetools implements WishlistApi
     {
         return $this->mapWishlist($this->client->post(
             '/shopping-lists/' . $wishlist->wishlistId,
-            [],
+            ['expand' => self::EXPAND_VARIANTS],
             [],
             json_encode([
                 'version' => $wishlist->wishlistVersion,
@@ -48,10 +112,6 @@ class Commercetools implements WishlistApi
                         'action' => 'addLineItem',
                         'sku' => $lineItem->variant->sku,
                         'quantity' => $lineItem->count,
-                        'custom' => !$lineItem->custom ? null : [
-                            'type' => $this->getCustomLineItemType(),
-                            'fields' => $lineItem->custom,
-                        ],
                     ]
                 ],
             ])
@@ -62,7 +122,7 @@ class Commercetools implements WishlistApi
     {
         return $this->mapWishlist($this->client->post(
             '/shopping-lists/' . $wishlist->wishlistId,
-            [],
+            ['expand' => self::EXPAND_VARIANTS],
             [],
             json_encode([
                 'version' => $wishlist->wishlistVersion,
@@ -79,10 +139,6 @@ class Commercetools implements WishlistApi
                             'currencyCode' => 'EUR', // @TODO: Get from context
                             'centAmount' => $lineItem->totalPrice,
                         ],
-                        'custom' => !$lineItem->custom ? null : [
-                            'type' => $this->getCustomLineItemType(),
-                            'fields' => $lineItem->custom,
-                        ],
                         'quantity' => $lineItem->count,
                     ],
                 ],
@@ -95,7 +151,7 @@ class Commercetools implements WishlistApi
         if ($lineItem instanceof LineItem\Variant) {
             return $this->mapWishlist($this->client->post(
                 '/shopping-lists/' . $wishlist->wishlistId,
-                [],
+                ['expand' => self::EXPAND_VARIANTS],
                 [],
                 json_encode([
                     'version' => $wishlist->wishlistVersion,
@@ -111,14 +167,14 @@ class Commercetools implements WishlistApi
         } else {
             return $this->mapWishlist($this->client->post(
                 '/shopping-lists/' . $wishlist->wishlistId,
-                [],
+                ['expand' => self::EXPAND_VARIANTS],
                 [],
                 json_encode([
                     'version' => $wishlist->wishlistVersion,
                     'actions' => [
                         [
                             'action' => 'changeCustomLineItemQuantity',
-                            'customLineItemId' => $lineItem->lineItemId,
+                            'textLineItemId' => $lineItem->lineItemId,
                             'quantity' => $count,
                         ],
                     ],
@@ -132,7 +188,7 @@ class Commercetools implements WishlistApi
         if ($lineItem instanceof LineItem\Variant) {
             return $this->mapWishlist($this->client->post(
                 '/shopping-lists/' . $wishlist->wishlistId,
-                [],
+                ['expand' => self::EXPAND_VARIANTS],
                 [],
                 json_encode([
                     'version' => $wishlist->wishlistVersion,
@@ -147,41 +203,19 @@ class Commercetools implements WishlistApi
         } else {
             return $this->mapWishlist($this->client->post(
                 '/shopping-lists/' . $wishlist->wishlistId,
-                [],
+                ['expand' => self::EXPAND_VARIANTS],
                 [],
                 json_encode([
                     'version' => $wishlist->wishlistVersion,
                     'actions' => [
                         [
                             'action' => 'removeCustomLineItem',
-                            'customLineItemId' => $lineItem->lineItemId,
+                            'textLineItemId' => $lineItem->lineItemId,
                         ],
                     ],
                 ])
             ));
         }
-    }
-
-    public function getWishlist(string $wishlistId): Wishlist
-    {
-        return $this->mapWishlist($this->client->get(
-            '/shopping-lists/' . $wishlistId
-        ));
-    }
-
-    public function getWishlists(string $accountId): array
-    {
-        $result = $this->client->fetch(
-            '/shopping-lists',
-            [
-                'where' => 'customer(id="' . $accountId . '")',
-            ]
-        );
-
-        return array_map(
-            [$this, 'mapWishlist'],
-            $result->results
-        );
     }
 
     private function mapWishlist(array $wishlist): Wishlist
@@ -198,13 +232,16 @@ class Commercetools implements WishlistApi
         return new Wishlist([
             'wishlistId' => $wishlist['id'],
             'wishlistVersion' => $wishlist['version'],
+            'anonymousId' => $wishlist['anonymousId'] ?? null,
+            'accountId' => $wishlist['customer']['id'] ?? null,
+            'name' => $wishlist['name'] ?? [],
             'lineItems' => $this->mapLineItems($wishlist),
-            'sum' => $wishlist['totalPrice']['centAmount'],
         ]);
     }
 
     private function mapLineItems(array $wishlist): array
     {
+        debug($wishlist);
         $lineItems = array_merge(
             array_map(
                 function (array $lineItem): LineItem {
@@ -212,11 +249,9 @@ class Commercetools implements WishlistApi
                         'lineItemId' => $lineItem['id'],
                         'name' => reset($lineItem['name']),
                         'type' => 'variant',
+                        'addedAt' => new \DateTimeImmutable($lineItem['addedAt']),
                         'variant' => $this->mapper->dataToVariant($lineItem['variant'], new Query(), new Locale()),
-                        'custom' => $lineItem['custom']['fields'] ?? [],
                         'count' => $lineItem['quantity'],
-                        'price' => $lineItem['price']['value']['centAmount'],
-                        'totalPrice' => $lineItem['totalPrice']['centAmount'],
                     ]);
                 },
                 $wishlist['lineItems']
@@ -227,22 +262,12 @@ class Commercetools implements WishlistApi
                         'lineItemId' => $lineItem['id'],
                         'name' => reset($lineItem['name']),
                         'type' => $lineItem['custom']['type'] ?? $lineItem['slug'],
-                        'custom' => $lineItem['custom']['fields'] ?? [],
+                        'addedAt' => new \DateTimeImmutable($lineItem['addedAt']),
                         'count' => $lineItem['quantity'],
-                        'price' => $lineItem['money']['centAmount'],
-                        'totalPrice' => $lineItem['totalPrice']['centAmount'],
                     ]);
                 },
-                $wishlist['customLineItems']
+                $wishlist['textLineItems']
             )
-        );
-
-        usort(
-            $lineItems,
-            function (LineItem $a, LineItem $b): int {
-                return ($a->custom['bundleNumber'] ?? $a->name) <=>
-                    ($b->custom['bundleNumber'] ?? $b->name);
-            }
         );
 
         return $lineItems;

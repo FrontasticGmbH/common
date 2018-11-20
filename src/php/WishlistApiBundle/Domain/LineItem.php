@@ -24,39 +24,14 @@ class LineItem extends DataObject
     public $type;
 
     /**
-     * @var [string => mixed]
+     * @var \DateTimeImmutable
      */
-    public $custom = [];
+    public $addedAt;
 
     /**
      * @var integer
      */
     public $count = 0;
-
-    /**
-     * @var integer
-     */
-    public $price = 0;
-
-    /**
-     * @var integer
-     */
-    public $discountedPrice;
-
-    /**
-     * @var array Translatable discount texts, if any are applied
-     */
-    public $discountTexts = [];
-
-    /**
-     * @var integer
-     */
-    public $totalPrice = 0;
-
-    /**
-     * @var bool
-     */
-    public $isGift = false;
 
     /**
      * Access original object from backend

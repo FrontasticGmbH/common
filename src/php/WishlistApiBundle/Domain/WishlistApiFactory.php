@@ -36,7 +36,8 @@ class WishlistApiFactory
                         $customer->configuration['commercetools']->projectKey,
                         $httpClient,
                         $cache
-                    )
+                    ),
+                    new Mapper()
                 );
                 break;
 

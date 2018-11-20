@@ -17,14 +17,24 @@ class Wishlist extends DataObject
     public $wishlistVersion;
 
     /**
+     * @var string
+     */
+    public $anonymousId;
+
+    /**
+     * @var string
+     */
+    public $accountId;
+
+    /**
+     * @var string[]
+     */
+    public $name = [];
+
+    /**
      * @var \Frontastic\Common\WishlistApiBundle\Domain\LineItem[]
      */
     public $lineItems = [];
-
-    /**
-     * @var integer
-     */
-    public $sum = 0;
 
     /**
      * Access original object from backend
