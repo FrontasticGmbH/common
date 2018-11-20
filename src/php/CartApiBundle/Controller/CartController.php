@@ -118,7 +118,7 @@ class CartController extends CrudController
         $cartApi->startTransaction($cart);
         $cart = $cartApi->setEmail(
             $cart,
-            $payload['user']['email']
+            $payload['account']['email']
         );
         $cart = $cartApi->setShippingAddress(
             $cart,
