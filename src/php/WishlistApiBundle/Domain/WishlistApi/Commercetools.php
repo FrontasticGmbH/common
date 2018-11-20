@@ -37,98 +37,128 @@ class Commercetools implements WishlistApi
 
     private function addVariantToWishlist(Wishlist $wishlist, LineItem\Variant $lineItem): Wishlist
     {
-        return $this->postWishlistActions(
-            $wishlist,
-            [
-                [
-                    'action' => 'addLineItem',
-                    'sku' => $lineItem->variant->sku,
-                    'quantity' => $lineItem->count,
-                    'custom' => !$lineItem->custom ? null : [
-                        'type' => $this->getCustomLineItemType(),
-                        'fields' => $lineItem->custom,
-                    ],
+        return $this->mapWishlist($this->client->post(
+            '/shopping-lists/' . $wishlist->wishlistId,
+            [],
+            [],
+            json_encode([
+                'version' => $wishlist->wishlistVersion,
+                'actions' => [
+                    [
+                        'action' => 'addLineItem',
+                        'sku' => $lineItem->variant->sku,
+                        'quantity' => $lineItem->count,
+                        'custom' => !$lineItem->custom ? null : [
+                            'type' => $this->getCustomLineItemType(),
+                            'fields' => $lineItem->custom,
+                        ],
+                    ]
                 ],
-            ]
-        );
+            ])
+        ));
     }
 
     private function addCustomToWishlist(Wishlist $wishlist, LineItem $lineItem): Wishlist
     {
-        return $this->postWishlistActions(
-            $wishlist,
-            [
-                [
-                    'action' => 'addCustomLineItem',
-                    'name' => ['de' => $lineItem->name],
-                    // Must be unique inside the entire wishlist. We do not use
-                    // this for anything relevant. Random seems fine for now.
-                    'slug' => md5(microtime()),
-                    'taxCategory' => $this->getTaxCategory(),
-                    'money' => [
-                        'type' => 'centPrecision',
-                        'currencyCode' => 'EUR', // @TODO: Get from context
-                        'centAmount' => $lineItem->totalPrice,
+        return $this->mapWishlist($this->client->post(
+            '/shopping-lists/' . $wishlist->wishlistId,
+            [],
+            [],
+            json_encode([
+                'version' => $wishlist->wishlistVersion,
+                'actions' => [
+                    [
+                        'action' => 'addCustomLineItem',
+                        'name' => ['de' => $lineItem->name],
+                        // Must be unique inside the entire wishlist. We do not use
+                        // this for anything relevant. Random seems fine for now.
+                        'slug' => md5(microtime()),
+                        'taxCategory' => $this->getTaxCategory(),
+                        'money' => [
+                            'type' => 'centPrecision',
+                            'currencyCode' => 'EUR', // @TODO: Get from context
+                            'centAmount' => $lineItem->totalPrice,
+                        ],
+                        'custom' => !$lineItem->custom ? null : [
+                            'type' => $this->getCustomLineItemType(),
+                            'fields' => $lineItem->custom,
+                        ],
+                        'quantity' => $lineItem->count,
                     ],
-                    'custom' => !$lineItem->custom ? null : [
-                        'type' => $this->getCustomLineItemType(),
-                        'fields' => $lineItem->custom,
-                    ],
-                    'quantity' => $lineItem->count,
                 ],
-            ]
-        );
+            ])
+        ));
     }
 
     public function updateLineItem(Wishlist $wishlist, LineItem $lineItem, int $count): Wishlist
     {
         if ($lineItem instanceof LineItem\Variant) {
-            return $this->postWishlistActions(
-                $wishlist,
-                [
-                    [
-                        'action' => 'changeLineItemQuantity',
-                        'lineItemId' => $lineItem->lineItemId,
-                        'quantity' => $count,
+            return $this->mapWishlist($this->client->post(
+                '/shopping-lists/' . $wishlist->wishlistId,
+                [],
+                [],
+                json_encode([
+                    'version' => $wishlist->wishlistVersion,
+                    'actions' => [
+                        [
+                            'action' => 'changeLineItemQuantity',
+                            'lineItemId' => $lineItem->lineItemId,
+                            'quantity' => $count,
+                        ],
                     ],
-                ]
-            );
+                ])
+            ));
         } else {
-            return $this->postWishlistActions(
-                $wishlist,
-                [
-                    [
-                        'action' => 'changeCustomLineItemQuantity',
-                        'customLineItemId' => $lineItem->lineItemId,
-                        'quantity' => $count,
+            return $this->mapWishlist($this->client->post(
+                '/shopping-lists/' . $wishlist->wishlistId,
+                [],
+                [],
+                json_encode([
+                    'version' => $wishlist->wishlistVersion,
+                    'actions' => [
+                        [
+                            'action' => 'changeCustomLineItemQuantity',
+                            'customLineItemId' => $lineItem->lineItemId,
+                            'quantity' => $count,
+                        ],
                     ],
-                ]
-            );
+                ])
+            ));
         }
     }
 
     public function removeLineItem(Wishlist $wishlist, LineItem $lineItem): Wishlist
     {
         if ($lineItem instanceof LineItem\Variant) {
-            return $this->postWishlistActions(
-                $wishlist,
-                [
-                    [
-                        'action' => 'removeLineItem',
-                        'lineItemId' => $lineItem->lineItemId,
+            return $this->mapWishlist($this->client->post(
+                '/shopping-lists/' . $wishlist->wishlistId,
+                [],
+                [],
+                json_encode([
+                    'version' => $wishlist->wishlistVersion,
+                    'actions' => [
+                        [
+                            'action' => 'removeLineItem',
+                            'lineItemId' => $lineItem->lineItemId,
+                        ],
                     ],
-                ]
-            );
+                ])
+            ));
         } else {
-            return $this->postWishlistActions(
-                $wishlist,
-                [
-                    [
-                        'action' => 'removeCustomLineItem',
-                        'customLineItemId' => $lineItem->lineItemId,
+            return $this->mapWishlist($this->client->post(
+                '/shopping-lists/' . $wishlist->wishlistId,
+                [],
+                [],
+                json_encode([
+                    'version' => $wishlist->wishlistVersion,
+                    'actions' => [
+                        [
+                            'action' => 'removeCustomLineItem',
+                            'customLineItemId' => $lineItem->lineItemId,
+                        ],
                     ],
-                ]
-            );
+                ])
+            ));
         }
     }
 
