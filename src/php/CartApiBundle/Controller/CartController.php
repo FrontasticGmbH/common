@@ -141,6 +141,7 @@ class CartController extends CrudController
 
         $order = $cartApi->order($cart);
 
+        // @TODO: Remove old cart instead (also for logged in users)
         // @HACK: Regenerate session ID to get a "new" cart:
         session_regenerate_id();
 

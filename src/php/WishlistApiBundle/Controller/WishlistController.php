@@ -140,12 +140,14 @@ class WishlistController extends CrudController
             ]));
         } else {
             try {
-                return $wishlistApi->getAnonymous(session_id());
+                return $wishlistApi->getAnonymous($context->session->account->accountId);
             } catch (\OutOfBoundsException $e) {
                 return $wishlistApi->create(new Wishlist([
-                    'anonymous' => session_id(),
+                    'anonymousId' => $context->session->account->accountId,
                     'name' => [
-                        $context->locale => 'Default Wishlist',
+                        // @TODO: Use language code from locale and
+                        // provide translation map
+                        'de' => 'Wunschzettel',
                     ],
                 ]));
             }
