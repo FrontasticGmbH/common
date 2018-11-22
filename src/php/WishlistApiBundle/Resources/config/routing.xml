@@ -8,8 +8,8 @@
         <default key="_controller">Frontastic\Common\WishlistApiBundle\Controller\WishlistController::getAction</default>
     </route>
 
-    <route id="Frontastic.WishlistApi.Wishlist.getOrder" path="/order/{order}">
-        <default key="_controller">Frontastic\Common\WishlistApiBundle\Controller\WishlistController::getOrderAction</default>
+    <route id="Frontastic.WishlistApi.Wishlist.create" path="/wishlist/create" methods="POST">
+        <default key="_controller">Frontastic\Common\WishlistApiBundle\Controller\WishlistController::createAction</default>
     </route>
 
     <route id="Frontastic.WishlistApi.Wishlist.add" path="/wishlist/add" methods="POST">

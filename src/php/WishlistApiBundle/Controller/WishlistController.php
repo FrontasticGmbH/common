@@ -5,6 +5,7 @@ namespace Frontastic\Common\WishlistApiBundle\Controller;
 use Frontastic\Common\WishlistApiBundle\Domain\Payment;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 use Frontastic\Common\CoreBundle\Controller\CrudController;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
@@ -44,6 +45,20 @@ class WishlistController extends CrudController
         return [
             'wishlist' => $wishlist,
         ];
+    }
+
+    public function createAction(Context $context, Request $request): Wishlist
+    {
+        if (!$context->session->loggedIn) {
+            throw new AuthenticationException('Not logged in.');
+        }
+
+        $payload = $this->getJsonContent($request);
+        $wishlistApi = $this->getWishlistApi($context);
+        return $wishlistApi->create(new Wishlist([
+            'name' => ['de' => $payload['name']],
+            'accountId' => $context->session->account->accountId,
+        ]));
     }
 
     public function updateLineItemAction(Context $context, Request $request): array
