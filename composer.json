@@ -23,7 +23,8 @@
         "phploc/phploc": "@stable",
         "squizlabs/php_codesniffer": "@stable",
         "sebastian/phpcpd": "@stable",
-        "doctrine/common": "^2.9"
+        "doctrine/common": "^2.9",
+        "myclabs/deep-copy": "^1.0"
     },
     "autoload": {
         "psr-4": {

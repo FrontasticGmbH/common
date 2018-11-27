@@ -2,6 +2,8 @@
 
 namespace Frontastic\Common\DevelopmentBundle;
 
+use DeepCopy\DeepCopy;
+
 /**
  * ATTENTION: This is only for development purposes!
  *
@@ -17,13 +19,27 @@ class Debugger
      */
     private static $debugMessages = [];
 
+    /**
+     * @var DeepCopy
+     */
+    private static $copier;
+
     public static function log(... $args)
     {
-        self::$debugMessages[] = $args;
+        // Copy logged objects to avoid instance changes
+        self::$debugMessages[] = self::getCopier()->copy($args);
     }
 
     public static function getMessages(): array
     {
         return self::$debugMessages;
+    }
+
+    private static function getCopier(): DeepCopy
+    {
+        if (self::$copier === null) {
+            self::$copier = new DeepCopy();
+        }
+        return self::$copier;
     }
 }
