@@ -24,15 +24,9 @@ class Commercetools implements ProductApi
     private $client;
 
     /**
-     * @todo Hardcoded for now, should come from a dedicated App
+     * @var ProductApi\Commercetools\Options
      */
-    private $facetsToRequest = [
-        'variants.attributes.designer',
-        'variants.attributes.color.key',
-        'variants.attributes.style.key',
-        'variants.attributes.gender.key',
-        'variants.price.centAmount:range (0 to *)',
-    ];
+    private $options;
 
     /**
      * @var string?
@@ -48,6 +42,20 @@ class Commercetools implements ProductApi
         $this->client = $client;
         $this->mapper = $mapper;
         $this->localeOverwrite = $localeOverwrite;
+        $this->options = new ProductApi\Commercetools\Options();
+    }
+
+    /**
+     * Overwrite default commerecetools options.
+     *
+     * Explicitely NOT part of the ProductApi interface because Commercetools specific and only to be used during
+     * factoring!
+     *
+     * @param Commercetools\Options $options
+     */
+    public function setOptions(ProductApi\Commercetools\Options $options): void
+    {
+        $this->options = $options;
     }
 
     /**
@@ -140,7 +148,7 @@ class Commercetools implements ProductApi
             'limit' => $query->limit,
             'filter' => [],
             'filter.query' => [],
-            'facet' => $this->facetsToRequest,
+            'facet' => $this->facetsToRequest($locale),
             'priceCurrency' => $locale->currency,
             'priceCountry' => $locale->territory,
         ];
@@ -174,6 +182,50 @@ class Commercetools implements ProductApi
             ),
             'facets' => $this->mapper->dataToFacets($result->facets, $query),
         ]);
+    }
+
+    /**
+     * Converts the facets defined in {@see $this->options} to queryable format.
+     *
+     * @param Locale $locale
+     * @return string[]
+     */
+    private function facetsToRequest(Locale $locale): array
+    {
+        $facets = [];
+        foreach ($this->options->facetsToQuery as $facetDefinition) {
+            $facet = '';
+            switch ($facetDefinition['attributeType']) {
+                case 'number':
+                    $facet = sprintf('%s.centAmount:range (* to *)', $facetDefinition['facetId']);
+                    break;
+
+                case 'money':
+                    $facet = sprintf('%s.centAmount:range (0 to *)', $facetDefinition['facetId']);
+                    break;
+
+                case 'enum':
+                    $facet = sprintf('%s.label', $facetDefinition['facetId']);
+                    break;
+
+                case 'localizedEnum':
+                    $facet = sprintf('%s.label.%s', $facetDefinition['facetId'], $locale->language);
+                    break;
+
+                case 'localizedText':
+                    $facet = sprintf('%s.%s', $facetDefinition['facetId'], $locale->language);
+                    break;
+
+                case 'boolean':
+                case 'text':
+                case 'reference':
+                default:
+                    $facet = $facetDefinition['facetId'];
+                    break;
+            }
+            $facets[] = $facet;
+        }
+        return $facets;
     }
 
     /**
