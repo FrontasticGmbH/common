@@ -223,7 +223,8 @@ class Commercetools implements ProductApi
                     $facet = $facetDefinition['attributeId'];
                     break;
             }
-            $facets[] = $facet;
+            // Alias to identifier used by us
+            $facets[] = sprintf('%s as %s', $facet, $facetDefinition['attributeId']);
         }
         return $facets;
     }
