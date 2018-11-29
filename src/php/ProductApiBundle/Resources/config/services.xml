@@ -6,7 +6,16 @@
 
     <services>
         <defaults public="true" />
-        <service id="Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory">
+
+        <service
+            id="Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory"
+            alias="Frontastic\Common\ProductApiBundle\Domain\DefaultProductApiFactory"
+        />
+
+        <service
+            id="Frontastic\Common\ProductApiBundle\Domain\DefaultProductApiFactory"
+            class="Frontastic\Common\ProductApiBundle\Domain\DefaultProductApiFactory"
+        >
             <argument type="service" id="service_container" />
         </service>
     </services>
