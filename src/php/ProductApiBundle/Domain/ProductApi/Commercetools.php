@@ -197,30 +197,30 @@ class Commercetools implements ProductApi
             $facet = '';
             switch ($facetDefinition['attributeType']) {
                 case 'number':
-                    $facet = sprintf('%s.centAmount:range (* to *)', $facetDefinition['facetId']);
+                    $facet = sprintf('%s.centAmount:range (* to *)', $facetDefinition['attributeId']);
                     break;
 
                 case 'money':
-                    $facet = sprintf('%s.centAmount:range (0 to *)', $facetDefinition['facetId']);
+                    $facet = sprintf('%s.centAmount:range (0 to *)', $facetDefinition['attributeId']);
                     break;
 
                 case 'enum':
-                    $facet = sprintf('%s.label', $facetDefinition['facetId']);
+                    $facet = sprintf('%s.label', $facetDefinition['attributeId']);
                     break;
 
                 case 'localizedEnum':
-                    $facet = sprintf('%s.label.%s', $facetDefinition['facetId'], $locale->language);
+                    $facet = sprintf('%s.label.%s', $facetDefinition['attributeId'], $locale->language);
                     break;
 
                 case 'localizedText':
-                    $facet = sprintf('%s.%s', $facetDefinition['facetId'], $locale->language);
+                    $facet = sprintf('%s.%s', $facetDefinition['attributeId'], $locale->language);
                     break;
 
                 case 'boolean':
                 case 'text':
                 case 'reference':
                 default:
-                    $facet = $facetDefinition['facetId'];
+                    $facet = $facetDefinition['attributeId'];
                     break;
             }
             $facets[] = $facet;

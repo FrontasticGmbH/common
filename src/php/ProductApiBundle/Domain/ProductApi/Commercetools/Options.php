@@ -13,7 +13,7 @@ class Options extends DataObject
      */
     public $facetsToQuery = [
         [
-            'facetId' => 'variants.price',
+            'attributeId' => 'variants.price',
             'attributeType' => 'money',
         ]
     ];
