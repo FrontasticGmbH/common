@@ -172,7 +172,11 @@ class Commercetools implements ProductApi
             $parameters['filter.query'][] = sprintf('id: "%s"', join('","', $query->productIds));
         }
 
-        $parameters['filter'] = $this->mapper->facetsToFilter($query->facets);
+        $parameters['filter'] = $this->mapper->facetsToFilter(
+            $query->facets,
+            $this->options->facetsToQuery,
+            $locale
+        );
 
         $result = $this->client->fetch('/product-projections/search', array_filter($parameters));
 

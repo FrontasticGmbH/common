@@ -303,30 +303,63 @@ class Mapper
 
     /**
      * @param ProductApi\Query\Facet[] $facets
-     * @return array
+     * @param array $facetDefinitions
+     * @param Locale $locale
+     * @return string[]
      */
-    public function facetsToFilter(array $facets): array
+    public function facetsToFilter(array $facets, array $facetDefinitions, Locale $locale): array
     {
+        $typeLookup = $this->attributeTypeLookup($facetDefinitions);
+
         $filters = [];
         foreach ($facets as $facet) {
-            switch (get_class($facet)) {
-                case ProductApi\Query\TermFacet::class:
-                    /** @var ProductApi\Query\TermFacet $facet */
+            switch ($typeLookup[$facet->handle]) {
+                case 'money':
+                    $filters[] = sprintf('%s.centAmount:range (%s to %s)', $facet->handle, $facet->min, $facet->max);
+                    break;
+
+                case 'enum':
                     foreach ($facet->terms as $term) {
-                        $filters[] = sprintf('%s:"%s"', $facet->handle, $term);
+                        $filters[] = sprintf('%s.label:"%s"', $facet->handle, $term);
                     }
                     break;
 
-                case ProductApi\Query\RangeFacet::class:
-                    /** @var ProductApi\Query\RangeFacet $facet */
-                    $filters[] = sprintf('%s:range (%s to %s)', $facet->handle, $facet->min, $facet->max);
+                case 'localizedEnum':
+                    foreach ($facet->terms as $term) {
+                        $filters[] = sprintf('%s.label.%s:"%s"', $facet->handle, $locale->language, $term);
+                    }
                     break;
 
+                case 'localizedText':
+                    foreach ($facet->terms as $term) {
+                        $filters[] = sprintf('%s.%s:"%s"', $facet->handle, $locale->language, $term);
+                    }
+                    break;
+
+                case 'number':
+                case 'boolean':
+                case 'text':
+                case 'reference':
                 default:
-                    // @todo Throw error?
+                    if ($facet instanceof Query\TermFacet) {
+                        foreach ($facet->terms as $term) {
+                            $filters[] = sprintf('%s:"%s"', $facet->handle, $term);
+                        }
+                    } else {
+                        $filters[] = sprintf('%s:range (%s to %s)', $facet->handle, $facet->min, $facet->max);
+                    }
                     break;
             }
         }
         return $filters;
+    }
+
+    private function attributeTypeLookup(array $facetDefinitions): array
+    {
+        $lookup = [];
+        foreach ($facetDefinitions as $facetDefinition) {
+            $lookup[$facetDefinition['attributeId']] = $facetDefinition['attributeType'];
+        }
+        return $lookup;
     }
 }
