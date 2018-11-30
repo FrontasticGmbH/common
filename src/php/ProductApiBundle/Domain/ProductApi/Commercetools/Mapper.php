@@ -300,4 +300,33 @@ class Mapper
         }
         return $facets;
     }
+
+    /**
+     * @param ProductApi\Query\Facet[] $facets
+     * @return array
+     */
+    public function facetsToFilter(array $facets): array
+    {
+        $filters = [];
+        foreach ($facets as $facet) {
+            switch (get_class($facet)) {
+                case ProductApi\Query\TermFacet::class:
+                    /** @var ProductApi\Query\TermFacet $facet */
+                    foreach ($facet->terms as $term) {
+                        $filters[] = sprintf('%s:"%s"', $facet->handle, $term);
+                    }
+                    break;
+
+                case ProductApi\Query\RangeFacet::class:
+                    /** @var ProductApi\Query\RangeFacet $facet */
+                    $filters[] = sprintf('%s:range (%s to %s)', $facet->handle, $facet->min, $facet->max);
+                    break;
+
+                default:
+                    // @todo Throw error?
+                    break;
+            }
+        }
+        return $filters;
+    }
 }

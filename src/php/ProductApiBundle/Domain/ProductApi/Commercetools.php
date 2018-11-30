@@ -172,7 +172,7 @@ class Commercetools implements ProductApi
             $parameters['filter.query'][] = sprintf('id: "%s"', join('","', $query->productIds));
         }
 
-        $parameters['filter'] = $this->facetsToFilter($query->facets);
+        $parameters['filter'] = $this->mapper->facetsToFilter($query->facets);
 
         $result = $this->client->fetch('/product-projections/search', array_filter($parameters));
 
@@ -198,32 +198,4 @@ class Commercetools implements ProductApi
         return $this->client;
     }
 
-    /**
-     * @param ProductApi\Query\Facet[] $facets
-     * @return array
-     */
-    private function facetsToFilter(array $facets): array
-    {
-        $filters = [];
-        foreach ($facets as $facet) {
-            switch (get_class($facet)) {
-                case ProductApi\Query\TermFacet::class:
-                    /** @var ProductApi\Query\TermFacet $facet */
-                    foreach ($facet->terms as $term) {
-                        $filters[] = sprintf('%s:"%s"', $facet->handle, $term);
-                    }
-                    break;
-
-                case ProductApi\Query\RangeFacet::class:
-                    /** @var ProductApi\Query\RangeFacet $facet */
-                    $filters[] = sprintf('%s:range (%s to %s)', $facet->handle, $facet->min, $facet->max);
-                    break;
-
-                default:
-                    // @todo Throw error?
-                    break;
-            }
-        }
-        return $filters;
-    }
 }
