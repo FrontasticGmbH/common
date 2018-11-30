@@ -264,13 +264,12 @@ class Mapper
      */
     public function facetsToRequest(array $facetDefinitions, Locale $locale): array
     {
-        \debug($facetDefinitions, $locale);
         $facets = [];
         foreach ($facetDefinitions as $facetDefinition) {
             $facet = '';
             switch ($facetDefinition['attributeType']) {
                 case 'number':
-                    $facet = sprintf('%s.centAmount:range (* to *)', $facetDefinition['attributeId']);
+                    $facet = sprintf('%s:range (* to *)', $facetDefinition['attributeId']);
                     break;
 
                 case 'money':
