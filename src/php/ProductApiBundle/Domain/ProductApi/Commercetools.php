@@ -24,6 +24,11 @@ class Commercetools implements ProductApi
     private $client;
 
     /**
+     * @var Mapper
+     */
+    private $mapper;
+
+    /**
      * @var ProductApi\Commercetools\Options
      */
     private $options;
@@ -34,8 +39,9 @@ class Commercetools implements ProductApi
     private $localeOverwrite;
 
     /**
-     * CommercetoolsHttpApi constructor.
      * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client $client
+     * @param Mapper $mapper
+     * @param string $localeOverwrite
      */
     public function __construct(Client $client, Mapper $mapper, $localeOverwrite = null)
     {
@@ -148,7 +154,7 @@ class Commercetools implements ProductApi
             'limit' => $query->limit,
             'filter' => [],
             'filter.query' => [],
-            'facet' => $this->facetsToRequest($locale),
+            'facet' => $this->mapper->facetsToRequest($this->options->facetsToQuery, $locale),
             'priceCurrency' => $locale->currency,
             'priceCountry' => $locale->territory,
         ];
@@ -182,51 +188,6 @@ class Commercetools implements ProductApi
             ),
             'facets' => $this->mapper->dataToFacets($result->facets, $query),
         ]);
-    }
-
-    /**
-     * Converts the facets defined in {@see $this->options} to queryable format.
-     *
-     * @param Locale $locale
-     * @return string[]
-     */
-    private function facetsToRequest(Locale $locale): array
-    {
-        $facets = [];
-        foreach ($this->options->facetsToQuery as $facetDefinition) {
-            $facet = '';
-            switch ($facetDefinition['attributeType']) {
-                case 'number':
-                    $facet = sprintf('%s.centAmount:range (* to *)', $facetDefinition['attributeId']);
-                    break;
-
-                case 'money':
-                    $facet = sprintf('%s.centAmount:range (0 to *)', $facetDefinition['attributeId']);
-                    break;
-
-                case 'enum':
-                    $facet = sprintf('%s.label', $facetDefinition['attributeId']);
-                    break;
-
-                case 'localizedEnum':
-                    $facet = sprintf('%s.label.%s', $facetDefinition['attributeId'], $locale->language);
-                    break;
-
-                case 'localizedText':
-                    $facet = sprintf('%s.%s', $facetDefinition['attributeId'], $locale->language);
-                    break;
-
-                case 'boolean':
-                case 'text':
-                case 'reference':
-                default:
-                    $facet = $facetDefinition['attributeId'];
-                    break;
-            }
-            // Alias to identifier used by us
-            $facets[] = sprintf('%s as %s', $facet, $facetDefinition['attributeId']);
-        }
-        return $facets;
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
 
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\Term;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
@@ -252,5 +253,52 @@ class Mapper
         } else {
             return reset($localizedString) ?: '';
         }
+    }
+
+    /**
+     * Converts the facets defined in {@see $this->options} to queryable format.
+     *
+     * @param array $facetDefinitions
+     * @param Locale $locale
+     * @return string[]
+     */
+    public function facetsToRequest(array $facetDefinitions, Locale $locale): array
+    {
+        \debug($facetDefinitions, $locale);
+        $facets = [];
+        foreach ($facetDefinitions as $facetDefinition) {
+            $facet = '';
+            switch ($facetDefinition['attributeType']) {
+                case 'number':
+                    $facet = sprintf('%s.centAmount:range (* to *)', $facetDefinition['attributeId']);
+                    break;
+
+                case 'money':
+                    $facet = sprintf('%s.centAmount:range (0 to *)', $facetDefinition['attributeId']);
+                    break;
+
+                case 'enum':
+                    $facet = sprintf('%s.label', $facetDefinition['attributeId']);
+                    break;
+
+                case 'localizedEnum':
+                    $facet = sprintf('%s.label.%s', $facetDefinition['attributeId'], $locale->language);
+                    break;
+
+                case 'localizedText':
+                    $facet = sprintf('%s.%s', $facetDefinition['attributeId'], $locale->language);
+                    break;
+
+                case 'boolean':
+                case 'text':
+                case 'reference':
+                default:
+                    $facet = $facetDefinition['attributeId'];
+                    break;
+            }
+            // Alias to identifier used by us
+            $facets[] = sprintf('%s as %s', $facet, $facetDefinition['attributeId']);
+        }
+        return $facets;
     }
 }
