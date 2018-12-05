@@ -10,8 +10,7 @@ import Page from './domain/page'
 import Region from './domain/region'
 import Tastic from './domain/tastic'
 import MediaApi from './mediaApi'
-
-import FacetTypeSchemaEnum from './facetTypeSchema/enum'
+import FacetTypeSchemaMap from './facetTypeSchema/map'
 
 export {
     ConfigurationSchema,
@@ -26,5 +25,5 @@ export {
     Region,
     Tastic,
     MediaApi,
-    FacetTypeSchemaEnum,
+    FacetTypeSchemaMap,
 }
