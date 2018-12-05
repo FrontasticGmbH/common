@@ -1,0 +1,35 @@
+{
+    "schema": [
+        {
+            "name": "Value Order",
+            "fields": [
+                {
+                    "label": "Strip Label Prefix",
+                    "field": "stripLabelPrefix",
+                    "type": "boolean",
+                    "default": false
+                },
+                {
+                    "label": "Sort Order",
+                    "field": "sortOrder",
+                    "type": "enum",
+                    "values": [
+                        {
+                            "value": "sort-undefined",
+                            "name": "Undefined"
+                        },
+                        {
+                            "value": "sort-ascending",
+                            "name": "Ascending"
+                        },
+                        {
+                            "value": "sort-descending",
+                            "name": "Descending"
+                        }
+                    ],
+                    "default": "sort-undefined"
+                }
+            ]
+        }
+    ]
+}

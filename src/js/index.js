@@ -11,6 +11,8 @@ import Region from './domain/region'
 import Tastic from './domain/tastic'
 import MediaApi from './mediaApi'
 
+import FacetTypeSchemaEnum from './facetTypeSchema/enum'
+
 export {
     ConfigurationSchema,
     generateId,
@@ -24,4 +26,5 @@ export {
     Region,
     Tastic,
     MediaApi,
+    FacetTypeSchemaEnum,
 }
