@@ -4,8 +4,6 @@ namespace Frontastic\Common\CartApiBundle\Domain;
 
 use Kore\DataObject\DataObject;
 
-use Frontastic\Common\ProductApiBundle\Domain\Variant;
-
 class LineItem extends DataObject
 {
     /**
@@ -69,5 +67,5 @@ class LineItem extends DataObject
      *
      * @var mixed
      */
-    public $dangerousInnerCart;
+    public $dangerousInnerItem;
 }

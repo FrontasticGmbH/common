@@ -7,7 +7,6 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestExcept
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
-use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 use Frontastic\Common\CartApiBundle\Domain\Category;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
@@ -55,6 +54,13 @@ class Commercetools implements CartApi
      */
     private $taxCategory = null;
 
+    /**
+     * Commercetools constructor.
+     *
+     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client $client
+     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper $mapper
+     * @param \Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator $orderIdGenerator
+     */
     public function __construct(Client $client, Mapper $mapper, OrderIdGenerator $orderIdGenerator)
     {
         $this->client = $client;
@@ -62,6 +68,12 @@ class Commercetools implements CartApi
         $this->orderIdGenerator = $orderIdGenerator;
     }
 
+    /**
+     * @param string $userId
+     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function getForUser(string $userId): Cart
     {
         try {
@@ -84,6 +96,12 @@ class Commercetools implements CartApi
         }
     }
 
+    /**
+     * @param string $anonymousId
+     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function getAnonymous(string $anonymousId): Cart
     {
         $result = $this->client->fetch('/carts', [
@@ -110,6 +128,11 @@ class Commercetools implements CartApi
         ));
     }
 
+    /**
+     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
+     * @param \Frontastic\Common\CartApiBundle\Domain\LineItem $lineItem
+     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
+     */
     public function addToCart(Cart $cart, LineItem $lineItem): Cart
     {
         if ($lineItem instanceof LineItem\Variant) {
@@ -119,6 +142,11 @@ class Commercetools implements CartApi
         return $this->addCustomToCart($cart, $lineItem);
     }
 
+    /**
+     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
+     * @param \Frontastic\Common\CartApiBundle\Domain\LineItem\Variant $lineItem
+     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
+     */
     private function addVariantToCart(Cart $cart, LineItem\Variant $lineItem): Cart
     {
         return $this->postCartActions(
@@ -137,6 +165,11 @@ class Commercetools implements CartApi
         );
     }
 
+    /**
+     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
+     * @param \Frontastic\Common\CartApiBundle\Domain\LineItem $lineItem
+     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
+     */
     private function addCustomToCart(Cart $cart, LineItem $lineItem): Cart
     {
         return $this->postCartActions(
@@ -164,6 +197,12 @@ class Commercetools implements CartApi
         );
     }
 
+    /**
+     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
+     * @param \Frontastic\Common\CartApiBundle\Domain\LineItem $lineItem
+     * @param int $count
+     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
+     */
     public function updateLineItem(Cart $cart, LineItem $lineItem, int $count): Cart
     {
         if ($lineItem instanceof LineItem\Variant) {
@@ -191,6 +230,11 @@ class Commercetools implements CartApi
         }
     }
 
+    /**
+     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
+     * @param \Frontastic\Common\CartApiBundle\Domain\LineItem $lineItem
+     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
+     */
     public function removeLineItem(Cart $cart, LineItem $lineItem): Cart
     {
         if ($lineItem instanceof LineItem\Variant) {
@@ -216,6 +260,11 @@ class Commercetools implements CartApi
         }
     }
 
+    /**
+     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
+     * @param string $email
+     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
+     */
     public function setEmail(Cart $cart, string $email): Cart
     {
         return $this->postCartActions(
@@ -229,6 +278,11 @@ class Commercetools implements CartApi
         );
     }
 
+    /**
+     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
+     * @param array $address
+     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
+     */
     public function setShippingAddress(Cart $cart, array $address): Cart
     {
         return $this->postCartActions(
@@ -242,6 +296,11 @@ class Commercetools implements CartApi
         );
     }
 
+    /**
+     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
+     * @param array $address
+     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
+     */
     public function setBillingAddress(Cart $cart, array $address): Cart
     {
         return $this->postCartActions(
@@ -255,6 +314,13 @@ class Commercetools implements CartApi
         );
     }
 
+    /**
+     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
+     * @param \Frontastic\Common\CartApiBundle\Domain\Payment $payment
+     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function setPayment(Cart $cart, Payment $payment): Cart
     {
         $payment = $this->client->post(
@@ -287,6 +353,12 @@ class Commercetools implements CartApi
         );
     }
 
+    /**
+     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
+     * @return \Frontastic\Common\CartApiBundle\Domain\Order
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function order(Cart $cart): Order
     {
         return $this->mapOrder($this->client->post(
@@ -301,6 +373,12 @@ class Commercetools implements CartApi
         ));
     }
 
+    /**
+     * @param string $orderId
+     * @return \Frontastic\Common\CartApiBundle\Domain\Order
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function getOrder(string $orderId): Order
     {
         return $this->mapOrder($this->client->get(
@@ -308,6 +386,12 @@ class Commercetools implements CartApi
         ));
     }
 
+    /**
+     * @param string $accountId
+     * @return \Frontastic\Common\CartApiBundle\Domain\Order[]
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function getOrders(string $accountId): array
     {
         $result = $this->client->fetch(
@@ -326,6 +410,10 @@ class Commercetools implements CartApi
     /**
      * This method is a temporary hack to recieve new orders. The
      * synchronization is based on a locally stored sequence number.
+     *
+     * @return \Frontastic\Common\CartApiBundle\Domain\Order[]
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
      */
     public function getNewOrders(): array
     {
@@ -347,6 +435,10 @@ class Commercetools implements CartApi
         return $orders;
     }
 
+    /**
+     * @param array $cart
+     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
+     */
     private function mapCart(array $cart): Cart
     {
         /**
@@ -363,9 +455,14 @@ class Commercetools implements CartApi
             'cartVersion' => $cart['version'],
             'lineItems' => $this->mapLineItems($cart),
             'sum' => $cart['totalPrice']['centAmount'],
+            'dangerousInnerCart' => $cart,
         ]);
     }
 
+    /**
+     * @param array $order
+     * @return \Frontastic\Common\CartApiBundle\Domain\Order
+     */
     private function mapOrder(array $order): Order
     {
         /**
@@ -384,9 +481,15 @@ class Commercetools implements CartApi
             'orderVersion' => $order['version'],
             'lineItems' => $this->mapLineItems($order),
             'sum' => $order['totalPrice']['centAmount'],
+            'dangerousInnerCart' => $order,
+            'dangerousInnerOrder' => $order,
         ]);
     }
 
+    /**
+     * @param array $cart
+     * @return \Frontastic\Common\CartApiBundle\Domain\LineItem[]
+     */
     private function mapLineItems(array $cart): array
     {
         $lineItems = array_merge(
@@ -413,6 +516,7 @@ class Commercetools implements CartApi
                         ),
                         'totalPrice' => $lineItem['totalPrice']['centAmount'],
                         'isGift' => ($lineItem['lineItemMode'] === 'GiftLineItem'),
+                        'dangerousInnerItem' => $lineItem,
                     ]);
                 },
                 $cart['lineItems']
@@ -438,6 +542,7 @@ class Commercetools implements CartApi
                             )
                         ),
                         'totalPrice' => $lineItem['totalPrice']['centAmount'],
+                        'dangerousInnerItem' => $lineItem,
                     ]);
                 },
                 $cart['customLineItems']
@@ -455,6 +560,12 @@ class Commercetools implements CartApi
         return $lineItems;
     }
 
+    /**
+     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
+     * @param array $actions
+     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     */
     protected function postCartActions(Cart $cart, array $actions)
     {
         if ($cart === $this->inTransaction) {
@@ -477,12 +588,20 @@ class Commercetools implements CartApi
         ));
     }
 
-    public function startTransaction(Cart $cart)
+    /**
+     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
+     */
+    public function startTransaction(Cart $cart): void
     {
         $this->inTransaction = $cart;
     }
 
-    public function commit()
+    /**
+     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
+    public function commit(): Cart
     {
         $cart = $this->inTransaction;
         $this->inTransaction = null;
@@ -493,6 +612,18 @@ class Commercetools implements CartApi
     }
 
     /**
+     * Get *dangerous* inner client
+     *
+     * This method exists to enable you to use features which are not yet part
+     * of the abstraction layer.
+     *
+     * Be aware that any usage of this method might seriously hurt backwards
+     * compatibility and the future abstractions might differ a lot from the
+     * vendor provided abstraction.
+     *
+     * Use this with care for features necessary in your customer and talk with
+     * Frontastic about provising an abstraction.
+     *
      * @return \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client
      */
     public function getDangerousInnerClient()
@@ -500,12 +631,18 @@ class Commercetools implements CartApi
         return $this->client;
     }
 
-    public function setCustomLineItemType(array $lineItemType)
+    /**
+     * @param array $lineItemType
+     */
+    public function setCustomLineItemType(array $lineItemType): void
     {
         $this->lineItemType = $lineItemType;
     }
 
-    public function getCustomLineItemType()
+    /**
+     * @return array
+     */
+    public function getCustomLineItemType(): array
     {
         if (!$this->lineItemType) {
             throw new \RuntimeException(
@@ -519,12 +656,18 @@ class Commercetools implements CartApi
         return $this->lineItemType;
     }
 
-    public function setTaxCategory(array $taxCategory)
+    /**
+     * @param array $taxCategory
+     */
+    public function setTaxCategory(array $taxCategory): void
     {
         $this->taxCategory = $taxCategory;
     }
 
-    public function getTaxCategory()
+    /**
+     * @return array
+     */
+    public function getTaxCategory(): array
     {
         if (!$this->taxCategory) {
             throw new \RuntimeException(

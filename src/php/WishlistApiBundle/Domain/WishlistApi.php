@@ -2,14 +2,52 @@
 
 namespace Frontastic\Common\WishlistApiBundle\Domain;
 
-use Frontastic\Common\ProductApiBundle\Domain\Variant;
-
 interface WishlistApi
 {
+    /**
+     * @param string $wishlistId
+     * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+     */
+    public function getWishlist(string $wishlistId): Wishlist;
+
+    /**
+     * @param string $anonymousId
+     * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+     */
+    public function getAnonymous(string $anonymousId): Wishlist;
+
+    /**
+     * @param string $accountId
+     * @return array
+     */
+    public function getWishlists(string $accountId): array;
+
+    /**
+     * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
+     * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+     */
+    public function create(Wishlist $wishlist): Wishlist;
+
+    /**
+     * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
+     * @param \Frontastic\Common\WishlistApiBundle\Domain\LineItem $lineItem
+     * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+     */
     public function addToWishlist(Wishlist $wishlist, LineItem $lineItem): Wishlist;
 
+    /**
+     * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
+     * @param \Frontastic\Common\WishlistApiBundle\Domain\LineItem $lineItem
+     * @param int $count
+     * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+     */
     public function updateLineItem(Wishlist $wishlist, LineItem $lineItem, int $count): Wishlist;
 
+    /**
+     * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
+     * @param \Frontastic\Common\WishlistApiBundle\Domain\LineItem $lineItem
+     * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+     */
     public function removeLineItem(Wishlist $wishlist, LineItem $lineItem): Wishlist;
 
     /**

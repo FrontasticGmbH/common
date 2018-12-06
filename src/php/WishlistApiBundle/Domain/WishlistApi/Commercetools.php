@@ -3,11 +3,9 @@
 namespace Frontastic\Common\WishlistApiBundle\Domain\WishlistApi;
 
 use Frontastic\Common\WishlistApiBundle\Domain\Payment;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
-use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 use Frontastic\Common\WishlistApiBundle\Domain\Category;
 use Frontastic\Common\WishlistApiBundle\Domain\Wishlist;
@@ -19,21 +17,33 @@ class Commercetools implements WishlistApi
     const EXPAND_VARIANTS = 'lineItems[*].variant';
 
     /**
-     * @var Client
+     * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client
      */
     private $client;
 
     /**
-     * @var Mapper
+     * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper
      */
     private $mapper;
 
+    /**
+     * Commercetools constructor.
+     *
+     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client $client
+     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper $mapper
+     */
     public function __construct(Client $client, Mapper $mapper)
     {
         $this->client = $client;
         $this->mapper = $mapper;
     }
 
+    /**
+     * @param string $wishlistId
+     * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function getWishlist(string $wishlistId): Wishlist
     {
         return $this->mapWishlist($this->client->get(
@@ -42,6 +52,12 @@ class Commercetools implements WishlistApi
         ));
     }
 
+    /**
+     * @param string $anonymousId
+     * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function getAnonymous(string $anonymousId): Wishlist
     {
         $result = $this->client->fetch(
@@ -59,6 +75,12 @@ class Commercetools implements WishlistApi
         return $this->mapWishlist($result->results[0]);
     }
 
+    /**
+     * @param string $accountId
+     * @return array
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function getWishlists(string $accountId): array
     {
         $result = $this->client->fetch(
@@ -75,6 +97,12 @@ class Commercetools implements WishlistApi
         );
     }
 
+    /**
+     * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
+     * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function create(Wishlist $wishlist): Wishlist
     {
         return $this->mapWishlist($this->client->post(
@@ -90,6 +118,13 @@ class Commercetools implements WishlistApi
         ));
     }
 
+    /**
+     * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
+     * @param \Frontastic\Common\WishlistApiBundle\Domain\LineItem $lineItem
+     * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function addToWishlist(Wishlist $wishlist, LineItem $lineItem): Wishlist
     {
         if ($lineItem instanceof LineItem\Variant) {
@@ -99,6 +134,12 @@ class Commercetools implements WishlistApi
         return $this->addCustomToWishlist($wishlist, $lineItem);
     }
 
+    /**
+     * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
+     * @param \Frontastic\Common\WishlistApiBundle\Domain\LineItem\Variant $lineItem
+     * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     */
     private function addVariantToWishlist(Wishlist $wishlist, LineItem\Variant $lineItem): Wishlist
     {
         return $this->mapWishlist($this->client->post(
@@ -118,6 +159,12 @@ class Commercetools implements WishlistApi
         ));
     }
 
+    /**
+     * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
+     * @param \Frontastic\Common\WishlistApiBundle\Domain\LineItem $lineItem
+     * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     */
     private function addCustomToWishlist(Wishlist $wishlist, LineItem $lineItem): Wishlist
     {
         return $this->mapWishlist($this->client->post(
@@ -146,6 +193,14 @@ class Commercetools implements WishlistApi
         ));
     }
 
+    /**
+     * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
+     * @param \Frontastic\Common\WishlistApiBundle\Domain\LineItem $lineItem
+     * @param int $count
+     * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function updateLineItem(Wishlist $wishlist, LineItem $lineItem, int $count): Wishlist
     {
         if ($lineItem instanceof LineItem\Variant) {
@@ -183,6 +238,13 @@ class Commercetools implements WishlistApi
         }
     }
 
+    /**
+     * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
+     * @param \Frontastic\Common\WishlistApiBundle\Domain\LineItem $lineItem
+     * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function removeLineItem(Wishlist $wishlist, LineItem $lineItem): Wishlist
     {
         if ($lineItem instanceof LineItem\Variant) {
@@ -218,6 +280,10 @@ class Commercetools implements WishlistApi
         }
     }
 
+    /**
+     * @param array $wishlist
+     * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+     */
     private function mapWishlist(array $wishlist): Wishlist
     {
         /**
@@ -236,9 +302,14 @@ class Commercetools implements WishlistApi
             'accountId' => $wishlist['customer']['id'] ?? null,
             'name' => reset($wishlist['name']),
             'lineItems' => $this->mapLineItems($wishlist),
+            'dangerousInnerWishlist' => $wishlist,
         ]);
     }
 
+    /**
+     * @param array $wishlist
+     * @return \Frontastic\Common\WishlistApiBundle\Domain\LineItem[]
+     */
     private function mapLineItems(array $wishlist): array
     {
         $lineItems = array_merge(
@@ -251,6 +322,7 @@ class Commercetools implements WishlistApi
                         'addedAt' => new \DateTimeImmutable($lineItem['addedAt']),
                         'variant' => $this->mapper->dataToVariant($lineItem['variant'], new Query(), new Locale()),
                         'count' => $lineItem['quantity'],
+                        'dangerousInnerItem' => $lineItem,
                     ]);
                 },
                 $wishlist['lineItems']
@@ -263,6 +335,7 @@ class Commercetools implements WishlistApi
                         'type' => $lineItem['custom']['type'] ?? $lineItem['slug'],
                         'addedAt' => new \DateTimeImmutable($lineItem['addedAt']),
                         'count' => $lineItem['quantity'],
+                        'dangerousInnerItem' => $lineItem,
                     ]);
                 },
                 $wishlist['textLineItems']
@@ -273,6 +346,18 @@ class Commercetools implements WishlistApi
     }
 
     /**
+     * Get *dangerous* inner client
+     *
+     * This method exists to enable you to use features which are not yet part
+     * of the abstraction layer.
+     *
+     * Be aware that any usage of this method might seriously hurt backwards
+     * compatibility and the future abstractions might differ a lot from the
+     * vendor provided abstraction.
+     *
+     * Use this with care for features necessary in your customer and talk with
+     * Frontastic about provising an abstraction.
+     *
      * @return \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client
      */
     public function getDangerousInnerClient()

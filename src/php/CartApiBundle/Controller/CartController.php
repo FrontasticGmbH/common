@@ -3,7 +3,6 @@
 namespace Frontastic\Common\CartApiBundle\Controller;
 
 use Frontastic\Common\CartApiBundle\Domain\Payment;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 use Frontastic\Common\CoreBundle\Controller\CrudController;
@@ -42,7 +41,7 @@ class CartController extends CrudController
 
         $cart = $this->getCart($context);
         $cartApi->startTransaction($cart);
-        $cart = $cartApi->addToCart(
+        $cartApi->addToCart(
             $cart,
             new LineItem\Variant([
                 'variant' => new Variant(['sku' => $payload['variant']['sku']]),
@@ -64,7 +63,7 @@ class CartController extends CrudController
 
         $cart = $this->getCart($context);
         $cartApi->startTransaction($cart);
-        $cart = $cartApi->updateLineItem(
+        $cartApi->updateLineItem(
             $cart,
             $this->getLineItem($cart, $payload['lineItemId']),
             $payload['count']
@@ -83,7 +82,7 @@ class CartController extends CrudController
 
         $cart = $this->getCart($context);
         $cartApi->startTransaction($cart);
-        $cart = $cartApi->removeLineItem(
+        $cartApi->removeLineItem(
             $cart,
             $this->getLineItem($cart, $payload['lineItemId'])
         );
@@ -128,7 +127,7 @@ class CartController extends CrudController
             $cart,
             $payload['billing'] ?: $payload['shipping']
         );
-        $cart = $cartApi->setPayment(
+        $cartApi->setPayment(
             $cart,
             new Payment([
                 'paymentProvider' => $payload['payment']['provider'],

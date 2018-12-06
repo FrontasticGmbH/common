@@ -9,22 +9,41 @@ use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 
+/**
+ * Class Commercetools
+ *
+ * @package Frontastic\Common\AccountApiBundle\Domain\AccountApi
+ */
 class Commercetools implements AccountApi
 {
     /**
-     * @var Client
+     * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client
      */
     private $client;
 
+    /**
+     * @var array
+     */
     private $customerType;
 
     const TYPE_NAME = 'frontastic-customer-type';
 
+    /**
+     * Commercetools constructor.
+     *
+     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client $client
+     */
     public function __construct(Client $client)
     {
         $this->client = $client;
     }
 
+    /**
+     * @param string $email
+     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function get(string $email): Account
     {
         $result = $this->client->fetch('/customers', [
@@ -38,6 +57,10 @@ class Commercetools implements AccountApi
         }
     }
 
+    /**
+     * @param string $token
+     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
+     */
     public function confirmEmail(string $token): Account
     {
         try {
@@ -54,6 +77,12 @@ class Commercetools implements AccountApi
         }
     }
 
+    /**
+     * @param \Frontastic\Common\AccountApiBundle\Domain\Account $account
+     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function create(Account $account): Account
     {
         $account = $this->mapAccount($this->client->post(
@@ -93,6 +122,12 @@ class Commercetools implements AccountApi
         return $account;
     }
 
+    /**
+     * @param string $token
+     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function verifyEmail(string $token): Account
     {
         return $this->mapAccount($this->client->post(
@@ -105,6 +140,12 @@ class Commercetools implements AccountApi
         ));
     }
 
+    /**
+     * @param \Frontastic\Common\AccountApiBundle\Domain\Account $account
+     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function update(Account $account): Account
     {
         $accountVersion = $this->client->get('/customers/' . $account->accountId);
@@ -141,6 +182,14 @@ class Commercetools implements AccountApi
         ));
     }
 
+    /**
+     * @param string $accountId
+     * @param string $oldPassword
+     * @param string $newPassword
+     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function updatePassword(string $accountId, string $oldPassword, string $newPassword): Account
     {
         $account= $this->client->get('/customers/' . $accountId);
@@ -157,6 +206,12 @@ class Commercetools implements AccountApi
         ));
     }
 
+    /**
+     * @param \Frontastic\Common\AccountApiBundle\Domain\Account $account
+     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function generatePasswordResetToken(Account $account): Account
     {
         $token = $this->client->post(
@@ -175,6 +230,13 @@ class Commercetools implements AccountApi
         return $account;
     }
 
+    /**
+     * @param string $token
+     * @param string $newPassword
+     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function resetPassword(string $token, string $newPassword): Account
     {
         return $this->mapAccount($this->client->post(
@@ -188,6 +250,10 @@ class Commercetools implements AccountApi
         ));
     }
 
+    /**
+     * @param \Frontastic\Common\AccountApiBundle\Domain\Account $account
+     * @return bool
+     */
     public function login(Account $account): bool
     {
         try {
@@ -209,11 +275,24 @@ class Commercetools implements AccountApi
         }
     }
 
+    /**
+     * @param string $accountId
+     * @return \Frontastic\Common\AccountApiBundle\Domain\Account[]
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function getAddresses(string $accountId): array
     {
         return $this->mapAddresses($this->client->get('/customers/' . $accountId));
     }
 
+    /**
+     * @param string $accountId
+     * @param \Frontastic\Common\AccountApiBundle\Domain\Address $address
+     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function addAddress(string $accountId, Address $address): Account
     {
         $account = $this->client->get('/customers/' . $accountId);
@@ -242,6 +321,13 @@ class Commercetools implements AccountApi
         ));
     }
 
+    /**
+     * @param string $accountId
+     * @param \Frontastic\Common\AccountApiBundle\Domain\Address $address
+     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function updateAddress(string $accountId, Address $address): Account
     {
         $account = $this->client->get('/customers/' . $accountId);
@@ -271,6 +357,13 @@ class Commercetools implements AccountApi
         ));
     }
 
+    /**
+     * @param string $accountId
+     * @param string $addressId
+     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function removeAddress(string $accountId, string $addressId): Account
     {
         $account = $this->client->get('/customers/' . $accountId);
@@ -290,6 +383,13 @@ class Commercetools implements AccountApi
         ));
     }
 
+    /**
+     * @param string $accountId
+     * @param string $addressId
+     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function setDefaultBillingAddress(string $accountId, string $addressId): Account
     {
         $account = $this->client->get('/customers/' . $accountId);
@@ -309,6 +409,13 @@ class Commercetools implements AccountApi
         ));
     }
 
+    /**
+     * @param string $accountId
+     * @param string $addressId
+     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @todo Should we catch the RequestException here?
+     */
     public function setDefaultShippingAddress(string $accountId, string $addressId): Account
     {
         $account = $this->client->get('/customers/' . $accountId);
@@ -341,11 +448,24 @@ class Commercetools implements AccountApi
             // Do NOT map the password back
             'confirmed' => $account['isEmailVerified'],
             'addresses' => $this->mapAddresses($account),
+            'dangerousInnerAccount' => $account,
         ]);
     }
 
+    /**
+     * @param array $account
+     * @return \Frontastic\Common\AccountApiBundle\Domain\Address[]
+     */
     private function mapAddresses(array $account): array
     {
+        $account = array_merge(
+            [
+                'defaultBillingAddressId' => null,
+                'defaultShippingAddressId' => null
+            ],
+            $account
+        );
+
         return array_map(
             function (array $address) use ($account): Address {;
                 return new Address([
@@ -360,6 +480,7 @@ class Commercetools implements AccountApi
                     'country' => $address['country'],
                     'isDefaultBillingAddress' => ($address['id'] === $account['defaultBillingAddressId']),
                     'isDefaultShippingAddress' => ($address['id'] === $account['defaultShippingAddressId']),
+                    'dangerousInnerAddress' => $address,
                 ]);
             },
             $account['addresses']
@@ -367,6 +488,18 @@ class Commercetools implements AccountApi
     }
 
     /**
+     * Get *dangerous* inner client
+     *
+     * This method exists to enable you to use features which are not yet part
+     * of the abstraction layer.
+     *
+     * Be aware that any usage of this method might seriously hurt backwards
+     * compatibility and the future abstractions might differ a lot from the
+     * vendor provided abstraction.
+     *
+     * Use this with care for features necessary in your customer and talk with
+     * Frontastic about provising an abstraction.
+     *
      * @return \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client
      */
     public function getDangerousInnerClient()
@@ -374,7 +507,11 @@ class Commercetools implements AccountApi
         return $this->client;
     }
 
-    public function getCustomerType()
+    /**
+     * @return array
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     */
+    public function getCustomerType(): array
     {
         if ($this->customerType) {
             return $this->customerType;
@@ -389,7 +526,11 @@ class Commercetools implements AccountApi
         return $this->customerType = ['id' => $customerType['id']];
     }
 
-    private function createCustomerType()
+    /**
+     * @return array
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     */
+    private function createCustomerType(): array
     {
         return $this->client->post(
             '/types',

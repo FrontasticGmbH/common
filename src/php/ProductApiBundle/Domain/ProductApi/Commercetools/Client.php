@@ -39,27 +39,70 @@ class Client
         $this->httpClient->addDefaultHeaders([sprintf('Authorization: Bearer %s', $this->getAccessToken())]);
     }
 
+    /**
+     * @param string $uri
+     * @param array $parameters
+     * @return \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client\ResultSet
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     */
     public function fetch(string $uri, array $parameters = []): ResultSet
     {
         return new ResultSet($this->request('GET', $uri, $parameters));
     }
 
+    /**
+     * @param string $uri
+     * @param string $id
+     * @param array $parameters
+     * @return array
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     */
     public function fetchById(string $uri, string $id, array $parameters = []): array
     {
         return $this->request('GET', sprintf('%s/%s', $uri, $id), $parameters);
     }
 
+    /**
+     * @param string $uri
+     * @param array $parameters
+     * @param array $headers
+     * @return array
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     */
     public function get(string $uri, array $parameters = [], array $headers = []): array
     {
         return $this->request('GET', $uri, $parameters, $headers);
     }
 
-    public function post(string $uri, array $parameters = [], array $headers = [], $body = ''): array
+    /**
+     * @param string $uri
+     * @param array $parameters
+     * @param array $headers
+     * @param string $body
+     * @return array
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     */
+    public function post(string $uri, array $parameters = [], array $headers = [], string $body = ''): array
     {
         return $this->request('POST', $uri, $parameters, $headers, $body);
     }
 
-    private function request($method, $uri, array $parameters = [], array $headers = [], $body = ''): array
+    /**
+     * @param string $method
+     * @param string $uri
+     * @param array $parameters
+     * @param array $headers
+     * @param string $body
+     * @return array
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     */
+    private function request(
+        string $method,
+        string $uri,
+        array $parameters = [],
+        array $headers = [],
+        string $body = ''
+    ): array
     {
         $query = '?';
         foreach ($parameters as $name => $parameter) {

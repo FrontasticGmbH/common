@@ -52,6 +52,12 @@ class Mapper
         return $variants;
     }
 
+    /**
+     * @param array $variantData
+     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query $query
+     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale $locale
+     * @return \Frontastic\Common\ProductApiBundle\Domain\Variant
+     */
     public function dataToVariant(array $variantData, Query $query, Locale $locale): Variant
     {
         list($price, $currency, $discountedPrice) = $this->dataToPrice($variantData, $locale);

@@ -7,7 +7,7 @@ use Frontastic\Common\WishlistApiBundle\Domain\LineItem;
 class Variant extends LineItem
 {
     /**
-     * @var Variant
+     * @var \Frontastic\Common\ProductApiBundle\Domain\Variant
      */
     public $variant;
 

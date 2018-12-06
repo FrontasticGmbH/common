@@ -4,6 +4,11 @@ namespace Frontastic\Common\WishlistApiBundle\Domain;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * Class Wishlist
+ *
+ * @package Frontastic\Common\WishlistApiBundle\Domain
+ */
 class Wishlist extends DataObject
 {
     /**
