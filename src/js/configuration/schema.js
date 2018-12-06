@@ -63,6 +63,10 @@ class ConfigurationSchema {
         return this.configuration[field]
     }
 
+    has (field) {
+        return !!this.fields[field]
+    }
+
     getSchema () {
         return this.schema
     }

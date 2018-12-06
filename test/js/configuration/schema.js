@@ -60,4 +60,34 @@ describe('ConfigurationSchema', function () {
 
         expect(schema.get('test')).toBe('23')
     })
+
+    it('claims to have defined field', () => {
+        let schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'string',
+                default: '42',
+
+            }],
+        }])
+
+        expect(schema.has('test')).toBe(true)
+    })
+
+    it('does not claim to have undefined field', () => {
+        let schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'string',
+                default: '42',
+
+            }],
+        }])
+
+        expect(schema.has('testaboo')).toBe(false)
+    })
 })
