@@ -12,7 +12,10 @@ class FrontasticCommonCoreExtension extends Extension
     public function load(array $configs, ContainerBuilder $container)
     {
         $locator = new FileLocator(__DIR__ . '/../Resources/config');
+
         $loader = new Loader\XmlFileLoader($container, $locator);
         $loader->load('services.xml');
+
+        $container->addCompilerPass(new JsonSerializerObjectEnhancerCompilerPass());
     }
 }
