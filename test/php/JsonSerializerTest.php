@@ -4,6 +4,7 @@ namespace Frontastic;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Frontastic\Common\JsonSerializer;
+use Frontastic\Common\JsonSerializer\ObjectEnhancer;
 
 class JsonSerializerTest extends \PHPUnit\Framework\TestCase
 {
@@ -37,5 +38,29 @@ class JsonSerializerTest extends \PHPUnit\Framework\TestCase
         $result = $serializer->serialize($input);
 
         $this->assertEquals($expected, $result);
+    }
+
+    public function testSerializeWithEnhancer()
+    {
+        $serializer = new JsonSerializer();
+        $enhancer = new class implements ObjectEnhancer {
+            public function enhance($object): array
+            {
+                return ['someKey' => 23];
+            }
+        };
+        $serializer->addEnhancer($enhancer);
+
+        $object = new \stdClass();
+        $object->property = 42;
+
+        $actualData = $serializer->serialize($object);
+
+        $this->assertEquals([
+            '_type' => 'stdClass',
+            'property' => 42,
+            'someKey' => 23,
+        ], $actualData);
+
     }
 }

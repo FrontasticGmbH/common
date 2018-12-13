@@ -4,14 +4,36 @@ namespace Frontastic\Common;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Proxy\Proxy;
+use Frontastic\Common\JsonSerializer\ObjectEnhancer;
 
 class JsonSerializer
 {
+    /**
+     * @var string[]
+     */
     private $propertyBlacklist;
 
-    public function __construct(array $propertyBlacklist = [])
+    /**
+     * @var ObjectEnhancer[]
+     */
+    private $objectEnhancers = [];
+
+    /**
+     * @param string[] $propertyBlacklist
+     * @param ObjectEnhancer[] $objectEnhancers
+     */
+    public function __construct(array $propertyBlacklist = [], array $objectEnhancers = [])
     {
         $this->propertyBlacklist = $propertyBlacklist;
+
+        foreach ($objectEnhancers as $enhancer) {
+            $this->addEnhancer($enhancer);
+        }
+    }
+
+    public function addEnhancer(ObjectEnhancer $enhancer): void
+    {
+        $this->objectEnhancers[] = $enhancer;
     }
 
     /**
@@ -55,7 +77,22 @@ class JsonSerializer
                 $result[$key] = $this->serialize($value, $visitedIds);
             }
         }
+
+        $result = array_merge(
+            $result,
+            $this->enhanceSerialization($item)
+        );
+
         return $result;
+    }
+
+    private function enhanceSerialization(object $object): array
+    {
+        $properties = [];
+        foreach ($this->objectEnhancers as $enhancer) {
+            $properties = array_merge($properties, $enhancer->enhance($object));
+        }
+        return $properties;
     }
 
     protected function convertProxy(Proxy $item)
