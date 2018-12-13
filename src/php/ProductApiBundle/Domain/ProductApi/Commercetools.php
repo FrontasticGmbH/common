@@ -136,6 +136,9 @@ class Commercetools implements ProductApi
      */
     public function getProduct(ProductQuery $query): ?Product
     {
+        if ($query->sku) {
+            return reset($this->query($query));
+        }
         return $this->mapper->dataToProduct(
             $this->client->fetchById('/products', $query->productId),
             $query
@@ -170,6 +173,9 @@ class Commercetools implements ProductApi
         }
         if ($query->productIds) {
             $parameters['filter.query'][] = sprintf('id: "%s"', join('","', $query->productIds));
+        }
+        if ($query->sku) {
+            $parameters['filter.query'][] = sprintf('variants.sku:"%s"', $query->sku);
         }
 
         $parameters['filter'] = $this->mapper->facetsToFilter(

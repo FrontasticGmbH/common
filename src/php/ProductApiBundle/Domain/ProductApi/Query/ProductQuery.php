@@ -13,6 +13,11 @@ class ProductQuery extends Query
     /**
      * @var string
      */
+    public $sku;
+
+    /**
+     * @var string
+     */
     public $productId;
 
     /**
