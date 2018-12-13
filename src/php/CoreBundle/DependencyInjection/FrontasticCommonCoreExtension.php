@@ -15,7 +15,5 @@ class FrontasticCommonCoreExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, $locator);
         $loader->load('services.xml');
-
-        $container->addCompilerPass(new JsonSerializerObjectEnhancerCompilerPass());
     }
 }
