@@ -38,6 +38,7 @@
                 <argument>apiKey</argument>
                 <argument>apiSecret</argument>
             </argument>
+            <argument type="tagged" tag="frontastic.json_serializer.enhancer" />
         </service>
 
         <service id="Domnikl\Statsd\Client">

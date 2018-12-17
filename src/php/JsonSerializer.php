@@ -22,7 +22,7 @@ class JsonSerializer
      * @param string[] $propertyBlacklist
      * @param ObjectEnhancer[] $objectEnhancers
      */
-    public function __construct(array $propertyBlacklist = [], array $objectEnhancers = [])
+    public function __construct(array $propertyBlacklist = [], iterable $objectEnhancers = [])
     {
         $this->propertyBlacklist = $propertyBlacklist;
 
