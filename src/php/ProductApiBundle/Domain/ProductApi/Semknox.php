@@ -242,6 +242,7 @@ class Semknox implements ProductApi
                 },
                 $result['filters']
             ),
+            'query' => clone $query,
         ]);
     }
 

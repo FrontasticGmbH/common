@@ -198,6 +198,7 @@ class Commercetools implements ProductApi
                 $result->results
             ),
             'facets' => $this->mapper->dataToFacets($result->facets, $query),
+            'query' => clone $query,
         ]);
     }
 

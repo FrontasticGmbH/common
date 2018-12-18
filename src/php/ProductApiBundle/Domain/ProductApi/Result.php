@@ -32,6 +32,13 @@ class Result extends DataObject implements \Countable, \IteratorAggregate
     public $facets = [];
 
     /**
+     * The query used to generate this result (cloned)
+     *
+     * @var Query
+     */
+    public $query;
+
+    /**
      * @return \Traversable
      */
     public function getIterator(): \Traversable

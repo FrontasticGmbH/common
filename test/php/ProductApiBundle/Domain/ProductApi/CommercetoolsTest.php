@@ -146,4 +146,22 @@ class CommercetoolsTest extends TestCase
             $result->facets
         );
     }
+
+    public function testReturnsQueryWithResult()
+    {
+        $this->clientMock->expects($this->any())->method('fetch')
+            ->will($this->returnValue(
+                require __DIR__ . '/_fixtures/CommercetoolsTest/testParseFacetsResult.php'
+            ));
+
+
+        $originalQuery = new ProductQuery([
+            'locale' => 'en_GB',
+        ]);
+
+        $result = $this->api->query($originalQuery);
+
+        $this->assertEquals($originalQuery, $result->query);
+        $this->assertNotSame($originalQuery, $result->query);
+    }
 }
