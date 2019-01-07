@@ -72,4 +72,12 @@ describe('httpQueryParser', function () {
             },
         })
     })
+
+    it('it parses arrays without indexes', () => {
+        const parserResult = httpParseQuery('a[]=foo&a[]=bar')
+
+        expect(parserResult).toEqual({
+            'a': ['foo', 'bar'],
+        })
+    })
 })
