@@ -40,4 +40,36 @@ describe('httpQueryParser', function () {
             },
         })
     })
+
+    it('it parses pure array to array', () => {
+        const parserResult = httpParseQuery('a[0]=foo&a[1]=bar')
+
+        expect(parserResult).toEqual({
+            'a': ['foo', 'bar'],
+        })
+    })
+
+    it('it parses non-consecutive array to object', () => {
+        const parserResult = httpParseQuery('a[0]=foo&a[2]=bar')
+
+        expect(parserResult).toEqual({
+            'a': {
+                '0': 'foo',
+                '2': 'bar',
+            },
+        })
+    })
+
+    it('it parses array in deep nested structure', () => {
+        const parserResult = httpParseQuery('a[x][y][0]=foo&a[x][y][1]=bar&a[x][z]=bam')
+
+        expect(parserResult).toEqual({
+            'a': {
+                'x': {
+                    'y': ['foo', 'bar'],
+                    'z': 'bam',
+                },
+            },
+        })
+    })
 })
