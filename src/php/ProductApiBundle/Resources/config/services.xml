@@ -14,9 +14,11 @@
 
         <service
             id="Frontastic\Common\ProductApiBundle\Domain\DefaultProductApiFactory"
-            class="Frontastic\Common\ProductApiBundle\Domain\DefaultProductApiFactory"
-        >
+            class="Frontastic\Common\ProductApiBundle\Domain\DefaultProductApiFactory">
             <argument type="service" id="service_container" />
+            <argument type="service">
+                <service class="Doctrine\Common\Cache\ApcuCache" />
+            </argument>
         </service>
     </services>
 </container>
