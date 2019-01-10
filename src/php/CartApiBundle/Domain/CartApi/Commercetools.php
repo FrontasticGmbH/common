@@ -15,6 +15,9 @@ use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to implementation of CartApi
+ */
 class Commercetools implements CartApi
 {
     const EXPAND_DISCOUNTS = 'lineItems[*].discountedPrice.includedDiscounts[*].discount';

@@ -11,6 +11,9 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
 
+/**
+ * @SuppressWarnings(PHPMD) TODO: Refactor or add more tests
+ */
 class Mapper
 {
     private $localeOverwrite;

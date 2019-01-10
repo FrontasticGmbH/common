@@ -8,9 +8,7 @@ use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\LifecycleTrait;
 
 /**
- * Class LifecycleEventDecorator
- *
- * @package Frontastic\Common\AccountApiBundle\Domain\AccountApi
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods) Central API entry point is OK to have many public methods.
  */
 class LifecycleEventDecorator implements AccountApi
 {

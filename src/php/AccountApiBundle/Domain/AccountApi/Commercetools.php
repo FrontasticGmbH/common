@@ -10,9 +10,7 @@ use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 
 /**
- * Class Commercetools
- *
- * @package Frontastic\Common\AccountApiBundle\Domain\AccountApi
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods) Central API entry point is OK to have many public methods.
  */
 class Commercetools implements AccountApi
 {

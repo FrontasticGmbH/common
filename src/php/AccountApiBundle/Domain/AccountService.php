@@ -7,6 +7,9 @@ use QafooLabs\MVC\Exception\UnauthenticatedAccountException;
 
 use Frontastic\Common\CoreBundle\Domain\Mailer;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods) Central API entry point is OK to have many public methods.
+ */
 class AccountService
 {
     /**
