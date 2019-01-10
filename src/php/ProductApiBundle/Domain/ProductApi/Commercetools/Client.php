@@ -166,13 +166,18 @@ class Client
             return $this->accessToken;
         }
 
-        $accessToken = $this->cache->fetch('accessToken');
+        $cacheId = sprintf(
+            'commercetools:accessToken:%s',
+            md5($this->clientId . $this->clientSecret . $this->projectKey)
+        );
+
+        $accessToken = $this->cache->fetch($cacheId);
         if ($accessToken && false === $accessToken->hasExpired()) {
             return ($this->accessToken = (string) $accessToken);
         }
 
         $accessToken = $this->obtainAccessToken();
-        $this->cache->save('accessToken', $accessToken);
+        $this->cache->save($cacheId, $accessToken);
 
         return ($this->accessToken = (string) $accessToken);
     }
