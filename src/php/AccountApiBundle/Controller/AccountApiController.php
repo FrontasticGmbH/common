@@ -20,7 +20,9 @@ class AccountApiController extends Controller
             throw new AuthenticationException('Not logged in.');
         }
 
-        $accountApi = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory')->factor($context->customer);
+        $accountApi = $this->get(
+            'Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory'
+        )->factor($context->customer);
         $address = new Address($this->getJsonBody($request));
         $address = $accountApi->addAddress($context->session->account->accountId, $address);
 
@@ -33,7 +35,9 @@ class AccountApiController extends Controller
             throw new AuthenticationException('Not logged in.');
         }
 
-        $accountApi = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory')->factor($context->customer);
+        $accountApi = $this->get(
+            'Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory'
+        )->factor($context->customer);
         $address = new Address(array_diff_key($this->getJsonBody($request), array_flip(['_type'])));
         $address = $accountApi->updateAddress($context->session->account->accountId, $address);
 
@@ -46,7 +50,9 @@ class AccountApiController extends Controller
             throw new AuthenticationException('Not logged in.');
         }
 
-        $accountApi = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory')->factor($context->customer);
+        $accountApi = $this->get(
+            'Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory'
+        )->factor($context->customer);
         $address = new Address(array_diff_key($this->getJsonBody($request), array_flip(['_type'])));
         $accountApi->removeAddress($context->session->account->accountId, $address->addressId);
 
@@ -59,7 +65,9 @@ class AccountApiController extends Controller
             throw new AuthenticationException('Not logged in.');
         }
 
-        $accountApi = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory')->factor($context->customer);
+        $accountApi = $this->get(
+            'Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory'
+        )->factor($context->customer);
         $address = new Address(array_diff_key($this->getJsonBody($request), array_flip(['_type'])));
         $address = $accountApi->setDefaultBillingAddress($context->session->account->accountId, $address->addressId);
 
@@ -72,7 +80,9 @@ class AccountApiController extends Controller
             throw new AuthenticationException('Not logged in.');
         }
 
-        $accountApi = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory')->factor($context->customer);
+        $accountApi = $this->get(
+            'Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory'
+        )->factor($context->customer);
         $address = new Address(array_diff_key($this->getJsonBody($request), array_flip(['_type'])));
         $address = $accountApi->setDefaultShippingAddress($context->session->account->accountId, $address->addressId);
 

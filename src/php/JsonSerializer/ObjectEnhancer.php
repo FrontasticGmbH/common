@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Frontastic\Common\JsonSerializer;
-
 
 interface ObjectEnhancer
 {

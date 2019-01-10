@@ -39,7 +39,10 @@ class AccountAuthController extends Controller
             'salutation' => $body['salutation'],
             'firstName' => $body['firstName'],
             'lastName' => $body['lastName'],
-            'birthday' => new \DateTimeImmutable($body['birthdayYear'] . '-' . $body['birthdayMonth'] . '-' . $body['birthdayDay'] . 'T12:00'),
+            'birthday' => new \DateTimeImmutable($body['birthdayYear'] .
+                '-' . $body['birthdayMonth'] .
+                '-' . $body['birthdayDay'] .
+                'T12:00'),
             'data' => [
                 'phonePrefix' => $body['phonePrefix'],
                 'phone' => $body['phone'],
@@ -113,7 +116,10 @@ class AccountAuthController extends Controller
         $account->salutation = $body['salutation'];
         $account->firstName = $body['firstName'];
         $account->lastName = $body['lastName'];
-        $account->birthday = new \DateTimeImmutable($body['birthdayYear'] . '-' . $body['birthdayMonth'] . '-' . $body['birthdayDay'] . 'T12:00');
+        $account->birthday = new \DateTimeImmutable($body['birthdayYear'] .
+            '-' . $body['birthdayMonth'] .
+            '-' . $body['birthdayDay'] .
+            'T12:00');
         $account->data = [
             'phonePrefix' => $body['phonePrefix'],
             'phone' => $body['phone'],

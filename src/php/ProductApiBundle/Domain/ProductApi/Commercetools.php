@@ -1,4 +1,5 @@
 <?php
+
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 
 use Frontastic\Common\ProductApiBundle\Domain\Category;
@@ -209,5 +210,4 @@ class Commercetools implements ProductApi
     {
         return $this->client;
     }
-
 }

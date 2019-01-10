@@ -1,4 +1,5 @@
 <?php
+
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
 
 use Doctrine\Common\Cache\Cache;
@@ -102,8 +103,7 @@ class Client
         array $parameters = [],
         array $headers = [],
         string $body = ''
-    ): array
-    {
+    ): array {
         $query = '?';
         foreach ($parameters as $name => $parameter) {
             if (false === is_array($parameter)) {

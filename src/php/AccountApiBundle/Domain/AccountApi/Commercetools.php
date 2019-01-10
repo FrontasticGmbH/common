@@ -465,7 +465,7 @@ class Commercetools implements AccountApi
         );
 
         return array_map(
-            function (array $address) use ($account): Address {;
+            function (array $address) use ($account): Address {
                 return new Address([
                     'addressId' => $address['id'],
                     'firstName' => $address['firstName'],

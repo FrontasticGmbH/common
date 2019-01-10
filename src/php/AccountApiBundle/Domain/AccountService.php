@@ -40,7 +40,12 @@ class AccountService
 
     public function sendConfirmationMail(Account $account)
     {
-        $this->mailer->sendToUser($account, 'register', 'Willkommen bei Frontastic', ['token' => $account->confirmationToken]);
+        $this->mailer->sendToUser(
+            $account,
+            'register',
+            'Willkommen bei Frontastic',
+            ['token' => $account->confirmationToken]
+        );
         $account->eraseCredentials();
     }
 
