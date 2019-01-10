@@ -2,7 +2,7 @@
 
 namespace Frontastic\Common\ProductApiBundle\Domain;
 
-use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\Cache;
 use Frontastic\Common\HttpClient\Stream;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Semknox;
@@ -10,11 +10,20 @@ use Frontastic\Common\ReplicatorBundle\Domain\Customer;
 
 class DefaultProductApiFactory implements ProductApiFactory
 {
+    /**
+     * @var
+     */
     private $container;
 
-    public function __construct($container)
+    /**
+     * @var \Doctrine\Common\Cache\Cache
+     */
+    private $cache;
+
+    public function __construct($container, Cache $cache)
     {
         $this->container = $container;
+        $this->cache = $cache;
     }
 
     public function factor(Customer $customer): ProductApi
@@ -38,8 +47,6 @@ class DefaultProductApiFactory implements ProductApiFactory
             case isset($config['commercetools']):
                 // @todo These objects should come from the DI Container
                 $httpClient = new Stream();
-                // @todo Use a persistent cache backend here.
-                $cache = new ArrayCache();
 
                 return new Commercetools(
                     new Commercetools\Client(
@@ -47,7 +54,7 @@ class DefaultProductApiFactory implements ProductApiFactory
                         $config['commercetools']->clientSecret,
                         $config['commercetools']->projectKey,
                         $httpClient,
-                        $cache
+                        $this->cache
                     ),
                     new Commercetools\Mapper(
                         $config['commercetools']->localeOverwrite ?? null
