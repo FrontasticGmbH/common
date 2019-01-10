@@ -16,7 +16,7 @@ describe('httpQueryParser', function () {
 
         expect(parserResult).toEqual({
             first: 'foo',
-            second: 'bar'
+            second: 'bar',
         })
     })
 
@@ -24,7 +24,7 @@ describe('httpQueryParser', function () {
         const parserResult = httpParseQuery('str_a=Jack+and+Jill+didn%27t+see+the+well.')
 
         expect(parserResult).toEqual({
-            str_a: 'Jack and Jill didn\'t see the well.'
+            str_a: 'Jack and Jill didn\'t see the well.',
         })
     })
 
@@ -34,7 +34,7 @@ describe('httpQueryParser', function () {
         expect(parserResult).toEqual({
             'abc': {
                 'a': {
-                    'b': { 'c':'def' },
+                    'b': { 'c': 'def' },
                 },
                 'q': 't 5',
             },
