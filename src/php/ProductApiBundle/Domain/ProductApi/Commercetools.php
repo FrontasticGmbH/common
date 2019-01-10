@@ -68,6 +68,7 @@ class Commercetools implements ProductApi
     /**
      * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery $query
      * @return \Frontastic\Common\ProductApiBundle\Domain\Category[]
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      */
     public function getCategories(CategoryQuery $query): array
     {
@@ -131,10 +132,6 @@ class Commercetools implements ProductApi
         );
     }
 
-    /**
-     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery $query
-     * @return \Frontastic\Common\ProductApiBundle\Domain\Product
-     */
     public function getProduct(ProductQuery $query): ?Product
     {
         if ($query->sku) {
@@ -147,10 +144,6 @@ class Commercetools implements ProductApi
         );
     }
 
-    /**
-     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery $query
-     * @return \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result
-     */
     public function query(ProductQuery $query): Result
     {
         $locale = Locale::createFromPosix($this->localeOverwrite ?: $query->locale);
