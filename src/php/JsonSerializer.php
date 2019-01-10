@@ -78,7 +78,7 @@ class JsonSerializer
             }
         }
 
-        $result = array_merge(
+        $result = array_replace(
             $result,
             $this->enhanceSerialization($item)
         );
