@@ -1,0 +1,20 @@
+{
+    "tasticType": "account-addresses",
+    "name": "Adresses",
+    "category": "Account",
+    "icon": "edit_location",
+    "schema": [
+        {
+            "name": "Content",
+            "fields": [
+                {
+                    "label": "Customer Adresses",
+                    "field": "addresses",
+                    "type": "stream",
+                    "streamType": "account-address",
+                    "default": null
+                }
+            ]
+        }
+    ]
+}

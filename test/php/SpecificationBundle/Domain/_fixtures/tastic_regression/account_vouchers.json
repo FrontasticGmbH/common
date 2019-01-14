@@ -1,0 +1,19 @@
+{
+    "tasticType": "account-vouchers",
+    "name": "Vouchers",
+    "category": "Account",
+    "icon": "bookmarks",
+    "schema": [
+        {
+            "name": "Content",
+            "fields": [
+                {
+                    "label": "Show SomeField",
+                    "field": "showSomeField",
+                    "type": "boolean",
+                    "default": true
+                }
+            ]
+        }
+    ]
+}

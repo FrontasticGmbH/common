@@ -1,0 +1,19 @@
+{
+    "tasticType": "teaser",
+    "name": "Teaser",
+    "icon": "border_outer",
+    "schema": [
+        {
+            "name": "Data Selection",
+            "fields": [
+                {
+                    "label": "Teaser",
+                    "field": "teaser",
+                    "type": "custom",
+                    "customAppType": "teaser",
+                    "default": null
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+{
+    "tasticType": "account-confirm",
+    "name": "Confirm Mail Address",
+    "category": "Account",
+    "icon": "mail",
+    "schema": [
+        {
+            "name": "Content",
+            "fields": [
+                {
+                    "label": "Success Text",
+                    "field": "success",
+                    "type": "markdown"
+                },
+                {
+                    "label": "Failure Text",
+                    "field": "failure",
+                    "type": "markdown"
+                }
+            ]
+        }
+    ]
+}

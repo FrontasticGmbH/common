@@ -1,0 +1,29 @@
+{
+    "tasticType": "checkout",
+    "name": "Checkout",
+    "icon": "monetization_on",
+    "schema": [
+        {
+            "name": "Checkout",
+            "fields": [
+            ]
+        },
+        {
+            "name": "Paypal",
+            "fields": [
+                {
+                    "label": "Sandbox Client ID",
+                    "field": "paypalSandboxClientId",
+                    "type": "string",
+                    "translatable": false
+                },
+                {
+                    "label": "Production Client ID",
+                    "field": "paypalProductionClientId",
+                    "type": "string",
+                    "translatable": false
+                }
+            ]
+        }
+    ]
+}

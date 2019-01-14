@@ -1,0 +1,30 @@
+{
+    "tasticType": "cart",
+    "name": "Cart",
+    "icon": "shopping_cart",
+    "schema": [
+        {
+            "name": "Shopping Cart",
+            "fields": [
+                {
+                    "label": "Show product pictures",
+                    "field": "showProductPicture",
+                    "type": "boolean",
+                    "default": true
+                },
+                {
+                    "label": "Show item price",
+                    "field": "showItemPrice",
+                    "type": "boolean",
+                    "default": false
+                },
+                {
+                    "label": "Show summed item price",
+                    "field": "showSummedItemPrice",
+                    "type": "boolean",
+                    "default": true
+                }
+            ]
+        }
+    ]
+}

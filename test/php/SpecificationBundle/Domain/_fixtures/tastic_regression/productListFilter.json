@@ -1,0 +1,18 @@
+{
+    "tasticType": "productListFilter",
+    "name": "Product List Filter",
+    "schema": [
+        {
+            "name": "Stream Selection",
+            "fields": [
+                {
+                    "label": "Stream",
+                    "field": "stream",
+                    "type": "stream",
+                    "streamType": "product-list",
+                    "default": null
+                }
+            ]
+        }
+    ]
+}

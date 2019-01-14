@@ -1,0 +1,31 @@
+{
+    "tasticType": "productList",
+    "name": "Product List",
+    "icon": "list",
+    "schema": [
+        {
+            "name": "Stream Selection",
+            "fields": [
+                {
+                    "label": "Stream",
+                    "field": "stream",
+                    "type": "stream",
+                    "streamType": "product-list",
+                    "default": null
+                },
+                {
+                    "label": "Show percentual reducement",
+                    "field": "showPercent",
+                    "type": "boolean",
+                    "default": true
+                },
+                {
+                    "label": "Show strike price",
+                    "field": "showStrikePrice",
+                    "type": "boolean",
+                    "default": true
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,47 @@
+{
+    "tasticType": "navigation",
+    "name": "Navigation",
+    "icon": "menu",
+    "schema": [
+        {
+            "name": "Root Node Selection",
+            "fields": [
+                {
+                    "label": "Navigation Tree",
+                    "field": "tree",
+                    "type": "tree",
+                    "default": {
+                        "node": null,
+                        "depth": 1
+                    }
+                },
+                {
+                    "label": "Logo (optional)",
+                    "field": "logo",
+                    "type": "media",
+                    "options": {
+                        "ratio": "10:1"
+                    }
+                },
+                {
+                    "label": "Show language selector",
+                    "field": "showLanguageSelector",
+                    "type": "boolean",
+                    "default": true
+                },
+                {
+                    "label": "Show search field",
+                    "field": "showSearch",
+                    "type": "boolean",
+                    "default": true
+                },
+                {
+                    "label": "Show cart icon",
+                    "field": "showCart",
+                    "type": "boolean",
+                    "default": true
+                }
+            ]
+        }
+    ]
+}

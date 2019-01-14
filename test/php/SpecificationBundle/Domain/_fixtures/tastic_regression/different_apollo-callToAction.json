@@ -1,0 +1,49 @@
+{
+  "tasticType": "different-callToAction",
+  "name": "Call to Action",
+  "icon": "list",
+  "schema": [
+    {
+      "name": "Stream Selection",
+      "fields": [
+        {
+          "label": "Stream",
+          "field": "stream",
+          "type": "stream",
+          "streamType": "product-list",
+          "default": null
+        },
+        {
+          "label": "Titel",
+          "field": "title",
+          "type": "text",
+          "default": "",
+          "translatable": false
+        },
+        {
+          "label": "Untertitel",
+          "field": "subTitle",
+          "type": "text",
+          "translatable": false
+        },
+        {
+          "label": "Text",
+          "field": "text",
+          "type": "text",
+          "translatable": false
+        },
+        {
+          "label": "Hintergrundbild",
+          "field": "backgroundImage",
+          "type": "media"
+        },
+        {
+          "label": "Buttonbeschriftung",
+          "field": "buttonLabel",
+          "type": "text",
+          "translatable": false
+        }
+      ]
+    }
+  ]
+}

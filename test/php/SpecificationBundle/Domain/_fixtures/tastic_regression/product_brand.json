@@ -1,0 +1,34 @@
+{
+    "tasticType": "product-brand",
+    "name": "Brand",
+    "category": "Product",
+    "icon": "short_text",
+    "schema": [
+        {
+            "name": "Presentation",
+            "fields": [
+                {
+                    "label": "Stream",
+                    "field": "stream",
+                    "type": "stream",
+                    "streamType": "product",
+                    "default": null
+                },
+                {
+                    "label": "Heading level",
+                    "field": "level",
+                    "type": "enum",
+                    "default": "h2",
+                    "values": [
+                        { "value": "h1", "name": "First Level (h1)" },
+                        { "value": "h2", "name": "Second Level (h2)" },
+                        { "value": "h3", "name": "Third Level (h3)" },
+                        { "value": "h4", "name": "Fourth Level (h4)" },
+                        { "value": "h5", "name": "Fifth Level (h5)" },
+                        { "value": "h6", "name": "Sixth Level (h6)" }
+                    ]
+                }
+            ]
+        }
+    ]
+}

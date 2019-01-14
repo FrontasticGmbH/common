@@ -1,0 +1,20 @@
+{
+    "tasticType": "glassesConfigurator",
+    "name": "Glasses Configuration",
+    "category": "Different",
+    "icon": "settings",
+    "schema": [
+        {
+            "name": "Glasses Configuration",
+            "fields": [
+                {
+                    "label": "Stream",
+                    "field": "stream",
+                    "type": "stream",
+                    "streamType": "product",
+                    "default": null
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,20 @@
+{
+    "tasticType": "glassesDetails",
+    "name": "Glasses Details",
+    "category": "Different",
+    "icon": "details",
+    "schema": [
+        {
+            "name": "Glasses Details",
+            "fields": [
+                {
+                    "label": "Stream",
+                    "field": "stream",
+                    "type": "stream",
+                    "streamType": "product",
+                    "default": null
+                }
+            ]
+        }
+    ]
+}

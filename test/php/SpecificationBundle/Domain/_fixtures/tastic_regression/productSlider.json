@@ -1,0 +1,37 @@
+{
+    "tasticType": "productSlider",
+    "name": "Product Slider",
+    "icon": "slideshow",
+    "schema": [
+        {
+            "name": "Stream Selection",
+            "fields": [
+                {
+                    "label": "Stream",
+                    "field": "stream",
+                    "type": "stream",
+                    "streamType": "product-list",
+                    "default": null
+                },
+                {
+                    "label": "# Products",
+                    "field": "productCount",
+                    "type": "integer",
+                    "default": 5
+                },
+                {
+                    "label": "Show percentual reducement",
+                    "field": "showPercent",
+                    "type": "boolean",
+                    "default": true
+                },
+                {
+                    "label": "Show strike price",
+                    "field": "showStrikePrice",
+                    "type": "boolean",
+                    "default": true
+                }
+            ]
+        }
+    ]
+}

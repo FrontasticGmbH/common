@@ -1,0 +1,25 @@
+{
+    "tasticType": "account-login",
+    "name": "Login",
+    "category": "Account",
+    "icon": "profile",
+    "schema": [
+        {
+            "name": "Content",
+            "fields": [
+                {
+                    "label": "Show Registration",
+                    "field": "showRegistration",
+                    "type": "boolean",
+                    "default": true
+                },
+                {
+                    "label": "Show Forgot Password",
+                    "field": "showForgotPassword",
+                    "type": "boolean",
+                    "default": true
+                }
+            ]
+        }
+    ]
+}

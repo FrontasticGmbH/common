@@ -1,0 +1,32 @@
+{
+    "tasticType": "product-image",
+    "name": "Image",
+    "category": "Product",
+    "icon": "photo_library",
+    "schema": [
+        {
+            "name": "Presentation",
+            "fields": [
+                {
+                    "label": "Stream",
+                    "field": "stream",
+                    "type": "stream",
+                    "streamType": "product",
+                    "default": null
+                },
+                {
+                    "label": "Show image slider controls",
+                    "field": "enableSlider",
+                    "type": "boolean",
+                    "default": true
+                },
+                {
+                    "label": "Automatically slide images",
+                    "field": "autoSlide",
+                    "type": "boolean",
+                    "default": false
+                }
+            ]
+        }
+    ]
+}

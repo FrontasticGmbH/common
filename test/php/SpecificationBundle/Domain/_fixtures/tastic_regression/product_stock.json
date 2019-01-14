@@ -1,0 +1,26 @@
+{
+    "tasticType": "product-stock",
+    "name": "On Stock",
+    "category": "Product",
+    "icon": "check_box",
+    "schema": [
+        {
+            "name": "Presentation",
+            "fields": [
+                {
+                    "label": "Stream",
+                    "field": "stream",
+                    "type": "stream",
+                    "streamType": "product",
+                    "default": null
+                },
+                {
+                    "label": "Show Fast Delivery Counter",
+                    "field": "fastDelivery",
+                    "type": "boolean",
+                    "default": true
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,61 @@
+{
+    "tasticType": "imageBanner",
+    "name": "Image Banner",
+    "icon": "photo_size_select_large",
+    "schema": [
+        {
+            "name": "Image",
+            "fields": [
+                {
+                    "label": "Image",
+                    "field": "image",
+                    "type": "media"
+                },
+                {
+                    "label": "Caption",
+                    "field": "caption",
+                    "type": "string"
+                },
+                {
+                    "label": "Size",
+                    "field": "size",
+                    "type": "enum",
+                    "default": "normal",
+                    "values": [
+                        { "value": "small", "name": "Small" },
+                        { "value": "normal", "name": "Normal" },
+                        { "value": "large", "name": "Large" }
+                    ]
+                },
+                {
+                    "label": "Horizontal Alignment",
+                    "field": "horizontalAlign",
+                    "type": "enum",
+                    "default": "center",
+                    "values": [
+                        { "value": "left", "name": "Left" },
+                        { "value": "center", "name": "Center" },
+                        { "value": "right", "name": "Right" }
+                    ]
+                },
+                {
+                    "label": "Vertical Alignment",
+                    "field": "verticalAlign",
+                    "type": "enum",
+                    "default": "center",
+                    "values": [
+                        { "value": "top", "name": "Top" },
+                        { "value": "center", "name": "Center" },
+                        { "value": "bottom", "name": "Bottom" }
+                    ]
+                },
+                {
+                    "label": "Link",
+                    "field": "link",
+                    "type": "reference",
+                    "default": null
+                }
+            ]
+        }
+    ]
+}

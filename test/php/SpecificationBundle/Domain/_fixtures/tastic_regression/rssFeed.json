@@ -1,0 +1,19 @@
+{
+    "tasticType": "rssFeed",
+    "name": "RSS-Feed",
+    "icon": "list",
+    "schema": [
+        {
+            "name": "Feed URL",
+            "fields": [
+                {
+                    "label": "RSS Feed URL",
+                    "field": "feed-url",
+                    "type": "string",
+                    "translatable": false,
+                    "default": ""
+                }
+            ]
+        }
+    ]
+}

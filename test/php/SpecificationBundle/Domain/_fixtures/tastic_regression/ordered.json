@@ -1,0 +1,13 @@
+{
+    "tasticType": "ordered",
+    "name": "Ordered",
+    "description": "Show the last order",
+    "icon": "shopping_basket",
+    "schema": [
+        {
+            "name": "Ordered",
+            "fields": [
+            ]
+        }
+    ]
+}

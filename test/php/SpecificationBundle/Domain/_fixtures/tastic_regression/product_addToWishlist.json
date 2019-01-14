@@ -1,0 +1,44 @@
+{
+    "tasticType": "product-addToWishlist",
+    "name": "Add To Wishlist",
+    "category": "Product",
+    "icon": "favorite",
+    "schema": [
+        {
+            "name": "Presentation",
+            "fields": [
+                {
+                    "label": "Show product name in variant selector",
+                    "field": "showNameInVariants",
+                    "type": "boolean",
+                    "default": false
+                },
+                {
+                    "label": "Show product price in variant selector",
+                    "field": "showPriceInVariants",
+                    "type": "boolean",
+                    "default": true
+                }
+            ]
+        },
+        {
+            "name": "Data",
+            "fields": [
+                {
+                    "label": "Stream",
+                    "field": "stream",
+                    "type": "stream",
+                    "streamType": "product",
+                    "default": null
+                },
+                {
+                    "label": "Wishlists",
+                    "field": "wishlists",
+                    "type": "stream",
+                    "streamType": "account-wishlists",
+                    "default": null
+                }
+            ]
+        }
+    ]
+}

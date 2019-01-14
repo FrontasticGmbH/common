@@ -1,0 +1,64 @@
+{
+    "identifier": "different-storefinder",
+    "name": "Different Storefinder",
+    "icon": "store",
+    "group": "different",
+    "fields": [
+        {
+            "label": "Name",
+            "field": "name"
+        },
+        {
+            "label": "Longitude",
+            "field": "longitude"
+        },
+        {
+            "label": "Latitude",
+            "field": "latitude"
+        },
+        {
+            "label": "Google Place ID",
+            "field": "placeID"
+        }
+    ],
+    "schema": [
+        {
+            "name": "Base Data",
+            "fields": [
+                {
+                    "label": "Name",
+                    "field": "name",
+                    "required": true,
+                    "type": "string"
+                },
+                {
+                    "label": "Google Place ID",
+                    "field": "placeID",
+                    "required": true,
+                    "type": "string"
+                },
+                {
+                    "label": "Latitude",
+                    "field": "latitude",
+                    "required": true,
+                    "type": "decimal"
+                },
+                {
+                    "label": "Longitude",
+                    "field": "longitude",
+                    "required": true,
+                    "type": "decimal"
+                }
+            ]
+        }
+    ],
+    "indexes": [
+        {
+            "name": "Location",
+            "fields": [
+                "latitude",
+                "longitude"
+            ]
+        }
+    ]
+}

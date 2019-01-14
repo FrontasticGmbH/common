@@ -1,0 +1,18 @@
+{
+    "tasticType": "text",
+    "name": "Text",
+    "icon": "wrap_text",
+    "schema": [
+        {
+            "name": "Content",
+            "fields": [
+                {
+                    "label": "Content",
+                    "field": "text",
+                    "type": "text",
+                    "default": "Enter your custom <strong>text</strong>."
+                }
+            ]
+        }
+    ]
+}

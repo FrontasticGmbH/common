@@ -1,0 +1,34 @@
+{
+    "tasticType": "product-metaData",
+    "name": "Product Page Meta Data",
+    "category": "Product",
+    "icon": "info",
+    "schema": [
+        {
+            "name": "General",
+            "fields": [
+                {
+                    "label": "Stream",
+                    "field": "stream",
+                    "type": "stream",
+                    "streamType": "product",
+                    "default": null
+                },
+                {
+                    "label": "Title Suffix",
+                    "field": "titleSuffix",
+                    "type": "text",
+                    "default": "",
+                    "translatable": true
+                },
+                {
+                    "label": "Title Part Separator",
+                    "field": "titlePartSeparator",
+                    "type": "text",
+                    "default": " | ",
+                    "translatable": false
+                }
+            ]
+        }
+    ]
+}

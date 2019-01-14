@@ -1,0 +1,19 @@
+{
+    "tasticType": "contentList",
+    "name": "Content List",
+    "icon": "list",
+    "schema": [
+        {
+            "name": "Stream Selection",
+            "fields": [
+                {
+                    "label": "Stream",
+                    "field": "stream",
+                    "type": "stream",
+                    "streamType": "content-list",
+                    "default": null
+                }
+            ]
+        }
+    ]
+}

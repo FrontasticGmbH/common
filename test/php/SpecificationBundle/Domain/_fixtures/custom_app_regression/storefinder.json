@@ -1,0 +1,137 @@
+{
+    "identifier": "storefinder",
+    "name": "Storefinder",
+    "icon": "store",
+    "fields": [
+        {
+            "label": "Name",
+            "field": "name"
+        },
+        {
+            "label": "City",
+            "field": "city"
+        },
+        {
+            "label": "Country",
+            "field": "country"
+        }
+    ],
+    "schema": [
+        {
+            "name": "Base Data",
+            "fields": [
+                {
+                    "label": "Name",
+                    "field": "name",
+                    "required": true,
+                    "type": "string"
+                },
+                {
+                    "label": "Cover Image",
+                    "field": "image",
+                    "type": "media"
+                },
+                {
+                    "label": "Description",
+                    "field": "description",
+                    "type": "markdown"
+                },
+                {
+                    "type": "image",
+                    "url": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE2LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgd2lkdGg9Ijg1Ljk4OHB4IiBoZWlnaHQ9Ijg1Ljk4N3B4IiB2aWV3Qm94PSIwIDAgODUuOTg4IDg1Ljk4NyIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgODUuOTg4IDg1Ljk4NzsiDQoJIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPHBhdGggc3R5bGU9ImZpbGw6IzAxMDAwMjsiIGQ9Ik03Ny45OTMsMzAuODg0Yy0yLjY5MiwwLTQuODc4LDIuMTg1LTQuODc4LDQuODY4YzAsMi42ODUsMi4xODYsNC44NjcsNC44NzgsNC44NjcNCgkJYzIuNjgzLDAsNC44NjctMi4xODMsNC44NjctNC44NjdDODIuODYsMzMuMDY5LDgwLjY3NSwzMC44ODQsNzcuOTkzLDMwLjg4NHogTTguMDA1LDMwLjg4NGMtMi42OTIsMC00Ljg3OCwyLjE4NS00Ljg3OCw0Ljg2OA0KCQljMCwyLjY4NSwyLjE4Niw0Ljg2Nyw0Ljg3OCw0Ljg2N2MyLjY4NSwwLDQuODctMi4xODMsNC44Ny00Ljg2N0MxMi44NzUsMzMuMDY5LDEwLjY5LDMwLjg4NCw4LjAwNSwzMC44ODR6IE02My41MDQsMjIuMDMNCgkJYy0zLjk5NywwLTcuMjM5LDMuMjUtNy4yMzksNy4yNWMwLDMuOTkyLDMuMjQyLDcuMjM2LDcuMjM5LDcuMjM2YzMuOTk4LDAsNy4yNS0zLjI0NCw3LjI1LTcuMjM2DQoJCUM3MC43NTQsMjUuMjg0LDY3LjUwMiwyMi4wMyw2My41MDQsMjIuMDN6IE04NS45ODgsNjYuMDg4aC04LjI1NFY1MC44OTZjMC0yLjYxLTAuNzY3LTUuMDMzLTEuOTk5LTcuMTQ2DQoJCWMwLjcyNi0wLjIxMiwxLjQ3MS0wLjM2MywyLjI1OC0wLjM2M2M0LjQwMSwwLDcuOTk1LDMuNTk0LDcuOTk1LDguMDA2VjY2LjA4OHogTTIyLjQ4MywyMi4wM2MtNCwwLTcuMjUsMy4yNS03LjI1LDcuMjUNCgkJYzAsMy45OTIsMy4yNSw3LjIzNiw3LjI1LDcuMjM2YzMuOTg3LDAsNy4yMzctMy4yNDQsNy4yMzctNy4yMzZDMjkuNzIsMjUuMjg0LDI2LjQ3MSwyMi4wMywyMi40ODMsMjIuMDN6IE04LjAwNSw0My4zODcNCgkJYzAuNzg3LDAsMS41MjIsMC4xNSwyLjI1LDAuMzYzYy0xLjI0NSwyLjExMy0xLjk5OSw0LjUzNi0xLjk5OSw3LjE0NnYxNS4xOTJIMFY1MS4zOTNDMCw0Ni45OCwzLjU5Niw0My4zODcsOC4wMDUsNDMuMzg3eg0KCQkgTTQyLjk4Niw3LjU1NWMtNS45LDAtMTAuNzEsNC44MDUtMTAuNzEsMTAuNzExYzAsNS45MDUsNC44MDUsMTAuNzE2LDEwLjcxLDEwLjcxNmM1LjkwNiwwLDEwLjcxNy00LjgxMSwxMC43MTctMTAuNzE2DQoJCUM1My43MDgsMTIuMzU5LDQ4Ljg5Miw3LjU1NSw0Mi45ODYsNy41NTV6IE03NS4wODMsNzEuNzQySDYyLjQzOFY0OC42MjdjMC0zLjE3OS0wLjgzOS02LjEzNi0yLjE5NS04Ljc4Nw0KCQljMS4wMzUtMC4zMDYsMi4xMjMtMC41MjMsMy4yNjItMC41MjNjNi4zOCwwLDExLjU3OCw1LjE4OCwxMS41NzgsMTEuNTc5VjcxLjc0MnogTTIzLjUzNyw0OC42Mjd2MjMuMTE1SDEwLjkwOFY1MC44OTYNCgkJYzAtNi4zODUsNS4xOTEtMTEuNTc5LDExLjU4MS0xMS41NzljMS4xMzksMCwyLjIxNiwwLjIxNywzLjI0OSwwLjUyM0MyNC4zODEsNDIuNDkxLDIzLjUzNyw0NS40NDgsMjMuNTM3LDQ4LjYyN3ogTTI2LjE4OCw3OC40MzMNCgkJaDMzLjU5OFY0OC42MjdjMC05LjI2NC03LjUzOS0xNi43OTgtMTYuODAxLTE2Ljc5OGMtOS4yNjksMC0xNi43OTcsNy41MzQtMTYuNzk3LDE2Ljc5OFY3OC40MzN6Ii8+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg=="
+                },
+                {
+                    "type": "description",
+                    "text": "Just add all *spokesperson* from the shop here, so the users may contact them."
+                },
+                {
+                    "label": "Spokesperson",
+                    "field": "people",
+                    "type": "group",
+                    "itemLabelField": "name",
+                    "min": 1,
+                    "max": 5,
+                    "fields": [
+                        {
+                            "label": "Name",
+                            "field": "name",
+                            "required": true,
+                            "type": "string"
+                        },
+                        {
+                            "label": "Role",
+                            "field": "role",
+                            "type": "string"
+                        },
+                        {
+                            "label": "Photo",
+                            "field": "photo",
+                            "type": "media"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Contact",
+            "fields": [
+                {
+                    "label": "Street",
+                    "field": "street",
+                    "type": "string"
+                },
+                {
+                    "label": "Street",
+                    "field": "street_ammendment",
+                    "type": "string"
+                },
+                {
+                    "label": "ZIP",
+                    "field": "zip",
+                    "type": "string"
+                },
+                {
+                    "label": "City",
+                    "field": "city",
+                    "required": true,
+                    "type": "string"
+                },
+                {
+                    "label": "State",
+                    "field": "state",
+                    "type": "string"
+                },
+                {
+                    "label": "Country",
+                    "field": "country",
+                    "type": "string"
+                },
+                {
+                    "label": "Latitude",
+                    "field": "latitude",
+                    "type": "decimal"
+                },
+                {
+                    "label": "Longitude",
+                    "field": "longitude",
+                    "type": "decimal"
+                }
+            ]
+        }
+    ],
+    "indexes": [
+        {
+            "name": "ZIP",
+            "fields": [
+                "zip"
+            ]
+        },
+        {
+            "name": "Location",
+            "fields": [
+                "latitude",
+                "longitude"
+            ]
+        }
+    ]
+}

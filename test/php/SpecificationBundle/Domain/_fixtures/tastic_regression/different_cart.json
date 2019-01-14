@@ -1,0 +1,11 @@
+{
+    "tasticType": "cart",
+    "name": "Cart",
+    "icon": "shopping_cart",
+    "schema": [
+        {
+            "name": "Shopping Cart",
+            "fields": []
+        }
+    ]
+}

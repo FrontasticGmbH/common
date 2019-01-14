@@ -1,0 +1,19 @@
+{
+    "tasticType": "markdown",
+    "name": "Markdown",
+    "icon": "wrap_text",
+    "schema": [
+        {
+            "name": "Content",
+            "fields": [
+                {
+                    "label": "Content",
+                    "field": "text",
+                    "type": "markdown",
+                    "default": "* Enter\n* some\n* Markdown",
+                    "translatable": true
+                }
+            ]
+        }
+    ]
+}

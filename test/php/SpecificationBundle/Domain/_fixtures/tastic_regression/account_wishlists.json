@@ -1,0 +1,19 @@
+{
+    "tasticType": "account-wishlists",
+    "name": "Wishlists",
+    "category": "Account",
+    "icon": "favorite",
+    "schema": [
+        {
+            "name": "Content",
+            "fields": [
+                {
+                    "label": "Show SomeField",
+                    "field": "showSomeField",
+                    "type": "boolean",
+                    "default": true
+                }
+            ]
+        }
+    ]
+}

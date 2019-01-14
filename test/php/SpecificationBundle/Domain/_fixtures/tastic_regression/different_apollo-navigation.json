@@ -1,0 +1,39 @@
+{
+  "tasticType": "different-navigation",
+  "name": "Different Navigation",
+  "icon": "menu",
+  "schema": [
+    {
+      "name": "Root Node Selection",
+      "fields": [
+        {
+          "label": "Primärer Navigationsbaum",
+          "field": "tree",
+          "type": "tree",
+          "default": {
+            "node": null,
+            "depth": 1
+          }
+        },
+        {
+          "label": "Navigationsbaum Topbar",
+          "field": "treeTopbar",
+          "type": "tree",
+          "default": {
+            "node": null,
+            "depth": 1
+          }
+        },
+        {
+          "label": "Navigationsbaum Actionbar",
+          "field": "treeActionbar",
+          "type": "tree",
+          "default": {
+            "node": null,
+            "depth": 1
+          }
+        }
+      ]
+    }
+  ]
+}

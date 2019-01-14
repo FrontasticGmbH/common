@@ -1,0 +1,19 @@
+{
+    "tasticType": "account-orders",
+    "name": "Orders",
+    "category": "Account",
+    "icon": "add_shopping_cart",
+    "schema": [
+        {
+            "name": "Content",
+            "fields": [
+                {
+                    "label": "Show SomeField",
+                    "field": "showSomeField",
+                    "type": "boolean",
+                    "default": true
+                }
+            ]
+        }
+    ]
+}

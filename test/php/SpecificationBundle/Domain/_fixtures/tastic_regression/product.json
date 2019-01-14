@@ -1,0 +1,64 @@
+{
+    "tasticType": "product",
+    "name": "Full Product",
+    "category": "Product",
+    "icon": "card_giftcard",
+    "schema": [
+        {
+            "name": "Stream Selection",
+            "fields": [
+                {
+                    "label": "Stream",
+                    "field": "stream",
+                    "type": "stream",
+                    "streamType": "product",
+                    "default": null
+                },
+                {
+                    "label": "Always show variant selector",
+                    "field": "showVariants",
+                    "type": "boolean",
+                    "default": false
+                },
+                {
+                    "label": "Heading level",
+                    "field": "level",
+                    "type": "enum",
+                    "default": "h2",
+                    "values": [
+                        { "value": "h1", "name": "First Level (h1)" },
+                        { "value": "h2", "name": "Second Level (h2)" },
+                        { "value": "h3", "name": "Third Level (h3)" },
+                        { "value": "h4", "name": "Fourth Level (h4)" },
+                        { "value": "h5", "name": "Fifth Level (h5)" },
+                        { "value": "h6", "name": "Sixth Level (h6)" }
+                    ]
+                },
+                {
+                    "label": "Show image slider controls",
+                    "field": "enableSlider",
+                    "type": "boolean",
+                    "default": true
+                },
+                {
+                    "label": "Automatically slide images",
+                    "field": "autoSlide",
+                    "type": "boolean",
+                    "default": false
+                },
+                {
+                    "label": "Show percentual reducement",
+                    "field": "showPercent",
+                    "type": "boolean",
+                    "default": true
+                },
+                {
+                    "label": "Show strike price",
+                    "field": "showStrikePrice",
+                    "type": "boolean",
+                    "default": true
+                }
+            ]
+        }
+    ]
+}

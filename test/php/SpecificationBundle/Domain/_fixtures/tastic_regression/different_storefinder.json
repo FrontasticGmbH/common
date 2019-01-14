@@ -1,0 +1,35 @@
+{
+    "tasticType": "different-storefinder",
+    "name": "Filialfinder",
+    "category": "Different",
+    "icon": "store",
+    "schema": [
+        {
+            "name": "General",
+            "fields": [
+                {
+                    "label": "Google API Keys",
+                    "field": "apiKeys",
+                    "type": "group",
+                    "translatable": false,
+                    "fields": [
+                        {
+                            "label": "Domain",
+                            "field": "domain",
+                            "type": "string",
+                            "translatable": false,
+                            "default": null
+                        },
+                        {
+                            "label": "Google API Key",
+                            "field": "apiKey",
+                            "type": "string",
+                            "translatable": false,
+                            "default": null
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

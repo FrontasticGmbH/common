@@ -1,0 +1,19 @@
+{
+    "tasticType": "account-profile",
+    "name": "Profile",
+    "category": "Account",
+    "icon": "account_box",
+    "schema": [
+        {
+            "name": "Content",
+            "fields": [
+                {
+                    "label": "Show SomeField",
+                    "field": "showSomeField",
+                    "type": "boolean",
+                    "default": true
+                }
+            ]
+        }
+    ]
+}

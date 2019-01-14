@@ -1,0 +1,156 @@
+{
+    "tasticType": "heroSlider",
+    "name": "Hero Slider",
+    "icon": "photo_library",
+    "schema": [
+        {
+            "name": "General",
+            "fields": [
+                {
+                    "label": "Slides",
+                    "field": "slides",
+                    "type": "group",
+                    "translatable": false,
+                    "fields": [
+                        {
+                            "label": "Background",
+                            "field": "background",
+                            "type": "media"
+                        },
+                        {
+                            "label": "Call-to-Action URL",
+                            "field": "ctaHref",
+                            "type": "string"
+                        },
+                        {
+                            "label": "Call-to-Action Left Offset (Mobile)",
+                            "field": "ctaMobileOffsetLeft",
+                            "type": "number"
+                        },
+                        {
+                            "label": "Call-to-Action Top Offset (Mobile)",
+                            "field": "ctaMobileOffsetTop",
+                            "type": "number"
+                        },
+                        {
+                            "label": "Call-to-Action Left Offset (Tablet)",
+                            "field": "ctaTabletOffsetLeft",
+                            "type": "number"
+                        },
+                        {
+                            "label": "Call-to-Action Top Offset (Tablet)",
+                            "field": "ctaTabletOffsetTop",
+                            "type": "number"
+                        },
+                        {
+                            "label": "Call-to-Action Left Offset (Desktop)",
+                            "field": "ctaDesktopOffsetLeft",
+                            "type": "number"
+                        },
+                        {
+                            "label": "Call-to-Action Top Offset (Desktop)",
+                            "field": "ctaDesktopOffsetTop",
+                            "type": "number"
+                        },
+                        {
+                            "label": "Image (Mobile)",
+                            "field": "mobileSrc",
+                            "type": "media"
+                        },
+                        {
+                            "label": "Image Position (Mobile)",
+                            "field": "mobileAlign",
+                            "type": "enum",
+                            "default": "center",
+                            "values": [
+                                { "value": "top-left", "name": "Top-Left" },
+                                { "value": "top-center", "name": "Top-Center" },
+                                { "value": "top-right", "name": "Top-Right" },
+                                { "value": "center-left", "name": "Center-Left" },
+                                { "value": "center-center", "name": "Center-Center" },
+                                { "value": "center-right", "name": "Center-Right" },
+                                { "value": "bottom-left", "name": "Bottom-Left" },
+                                { "value": "bottom-center", "name": "Bottom-Center" },
+                                { "value": "bottom-right", "name": "Bottom-Right" }
+                            ]
+                        },
+                        {
+                            "label": "Image Left Offset (Mobile)",
+                            "field": "imageMobileOffsetLeft",
+                            "type": "number"
+                        },
+                        {
+                            "label": "Image Top Offset (Mobile)",
+                            "field": "imageMobileOffsetTop",
+                            "type": "number"
+                        },
+                        {
+                            "label": "Image (Tablet)",
+                            "field": "tabletSrc",
+                            "type": "media"
+                        },
+                        {
+                            "label": "Image Position (Tablet)",
+                            "field": "tabletAlign",
+                            "type": "enum",
+                            "default": "center",
+                            "values": [
+                                { "value": "top-left", "name": "Top-Left" },
+                                { "value": "top-center", "name": "Top-Center" },
+                                { "value": "top-right", "name": "Top-Right" },
+                                { "value": "center-left", "name": "Center-Left" },
+                                { "value": "center-center", "name": "Center-Center" },
+                                { "value": "center-right", "name": "Center-Right" },
+                                { "value": "bottom-left", "name": "Bottom-Left" },
+                                { "value": "bottom-center", "name": "Bottom-Center" },
+                                { "value": "bottom-right", "name": "Bottom-Right" }
+                            ]
+                        },
+                        {
+                            "label": "Image Left Offset (Tablet)",
+                            "field": "imageMobileOffsetLeft",
+                            "type": "number"
+                        },
+                        {
+                            "label": "Image Top Offset (Tablet)",
+                            "field": "imageMobileOffsetTop",
+                            "type": "number"
+                        },
+                        {
+                            "label": "Image (Desktop)",
+                            "field": "desktopSrc",
+                            "type": "media"
+                        },
+                        {
+                            "label": "Image Position (Desktop)",
+                            "field": "desktopAlign",
+                            "type": "enum",
+                            "default": "center",
+                            "values": [
+                                { "value": "top-left", "name": "Top-Left" },
+                                { "value": "top-center", "name": "Top-Center" },
+                                { "value": "top-right", "name": "Top-Right" },
+                                { "value": "center-left", "name": "Center-Left" },
+                                { "value": "center-center", "name": "Center-Center" },
+                                { "value": "center-right", "name": "Center-Right" },
+                                { "value": "bottom-left", "name": "Bottom-Left" },
+                                { "value": "bottom-center", "name": "Bottom-Center" },
+                                { "value": "bottom-right", "name": "Bottom-Right" }
+                            ]
+                        },
+                        {
+                            "label": "Image Left Offset (Desktop)",
+                            "field": "imageMobileOffsetLeft",
+                            "type": "number"
+                        },
+                        {
+                            "label": "Image Top Offset (Desktop)",
+                            "field": "imageMobileOffsetTop",
+                            "type": "number"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,38 @@
+{
+    "tasticType": "product-addToCart",
+    "name": "Add To Cart",
+    "category": "Product",
+    "icon": "add_shopping_cart",
+    "schema": [
+        {
+            "name": "Presentation",
+            "fields": [
+                {
+                    "label": "Stream",
+                    "field": "stream",
+                    "type": "stream",
+                    "streamType": "product",
+                    "default": null
+                },
+                {
+                    "label": "Always show variant selector",
+                    "field": "showVariants",
+                    "type": "boolean",
+                    "default": false
+                },
+                {
+                    "label": "Show product name in variant selector",
+                    "field": "showNameInVariants",
+                    "type": "boolean",
+                    "default": false
+                },
+                {
+                    "label": "Show product price in variant selector",
+                    "field": "showPriceInVariants",
+                    "type": "boolean",
+                    "default": true
+                }
+            ]
+        }
+    ]
+}

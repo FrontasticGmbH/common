@@ -1,0 +1,19 @@
+{
+    "tasticType": "instagramPost",
+    "name": "Instagram Post",
+    "icon": "image",
+    "schema": [
+        {
+            "name": "Post URL",
+            "fields": [
+                {
+                    "label": "Instagram Post URL",
+                    "field": "post-url",
+                    "type": "string",
+                    "translatable": false,
+                    "default": ""
+                }
+            ]
+        }
+    ]
+}

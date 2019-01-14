@@ -1,0 +1,41 @@
+{
+    "tasticType": "product-description",
+    "name": "Description",
+    "category": "Product",
+    "icon": "wrap_text",
+    "schema": [
+        {
+            "name": "Presentation",
+            "fields": [
+                {
+                    "label": "Stream",
+                    "field": "stream",
+                    "type": "stream",
+                    "streamType": "product",
+                    "default": null
+                },
+                {
+                    "label": "Fields",
+                    "field": "fields",
+                    "type": "group",
+                    "itemLabelField": "name",
+                    "min": 1,
+                    "fields": [
+                        {
+                            "label": "Name",
+                            "field": "name",
+                            "required": true,
+                            "type": "string"
+                        },
+                        {
+                            "label": "Attribute",
+                            "field": "attribute",
+                            "required": true,
+                            "type": "string"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

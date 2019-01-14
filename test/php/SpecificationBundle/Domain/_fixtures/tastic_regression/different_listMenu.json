@@ -1,0 +1,25 @@
+{
+    "tasticType": "listMenu",
+    "name": "List Menu",
+    "category": "Different",
+    "icon": "menu",
+    "schema": [
+        {
+            "name": "General",
+            "fields": [
+                {
+                    "label": "Menu Level",
+                    "field": "tree",
+                    "type": "tree",
+                    "default": {
+                        "node": null,
+                        "depth": 1
+                    },
+                    "options": {
+                        "depth": 1
+                    }
+                }
+            ]
+        }
+    ]
+}
