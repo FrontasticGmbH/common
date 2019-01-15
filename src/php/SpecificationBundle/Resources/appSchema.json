@@ -37,7 +37,8 @@
                         "reference",
                         "stream",
                         "string",
-                        "text"
+                        "text",
+                        "tree"
                     ]
                 }
             },
