@@ -7,6 +7,8 @@ use Seld\JsonLint\JsonParser;
 
 class CustomAppSpecParser
 {
+    const SCHEMA_FILE = __DIR__ . '/../../../json/appSchema.json';
+
     public function parse(string $schema): \StdClass
     {
         $jsonParser = new JsonParser();
@@ -17,7 +19,7 @@ class CustomAppSpecParser
             );
         }
 
-        $jsonSchema = file_get_contents(__DIR__ . '/../Resources/appSchema.json');
+        $jsonSchema = file_get_contents(self::SCHEMA_FILE);
         if ($exception = $jsonParser->lint($jsonSchema)) {
             throw new InvalidSchemaException(
                 "Failed to parse JSON Schema.",

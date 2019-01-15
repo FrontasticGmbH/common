@@ -6,7 +6,7 @@ use JsonSchema\Validator;
 
 class MetaSchemaValidationTest extends \PHPUnit\Framework\TestCase
 {
-    const SCHEMA_DIRECTORY = __DIR__ . '/../../../src/php/SpecificationBundle/Resources';
+    const SCHEMA_DIRECTORY = __DIR__ . '/../../../src/json';
 
     public static function provideSchemaFiles()
     {
