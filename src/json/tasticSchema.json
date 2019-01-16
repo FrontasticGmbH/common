@@ -24,37 +24,26 @@
                     "fields": {
                         "type": "array",
                         "items": {
-                            "type": "object",
-                            "properties": {
-                                "label": {
-                                    "type": "string"
-                                },
-                                "description": {
-                                    "type": "string"
-                                },
-                                "field": {
-                                    "type": "string"
-                                },
-                                "translatable": {
-                                    "type": "boolean"
-                                },
-                                "required": {
-                                    "type": "boolean"
-                                },
-                                "type": {
-                                    "anyOf": [
-                                        { "$ref": "https://frontastic.cloud/json/schema/common#/definitions/fieldType" },
-                                        {
-                                            "type": "string",
-                                            "enum": [
-                                                "custom",
-                                                "group"
+                            "allOf": [
+                                { "$ref": "https://frontastic.cloud/json/schema/common#/definitions/fieldDefinition" },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "type": {
+                                            "anyOf": [
+                                                { "$ref": "https://frontastic.cloud/json/schema/common#/definitions/fieldType" },
+                                                {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "custom",
+                                                        "group"
+                                                    ]
+                                                }
                                             ]
                                         }
-                                    ]
+                                    }
                                 }
-                            },
-                            "required": ["label", "field", "type"]
+                            ]
                         }
                     }
                 },

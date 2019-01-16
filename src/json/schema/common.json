@@ -4,6 +4,26 @@
     "description": "Definitions of Common Elements in Frontastic Schemas",
 
     "definitions": {
+        "fieldDefinition": {
+            "type": "object",
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "field": {
+                    "type": "string"
+                },
+                "translatable": {
+                    "type": "boolean"
+                },
+                "required": {
+                    "type": "boolean"
+                }
+            }
+        },
         "fieldType": {
             "type": "string",
             "enum": [
