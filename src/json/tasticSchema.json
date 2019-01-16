@@ -3,6 +3,25 @@
     "title": "Tastic Schema",
     "description": "A Frontastic tastic definition",
     "type": "object",
+    "definitions": {
+        "fieldDefinition": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "anyOf": [
+                        { "$ref": "https://frontastic.cloud/json/schema/common#/definitions/fieldType" },
+                        {
+                            "type": "string",
+                            "enum": [
+                                "custom",
+                                "group"
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    },
     "properties": {
         "tasticType": {
             "type": "string"
@@ -26,23 +45,7 @@
                         "items": {
                             "allOf": [
                                 { "$ref": "https://frontastic.cloud/json/schema/common#/definitions/fieldDefinition" },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "type": {
-                                            "anyOf": [
-                                                { "$ref": "https://frontastic.cloud/json/schema/common#/definitions/fieldType" },
-                                                {
-                                                    "type": "string",
-                                                    "enum": [
-                                                        "custom",
-                                                        "group"
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
+                                { "$ref": "#/definitions/fieldDefinition" }
                             ]
                         }
                     }
