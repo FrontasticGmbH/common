@@ -42,22 +42,15 @@
                                     "type": "boolean"
                                 },
                                 "type": {
-                                    "type": "string",
-                                    "enum": [
-                                        "boolean",
-                                        "custom",
-                                        "decimal",
-                                        "enum",
-                                        "group",
-                                        "integer",
-                                        "markdown",
-                                        "media",
-                                        "node",
-                                        "reference",
-                                        "stream",
-                                        "string",
-                                        "text",
-                                        "tree"
+                                    "anyOf": [
+                                        { "$ref": "https://frontastic.cloud/json/schema/common#/definitions/fieldType" },
+                                        {
+                                            "type": "string",
+                                            "enum": [
+                                                "custom",
+                                                "group"
+                                            ]
+                                        }
                                     ]
                                 }
                             },
