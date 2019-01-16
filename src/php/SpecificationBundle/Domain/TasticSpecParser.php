@@ -7,8 +7,6 @@ use Seld\JsonLint\JsonParser;
 
 class TasticSpecParser
 {
-    const SCHEMA_FILE = __DIR__ . '/../../../json/tasticSchema.json';
-
     public function parse(string $schema): \StdClass
     {
         $jsonParser = new JsonParser();
@@ -19,11 +17,14 @@ class TasticSpecParser
             );
         }
 
-        $validator = new Validator();
+        $validator = SchemaValidatorFactory::createValidator();
+
         $schema = json_decode($schema);
         $validator->validate(
             $schema,
-            json_decode(file_get_contents(self::SCHEMA_FILE))
+            json_decode(file_get_contents(
+                SchemaValidatorFactory::schemaFilePath('tasticSchema.json')
+            ))
         );
 
         if (!$validator->isValid()) {
