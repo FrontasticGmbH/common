@@ -1,4 +1,5 @@
 {
+    "id": "https://frontastic.cloud/json/appSchema",
     "title": "Custom Application Schema",
     "description": "A Frontastic custom application definition",
     "type": "object",
