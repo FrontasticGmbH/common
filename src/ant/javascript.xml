@@ -6,6 +6,8 @@
         <exec executable="yarn" failonerror="true" dir="${basedir}">
             <env key="CI" value="true" />
 
+            <arg value="--network-timeout" />
+            <arg value="1000000000" />
             <arg value="install" />
         </exec>
 
