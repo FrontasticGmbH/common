@@ -32,6 +32,11 @@ class Project extends DataObject
     public $previewUrl;
 
     /**
+     * @var string
+     */
+    public $publicUrl;
+
+    /**
      * @var int
      */
     public $webpackPort;
