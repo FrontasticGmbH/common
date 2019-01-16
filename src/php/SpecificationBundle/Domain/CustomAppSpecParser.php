@@ -2,6 +2,8 @@
 
 namespace Frontastic\Common\SpecificationBundle\Domain;
 
+use JsonSchema\Constraints\Factory;
+use JsonSchema\SchemaStorage;
 use JsonSchema\Validator;
 use Seld\JsonLint\JsonParser;
 
@@ -27,7 +29,15 @@ class CustomAppSpecParser
             );
         }
 
-        $validator = new Validator();
+        $schemaStorage = new SchemaStorage();
+        $schemaStorage->addSchema(
+            'https://frontastic.cloud/json/schema/common',
+            json_decode(file_get_contents(
+                dirname(self::SCHEMA_FILE) . '/schema/common.json'
+            ))
+        );
+
+        $validator = new Validator(new Factory($schemaStorage));
         $schema = json_decode($schema);
         $validator->validate($schema, json_decode($jsonSchema));
 

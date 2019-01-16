@@ -25,21 +25,7 @@
                     "type": "boolean"
                 },
                 "type": {
-                    "type": "string",
-                    "enum": [
-                        "boolean",
-                        "decimal",
-                        "enum",
-                        "integer",
-                        "markdown",
-                        "media",
-                        "node",
-                        "reference",
-                        "stream",
-                        "string",
-                        "text",
-                        "tree"
-                    ]
+                    "$ref": "https://frontastic.cloud/json/schema/common#/definitions/fieldType"
                 }
             },
             "required": ["label", "field", "type"]
