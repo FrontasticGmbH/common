@@ -5,31 +5,22 @@
     "type": "object",
     "definitions": {
         "field": {
+            "allOf": [
+                { "$ref": "https://frontastic.cloud/json/schema/common#/definitions/field" },
+                { "$ref": "#/definitions/app-field-additions" }
+            ]
+        },
+        "app-field-additions": {
             "type": "object",
             "properties": {
-                "label": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
+                "type": { "$ref": "https://frontastic.cloud/json/schema/common#/definitions/field-type" },
                 "field": {
                     "type": "string",
                     "not": {
                         "enum": ["id", "sequence", "locale", "is_deleted"]
                     }
-                },
-                "translatable": {
-                    "type": "boolean"
-                },
-                "required": {
-                    "type": "boolean"
-                },
-                "type": {
-                    "$ref": "https://frontastic.cloud/json/schema/common#/definitions/field-type"
                 }
-            },
-            "required": ["label", "field", "type"]
+            }
         },
         "image": {
             "type": "object",
