@@ -9,8 +9,6 @@ use Seld\JsonLint\JsonParser;
 
 class CustomAppSpecParser
 {
-    const SCHEMA_FILE = __DIR__ . '/../../../json/appSchema.json';
-
     public function parse(string $schema): \StdClass
     {
         $jsonParser = new JsonParser();
@@ -21,7 +19,7 @@ class CustomAppSpecParser
             );
         }
 
-        $jsonSchema = file_get_contents(self::SCHEMA_FILE);
+        $jsonSchema = file_get_contents(SchemaValidatorFactory::schemaFilePath('appSchema.json'));
         if ($exception = $jsonParser->lint($jsonSchema)) {
             throw new InvalidSchemaException(
                 "Failed to parse JSON Schema.",
@@ -29,15 +27,8 @@ class CustomAppSpecParser
             );
         }
 
-        $schemaStorage = new SchemaStorage();
-        $schemaStorage->addSchema(
-            'https://frontastic.cloud/json/schema/common',
-            json_decode(file_get_contents(
-                dirname(self::SCHEMA_FILE) . '/schema/common.json'
-            ))
-        );
+        $validator = SchemaValidatorFactory::createValidator();
 
-        $validator = new Validator(new Factory($schemaStorage));
         $schema = json_decode($schema);
         $validator->validate($schema, json_decode($jsonSchema));
 
