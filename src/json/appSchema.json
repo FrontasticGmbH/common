@@ -26,7 +26,7 @@
                     "type": "boolean"
                 },
                 "type": {
-                    "$ref": "https://frontastic.cloud/json/schema/common#/definitions/fieldType"
+                    "$ref": "https://frontastic.cloud/json/schema/common#/definitions/field-type"
                 }
             },
             "required": ["label", "field", "type"]

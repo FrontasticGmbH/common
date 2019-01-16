@@ -4,18 +4,18 @@
     "description": "A Frontastic tastic definition",
     "type": "object",
     "definitions": {
-        "fieldDefinition": {
+        "field": {
             "allOf": [
-                { "$ref": "https://frontastic.cloud/json/schema/common#/definitions/fieldDefinition" },
-                { "$ref": "#/definitions/tasticFieldDefinitionAdditions" }
+                { "$ref": "https://frontastic.cloud/json/schema/common#/definitions/field" },
+                { "$ref": "#/definitions/tastic-field-additions" }
             ]
         },
-        "tasticFieldDefinitionAdditions": {
+        "tastic-field-additions": {
             "type": "object",
             "properties": {
                 "type": {
                     "anyOf": [
-                        { "$ref": "https://frontastic.cloud/json/schema/common#/definitions/fieldType" },
+                        { "$ref": "https://frontastic.cloud/json/schema/common#/definitions/field-type" },
                         {
                             "type": "string",
                             "enum": [
@@ -49,7 +49,7 @@
                     "fields": {
                         "type": "array",
                         "items": {
-                            "$ref": "#/definitions/fieldDefinition"
+                            "$ref": "#/definitions/field"
                         }
                     }
                 },

@@ -4,7 +4,7 @@
     "description": "Definitions of Common Elements in Frontastic Schemas",
 
     "definitions": {
-        "fieldDefinition": {
+        "field": {
             "type": "object",
             "properties": {
                 "label": {
@@ -24,7 +24,7 @@
                 }
             }
         },
-        "fieldType": {
+        "field-type": {
             "type": "string",
             "enum": [
                 "boolean",
