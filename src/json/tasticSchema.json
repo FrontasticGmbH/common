@@ -5,6 +5,12 @@
     "type": "object",
     "definitions": {
         "fieldDefinition": {
+            "allOf": [
+                { "$ref": "https://frontastic.cloud/json/schema/common#/definitions/fieldDefinition" },
+                { "$ref": "#/definitions/tasticFieldDefinitionAdditions" }
+            ]
+        },
+        "tasticFieldDefinitionAdditions": {
             "type": "object",
             "properties": {
                 "type": {
@@ -43,10 +49,7 @@
                     "fields": {
                         "type": "array",
                         "items": {
-                            "allOf": [
-                                { "$ref": "https://frontastic.cloud/json/schema/common#/definitions/fieldDefinition" },
-                                { "$ref": "#/definitions/fieldDefinition" }
-                            ]
+                            "$ref": "#/definitions/fieldDefinition"
                         }
                     }
                 },
