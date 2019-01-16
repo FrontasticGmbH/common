@@ -16,6 +16,9 @@ class CustomerService
      */
     private $deployedCustomers;
 
+    /**
+     * @var \Frontastic\Common\ReplicatorBundle\Domain\Customer[]
+     */
     private $customers = null;
 
     /**
@@ -122,6 +125,7 @@ class CustomerService
                         'name' => $project['name'],
                         'customer' => $customer['name'],
                         'apiKey' => $customer['secret'],
+                        'publicUrl' => $project['publicUrl'] ?? null,
                         'previewUrl' => $project['previewUrl'] ?? null,
                         'webpackPort' => $project['webpackPort'] ?? 3000,
                         'configuration' => $this->convertConfigurationToObjects(
