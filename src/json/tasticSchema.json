@@ -4,31 +4,6 @@
     "title": "Tastic Schema",
     "description": "A Frontastic tastic definition",
     "type": "object",
-    "definitions": {
-        "field": {
-            "allOf": [
-                { "$ref": "https://frontastic.cloud/json/schema/common#/definitions/field" },
-                { "$ref": "#/definitions/tastic-field-additions" }
-            ]
-        },
-        "tastic-field-additions": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "anyOf": [
-                        { "$ref": "https://frontastic.cloud/json/schema/common#/definitions/field-type" },
-                        {
-                            "type": "string",
-                            "$comment": "@TODO: Replace by detailed 'group' definition from app",
-                            "enum": [
-                                "group"
-                            ]
-                        }
-                    ]
-                }
-            }
-        }
-    },
     "properties": {
         "tasticType": {
             "type": "string"
@@ -50,7 +25,12 @@
                     "fields": {
                         "type": "array",
                         "items": {
-                            "$ref": "#/definitions/field"
+                            "oneOf": [
+                                {"$ref": "https://frontastic.cloud/json/schema/common#/definitions/field"},
+                                {"$ref": "https://frontastic.cloud/json/schema/common#/definitions/group"},
+                                {"$ref": "https://frontastic.cloud/json/schema/common#/definitions/image"},
+                                {"$ref": "https://frontastic.cloud/json/schema/common#/definitions/description"}
+                            ]
                         }
                     }
                 },
