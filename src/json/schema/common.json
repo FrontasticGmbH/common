@@ -28,12 +28,31 @@
                     "$comment": "TODO: Define dependency to type?",
                     "type": "string"
                 },
+                "customAppType": {
+                    "$comment": "TODO: Define dependency to type?",
+                    "type": "string"
+                },
                 "default": {
                     "$comment": "Value type depends on the 'type' and is therefore arbitrary."
                 },
                 "options": {
                     "$comment": "Any kind of options supported by the field type",
                     "type": "object"
+                },
+                "values": {
+                    "$comment": "Value set for 'enum' type",
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "value": {
+                                "type": "string"
+                            },
+                            "name": {
+                                "type": "string"
+                            }
+                        }
+                    }
                 },
 
                 "translatable": {
