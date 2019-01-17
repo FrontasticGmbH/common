@@ -1,0 +1,22 @@
+{
+    "identifier": "minimal-group",
+    "name": "Minimal example to reproduce group matching",
+    "fields": [
+    ],
+    "schema": [
+        {
+            "name": "Base Data",
+            "fields": [
+                {
+                    "label": "A Group",
+                    "field": "groupiely",
+                    "type": "group",
+                    "itemLabelField": "name",
+                    "fields": [
+                    ]
+                }
+            ]
+        }
+    ],
+    "indexes": []
+}
