@@ -15,7 +15,9 @@ class TasticSpecRegressionTest extends TestCase
     {
         $specParser = new TasticSpecParser();
 
-        $actualSchema = $specParser->parse(file_get_contents($schemaFile));
+        $actualSchema = $specParser->parse(file_get_contents(
+            self::FIXTURE_DIR . '/' . $schemaFile
+        ));
 
         $this->assertInstanceOf(\stdClass::class, $actualSchema);
     }
@@ -24,7 +26,7 @@ class TasticSpecRegressionTest extends TestCase
     {
         return array_map(function ($filename) {
             return [
-                $filename
+                basename($filename)
             ];
         }, glob(self::FIXTURE_DIR . '/*.json'));
     }
