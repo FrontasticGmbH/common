@@ -28,6 +28,44 @@
                 }
             }
         },
+        "group": {
+            "type": "object",
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "field": {
+                    "type": "string"
+                },
+                "itemLabelField": {
+                    "type": "string"
+                },
+                "min": {
+                    "type": "integer"
+                },
+                "max": {
+                    "type": "integer"
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "oneOf": [
+                            {"$ref": "#/definitions/field"},
+                            {"$ref": "#/definitions/image"},
+                            {"$ref": "#/definitions/description"}
+                        ]
+                    }
+                },
+                "type": {
+                    "type": "string",
+                    "enum": ["group"]
+                }
+            },
+            "required": ["label", "field", "itemLabelField", "type"]
+        },
         "image": {
             "$comment": "Illustrating image as part of the input form",
 
@@ -110,46 +148,7 @@
                                 {"$ref": "#/definitions/field"},
                                 {"$ref": "#/definitions/image"},
                                 {"$ref": "#/definitions/description"},
-                                {
-                                    "$comment": "@TODO: This is the actual detailed definition of a 'group', right?",
-
-                                    "type": "object",
-                                    "properties": {
-                                        "label": {
-                                            "type": "string"
-                                        },
-                                        "description": {
-                                            "type": "string"
-                                        },
-                                        "field": {
-                                            "type": "string"
-                                        },
-                                        "itemLabelField": {
-                                            "type": "string"
-                                        },
-                                        "min": {
-                                            "type": "integer"
-                                        },
-                                        "max": {
-                                            "type": "integer"
-                                        },
-                                        "fields": {
-                                            "type": "array",
-                                            "items": {
-                                                "oneOf": [
-                                                    {"$ref": "#/definitions/field"},
-                                                    {"$ref": "#/definitions/image"},
-                                                    {"$ref": "#/definitions/description"}
-                                                ]
-                                            }
-                                        },
-                                        "type": {
-                                            "type": "string",
-                                            "enum": ["group"]
-                                        }
-                                    },
-                                    "required": ["label", "field", "itemLabelField", "type"]
-                                }
+                                {"$ref": "#/definitions/group"}
                             ]
                         }
                     }
