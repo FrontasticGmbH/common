@@ -15,7 +15,6 @@ class CustomAppSpecParserTest extends \PHPUnit\Framework\TestCase
             ['invalid_reference.json', 'Invalid display field reference.'],
             ['invalid_index.json', 'Invalid index field reference.'],
             ['invalid_index_type.json', 'Invalid index field type.'],
-            ['disallowed_type_custom.json', 'JSON does not follow schema.'],
         );
     }
 

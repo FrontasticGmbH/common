@@ -29,6 +29,7 @@
             "type": "string",
             "enum": [
                 "boolean",
+                "custom",
                 "decimal",
                 "enum",
                 "integer",
