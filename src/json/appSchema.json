@@ -9,18 +9,7 @@
 
     "definitions": {
         "field": {
-            "allOf": [
-                { "$ref": "https://frontastic.cloud/json/schema/common#/definitions/field" },
-                { "$ref": "#/definitions/app-field-additions" }
-            ]
-        },
-        "app-field-additions": {
-            "$comment": "Restrictions that apply only to app schemas",
-
-            "type": "object",
-            "properties": {
-                "type": { "$ref": "https://frontastic.cloud/json/schema/common#/definitions/field-type" }
-            }
+            "$ref": "https://frontastic.cloud/json/schema/common#/definitions/field"
         },
         "group": {
             "type": "object",
@@ -33,6 +22,9 @@
                 },
                 "field": {
                     "type": "string"
+                },
+                "type": {
+                    "enum": ["group"]
                 },
                 "itemLabelField": {
                     "type": "string"
@@ -52,10 +44,6 @@
                             {"$ref": "#/definitions/description"}
                         ]
                     }
-                },
-                "type": {
-                    "type": "string",
-                    "enum": ["group"]
                 }
             },
             "required": ["label", "field", "itemLabelField", "type"]
@@ -69,7 +57,6 @@
                     "type": "string"
                 },
                 "type": {
-                    "type": "string",
                     "enum": ["image"]
                 }
             },
@@ -84,7 +71,6 @@
                     "type": "string"
                 },
                 "type": {
-                    "type": "string",
                     "enum": ["description"]
                 }
             },
@@ -140,9 +126,9 @@
 
                             "oneOf": [
                                 {"$ref": "#/definitions/field"},
+                                {"$ref": "#/definitions/group"},
                                 {"$ref": "#/definitions/image"},
-                                {"$ref": "#/definitions/description"},
-                                {"$ref": "#/definitions/group"}
+                                {"$ref": "#/definitions/description"}
                             ]
                         }
                     }

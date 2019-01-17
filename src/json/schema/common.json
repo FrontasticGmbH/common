@@ -20,16 +20,32 @@
                         "enum": ["id", "sequence", "locale", "is_deleted"]
                     }
                 },
+
+                "type": {
+                    "@ref": "#/definitions/field-type"
+                },
+                "streamType": {
+                    "$comment": "TODO: Define dependency to type?",
+                    "type": "string"
+                },
+                "default": {
+                    "$comment": "Value type depends on the 'type' and is therefore arbitrary."
+                },
+                "options": {
+                    "type": "object"
+                },
+
                 "translatable": {
                     "type": "boolean"
                 },
                 "required": {
                     "type": "boolean"
                 }
-            }
+            },
+            "required": ["field", "type", "label"],
+            "additionalProperties": false
         },
         "field-type": {
-            "type": "string",
             "enum": [
                 "boolean",
                 "custom",
