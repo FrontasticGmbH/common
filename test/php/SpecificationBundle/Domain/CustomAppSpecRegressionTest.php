@@ -15,9 +15,15 @@ class CustomAppSpecRegressionTest extends TestCase
     {
         $specParser = new CustomAppSpecParser();
 
-        $actualSchema = $specParser->parse(file_get_contents(
-            self::FIXTURE_DIR . '/' . $schemaFile
-        ));
+        try {
+            $actualSchema = $specParser->parse(file_get_contents(
+                self::FIXTURE_DIR . '/' . $schemaFile
+            ));
+        } catch (InvalidSchemaException $e) {
+            $this->fail(
+                sprintf('InvalidSchemaException (%s): %s', $e->getMessage(), $e->getError())
+            );
+        }
 
         $this->assertInstanceOf(\stdClass::class, $actualSchema);
     }
