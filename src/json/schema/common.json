@@ -32,6 +32,7 @@
                     "$comment": "Value type depends on the 'type' and is therefore arbitrary."
                 },
                 "options": {
+                    "$comment": "Any kind of options supported by the field type",
                     "type": "object"
                 },
 
@@ -61,6 +62,71 @@
                 "text",
                 "tree"
             ]
+        },
+        "group": {
+            "type": "object",
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "field": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": ["group"]
+                },
+                "itemLabelField": {
+                    "type": "string"
+                },
+                "min": {
+                    "type": "integer"
+                },
+                "max": {
+                    "type": "integer"
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "oneOf": [
+                            {"$ref": "#/definitions/field"},
+                            {"$ref": "#/definitions/image"},
+                            {"$ref": "#/definitions/description"}
+                        ]
+                    }
+                }
+            },
+            "required": ["label", "field", "itemLabelField", "type"]
+        },
+        "image": {
+            "$comment": "Illustrating image as part of the input form",
+
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": ["image"]
+                }
+            },
+            "required": ["url", "type"]
+        },
+        "description": {
+            "$comment": "Illustrating description as part of the input form",
+
+            "type": "object",
+            "properties": {
+                "text": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": ["description"]
+                }
+            },
+            "required": ["text", "type"]
         }
     }
 }
