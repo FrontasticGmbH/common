@@ -11,6 +11,7 @@
                     "label": "Google API Keys",
                     "field": "apiKeys",
                     "type": "group",
+                    "itemLabelField": "domain",
                     "translatable": false,
                     "fields": [
                         {

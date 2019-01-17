@@ -10,6 +10,7 @@
                     "label": "Slides",
                     "field": "slides",
                     "type": "group",
+                    "itemLabelField": "ctaHref",
                     "translatable": false,
                     "fields": [
                         {
