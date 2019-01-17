@@ -19,6 +19,7 @@
                         { "$ref": "https://frontastic.cloud/json/schema/common#/definitions/field-type" },
                         {
                             "type": "string",
+                            "$comment": "@TODO: Replace by detailed 'group' definition from app",
                             "enum": [
                                 "group"
                             ]
