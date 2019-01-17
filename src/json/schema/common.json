@@ -5,6 +5,30 @@
     "description": "Definitions of Common Elements in Frontastic Schemas",
 
     "definitions": {
+        "schema": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "fields": {
+                        "type": "array",
+                        "items": {
+                            "oneOf": [
+                                {"$ref": "#/definitions/field"},
+                                {"$ref": "#/definitions/group"},
+                                {"$ref": "#/definitions/image"},
+                                {"$ref": "#/definitions/description"}
+                            ]
+                        }
+                    }
+                },
+                "required": ["name", "fields"]
+            }
+        },
+
         "field": {
             "type": "object",
             "properties": {

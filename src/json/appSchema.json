@@ -40,31 +40,7 @@
             }
         },
         "schema": {
-            "$comment": "Actual field schema of the custom app, fields grouped into named sections.",
-
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "fields": {
-                        "type": "array",
-                        "items": {
-                            "$comment": "Fields, groups of fields or illustrating images/descriptions.",
-
-                            "oneOf": [
-                                {"$ref": "https://frontastic.cloud/json/schema/common#/definitions/field"},
-                                {"$ref": "https://frontastic.cloud/json/schema/common#/definitions/group"},
-                                {"$ref": "https://frontastic.cloud/json/schema/common#/definitions/image"},
-                                {"$ref": "https://frontastic.cloud/json/schema/common#/definitions/description"}
-                            ]
-                        }
-                    }
-                },
-                "required": ["name", "fields"]
-            }
+            "$ref": "https://frontastic.cloud/json/schema/common#/definitions/schema"
         },
         "indexes": {
             "$comment": "Indexes that should be set upon the custom data to improve searching and fetching in Catwalk.",

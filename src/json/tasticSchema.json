@@ -15,27 +15,7 @@
             "type": "string"
         },
         "schema": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "fields": {
-                        "type": "array",
-                        "items": {
-                            "oneOf": [
-                                {"$ref": "https://frontastic.cloud/json/schema/common#/definitions/field"},
-                                {"$ref": "https://frontastic.cloud/json/schema/common#/definitions/group"},
-                                {"$ref": "https://frontastic.cloud/json/schema/common#/definitions/image"},
-                                {"$ref": "https://frontastic.cloud/json/schema/common#/definitions/description"}
-                            ]
-                        }
-                    }
-                },
-                "required": ["name", "fields"]
-            }
+            "$ref": "https://frontastic.cloud/json/schema/common#/definitions/schema"
         }
     },
     "required": ["tasticType", "name", "schema"]
