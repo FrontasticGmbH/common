@@ -1,9 +1,12 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "https://frontastic.cloud/json/appSchema",
-    "title": "Custom Application Schema",
-    "description": "A Frontastic custom application definition",
+
+    "title": "Custom App Schema",
+    "description": "A Frontastic custom app definition",
+
     "type": "object",
+
     "definitions": {
         "field": {
             "allOf": [
@@ -12,6 +15,8 @@
             ]
         },
         "app-field-additions": {
+            "$comment": "Restrictions that apply only to app schemas",
+
             "type": "object",
             "properties": {
                 "type": { "$ref": "https://frontastic.cloud/json/schema/common#/definitions/field-type" },
@@ -24,6 +29,8 @@
             }
         },
         "image": {
+            "$comment": "Illustrating image as part of the input form",
+
             "type": "object",
             "properties": {
                 "url": {
@@ -37,6 +44,8 @@
             "required": ["url", "type"]
         },
         "description": {
+            "$comment": "Illustrating description as part of the input form",
+
             "type": "object",
             "properties": {
                 "text": {
@@ -64,6 +73,8 @@
             "type": "string"
         },
         "fields": {
+            "$comment": "Fields to be displayed in the overview table of the custom app.",
+
             "type": "array",
             "items": {
                 "type": "object",
@@ -72,6 +83,8 @@
                         "type": "string"
                     },
                     "field": {
+                        "$comment": "Reference to a field identifier available in 'schema'.",
+
                         "type": "string"
                     }
                 },
@@ -79,6 +92,8 @@
             }
         },
         "schema": {
+            "$comment": "Actual field schema of the custom app, fields grouped into named sections.",
+
             "type": "array",
             "items": {
                 "type": "object",
@@ -89,11 +104,15 @@
                     "fields": {
                         "type": "array",
                         "items": {
+                            "$comment": "Fields, groups of fields or illustrating images/descriptions.",
+
                             "oneOf": [
                                 {"$ref": "#/definitions/field"},
                                 {"$ref": "#/definitions/image"},
                                 {"$ref": "#/definitions/description"},
                                 {
+                                    "$comment": "@TODO: This is the actual detailed definition of a 'group', right?",
+
                                     "type": "object",
                                     "properties": {
                                         "label": {
@@ -139,6 +158,8 @@
             }
         },
         "indexes": {
+            "$comment": "Indexes that should be set upon the custom data to improve searching and fetching in Catwalk.",
+
             "type": "array",
             "items": {
                 "type": "object",
@@ -147,6 +168,8 @@
                         "type": "string"
                     },
                     "fields": {
+                        "$comment": "References to field identifiers used in 'schema'",
+
                         "type": "array",
                         "items": {
                             "type": "string"
