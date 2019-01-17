@@ -60,6 +60,11 @@
                 },
                 "required": {
                     "type": "boolean"
+                },
+
+                "$comment": {
+                    "@comment": "Allow json-schem style comments in our schemas",
+                    "type": "string"
                 }
             },
             "required": ["field", "type", "label"],
@@ -115,6 +120,11 @@
                             {"$ref": "#/definitions/description"}
                         ]
                     }
+                },
+
+                "$comment": {
+                    "@comment": "Allow json-schem style comments in our schemas",
+                    "type": "string"
                 }
             },
             "required": ["label", "field", "itemLabelField", "type"]
@@ -129,6 +139,11 @@
                 },
                 "type": {
                     "enum": ["image"]
+                },
+
+                "$comment": {
+                    "@comment": "Allow json-schem style comments in our schemas",
+                    "type": "string"
                 }
             },
             "required": ["url", "type"]
@@ -143,6 +158,11 @@
                 },
                 "type": {
                     "enum": ["description"]
+                },
+
+                "$comment": {
+                    "@comment": "Allow json-schem style comments in our schemas",
+                    "type": "string"
                 }
             },
             "required": ["text", "type"]
