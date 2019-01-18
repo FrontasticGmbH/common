@@ -137,6 +137,17 @@ class LifecycleEventDecorator implements CartApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
+    public function setShippingMethod(Cart $cart, string $shippingMethod): Cart
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
+    public function setCustomField(Cart $cart, array $fields): Cart
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
+
     /**
      * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
      * @param array $address

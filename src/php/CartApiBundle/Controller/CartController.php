@@ -104,40 +104,93 @@ class CartController extends CrudController
         throw new \OutOfBoundsException("Could not find line item with ID $lineItemId");
     }
 
+    public function updateAction(Context $context, Request $request): array
+    {
+        $payload = $this->getJsonContent($request);
+        $cartApi = $this->getCartApi($context);
+
+        $cart = $this->getCart($context);
+        $cartApi->startTransaction($cart);
+
+        if (!empty($payload['account'])) {
+            // @TODO: This is apollo specific and must be extracted
+            if (!empty($payload['account']['year'])) {
+                $cart = $cartApi->setCustomField(
+                    $cart,
+                    [
+                        'birthday' => sprintf(
+                            '%04d-%02d-%02d',
+                            $payload['account']['year'] ?? 1900,
+                            $payload['account']['month'] ?? 1,
+                            $payload['account']['day'] ?? 1
+                        ),
+                    ]
+                );
+            }
+
+            $cart = $cartApi->setEmail(
+                $cart,
+                $payload['account']['email']
+            );
+        }
+
+        if (!empty($payload['shipping'])) {
+            // @TODO: This is apollo specific and must be extracted
+            if (!empty($payload['shipping']['storeId'])) {
+                $cart = $cartApi->setCustomField(
+                    $cart,
+                    ['storeId' => $payload['shipping']['storeId']]
+                );
+            }
+
+            $cart = $cartApi->setShippingAddress(
+                $cart,
+                $payload['shipping']
+            );
+        }
+
+        if (!empty($payload['billing']) || !empty($payload['shipping'])) {
+            $cart = $cartApi->setBillingAddress(
+                $cart,
+                $payload['billing'] ?: $payload['shipping']
+            );
+        }
+
+        if (!empty($payload['shippingMethod'])) {
+            // @TODO: This is apollo specific and must be extracted
+            $shippingMethodMap = [
+                'home' => '850b8c3a-974a-4f07-bf29-e1fdcdad5406',
+                'store' => '849328bb-f69a-4c86-9ab4-becc28478a0f',
+            ];
+
+            $cart = $cartApi->setShippingMethod(
+                $cart,
+                $shippingMethodMap[$payload['shippingMethod']]
+            );
+        }
+
+        if (!empty($payload['payment'])) {
+            $cartApi->setPayment(
+                $cart,
+                new Payment([
+                    'paymentProvider' => $payload['payment']['provider'],
+                    'paymentId' => $payload['payment']['id'],
+                    'amount' => $this->getCart($context)->sum,
+                    'currency' => $context->currency,
+                    'debug' => json_encode($payload['payment']['rawInfo'] ?? null),
+                ])
+            );
+        }
+
+        return ['cart' => $cartApi->commit()];
+    }
+
     public function checkoutAction(Context $context, Request $request): array
     {
         $payload = $this->getJsonContent($request);
         $cartApi = $this->getCartApi($context);
 
-        // @TODO:
-        // [ ] Create new user, if requested
-        // [ ] Register for newsletter if requested
-
-        $cart = $this->getCart($context);
-        $cartApi->startTransaction($cart);
-        $cart = $cartApi->setEmail(
-            $cart,
-            $payload['account']['email']
-        );
-        $cart = $cartApi->setShippingAddress(
-            $cart,
-            $payload['shipping']
-        );
-        $cart = $cartApi->setBillingAddress(
-            $cart,
-            $payload['billing'] ?: $payload['shipping']
-        );
-        $cartApi->setPayment(
-            $cart,
-            new Payment([
-                'paymentProvider' => $payload['payment']['provider'],
-                'paymentId' => $payload['payment']['id'],
-                'amount' => $this->getCart($context)->sum,
-                'currency' => $context->currency
-            ])
-        );
-        $cart = $cartApi->commit();
-
+        $cart = $this->updateAction($context, $request)['cart'];
         $order = $cartApi->order($cart);
 
         // @TODO: Remove old cart instead (also for logged in users)

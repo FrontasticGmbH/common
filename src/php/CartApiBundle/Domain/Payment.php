@@ -25,4 +25,9 @@ class Payment extends DataObject
      * @var string
      */
     public $currency;
+
+    /**
+     * @var string
+     */
+    public $debug;
 }

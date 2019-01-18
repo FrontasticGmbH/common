@@ -281,6 +281,36 @@ class Commercetools implements CartApi
         );
     }
 
+    public function setShippingMethod(Cart $cart, string $shippingMethod): Cart
+    {
+        return $this->postCartActions(
+            $cart,
+            [
+                [
+                    'action' => 'setShippingMethod',
+                    'shippingMethod' => [
+                        'typeId' => 'shipping-method',
+                        'id' => $shippingMethod,
+                    ],
+                ],
+            ]
+        );
+    }
+
+    public function setCustomField(Cart $cart, array $fields): Cart
+    {
+        $actions = [];
+        foreach ($fields as $name => $value) {
+            $actions[] = [
+                'action' => 'setCustomField',
+                'name' => $name,
+                'value' => $value,
+            ];
+        }
+
+        return $this->postCartActions($cart, $actions);
+    }
+
     /**
      * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
      * @param array $address
@@ -338,6 +368,10 @@ class Commercetools implements CartApi
                 'interfaceId' => $payment->paymentId,
                 'paymentMethodInfo' => [
                     'paymentInterface' => $payment->paymentProvider,
+                ],
+                'paymentStatus' => [
+                    'interfaceCode' => 'wirecard',
+                    'interfaceText' => $payment->debug,
                 ]
             ])
         );

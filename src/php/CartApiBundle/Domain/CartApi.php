@@ -67,6 +67,10 @@ interface CartApi
      */
     public function setEmail(Cart $cart, string $email): Cart;
 
+    public function setShippingMethod(Cart $cart, string $shippingMethod): Cart;
+
+    public function setCustomField(Cart $cart, array $fields): Cart;
+
     /**
      * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
      * @param array $address

@@ -24,6 +24,10 @@
         <default key="_controller">Frontastic\Common\CartApiBundle\Controller\CartController::removeLineItemAction</default>
     </route>
 
+    <route id="Frontastic.CartApi.Cart.update" path="/cart/update" methods="POST">
+        <default key="_controller">Frontastic\Common\CartApiBundle\Controller\CartController::updateAction</default>
+    </route>
+
     <route id="Frontastic.CartApi.Cart.checkout" path="/cart/checkout" methods="POST">
         <default key="_controller">Frontastic\Common\CartApiBundle\Controller\CartController::checkoutAction</default>
     </route>
