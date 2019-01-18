@@ -8,7 +8,7 @@ class CustomAppSpecParserTest extends \PHPUnit\Framework\TestCase
     public function getFailingSchemaFiles()
     {
         return array(
-            ['parse_error.json', 'Failed to parse JSON.'],
+            ['parse_error.json', 'Failed to lint JSON.'],
             ['invalid_schema.json', 'JSON does not follow schema.'],
             ['reserved_name.json', 'JSON does not follow schema.'],
             ['duplicate_field.json', 'Inconsistent field definition.'],

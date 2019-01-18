@@ -2,54 +2,25 @@
 
 namespace Frontastic\Common\SpecificationBundle\Domain;
 
-use JsonSchema\Constraints\Factory;
-use JsonSchema\SchemaStorage;
-use JsonSchema\Validator;
-use Seld\JsonLint\JsonParser;
-
 class CustomAppSpecParser
 {
+    /**
+     * @var JsonSchemaValidator
+     */
+    private $validator;
+
+    public function __construct()
+    {
+        $this->validator = new JsonSchemaValidator();
+    }
+
     public function parse(string $schema): \StdClass
     {
-        $jsonParser = new JsonParser();
-        if ($exception = $jsonParser->lint($schema)) {
-            throw new InvalidSchemaException(
-                "Failed to parse JSON.",
-                $exception->getMessage()
-            );
-        }
-
-        $jsonSchema = file_get_contents(SchemaValidatorFactory::schemaFilePath('appSchema.json'));
-        if ($exception = $jsonParser->lint($jsonSchema)) {
-            throw new InvalidSchemaException(
-                "Failed to parse JSON Schema.",
-                $exception->getMessage()
-            );
-        }
-
-        $validator = SchemaValidatorFactory::createValidator();
-
-        $schema = json_decode($schema);
-        $validator->validate($schema, json_decode($jsonSchema));
-
-        if (!$validator->isValid()) {
-            throw new InvalidSchemaException(
-                "JSON does not follow schema.",
-                implode(
-                    "\n",
-                    array_map(
-                        function (array $error): string {
-                            return sprintf(
-                                "* %s: %s",
-                                $error['property'],
-                                $error['message']
-                            );
-                        },
-                        $validator->getErrors()
-                    )
-                )
-            );
-        }
+        $schema = $this->validator->parse(
+            $schema,
+            'appSchema.json',
+            ['schema/common.json']
+        );
 
         $fields = $this->getVerifiedFieldArray($schema);
         $this->verifyDisplayedFields($schema, $fields);
