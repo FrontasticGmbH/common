@@ -6,7 +6,32 @@
     "type": "object",
     "properties": {
         "schema": {
-            "$ref": "https://frontastic.cloud/json/schema/common#/definitions/schema"
+            "allOf": [
+                { "$ref": "https://frontastic.cloud/json/schema/common#/definitions/schema" },
+
+                {
+                    "$comment": "Field 'path' is reserved in node configuration.",
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "fields": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "field": {
+                                            "not": {
+                                                "enum": ["path"]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
         }
     },
     "required": ["schema"]

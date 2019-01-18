@@ -1,0 +1,14 @@
+{
+    "schema": [
+        {
+            "name": "Some Section",
+            "fields": [
+                {
+                    "label": "Path is not allowed here",
+                    "field": "path",
+                    "type": "string"
+                }
+            ]
+        }
+    ]
+}
