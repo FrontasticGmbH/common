@@ -1,0 +1,58 @@
+{
+    "schema": [
+        {
+            "name": "Display Properties",
+            "fields": [
+                {
+                    "label": "Highlight Menu Item",
+                    "field": "displayHighlightMenuItem",
+                    "type": "boolean",
+                    "default": false
+                },
+                {
+                    "label": "Highlight Category Tag",
+                    "field": "displayHighlightCategoryTag",
+                    "type": "boolean",
+                    "default": false
+                },
+                {
+                    "label": "Description",
+                    "field": "displayDescription",
+                    "type": "string",
+                    "translatable": true
+                },
+                {
+                    "label": "Image",
+                    "field": "displayMedia",
+                    "type": "media",
+                    "options": {
+                        "ratio": "4:1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "SEO",
+            "fields": [
+                {
+                    "label": "Title",
+                    "field": "seoTitle",
+                    "type": "string",
+                    "translatable": true
+                },
+                {
+                    "label": "Description",
+                    "field": "seoDescription",
+                    "type": "string",
+                    "translatable": true
+                },
+                {
+                    "label": "Keywords",
+                    "field": "seoKeywords",
+                    "type": "string",
+                    "translatable": true
+                }
+            ]
+        }
+    ]
+}
