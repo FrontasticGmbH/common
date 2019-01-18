@@ -1,0 +1,13 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://frontastic.cloud/json/nodeSchema",
+    "title": "Node Schema",
+    "description": "Meta Schema For Node Configuration Schema",
+    "type": "object",
+    "properties": {
+        "schema": {
+            "$ref": "https://frontastic.cloud/json/schema/common#/definitions/schema"
+        }
+    },
+    "required": ["schema"]
+}
