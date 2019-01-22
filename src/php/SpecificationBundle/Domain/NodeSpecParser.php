@@ -2,7 +2,7 @@
 
 namespace Frontastic\Common\SpecificationBundle\Domain;
 
-class NodeSpecParser
+class NodeSpecParser implements SpecParser
 {
     /**
      * @var JsonSchemaValidator

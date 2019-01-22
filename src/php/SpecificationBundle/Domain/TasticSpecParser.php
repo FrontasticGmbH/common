@@ -2,7 +2,7 @@
 
 namespace Frontastic\Common\SpecificationBundle\Domain;
 
-class TasticSpecParser
+class TasticSpecParser implements SpecParser
 {
     /**
      * @var JsonSchemaValidator

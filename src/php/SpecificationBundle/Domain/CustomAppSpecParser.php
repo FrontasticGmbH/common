@@ -2,7 +2,7 @@
 
 namespace Frontastic\Common\SpecificationBundle\Domain;
 
-class CustomAppSpecParser
+class CustomAppSpecParser implements SpecParser
 {
     /**
      * @var JsonSchemaValidator
