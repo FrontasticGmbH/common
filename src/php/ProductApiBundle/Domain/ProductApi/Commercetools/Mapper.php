@@ -70,7 +70,7 @@ class Mapper
 
         return new Variant([
             'id' => $variantData['id'],
-            'sku' => $variantData['sku'],
+            'sku' => $variantData['sku'] ?? null,
             'groupId' => $groupId,
             'price' => $price,
             'discountedPrice' => $discountedPrice,
