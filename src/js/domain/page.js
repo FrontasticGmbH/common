@@ -132,6 +132,12 @@ class Page {
         return this.getRegion(regionId).getElement({ cellId: cellId }).addTastic(tasticType, {}, schema)
     }
 
+    addTasticOnPosition (postition, regionId, cellId, tasticType) {
+        let schema = _.find(this.tastics, { tasticType: tasticType })
+
+        return this.getRegion(regionId).getElement({ cellId: cellId }).addTasticOnPosition(postition, tasticType, {}, schema)
+    }
+
     findTastic (tasticId) {
         for (let region in this.regions) {
             for (let elementIndex = 0; elementIndex < this.regions[region].elements.length; ++elementIndex) {
