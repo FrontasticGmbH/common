@@ -67,6 +67,18 @@ class Cell {
         return this.tastics[this.tastics.length - 1]
     }
 
+    addTasticOnPosition (position, tasticType, configuration = {}, schema = []) {
+        const newTastic = new Tastic({
+            tasticType: tasticType,
+            configuration: configuration,
+            schema: schema,
+        })
+
+        this.tastics.splice(position, 0, newTastic);
+
+        return newTastic
+    }
+
     getTastic (tasticId) {
         let tastic = _.find(this.tastics, { tasticId: tasticId })
         if (!tastic) {
