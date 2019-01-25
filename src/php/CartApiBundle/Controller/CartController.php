@@ -114,7 +114,14 @@ class CartController extends CrudController
 
         if (!empty($payload['account'])) {
             // @TODO: This is apollo specific and must be extracted
-            if (!empty($payload['account']['year'])) {
+
+            // @TODO: This is apollo specific and must be extracted
+            if (!empty($payload['account']['birthday'])) {
+                $cart = $cartApi->setCustomField(
+                    $cart,
+                    ['birthday' => (new \DateTime($payload['account']['birthday']))->format('Y-m-d')]
+                );
+            } elseif (!empty($payload['account']['year'])) {
                 $cart = $cartApi->setCustomField(
                     $cart,
                     [
