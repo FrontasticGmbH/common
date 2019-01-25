@@ -14,6 +14,11 @@ class Address extends DataObject
     /**
      * @var string
      */
+    public $salutation;
+
+    /**
+     * @var string
+     */
     public $firstName;
 
     /**

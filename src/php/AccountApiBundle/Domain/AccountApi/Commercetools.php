@@ -304,6 +304,7 @@ class Commercetools implements AccountApi
                     [
                         'action' => 'addAddress',
                         'address' => [
+                            'salutation' => $address->salutation,
                             'firstName' => $address->firstName,
                             'lastName' => $address->lastName,
                             'streetName' => $address->streetName,
@@ -340,6 +341,7 @@ class Commercetools implements AccountApi
                         'action' => 'changeAddress',
                         'addressId' => $address->addressId,
                         'address' => [
+                            'salutation' => $address->salutation,
                             'firstName' => $address->firstName,
                             'lastName' => $address->lastName,
                             'streetName' => $address->streetName,
@@ -468,6 +470,7 @@ class Commercetools implements AccountApi
             function (array $address) use ($account): Address {
                 return new Address([
                     'addressId' => $address['id'],
+                    'salutation' => $address['salutation'] ?? 'Herr',
                     'firstName' => $address['firstName'],
                     'lastName' => $address['lastName'],
                     'streetName' => $address['streetName'],
