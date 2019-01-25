@@ -19,7 +19,7 @@ class CustomAppSpecParser implements SpecParser
         $schema = $this->validator->parse(
             $schema,
             'appSchema.json',
-            ['schema/common.json']
+            ['library/common.json']
         );
 
         $fields = $this->getVerifiedFieldArray($schema);

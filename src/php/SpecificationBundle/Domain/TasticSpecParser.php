@@ -19,7 +19,7 @@ class TasticSpecParser implements SpecParser
         return $this->validator->parse(
             $schema,
             'tasticSchema.json',
-            ['schema/common.json']
+            ['library/common.json']
         );
     }
 }

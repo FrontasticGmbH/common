@@ -19,7 +19,7 @@ class NodeSpecParser implements SpecParser
         return $this->validator->parse(
             $schema,
             'nodeSchema.json',
-            ['schema/common.json']
+            ['library/common.json']
         );
     }
 }
