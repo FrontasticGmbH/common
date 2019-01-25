@@ -57,14 +57,17 @@ class Cell {
         }
     }
 
-    addTastic (tasticType, configuration = {}, schema = [], position = 0) {
+    addTastic (tasticType, configuration = {}, schema = [], position) {
         const newTastic = new Tastic({
             tasticType: tasticType,
             configuration: configuration,
             schema: schema,
         })
 
-        this.tastics.splice(position, 0, newTastic);
+        if(_.isUndefined(position))
+            this.tastics.push(newTastic)
+        else
+            this.tastics.splice(position, 0, newTastic);
 
         return newTastic
     }
