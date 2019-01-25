@@ -57,17 +57,7 @@ class Cell {
         }
     }
 
-    addTastic (tasticType, configuration = {}, schema = []) {
-        this.tastics.push(new Tastic({
-            tasticType: tasticType,
-            configuration: configuration,
-            schema: schema,
-        }))
-
-        return this.tastics[this.tastics.length - 1]
-    }
-
-    addTasticOnPosition (position, tasticType, configuration = {}, schema = []) {
+    addTastic (tasticType, configuration = {}, schema = [], position = 0) {
         const newTastic = new Tastic({
             tasticType: tasticType,
             configuration: configuration,
@@ -86,6 +76,10 @@ class Cell {
         }
 
         return tastic
+    }
+
+    getTasticCount () {
+        return this.tastics.length
     }
 
     export () {
