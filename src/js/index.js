@@ -1,4 +1,5 @@
 import ConfigurationSchema from './configuration/schema'
+import DefaultSchemas from './configuration/defaultSchemas/index'
 import generateId from './generateId'
 import getTranslation from './translate'
 import httpBuildQuery from './httpBuildQuery'
@@ -14,6 +15,7 @@ import FacetTypeSchemaMap from './facetTypeSchema/map'
 
 export {
     ConfigurationSchema,
+    DefaultSchemas,
     generateId,
     getTranslation,
     httpBuildQuery,
