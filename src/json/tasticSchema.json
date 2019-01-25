@@ -15,7 +15,7 @@
             "type": "string"
         },
         "schema": {
-            "$ref": "https://frontastic.cloud/json/schema/common#/definitions/schema"
+            "$ref": "https://frontastic.cloud/json/library/common#/definitions/schema"
         }
     },
     "required": ["tasticType", "name", "schema"]

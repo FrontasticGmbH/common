@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
-    "id": "https://frontastic.cloud/json/schema/common",
+    "id": "https://frontastic.cloud/json/library/common",
     "title": "Common Schema Elements",
     "description": "Definitions of Common Elements in Frontastic Schemas",
 
