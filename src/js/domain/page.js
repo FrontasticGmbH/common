@@ -173,12 +173,12 @@ class Page {
         let [targetRegion, targetElementIndex] = this.findElement({ cellId: target.cell })
 
         this.regions[targetRegion].elements[targetElementIndex].tastics.splice(
-            typeof target.tastic === 'undefined' ?
+            typeof target.tasticDropPosition === 'undefined' ?
                 this.regions[targetRegion].elements[targetElementIndex].tastics.length :
-                target.tastic - (
+                target.tasticDropPosition - (
                     (region === targetRegion) &&
                     (elementIndex === targetElementIndex) &&
-                    (target.tastic > tasticIndex) ? 1 : 0),
+                    (target.tasticDropPosition > tasticIndex) ? 1 : 0),
             0,
             tastic
         )
