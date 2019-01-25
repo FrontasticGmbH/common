@@ -106,8 +106,7 @@ describe('ConfigurationSchema', function () {
                             type: 'string',
                             default: 'A default',
                         },
-                    ]
-
+                    ],
                 }],
             }],
             {
@@ -115,8 +114,8 @@ describe('ConfigurationSchema', function () {
                     {},
                     {
                         groupFirst: 'Not a default',
-                    }
-                ]
+                    },
+                ],
             }
         )
 
@@ -126,7 +125,7 @@ describe('ConfigurationSchema', function () {
             },
             {
                 groupFirst: 'Not a default',
-            }
+            },
         ])
     })
 })
