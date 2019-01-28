@@ -2,7 +2,7 @@
 
 namespace Frontastic\Common\SpecificationBundle\Domain;
 
-class NodeSpecParser
+class NodeSpecParser implements SpecParser
 {
     /**
      * @var JsonSchemaValidator
@@ -19,7 +19,7 @@ class NodeSpecParser
         return $this->validator->parse(
             $schema,
             'nodeSchema.json',
-            ['schema/common.json']
+            ['library/common.json']
         );
     }
 }

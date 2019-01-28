@@ -18,6 +18,7 @@ class ConfigurationSchema {
                     values: this.schema[i].fields[j].values || [],
                     default: this.schema[i].fields[j].default || null,
                     validate: this.schema[i].fields[j].validate || {},
+                    fields: this.schema[i].fields[j].fields || null,
                 }
             }
         }
@@ -56,6 +57,13 @@ class ConfigurationSchema {
             return this.configuration[field] || null
         }
 
+        if (this.fields[field].type === 'group') {
+            return this.completeGroupConfig(
+                this.configuration[field] || [],
+                this.fields[field].fields
+            )
+        }
+
         if (typeof this.configuration[field] === 'undefined') {
             return this.fields[field].default
         }
@@ -73,6 +81,22 @@ class ConfigurationSchema {
 
     getConfiguration () {
         return this.configuration
+    }
+
+    /**
+     * @private
+     * @param {object[]} groupEntries
+     * @param {object[]} fieldDefinitions
+     */
+    completeGroupConfig (groupEntries, fieldDefinitions) {
+        return _.map(groupEntries, (groupEntry) => {
+            _.forEach(fieldDefinitions, (fieldDefinition) => {
+                if (typeof groupEntry[fieldDefinition.field] === 'undefined') {
+                    groupEntry[fieldDefinition.field] = fieldDefinition.default || null
+                }
+            })
+            return groupEntry
+        })
     }
 }
 

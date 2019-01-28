@@ -90,4 +90,42 @@ describe('ConfigurationSchema', function () {
 
         expect(schema.has('testaboo')).toBe(false)
     })
+
+    it('completes defaults in group values', () => {
+        let schema = new Schema(
+            [{
+                name: 'Section',
+                fields: [{
+                    label: 'Test Field',
+                    field: 'test',
+                    type: 'group',
+                    fields: [
+                        {
+                            label: 'First',
+                            field: 'groupFirst',
+                            type: 'string',
+                            default: 'A default',
+                        },
+                    ],
+                }],
+            }],
+            {
+                test: [
+                    {},
+                    {
+                        groupFirst: 'Not a default',
+                    },
+                ],
+            }
+        )
+
+        expect(schema.get('test')).toEqual([
+            {
+                groupFirst: 'A default',
+            },
+            {
+                groupFirst: 'Not a default',
+            },
+        ])
+    })
 })

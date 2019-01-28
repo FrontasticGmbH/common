@@ -40,7 +40,7 @@
             }
         },
         "schema": {
-            "$ref": "https://frontastic.cloud/json/schema/common#/definitions/schema"
+            "$ref": "https://frontastic.cloud/json/library/common#/definitions/schema"
         },
         "indexes": {
             "$comment": "Indexes that should be set upon the custom data to improve searching and fetching in Catwalk.",

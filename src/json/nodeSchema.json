@@ -7,7 +7,7 @@
     "properties": {
         "schema": {
             "allOf": [
-                { "$ref": "https://frontastic.cloud/json/schema/common#/definitions/schema" },
+                { "$ref": "https://frontastic.cloud/json/library/common#/definitions/schema" },
 
                 {
                     "$comment": "Field 'path' is reserved in node configuration.",

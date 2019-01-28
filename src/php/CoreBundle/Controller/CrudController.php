@@ -10,6 +10,8 @@ use Kore\DataObject\DataObject;
 
 use Frontastic\UserBundle\Domain\MetaData;
 
+use Frontastic\Common\CoreBundle\Domain\Versioner;
+
 abstract class CrudController extends Controller
 {
     /**
@@ -28,14 +30,12 @@ abstract class CrudController extends Controller
 
     protected function fillFromRequest(DataObject $entity, Request $request): DataObject
     {
-        $body = $this->getJsonContent($request);
-        if (property_exists($entity, 'versions')) {
-            $oldEntity = clone $entity;
-            $oldEntity->versions = [];
+        $versioner = new Versioner();
 
-            $entity->versions = $entity->versions ?: [];
-            array_unshift($entity->versions, $oldEntity);
-            $entity->versions = array_slice($entity->versions, 0, 32);
+        $body = $this->getJsonContent($request);
+
+        if ($versioner->supports($entity)) {
+            $versioner->versionSnapshot($entity);
         }
 
         foreach ($body as $property => $value) {

@@ -2,7 +2,7 @@
 
 namespace Frontastic\Common\SpecificationBundle\Domain;
 
-class CustomAppSpecParser
+class CustomAppSpecParser implements SpecParser
 {
     /**
      * @var JsonSchemaValidator
@@ -19,7 +19,7 @@ class CustomAppSpecParser
         $schema = $this->validator->parse(
             $schema,
             'appSchema.json',
-            ['schema/common.json']
+            ['library/common.json']
         );
 
         $fields = $this->getVerifiedFieldArray($schema);

@@ -2,7 +2,7 @@
 
 namespace Frontastic\Common\SpecificationBundle\Domain;
 
-class TasticSpecParser
+class TasticSpecParser implements SpecParser
 {
     /**
      * @var JsonSchemaValidator
@@ -19,7 +19,7 @@ class TasticSpecParser
         return $this->validator->parse(
             $schema,
             'tasticSchema.json',
-            ['schema/common.json']
+            ['library/common.json']
         );
     }
 }
