@@ -523,7 +523,7 @@ class Commercetools implements CartApi
             'orderVersion' => $order['version'],
             'lineItems' => $this->mapLineItems($order),
             'sum' => $order['totalPrice']['centAmount'],
-            'payment' => $this->mapPayment($cart),
+            'payment' => $this->mapPayment($order),
             'dangerousInnerCart' => $order,
             'dangerousInnerOrder' => $order,
         ]);
