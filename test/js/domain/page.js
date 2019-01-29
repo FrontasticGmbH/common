@@ -809,4 +809,103 @@ describe('Page', function () {
             },
         })
     })
+
+    it('adds a tastic inaa cell when position is not defined', () => {
+        let page = new Page({}, ['regA'])
+        page.addCell('regA').cellId = 'cell-a'
+        page.addTastic('regA', 'cell-a', 'type').tasticId = 'a'
+        page.addTastic('regA', 'cell-a', 'type').tasticId = 'b'
+        page.addTastic('regA', 'cell-a', 'type').tasticId = 'c'
+
+        expect(page.export()).toEqual({
+            layoutId: 'three_rows',
+            nodes: [],
+            pageId: null,
+            regions: {
+                regA: {
+                    regionId: 'regA',
+                    configuration: {},
+                    elements: [
+                        {
+                            cellId: 'cell-a',
+                            configuration: {},
+                            tastics: [
+                                {
+                                    tasticId: 'c',
+                                    tasticType: 'type',
+                                    configuration: {},
+                                },
+                                {
+                                    tasticId: 'b',
+                                    tasticType: 'type',
+                                    configuration: {},
+                                },
+                                {
+                                    tasticId: 'a',
+                                    tasticType: 'type',
+                                    configuration: {},
+                                }
+                            ],
+                        },
+                    ],
+                },
+            },
+        })
+    })
+
+    it('adds a tastic in a cell on a specific position', () => {
+        let page = new Page({}, ['regA'])
+        page.addCell('regA').cellId = 'cell-a'
+        page.addTastic('regA', 'cell-a', 'type').tasticId = 'b'
+        page.addTastic('regA', 'cell-a', 'type').tasticId = 'a'
+        page.addTastic('regA', 'cell-a', 'type').tasticId = 'c'
+        page.addTastic('regA', 'cell-a', 'type').tasticId = 'd'
+
+        page.addTastic('regA', 'cell-a', 'type', 2).tasticId = 'e'
+
+        expect(page.export()).toEqual({
+            layoutId: 'three_rows',
+            nodes: [],
+            pageId: null,
+            regions: {
+                regA: {
+                    regionId: 'regA',
+                    configuration: {},
+                    elements: [
+                        {
+                            cellId: 'cell-a',
+                            configuration: {},
+                            tastics: [
+                                {
+                                    tasticId: 'd',
+                                    tasticType: 'type',
+                                    configuration: {},
+                                },
+                                {
+                                    tasticId: 'c',
+                                    tasticType: 'type',
+                                    configuration: {},
+                                },
+                                {
+                                    tasticId: 'e',
+                                    tasticType: 'type',
+                                    configuration: {},
+                                },
+                                {
+                                    tasticId: 'a',
+                                    tasticType: 'type',
+                                    configuration: {},
+                                },
+                                {
+                                    tasticId: 'b',
+                                    tasticType: 'type',
+                                    configuration: {},
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+        })
+    })
 })
