@@ -2,7 +2,6 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain\CartApi;
 
-use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
@@ -13,6 +12,7 @@ use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
+use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator;
 
 /**
@@ -20,7 +20,10 @@ use Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator;
  */
 class Commercetools implements CartApi
 {
-    const EXPAND = 'lineItems[*].discountedPrice.includedDiscounts[*].discount';
+    const EXPAND = [
+        'lineItems[*].discountedPrice.includedDiscounts[*].discount',
+        'paymentInfo.payments[*]',
+    ];
 
     /**
      * @var Client
@@ -493,6 +496,7 @@ class Commercetools implements CartApi
             'cartVersion' => $cart['version'],
             'lineItems' => $this->mapLineItems($cart),
             'sum' => $cart['totalPrice']['centAmount'],
+            'payment' => $this->mapPayment($cart),
             'dangerousInnerCart' => $cart,
         ]);
     }
@@ -519,6 +523,7 @@ class Commercetools implements CartApi
             'orderVersion' => $order['version'],
             'lineItems' => $this->mapLineItems($order),
             'sum' => $order['totalPrice']['centAmount'],
+            'payment' => $this->mapPayment($cart),
             'dangerousInnerCart' => $order,
             'dangerousInnerOrder' => $order,
         ]);
@@ -596,6 +601,22 @@ class Commercetools implements CartApi
         );
 
         return $lineItems;
+    }
+
+    private function mapPayment(array $cart): ?Payment
+    {
+        if (empty($cart['paymentInfo']['payments'])) {
+            return null;
+        }
+
+        $payment = reset($cart['paymentInfo']['payments'])['obj'];
+        return new Payment([
+            'paymentId' => $payment['id'],
+            'paymentProvider' => $payment['paymentMethodInfo']['paymentInterface'],
+            'amount' => $payment['amountPlanned']['centAmount'],
+            'currency' => $payment['amountPlanned']['currencyCode'],
+            'debug' => json_encode($payment),
+        ]);
     }
 
     /**

@@ -27,6 +27,11 @@ class Cart extends DataObject
     public $sum = 0;
 
     /**
+     * @var Payment
+     */
+    public $payment;
+
+    /**
      * Access original object from backend
      *
      * This should only be used if you need very specific features
