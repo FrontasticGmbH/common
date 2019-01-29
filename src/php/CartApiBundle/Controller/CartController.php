@@ -176,7 +176,8 @@ class CartController extends CrudController
             );
         }
 
-        if (!empty($payload['payment'])) {
+        // @TODO: How do we want to handle dublicate payment assigments?
+        if (!empty($payload['payment']) && empty($cart->payment)) {
             $cartApi->setPayment(
                 $cart,
                 new Payment([
