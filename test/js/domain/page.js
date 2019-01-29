@@ -557,7 +557,7 @@ describe('Page', function () {
         page.addTastic('regB', 'cell-b', 'type').tasticId = 'a'
         page.addTastic('regB', 'cell-b', 'type').tasticId = 'c'
 
-        page.moveTastic('b', { cell: 'cell-b', tastic: 1 })
+        page.moveTastic('b', { cell: 'cell-b', tasticDropPosition: 1 })
 
         expect(page.export()).toEqual({
             layoutId: 'three_rows',
@@ -584,7 +584,7 @@ describe('Page', function () {
                             configuration: {},
                             tastics: [
                                 {
-                                    tasticId: 'a',
+                                    tasticId: 'c',
                                     tasticType: 'type',
                                     configuration: {},
                                 },
@@ -594,7 +594,7 @@ describe('Page', function () {
                                     configuration: {},
                                 },
                                 {
-                                    tasticId: 'c',
+                                    tasticId: 'a',
                                     tasticType: 'type',
                                     configuration: {},
                                 },
@@ -613,7 +613,7 @@ describe('Page', function () {
         page.addTastic('regA', 'cell-a', 'type').tasticId = 'a'
         page.addTastic('regA', 'cell-a', 'type').tasticId = 'c'
 
-        page.moveTastic('b', { cell: 'cell-a', tastic: 2 })
+        page.moveTastic('c', { cell: 'cell-a', tasticDropPosition: 2 })
 
         expect(page.export()).toEqual({
             layoutId: 'three_rows',
@@ -634,12 +634,12 @@ describe('Page', function () {
                                     configuration: {},
                                 },
                                 {
-                                    tasticId: 'b',
+                                    tasticId: 'c',
                                     tasticType: 'type',
                                     configuration: {},
                                 },
                                 {
-                                    tasticId: 'c',
+                                    tasticId: 'b',
                                     tasticType: 'type',
                                     configuration: {},
                                 },
@@ -658,7 +658,7 @@ describe('Page', function () {
         page.addTastic('regA', 'cell-a', 'type').tasticId = 'a'
         page.addTastic('regA', 'cell-a', 'type').tasticId = 'c'
 
-        page.moveTastic('a', { cell: 'cell-a', tastic: 0 })
+        page.moveTastic('a', { cell: 'cell-a', tasticDropPosition: 0 })
 
         expect(page.export()).toEqual({
             layoutId: 'three_rows',
@@ -679,12 +679,12 @@ describe('Page', function () {
                                     configuration: {},
                                 },
                                 {
-                                    tasticId: 'b',
+                                    tasticId: 'c',
                                     tasticType: 'type',
                                     configuration: {},
                                 },
                                 {
-                                    tasticId: 'c',
+                                    tasticId: 'b',
                                     tasticType: 'type',
                                     configuration: {},
                                 },
@@ -731,12 +731,12 @@ describe('Page', function () {
                             configuration: {},
                             tastics: [
                                 {
-                                    tasticId: 'a',
+                                    tasticId: 'c',
                                     tasticType: 'type',
                                     configuration: {},
                                 },
                                 {
-                                    tasticId: 'c',
+                                    tasticId: 'a',
                                     tasticType: 'type',
                                     configuration: {},
                                 },
@@ -761,7 +761,7 @@ describe('Page', function () {
         page.addTastic('regB', 'cell-b', 'type').tasticId = 'a'
         page.addTastic('regB', 'cell-b', 'type').tasticId = 'c'
 
-        page.moveTastic('b', { cell: 'cell-b', tastic: 0 })
+        page.moveTastic('b', { cell: 'cell-b', tasticDropPosition: 0 })
 
         expect(page.export()).toEqual({
             layoutId: 'three_rows',
@@ -793,12 +793,12 @@ describe('Page', function () {
                                     configuration: {},
                                 },
                                 {
-                                    tasticId: 'a',
+                                    tasticId: 'c',
                                     tasticType: 'type',
                                     configuration: {},
                                 },
                                 {
-                                    tasticId: 'c',
+                                    tasticId: 'a',
                                     tasticType: 'type',
                                     configuration: {},
                                 },
