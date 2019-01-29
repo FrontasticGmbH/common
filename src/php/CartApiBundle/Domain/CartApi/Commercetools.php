@@ -20,7 +20,7 @@ use Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator;
  */
 class Commercetools implements CartApi
 {
-    const EXPAND_DISCOUNTS = 'lineItems[*].discountedPrice.includedDiscounts[*].discount';
+    const EXPAND = 'lineItems[*].discountedPrice.includedDiscounts[*].discount';
 
     /**
      * @var Client
@@ -82,11 +82,12 @@ class Commercetools implements CartApi
         try {
             return $this->mapCart($this->client->get('/carts', [
                 'customerId' => $userId,
+                'expand' => self::EXPAND,
             ]));
         } catch (RequestException $e) {
             return $this->mapCart($this->client->post(
                 '/carts',
-                ['expand' => self::EXPAND_DISCOUNTS],
+                ['expand' => self::EXPAND],
                 [],
                 json_encode([
                     // @TODO: Currency should only be stored in context. Property should be removed.
@@ -110,7 +111,7 @@ class Commercetools implements CartApi
         $result = $this->client->fetch('/carts', [
             'where' => 'anonymousId="' . $anonymousId . '"',
             'limit' => 1,
-            'expand' => self::EXPAND_DISCOUNTS,
+            'expand' => self::EXPAND,
         ]);
 
         if ($result->count >= 1) {
@@ -119,7 +120,7 @@ class Commercetools implements CartApi
 
         return $this->mapCart($this->client->post(
             '/carts',
-            ['expand' => self::EXPAND_DISCOUNTS],
+            ['expand' => self::EXPAND],
             [],
             json_encode([
                 // @TODO: Currency should only be stored in context. Property should be removed.
@@ -400,7 +401,7 @@ class Commercetools implements CartApi
     {
         return $this->mapOrder($this->client->post(
             '/orders',
-            [],
+            ['expand' => self::EXPAND],
             [],
             json_encode([
                 'id' => $cart->cartId,
@@ -420,7 +421,7 @@ class Commercetools implements CartApi
     {
         return $this->mapOrder($this->client->get(
             '/orders/order-number=' . $orderId
-        ));
+        ), ['expand' => self::EXPAND]);
     }
 
     /**
@@ -544,7 +545,7 @@ class Commercetools implements CartApi
                             $lineItem['discountedPrice']['value']['centAmount'] : null),
                         'discountTexts' => array_map(
                             function ($discount): array {
-                                return $discount['discount']['obj']['name'];
+                                return $discount['discount']['obj']['name'] ?? [];
                             },
                             (isset($lineItem['discountedPrice']['includedDiscounts'])
                                 ? $lineItem['discountedPrice']['includedDiscounts']
@@ -571,7 +572,7 @@ class Commercetools implements CartApi
                             $lineItem['discountedPrice']['value']['centAmount'] : null),
                         'discountTexts' => array_map(
                             function ($discount): array {
-                                return $discount['discount']['obj']['name'];
+                                return $discount['discount']['obj']['name'] ?? [];
                             },
                             (isset($lineItem['discountedPrice']['includedDiscounts'])
                                 ? $lineItem['discountedPrice']['includedDiscounts']
@@ -616,7 +617,7 @@ class Commercetools implements CartApi
 
         return $this->mapCart($this->client->post(
             '/carts/' . $cart->cartId,
-            ['expand' => self::EXPAND_DISCOUNTS],
+            ['expand' => self::EXPAND],
             [],
             json_encode([
                 'version' => $cart->cartVersion,
