@@ -1,7 +1,5 @@
-export default function () {
-    let S4 = function () {
-        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
-    }
+import v4 from 'uuid/v4'
 
-    return S4() + S4()
+export default function () {
+    return v4()
 }

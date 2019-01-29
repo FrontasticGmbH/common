@@ -46,6 +46,8 @@ abstract class CrudController extends Controller
             $entity->$property = $value;
         }
 
+        file_put_contents('/tmp/entity.php', '<?php return ' . var_export($entity, true) . ';');
+
         return $entity;
     }
 }
