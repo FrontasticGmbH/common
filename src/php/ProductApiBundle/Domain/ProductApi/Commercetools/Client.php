@@ -95,7 +95,7 @@ class Client
      * @return array
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      */
-    private function request(
+    public function request(
         string $method,
         string $uri,
         array $parameters = [],
