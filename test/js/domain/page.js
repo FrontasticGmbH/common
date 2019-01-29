@@ -844,7 +844,7 @@ describe('Page', function () {
                                     tasticId: 'a',
                                     tasticType: 'type',
                                     configuration: {},
-                                }
+                                },
                             ],
                         },
                     ],

@@ -64,7 +64,7 @@ class Cell {
             schema: schema,
         })
 
-        this.tastics.splice(position, 0, newTastic);
+        this.tastics.splice(position, 0, newTastic)
 
         return newTastic
     }
