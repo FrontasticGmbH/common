@@ -14,18 +14,84 @@
                         "type": "string"
                     },
                     "fields": {
-                        "type": "array",
-                        "items": {
-                            "oneOf": [
-                                {"$ref": "#/definitions/field"},
-                                {"$ref": "#/definitions/group"},
-                                {"$ref": "#/definitions/image"},
-                                {"$ref": "#/definitions/description"}
-                            ]
-                        }
+                        "$ref": "#/definitions/fields"
                     }
                 },
                 "required": ["name", "fields"]
+            }
+        },
+
+        "fields": {
+            "type": "array",
+            "items": {
+                "oneOf": [
+                    {
+                        "allOf": [
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "type": {
+                                        "enum": [
+                                            "boolean",
+                                            "custom",
+                                            "decimal",
+                                            "enum",
+                                            "integer",
+                                            "markdown",
+                                            "media",
+                                            "node",
+                                            "reference",
+                                            "stream",
+                                            "string",
+                                            "text",
+                                            "tree"
+                                        ]
+                                    }
+                                }
+                            },
+                            {"$ref": "#/definitions/field"}
+                        ]
+                    },
+                    {
+                        "allOf": [
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "type": {
+                                        "enum": ["group"]
+                                    }
+                                }
+                            },
+                            {"$ref": "#/definitions/group"}
+                        ]
+                    },
+                    {
+                        "allOf": [
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "type": {
+                                        "enum": ["image"]
+                                    }
+                                }
+                            },
+                            {"$ref": "#/definitions/image"}
+                        ]
+                    },
+                    {
+                        "allOf": [
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "type": {
+                                        "enum": ["description"]
+                                    }
+                                }
+                            },
+                            {"$ref": "#/definitions/description"}
+                        ]
+                    }
+                ]
             }
         },
 
@@ -43,10 +109,6 @@
                     "not": {
                         "enum": ["id", "sequence", "locale", "is_deleted"]
                     }
-                },
-
-                "type": {
-                    "@ref": "#/definitions/field-type"
                 },
                 "streamType": {
                     "$comment": "TODO: Define dependency to type?",
@@ -91,25 +153,7 @@
                     "type": "string"
                 }
             },
-            "required": ["field", "type", "label"],
-            "additionalProperties": false
-        },
-        "field-type": {
-            "enum": [
-                "boolean",
-                "custom",
-                "decimal",
-                "enum",
-                "integer",
-                "markdown",
-                "media",
-                "node",
-                "reference",
-                "stream",
-                "string",
-                "text",
-                "tree"
-            ]
+            "required": ["field", "type", "label"]
         },
         "group": {
             "type": "object",
@@ -123,9 +167,6 @@
                 "field": {
                     "type": "string"
                 },
-                "type": {
-                    "enum": ["group"]
-                },
                 "itemLabelField": {
                     "type": "string"
                 },
@@ -136,6 +177,7 @@
                     "type": "integer"
                 },
                 "fields": {
+                    "$comment": "FIXME: Update to new definition if working",
                     "type": "array",
                     "items": {
                         "oneOf": [
@@ -151,7 +193,7 @@
                     "type": "string"
                 }
             },
-            "required": ["label", "field", "itemLabelField", "type"]
+            "required": ["label", "field", "type"]
         },
         "image": {
             "$comment": "Illustrating image as part of the input form",
@@ -161,10 +203,6 @@
                 "url": {
                     "type": "string"
                 },
-                "type": {
-                    "enum": ["image"]
-                },
-
                 "$comment": {
                     "@comment": "Allow json-schem style comments in our schemas",
                     "type": "string"
@@ -180,10 +218,6 @@
                 "text": {
                     "type": "string"
                 },
-                "type": {
-                    "enum": ["description"]
-                },
-
                 "$comment": {
                     "@comment": "Allow json-schem style comments in our schemas",
                     "type": "string"
