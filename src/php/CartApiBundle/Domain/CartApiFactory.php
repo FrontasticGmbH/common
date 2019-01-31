@@ -35,8 +35,7 @@ class CartApiFactory
                         $this->cache
                     ),
                     new Mapper(),
-                    // @todo: Should come out of the container
-                    new OrderIdGenerator\Random()
+                    $this->getOrderIdGenerator()
                 );
                 break;
 
@@ -48,5 +47,14 @@ class CartApiFactory
         }
 
         return new CartApi\LifecycleEventDecorator($cartApi, $this->decorators);
+    }
+
+    private function getOrderIdGenerator(): OrderIdGenerator
+    {
+        try {
+            return $this->container->get('frontastic.order-id-generator');
+        } catch (\Exception $e) {
+            return new OrderIdGenerator\Random();
+        }
     }
 }
