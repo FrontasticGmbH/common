@@ -1,0 +1,25 @@
+{
+    "identifier": "storefinder",
+    "name": "Storefinder",
+    "icon": "store",
+    "fields": [
+        {
+            "label": "Name",
+            "field": "name"
+        }
+    ],
+    "schema": [
+        {
+            "name": "Base Data",
+            "fields": [
+                {
+                    "label": "Name",
+                    "field": "name",
+                    "required": true,
+                    "type": "unknown-field-type"
+                }
+            ]
+        }
+    ],
+    "indexes": []
+}

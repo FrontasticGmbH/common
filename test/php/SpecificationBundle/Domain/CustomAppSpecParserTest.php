@@ -3,8 +3,12 @@
 namespace Frontastic\Common\SpecificationBundle\Domain;
 
 
+use InvalidArgumentException;
+
 class CustomAppSpecParserTest extends \PHPUnit\Framework\TestCase
 {
+    const FIXTURE_DIR = __DIR__ . '/_fixtures';
+
     public function getFailingSchemaFiles()
     {
         return array(
@@ -28,6 +32,27 @@ class CustomAppSpecParserTest extends \PHPUnit\Framework\TestCase
         $this->expectException(InvalidSchemaException::class);
         $this->expectExceptionMessage($message);
 
-        $specParser->parse(file_get_contents(__DIR__ . '/_fixtures/' . $schemaFile));
+        $specParser->parse(file_get_contents(self::FIXTURE_DIR . '/' . $schemaFile));
+    }
+
+    public function testUnknownFieldTypeRaisesSenisbleError()
+    {
+        $specParser = new CustomAppSpecParser();
+
+        try {
+            $specParser->parse(file_get_contents(self::FIXTURE_DIR . '/unknown_field_type.json'));
+        } catch (InvalidSchemaException $e) {
+            $this->assertContains(
+                'schema[0].fields[0].type: Does not have a value in the enumeration',
+                $e->getError(),
+                'Exception error does not contain required text.'
+            );
+            return;
+        }
+        $this->fail(sprintf(
+            'Expected exception of type "%s" not thrown',
+            InvalidSchemaException::class
+        ));
+
     }
 }
