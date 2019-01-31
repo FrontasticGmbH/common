@@ -181,8 +181,8 @@ class CartController extends CrudController
             $cartApi->setPayment(
                 $cart,
                 new Payment([
-                    'paymentProvider' => $payload['payment']['provider'],
-                    'paymentId' => $payload['payment']['id'],
+                    'paymentProvider' => $payload['payment']['paymentProvider'],
+                    'paymentId' => $payload['payment']['paymentId'],
                     'amount' => $this->getCart($context)->sum,
                     'currency' => $context->currency,
                     'debug' => json_encode($payload['payment']['rawInfo'] ?? null),
