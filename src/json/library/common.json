@@ -40,6 +40,7 @@
                                             "markdown",
                                             "media",
                                             "node",
+                                            "number",
                                             "reference",
                                             "stream",
                                             "string",
@@ -177,15 +178,7 @@
                     "type": "integer"
                 },
                 "fields": {
-                    "$comment": "FIXME: Update to new definition if working",
-                    "type": "array",
-                    "items": {
-                        "oneOf": [
-                            {"$ref": "#/definitions/field"},
-                            {"$ref": "#/definitions/image"},
-                            {"$ref": "#/definitions/description"}
-                        ]
-                    }
+                    "$ref": "#/definitions/fields"
                 },
 
                 "$comment": {
