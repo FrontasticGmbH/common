@@ -13,10 +13,12 @@ use Frontastic\Common\ReplicatorBundle\Domain\Customer;
 class ContentApiFactory
 {
     private $container;
+    private $decorators = [];
 
-    public function __construct($container)
+    public function __construct($container, iterable $decorators)
     {
         $this->container = $container;
+        $this->decorators = $decorators;
     }
 
     public function factor(Customer $customer): ContentApi
@@ -27,12 +29,16 @@ class ContentApiFactory
                     $customer->configuration['contentful']->accessToken,
                     $customer->configuration['contentful']->spaceId
                 );
-                return new ContentApi\Contentful($client);
+                $api = new ContentApi\Contentful($client);
+                break;
+
             default:
                 throw new \OutOfBoundsException(
                     "No content API configured for customer {$customer->name}. " .
                     "Check the provisioned customer configuration in app/config/customers/."
                 );
         }
+
+        return new ContentApi\LifecycleEventDecorator($api, $this->decorators);
     }
 }
