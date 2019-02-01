@@ -61,7 +61,15 @@ trait LifecycleTrait
         $afterEvent = 'after' . ucfirst($method);
         foreach ($this->listeners as $listener) {
             if (is_callable([$listener, $afterEvent])) {
-                $listener->$afterEvent($this->getAggregate(), $result);
+                $returnValue = $listener->$afterEvent($this->getAggregate(), $result);
+
+                // If a listerner changes the return value, for example
+                // replacing the default return object with an enriched custom
+                // object we use this as a return value for now. The return
+                // type hints ensure this will stay valid.
+                if ($returnValue) {
+                    $result = $returnValue;
+                }
             }
         }
 
