@@ -36,8 +36,6 @@ class Client
         $this->projectKey = $projectKey;
         $this->httpClient = $httpClient;
         $this->cache = $cache;
-
-        $this->httpClient->addDefaultHeaders([sprintf('Authorization: Bearer %s', $this->getAccessToken())]);
     }
 
     /**
@@ -117,6 +115,7 @@ class Client
 
         $query .= $parameters ? http_build_query($parameters) : '';
 
+        $headers[] = sprintf('Authorization: Bearer %s', $this->getAccessToken());
         $response = $this->httpClient->request(
             $method,
             sprintf('https://api.sphere.io/%s%s%s', $this->projectKey, $uri, $query),

@@ -2,11 +2,11 @@
 
 namespace Frontastic\Common\ContentApiBundle\Domain;
 
+use Doctrine\Common\Cache\Cache;
+
 use Commercetools\Core\Client;
 use Commercetools\Core\Config;
 use Commercetools\Core\Model\Common\Context;
-
-use Cache\Adapter\Filesystem\FilesystemCachePool;
 
 use Frontastic\Common\ReplicatorBundle\Domain\Customer;
 

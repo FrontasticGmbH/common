@@ -11,6 +11,9 @@
 
         <service id="Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory">
             <argument type="service" id="service_container" />
+            <argument type="service">
+                <service class="Doctrine\Common\Cache\ApcuCache" />
+            </argument>
             <argument type="tagged" tag="accountApi.lifecycleEventListener" />
         </service>
 

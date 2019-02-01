@@ -9,6 +9,9 @@
 
         <service id="Frontastic\Common\WishlistApiBundle\Domain\WishlistApiFactory">
             <argument type="service" id="service_container" />
+            <argument type="service">
+                <service class="Doctrine\Common\Cache\ApcuCache" />
+            </argument>
             <argument type="tagged" tag="wishlistApi.lifecycleEventListener" />
         </service>
     </services>

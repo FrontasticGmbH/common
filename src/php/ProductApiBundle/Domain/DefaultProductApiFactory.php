@@ -29,12 +29,13 @@ class DefaultProductApiFactory implements ProductApiFactory
     {
         $this->container = $container;
         $this->cache = $cache;
+        $this->decorators = $decorators;
     }
 
     public function factor(Customer $customer): ProductApi
     {
         try {
-            return new LifecycleEventDecorator(
+            return new ProductApi\LifecycleEventDecorator(
                 $this->factorFromConfiguration($customer->configuration),
                 $this->decorators
             );
@@ -52,15 +53,12 @@ class DefaultProductApiFactory implements ProductApiFactory
     {
         switch (true) {
             case isset($config['commercetools']):
-                // @todo These objects should come from the DI Container
-                $httpClient = new Stream();
-
                 return new Commercetools(
                     new Commercetools\Client(
                         $config['commercetools']->clientId,
                         $config['commercetools']->clientSecret,
                         $config['commercetools']->projectKey,
-                        $httpClient,
+                        $this->container->get(Stream::class),
                         $this->cache
                     ),
                     new Commercetools\Mapper(
@@ -69,9 +67,6 @@ class DefaultProductApiFactory implements ProductApiFactory
                     $config['commercetools']->localeOverwrite ?? null
                 );
             case isset($config['semknox']):
-                // @todo These objects should come from the DI Container
-                $httpClient = new Stream();
-
                 $searchIndexClients = [];
                 $dataStudioClients = [];
                 foreach ($config['semknox']->languages as $language => $languageConfig) {
@@ -79,12 +74,12 @@ class DefaultProductApiFactory implements ProductApiFactory
                         $languageConfig['host'],
                         $languageConfig['customerId'],
                         $languageConfig['apiKey'],
-                        $httpClient
+                        $this->container->get(Stream::class)
                     );
                     $dataStudioClients[$language] = new Semknox\DataStudioClient(
                         $languageConfig['projectId'],
                         $languageConfig['accessToken'],
-                        $httpClient
+                        $this->container->get(Stream::class)
                     );
                 }
 
