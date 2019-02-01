@@ -20,7 +20,12 @@ class DefaultProductApiFactory implements ProductApiFactory
      */
     private $cache;
 
-    public function __construct($container, Cache $cache)
+    /**
+     * @var array
+     */
+    private $decorators;
+
+    public function __construct($container, Cache $cache, iterable $decorators = [])
     {
         $this->container = $container;
         $this->cache = $cache;
@@ -29,7 +34,10 @@ class DefaultProductApiFactory implements ProductApiFactory
     public function factor(Customer $customer): ProductApi
     {
         try {
-            $api = $this->factorFromConfiguration($customer->configuration);
+            return new LifecycleEventDecorator(
+                $this->factorFromConfiguration($customer->configuration),
+                $this->decorators
+            );
         } catch (\OutOfBoundsException $e) {
             throw new \OutOfBoundsException(
                 "No product API configured for customer {$customer->name}. " .
@@ -38,7 +46,6 @@ class DefaultProductApiFactory implements ProductApiFactory
                 $e
             );
         }
-        return $api;
     }
 
     public function factorFromConfiguration(array $config): ProductApi
