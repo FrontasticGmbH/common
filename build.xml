@@ -8,8 +8,11 @@
     -->
     <property file="${basedir}/environment.local" />
     <property file="${basedir}/../../environment.local" />
+    <property file="${frontastic_basedir}/environment.local" />
     <property file="${basedir}/environment" />
     <property file="${basedir}/../../environment" />
+    <property file="${frontastic_basedir}/environment" />
+
 
     <!--
         Import main target defintions (extension points)
