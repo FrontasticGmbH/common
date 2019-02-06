@@ -8,6 +8,9 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Semknox;
 use Frontastic\Common\ReplicatorBundle\Domain\Customer;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DefaultProductApiFactory implements ProductApiFactory
 {
     /**
