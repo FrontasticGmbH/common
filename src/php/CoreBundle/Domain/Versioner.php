@@ -2,7 +2,6 @@
 
 namespace Frontastic\Common\CoreBundle\Domain;
 
-
 class Versioner
 {
     public function supports(object $entity): bool
