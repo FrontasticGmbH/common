@@ -175,9 +175,17 @@ class Client
             return ($this->accessToken = (string) $accessToken);
         }
 
-        $accessToken = $this->obtainAccessToken();
-        $this->cache->save($cacheId, $accessToken);
+        try {
+            $accessToken = $this->obtainAccessToken();
+        } catch (\Exception $e) {
+            throw new \RuntimeException(
+                'Cannot connect to Commercetools to obtain an access token',
+                0,
+                $e
+            );
+        }
 
+        $this->cache->save($cacheId, $accessToken);
         return ($this->accessToken = (string) $accessToken);
     }
 
