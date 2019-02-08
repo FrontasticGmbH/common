@@ -26,11 +26,13 @@ class Query extends DataObject
     public $loadDangerousInnerData = false;
 
     /**
-     * Optional limit, the default value is <b>25</b>.
+     * Optional limit, the default value is <b>24</b>, because it is divisble
+     * by 2, 3, 4 & 6 – which are common numbers or products per row in
+     * frontends.
      *
      * @var integer
      */
-    public $limit = 25;
+    public $limit = 24;
 
     /**
      * Optional start offset, default is <b>0</b>.
