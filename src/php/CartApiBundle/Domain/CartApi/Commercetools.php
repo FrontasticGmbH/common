@@ -609,12 +609,17 @@ class Commercetools implements CartApi
             return null;
         }
 
-        $payment = reset($cart['paymentInfo']['payments'])['obj'];
+        $payment = reset($cart['paymentInfo']['payments']);
+        if (!$payment) {
+            return null;
+        }
+
+        $payment = isset($payment['obj']) ? $payment['obj'] : $payment;
         return new Payment([
             'paymentId' => $payment['id'],
-            'paymentProvider' => $payment['paymentMethodInfo']['paymentInterface'],
-            'amount' => $payment['amountPlanned']['centAmount'],
-            'currency' => $payment['amountPlanned']['currencyCode'],
+            'paymentProvider' => $payment['paymentMethodInfo']['paymentInterface'] ?? null,
+            'amount' => $payment['amountPlanned']['centAmount'] ?? null,
+            'currency' => $payment['amountPlanned']['currencyCode'] ?? null,
             'debug' => json_encode($payment),
         ]);
     }
