@@ -559,7 +559,7 @@ class Commercetools implements CartApi
             'streetNumber' => $address['streetNumber'] ?? null,
             'postalCode' => $address['postalCode'] ?? null,
             'city' => $address['city'] ?? null,
-            'country' => $address['city'] ?? null,
+            'country' => $address['country'] ?? null,
         ]);
     }
 
