@@ -4,6 +4,8 @@ namespace Frontastic\Common\CartApiBundle\Domain;
 
 use Kore\DataObject\DataObject;
 
+use Frontastic\Common\AccountApiBundle\Domain\Address;
+
 class Cart extends DataObject
 {
     /**
@@ -22,12 +24,37 @@ class Cart extends DataObject
     public $lineItems = [];
 
     /**
+     * @var string
+     */
+    public $email;
+
+    /**
+     * @var \DateTimeImmutable
+     */
+    public $birthday;
+
+    /**
+     * @var ?ShippingMethod
+     */
+    public $shippingMethod;
+
+    /**
+     * @var ?Address
+     */
+    public $shippingAddress;
+
+    /**
+     * @var ?Address
+     */
+    public $billingAddress;
+
+    /**
      * @var integer
      */
     public $sum = 0;
 
     /**
-     * @var Payment
+     * @var ?Payment
      */
     public $payment;
 

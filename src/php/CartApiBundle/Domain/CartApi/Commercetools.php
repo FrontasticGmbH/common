@@ -7,6 +7,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
+use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Category;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\Order;
@@ -14,6 +15,7 @@ use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator;
+use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to implementation of CartApi
@@ -495,6 +497,13 @@ class Commercetools implements CartApi
             'cartId' => $cart['id'],
             'cartVersion' => $cart['version'],
             'lineItems' => $this->mapLineItems($cart),
+            'email' => $cart['customerEmail'] ?? null,
+            'birthday' => isset($cart['custom']['fields']['birthday']) ?
+                new \DateTimeImmutable($cart['custom']['fields']['birthday']) :
+                null,
+            'shippingMethod' => $this->mapShippingMethod($cart['shippingInfo'] ?? []),
+            'shippingAddress' => $this->mapAddress($cart['shippingAddress'] ?? []),
+            'billingAddress' => $this->mapAddress($cart['billingAddress'] ?? []),
             'sum' => $cart['totalPrice']['centAmount'],
             'payment' => $this->mapPayment($cart),
             'dangerousInnerCart' => $cart,
@@ -526,6 +535,36 @@ class Commercetools implements CartApi
             'payment' => $this->mapPayment($order),
             'dangerousInnerCart' => $order,
             'dangerousInnerOrder' => $order,
+        ]);
+    }
+
+    private function mapAddress(array $address): ?Address
+    {
+        if (!count($address)) {
+            return null;
+        }
+
+        return new Address([
+            'salutation' => $address['salutation'] ?? null,
+            'firstName' => $address['firstName'] ?? null,
+            'lastName' => $address['lastName'] ?? null,
+            'streetName' => $address['streetName'] ?? null,
+            'streetNumber' => $address['streetNumber'] ?? null,
+            'postalCode' => $address['postalCode'] ?? null,
+            'city' => $address['city'] ?? null,
+            'country' => $address['city'] ?? null,
+        ]);
+    }
+
+    private function mapShippingMethod(array $shipping): ?ShippingMethod
+    {
+        if (!count($shipping)) {
+            return null;
+        }
+
+        return new ShippingMethod([
+            'name' => $shipping['shippingMethodName'] ?? null,
+            'price' => $shipping['shippingRate']['price']['centAmount'] ?? null,
         ]);
     }
 
