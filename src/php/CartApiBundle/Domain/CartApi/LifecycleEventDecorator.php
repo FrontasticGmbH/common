@@ -173,7 +173,7 @@ class LifecycleEventDecorator implements CartApi
      * @param \Frontastic\Common\CartApiBundle\Domain\Payment $payment
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function setPayment(Cart $cart, Payment $payment): Cart
+    public function setPayment(Cart $cart, Payment $payment, ?array $custom = null): Cart
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }

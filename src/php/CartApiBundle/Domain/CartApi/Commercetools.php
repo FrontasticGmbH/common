@@ -360,7 +360,7 @@ class Commercetools implements CartApi
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function setPayment(Cart $cart, Payment $payment): Cart
+    public function setPayment(Cart $cart, Payment $payment, ?array $custom = null): Cart
     {
         $payment = $this->client->post(
             '/payments',
@@ -378,7 +378,8 @@ class Commercetools implements CartApi
                 'paymentStatus' => [
                     'interfaceCode' => 'wirecard',
                     'interfaceText' => $payment->debug,
-                ]
+                ],
+                'custom' => $custom,
             ])
         );
 
