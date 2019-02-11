@@ -531,6 +531,13 @@ class Commercetools implements CartApi
             'orderId' => $order['orderNumber'],
             'orderVersion' => $order['version'],
             'lineItems' => $this->mapLineItems($order),
+            'email' => $cart['customerEmail'] ?? null,
+            'birthday' => isset($cart['custom']['fields']['birthday']) ?
+                new \DateTimeImmutable($cart['custom']['fields']['birthday']) :
+                null,
+            'shippingMethod' => $this->mapShippingMethod($cart['shippingInfo'] ?? []),
+            'shippingAddress' => $this->mapAddress($cart['shippingAddress'] ?? []),
+            'billingAddress' => $this->mapAddress($cart['billingAddress'] ?? []),
             'sum' => $order['totalPrice']['centAmount'],
             'payment' => $this->mapPayment($order),
             'dangerousInnerCart' => $order,
