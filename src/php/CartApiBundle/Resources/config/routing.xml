@@ -16,6 +16,10 @@
         <default key="_controller">Frontastic\Common\CartApiBundle\Controller\CartController::addAction</default>
     </route>
 
+    <route id="Frontastic.CartApi.Cart.addMultiple" path="/cart/addMultiple" methods="POST">
+        <default key="_controller">Frontastic\Common\CartApiBundle\Controller\CartController::addMultipleAction</default>
+    </route>
+
     <route id="Frontastic.CartApi.Cart.updateLineItem" path="/cart/lineItem" methods="POST">
         <default key="_controller">Frontastic\Common\CartApiBundle\Controller\CartController::updateLineItemAction</default>
     </route>

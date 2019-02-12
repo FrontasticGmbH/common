@@ -56,6 +56,35 @@ class CartController extends CrudController
         ];
     }
 
+    public function addMultipleAction(Context $context, Request $request): array
+    {
+        $payload = $this->getJsonContent($request);
+        $cartApi = $this->getCartApi($context);
+
+        $cart = $this->getCart($context);
+        $cartApi->startTransaction($cart);
+        foreach (($payload['lineItems'] ?? []) as $lineItemData) {
+            debug(new LineItem\Variant([
+                    'variant' => new Variant(['sku' => $lineItemData['variant']['sku']]),
+                    'custom' => $lineItemData['option'] ?? [],
+                    'count' => $lineItemData['count'] ?? 1,
+                ]));
+            $cartApi->addToCart(
+                $cart,
+                new LineItem\Variant([
+                    'variant' => new Variant(['sku' => $lineItemData['variant']['sku']]),
+                    'custom' => $lineItemData['option'] ?? [],
+                    'count' => $lineItemData['count'] ?? 1,
+                ])
+            );
+        }
+        $cart = $cartApi->commit();
+
+        return [
+            'cart' => $cart,
+        ];
+    }
+
     public function updateLineItemAction(Context $context, Request $request): array
     {
         $payload = $this->getJsonContent($request);
