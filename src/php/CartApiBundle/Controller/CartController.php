@@ -64,11 +64,6 @@ class CartController extends CrudController
         $cart = $this->getCart($context);
         $cartApi->startTransaction($cart);
         foreach (($payload['lineItems'] ?? []) as $lineItemData) {
-            debug(new LineItem\Variant([
-                    'variant' => new Variant(['sku' => $lineItemData['variant']['sku']]),
-                    'custom' => $lineItemData['option'] ?? [],
-                    'count' => $lineItemData['count'] ?? 1,
-                ]));
             $cartApi->addToCart(
                 $cart,
                 new LineItem\Variant([
