@@ -200,20 +200,6 @@ class CartController extends CrudController
             );
         }
 
-        // @TODO: How do we want to handle dublicate payment assigments?
-        if (!empty($payload['payment']) && empty($cart->payment)) {
-            $cartApi->setPayment(
-                $cart,
-                new Payment([
-                    'paymentProvider' => $payload['payment']['paymentProvider'],
-                    'paymentId' => $payload['payment']['paymentId'],
-                    'amount' => $this->getCart($context)->sum,
-                    'currency' => $context->currency,
-                    'debug' => json_encode($payload['payment']['rawInfo'] ?? null),
-                ])
-            );
-        }
-
         return ['cart' => $cartApi->commit()];
     }
 
