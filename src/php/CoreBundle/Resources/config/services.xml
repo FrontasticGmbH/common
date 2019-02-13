@@ -35,6 +35,7 @@
                 <argument>passwordHash</argument>
                 <argument>secret</argument>
                 <argument>token</argument>
+                <argument>apiToken</argument>
                 <argument>apiKey</argument>
                 <argument>apiSecret</argument>
             </argument>

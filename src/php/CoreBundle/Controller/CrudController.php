@@ -2,15 +2,10 @@
 
 namespace Frontastic\Common\CoreBundle\Controller;
 
+use Frontastic\Common\CoreBundle\Domain\Versioner;
+use Kore\DataObject\DataObject;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-
-use Kore\DataObject\DataObject;
-
-use Frontastic\UserBundle\Domain\MetaData;
-
-use Frontastic\Common\CoreBundle\Domain\Versioner;
 
 abstract class CrudController extends Controller
 {
@@ -45,8 +40,6 @@ abstract class CrudController extends Controller
 
             $entity->$property = $value;
         }
-
-        file_put_contents('/tmp/entity.php', '<?php return ' . var_export($entity, true) . ';');
 
         return $entity;
     }
