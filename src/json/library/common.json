@@ -150,7 +150,7 @@
                 },
 
                 "$comment": {
-                    "@comment": "Allow json-schem style comments in our schemas",
+                    "@comment": "Allow json-schema style comments in our schemas",
                     "type": "string"
                 }
             },
@@ -182,7 +182,7 @@
                 },
 
                 "$comment": {
-                    "@comment": "Allow json-schem style comments in our schemas",
+                    "@comment": "Allow json-schema style comments in our schemas",
                     "type": "string"
                 }
             },
@@ -197,7 +197,7 @@
                     "type": "string"
                 },
                 "$comment": {
-                    "@comment": "Allow json-schem style comments in our schemas",
+                    "@comment": "Allow json-schema style comments in our schemas",
                     "type": "string"
                 }
             },
@@ -212,7 +212,7 @@
                     "type": "string"
                 },
                 "$comment": {
-                    "@comment": "Allow json-schem style comments in our schemas",
+                    "@comment": "Allow json-schema style comments in our schemas",
                     "type": "string"
                 }
             },
