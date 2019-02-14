@@ -223,6 +223,8 @@ class CartController extends CrudController
         $cartApi = $this->getCartApi($context);
 
         $cart = $this->updateAction($context, $request)['cart'];
+
+        // @TODO: Ensure the cart has sufficient payments.
         $order = $cartApi->order($cart);
 
         // @TODO: Remove old cart instead (also for logged in users)
