@@ -69,9 +69,9 @@ class CustomerService
         $this->customers = array_values($this->customers);
     }
 
-    private function explodeConfiguration(array $values): array
+    private function explodeConfiguration(array $values, ?array $defaults = null): array
     {
-        $baseConfiguration = array_replace_recursive($this->apis, $values);
+        $baseConfiguration = array_replace_recursive($defaults ?: $this->apis, $values);
         foreach ($this->apis as $api => $defaultEngine) {
             $baseConfiguration[$api] = array_replace_recursive(
                 $baseConfiguration[$api],
@@ -113,7 +113,7 @@ class CustomerService
                         'webpackPort' => $project['webpackPort'] ?? 3000,
                         'configuration' => array_replace_recursive(
                             $customerConfiguration,
-                            $this->explodeConfiguration($project['configuration'] ?? [])
+                            $this->explodeConfiguration($project['configuration'] ?? [], $customerConfiguration)
                         ),
                         'languages' => $project['languages'] ?? [$project['defaultLanguage'] ?? 'eng_GB'],
                         'defaultLanguage' => $project['defaultLanguage'] ?? 'eng_GB',
