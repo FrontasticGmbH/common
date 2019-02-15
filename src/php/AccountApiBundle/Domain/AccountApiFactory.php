@@ -23,13 +23,13 @@ class AccountApiFactory
 
     public function factor(Customer $customer): AccountApi
     {
-        switch (true) {
-            case isset($customer->configuration['commercetools']):
+        switch ($customer->configuration['account']->engine) {
+            case 'commercetools':
                 $accountApi = new AccountApi\Commercetools(
                     new Client(
-                        $customer->configuration['commercetools']->clientId,
-                        $customer->configuration['commercetools']->clientSecret,
-                        $customer->configuration['commercetools']->projectKey,
+                        $customer->configuration['account']->clientId,
+                        $customer->configuration['account']->clientSecret,
+                        $customer->configuration['account']->projectKey,
                         $this->container->get(Stream::class),
                         $this->cache
                     )

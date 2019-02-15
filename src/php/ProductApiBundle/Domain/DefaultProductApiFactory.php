@@ -54,13 +54,13 @@ class DefaultProductApiFactory implements ProductApiFactory
 
     public function factorFromConfiguration(array $config): ProductApi
     {
-        switch (true) {
-            case isset($config['commercetools']):
+        switch ($config['product']->engine) {
+            case 'commercetools':
                 return new Commercetools(
                     new Commercetools\Client(
-                        $config['commercetools']->clientId,
-                        $config['commercetools']->clientSecret,
-                        $config['commercetools']->projectKey,
+                        $config['product']->clientId,
+                        $config['product']->clientSecret,
+                        $config['product']->projectKey,
                         $this->container->get(Stream::class),
                         $this->cache
                     ),
@@ -69,10 +69,10 @@ class DefaultProductApiFactory implements ProductApiFactory
                     ),
                     $config['commercetools']->localeOverwrite ?? null
                 );
-            case isset($config['semknox']):
+            case 'semknox':
                 $searchIndexClients = [];
                 $dataStudioClients = [];
-                foreach ($config['semknox']->languages as $language => $languageConfig) {
+                foreach ($config['product']['languages'] as $language => $languageConfig) {
                     $searchIndexClients[$language] = new Semknox\SearchIndexClient(
                         $languageConfig['host'],
                         $languageConfig['customerId'],

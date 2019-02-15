@@ -24,13 +24,13 @@ class WishlistApiFactory
 
     public function factor(Customer $customer): WishlistApi
     {
-        switch (true) {
-            case isset($customer->configuration['commercetools']):
+        switch ($customer->configuration['wishlist']->engine) {
+            case 'commercetools':
                 $wishlistApi = new WishlistApi\Commercetools(
                     new Client(
-                        $customer->configuration['commercetools']->clientId,
-                        $customer->configuration['commercetools']->clientSecret,
-                        $customer->configuration['commercetools']->projectKey,
+                        $customer->configuration['wishlist']->clientId,
+                        $customer->configuration['wishlist']->clientSecret,
+                        $customer->configuration['wishlist']->projectKey,
                         $this->container->get(Stream::class),
                         $this->cache
                     ),

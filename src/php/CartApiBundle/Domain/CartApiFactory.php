@@ -24,13 +24,13 @@ class CartApiFactory
 
     public function factor(Customer $customer): CartApi
     {
-        switch (true) {
-            case isset($customer->configuration['commercetools']):
+        switch ($customer->configuration['cart']->engine) {
+            case 'commercetools':
                 $cartApi = new CartApi\Commercetools(
                     new Client(
-                        $customer->configuration['commercetools']->clientId,
-                        $customer->configuration['commercetools']->clientSecret,
-                        $customer->configuration['commercetools']->projectKey,
+                        $customer->configuration['cart']->clientId,
+                        $customer->configuration['cart']->clientSecret,
+                        $customer->configuration['cart']->projectKey,
                         $this->container->get(Stream::class),
                         $this->cache
                     ),

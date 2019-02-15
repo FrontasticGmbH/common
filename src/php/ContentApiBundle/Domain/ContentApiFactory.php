@@ -23,11 +23,11 @@ class ContentApiFactory
 
     public function factor(Customer $customer): ContentApi
     {
-        switch (true) {
-            case isset($customer->configuration['contentful']):
+        switch ($customer->configuration['content']->engine) {
+            case 'contentful':
                 $client = new \Contentful\Delivery\Client(
-                    $customer->configuration['contentful']->accessToken,
-                    $customer->configuration['contentful']->spaceId
+                    $customer->configuration['content']->accessToken,
+                    $customer->configuration['content']->spaceId
                 );
                 $api = new ContentApi\Contentful($client);
                 break;

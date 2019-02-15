@@ -31,6 +31,9 @@ class CustomerService
         'cart' => [
             'engine' => 'commercetools',
         ],
+        'wishlist' => [
+            'engine' => 'commercetools',
+        ],
         'search' => [
             'engine' => 'commercetools',
         ],
