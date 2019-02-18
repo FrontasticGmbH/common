@@ -137,28 +137,6 @@ class CartController extends CrudController
         $cartApi->startTransaction($cart);
 
         if (!empty($payload['account'])) {
-            // @TODO: This is apollo specific and must be extracted
-
-            // @TODO: This is apollo specific and must be extracted
-            if (!empty($payload['account']['birthday'])) {
-                $cart = $cartApi->setCustomField(
-                    $cart,
-                    ['birthday' => (new \DateTime($payload['account']['birthday']))->format('Y-m-d')]
-                );
-            } elseif (!empty($payload['account']['year'])) {
-                $cart = $cartApi->setCustomField(
-                    $cart,
-                    [
-                        'birthday' => sprintf(
-                            '%04d-%02d-%02d',
-                            $payload['account']['year'] ?? 1900,
-                            $payload['account']['month'] ?? 1,
-                            $payload['account']['day'] ?? 1
-                        ),
-                    ]
-                );
-            }
-
             $cart = $cartApi->setEmail(
                 $cart,
                 $payload['account']['email']
@@ -166,14 +144,6 @@ class CartController extends CrudController
         }
 
         if (!empty($payload['shipping'])) {
-            // @TODO: This is apollo specific and must be extracted
-            if (!empty($payload['shipping']['storeId'])) {
-                $cart = $cartApi->setCustomField(
-                    $cart,
-                    ['storeId' => $payload['shipping']['storeId']]
-                );
-            }
-
             $cart = $cartApi->setShippingAddress(
                 $cart,
                 $payload['shipping']
@@ -184,33 +154,6 @@ class CartController extends CrudController
             $cart = $cartApi->setBillingAddress(
                 $cart,
                 $payload['billing'] ?: $payload['shipping']
-            );
-        }
-
-        if (!empty($payload['shippingMethod'])) {
-            // @TODO: This is apollo specific and must be extracted
-            $shippingMethodMap = [
-                'home' => '850b8c3a-974a-4f07-bf29-e1fdcdad5406',
-                'store' => '849328bb-f69a-4c86-9ab4-becc28478a0f',
-            ];
-
-            $cart = $cartApi->setShippingMethod(
-                $cart,
-                $shippingMethodMap[$payload['shippingMethod']]
-            );
-        }
-
-        // @TODO: How do we want to handle dublicate payment assigments?
-        if (!empty($payload['payment']) && empty($cart->payment)) {
-            $cartApi->setPayment(
-                $cart,
-                new Payment([
-                    'paymentProvider' => $payload['payment']['paymentProvider'],
-                    'paymentId' => $payload['payment']['paymentId'],
-                    'amount' => $this->getCart($context)->sum,
-                    'currency' => $context->currency,
-                    'debug' => json_encode($payload['payment']['rawInfo'] ?? null),
-                ])
             );
         }
 
