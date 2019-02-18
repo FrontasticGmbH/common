@@ -323,7 +323,7 @@ class Mapper
 
         $filters = [];
         foreach ($facets as $facet) {
-            switch ($typeLookup[$facet->handle]) {
+            switch ($typeLookup[$facet->handle] ?? '__UNKNOWN') {
                 case 'money':
                     $filters[] = sprintf('%s.centAmount:range (%s to %s)', $facet->handle, $facet->min, $facet->max);
                     break;
