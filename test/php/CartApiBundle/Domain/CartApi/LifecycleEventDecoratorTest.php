@@ -41,7 +41,7 @@ class LifecycleEventDecoratorTest extends \PHPUnit\Framework\TestCase
             ->with(
                 $this->equalTo($cartApi),
                 $this->equalTo(new Domain\Cart())
-            );
+            )->will($this->returnArgument(1));
 
         $decorator = new LifecycleEventDecorator($cartApi, [$listener]);
         $decorator->addToCart(
