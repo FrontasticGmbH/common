@@ -5,10 +5,12 @@ import Kit from '../../../src/js/domain/kit'
 import Tastic from '../../../src/js/domain/tastic'
 
 let mockId = 'id'
+/* eslint-disable arrow-body-style */
 jest.mock(
     '../../../src/js/generateId',
     () => jest.fn(() => mockId)
 )
+/* eslint-enable arrow-body-style */
 
 describe('Page', function () {
     it('creates region automatically', () => {
