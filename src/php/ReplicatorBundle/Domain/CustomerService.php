@@ -99,7 +99,12 @@ class CustomerService
             'secret' => $customer['secret'],
             'edition' => $customer['edition'] ?? 'mirco',
             'isTransient' => $transient,
-            'configuration' => $customerConfiguration,
+            'configuration' => array_map(
+                function (array $values) {
+                    return is_array($values) ? (object)$values : $values;
+                },
+                $customerConfiguration
+            ),
             'environments' => $customer['environments'] ?? [
                 'production',
                 'staging',
@@ -114,9 +119,14 @@ class CustomerService
                         'apiKey' => $customer['secret'],
                         'previewUrl' => $project['previewUrl'] ?? null,
                         'webpackPort' => $project['webpackPort'] ?? 3000,
-                        'configuration' => array_replace_recursive(
-                            $customerConfiguration,
-                            $this->explodeConfiguration($project['configuration'] ?? [], $customerConfiguration)
+                        'configuration' => array_map(
+                            function (array $values) {
+                                return is_array($values) ? (object)$values : $values;
+                            },
+                            array_replace_recursive(
+                                $customerConfiguration,
+                                $this->explodeConfiguration($project['configuration'] ?? [], $customerConfiguration)
+                            )
                         ),
                         'languages' => $project['languages'] ?? [$project['defaultLanguage'] ?? 'eng_GB'],
                         'defaultLanguage' => $project['defaultLanguage'] ?? 'eng_GB',
