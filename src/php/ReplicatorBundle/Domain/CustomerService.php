@@ -85,6 +85,16 @@ class CustomerService
         return $baseConfiguration;
     }
 
+    private function convertConfigurationToObjects(array $configuration): array
+    {
+        return array_map(
+            function (array $values) {
+                return is_array($values) ? (object)$values : $values;
+            },
+            $configuration
+        );
+    }
+
     private function parseCustomerFile(string $customerFile, $transient = false): Customer
     {
         $customer = Yaml::parse(file_get_contents($customerFile));
@@ -99,12 +109,7 @@ class CustomerService
             'secret' => $customer['secret'],
             'edition' => $customer['edition'] ?? 'mirco',
             'isTransient' => $transient,
-            'configuration' => array_map(
-                function (array $values) {
-                    return is_array($values) ? (object)$values : $values;
-                },
-                $customerConfiguration
-            ),
+            'configuration' => $this->convertConfigurationToObjects($customerConfiguration),
             'environments' => $customer['environments'] ?? [
                 'production',
                 'staging',
@@ -119,10 +124,7 @@ class CustomerService
                         'apiKey' => $customer['secret'],
                         'previewUrl' => $project['previewUrl'] ?? null,
                         'webpackPort' => $project['webpackPort'] ?? 3000,
-                        'configuration' => array_map(
-                            function (array $values) {
-                                return is_array($values) ? (object)$values : $values;
-                            },
+                        'configuration' => $this->convertConfigurationToObjects(
                             array_replace_recursive(
                                 $customerConfiguration,
                                 $this->explodeConfiguration($project['configuration'] ?? [], $customerConfiguration)
