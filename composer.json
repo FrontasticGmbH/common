@@ -1,5 +1,10 @@
 {
     "name": "frontastic/common",
+    "config": {
+        "platform": {
+            "php": "7.2"
+        }
+    },
     "require": {
         "symfony/dependency-injection": "^4.1",
         "symfony/config": "^4.1",
