@@ -19,6 +19,7 @@ use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to implementation of CartApi
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity) FIXME: Refactor!
  */
 class Commercetools implements CartApi
 {

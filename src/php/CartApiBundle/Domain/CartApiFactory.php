@@ -9,6 +9,9 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
 use Frontastic\Common\ReplicatorBundle\Domain\Customer;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Factory
+ */
 class CartApiFactory
 {
     private $container;
