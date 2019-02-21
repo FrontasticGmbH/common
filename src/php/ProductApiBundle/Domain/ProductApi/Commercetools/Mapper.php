@@ -68,6 +68,16 @@ class Mapper
         $attributes = $this->dataToAttributes($variantData, $locale);
         $groupId = $attributes['baseId'];
 
+        $isOnStock = true;
+        if (isset($variantData['availability'])) {
+            $availability = $variantData['availability'];
+            if (isset($availability['channels'])) {
+                // Use first channel for now
+                $availability = reset($availability['channels']);
+            }
+            $isOnStock = $availability['isOnStock'];
+        }
+
         return new Variant([
             'id' => $variantData['id'],
             'sku' => $variantData['sku'] ?? null,
@@ -91,7 +101,7 @@ class Mapper
                     $variantData['images']
                 )
             ),
-            'isOnStock' => $variantData['availability']['isOnStock'] ?? false,
+            'isOnStock' => $isOnStock,
             'dangerousInnerVariant' => $this->dataToDangerousInnerData($variantData, $query),
         ]);
     }
