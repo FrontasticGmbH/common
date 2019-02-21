@@ -178,6 +178,11 @@ class LifecycleEventDecorator implements CartApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
+    public function redeemDiscountCode(Cart $cart, string $code): Cart
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
     /**
      * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
      * @return \Frontastic\Common\CartApiBundle\Domain\Order

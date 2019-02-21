@@ -179,6 +179,13 @@ class CartController extends CrudController
         ];
     }
 
+    public function redeemDiscountAction(Context $context, string $code): array
+    {
+        return [
+            'cart' => $this->getCartApi($context)->redeemDiscountCode($this->getCart($context), $code),
+        ];
+    }
+
     protected function getCartApi(Context $context): CartApi
     {
         if ($this->cartApi) {

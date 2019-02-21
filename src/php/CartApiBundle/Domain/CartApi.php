@@ -92,6 +92,8 @@ interface CartApi
      */
     public function addPayment(Cart $cart, Payment $payment, ?array $custom = null): Cart;
 
+    public function redeemDiscountCode(Cart $cart, string $code): Cart;
+
     /**
      * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
      * @return \Frontastic\Common\CartApiBundle\Domain\Order

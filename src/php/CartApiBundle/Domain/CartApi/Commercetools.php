@@ -398,6 +398,19 @@ class Commercetools implements CartApi
         );
     }
 
+    public function redeemDiscountCode(Cart $cart, string $code): Cart
+    {
+        return $this->postCartActions(
+            $cart,
+            [
+                [
+                    'action' => 'addDiscountCode',
+                    'code' => $code,
+                ],
+            ]
+        );
+    }
+
     /**
      * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
      * @return \Frontastic\Common\CartApiBundle\Domain\Order
