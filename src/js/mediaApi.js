@@ -8,8 +8,10 @@ class MediaApi {
 
     getImageDimensions (media, inputWidth, inputHeight, inputCropRatio = null, factor = 1) {
         let cropRatio = this.getFloatRatio(media, inputCropRatio)
-        let width = Math.ceil(+inputWidth * factor)
-        let height = inputHeight && !inputCropRatio ? Math.ceil(+inputHeight * factor) : Math.ceil(width * cropRatio)
+        let width = Math.ceil((+inputWidth) * factor)
+        let height = inputHeight && !inputCropRatio ?
+            Math.ceil((+inputHeight) * factor) :
+            Math.ceil(width * cropRatio)
 
         return [width, height]
     }
