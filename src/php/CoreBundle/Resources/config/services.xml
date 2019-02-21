@@ -21,7 +21,7 @@
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="50" />
         </service>
 
-        <service id="Frontastic\Common\CoreBundle\Domain\Mailer">
+        <service id="Frontastic\Common\CoreBundle\Domain\Mailer" class="Frontastic\Common\CoreBundle\Domain\Mailer\SwiftMail">
             <argument type="service" id="mailer" />
             <argument type="service" id="templating" />
         </service>
