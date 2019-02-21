@@ -361,7 +361,7 @@ class Commercetools implements CartApi
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function setPayment(Cart $cart, Payment $payment, ?array $custom = null): Cart
+    public function addPayment(Cart $cart, Payment $payment, ?array $custom = null): Cart
     {
         $payment = $this->client->post(
             '/payments',
@@ -507,7 +507,7 @@ class Commercetools implements CartApi
             'shippingAddress' => $this->mapAddress($cart['shippingAddress'] ?? []),
             'billingAddress' => $this->mapAddress($cart['billingAddress'] ?? []),
             'sum' => $cart['totalPrice']['centAmount'],
-            'payment' => $this->mapPayment($cart),
+            'payments' => $this->mapPayments($cart),
             'dangerousInnerCart' => $cart,
         ]);
     }
@@ -541,7 +541,7 @@ class Commercetools implements CartApi
             'shippingAddress' => $this->mapAddress($cart['shippingAddress'] ?? []),
             'billingAddress' => $this->mapAddress($cart['billingAddress'] ?? []),
             'sum' => $order['totalPrice']['centAmount'],
-            'payment' => $this->mapPayment($order),
+            'payments' => $this->mapPayments($order),
             'dangerousInnerCart' => $order,
             'dangerousInnerOrder' => $order,
         ]);
@@ -651,25 +651,25 @@ class Commercetools implements CartApi
         return $lineItems;
     }
 
-    private function mapPayment(array $cart): ?Payment
+    private function mapPayments(array $cart): array
     {
         if (empty($cart['paymentInfo']['payments'])) {
-            return null;
+            return [];
         }
 
-        $payment = reset($cart['paymentInfo']['payments']);
-        if (!$payment) {
-            return null;
+        $payments = [];
+        foreach ($cart['paymentInfo']['payments'] as $payment) {
+            $payment = isset($payment['obj']) ? $payment['obj'] : $payment;
+            $payments[] = new Payment([
+                'paymentId' => $payment['id'],
+                'paymentProvider' => $payment['paymentMethodInfo']['paymentInterface'] ?? null,
+                'amount' => $payment['amountPlanned']['centAmount'] ?? null,
+                'currency' => $payment['amountPlanned']['currencyCode'] ?? null,
+                'debug' => json_encode($payment),
+            ]);
         }
 
-        $payment = isset($payment['obj']) ? $payment['obj'] : $payment;
-        return new Payment([
-            'paymentId' => $payment['id'],
-            'paymentProvider' => $payment['paymentMethodInfo']['paymentInterface'] ?? null,
-            'amount' => $payment['amountPlanned']['centAmount'] ?? null,
-            'currency' => $payment['amountPlanned']['currencyCode'] ?? null,
-            'debug' => json_encode($payment),
-        ]);
+        return $payments;
     }
 
     /**

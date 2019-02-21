@@ -54,9 +54,9 @@ class Cart extends DataObject
     public $sum = 0;
 
     /**
-     * @var ?Payment
+     * @var Payment[]
      */
-    public $payment;
+    public $payments = [];
 
     /**
      * Access original object from backend
