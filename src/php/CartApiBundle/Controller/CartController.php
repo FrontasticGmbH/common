@@ -44,7 +44,10 @@ class CartController extends CrudController
         $cartApi->addToCart(
             $cart,
             new LineItem\Variant([
-                'variant' => new Variant(['sku' => $payload['variant']['sku']]),
+                'variant' => new Variant([
+                    'sku' => $payload['variant']['sku'],
+                    'attributes' => $payload['variant']['attributes'],
+                ]),
                 'custom' => $payload['option'] ?: [],
                 'count' => $payload['count']
             ])
@@ -67,7 +70,10 @@ class CartController extends CrudController
             $cartApi->addToCart(
                 $cart,
                 new LineItem\Variant([
-                    'variant' => new Variant(['sku' => $lineItemData['variant']['sku']]),
+                    'variant' => new Variant([
+                        'sku' => $lineItemData['variant']['sku'],
+                        'attributes' => $lineItemData['variant']['attributes'],
+                    ]),
                     'custom' => $lineItemData['option'] ?? [],
                     'count' => $lineItemData['count'] ?? 1,
                 ])
