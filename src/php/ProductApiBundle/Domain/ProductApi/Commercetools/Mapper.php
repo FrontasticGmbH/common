@@ -91,8 +91,7 @@ class Mapper
                     $variantData['images']
                 )
             ),
-            /* @todo Evaluate when availability is set and when not */
-            'isOnStock' => (isset($variantData['availability']) ? $variantData['availability']['isOnStock'] : true),
+            'isOnStock' => $variantData['availability']['isOnStock'] ?? false,
             'dangerousInnerVariant' => $this->dataToDangerousInnerData($variantData, $query),
         ]);
     }
