@@ -1,6 +1,6 @@
 /* global spyOn */
 
-import Schema from '../../..//src/js/configuration/schema.js'
+import Schema from '../../../src/js/configuration/schema.js'
 
 describe('ConfigurationSchema', function () {
     beforeEach(function () {
