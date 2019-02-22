@@ -97,7 +97,6 @@ class ConfigurationSchema {
 
     hasMissingRequiredFieldValues (skipStreams = false) {
         return Object.entries(this.fields).some(([field, schema]) => {
-
             let value = this.get(field)
 
             if (schema.type === 'group') {
