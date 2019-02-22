@@ -128,4 +128,242 @@ describe('ConfigurationSchema', function () {
             },
         ])
     })
+
+    it('claims to have missing required field values', () => {
+        const schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'string',
+                required: true,
+            }],
+        }])
+
+        expect(schema.hasMissingRequiredFieldValues()).toBe(true)
+    })
+
+    it('claims to have no missing required field values when value is given', () => {
+        const schema = new Schema(
+            [{
+                name: 'Section',
+                fields: [{
+                    label: 'Test Field',
+                    field: 'test',
+                    type: 'string',
+                    required: true,
+                }],
+            }],
+            { test: 'Some Value' })
+
+        expect(schema.hasMissingRequiredFieldValues()).toBe(false)
+    })
+
+    it('claims to have missing required field values when value is empty string', () => {
+        const schema = new Schema(
+            [{
+                name: 'Section',
+                fields: [{
+                    label: 'Test Field',
+                    field: 'test',
+                    type: 'string',
+                    required: true,
+                }],
+            }],
+            { test: '' })
+
+        expect(schema.hasMissingRequiredFieldValues()).toBe(true)
+    })
+
+    it('claims to have no missing required field values when value is boolean false', () => {
+        const schema = new Schema(
+            [{
+                name: 'Section',
+                fields: [{
+                    label: 'Test Field',
+                    field: 'test',
+                    type: 'boolean',
+                    required: true,
+                }],
+            }],
+            { test: false })
+
+        expect(schema.hasMissingRequiredFieldValues()).toBe(false)
+    })
+
+    it('claims to have missing required field values when value is null', () => {
+        const schema = new Schema(
+            [{
+                name: 'Section',
+                fields: [{
+                    label: 'Test Field',
+                    field: 'test',
+                    type: 'string',
+                    required: true,
+                }],
+            }],
+            { test: null })
+
+        expect(schema.hasMissingRequiredFieldValues()).toBe(true)
+    })
+
+    it('claims to have no missing required field values when default is set', () => {
+        const schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'string',
+                required: true,
+                default: '42',
+            }],
+        }])
+
+        expect(schema.hasMissingRequiredFieldValues()).toBe(false)
+    })
+
+    it('claims to have missing required field values when default is null', () => {
+        const schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'string',
+                required: true,
+                default: null,
+            }],
+        }])
+
+        expect(schema.hasMissingRequiredFieldValues()).toBe(true)
+    })
+
+    it('claims to have no missing required field values when field is not required', () => {
+        const schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'string',
+            }],
+        }])
+
+        expect(schema.hasMissingRequiredFieldValues()).toBe(false)
+    })
+
+    it('claims to have missing required field values when stream field is not required', () => {
+        const schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'stream',
+            }],
+        }])
+
+        expect(schema.hasMissingRequiredFieldValues()).toBe(true)
+    })
+
+    it('claims to have no missing required field values when skipping streams', () => {
+        const schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'stream',
+                required: true,
+            }],
+        }])
+
+        expect(schema.hasMissingRequiredFieldValues(true)).toBe(false)
+    })
+
+    it('claims to have no missing required field values inside an undefined group', () => {
+        const schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'group',
+                fields: [
+                    {
+                        label: 'First',
+                        field: 'groupFirst',
+                        type: 'string',
+                        required: true,
+                    },
+                ],
+            }],
+        }])
+
+        expect(schema.hasMissingRequiredFieldValues()).toBe(false)
+    })
+
+    it('claims to have no missing required field values inside an empty group', () => {
+        const schema = new Schema(
+            [{
+                name: 'Section',
+                fields: [{
+                    label: 'Test Field',
+                    field: 'test',
+                    type: 'group',
+                    fields: [
+                        {
+                            label: 'First',
+                            field: 'groupFirst',
+                            type: 'string',
+                            required: true,
+                        },
+                    ],
+                }],
+            }],
+            { test: [] })
+
+        expect(schema.hasMissingRequiredFieldValues()).toBe(false)
+    })
+
+    it('claims to have missing required field values inside a group', () => {
+        const schema = new Schema(
+            [{
+                name: 'Section',
+                fields: [{
+                    label: 'Test Field',
+                    field: 'test',
+                    type: 'group',
+                    fields: [
+                        {
+                            label: 'First',
+                            field: 'groupFirst',
+                            type: 'string',
+                            required: true,
+                        },
+                    ],
+                }],
+            }],
+            { test: [{ groupFirst: '42' }, {}] })
+
+        expect(schema.hasMissingRequiredFieldValues()).toBe(true)
+    })
+
+    it('claims to have no missing required field values inside a group with present value', () => {
+        const schema = new Schema(
+            [{
+                name: 'Section',
+                fields: [{
+                    label: 'Test Field',
+                    field: 'test',
+                    type: 'group',
+                    fields: [
+                        {
+                            label: 'First',
+                            field: 'groupFirst',
+                            type: 'string',
+                            required: true,
+                        },
+                    ],
+                }],
+            }],
+            { test: [{ groupFirst: '42' }, { groupFirst: '23' }] })
+
+        expect(schema.hasMissingRequiredFieldValues()).toBe(false)
+    })
 })

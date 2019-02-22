@@ -13,12 +13,15 @@ class ConfigurationSchema {
                     continue
                 }
 
+                const type = this.schema[i].fields[j].type || 'text'
                 this.fields[this.schema[i].fields[j].field] = {
-                    type: this.schema[i].fields[j].type || 'text',
+                    type: type,
                     values: this.schema[i].fields[j].values || [],
                     default: this.schema[i].fields[j].default || null,
                     validate: this.schema[i].fields[j].validate || {},
                     fields: this.schema[i].fields[j].fields || null,
+                    // @TODO: Streams should be marked as required in the tastic configurations
+                    required: Boolean(this.schema[i].fields[j].required) || type === 'stream',
                 }
             }
         }
@@ -81,6 +84,27 @@ class ConfigurationSchema {
 
     getConfiguration () {
         return this.configuration
+    }
+
+    hasMissingRequiredFieldValues (skipStreams = false) {
+        return Object.entries(this.fields).some(([field, schema]) => {
+            let configurationValue = this.configuration[field]
+
+            if (schema.type === 'group') {
+                const groupEntries = configurationValue || []
+                return groupEntries.some(configuration => {
+                    const gropuSchema = new ConfigurationSchema([schema], configuration)
+                    return gropuSchema.hasMissingRequiredFieldValues(skipStreams)
+                })
+            }
+
+            if (schema.type === 'stream' && skipStreams) {
+                return false
+            }
+
+            return schema.required && schema.default === null && (
+                typeof configurationValue === 'undefined' || configurationValue === null || configurationValue === '')
+        })
     }
 
     /**
