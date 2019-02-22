@@ -91,6 +91,66 @@ describe('ConfigurationSchema', function () {
         expect(schema.has('testaboo')).toBe(false)
     })
 
+    it('adds minimum number of entries to groups', () => {
+        const schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'group',
+                fields: [],
+                min: 3,
+            }],
+        }])
+
+        expect(schema.get('test')).toEqual([{}, {}, {}])
+    })
+
+    it('adds one entry to groups without minimum', () => {
+        const schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'group',
+                fields: [],
+            }],
+        }])
+
+        expect(schema.get('test')).toEqual([{}])
+    })
+
+    it('removes entries past the maximum from groups', () => {
+        const schema = new Schema(
+            [{
+                name: 'Section',
+                fields: [{
+                    label: 'Test Field',
+                    field: 'test',
+                    type: 'group',
+                    max: 2,
+                    fields: [{
+                        label: 'First',
+                        field: 'groupFirst',
+                        type: 'string',
+                    }],
+                }],
+            }],
+            {
+                test: [
+                    { groupFirst: 'first' },
+                    { groupFirst: 'second' },
+                    { groupFirst: 'third' },
+                    { groupFirst: 'fourth' },
+                ],
+            })
+
+        expect(schema.get('test'))
+            .toEqual([
+                { groupFirst: 'first' },
+                { groupFirst: 'second' }])
+    })
+
     it('completes defaults in group values', () => {
         let schema = new Schema(
             [{
@@ -277,7 +337,7 @@ describe('ConfigurationSchema', function () {
         expect(schema.hasMissingRequiredFieldValues(true)).toBe(false)
     })
 
-    it('claims to have no missing required field values inside an undefined group', () => {
+    it('claims to have missing required field values inside an undefined group', () => {
         const schema = new Schema([{
             name: 'Section',
             fields: [{
@@ -295,10 +355,10 @@ describe('ConfigurationSchema', function () {
             }],
         }])
 
-        expect(schema.hasMissingRequiredFieldValues()).toBe(false)
+        expect(schema.hasMissingRequiredFieldValues()).toBe(true)
     })
 
-    it('claims to have no missing required field values inside an empty group', () => {
+    it('claims to have missing required field values inside an empty group', () => {
         const schema = new Schema(
             [{
                 name: 'Section',
@@ -318,7 +378,7 @@ describe('ConfigurationSchema', function () {
             }],
             { test: [] })
 
-        expect(schema.hasMissingRequiredFieldValues()).toBe(false)
+        expect(schema.hasMissingRequiredFieldValues()).toBe(true)
     })
 
     it('claims to have missing required field values inside a group', () => {

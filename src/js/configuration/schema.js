@@ -20,6 +20,8 @@ class ConfigurationSchema {
                     default: this.schema[i].fields[j].default || null,
                     validate: this.schema[i].fields[j].validate || {},
                     fields: this.schema[i].fields[j].fields || null,
+                    min: this.schema[i].fields[j].min || 1,
+                    max: this.schema[i].fields[j].max || 16,
                     // @TODO: Streams should be marked as required in the tastic configurations
                     required: Boolean(this.schema[i].fields[j].required) || type === 'stream',
                 }
@@ -55,23 +57,30 @@ class ConfigurationSchema {
     }
 
     get (field) {
-        if (!this.fields[field]) {
+        const fieldConfig = this.fields[field]
+
+        if (!fieldConfig) {
             console.warn('Unknown field ' + field + ' in this configuration schema.')
             return this.configuration[field] || null
         }
 
-        if (this.fields[field].type === 'group') {
-            return this.completeGroupConfig(
-                this.configuration[field] || [],
-                this.fields[field].fields
-            )
+        if (fieldConfig.type === 'group') {
+            let values = (this.configuration[field] || []).slice(0, fieldConfig.max)
+            for (let i = values.length; i < fieldConfig.min; ++i) {
+                values[i] = {}
+            }
+            return this.completeGroupConfig(values, fieldConfig.fields)
         }
 
         if (typeof this.configuration[field] === 'undefined') {
-            return this.fields[field].default
+            return fieldConfig.default
         }
 
         return this.configuration[field]
+    }
+
+    getField (field) {
+        return this.fields[field]
     }
 
     has (field) {
@@ -88,22 +97,25 @@ class ConfigurationSchema {
 
     hasMissingRequiredFieldValues (skipStreams = false) {
         return Object.entries(this.fields).some(([field, schema]) => {
-            let configurationValue = this.configuration[field]
+
+            let value = this.get(field)
 
             if (schema.type === 'group') {
-                const groupEntries = configurationValue || []
-                return groupEntries.some(configuration => {
+                return value.some(configuration => {
                     const gropuSchema = new ConfigurationSchema([schema], configuration)
                     return gropuSchema.hasMissingRequiredFieldValues(skipStreams)
                 })
+            }
+
+            if (!schema.required) {
+                return false
             }
 
             if (schema.type === 'stream' && skipStreams) {
                 return false
             }
 
-            return schema.required && schema.default === null && (
-                typeof configurationValue === 'undefined' || configurationValue === null || configurationValue === '')
+            return typeof value === 'undefined' || value === null || value === ''
         })
     }
 
