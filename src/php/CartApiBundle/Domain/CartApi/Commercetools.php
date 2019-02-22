@@ -697,7 +697,6 @@ class Commercetools implements CartApi
         foreach ($cart['discountCodes'] as $discount) {
             $discount = $discount['discountCode'] ?? [];
             $discount = isset($discount['obj']) ? $discount['obj'] : $discount;
-            debug($discount);
             $discounts[] = new Discount([
                 'discountId' => $discount['id'] ?? 'undefined',
                 'name' => $discount['name'] ?? null,
