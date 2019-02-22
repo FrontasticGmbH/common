@@ -14,6 +14,7 @@ use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
+use Frontastic\Common\CartApiBundle\Domain\Discount;
 use Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 
@@ -26,6 +27,7 @@ class Commercetools implements CartApi
     const EXPAND = [
         'lineItems[*].discountedPrice.includedDiscounts[*].discount',
         'paymentInfo.payments[*]',
+        'discountCodes[*].discountCode',
     ];
 
     /**
@@ -521,6 +523,7 @@ class Commercetools implements CartApi
             'billingAddress' => $this->mapAddress($cart['billingAddress'] ?? []),
             'sum' => $cart['totalPrice']['centAmount'],
             'payments' => $this->mapPayments($cart),
+            'discountCodes' => $this->mapDiscounts($cart),
             'dangerousInnerCart' => $cart,
         ]);
     }
@@ -555,6 +558,7 @@ class Commercetools implements CartApi
             'billingAddress' => $this->mapAddress($cart['billingAddress'] ?? []),
             'sum' => $order['totalPrice']['centAmount'],
             'payments' => $this->mapPayments($order),
+            'discountCodes' => $this->mapDiscounts($order),
             'dangerousInnerCart' => $order,
             'dangerousInnerOrder' => $order,
         ]);
@@ -607,8 +611,7 @@ class Commercetools implements CartApi
                         'custom' => $lineItem['custom']['fields'] ?? [],
                         'count' => $lineItem['quantity'],
                         'price' => $lineItem['price']['value']['centAmount'],
-                        'discountedPrice' => (isset($lineItem['discountedPrice']) ?
-                            $lineItem['discountedPrice']['value']['centAmount'] : null),
+                        'discountedPrice' => (isset($lineItem['discountedPrice']) ? $lineItem['totalPrice']['centAmount'] : null),
                         'discountTexts' => array_map(
                             function ($discount): array {
                                 return $discount['discount']['obj']['name'] ?? [];
@@ -634,8 +637,7 @@ class Commercetools implements CartApi
                         'custom' => $lineItem['custom']['fields'] ?? [],
                         'count' => $lineItem['quantity'],
                         'price' => $lineItem['money']['centAmount'],
-                        'discountedPrice' => (isset($lineItem['discountedPrice']) ?
-                            $lineItem['discountedPrice']['value']['centAmount'] : null),
+                        'discountedPrice' => (isset($lineItem['discountedPrice']) ? $lineItem['totalPrice']['centAmount'] : null),
                         'discountTexts' => array_map(
                             function ($discount): array {
                                 return $discount['discount']['obj']['name'] ?? [];
@@ -683,6 +685,28 @@ class Commercetools implements CartApi
         }
 
         return $payments;
+    }
+
+    private function mapDiscounts(array $cart): array
+    {
+        if (empty($cart['discountCodes'])) {
+            return [];
+        }
+
+        $discounts = [];
+        foreach ($cart['discountCodes'] as $discount) {
+            $discount = $discount['discountCode'] ?? [];
+            $discount = isset($discount['obj']) ? $discount['obj'] : $discount;
+            debug($discount);
+            $discounts[] = new Discount([
+                'discountId' => $discount['id'] ?? 'undefined',
+                'name' => $discount['name'] ?? null,
+                'description' => $discount['description'] ?? null,
+                'dangerousInnerDiscount' => $discount,
+            ]);
+        }
+
+        return $discounts;
     }
 
     /**

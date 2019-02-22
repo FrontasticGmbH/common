@@ -59,6 +59,11 @@ class Cart extends DataObject
     public $payments = [];
 
     /**
+     * @var string[]
+     */
+    public $discountCodes = [];
+
+    /**
      * Access original object from backend
      *
      * This should only be used if you need very specific features
