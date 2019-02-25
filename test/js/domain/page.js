@@ -2,6 +2,7 @@ import Page from '../../../src/js/domain/page.js'
 import Region from '../../../src/js/domain/region.js'
 import Element from '../../../src/js/domain/cell.js'
 import Kit from '../../../src/js/domain/kit'
+import Tastic from '../../../src/js/domain/tastic'
 
 jest.mock(
     '../../../src/js/generateId',
@@ -187,8 +188,7 @@ describe('Page', function () {
                 a: {
                     regionId: 'a',
                     configuration: {},
-                    elements: [
-                    ],
+                    elements: [],
                 },
                 b: {
                     regionId: 'b',
@@ -287,8 +287,7 @@ describe('Page', function () {
                 a: {
                     regionId: 'a',
                     configuration: {},
-                    elements: [
-                    ],
+                    elements: [],
                 },
                 b: {
                     regionId: 'b',
@@ -407,8 +406,7 @@ describe('Page', function () {
                 a: {
                     regionId: 'a',
                     configuration: {},
-                    elements: [
-                    ],
+                    elements: [],
                 },
                 b: {
                     regionId: 'b',
@@ -451,8 +449,7 @@ describe('Page', function () {
                 a: {
                     regionId: 'a',
                     configuration: {},
-                    elements: [
-                    ],
+                    elements: [],
                 },
                 b: {
                     regionId: 'b',
@@ -907,5 +904,23 @@ describe('Page', function () {
                 },
             },
         })
+    })
+
+    it('getTastics returns tastics from multiple regions', () => {
+        const page = new Page({}, ['regA', 'regB'])
+        page.addCell('regA').cellId = 'cell-a'
+        page.addCell('regA').cellId = 'cell-b'
+        page.addCell('regB').cellId = 'cell-c'
+        page.addTastic('regA', 'cell-a', 'type').tasticId = 'b'
+        page.addTastic('regA', 'cell-a', 'type').tasticId = 'a'
+        page.addTastic('regA', 'cell-b', 'type').tasticId = 'c'
+        page.addTastic('regB', 'cell-c', 'type').tasticId = 'd'
+
+        expect(page.getTastics()).toEqual([
+            new Tastic({ tasticId: 'a', tasticType: 'type' }),
+            new Tastic({ tasticId: 'b', tasticType: 'type' }),
+            new Tastic({ tasticId: 'c', tasticType: 'type' }),
+            new Tastic({ tasticId: 'd', tasticType: 'type' }),
+        ])
     })
 })

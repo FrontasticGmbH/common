@@ -215,6 +215,18 @@ class Region {
         return element
     }
 
+    getCells () {
+        return this.elements.filter((element) => {
+            return element instanceof Cell
+        })
+    }
+
+    getKits () {
+        return this.elements.filter((element) => {
+            return element instanceof Kit
+        })
+    }
+
     export () {
         return {
             regionId: this.regionId,
