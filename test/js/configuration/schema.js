@@ -426,4 +426,84 @@ describe('ConfigurationSchema', function () {
 
         expect(schema.hasMissingRequiredFieldValues()).toBe(false)
     })
+
+    it('claims to have missing required field values when reference is null', () => {
+        const schema = new Schema(
+            [{
+                name: 'Section',
+                fields: [{
+                    label: 'Test Field',
+                    field: 'test',
+                    type: 'reference',
+                    required: true,
+                }],
+            }],
+            { test: null })
+
+        expect(schema.hasMissingRequiredFieldValues()).toBe(true)
+    })
+
+    it('claims to have missing required field values when reference is empty object', () => {
+        const schema = new Schema(
+            [{
+                name: 'Section',
+                fields: [{
+                    label: 'Test Field',
+                    field: 'test',
+                    type: 'reference',
+                    required: true,
+                }],
+            }],
+            { test: {} })
+
+        expect(schema.hasMissingRequiredFieldValues()).toBe(true)
+    })
+
+    it('claims to have missing required field values when reference type is null', () => {
+        const schema = new Schema(
+            [{
+                name: 'Section',
+                fields: [{
+                    label: 'Test Field',
+                    field: 'test',
+                    type: 'reference',
+                    required: true,
+                }],
+            }],
+            { test: { type: null } })
+
+        expect(schema.hasMissingRequiredFieldValues()).toBe(true)
+    })
+
+    it('claims to have missing required field values when reference target is null', () => {
+        const schema = new Schema(
+            [{
+                name: 'Section',
+                fields: [{
+                    label: 'Test Field',
+                    field: 'test',
+                    type: 'reference',
+                    required: true,
+                }],
+            }],
+            { test: { type: 'link', target: null } })
+
+        expect(schema.hasMissingRequiredFieldValues()).toBe(true)
+    })
+
+    it('claims to have no missing required field values when reference type and target are set', () => {
+        const schema = new Schema(
+            [{
+                name: 'Section',
+                fields: [{
+                    label: 'Test Field',
+                    field: 'test',
+                    type: 'reference',
+                    required: true,
+                }],
+            }],
+            { test: { type: 'link', target: 'https://frontastic.io/' } })
+
+        expect(schema.hasMissingRequiredFieldValues()).toBe(false)
+    })
 })

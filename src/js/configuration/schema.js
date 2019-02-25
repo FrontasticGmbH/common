@@ -122,6 +122,12 @@ class ConfigurationSchema {
             return false
         }
 
+        if (schema.type === 'reference') {
+            return typeof value !== 'object' || value === null ||
+                typeof value.type !== 'string' || value.type === '' ||
+                typeof value.target !== 'string' || value.target === ''
+        }
+
         return typeof value === 'undefined' || value === null || value === ''
     }
 
