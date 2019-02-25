@@ -80,7 +80,11 @@ class ConfigurationSchema {
     }
 
     getField (field) {
-        return this.fields[field]
+        const schema = this.fields[field]
+        if (!schema) {
+            throw new Error('Unknown field ' + field + ' in this configuration schema.')
+        }
+        return schema
     }
 
     has (field) {
@@ -95,26 +99,35 @@ class ConfigurationSchema {
         return this.configuration
     }
 
+    isFieldRequired (field) {
+        return this.getField(field).required
+    }
+
+    hasMissingRequiredValueInField (field, skipStreams = false) {
+        const schema = this.getField(field)
+        const value = this.get(field)
+
+        if (schema.type === 'group') {
+            return value.some(configuration => {
+                const gropuSchema = new ConfigurationSchema([schema], configuration)
+                return gropuSchema.hasMissingRequiredFieldValues(skipStreams)
+            })
+        }
+
+        if (!schema.required) {
+            return false
+        }
+
+        if (schema.type === 'stream' && skipStreams) {
+            return false
+        }
+
+        return typeof value === 'undefined' || value === null || value === ''
+    }
+
     hasMissingRequiredFieldValues (skipStreams = false) {
-        return Object.entries(this.fields).some(([field, schema]) => {
-            let value = this.get(field)
-
-            if (schema.type === 'group') {
-                return value.some(configuration => {
-                    const gropuSchema = new ConfigurationSchema([schema], configuration)
-                    return gropuSchema.hasMissingRequiredFieldValues(skipStreams)
-                })
-            }
-
-            if (!schema.required) {
-                return false
-            }
-
-            if (schema.type === 'stream' && skipStreams) {
-                return false
-            }
-
-            return typeof value === 'undefined' || value === null || value === ''
+        return Object.keys(this.fields).some((field) => {
+            return this.hasMissingRequiredValueInField(field, skipStreams)
         })
     }
 
