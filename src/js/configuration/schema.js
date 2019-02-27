@@ -16,6 +16,7 @@ class ConfigurationSchema {
                 const type = this.schema[i].fields[j].type || 'text'
                 this.fields[this.schema[i].fields[j].field] = {
                     type: type,
+                    sectionName: this.schema[i].name || '',
                     values: this.schema[i].fields[j].values || [],
                     default: this.schema[i].fields[j].default || null,
                     validate: this.schema[i].fields[j].validate || {},
@@ -134,6 +135,12 @@ class ConfigurationSchema {
     hasMissingRequiredFieldValues (skipStreams = false) {
         return Object.keys(this.fields).some((field) => {
             return this.hasMissingRequiredValueInField(field, skipStreams)
+        })
+    }
+
+    hasMissingRequiredFieldValuesInSection (sectionName, skipStreams = false) {
+        return Object.entries(this.fields).some(([field, schema]) => {
+            return schema.sectionName === sectionName && this.hasMissingRequiredValueInField(field, skipStreams)
         })
     }
 

@@ -506,4 +506,56 @@ describe('ConfigurationSchema', function () {
 
         expect(schema.hasMissingRequiredFieldValues()).toBe(false)
     })
+
+    it('claims to have no missing required values in unknown section', () => {
+        const schema = new Schema([{
+            name: 'Section',
+            fields: [],
+        }])
+
+        expect(schema.hasMissingRequiredFieldValuesInSection('Unknown Schema')).toBe(false)
+    })
+
+    it('claims to have no missing required values in empty section', () => {
+        const schema = new Schema([{
+            name: 'Section',
+            fields: [],
+        }])
+
+        expect(schema.hasMissingRequiredFieldValuesInSection('Section')).toBe(false)
+    })
+
+    it('claims to have missing required values in section', () => {
+        const schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'string',
+                required: true,
+            }],
+        }])
+
+        expect(schema.hasMissingRequiredFieldValuesInSection('Section')).toBe(true)
+    })
+
+    it('claims to have missing required values in other section', () => {
+        const schema = new Schema([
+            {
+                name: 'Section',
+                fields: [{
+                    label: 'Test Field',
+                    field: 'test',
+                    type: 'string',
+                    required: true,
+                }],
+            },
+            {
+                name: 'Other Section',
+                fields: [],
+            },
+        ])
+
+        expect(schema.hasMissingRequiredFieldValuesInSection('Other Section')).toBe(false)
+    })
 })
