@@ -196,7 +196,7 @@ class Client
         $provider = new AccessTokenProvider([
             'clientId' => $this->clientId,
             'clientSecret' => $this->clientSecret,
-            'scope' => sprintf('view_products:%s', $this->projectKey),
+            'scope' => sprintf('manage_project:%s', $this->projectKey),
         ]);
 
         return $provider->getAccessToken(new ClientCredentials());
