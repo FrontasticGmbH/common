@@ -1,0 +1,38 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://frontastic.cloud/json/cellSchema",
+    "title": "Node Schema",
+    "description": "Meta Schema For Cell Configuration Schema",
+    "type": "object",
+    "properties": {
+        "schema": {
+            "allOf": [
+                { "$ref": "https://frontastic.cloud/json/library/common#/definitions/schema" },
+
+                {
+                    "$comment": "Fields 'size', 'mobile', 'tablet' & 'desktop' are reserved in cell configuration.",
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "fields": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "field": {
+                                            "not": {
+                                                "enum": ["size", "mobile", "tablet", "desktop"]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    "required": ["schema"]
+}
