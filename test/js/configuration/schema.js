@@ -558,4 +558,72 @@ describe('ConfigurationSchema', function () {
 
         expect(schema.hasMissingRequiredFieldValuesInSection('Other Section')).toBe(false)
     })
+
+    it('merges 2 schemas', () => {
+        const a = new Schema([
+            {
+                name: 'Section A1',
+                fields: [{
+                    label: 'A1',
+                    field: 'a1',
+                    type: 'string',
+                }]
+            },
+            {
+                name: 'Section A2',
+                fields: [{
+                    label: 'A2',
+                    field: 'a2',
+                    type: 'string',
+                }]
+            },
+        ], {
+            a1: 'A-1',
+        })
+
+        const b = new Schema([
+            {
+                name: 'Section B1',
+                fields: [{
+                    label: 'B1',
+                    field: 'b1',
+                    type: 'string',
+                }]
+            },
+        ], {
+            b1: 'B-1',
+        })
+
+        const expected = new Schema([
+            {
+                name: 'Section A1',
+                fields: [{
+                    label: 'A1',
+                    field: 'a1',
+                    type: 'string',
+                }]
+            },
+            {
+                name: 'Section A2',
+                fields: [{
+                    label: 'A2',
+                    field: 'a2',
+                    type: 'string',
+                }]
+            },
+            {
+                name: 'Section B1',
+                fields: [{
+                    label: 'B1',
+                    field: 'b1',
+                    type: 'string',
+                }]
+            },
+        ], {
+            a1: 'A-1',
+            b1: 'B-1',
+        })
+
+        expect(Schema.merge(a, b)).toEqual(expected)
+    })
 })

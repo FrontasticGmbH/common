@@ -159,6 +159,27 @@ class ConfigurationSchema {
             return groupEntry
         })
     }
+
+    /**
+     * @param {ConfigurationSchema} schemaA
+     * @param {ConfigurationSchema} schemaB
+     * @return {ConfigurationSchema}
+     */
+    static merge(schemaA, schemaB) {
+        let newId = null
+        if (schemaA.id) {
+            newId = schemaA.id
+        }
+        if (schemaB.id) {
+            newId += '/' + schemaB.id
+        }
+
+        return new ConfigurationSchema(
+            schemaA.schema.concat(schemaB.schema),
+            _.merge(schemaA.configuration, schemaB.configuration),
+            newId
+        )
+    }
 }
 
 export default ConfigurationSchema
