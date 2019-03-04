@@ -159,38 +159,6 @@ class ConfigurationSchema {
             return groupEntry
         })
     }
-
-    /**
-     * @param {ConfigurationSchema} schemaA
-     * @param {ConfigurationSchema} schemaB
-     * @return {ConfigurationSchema}
-     */
-    static merge(schemaA, schemaB) {
-        let newId = null
-        if (schemaA.id) {
-            newId = schemaA.id
-        }
-        if (schemaB.id) {
-            newId += '/' + schemaB.id
-        }
-
-        return new ConfigurationSchema(
-            schemaA.schema.concat(schemaB.schema),
-            _.merge(schemaA.configuration, schemaB.configuration),
-            newId
-        )
-    }
-    
-    static split(sourceSchema, targetA, targetB) {
-        targetA.configuration = _.pick(
-            sourceSchema.configuration,
-            _.keys(targetA.fields)
-        )
-        targetB.configuration = _.pick(
-            sourceSchema.configuration,
-            _.keys(targetB.fields)
-        )
-    }
 }
 
 export default ConfigurationSchema
