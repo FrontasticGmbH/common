@@ -151,6 +151,7 @@ describe('Page', function () {
                                 size: 6,
                                 tablet: false,
                             },
+                            customConfiguration: {},
                             tastics: [
                                 {
                                     tasticId: 'id',
@@ -197,6 +198,7 @@ describe('Page', function () {
                         {
                             cellId: 'a',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [],
                         },
                     ],
@@ -247,11 +249,13 @@ describe('Page', function () {
                         {
                             cellId: 'a',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [],
                         },
                         {
                             cellId: 'c',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [],
                         },
                     ],
@@ -263,6 +267,7 @@ describe('Page', function () {
                         {
                             cellId: 'b',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [],
                         },
                     ],
@@ -296,16 +301,19 @@ describe('Page', function () {
                         {
                             cellId: 'a',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [],
                         },
                         {
                             cellId: 'b',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [],
                         },
                         {
                             cellId: 'c',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [],
                         },
                     ],
@@ -334,16 +342,19 @@ describe('Page', function () {
                         {
                             cellId: 'a',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [],
                         },
                         {
                             cellId: 'b',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [],
                         },
                         {
                             cellId: 'c',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [],
                         },
                     ],
@@ -372,16 +383,19 @@ describe('Page', function () {
                         {
                             cellId: 'a',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [],
                         },
                         {
                             cellId: 'b',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [],
                         },
                         {
                             cellId: 'c',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [],
                         },
                     ],
@@ -415,16 +429,19 @@ describe('Page', function () {
                         {
                             cellId: 'a',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [],
                         },
                         {
                             cellId: 'c',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [],
                         },
                         {
                             cellId: 'b',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [],
                         },
                     ],
@@ -458,16 +475,19 @@ describe('Page', function () {
                         {
                             cellId: 'b',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [],
                         },
                         {
                             cellId: 'a',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [],
                         },
                         {
                             cellId: 'c',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [],
                         },
                     ],
@@ -496,6 +516,7 @@ describe('Page', function () {
                         {
                             cellId: 'a',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [],
                         },
                     ],
@@ -507,6 +528,7 @@ describe('Page', function () {
                         {
                             cellId: 'b',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [
                                 {
                                     tasticId: 'a',
@@ -568,6 +590,7 @@ describe('Page', function () {
                         {
                             cellId: 'cell-a',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [],
                         },
                     ],
@@ -579,6 +602,7 @@ describe('Page', function () {
                         {
                             cellId: 'cell-b',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [
                                 {
                                     tasticId: 'c',
@@ -624,6 +648,7 @@ describe('Page', function () {
                         {
                             cellId: 'cell-a',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [
                                 {
                                     tasticId: 'a',
@@ -669,6 +694,7 @@ describe('Page', function () {
                         {
                             cellId: 'cell-a',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [
                                 {
                                     tasticId: 'a',
@@ -715,6 +741,7 @@ describe('Page', function () {
                         {
                             cellId: 'cell-a',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [],
                         },
                     ],
@@ -726,6 +753,7 @@ describe('Page', function () {
                         {
                             cellId: 'cell-b',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [
                                 {
                                     tasticId: 'c',
@@ -772,6 +800,7 @@ describe('Page', function () {
                         {
                             cellId: 'cell-a',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [],
                         },
                     ],
@@ -783,6 +812,7 @@ describe('Page', function () {
                         {
                             cellId: 'cell-b',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [
                                 {
                                     tasticId: 'b',
@@ -826,6 +856,7 @@ describe('Page', function () {
                         {
                             cellId: 'cell-a',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [
                                 {
                                     tasticId: 'c',
@@ -872,6 +903,7 @@ describe('Page', function () {
                         {
                             cellId: 'cell-a',
                             configuration: {},
+                            customConfiguration: {},
                             tastics: [
                                 {
                                     tasticId: 'd',
