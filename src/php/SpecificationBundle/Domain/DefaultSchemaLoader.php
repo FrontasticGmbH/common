@@ -2,7 +2,7 @@
 
 namespace Frontastic\Common\SpecificationBundle\Domain;
 
-use http\Exception\InvalidArgumentException;
+use \InvalidArgumentException;
 
 class DefaultSchemaLoader
 {
