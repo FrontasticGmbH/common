@@ -9,6 +9,7 @@ class Cell {
     constructor (cell = {}) {
         this.cellId = cell.cellId || generateId()
         this.configuration = cell.configuration || {}
+        this.customConfiguration = cell.customConfiguration || {}
         this.schema = new ConfigurationSchema([
             {
                 name: 'Responsive',
@@ -86,6 +87,7 @@ class Cell {
         return {
             cellId: this.cellId,
             configuration: this.schema.getConfiguration(),
+            customConfiguration: this.customConfiguration,
             tastics: _.map(this.tastics, (tastic) => {
                 return tastic.export()
             }),
