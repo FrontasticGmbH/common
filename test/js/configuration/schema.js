@@ -626,4 +626,75 @@ describe('ConfigurationSchema', function () {
 
         expect(Schema.merge(a, b)).toEqual(expected)
     })
+
+    it('splits schema into 2', () => {
+        const targetA = new Schema([
+            {
+                name: 'Section A1',
+                fields: [{
+                    label: 'A1',
+                    field: 'a1',
+                    type: 'string',
+                }]
+            },
+            {
+                name: 'Section A2',
+                fields: [{
+                    label: 'A2',
+                    field: 'a2',
+                    type: 'string',
+                }]
+            },
+        ])
+
+        const targetB = new Schema([
+            {
+                name: 'Section B1',
+                fields: [{
+                    label: 'B1',
+                    field: 'b1',
+                    type: 'string',
+                }]
+            },
+        ])
+
+        const source = new Schema([
+            {
+                name: 'Section A1',
+                fields: [{
+                    label: 'A1',
+                    field: 'a1',
+                    type: 'string',
+                }]
+            },
+            {
+                name: 'Section A2',
+                fields: [{
+                    label: 'A2',
+                    field: 'a2',
+                    type: 'string',
+                }]
+            },
+            {
+                name: 'Section B1',
+                fields: [{
+                    label: 'B1',
+                    field: 'b1',
+                    type: 'string',
+                }]
+            },
+        ], {
+            a1: 'A-1',
+            b1: 'B-1',
+        })
+
+        Schema.split(source, targetA, targetB)
+
+        expect(targetA.configuration).toEqual({
+            a1: 'A-1',
+        })
+        expect(targetB.configuration).toEqual({
+            b1: 'B-1',
+        })
+    })
 })

@@ -180,6 +180,17 @@ class ConfigurationSchema {
             newId
         )
     }
+    
+    static split(sourceSchema, targetA, targetB) {
+        targetA.configuration = _.pick(
+            sourceSchema.configuration,
+            _.keys(targetA.fields)
+        )
+        targetB.configuration = _.pick(
+            sourceSchema.configuration,
+            _.keys(targetB.fields)
+        )
+    }
 }
 
 export default ConfigurationSchema
