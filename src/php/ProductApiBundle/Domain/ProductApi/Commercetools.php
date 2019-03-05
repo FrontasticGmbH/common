@@ -172,6 +172,9 @@ class Commercetools implements ProductApi
         if ($query->sku) {
             $parameters['filter.query'][] = sprintf('variants.sku:"%s"', $query->sku);
         }
+        if ($query->skus) {
+            $parameters['filter.query'][] = sprintf('variants.sku:"%s"', join('","', $query->skus));
+        }
 
         $parameters['filter'] = $this->mapper->facetsToFilter(
             $query->facets,
