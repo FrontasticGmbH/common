@@ -1,8 +1,10 @@
 <?php
 
-namespace Frontastic\CoreBundle\Domain\Mailer;
+namespace Frontastic\Common\CoreBundle\Domain\Mailer;
 
-use Frontastic\CoreBundle\Domain\Mailer;
+use Symfony\Component\Templating\EngineInterface;
+
+use Frontastic\Common\CoreBundle\Domain\Mailer;
 
 class SwiftMail extends Mailer
 {
