@@ -4,4 +4,4 @@ env=prod
 test-static-cpd.fail-on-violation = false
 
 coding.standard=PSR2
-version=2019.03.08.09.15
+version=2019.03.12.09.49
