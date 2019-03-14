@@ -7,6 +7,8 @@ use QafooLabs\MVC\Exception\UnauthenticatedAccountException;
 
 use Frontastic\Common\CoreBundle\Domain\Mailer;
 
+use Frontastic\Common\CartApiBundle\Domain\Cart;
+
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Central API entry point is OK to have many public methods.
  */
@@ -76,14 +78,14 @@ class AccountService
         return $this->accountApi->confirmEmail($confirmationToken);
     }
 
-    public function login(Account $account): bool
+    public function login(Account $account, ?Cart $cart = null): bool
     {
-        return $this->accountApi->login($account);
+        return $this->accountApi->login($account, $cart);
     }
 
-    public function create(Account $account): Account
+    public function create(Account $account, ?Cart $cart = null): Account
     {
-        return $this->accountApi->create($account);
+        return $this->accountApi->create($account, $cart);
     }
 
     public function update(Account $account): Account

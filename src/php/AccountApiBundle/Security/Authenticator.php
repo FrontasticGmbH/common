@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
+use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Session;
 use Frontastic\Common\AccountApiBundle\Domain\AuthentificationInformation;
@@ -21,9 +22,12 @@ class Authenticator extends AbstractGuardAuthenticator
 {
     private $accountService;
 
-    public function __construct(AccountService $accountService)
+    private $cartApi;
+
+    public function __construct(AccountService $accountService, CartApi $cartApi)
     {
         $this->accountService = $accountService;
+        $this->cartApi = $cartApi;
     }
 
     /**
@@ -100,6 +104,7 @@ class Authenticator extends AbstractGuardAuthenticator
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
+        debug($credentials, $user);
         if (!($user instanceof Account)) {
             return false;
         }
@@ -108,7 +113,10 @@ class Authenticator extends AbstractGuardAuthenticator
         // the password and does not return the original hash, so that we can't
         // compare hashes any more.
         $user->setPassword($credentials['password']);
-        return $this->accountService->login($user);
+        return $this->accountService->login(
+            $user,
+            $this->cartApi->getAnonymous(session_id())
+        );
     }
 
     /**

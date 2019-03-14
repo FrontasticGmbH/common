@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 
+use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
@@ -60,11 +61,7 @@ class LifecycleEventDecorator implements AccountApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    /**
-     * @param \Frontastic\Common\AccountApiBundle\Domain\Account $account
-     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
-     */
-    public function create(Account $account): Account
+    public function create(Account $account, ?Cart $cart = null): Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
@@ -117,11 +114,7 @@ class LifecycleEventDecorator implements AccountApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    /**
-     * @param \Frontastic\Common\AccountApiBundle\Domain\Account $account
-     * @return bool
-     */
-    public function login(Account $account): bool
+    public function login(Account $account, ?Cart $cart = null): bool
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }

@@ -54,7 +54,10 @@ class AccountAuthController extends Controller
             return new JsonResponse(new ErrorResult(['message' => "Die E-Mail-Adresse wird bereits verwendet."]), 409);
         }
 
-        $account = $accountService->create($account);
+        $account = $accountService->create(
+            $account,
+            $this->get('frontastic.catwalk.cart_api')->getAnonymous(session_id())
+        );
         $accountService->sendConfirmationMail($account);
 
         return $this->loginAccount($account, $request);

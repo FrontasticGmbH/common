@@ -8,6 +8,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
+use Frontastic\Common\CartApiBundle\Domain\Cart;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Central API entry point is OK to have many public methods.
@@ -76,12 +77,9 @@ class Commercetools implements AccountApi
     }
 
     /**
-     * @param \Frontastic\Common\AccountApiBundle\Domain\Account $account
-     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function create(Account $account): Account
+    public function create(Account $account, ?Cart $cart = null): Account
     {
         $account = $this->mapAccount($this->client->post(
             '/customers',
@@ -101,6 +99,7 @@ class Commercetools implements AccountApi
                         'data' => json_encode($account->data),
                     ],
                 ],
+                'anonymousCartId' => $cart ? $cart->cartId : null,
             ])
         )['customer']);
 
@@ -248,11 +247,7 @@ class Commercetools implements AccountApi
         ));
     }
 
-    /**
-     * @param \Frontastic\Common\AccountApiBundle\Domain\Account $account
-     * @return bool
-     */
-    public function login(Account $account): bool
+    public function login(Account $account, ?Cart $cart = null): bool
     {
         try {
             $account = $this->mapAccount($this->client->post(
@@ -264,6 +259,7 @@ class Commercetools implements AccountApi
                     // that this cart is merged into the users cart.
                     'email' => $account->email,
                     'password' => $account->getPassword(),
+                    'anonymousCartId' => $cart ? $cart->cartId : null,
                 ])
             )['customer']);
 

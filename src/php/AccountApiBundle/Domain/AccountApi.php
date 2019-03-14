@@ -2,6 +2,8 @@
 
 namespace Frontastic\Common\AccountApiBundle\Domain;
 
+use Frontastic\Common\CartApiBundle\Domain\Cart;
+
 interface AccountApi
 {
     /**
@@ -16,11 +18,7 @@ interface AccountApi
      */
     public function confirmEmail(string $token): Account;
 
-    /**
-     * @param \Frontastic\Common\AccountApiBundle\Domain\Account $account
-     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
-     */
-    public function create(Account $account): Account;
+    public function create(Account $account, ?Cart $cart = null): Account;
 
     /**
      * @param string $token
@@ -55,11 +53,7 @@ interface AccountApi
      */
     public function resetPassword(string $token, string $newPassword): Account;
 
-    /**
-     * @param \Frontastic\Common\AccountApiBundle\Domain\Account $account
-     * @return bool
-     */
-    public function login(Account $account): bool;
+    public function login(Account $account, ?Cart $cart = null): bool;
 
     /**
      * @param string $accountId
