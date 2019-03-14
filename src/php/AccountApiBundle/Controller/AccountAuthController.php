@@ -57,7 +57,7 @@ class AccountAuthController extends Controller
         $account = $accountService->create($account);
         $accountService->sendConfirmationMail($account);
 
-        return new JsonResponse($accountService->getSessionFor($account));
+        return $this->loginAccount($account, $request);
     }
 
     public function confirmAction(Request $request, string $token): JsonResponse
