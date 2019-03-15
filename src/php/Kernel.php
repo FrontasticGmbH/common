@@ -47,7 +47,16 @@ abstract class Kernel extends SymfonyKernel
 
     public function getCacheDir(): string
     {
-        return static::getConfiguration()['cache_dir'] . '/' . static::getComponentName() . '/' . $this->environment;
+        $configuration = static::getConfiguration();
+        $cacheDir = $configuration['cache_dir'] . '/' . static::getComponentName() . '/' . $this->environment;
+
+        if ('dev' === $configuration['env']) {
+            return $cacheDir;
+        }
+        if (isset($configuration['version']) && false === empty($configuration['version'])) {
+            $cacheDir .= '@' . $configuration['version'];
+        }
+        return $cacheDir;
     }
 
     public function getLogDir(): string
