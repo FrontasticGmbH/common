@@ -209,6 +209,9 @@
                 "tasticType":{
                     "type": "string"
                 },
+                "tasticData":{
+                    "type": "object"
+                },
                 "$comment": {
                     "@comment": "Allow json-schema style comments in our schemas",
                     "type": "string"
