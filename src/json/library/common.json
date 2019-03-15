@@ -206,7 +206,7 @@
 
             "type": "object",
             "properties": {
-                "label": {
+                "tasticType":{
                     "type": "string"
                 },
                 "$comment": {
