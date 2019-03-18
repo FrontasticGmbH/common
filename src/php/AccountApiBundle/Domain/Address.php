@@ -44,6 +44,11 @@ class Address extends DataObject
     /**
      * @var string
      */
+    public $additionalAddressInfo;
+
+    /**
+     * @var string
+     */
     public $postalCode;
 
     /**
