@@ -149,14 +149,15 @@ class CartController extends CrudController
             );
         }
 
-        if (!empty($payload['shipping'])) {
+        if (!empty($payload['shipping']) || !empty($payload['billing'])) {
             $cart = $cartApi->setShippingAddress(
                 $cart,
-                $payload['shipping']
+                $payload['shipping'] ?: $payload['billing']
             );
         }
 
         if (!empty($payload['billing']) || !empty($payload['shipping'])) {
+            debug('Blling', $payload['billing']);
             $cart = $cartApi->setBillingAddress(
                 $cart,
                 $payload['billing'] ?: $payload['shipping']

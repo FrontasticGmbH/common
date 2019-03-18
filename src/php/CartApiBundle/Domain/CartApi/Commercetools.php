@@ -332,7 +332,7 @@ class Commercetools implements CartApi
             [
                 [
                     'action' => 'setShippingAddress',
-                    'address' => $address,
+                    'address' => $this->reverseMapAddress($address),
                 ],
             ]
         );
@@ -350,7 +350,7 @@ class Commercetools implements CartApi
             [
                 [
                     'action' => 'setBillingAddress',
-                    'address' => $address,
+                    'address' => $this->reverseMapAddress($address),
                 ],
             ]
         );
@@ -571,15 +571,33 @@ class Commercetools implements CartApi
         }
 
         return new Address([
+            'addressId' => $address['id'] ?? null,
             'salutation' => $address['salutation'] ?? null,
             'firstName' => $address['firstName'] ?? null,
             'lastName' => $address['lastName'] ?? null,
             'streetName' => $address['streetName'] ?? null,
             'streetNumber' => $address['streetNumber'] ?? null,
+            'additionalStreetInfo' => $address['additionalStreetInfo'] ?? null,
             'postalCode' => $address['postalCode'] ?? null,
             'city' => $address['city'] ?? null,
             'country' => $address['country'] ?? null,
         ]);
+    }
+
+    private function reverseMapAddress(array $address): array
+    {
+        return [
+            'id' => $address['addressId'] ?? null,
+            'salutation' => $address['salutation'] ?? null,
+            'firstName' => $address['firstName'] ?? null,
+            'lastName' => $address['lastName'] ?? null,
+            'streetName' => $address['streetName'] ?? null,
+            'streetNumber' => $address['streetNumber'] ?? null,
+            'additionalStreetInfo' => $address['additionalStreetInfo'] ?? null,
+            'postalCode' => $address['postalCode'] ?? null,
+            'city' => $address['city'] ?? null,
+            'country' => $address['country'] ?? null,
+        ];
     }
 
     private function mapShippingMethod(array $shipping): ?ShippingMethod
