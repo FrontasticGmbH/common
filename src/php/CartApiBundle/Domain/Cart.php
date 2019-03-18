@@ -75,4 +75,59 @@ class Cart extends DataObject
      * @var mixed
      */
     public $dangerousInnerCart;
+
+    public function getPayedAmount(): int {
+        return array_sum(
+            array_map(
+                function (Payment $payment) {
+                    return $payment->amount;
+                },
+                $this->payments ?: []
+            )
+        );
+    }
+
+    public function hasUser(): bool {
+        return (bool) $this->email;
+    }
+
+    public function hasShippingAddress(): bool {
+        return (
+            $this->shippingAddress &&
+            $this->shippingAddress->firstName &&
+            $this->shippingAddress->lastName &&
+            $this->shippingAddress->postalCode &&
+            $this->shippingAddress->city &&
+            $this->shippingAddress->country
+        );
+    }
+
+    public function hasBillingAddress(): bool {
+        return (
+            $this->billingAddress &&
+            $this->billingAddress->firstName &&
+            $this->billingAddress->lastName &&
+            $this->billingAddress->postalCode &&
+            $this->billingAddress->city &&
+            $this->billingAddress->country
+        );
+    }
+
+    public function hasAddresses(): bool {
+        return (
+            $this->hasShippingAddress() &&
+            $this->hasBillingAddress()
+        );
+    }
+
+    public function hasCompletePayments(): bool {
+        return (
+            $this->payments &&
+            ($this->getPayedAmount() >= $this->sum)
+        );
+    }
+
+    public function isComplete(): bool {
+        return $this->hasUser() && $this->hasAddresses() && $this->hasCompletePayments();
+    }
 }

@@ -157,7 +157,6 @@ class CartController extends CrudController
         }
 
         if (!empty($payload['billing']) || !empty($payload['shipping'])) {
-            debug('Blling', $payload['billing']);
             $cart = $cartApi->setBillingAddress(
                 $cart,
                 $payload['billing'] ?: $payload['shipping']
@@ -173,6 +172,9 @@ class CartController extends CrudController
         $cartApi = $this->getCartApi($context);
 
         $cart = $this->updateAction($context, $request)['cart'];
+        if (!$cart->isComplete()) {
+            throw new \DomainException('Cart not complete yet.');
+        }
 
         // @TODO: Ensure the cart has sufficient payments.
         $order = $cartApi->order($cart);
