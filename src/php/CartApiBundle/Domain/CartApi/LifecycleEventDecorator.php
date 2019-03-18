@@ -226,7 +226,7 @@ class LifecycleEventDecorator implements CartApi
      */
     public function startTransaction(Cart $cart): void
     {
-        return $this->dispatch(__FUNCTION__, func_get_args());
+        $this->dispatch(__FUNCTION__, func_get_args());
     }
 
     /**
