@@ -226,7 +226,7 @@ class LifecycleEventDecorator implements CartApi
      */
     public function startTransaction(Cart $cart): void
     {
-        $this->aggregate->startTransaction($cart);
+        return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
     /**
@@ -234,6 +234,6 @@ class LifecycleEventDecorator implements CartApi
      */
     public function commit(): Cart
     {
-        return $this->aggregate->commit();
+        return $this->dispatch(__FUNCTION__, func_get_args());
     }
 }
