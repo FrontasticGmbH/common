@@ -104,7 +104,6 @@ class Authenticator extends AbstractGuardAuthenticator
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
-        debug($credentials, $user);
         if (!($user instanceof Account)) {
             return false;
         }
