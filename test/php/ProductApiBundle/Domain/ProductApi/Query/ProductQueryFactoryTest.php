@@ -83,7 +83,8 @@ class ProductQueryFactoryTest extends TestCase
                 'facets' => [
                     new RangeFacet([
                         'handle' => 'variants.price',
-                        ''
+                        'min' => 11,
+                        'max' => 22,
                     ])
                 ]
             ]),
@@ -93,16 +94,24 @@ class ProductQueryFactoryTest extends TestCase
                         'variants.price' => [
                             'min' => 1,
                             'max' => 2,
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 [
                     'facets' => [
                         'variants.price' => [
                             'min' => 23,
                             'max' => 42,
-                        ]
-                    ]
+                        ],
+                    ],
+                ],
+                [
+                    'facets' => [
+                        'variants.price' => [
+                            'min' => 11,
+                            'max' => 22,
+                        ],
+                    ],
                 ]
             )
         );
