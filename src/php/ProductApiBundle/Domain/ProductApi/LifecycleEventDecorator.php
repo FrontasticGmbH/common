@@ -39,9 +39,11 @@ class LifecycleEventDecorator implements ProductApi
     }
 
     /**
+     * @TODO This method should be available on all decorators, extract it into an interface to check for it.
+     *
      * @return \Frontastic\Common\ProductApiBundle\Domain\ProductApi
      */
-    protected function getAggregate(): object
+    public function getAggregate(): object
     {
         return $this->aggregate;
     }
