@@ -4,6 +4,7 @@ namespace Frontastic\Common\ProductApiBundle\Controller;
 
 use Frontastic\Backstage\ApiBundle\Domain\Context;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQueryFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,11 +19,9 @@ class SearchController extends Controller
             (isset($context->project) ? $context->project->configuration : $context->customer->configuration)
         );
 
-        $query = new ProductQuery(
-            array_merge(
-                ['locale' => $context->locale],
-                json_decode($request->getContent(), true)
-            )
+        $query = ProductQueryFactory::queryFromParameters(
+            ['locale' => $context->locale],
+            json_decode($request->getContent(), true)
         );
 
         return [
