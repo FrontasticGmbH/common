@@ -52,5 +52,4 @@ class ProductQueryFactory
                 throw new \RuntimeException("Unknown facet type for '{$facetHandle}'");
         }
     }
-
 }
