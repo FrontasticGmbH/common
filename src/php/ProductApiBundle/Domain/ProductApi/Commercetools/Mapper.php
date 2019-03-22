@@ -239,9 +239,10 @@ class Mapper
             ),
             array_map(
                 function (array $attribute) use ($locale) {
-                    if (is_array($attribute['value'])) {
+                    if (is_array($attribute['value']) && !isset($attribute['value']['type'])) {
                         return $this->getLocalizedValue($locale, $attribute['value'] ?? []);
                     }
+
                     return $attribute['value'];
                 },
                 $variantData['attributes']
