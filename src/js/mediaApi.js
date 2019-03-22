@@ -29,7 +29,7 @@ class MediaApi {
         return ratioStringMatches[2] / ratioStringMatches[1]
     }
 
-    getImageLink(media, configuration, inputWidth, inputHeight, inputCropRatio, autoHeight, options = {}, factor = 1) {
+    getImageLink(media, configuration, inputWidth, inputHeight, inputCropRatio, options = {}, factor = 1) {
         let mediaApi = this.getMediaApi(configuration)
         let [width, height] = this.getImageDimensions(media, inputWidth, inputHeight, inputCropRatio, factor)
         let ratio = width / height
@@ -44,7 +44,7 @@ class MediaApi {
                 break
             }
         }
-        height = !autoHeight ? Math.ceil(width / ratio) : null
+        height = !options.autoHeight ? Math.ceil(width / ratio) : null
 
         if (_.isString(media)) {
             return mediaApi.getFetchImageUrl(media, width, height, options)
