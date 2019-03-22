@@ -53,6 +53,16 @@ class ProductQuery extends Query
     public $facets = [];
 
     /**
+     * @var string
+     */
+    public $sortAttributeId;
+
+    /**
+     * @var string
+     */
+    public $sortOrder;
+
+    /**
      * @return void
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\InvalidQueryException
      */
@@ -65,5 +75,7 @@ class ProductQuery extends Query
         $this->validateProperty('currency', 'string');
         $this->validateProperty('query', 'string');
         $this->validateProperty('facets', 'array');
+        $this->validateProperty('sortAttributeId', 'string');
+        $this->validateProperty('sortOrder', 'string');
     }
 }
