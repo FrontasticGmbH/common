@@ -44,6 +44,13 @@ class JsonViewListener
             return;
         }
 
+        // Since the same views are sometimes rendered as HTML and sometimes as
+        // JSON we instruct the browser NOT to cache the JSON. Otherwise it
+        // might be shown again if the users goes back to a site…
+        header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+        header("Cache-Control: post-check=0, pre-check=0", false);
+        header("Pragma: no-cache");
+
         $event->setResponse(new JsonResponse($this->jsonSerializer->serialize($result)));
     }
 }
