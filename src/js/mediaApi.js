@@ -2,11 +2,11 @@ import Cloudinary from './mediaApi/cloudinary'
 import _ from 'lodash'
 
 class MediaApi {
-    constructor() {
+    constructor () {
         this.imageSizes = [16, 32, 64, 128, 256, 512, 1024, 2048]
     }
 
-    getImageDimensions(media, inputWidth, inputHeight, inputCropRatio = null, factor = 1) {
+    getImageDimensions (media, inputWidth, inputHeight, inputCropRatio = null, factor = 1) {
         let cropRatio = this.getFloatRatio(media, inputCropRatio)
         let width = Math.ceil(+inputWidth * factor)
         let height = inputHeight && !inputCropRatio ? Math.ceil(+inputHeight * factor) : Math.ceil(width * cropRatio)
@@ -14,7 +14,7 @@ class MediaApi {
         return [width, height]
     }
 
-    getFloatRatio(media, cropRatio = null) {
+    getFloatRatio (media, cropRatio = null) {
         if (!cropRatio && media && media.width && media.height) {
             return media.height / media.width
         }
@@ -29,7 +29,7 @@ class MediaApi {
         return ratioStringMatches[2] / ratioStringMatches[1]
     }
 
-    getImageLink(media, configuration, inputWidth, inputHeight, inputCropRatio, options = {}, factor = 1) {
+    getImageLink (media, configuration, inputWidth, inputHeight, inputCropRatio, options = {}, factor = 1) {
         let mediaApi = this.getMediaApi(configuration)
         let [width, height] = this.getImageDimensions(media, inputWidth, inputHeight, inputCropRatio, factor)
         let ratio = width / height
@@ -57,13 +57,12 @@ class MediaApi {
         switch (configuration.media.engine) {
         case 'cloudinary':
             return new Cloudinary(configuration.media)
-
         default:
             throw new Error('No valid media API found.')
         }
     }
 
-    static getElementDimensions(element) {
+    static getElementDimensions (element) {
         let padding = 0
         if (getComputedStyle) {
             let computedStyle = getComputedStyle(element)
