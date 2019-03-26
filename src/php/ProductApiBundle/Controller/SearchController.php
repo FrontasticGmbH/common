@@ -2,7 +2,7 @@
 
 namespace Frontastic\Common\ProductApiBundle\Controller;
 
-use Frontastic\Backstage\ApiBundle\Domain\Context;
+use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQueryFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -12,12 +12,7 @@ class SearchController extends Controller
 {
     public function listAction(Request $request, Context $context): array
     {
-        /** @var \Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory $productApiFactory */
-        $productApiFactory = $this->get('Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory');
-
-        $productApi = $productApiFactory->factorFromConfiguration(
-            (isset($context->project) ? $context->project->configuration : $context->customer->configuration)
-        );
+        $productApi = $this->get('frontastic.catwalk.product_api');
 
         $query = ProductQueryFactory::queryFromParameters(
             ['locale' => $context->locale],
