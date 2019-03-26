@@ -15,6 +15,8 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductType;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  * @TODO: Refactor result parsing and request generation out of here.
  */
 class Commercetools implements ProductApi
