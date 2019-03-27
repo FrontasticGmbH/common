@@ -441,9 +441,10 @@ class Commercetools implements CartApi
      */
     public function getOrder(string $orderId): Order
     {
-        return $this->mapOrder($this->client->get(
+        $result = $this->mapOrder($this->client->get(
             '/orders/order-number=' . $orderId
         ), ['expand' => self::EXPAND]);
+        return $result;
     }
 
     /**
@@ -544,24 +545,25 @@ class Commercetools implements CartApi
          * [ ] Map delivery status
          * [ ] Map order status
          */
-        return new Order([
+        $order = new Order([
             'cartId' => $order['id'],
             'orderId' => $order['orderNumber'],
             'orderVersion' => $order['version'],
             'lineItems' => $this->mapLineItems($order),
-            'email' => $cart['customerEmail'] ?? null,
-            'birthday' => isset($cart['custom']['fields']['birthday']) ?
-                new \DateTimeImmutable($cart['custom']['fields']['birthday']) :
+            'email' => $order['customerEmail'] ?? null,
+            'birthday' => isset($order['custom']['fields']['birthday']) ?
+                new \DateTimeImmutable($order['custom']['fields']['birthday']) :
                 null,
-            'shippingMethod' => $this->mapShippingMethod($cart['shippingInfo'] ?? []),
-            'shippingAddress' => $this->mapAddress($cart['shippingAddress'] ?? []),
-            'billingAddress' => $this->mapAddress($cart['billingAddress'] ?? []),
+            'shippingMethod' => $this->mapShippingMethod($order['shippingInfo'] ?? []),
+            'shippingAddress' => $this->mapAddress($order['shippingAddress'] ?? []),
+            'billingAddress' => $this->mapAddress($order['billingAddress'] ?? []),
             'sum' => $order['totalPrice']['centAmount'],
             'payments' => $this->mapPayments($order),
             'discountCodes' => $this->mapDiscounts($order),
             'dangerousInnerCart' => $order,
             'dangerousInnerOrder' => $order,
         ]);
+        return $order;
     }
 
     private function mapAddress(array $address): ?Address
