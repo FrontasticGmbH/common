@@ -48,7 +48,7 @@ class Customer extends DataObject
     public function getLowestEnvironment(): string
     {
         // Get the last element of the array without resetting the internal pointer in the array
-        array_values(array_slice($this->environments, -1))[0];
+        return array_values(array_slice($this->environments, -1))[0];
     }
 
     /**
