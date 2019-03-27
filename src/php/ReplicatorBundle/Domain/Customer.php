@@ -43,6 +43,15 @@ class Customer extends DataObject
     ];
 
     /**
+     * Get the environment with the lowest priority. This will return 'development' for the default environments.
+     */
+    public function getLowestEnvironment(): string
+    {
+        // Get the last element of the array without resetting the internal pointer in the array
+        array_values(array_slice($this->environments, -1))[0];
+    }
+
+    /**
      * @var Project[]
      */
     public $projects = [];
