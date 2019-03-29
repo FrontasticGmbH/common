@@ -8,15 +8,15 @@ class MediaApi {
 
     getImageDimensions (media, inputWidth, inputHeight, inputCropRatio = null, factor = 1) {
         let cropRatio = this.getFloatRatio(media, inputCropRatio)
-        let width = Math.ceil((+inputWidth) * factor)
-        let height = Math.ceil(width * cropRatio)
+        let width = Math.ceil(+inputWidth * factor)
+        let height = inputHeight && !inputCropRatio ? Math.ceil(+inputHeight * factor) : Math.ceil(width * cropRatio)
 
         return [width, height]
     }
 
     getFloatRatio (media, cropRatio = null) {
         if (!cropRatio && media && media.width && media.height) {
-            return (media.height / media.width)
+            return media.height / media.width
         }
 
         const ratioStringMatches = String(cropRatio).match(/([0-9]+):([0-9]+)/)
@@ -44,7 +44,7 @@ class MediaApi {
                 break
             }
         }
-        height = Math.ceil(width / ratio)
+        height = !options.autoHeight ? Math.ceil(width / ratio) : null
 
         if (_.isString(media)) {
             return mediaApi.getFetchImageUrl(media, width, height, options)
@@ -54,17 +54,13 @@ class MediaApi {
     }
 
     getMediaApi (configuration) {
-        let mediaApi = null
+        switch (configuration.media.engine) {
+        case 'cloudinary':
+            return new Cloudinary(configuration.media)
 
-        if (configuration.cloudinary) {
-            mediaApi = new Cloudinary(configuration.cloudinary)
-        }
-
-        if (!mediaApi) {
+        default:
             throw new Error('No valid media API found.')
         }
-
-        return mediaApi
     }
 
     static getElementDimensions (element) {

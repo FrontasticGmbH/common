@@ -189,6 +189,36 @@ describe('ConfigurationSchema', function () {
         ])
     })
 
+    it('replaces a null group element', () => {
+        let schema = new Schema(
+            [{
+                name: 'Section',
+                fields: [{
+                    label: 'Test Field',
+                    field: 'test',
+                    type: 'group',
+                    fields: [
+                        {
+                            label: 'First',
+                            field: 'groupFirst',
+                            type: 'string',
+                            default: 'A default',
+                        },
+                    ],
+                }],
+            }],
+            {
+                test: [null],
+            }
+        )
+
+        expect(schema.get('test')).toEqual([
+            {
+                groupFirst: 'A default',
+            },
+        ])
+    })
+
     it('claims to have missing required field values', () => {
         const schema = new Schema([{
             name: 'Section',
@@ -400,6 +430,29 @@ describe('ConfigurationSchema', function () {
                 }],
             }],
             { test: [{ groupFirst: '42' }, {}] })
+
+        expect(schema.hasMissingRequiredFieldValues()).toBe(true)
+    })
+
+    it('claims to have missing required field values inside a group with element null', () => {
+        const schema = new Schema(
+            [{
+                name: 'Section',
+                fields: [{
+                    label: 'Test Field',
+                    field: 'test',
+                    type: 'group',
+                    fields: [
+                        {
+                            label: 'First',
+                            field: 'groupFirst',
+                            type: 'string',
+                            required: true,
+                        },
+                    ],
+                }],
+            }],
+            { test: [null] })
 
         expect(schema.hasMissingRequiredFieldValues()).toBe(true)
     })
