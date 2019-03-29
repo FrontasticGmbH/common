@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="JavaScript Build">
-    <target name="yarn:link" unless="${production}" extensionOf="-prepare:after~hook">
+    <target name="yarn:link" extensionOf="-prepare:after~hook">
         <tool-exists executable="yarn" />
 
         <exec executable="yarn" failonerror="true" dir="${basedir}">
