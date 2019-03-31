@@ -151,6 +151,9 @@ class ConfigurationSchema {
      */
     completeGroupConfig (groupEntries, fieldDefinitions) {
         return _.map(groupEntries, (groupEntry) => {
+            if (groupEntry === null || typeof groupEntry !== 'object') {
+                groupEntry = {}
+            }
             _.forEach(fieldDefinitions, (fieldDefinition) => {
                 if (typeof groupEntry[fieldDefinition.field] === 'undefined') {
                     groupEntry[fieldDefinition.field] = fieldDefinition.default || null
