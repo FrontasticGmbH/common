@@ -56,7 +56,7 @@ class JsonSerializer
         if (is_array($item) || ($item instanceof Collection)) {
             $result = [];
             foreach ($item as $key => $value) {
-                if (in_array($key, $this->, true)) {
+                if (in_array($key, $this->propertyExcludeList, true)) {
                     $result[$key] = '_FILTERED_';
                 } else {
                     $result[$key] = $this->serialize($value, $visitedIds);
