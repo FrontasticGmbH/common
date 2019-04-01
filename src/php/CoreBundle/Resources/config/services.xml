@@ -28,16 +28,18 @@
 
         <service id="Frontastic\Common\JsonSerializer">
             <argument type="collection">
-                <argument>clientId</argument>
-                <argument>clientSecret</argument>
-                <argument>password</argument>
-                <argument>newPassword</argument>
-                <argument>passwordHash</argument>
-                <argument>secret</argument>
-                <argument>token</argument>
-                <argument>apiToken</argument>
+                <argument>accessToken</argument>
                 <argument>apiKey</argument>
                 <argument>apiSecret</argument>
+                <argument>apiToken</argument>
+                <argument>clientId</argument>
+                <argument>clientSecret</argument>
+                <argument>newPassword</argument>
+                <argument>password</argument>
+                <argument>passwordHash</argument>
+                <argument>previewToken</argument>
+                <argument>secret</argument>
+                <argument>token</argument>
             </argument>
             <argument type="tagged" tag="frontastic.json_serializer.enhancer" />
         </service>
