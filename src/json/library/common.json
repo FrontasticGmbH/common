@@ -72,6 +72,19 @@
                                 "type": "object",
                                 "properties": {
                                     "type": {
+                                        "enum": ["tastic"]
+                                    }
+                                }
+                            },
+                            {"$ref": "#/definitions/tastic"}
+                        ]
+                    },
+                    {
+                        "allOf": [
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "type": {
                                         "enum": ["image"]
                                     }
                                 }
@@ -187,6 +200,24 @@
                 }
             },
             "required": ["label", "field", "type"]
+        },
+        "tastic":{
+            "$comment": "Allow nesting of tastics",
+
+            "type": "object",
+            "properties": {
+                "tasticType":{
+                    "type": "string"
+                },
+                "tasticData":{
+                    "type": "object"
+                },
+                "$comment": {
+                    "@comment": "Allow json-schema style comments in our schemas",
+                    "type": "string"
+                }
+            },
+            "required": ["label", "type"]
         },
         "image": {
             "$comment": "Illustrating image as part of the input form",
