@@ -11,7 +11,7 @@ class JsonSerializer
     /**
      * @var string[]
      */
-    private $propertyBlacklist;
+    private $propertyExcludeList;
 
     /**
      * @var ObjectEnhancer[]
@@ -19,12 +19,12 @@ class JsonSerializer
     private $objectEnhancers = [];
 
     /**
-     * @param string[] $propertyBlacklist
+     * @param string[] $propertyExcludeList
      * @param ObjectEnhancer[] $objectEnhancers
      */
-    public function __construct(array $propertyBlacklist = [], iterable $objectEnhancers = [])
+    public function __construct(array $propertyExcludeList = [], iterable $objectEnhancers = [])
     {
-        $this->propertyBlacklist = $propertyBlacklist;
+        $this->propertyExcludeList = $propertyExcludeList;
 
         foreach ($objectEnhancers as $enhancer) {
             $this->addEnhancer($enhancer);
@@ -56,7 +56,11 @@ class JsonSerializer
         if (is_array($item) || ($item instanceof Collection)) {
             $result = [];
             foreach ($item as $key => $value) {
-                $result[$key] = $this->serialize($value, $visitedIds);
+                if (in_array($key, $this->, true)) {
+                    $result[$key] = '_FILTERED_';
+                } else {
+                    $result[$key] = $this->serialize($value, $visitedIds);
+                }
             }
             return $result;
         }
@@ -71,7 +75,7 @@ class JsonSerializer
 
         $result = ['_type' => get_class($item)];
         foreach (get_object_vars($item) as $key => $value) {
-            if (in_array($key, $this->propertyBlacklist)) {
+            if (in_array($key, $this->propertyExcludeList)) {
                 $result[$key] = '_FILTERED_';
             } else {
                 $result[$key] = $this->serialize($value, $visitedIds);
