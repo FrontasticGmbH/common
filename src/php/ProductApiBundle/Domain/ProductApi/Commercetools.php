@@ -138,7 +138,8 @@ class Commercetools implements ProductApi
     {
         if ($query->sku) {
             $productQueryResult = $this->query($query);
-            return reset($productQueryResult->items);
+            $product = reset($productQueryResult->items);
+            return $product === false ? null : $product;
         }
         return $this->mapper->dataToProduct(
             $this->client->fetchById('/products', $query->productId),
