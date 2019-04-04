@@ -45,7 +45,7 @@ class AccountService
         $this->mailer->sendToUser(
             $account,
             'register',
-            'Willkommen bei Frontastic',
+            'Willkommen (Ihr neuer Account)',
             ['token' => $account->confirmationToken]
         );
         $account->eraseCredentials();
