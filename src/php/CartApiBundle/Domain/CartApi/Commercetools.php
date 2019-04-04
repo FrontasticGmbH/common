@@ -612,7 +612,7 @@ class Commercetools implements CartApi
 
         return new ShippingMethod([
             'name' => $shipping['shippingMethodName'] ?? null,
-            'price' => $shipping['shippingRate']['price']['centAmount'] ?? null,
+            'price' => $shipping['price']['centAmount'] ?? null,
         ]);
     }
 
