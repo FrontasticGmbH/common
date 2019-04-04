@@ -37,6 +37,7 @@
                                             "decimal",
                                             "enum",
                                             "integer",
+                                            "json",
                                             "markdown",
                                             "media",
                                             "node",
