@@ -134,6 +134,10 @@ class Mapper
         array $facetData,
         ProductApi\Query\Facet $facetQuery = null
     ): ProductApi\Result\Facet {
+        if ($facetData['type'] === 'terms' && $facetData['dataType'] === 'number') {
+            return $this->dataToNumberRangeFacet($facetKey, $facetData, $facetQuery);
+        }
+
         switch ($facetData['type']) {
             case 'range':
                 return $this->dataToRangeFacet($facetKey, $facetData, $facetQuery);
@@ -186,6 +190,54 @@ class Mapper
             'key' => $facetKey,
             'min' => $facetData['ranges'][0]['min'],
             'max' => $facetData['ranges'][0]['max'],
+        ];
+
+        if ($facetQuery !== null) {
+            $facetValues['selected'] = true;
+            $facetValues['value'] = [
+                'min' => $facetQuery->min,
+                'max' => $facetQuery->max,
+            ];
+        }
+
+        return new ProductApi\Result\RangeFacet($facetValues);
+    }
+
+    /**
+     * Special handling for number facets due to CommerceTools not coping with (* to *).
+     *
+     * In some cases, CommerceTools cannot cope with a facet query (NOT filter!) of (* to *). CT support claimed this
+     * is intentional and we should use term facet for the query. Since the facet FILTER should be a range one, we
+     * are doing this nice conversion.
+     *
+     * @param string $facetKey
+     * @param array $facetData
+     * @param Query\RangeFacet $facetQuery
+     * @return ProductApi\Result\RangeFacet
+     */
+    public function dataToNumberRangeFacet(
+        string $facetKey,
+        array $facetData,
+        ProductApi\Query\RangeFacet $facetQuery = null
+    ): ProductApi\Result\RangeFacet
+    {
+        $min = \PHP_INT_MAX;
+        $max = \PHP_INT_MIN;
+
+        foreach ($facetData['terms'] as $term) {
+            $value = (float)$term['term'];
+            $min = min($min, $value);
+            $max = max($max, $value);
+        }
+
+        $min = min($min, $max);
+        $max = max($min, $max);
+
+        $facetValues = [
+            'handle' => $facetKey,
+            'key' => $facetKey,
+            'min' => $min,
+            'max' => $max,
         ];
 
         if ($facetQuery !== null) {
@@ -288,7 +340,7 @@ class Mapper
             $facet = '';
             switch ($facetDefinition['attributeType']) {
                 case 'number':
-                    $facet = sprintf('%s:range (* to *)', $facetDefinition['attributeId']);
+                    $facet = sprintf('%s', $facetDefinition['attributeId']);
                     break;
 
                 case 'money':
