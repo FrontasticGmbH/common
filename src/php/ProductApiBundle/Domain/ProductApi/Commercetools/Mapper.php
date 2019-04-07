@@ -318,7 +318,7 @@ class Mapper
             $facets[] = sprintf('%s as %s', $facet, $facetDefinition['attributeId']);
         }
 
-        return array_unique($facets);
+        return array_values(array_unique($facets));
     }
 
     /**
