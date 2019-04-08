@@ -180,7 +180,7 @@ class Commercetools implements ProductApi
         }
         if ($query->sortAttributeId) {
             $parameters['sort'] = $query->sortAttributeId;
-            if ($query->sortOrder === 'descending') {
+            if ($query->sortDescending()) {
                 $parameters['sort'] .= ' desc';
             } else {
                 $parameters['sort'] .= ' asc';

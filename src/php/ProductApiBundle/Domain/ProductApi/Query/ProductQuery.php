@@ -1,10 +1,14 @@
 <?php
+
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 
 class ProductQuery extends Query
 {
+    public const SORT_ORDER_ASCENDING = 'ascending';
+    public const SORT_ORDER_DESCENDING = 'descending';
+
     /**
      * @var string
      */
@@ -60,7 +64,7 @@ class ProductQuery extends Query
     /**
      * @var string
      */
-    public $sortOrder;
+    public $sortOrder = self::SORT_ORDER_ASCENDING;
 
     /**
      * @return void
@@ -77,5 +81,19 @@ class ProductQuery extends Query
         $this->validateProperty('facets', 'array');
         $this->validateProperty('sortAttributeId', 'string');
         $this->validateProperty('sortOrder', 'string');
+    }
+
+    public function sortAscending(): bool
+    {
+        /*
+         * ascending is the default so we interpret all non-descending values as ascending
+         */
+
+        return $this->sortOrder !== self::SORT_ORDER_DESCENDING;
+    }
+
+    public function sortDescending(): bool
+    {
+        return !$this->sortAscending();
     }
 }
