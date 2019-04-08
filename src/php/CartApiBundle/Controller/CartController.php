@@ -96,7 +96,8 @@ class CartController extends CrudController
         $cartApi->updateLineItem(
             $cart,
             $this->getLineItem($cart, $payload['lineItemId']),
-            $payload['count']
+            $payload['count'],
+            $payload['custom'] ?? null
         );
         $cart = $cartApi->commit();
 

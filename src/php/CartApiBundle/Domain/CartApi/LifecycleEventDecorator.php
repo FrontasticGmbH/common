@@ -106,13 +106,7 @@ class LifecycleEventDecorator implements CartApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    /**
-     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
-     * @param \Frontastic\Common\CartApiBundle\Domain\LineItem $lineItem
-     * @param int $count
-     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
-     */
-    public function updateLineItem(Cart $cart, LineItem $lineItem, int $count): Cart
+    public function updateLineItem(Cart $cart, LineItem $lineItem, int $count, ?array $custom = null): Cart
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }

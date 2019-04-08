@@ -209,37 +209,35 @@ class Commercetools implements CartApi
         );
     }
 
-    /**
-     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
-     * @param \Frontastic\Common\CartApiBundle\Domain\LineItem $lineItem
-     * @param int $count
-     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
-     */
-    public function updateLineItem(Cart $cart, LineItem $lineItem, int $count): Cart
+    public function updateLineItem(Cart $cart, LineItem $lineItem, int $count, ?array $custom = null): Cart
     {
+        $actions = [];
         if ($lineItem instanceof LineItem\Variant) {
-            return $this->postCartActions(
-                $cart,
-                [
-                    [
-                        'action' => 'changeLineItemQuantity',
-                        'lineItemId' => $lineItem->lineItemId,
-                        'quantity' => $count,
-                    ],
-                ]
-            );
+            $actions[] = [
+                'action' => 'changeLineItemQuantity',
+                'lineItemId' => $lineItem->lineItemId,
+                'quantity' => $count,
+            ];
         } else {
-            return $this->postCartActions(
-                $cart,
-                [
-                    [
-                        'action' => 'changeCustomLineItemQuantity',
-                        'customLineItemId' => $lineItem->lineItemId,
-                        'quantity' => $count,
-                    ],
-                ]
-            );
+            $actions[] = [
+                'action' => 'changeCustomLineItemQuantity',
+                'customLineItemId' => $lineItem->lineItemId,
+                'quantity' => $count,
+            ];
         }
+
+        if ($custom) {
+            foreach ($custom as $field => $value) {
+                $actions[] = [
+                    'action' => 'setLineItemCustomField',
+                    'lineItemId' => $lineItem->lineItemId,
+                    'name' => $field,
+                    'value' => $value,
+                ];
+            }
+        }
+
+        return $this->postCartActions($cart, $actions);
     }
 
     /**

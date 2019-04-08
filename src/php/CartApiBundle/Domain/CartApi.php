@@ -45,13 +45,7 @@ interface CartApi
      */
     public function addToCart(Cart $cart, LineItem $lineItem): Cart;
 
-    /**
-     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
-     * @param \Frontastic\Common\CartApiBundle\Domain\LineItem $lineItem
-     * @param int $count
-     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
-     */
-    public function updateLineItem(Cart $cart, LineItem $lineItem, int $count): Cart;
+    public function updateLineItem(Cart $cart, LineItem $lineItem, int $count, ?array $custom = null): Cart;
 
     /**
      * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
