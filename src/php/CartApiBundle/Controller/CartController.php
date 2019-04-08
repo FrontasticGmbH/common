@@ -26,7 +26,7 @@ class CartController extends CrudController
         ];
     }
 
-    public function getOrderAction(Context $context, string $order): array
+    public function getOrderAction(Context $context, Request $request, string $order): array
     {
         $cartApi = $this->getCartApi($context);
         return [
