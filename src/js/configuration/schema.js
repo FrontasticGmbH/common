@@ -25,6 +25,7 @@ class ConfigurationSchema {
                     max: this.schema[i].fields[j].max || 16,
                     // @TODO: Streams should be marked as required in the tastic configurations
                     required: Boolean(this.schema[i].fields[j].required) || type === 'stream',
+                    disabled: this.schema[i].fields[j].disabled === true,
                 }
             }
         }
@@ -102,6 +103,10 @@ class ConfigurationSchema {
 
     isFieldRequired (field) {
         return this.getField(field).required
+    }
+
+    isFieldDisabled (field) {
+        return this.getField(field).disabled
     }
 
     hasMissingRequiredValueInField (field, skipStreams = false) {

@@ -34,6 +34,14 @@ class Tastic {
                         type: 'boolean',
                         default: true,
                     },
+                    {
+                        label: 'Anchor',
+                        field: 'tasticId',
+                        type: 'string',
+                        translatable: false,
+                        disabled: true,
+                        default: '#' + this.tasticId,
+                    },
                 ],
             },
         ]
