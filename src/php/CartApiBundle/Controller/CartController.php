@@ -40,6 +40,8 @@ class CartController extends CrudController
         $cartApi = $this->getCartApi($context);
 
         $cart = $this->getCart($context);
+        $beforeItemIds = $this->getLineItemIds($cart);
+
         $cartApi->startTransaction($cart);
         $cartApi->addToCart(
             $cart,
@@ -56,6 +58,13 @@ class CartController extends CrudController
 
         return [
             'cart' => $cart,
+            'addedItems' => $this->getLineItems(
+                $cart,
+                array_diff(
+                    $this->getLineItemIds($cart),
+                    $beforeItemIds
+                )
+            ),
         ];
     }
 
@@ -65,6 +74,8 @@ class CartController extends CrudController
         $cartApi = $this->getCartApi($context);
 
         $cart = $this->getCart($context);
+        $beforeItemIds = $this->getLineItemIds($cart);
+
         $cartApi->startTransaction($cart);
         foreach (($payload['lineItems'] ?? []) as $lineItemData) {
             $cartApi->addToCart(
@@ -83,6 +94,13 @@ class CartController extends CrudController
 
         return [
             'cart' => $cart,
+            'addedItems' => $this->getLineItems(
+                $cart,
+                array_diff(
+                    $this->getLineItemIds($cart),
+                    $beforeItemIds
+                )
+            ),
         ];
     }
 
@@ -112,15 +130,17 @@ class CartController extends CrudController
         $cartApi = $this->getCartApi($context);
 
         $cart = $this->getCart($context);
+
         $cartApi->startTransaction($cart);
         $cartApi->removeLineItem(
             $cart,
-            $this->getLineItem($cart, $payload['lineItemId'])
+            ($item = $this->getLineItem($cart, $payload['lineItemId']))
         );
         $cart = $cartApi->commit();
 
         return [
             'cart' => $cart,
+            'removedItems' => [$item],
         ];
     }
 
@@ -133,6 +153,27 @@ class CartController extends CrudController
         }
 
         throw new \OutOfBoundsException("Could not find line item with ID $lineItemId");
+    }
+
+    private function getLineItems(Cart $cart, array $lineItemIds): array
+    {
+        $items = [];
+        foreach ($cart->lineItems as $lineItem) {
+            if (in_array($lineItem->lineItemId, $lineItemIds)) {
+                $items[] = $lineItem;
+            }
+        }
+        return $items;
+    }
+
+    private function getLineItemIds(Cart $cart): array
+    {
+        return array_map(
+            function (LineItem $lineItem) {
+                return $lineItem->lineItemId;
+            },
+            $cart->lineItems
+        );
     }
 
     public function updateAction(Context $context, Request $request): array
