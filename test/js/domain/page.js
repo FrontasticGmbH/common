@@ -4,9 +4,10 @@ import Element from '../../../src/js/domain/cell.js'
 import Kit from '../../../src/js/domain/kit'
 import Tastic from '../../../src/js/domain/tastic'
 
+let mockId = 'id'
 jest.mock(
     '../../../src/js/generateId',
-    () => jest.fn(() => 'id')
+    () => jest.fn(() => mockId)
 )
 
 describe('Page', function () {
@@ -943,10 +944,14 @@ describe('Page', function () {
         page.addCell('regA').cellId = 'cell-a'
         page.addCell('regA').cellId = 'cell-b'
         page.addCell('regB').cellId = 'cell-c'
-        page.addTastic('regA', 'cell-a', 'type').tasticId = 'b'
-        page.addTastic('regA', 'cell-a', 'type').tasticId = 'a'
-        page.addTastic('regA', 'cell-b', 'type').tasticId = 'c'
-        page.addTastic('regB', 'cell-c', 'type').tasticId = 'd'
+        mockId = 'b'
+        page.addTastic('regA', 'cell-a', 'type')
+        mockId = 'a'
+        page.addTastic('regA', 'cell-a', 'type')
+        mockId = 'c'
+        page.addTastic('regA', 'cell-b', 'type')
+        mockId = 'd'
+        page.addTastic('regB', 'cell-c', 'type')
 
         expect(page.getTastics()).toEqual([
             new Tastic({ tasticId: 'a', tasticType: 'type' }),
