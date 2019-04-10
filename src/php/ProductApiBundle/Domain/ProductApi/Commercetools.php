@@ -186,11 +186,13 @@ class Commercetools implements ProductApi
                 $parameters['sort'] .= ' asc';
             }
         }
-
-        $parameters['filter'] = $this->mapper->facetsToFilter(
-            $query->facets,
-            $this->options->facetsToQuery,
-            $locale
+        $parameters['filter'] = array_merge(
+            $this->mapper->facetsToFilter(
+                $query->facets,
+                $this->options->facetsToQuery,
+                $locale
+            ),
+            $query->filter ?: []
         );
 
         $result = $this->client->fetch('/product-projections/search', array_filter($parameters));

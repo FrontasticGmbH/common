@@ -52,6 +52,11 @@ class ProductQuery extends Query
     public $query;
 
     /**
+     * @var array
+     */
+    public $filter = [];
+
+    /**
      * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\Facet[]
      */
     public $facets = [];
