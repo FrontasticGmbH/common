@@ -29,31 +29,35 @@ interface WishlistApi
 
     /**
      * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
+     * @param string $locale
      * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
      */
-    public function create(Wishlist $wishlist): Wishlist;
+    public function create(Wishlist $wishlist, string $locale): Wishlist;
 
     /**
      * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
      * @param \Frontastic\Common\WishlistApiBundle\Domain\LineItem $lineItem
+     * @param string $locale
      * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
      */
-    public function addToWishlist(Wishlist $wishlist, LineItem $lineItem): Wishlist;
+    public function addToWishlist(Wishlist $wishlist, LineItem $lineItem, string $locale): Wishlist;
 
     /**
      * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
      * @param \Frontastic\Common\WishlistApiBundle\Domain\LineItem $lineItem
      * @param int $count
+     * @param string $locale
      * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
      */
-    public function updateLineItem(Wishlist $wishlist, LineItem $lineItem, int $count): Wishlist;
+    public function updateLineItem(Wishlist $wishlist, LineItem $lineItem, int $count, string $locale): Wishlist;
 
     /**
      * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
      * @param \Frontastic\Common\WishlistApiBundle\Domain\LineItem $lineItem
+     * @param string $locale
      * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
      */
-    public function removeLineItem(Wishlist $wishlist, LineItem $lineItem): Wishlist;
+    public function removeLineItem(Wishlist $wishlist, LineItem $lineItem, string $locale): Wishlist;
 
     /**
      * Get *dangerous* inner client

@@ -39,7 +39,8 @@ class WishlistController extends CrudController
             new LineItem\Variant([
                 'variant' => new Variant(['sku' => $payload['variant']['sku']]),
                 'count' => $payload['count']
-            ])
+            ]),
+            $context->locale
         );
 
         return [
@@ -58,7 +59,7 @@ class WishlistController extends CrudController
         return $wishlistApi->create(new Wishlist([
             'name' => ['de' => $payload['name']],
             'accountId' => $context->session->account->accountId,
-        ]));
+        ]), $context->locale);
     }
 
     public function updateLineItemAction(Context $context, Request $request): array
@@ -152,7 +153,7 @@ class WishlistController extends CrudController
                     // provide translation map
                     'de' => 'Wunschzettel',
                 ],
-            ]));
+            ]), $context->locale);
         } else {
             try {
                 return $wishlistApi->getAnonymous($context->session->account->accountId, $context->locale);
@@ -164,7 +165,7 @@ class WishlistController extends CrudController
                         // provide translation map
                         'de' => 'Wunschzettel',
                     ],
-                ]));
+                ]), $context->locale);
             }
         }
     }

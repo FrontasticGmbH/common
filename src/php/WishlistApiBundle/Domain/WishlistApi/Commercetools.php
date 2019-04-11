@@ -112,11 +112,12 @@ class Commercetools implements WishlistApi
 
     /**
      * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
+     * @param string $locale
      * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function create(Wishlist $wishlist): Wishlist
+    public function create(Wishlist $wishlist, string $locale): Wishlist
     {
         return $this->mapWishlist($this->client->post(
             '/shopping-lists',
@@ -128,32 +129,34 @@ class Commercetools implements WishlistApi
                 'anonymousId' => $wishlist->anonymousId ?: null,
                 'deleteDaysAfterLastModification' => $wishlist->anonymousId ? 31 : null,
             ])
-        ));
+        ), Locale::createFromPosix($locale));
     }
 
     /**
      * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
      * @param \Frontastic\Common\WishlistApiBundle\Domain\LineItem $lineItem
+     * @param string $locale
      * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function addToWishlist(Wishlist $wishlist, LineItem $lineItem): Wishlist
+    public function addToWishlist(Wishlist $wishlist, LineItem $lineItem, string $locale): Wishlist
     {
         if ($lineItem instanceof LineItem\Variant) {
-            return $this->addVariantToWishlist($wishlist, $lineItem);
+            return $this->addVariantToWishlist($wishlist, $lineItem, $locale);
         }
 
-        return $this->addCustomToWishlist($wishlist, $lineItem);
+        return $this->addCustomToWishlist($wishlist, $lineItem, $locale);
     }
 
     /**
      * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
      * @param \Frontastic\Common\WishlistApiBundle\Domain\LineItem\Variant $lineItem
+     * @param string $locale
      * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      */
-    private function addVariantToWishlist(Wishlist $wishlist, LineItem\Variant $lineItem): Wishlist
+    private function addVariantToWishlist(Wishlist $wishlist, LineItem\Variant $lineItem, string $locale): Wishlist
     {
         return $this->mapWishlist($this->client->post(
             '/shopping-lists/' . $wishlist->wishlistId,
@@ -169,7 +172,7 @@ class Commercetools implements WishlistApi
                     ]
                 ],
             ])
-        ));
+        ), Locale::createFromPosix($locale));
     }
 
     /**
@@ -178,7 +181,7 @@ class Commercetools implements WishlistApi
      * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      */
-    private function addCustomToWishlist(Wishlist $wishlist, LineItem $lineItem): Wishlist
+    private function addCustomToWishlist(Wishlist $wishlist, LineItem $lineItem, string $locale): Wishlist
     {
         return $this->mapWishlist($this->client->post(
             '/shopping-lists/' . $wishlist->wishlistId,
@@ -203,18 +206,19 @@ class Commercetools implements WishlistApi
                     ],
                 ],
             ])
-        ));
+        ), Locale::createFromPosix($locale));
     }
 
     /**
      * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
      * @param \Frontastic\Common\WishlistApiBundle\Domain\LineItem $lineItem
      * @param int $count
+     * @param string $locale
      * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function updateLineItem(Wishlist $wishlist, LineItem $lineItem, int $count): Wishlist
+    public function updateLineItem(Wishlist $wishlist, LineItem $lineItem, int $count, string $locale): Wishlist
     {
         if ($lineItem instanceof LineItem\Variant) {
             return $this->mapWishlist($this->client->post(
@@ -231,7 +235,7 @@ class Commercetools implements WishlistApi
                         ],
                     ],
                 ])
-            ));
+            ), Locale::createFromPosix($locale));
         } else {
             return $this->mapWishlist($this->client->post(
                 '/shopping-lists/' . $wishlist->wishlistId,
@@ -247,18 +251,19 @@ class Commercetools implements WishlistApi
                         ],
                     ],
                 ])
-            ));
+            ), Locale::createFromPosix($locale));
         }
     }
 
     /**
      * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
      * @param \Frontastic\Common\WishlistApiBundle\Domain\LineItem $lineItem
+     * @param string $locale
      * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function removeLineItem(Wishlist $wishlist, LineItem $lineItem): Wishlist
+    public function removeLineItem(Wishlist $wishlist, LineItem $lineItem, string $locale): Wishlist
     {
         if ($lineItem instanceof LineItem\Variant) {
             return $this->mapWishlist($this->client->post(
@@ -274,7 +279,7 @@ class Commercetools implements WishlistApi
                         ],
                     ],
                 ])
-            ));
+            ), Locale::createFromPosix($locale));
         } else {
             return $this->mapWishlist($this->client->post(
                 '/shopping-lists/' . $wishlist->wishlistId,
@@ -289,7 +294,7 @@ class Commercetools implements WishlistApi
                         ],
                     ],
                 ])
-            ));
+            ), Locale::createFromPosix($locale));
         }
     }
 
