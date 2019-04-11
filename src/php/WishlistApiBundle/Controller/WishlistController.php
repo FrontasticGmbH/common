@@ -135,11 +135,11 @@ class WishlistController extends CrudController
         $wishlistApi = $this->getWishlistApi($context);
 
         if ($wishlistId) {
-            return $wishlistApi->getWishlist($wishlistId);
+            return $wishlistApi->getWishlist($wishlistId, $context->locale);
         }
 
         if ($context->session->loggedIn) {
-            $wishlists = $wishlistApi->getWishlists($context->session->account->accountId);
+            $wishlists = $wishlistApi->getWishlists($context->session->account->accountId, $context->locale);
 
             if (count($wishlists)) {
                 return reset($wishlists);
@@ -155,7 +155,7 @@ class WishlistController extends CrudController
             ]));
         } else {
             try {
-                return $wishlistApi->getAnonymous($context->session->account->accountId);
+                return $wishlistApi->getAnonymous($context->session->account->accountId, $context->locale);
             } catch (\OutOfBoundsException $e) {
                 return $wishlistApi->create(new Wishlist([
                     'anonymousId' => $context->session->account->accountId,

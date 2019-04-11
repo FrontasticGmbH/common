@@ -2,25 +2,30 @@
 
 namespace Frontastic\Common\WishlistApiBundle\Domain;
 
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
+
 interface WishlistApi
 {
     /**
      * @param string $wishlistId
+     * @param string $locale
      * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
      */
-    public function getWishlist(string $wishlistId): Wishlist;
+    public function getWishlist(string $wishlistId, string $locale): Wishlist;
 
     /**
      * @param string $anonymousId
+     * @param string $locale
      * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
      */
-    public function getAnonymous(string $anonymousId): Wishlist;
+    public function getAnonymous(string $anonymousId, string $locale): Wishlist;
 
     /**
      * @param string $accountId
+     * @param string $locale
      * @return array
      */
-    public function getWishlists(string $accountId): array;
+    public function getWishlists(string $accountId, string $locale): array;
 
     /**
      * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist

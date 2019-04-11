@@ -40,25 +40,30 @@ class Commercetools implements WishlistApi
 
     /**
      * @param string $wishlistId
+     * @param string $locale
      * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function getWishlist(string $wishlistId): Wishlist
+    public function getWishlist(string $wishlistId, string $locale): Wishlist
     {
-        return $this->mapWishlist($this->client->get(
-            '/shopping-lists/' . $wishlistId,
-            ['expand' => self::EXPAND_VARIANTS]
-        ));
+        return $this->mapWishlist(
+            $this->client->get(
+                '/shopping-lists/' . $wishlistId,
+                ['expand' => self::EXPAND_VARIANTS]
+            ),
+            Locale::createFromPosix($locale)
+        );
     }
 
     /**
      * @param string $anonymousId
+     * @param string $locale
      * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function getAnonymous(string $anonymousId): Wishlist
+    public function getAnonymous(string $anonymousId, string $locale): Wishlist
     {
         $result = $this->client->fetch(
             '/shopping-lists',
@@ -72,16 +77,20 @@ class Commercetools implements WishlistApi
             throw new \OutOfBoundsException("No wishlist exists yet.");
         }
 
-        return $this->mapWishlist($result->results[0]);
+        return $this->mapWishlist(
+            $result->results[0],
+            Locale::createFromPosix($locale)
+        );
     }
 
     /**
      * @param string $accountId
+     * @param string $locale
      * @return array
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function getWishlists(string $accountId): array
+    public function getWishlists(string $accountId, string $locale): array
     {
         $result = $this->client->fetch(
             '/shopping-lists',
@@ -91,8 +100,12 @@ class Commercetools implements WishlistApi
             ]
         );
 
+        $locale = Locale::createFromPosix($locale);
+
         return array_map(
-            [$this, 'mapWishlist'],
+            function ($wishlist) use ($locale) {
+                return $this->mapWishlist($wishlist, $locale);
+            },
             $result->results
         );
     }
@@ -282,9 +295,10 @@ class Commercetools implements WishlistApi
 
     /**
      * @param array $wishlist
+     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale $locale
      * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
      */
-    private function mapWishlist(array $wishlist): Wishlist
+    private function mapWishlist(array $wishlist, Locale $locale): Wishlist
     {
         /**
          * @TODO:
@@ -301,26 +315,27 @@ class Commercetools implements WishlistApi
             'anonymousId' => $wishlist['anonymousId'] ?? null,
             'accountId' => $wishlist['customer']['id'] ?? null,
             'name' => reset($wishlist['name']),
-            'lineItems' => $this->mapLineItems($wishlist),
+            'lineItems' => $this->mapLineItems($wishlist, $locale),
             'dangerousInnerWishlist' => $wishlist,
         ]);
     }
 
     /**
      * @param array $wishlist
+     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale $locale
      * @return \Frontastic\Common\WishlistApiBundle\Domain\LineItem[]
      */
-    private function mapLineItems(array $wishlist): array
+    private function mapLineItems(array $wishlist, Locale $locale): array
     {
         $lineItems = array_merge(
             array_map(
-                function (array $lineItem): LineItem {
+                function (array $lineItem) use ($locale): LineItem {
                     return new LineItem\Variant([
                         'lineItemId' => $lineItem['id'],
                         'name' => reset($lineItem['name']),
                         'type' => 'variant',
                         'addedAt' => new \DateTimeImmutable($lineItem['addedAt']),
-                        'variant' => $this->mapper->dataToVariant($lineItem['variant'], new Query(), new Locale()),
+                        'variant' => $this->mapper->dataToVariant($lineItem['variant'], new Query(), $locale),
                         'count' => $lineItem['quantity'],
                         'dangerousInnerItem' => $lineItem,
                     ]);

@@ -3,6 +3,7 @@
 namespace Frontastic\Common\WishlistApiBundle\Domain\WishlistApi;
 
 use Frontastic\Common\LifecycleTrait;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
 use Frontastic\Common\WishlistApiBundle\Domain\WishlistApi;
 use Frontastic\Common\WishlistApiBundle\Domain\Wishlist;
 use Frontastic\Common\WishlistApiBundle\Domain\Payment;
@@ -47,27 +48,30 @@ class LifecycleEventDecorator implements WishlistApi
 
     /**
      * @param string $wishlistId
+     * @param string $locale
      * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
      */
-    public function getWishlist(string $wishlistId): Wishlist
+    public function getWishlist(string $wishlistId, string $locale): Wishlist
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
     /**
      * @param string $anonymousId
+     * @param string $locale
      * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
      */
-    public function getAnonymous(string $anonymousId): Wishlist
+    public function getAnonymous(string $anonymousId, string $locale): Wishlist
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
     /**
      * @param string $accountId
+     * @param string $locale
      * @return array
      */
-    public function getWishlists(string $accountId): array
+    public function getWishlists(string $accountId, string $locale): array
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
