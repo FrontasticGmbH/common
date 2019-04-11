@@ -291,7 +291,7 @@ class Mapper
             ),
             array_map(
                 function (array $attribute) use ($locale) {
-                    if (is_array($attribute['value']) && !isset($attribute['value']['type'])) {
+                    if (is_array($attribute['value']) && !$this->isNumericArray($attribute['value'])) {
                         return $this->getLocalizedValue($locale, $attribute['value'] ?? []);
                     }
 
@@ -300,6 +300,11 @@ class Mapper
                 $variantData['attributes']
             )
         ));
+    }
+
+    private function isNumericArray(array $array): bool
+    {
+        return ($array === array_values($array));
     }
 
     public function dataToDangerousInnerData(array $rawData, Query $query): ?array
