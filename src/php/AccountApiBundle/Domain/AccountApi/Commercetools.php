@@ -82,37 +82,48 @@ class Commercetools implements AccountApi
      */
     public function create(Account $account, ?Cart $cart = null): Account
     {
-        $account = $this->mapAccount($this->client->post(
-            '/customers',
-            [],
-            [],
-            json_encode([
-                'email' => $account->email,
-                'salutation' => $account->salutation,
-                'firstName' => $account->firstName,
-                'lastName' => $account->lastName,
-                'dateOfBirth' => $account->birthday->format('Y-m-d'),
-                'password' => $account->getPassword(),
-                'isEmailVerified' => $account->confirmed,
-                'custom' => [
-                    'type' => $this->getCustomerType(),
-                    'fields' => [
-                        'data' => json_encode($account->data),
+        try {
+            $account = $this->mapAccount($this->client->post(
+                '/customers',
+                [],
+                [],
+                json_encode([
+                    'email' => $account->email,
+                    'salutation' => $account->salutation,
+                    'firstName' => $account->firstName,
+                    'lastName' => $account->lastName,
+                    'dateOfBirth' => $account->birthday->format('Y-m-d'),
+                    'password' => $account->getPassword(),
+                    'isEmailVerified' => $account->confirmed,
+                    'custom' => [
+                        'type' => $this->getCustomerType(),
+                        'fields' => [
+                            'data' => json_encode($account->data),
+                        ],
                     ],
-                ],
-                'anonymousCartId' => $cart ? $cart->cartId : null,
-            ])
-        )['customer']);
+                    'anonymousCartId' => $cart ? $cart->cartId : null,
+                ])
+            )['customer']);
 
-        $token = $this->client->post(
-            '/customers/email-token',
-            [],
-            [],
-            json_encode([
-                'id' => $account->accountId,
-                'ttlMinutes' => 2 * 7 * 24 * 60,
-            ])
-        );
+            $token = $this->client->post(
+                '/customers/email-token',
+                [],
+                [],
+                json_encode([
+                    'id' => $account->accountId,
+                    'ttlMinutes' => 2 * 7 * 24 * 60,
+                ])
+            );
+        } catch (RequestException $e) {
+            if ($cart !== null && $e->getCode() === 400) {
+                /*
+                 * The cart might already belong to another user so we try to login without the cart.
+                 */
+                return $this->create($account);
+            }
+
+            throw $e;
+        }
 
         $account->confirmationToken = $token['value'];
         $account->tokenValidUntil = new \DateTimeImmutable($token['expiresAt']);
@@ -265,6 +276,15 @@ class Commercetools implements AccountApi
             )['customer']);
 
             return $account->confirmed;
+        } catch (RequestException $e) {
+            if ($cart !== null && $e->getCode() === 400) {
+                /*
+                 * The cart might already belong to another user so we try to login without the cart.
+                 */
+                return $this->login($account);
+            }
+
+            return false;
         } catch (\Exception $e) {
             return false;
         }
