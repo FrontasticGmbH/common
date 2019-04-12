@@ -76,6 +76,14 @@ class Page {
         })
     }
 
+    duplicateCell (regionId, cell) {
+        const newCell = this.addCell(regionId, cell.configuration)
+        cell.tastics.forEach((tastic, position) =>
+            this.addTastic(regionId, newCell.cellId, tastic.tasticType, position, tastic.configuration)
+        )
+        return newCell
+    }
+
     addKit (region, kit) {
         return this.getRegion(region).addKit(kit)
     }
@@ -126,10 +134,10 @@ class Page {
         )
     }
 
-    addTastic (regionId, cellId, tasticType, position) {
+    addTastic (regionId, cellId, tasticType, position, configuration = {}) {
         let schema = _.find(this.tastics, { tasticType: tasticType })
 
-        return this.getRegion(regionId).getElement({ cellId: cellId }).addTastic(tasticType, {}, schema, position)
+        return this.getRegion(regionId).getElement({ cellId: cellId }).addTastic(tasticType, configuration, schema, position)
     }
 
     getTastics () {
@@ -188,11 +196,17 @@ class Page {
                 this.regions[targetRegion].elements[targetElementIndex].tastics.length :
                 target.tasticDropPosition - (
                     (region === targetRegion) &&
-                    (elementIndex === targetElementIndex) &&
-                    (target.tasticDropPosition > tasticIndex) ? 1 : 0),
+                        (elementIndex === targetElementIndex) &&
+                        (target.tasticDropPosition > tasticIndex) ? 1 : 0),
             0,
             tastic
         )
+    }
+
+    duplicateTastic (tasticId, cellId) {
+        const [region, , tasticIndex] = this.findTastic(tasticId)
+        const tastic = this.getTastic(tasticId)
+        return this.addTastic(region, cellId, tastic.tasticType, tasticIndex + 1, tastic.configuration)
     }
 
     export () {
