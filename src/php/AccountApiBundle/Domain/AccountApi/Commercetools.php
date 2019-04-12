@@ -2,13 +2,13 @@
 
 namespace Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
-use Frontastic\Common\AccountApiBundle\Domain\Payment;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
-use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
+use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
+use Frontastic\Common\AccountApiBundle\Domain\Payment;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Central API entry point is OK to have many public methods.
@@ -45,9 +45,10 @@ class Commercetools implements AccountApi
      */
     public function get(string $email): Account
     {
-        $result = $this->client->fetch('/customers', [
-            'where' => 'email="' . $email . '"',
-        ]);
+        $result = $this->client->fetch('/customers',
+            [
+                'where' => 'email="' . $email . '"',
+            ]);
 
         if ($result->count >= 1) {
             return $this->mapAccount($result->results[0]);
@@ -189,7 +190,7 @@ class Commercetools implements AccountApi
      */
     public function updatePassword(string $accountId, string $oldPassword, string $newPassword): Account
     {
-        $account= $this->client->get('/customers/' . $accountId);
+        $account = $this->client->get('/customers/' . $accountId);
         return $this->mapAccount($this->client->post(
             '/customers/password',
             [],
@@ -459,7 +460,7 @@ class Commercetools implements AccountApi
         $account = array_merge(
             [
                 'defaultBillingAddressId' => null,
-                'defaultShippingAddressId' => null
+                'defaultShippingAddressId' => null,
             ],
             $account
         );
