@@ -142,7 +142,7 @@ class Client
 
     private function prepareErrorMessage(\stdClass $errorData): string
     {
-        $message = $errorData->message;
+        $message = '';
 
         if (isset($errorData->errors)) {
             $message .= "\n" . implode(
@@ -154,6 +154,10 @@ class Client
                     $errorData->errors
                 )
             );
+        }
+
+        if ($message === '') {
+            $message = $errorData->message;
         }
 
         return $message;
