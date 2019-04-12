@@ -140,7 +140,7 @@ class Client
         return [];
     }
 
-    private function prepareErrorMessage(\stdClass $errorData): string
+    protected function prepareErrorMessage(\stdClass $errorData): string
     {
         $message = '';
 
