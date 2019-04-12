@@ -45,7 +45,7 @@ describe('ConfigurationSchema', function () {
         expect(schema.get('test')).toBe('42')
     })
 
-    it('gets set option for defined field', () => {
+    it('gets default option for undefined existing field', () => {
         let schema = new Schema([{
             name: 'Section',
             fields: [{
@@ -56,9 +56,23 @@ describe('ConfigurationSchema', function () {
 
             }],
         }])
-        schema = schema.set('test', '23')
 
-        expect(schema.get('test')).toBe('23')
+        expect(schema.get('test')).toBe('42')
+    })
+
+    it('gets correct "false" default for boolean field', () => {
+        let schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'boolean',
+                default: false,
+
+            }],
+        }])
+
+        expect(schema.get('test')).toBe(fals)
     })
 
     it('claims to have defined field', () => {

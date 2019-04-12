@@ -18,7 +18,9 @@ class ConfigurationSchema {
                     type: type,
                     sectionName: this.schema[i].name || '',
                     values: this.schema[i].fields[j].values || [],
-                    default: this.schema[i].fields[j].default || null,
+                    default: (typeof this.schema[i].fields[j].default !== 'undefined' ?
+                        this.schema[i].fields[j].default
+                        : null),
                     validate: this.schema[i].fields[j].validate || {},
                     fields: this.schema[i].fields[j].fields || null,
                     min: this.schema[i].fields[j].min || 1,
@@ -74,7 +76,7 @@ class ConfigurationSchema {
             return this.completeGroupConfig(values, fieldConfig.fields)
         }
 
-        if (typeof this.configuration[field] === 'undefined') {
+        if (typeof this.configuration[field] === 'undefined' || this.configuration[field] === null) {
             return fieldConfig.default
         }
 
@@ -160,7 +162,7 @@ class ConfigurationSchema {
                 groupEntry = {}
             }
             _.forEach(fieldDefinitions, (fieldDefinition) => {
-                if (typeof groupEntry[fieldDefinition.field] === 'undefined') {
+                if (typeof groupEntry[fieldDefinition.field] === 'undefined' || groupEntry[fieldDefinition.field] === null) {
                     groupEntry[fieldDefinition.field] = fieldDefinition.default || null
                 }
             })
