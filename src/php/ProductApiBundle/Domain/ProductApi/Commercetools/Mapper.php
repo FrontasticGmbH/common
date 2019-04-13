@@ -63,7 +63,6 @@ class Mapper
      */
     public function dataToVariant(array $variantData, Query $query, Locale $locale): Variant
     {
-        debug($locale);
         list($price, $currency, $discountedPrice) = $this->dataToPrice($variantData, $locale);
 
         $attributes = $this->dataToAttributes($variantData, $locale);
