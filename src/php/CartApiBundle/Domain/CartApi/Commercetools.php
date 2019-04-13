@@ -26,8 +26,8 @@ class Commercetools implements CartApi
 {
     const EXPAND = [
         'lineItems[*].discountedPrice.includedDiscounts[*].discount',
-        'paymentInfo.payments[*]',
         'discountCodes[*].discountCode',
+        'paymentInfo.payments[*]',
     ];
 
     /**
@@ -439,10 +439,10 @@ class Commercetools implements CartApi
      */
     public function getOrder(string $orderId): Order
     {
-        $result = $this->mapOrder($this->client->get(
-            '/orders/order-number=' . $orderId
-        ), ['expand' => self::EXPAND]);
-        return $result;
+        return $this->mapOrder($this->client->get(
+            '/orders/order-number=' . $orderId,
+            ['expand' => self::EXPAND]
+        ));
     }
 
     /**
