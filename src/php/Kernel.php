@@ -57,7 +57,7 @@ abstract class Kernel extends SymfonyKernel
         if (isset($configuration['version']) && false === empty($configuration['version'])) {
             $version = $configuration['version'];
         }
-        $versionFile = $cacheDir . '/version/version.txt';
+        $versionFile = $configuration['cache_dir'] . '/_version/version.txt';
         if (false === file_exists($versionFile) || $version !== trim(file_get_contents($versionFile))) {
             mkdir(dirname($versionFile), 0755, true);
             file_put_contents($versionFile, $version);
