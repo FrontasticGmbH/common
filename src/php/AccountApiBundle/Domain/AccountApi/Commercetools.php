@@ -9,6 +9,7 @@ use Frontastic\Common\AccountApiBundle\Domain\Payment;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Central API entry point is OK to have many public methods.
@@ -274,8 +275,6 @@ class Commercetools implements AccountApi
                     'anonymousCartId' => $cart ? $cart->cartId : null,
                 ])
             )['customer']);
-
-            return $account->confirmed;
         } catch (RequestException $e) {
             if ($cart !== null && $e->getCode() === 400) {
                 /*
@@ -288,6 +287,11 @@ class Commercetools implements AccountApi
         } catch (\Exception $e) {
             return false;
         }
+        if(!$account->confirmed) {
+            throw new AuthenticationException('Your email address was not yet verified.');
+        }
+
+        return $account->confirmed;
     }
 
     /**
