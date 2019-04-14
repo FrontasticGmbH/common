@@ -178,13 +178,14 @@ class Commercetools implements ProductApi
         if ($query->skus) {
             $parameters['filter.query'][] = sprintf('variants.sku:"%s"', join('","', $query->skus));
         }
-        if ($query->sortAttributeId) {
-            $parameters['sort'] = $query->sortAttributeId;
-            if ($query->sortDescending()) {
-                $parameters['sort'] .= ' desc';
-            } else {
-                $parameters['sort'] .= ' asc';
-            }
+        if ($query->sortAttributes) {
+            $parameters['sort'] = array_map(
+                function (string $direction, string $field): string {
+                    return $field . ($direction === ProductQuery::SORT_ORDER_ASCENDING ? ' asc' : ' desc');
+                },
+                $query->sortAttributes,
+                array_keys($query->sortAttributes)
+            );
         }
         $parameters['filter'] = array_merge(
             $this->mapper->facetsToFilter(

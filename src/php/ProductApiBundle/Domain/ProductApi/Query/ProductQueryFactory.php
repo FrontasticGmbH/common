@@ -29,6 +29,15 @@ class ProductQueryFactory
             $queryParameters['facets'][] = self::createFacet($facetHandle, $facetConfig);
         }
 
+        if (isset($queryParameters['sortAttributeId'])) {
+            $queryParameters['sortAttributes'] = [
+                $queryParameters['sortAttributeId'] => $queryParameters['sortOrder'] ?? ProductQuery::SORT_ORDER_ASCENDING,
+            ];
+
+            unset($queryParameters['sortAttributeId']);
+            unset($queryParameters['sortOrder']);
+        }
+
         return new ProductQuery($queryParameters);
     }
 

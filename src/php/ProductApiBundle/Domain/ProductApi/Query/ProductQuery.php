@@ -62,14 +62,11 @@ class ProductQuery extends Query
     public $facets = [];
 
     /**
-     * @var string
+     * Map of sort attributes => sort order
+     *
+     * @var mixed
      */
-    public $sortAttributeId;
-
-    /**
-     * @var string
-     */
-    public $sortOrder = self::SORT_ORDER_ASCENDING;
+    public $sortAttributes = [];
 
     /**
      * @return void
@@ -84,21 +81,6 @@ class ProductQuery extends Query
         $this->validateProperty('currency', 'string');
         $this->validateProperty('query', 'string');
         $this->validateProperty('facets', 'array');
-        $this->validateProperty('sortAttributeId', 'string');
-        $this->validateProperty('sortOrder', 'string');
-    }
-
-    public function sortAscending(): bool
-    {
-        /*
-         * ascending is the default so we interpret all non-descending values as ascending
-         */
-
-        return $this->sortOrder !== self::SORT_ORDER_DESCENDING;
-    }
-
-    public function sortDescending(): bool
-    {
-        return !$this->sortAscending();
+        $this->validateProperty('sortAttributes', 'array');
     }
 }
