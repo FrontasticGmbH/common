@@ -103,6 +103,7 @@ class Commercetools implements CartApi
                     'country' => 'DE',
                     'customerId' => $userId,
                     'state' => 'Active',
+                    'inventoryMode' => 'ReserveOnOrder',
                 ])
             ));
         }
@@ -136,6 +137,7 @@ class Commercetools implements CartApi
                 'country' => 'DE',
                 'anonymousId' => $anonymousId,
                 'state' => 'Active',
+                'inventoryMode' => 'ReserveOnOrder',
             ])
         ));
     }
