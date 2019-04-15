@@ -35,4 +35,14 @@ class ErrorResult extends DataObject
      * @var string[]
      */
     public $stack;
+
+    /**
+     * @var string
+     */
+    public $code;
+
+    /**
+     * @var object
+     */
+    public $parameters;
 }

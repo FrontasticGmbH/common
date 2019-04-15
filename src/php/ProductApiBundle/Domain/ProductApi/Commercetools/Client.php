@@ -3,12 +3,14 @@
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
 
 use Doctrine\Common\Cache\Cache;
+use League\OAuth2\Client\Grant\ClientCredentials;
+use League\OAuth2\Client\Token\AccessToken;
+
 use Frontastic\Common\HttpClient;
+use Frontastic\Common\HttpClient\Response;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client\AccessTokenProvider;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client\ResultSet;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
-use League\OAuth2\Client\Grant\ClientCredentials;
-use League\OAuth2\Client\Token\AccessToken;
 
 class Client
 {
@@ -124,12 +126,7 @@ class Client
         );
 
         if ($response->status >= 400) {
-            $message = $response->body;
-            if (($errorData = json_decode($message)) &&
-                $errorData->message) {
-                $message = $this->prepareErrorMessage($errorData);
-            }
-            throw new RequestException($message, $response->status);
+            throw $this->prepareException($response);
         }
 
         $data = json_decode($response->body, true);
@@ -140,27 +137,31 @@ class Client
         return [];
     }
 
-    protected function prepareErrorMessage(\stdClass $errorData): string
+    protected function prepareException(Response $response): \Exception
     {
-        $message = '';
+        $errorData = json_decode($response->body) ?: (object) ['message' => $response->body];
+        $exception = new RequestException($errorData->message);
 
         if (isset($errorData->errors)) {
-            $message .= "\n" . implode(
-                "\n",
-                array_map(
-                    function ($error) {
-                        return sprintf('%s (%s)', $error->message, $error->detailedErrorMessage ?? '');
-                    },
-                    $errorData->errors
-                )
-            );
+            $errorData->errors = array_reverse($errorData->errors);
+            foreach ($errorData->errors as $error) {
+                $exception = new RequestException(
+                    $error->message ?? 'Unknown error',
+                    $response->status ?? 500,
+                    $exception
+                );
+
+                $exception->setTranslationData(
+                    $error->code ?? 'Unknown',
+                    array_diff_key(
+                        (array) $error,
+                        ['action' => true, 'message' => true, 'code' => true]
+                    )
+                );
+            }
         }
 
-        if ($message === '') {
-            $message = $errorData->message;
-        }
-
-        return $message;
+        return $exception;
     }
 
     private function getAccessToken(): string
