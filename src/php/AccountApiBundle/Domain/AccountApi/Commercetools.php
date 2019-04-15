@@ -94,7 +94,7 @@ class Commercetools implements AccountApi
                     'firstName' => $account->firstName,
                     'lastName' => $account->lastName,
                     'dateOfBirth' => $account->birthday->format('Y-m-d'),
-                    'password' => $account->getPassword(),
+                    'password' => $this->sanitizePassword($account->getPassword()),
                     'isEmailVerified' => $account->confirmed,
                     'custom' => [
                         'type' => $this->getCustomerType(),
@@ -210,8 +210,8 @@ class Commercetools implements AccountApi
             json_encode([
                 'id' => $accountId,
                 'version' => $account['version'],
-                'currentPassword' => $oldPassword,
-                'newPassword' => $newPassword,
+                'currentPassword' => $this->sanitizePassword($oldPassword),
+                'newPassword' => $this->sanitizePassword($newPassword),
             ])
         ));
     }
@@ -255,7 +255,7 @@ class Commercetools implements AccountApi
             [],
             json_encode([
                 'tokenValue' => $token,
-                'newPassword' => $newPassword,
+                'newPassword' => $this->sanitizePassword($newPassword),
             ])
         ));
     }
@@ -271,7 +271,7 @@ class Commercetools implements AccountApi
                     // @TODO: We should pass existing anonymous cart IDs so
                     // that this cart is merged into the users cart.
                     'email' => $account->email,
-                    'password' => $account->getPassword(),
+                    'password' => $this->sanitizePassword($account->getPassword()),
                     'anonymousCartId' => $cart ? $cart->cartId : null,
                 ])
             )['customer']);
@@ -576,5 +576,10 @@ class Commercetools implements AccountApi
                 ],
             ])
         );
+    }
+
+    private function sanitizePassword(string $password): string
+    {
+        return str_replace('%', '', $password);
     }
 }
