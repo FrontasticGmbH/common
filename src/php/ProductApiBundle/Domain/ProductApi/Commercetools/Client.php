@@ -139,8 +139,8 @@ class Client
 
     protected function prepareException(Response $response): \Exception
     {
-        $errorData = json_decode($response->body) ?: (object) ['message' => $response->body];
-        $exception = new RequestException($errorData->message);
+        $errorData = json_decode($response->body);
+        $exception = new RequestException(($errorData->message ?? $response->body) ?: 'Internal Server Error');
 
         if (isset($errorData->errors)) {
             $errorData->errors = array_reverse($errorData->errors);
