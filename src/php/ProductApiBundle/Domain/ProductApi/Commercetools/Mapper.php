@@ -419,9 +419,22 @@ class Mapper
                 case 'reference':
                 default:
                     if ($facet instanceof Query\TermFacet) {
-                        foreach ($facet->terms as $term) {
-                            $filters[] = sprintf('%s:"%s"', $facet->handle, $term);
-                        }
+                        $termsAsStringWithQuotes = implode(
+                            ",",
+                            array_map(
+                                function ($term) {
+                                    return sprintf('"%s"', $term);
+                                },
+                                $facet->terms
+                            )
+                        );
+
+                        $filters[] = sprintf(
+                            '%s:%s',
+                            $facet->handle,
+                            $termsAsStringWithQuotes
+
+                        );
                     } else {
                         $filters[] = sprintf('%s:range (%s to %s)', $facet->handle, $facet->min, $facet->max);
                     }
