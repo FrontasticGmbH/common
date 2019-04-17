@@ -407,7 +407,7 @@ class Commercetools implements CartApi
             [
                 [
                     'action' => 'addDiscountCode',
-                    'code' => $code,
+                    'code' => str_replace('%', '', $code),
                 ],
             ]
         );
