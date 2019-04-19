@@ -747,13 +747,16 @@ class Commercetools implements CartApi
             return $cart;
         }
 
-        $currentCart = $this->client->get('/carts/' . $cart->cartId);
+        // The idea to fetch the current cart seems not to work. Updates do not
+        // seem to be instant, so that we stll run into version conflicts here…
+        // $currentCart = $this->client->get('/carts/' . $cart->cartId);
+
         return $this->mapCart($this->client->post(
             '/carts/' . $cart->cartId,
             ['expand' => self::EXPAND],
             [],
             json_encode([
-                'version' => $currentCart['version'],
+                'version' => $cart->cartVersion,
                 'actions' => $actions,
             ])
         ));
