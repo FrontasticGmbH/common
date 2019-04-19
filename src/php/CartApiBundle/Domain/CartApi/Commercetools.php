@@ -747,12 +747,13 @@ class Commercetools implements CartApi
             return $cart;
         }
 
+        $currentCart = $this->client->get('/carts/' . $cart->cartId);
         return $this->mapCart($this->client->post(
             '/carts/' . $cart->cartId,
             ['expand' => self::EXPAND],
             [],
             json_encode([
-                'version' => $cart->cartVersion,
+                'version' => $currentCart['version'],
                 'actions' => $actions,
             ])
         ));
