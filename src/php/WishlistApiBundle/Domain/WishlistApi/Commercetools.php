@@ -340,7 +340,7 @@ class Commercetools implements WishlistApi
                         'name' => reset($lineItem['name']),
                         'type' => 'variant',
                         'addedAt' => new \DateTimeImmutable($lineItem['addedAt']),
-                        'variant' => $this->mapper->dataToVariant($lineItem['variant'], new Query(), $locale),
+                        'variant' => !empty($lineItem['variant']) ? $this->mapper->dataToVariant($lineItem['variant'], new Query(), $locale) : null,
                         'count' => $lineItem['quantity'],
                         'dangerousInnerItem' => $lineItem,
                     ]);
