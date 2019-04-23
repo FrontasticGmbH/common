@@ -332,7 +332,7 @@ class Commercetools implements WishlistApi
      */
     private function mapLineItems(array $wishlist, Locale $locale): array
     {
-        $lineItems = array_merge(
+        $lineItems = array_filter(
             array_map(
                 function (array $lineItem) use ($locale): LineItem {
                     return new LineItem\Variant([
@@ -347,19 +347,9 @@ class Commercetools implements WishlistApi
                 },
                 $wishlist['lineItems']
             ),
-            array_map(
-                function (array $lineItem): LineItem {
-                    return new LineItem([
-                        'lineItemId' => $lineItem['id'],
-                        'name' => reset($lineItem['name']),
-                        'type' => $lineItem['custom']['type'] ?? $lineItem['slug'],
-                        'addedAt' => new \DateTimeImmutable($lineItem['addedAt']),
-                        'count' => $lineItem['quantity'],
-                        'dangerousInnerItem' => $lineItem,
-                    ]);
-                },
-                $wishlist['textLineItems']
-            )
+            function (LineItem $lineItem): bool {
+                return (bool) $lineItem->variant;
+            }
         );
 
         return $lineItems;
