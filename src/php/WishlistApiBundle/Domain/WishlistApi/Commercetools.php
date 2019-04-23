@@ -332,7 +332,7 @@ class Commercetools implements WishlistApi
      */
     private function mapLineItems(array $wishlist, Locale $locale): array
     {
-        $lineItems = array_filter(
+        $lineItems = array_values(array_filter(
             array_map(
                 function (array $lineItem) use ($locale): LineItem {
                     return new LineItem\Variant([
@@ -350,7 +350,7 @@ class Commercetools implements WishlistApi
             function (LineItem $lineItem): bool {
                 return (bool) $lineItem->variant;
             }
-        );
+        ));
 
         return $lineItems;
     }
