@@ -22,6 +22,7 @@ class Cell {
                         values: [
                             { value: 2, name: '1/6' },
                             { value: 3, name: '1/4' },
+                            { value: 8, name: '2/3' },
                             { value: 4, name: '1/3' },
                             { value: 6, name: '1/2' },
                             { value: 12, name: '1' },
