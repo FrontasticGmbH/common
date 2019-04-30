@@ -6,5 +6,5 @@ use Kore\DataObject\DataObject;
 
 class Options extends DataObject
 {
-    public $timeout = 30;
+    public $timeout = 1;
 }
