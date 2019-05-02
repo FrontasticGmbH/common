@@ -6,7 +6,10 @@
 
     <services>
         <defaults public="true" />
-        <service id="Frontastic\Common\HttpClient\Stream">
+        <service id="Frontastic\Common\HttpClient\Stream" class="Frontastic\Common\HttpClient\Tideways">
+            <argument type="service">
+                <service class="Frontastic\Common\HttpClient\Stream" />
+            </argument>
         </service>
 
         <service id="Frontastic\Common\CoreBundle\EventListener\JsonExceptionListener">
