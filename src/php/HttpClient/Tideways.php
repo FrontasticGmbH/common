@@ -43,8 +43,8 @@ class Tideways extends HttpClient
                     'http.url' => $url,
                     'http.status' => $response->status,
                     'http.method' => $method,
-                    'http.body' => $body,
-                    'http.headers' => implode("\n", $headers),
+                    // 'http.body' => $body,
+                    // 'http.headers' => implode("\n", $headers),
                 ]);
                 $span->finish();
             }
