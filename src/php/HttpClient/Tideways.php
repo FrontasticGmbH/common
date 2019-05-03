@@ -44,7 +44,7 @@ class Tideways extends HttpClient
             $response = $this->aggregate->request($method, $url, $body, $headers, $options);
         } catch (\Exception $e) {
             $this->logger->error(sprintf(
-                '[HTTP] Exception: %s %s (%s)'.
+                '[HTTP] Exception: %s %s (%s)',
                 $method,
                 $url,
                 $body ?: '<null>'
@@ -52,7 +52,7 @@ class Tideways extends HttpClient
 
             throw $e;
         } finally {
-            if ($response->status >= 500) {
+            if (isset($response) && $response->status >= 500) {
                 $this->logger->error(
                     sprintf(
                         '[HTTP] Failed Request: %s %s (%s)',
@@ -60,7 +60,7 @@ class Tideways extends HttpClient
                         $url,
                         $body ?: '<null>'
                     ),
-                    ['status' => $response->status]
+                    ['status' => $response->status ?? 599]
                 );
             }
 
