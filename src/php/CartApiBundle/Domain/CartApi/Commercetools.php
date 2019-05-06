@@ -379,7 +379,7 @@ class Commercetools implements CartApi
                     'paymentInterface' => $payment->paymentProvider,
                 ],
                 'paymentStatus' => [
-                    'interfaceCode' => 'wirecard',
+                    'interfaceCode' => 'frontastic',
                     'interfaceText' => $payment->debug,
                 ],
                 'custom' => $custom,
