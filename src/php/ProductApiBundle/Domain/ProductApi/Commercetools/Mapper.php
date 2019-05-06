@@ -289,6 +289,10 @@ class Mapper
             ),
             array_map(
                 function (array $attribute) use ($locale) {
+                    if (isset($attribute['value']['centAmount'])) {
+                        return $attribute['value'];
+                    }
+
                     if (is_array($attribute['value']) && !$this->isNumericArray($attribute['value'])) {
                         return $this->getLocalizedValue($locale, $attribute['value'] ?? []);
                     }
