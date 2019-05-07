@@ -42,8 +42,11 @@ class Tideways extends HttpClient
         Options $options = null
     ): Response {
         $span = null;
+        $traceId = null;
         if (class_exists(\Tideways\Profiler::class)) {
             $span = \Tideways\Profiler::createSpan('http');
+            $traceId = \Tideways\Profiler::currentTraceId();
+            $headers[] = 'X-Correlation-ID: ' . $traceId;
         }
 
         try {
@@ -66,7 +69,7 @@ class Tideways extends HttpClient
                         $url,
                         $body ?: '<null>'
                     ),
-                    ['status' => $response->status ?? 599]
+                    ['status' => $response->status ?? 599, 'CorrelationId' => $traceId]
                 );
             }
 
