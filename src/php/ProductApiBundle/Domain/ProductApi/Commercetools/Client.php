@@ -122,7 +122,10 @@ class Client
             $method,
             sprintf('https://api.sphere.io/%s%s%s', $this->projectKey, $uri, $query),
             $body,
-            $headers
+            $headers,
+            new HttpClient\Options([
+                'timeout' => 2,
+            ])
         );
 
         if ($response->status >= 400) {
