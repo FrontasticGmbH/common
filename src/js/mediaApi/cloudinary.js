@@ -13,7 +13,9 @@ class Cloudinary {
         return this.cloudinary.url(
             media.mediaId,
             _.extend(
-                {},
+                {
+                    fetch_format: "auto",
+                },
                 this.getGravityOptions(options),
                 this.cropOptions(options),
                 {
@@ -34,6 +36,7 @@ class Cloudinary {
             url,
             _.extend(
                 {
+                    fetch_format: "auto",
                     type: 'fetch',
                 },
                 this.getGravityOptions(options),
