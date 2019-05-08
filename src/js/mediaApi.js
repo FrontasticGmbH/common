@@ -37,14 +37,17 @@ class MediaApi {
         // Because we do not want the image provider to cache far too many
         // image sizes we bind ourselves to a certain set of sizes and choose
         // the next larger one. Thus we rely on the browser to resize the image
-        // slightly.
-        for (let i = 0; i < this.imageSizes.length; ++i) {
-            if (this.imageSizes[i] >= width) {
-                width = this.imageSizes[i]
-                break
+        // slightly. This only works for resized images, obviously and not if
+        // the image is supposed to be in a defined size.
+        if (['fill', 'pad'].includes(options.crop)) {
+            for (let i = 0; i < this.imageSizes.length; ++i) {
+                if (this.imageSizes[i] >= width) {
+                    width = this.imageSizes[i]
+                    break
+                }
             }
+            height = !options.autoHeight ? Math.ceil(width / ratio) : null
         }
-        height = !options.autoHeight ? Math.ceil(width / ratio) : null
 
         if (_.isString(media)) {
             return mediaApi.getFetchImageUrl(media, width, height, options)

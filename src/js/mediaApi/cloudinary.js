@@ -15,13 +15,11 @@ class Cloudinary {
             _.extend(
                 {
                     fetch_format: "auto",
-                },
-                this.getGravityOptions(options),
-                this.cropOptions(options),
-                {
                     width: width,
                     height: height,
-                }
+                },
+                this.getGravityOptions(options),
+                this.cropOptions(options)
             )
         )
     }
@@ -38,13 +36,11 @@ class Cloudinary {
                 {
                     fetch_format: "auto",
                     type: 'fetch',
-                },
-                this.getGravityOptions(options),
-                this.cropOptions(options),
-                {
                     width: width,
                     height: height,
-                }
+                },
+                this.getGravityOptions(options),
+                this.cropOptions(options)
             )
         )
     }
@@ -53,11 +49,11 @@ class Cloudinary {
         return this.cloudinary.url(
             media.mediaId,
             _.extend(
-                options,
                 {
                     width: width,
                     height: height,
-                }
+                },
+                options
             )
         )
     }
