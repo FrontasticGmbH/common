@@ -143,14 +143,14 @@ class Client
     protected function prepareException(Response $response): \Exception
     {
         $errorData = json_decode($response->body);
-        $exception = new RequestException(($errorData->message ?? $response->body) ?: 'Internal Server Error');
+        $exception = new RequestException(($errorData->message ?? $response->body) ?: 'Internal Server Error', 503);
 
         if (isset($errorData->errors)) {
             $errorData->errors = array_reverse($errorData->errors);
             foreach ($errorData->errors as $error) {
                 $exception = new RequestException(
                     $error->message ?? 'Unknown error',
-                    $response->status ?? 500,
+                    $response->status ?? 503,
                     $exception
                 );
 
