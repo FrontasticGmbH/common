@@ -78,7 +78,7 @@ class Stream extends HttpClient
         if ($httpFilePointer === false) {
             $error = error_get_last();
             return new HttpClient\Response([
-                'status' => 503,
+                'status' => 599,
                 'body' => "Could not connect to server {$url}: " . $error['message'],
             ]);
         }
