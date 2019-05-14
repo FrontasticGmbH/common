@@ -154,7 +154,8 @@ class Commercetools implements ProductApi
             'offset' => $query->offset,
             'limit' => $query->limit,
             'filter' => [],
-            'filter.query' => [],
+            'filter.query' => $query->filter ?: [],
+            'filter.facets' => [],
             'facet' => $this->mapper->facetsToRequest($this->options->facetsToQuery, $locale),
             'priceCurrency' => $locale->currency,
             'priceCountry' => $locale->territory,
@@ -187,14 +188,13 @@ class Commercetools implements ProductApi
                 array_keys($query->sortAttributes)
             );
         }
-        $parameters['filter'] = array_merge(
-            $this->mapper->facetsToFilter(
-                $query->facets,
-                $this->options->facetsToQuery,
-                $locale
-            ),
-            $query->filter ?: []
+        $facetsToFilter = $this->mapper->facetsToFilter(
+            $query->facets,
+            $this->options->facetsToQuery,
+            $locale
         );
+        $parameters['filter'] = $facetsToFilter;
+        $parameters['filter.facets'] = $facetsToFilter;
 
         $result = $this->client->fetch('/product-projections/search', array_filter($parameters));
 
