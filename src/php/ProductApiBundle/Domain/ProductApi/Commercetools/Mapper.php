@@ -84,6 +84,7 @@ class Mapper
             'groupId' => $groupId,
             'price' => $price,
             'discountedPrice' => $discountedPrice,
+            'discounts' => $variantData['discountedPrice']['includedDiscounts'] ?? [],
             // @TODO: Currency should only be stored in context. Property should be removed.
             'currency' => $currency,
             'attributes' => $attributes,

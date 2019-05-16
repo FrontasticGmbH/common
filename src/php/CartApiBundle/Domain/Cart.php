@@ -19,6 +19,11 @@ class Cart extends DataObject
     public $cartVersion;
 
     /**
+     * @var [string => mixed]
+     */
+    public $custom = [];
+
+    /**
      * @var \Frontastic\Common\CartApiBundle\Domain\LineItem[]
      */
     public $lineItems = [];

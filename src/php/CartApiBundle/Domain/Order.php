@@ -15,6 +15,16 @@ class Order extends Cart
     public $orderVersion;
 
     /**
+     * @var string
+     */
+    public $orderState;
+
+    /**
+     * @var \DateTimeImmutable
+     */
+    public $createdAt;
+
+    /**
      * Access original object from backend
      *
      * This should only be used if you need very specific features

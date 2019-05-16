@@ -514,6 +514,7 @@ class Commercetools implements CartApi
         return new Cart([
             'cartId' => $cart['id'],
             'cartVersion' => $cart['version'],
+            'custom' => $cart['custom']['fields'] ?? [],
             'lineItems' => $this->mapLineItems($cart),
             'email' => $cart['customerEmail'] ?? null,
             'birthday' => isset($cart['custom']['fields']['birthday']) ?
@@ -547,6 +548,9 @@ class Commercetools implements CartApi
          */
         $order = new Order([
             'cartId' => $order['id'],
+            'custom' => $order['custom']['fields'] ?? [],
+            'orderState' => $order['orderState'],
+            'createdAt' => new \DateTimeImmutable($order['createdAt']),
             'orderId' => $order['orderNumber'],
             'orderVersion' => $order['version'],
             'lineItems' => $this->mapLineItems($order),

@@ -35,6 +35,13 @@ class Variant extends DataObject
     public $discountedPrice;
 
     /**
+     * Array of discount descriptions
+     *
+     * @var mixed
+     */
+    public $discounts = [];
+
+    /**
      * A three letter currency code in upper case.
      *
      * @TODO: Currency should only be stored in context. Property should be removed.
