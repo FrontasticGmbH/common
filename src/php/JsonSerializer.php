@@ -56,6 +56,10 @@ class JsonSerializer
         if (is_array($item) || ($item instanceof Collection)) {
             $result = [];
             foreach ($item as $key => $value) {
+                if (strpos($key, 'dangerousInner') === 0) {
+                    continue;
+                }
+
                 if (in_array($key, $this->propertyExcludeList, true)) {
                     $result[$key] = '_FILTERED_';
                 } else {
@@ -75,6 +79,10 @@ class JsonSerializer
 
         $result = ['_type' => get_class($item)];
         foreach (get_object_vars($item) as $key => $value) {
+            if (strpos($key, 'dangerousInner') === 0) {
+                continue;
+            }
+
             if (in_array($key, $this->propertyExcludeList)) {
                 $result[$key] = '_FILTERED_';
             } else {
