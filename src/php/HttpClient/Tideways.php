@@ -17,10 +17,16 @@ class Tideways extends HttpClient
      */
     private $logger;
 
-    public function __construct(HttpClient $aggregate, LoggerInterface $logger)
+    /**
+     * @var string|null
+     */
+    private $clientIdentifier;
+
+    public function __construct(HttpClient $aggregate, LoggerInterface $logger, $clientIdentifier = null)
     {
         $this->aggregate = $aggregate;
         $this->logger = $logger;
+        $this->clientIdentifier = $clientIdentifier;
     }
 
     public function addDefaultHeaders(array $headers)
@@ -71,6 +77,7 @@ class Tideways extends HttpClient
                     'http.method' => $method,
                     'http.body' => $body,
                     'http.headers' => implode("\n", $headers),
+                    'frontastic.http_client_identifier' => $this->clientIdentifier,
                 ]);
                 $span->finish();
             }
