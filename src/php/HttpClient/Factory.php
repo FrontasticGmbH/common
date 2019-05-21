@@ -12,9 +12,19 @@ class Factory
      */
     private $container;
 
-    public function __construct(ContainerInterface $container)
+    /**
+     * @var Options
+     */
+    private $defaultOptions;
+
+    public function __construct(ContainerInterface $container, Options $defaultOptions = null)
     {
         $this->container = $container;
+
+        if ($defaultOptions === null)  {
+            $defaultOptions = new Options();
+        }
+        $this->defaultOptions = $defaultOptions;
     }
 
     public function create($clientIdentifier, Configuration $configuration = null): HttpClient
@@ -23,7 +33,7 @@ class Factory
             $configuration = new Configuration();
         }
         if ($configuration->options === null) {
-            $configuration->options = new Options();
+            $configuration->options = clone $this->defaultOptions;
         }
 
         $httpClient = new Stream();

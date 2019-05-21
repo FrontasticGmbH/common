@@ -7,10 +7,22 @@
     <services>
         <defaults public="true" />
         <service id="Frontastic\Common\HttpClient\Stream" class="Frontastic\Common\HttpClient\Tideways">
-            <argument type="service">
-                <service class="Frontastic\Common\HttpClient\Stream" />
+            <factory service="Frontastic\Common\HttpClient\Factory" method="create" />
+
+            <argument>unknown_http_client</argument>
+
+            <deprecated>Deprecated in favor of creating a dedicated client using Frontastic\Common\HttpClient\Factory</deprecated>
+        </service>
+
+        <service id="Frontastic\Common\HttpClient\Factory">
+            <argument id="service_container"/>
+            <argument id="Frontastic\Common\HttpClient\Options"/>
+        </service>
+
+        <service id="Frontastic\Common\HttpClient\Options">
+            <argument type="collection">
+                <argument key="timeout">%env(http_client_timeout)%</argument>
             </argument>
-            <argument type="service" id="logger" />
         </service>
 
         <service id="Frontastic\Common\CoreBundle\EventListener\JsonExceptionListener">
