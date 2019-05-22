@@ -16,6 +16,16 @@ class Stream extends HttpClient
      */
     private $headers = array();
 
+    /**
+     * @var Options
+     */
+    private $defaultOptions;
+
+    public function __construct(Options $defaultOptions = null)
+    {
+        $this->defaultOptions = $defaultOptions ?: new Options();
+    }
+
     public function addDefaultHeaders(array $headers)
     {
         $this->headers = array_merge(
@@ -41,7 +51,7 @@ class Stream extends HttpClient
         array $headers = array(),
         Options $options = null
     ): Response {
-        $options = $options ?: new Options();
+        $options = $options ?: $this->defaultOptions;
         $httpFilePointer = @fopen(
             $url,
             'r',
