@@ -16,29 +16,13 @@ class FactoryTest extends TestCase
      */
     private $factory;
 
-    /**
-     * @var ContainerInterface|MockObject
-     */
-    private $containerMock;
-
     public function setUp()
     {
-        $this->containerMock = $this->getMockBuilder(ContainerInterface::class)->getMock();
-        $this->factory = new Factory($this->containerMock);
-
-        $this->containerMock->expects(self::any())->method('get')->willReturnCallback(
-            function ($serviceId) {
-                $services = [
-                    'logger' => $this->getMockBuilder(LoggerInterface::class)->getMock(),
-                    \Domnikl\Statsd\Client::class => $this->getMockBuilder(\Domnikl\Statsd\Client::class)
-                            ->disableOriginalConstructor()->getMock(),
-                ];
-
-                if (!isset($services[$serviceId])) {
-                    throw new \Exception('Service not found!');
-                }
-                return $services[$serviceId];
-            });
+        $this->factory = new Factory(
+            $this->getMockBuilder(LoggerInterface::class)->getMock(),
+            $this->getMockBuilder(\Domnikl\Statsd\Client::class)
+                ->disableOriginalConstructor()->getMock()
+        );
     }
 
     public function testCreateDefault()

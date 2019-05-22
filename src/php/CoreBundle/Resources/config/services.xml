@@ -11,12 +11,13 @@
 
             <argument>unknown_http_client</argument>
 
-            <deprecated>Deprecated in favor of creating a dedicated client using Frontastic\Common\HttpClient\Factory</deprecated>
+            <deprecated>%service_id% is deprecated in favor of creating a dedicated client using Frontastic\Common\HttpClient\Factory</deprecated>
         </service>
 
         <service id="Frontastic\Common\HttpClient\Factory">
-            <argument id="service_container"/>
-            <argument id="Frontastic\Common\HttpClient\Options"/>
+            <argument type="service" id="logger"/>
+            <argument type="service" id="Domnikl\Statsd\Client"/>
+            <argument type="service" id="Frontastic\Common\HttpClient\Options"/>
         </service>
 
         <service id="Frontastic\Common\HttpClient\Options">

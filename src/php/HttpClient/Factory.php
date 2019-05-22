@@ -2,24 +2,32 @@
 
 namespace Frontastic\Common\HttpClient;
 
+use Domnikl\Statsd\Client;
 use Frontastic\Common\HttpClient;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Factory
 {
     /**
-     * @var ContainerInterface
+     * @var LoggerInterface
      */
-    private $container;
+    private $logger;
+
+    /**
+     * @var Client
+     */
+    private $statsClient;
 
     /**
      * @var Options
      */
     private $defaultOptions;
 
-    public function __construct(ContainerInterface $container, Options $defaultOptions = null)
+    public function __construct(LoggerInterface $logger, Client $statsClient, Options $defaultOptions = null)
     {
-        $this->container = $container;
+        $this->logger = $logger;
+        $this->statsClient = $statsClient;
 
         if ($defaultOptions === null)  {
             $defaultOptions = new Options();
@@ -48,7 +56,7 @@ class Factory
         if ($configuration->collectProfiling) {
             $httpClient = new Tideways(
                 $httpClient,
-                $this->container->get('logger'),
+                $this->logger,
                 $clientIdentifier
             );
         }
@@ -56,7 +64,7 @@ class Factory
         if ($configuration->collectStats) {
             $httpClient = new StatsD(
                 $clientIdentifier,
-                $this->container->get('Domnikl\Statsd\Client'),
+                $this->statsClient,
                 $httpClient
             );
         }
