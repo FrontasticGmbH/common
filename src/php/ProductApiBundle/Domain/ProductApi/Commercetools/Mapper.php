@@ -68,7 +68,7 @@ class Mapper
         $attributes = $this->dataToAttributes($variantData, $locale);
         $groupId = $attributes['baseId'];
 
-        $isOnStock = true;
+        $isOnStock = null;
         if (isset($variantData['availability'])) {
             $availability = $variantData['availability'];
             if (isset($availability['channels'])) {
