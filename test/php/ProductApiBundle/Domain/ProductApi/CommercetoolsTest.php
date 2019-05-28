@@ -32,8 +32,7 @@ class CommercetoolsTest extends TestCase
     public function testQueryWithFacets()
     {
         $expectedFilterValues = [
-            'variants.term-value:"red"',
-            'variants.term-value:"blue"',
+            'variants.term-value:"red","blue"',
             'variants.price-max-only:range (0 to 42)',
             'variants.price-min-only:range (23 to ' . PHP_INT_MAX . ')',
             'variants.price-min-max:range (23 to 42)'

@@ -31,7 +31,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 ['attributeId' => 'variant.attribute.size', 'attributeType' => 'number'],
-                'variant.attribute.size:range (* to *) as variant.attribute.size',
+                'variant.attribute.size as variant.attribute.size',
             ],
             [
                 ['attributeId' => 'variant.price', 'attributeType' => 'money'],
