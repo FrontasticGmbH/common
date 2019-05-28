@@ -665,7 +665,7 @@ class Commercetools implements CartApi
                         'discountedPrice' => (isset($lineItem['discountedPrice'])
                             ? $lineItem['totalPrice']['centAmount']
                             : null
-                        ),;
+                        ),
                         'discountTexts' => array_map(
                             function ($discount): array {
                                 return $discount['discount']['obj']['name'] ?? [];
