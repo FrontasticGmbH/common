@@ -72,7 +72,7 @@ describe('ConfigurationSchema', function () {
             }],
         }])
 
-        expect(schema.get('test')).toBe(fals)
+        expect(schema.get('test')).toBe(false)
     })
 
     it('claims to have defined field', () => {
