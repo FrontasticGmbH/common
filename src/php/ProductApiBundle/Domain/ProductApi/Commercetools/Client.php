@@ -124,7 +124,7 @@ class Client
             $body,
             $headers,
             new HttpClient\Options([
-                'timeout' => 2,
+                'timeout' => $method === 'POST' ? 10 : 2,
             ])
         );
 
