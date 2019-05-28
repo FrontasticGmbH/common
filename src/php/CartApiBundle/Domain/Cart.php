@@ -76,7 +76,8 @@ class Cart extends DataObject
      */
     public $dangerousInnerCart;
 
-    public function getPayedAmount(): int {
+    public function getPayedAmount(): int
+    {
         return array_sum(
             array_map(
                 function (Payment $payment) {
@@ -87,11 +88,13 @@ class Cart extends DataObject
         );
     }
 
-    public function hasUser(): bool {
+    public function hasUser(): bool
+    {
         return (bool) $this->email;
     }
 
-    public function hasShippingAddress(): bool {
+    public function hasShippingAddress(): bool
+    {
         return (
             $this->shippingAddress &&
             $this->shippingAddress->firstName &&
@@ -102,7 +105,8 @@ class Cart extends DataObject
         );
     }
 
-    public function hasBillingAddress(): bool {
+    public function hasBillingAddress(): bool
+    {
         return (
             $this->billingAddress &&
             $this->billingAddress->firstName &&
@@ -113,21 +117,24 @@ class Cart extends DataObject
         );
     }
 
-    public function hasAddresses(): bool {
+    public function hasAddresses(): bool
+    {
         return (
             $this->hasShippingAddress() &&
             $this->hasBillingAddress()
         );
     }
 
-    public function hasCompletePayments(): bool {
+    public function hasCompletePayments(): bool
+    {
         return (
             $this->payments &&
             ($this->getPayedAmount() >= $this->sum)
         );
     }
 
-    public function isComplete(): bool {
+    public function isComplete(): bool
+    {
         return $this->hasUser() && $this->hasAddresses() && $this->hasCompletePayments();
     }
 }

@@ -31,7 +31,8 @@ class ProductQueryFactory
 
         if (isset($queryParameters['sortAttributeId'])) {
             $queryParameters['sortAttributes'] = [
-                $queryParameters['sortAttributeId'] => $queryParameters['sortOrder'] ?? ProductQuery::SORT_ORDER_ASCENDING,
+                $queryParameters['sortAttributeId'] => $queryParameters['sortOrder']
+                    ?? ProductQuery::SORT_ORDER_ASCENDING,
             ];
 
             unset($queryParameters['sortAttributeId']);

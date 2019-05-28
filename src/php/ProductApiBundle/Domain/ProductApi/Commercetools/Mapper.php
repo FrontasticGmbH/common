@@ -133,8 +133,7 @@ class Mapper
         $facetKey,
         array $facetData,
         ProductApi\Query\Facet $facetQuery = null
-    ): ProductApi\Result\Facet
-    {
+    ): ProductApi\Result\Facet {
         if ($facetData['type'] === 'terms' && $facetData['dataType'] === 'number') {
             return $this->dataToNumberRangeFacet($facetKey, $facetData, $facetQuery);
         }
@@ -155,9 +154,7 @@ class Mapper
         string $facetKey,
         array $facetData,
         ProductApi\Query\TermFacet $facetQuery = null
-    ): ProductApi\Result\TermFacet
-    {
-
+    ): ProductApi\Result\TermFacet {
         $selectedTermsMap = [];
         if ($facetQuery !== null) {
             $selectedTermsMap = array_fill_keys($facetQuery->terms, true);
@@ -186,8 +183,7 @@ class Mapper
         string $facetKey,
         array $facetData,
         ProductApi\Query\RangeFacet $facetQuery = null
-    ): ProductApi\Result\RangeFacet
-    {
+    ): ProductApi\Result\RangeFacet {
         $facetValues = [
             'handle' => $facetKey,
             'key' => $facetKey,
@@ -222,8 +218,7 @@ class Mapper
         string $facetKey,
         array $facetData,
         ProductApi\Query\RangeFacet $facetQuery = null
-    ): ProductApi\Result\RangeFacet
-    {
+    ): ProductApi\Result\RangeFacet {
         $min = \PHP_INT_MAX;
         $max = \PHP_INT_MIN;
 
@@ -436,7 +431,6 @@ class Mapper
                             '%s:%s',
                             $facet->handle,
                             $termsAsStringWithQuotes
-
                         );
                     } else {
                         $filters[] = sprintf('%s:range (%s to %s)', $facet->handle, $facet->min, $facet->max);

@@ -29,7 +29,7 @@ class Factory
         $this->logger = $logger;
         $this->statsClient = $statsClient;
 
-        if ($defaultOptions === null)  {
+        if ($defaultOptions === null) {
             $defaultOptions = new Options();
         }
         $this->defaultOptions = $defaultOptions;

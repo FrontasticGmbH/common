@@ -46,10 +46,12 @@ class Commercetools implements AccountApi
      */
     public function get(string $email): Account
     {
-        $result = $this->client->fetch('/customers',
+        $result = $this->client->fetch(
+            '/customers',
             [
                 'where' => 'email="' . $email . '"',
-            ]);
+            ]
+        );
 
         if ($result->count >= 1) {
             return $this->mapAccount($result->results[0]);
@@ -287,7 +289,7 @@ class Commercetools implements AccountApi
         } catch (\Exception $e) {
             return false;
         }
-        if(!$account->confirmed) {
+        if (!$account->confirmed) {
             throw new AuthenticationException('Your email address was not yet verified.');
         }
 

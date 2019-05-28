@@ -633,7 +633,10 @@ class Commercetools implements CartApi
                         'custom' => $lineItem['custom']['fields'] ?? [],
                         'count' => $lineItem['quantity'],
                         'price' => $lineItem['price']['value']['centAmount'],
-                        'discountedPrice' => (isset($lineItem['discountedPrice']) ? $lineItem['totalPrice']['centAmount'] : null),
+                        'discountedPrice' => (isset($lineItem['discountedPrice'])
+                            ? $lineItem['totalPrice']['centAmount']
+                            : null
+                        ),
                         'discountTexts' => array_map(
                             function ($discount): array {
                                 return $discount['discount']['obj']['name'] ?? [];
@@ -659,7 +662,10 @@ class Commercetools implements CartApi
                         'custom' => $lineItem['custom']['fields'] ?? [],
                         'count' => $lineItem['quantity'],
                         'price' => $lineItem['money']['centAmount'],
-                        'discountedPrice' => (isset($lineItem['discountedPrice']) ? $lineItem['totalPrice']['centAmount'] : null),
+                        'discountedPrice' => (isset($lineItem['discountedPrice'])
+                            ? $lineItem['totalPrice']['centAmount']
+                            : null
+                        ),;
                         'discountTexts' => array_map(
                             function ($discount): array {
                                 return $discount['discount']['obj']['name'] ?? [];

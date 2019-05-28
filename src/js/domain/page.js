@@ -78,9 +78,9 @@ class Page {
 
     duplicateCell (regionId, cell) {
         const newCell = this.addCell(regionId, cell.configuration)
-        cell.tastics.forEach((tastic, position) =>
+        cell.tastics.forEach((tastic, position) => {
             this.addTastic(regionId, newCell.cellId, tastic.tasticType, position, tastic.configuration)
-        )
+        })
         return newCell
     }
 

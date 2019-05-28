@@ -6,6 +6,8 @@ namespace Frontastic\Common;
  */
 final class Functions
 {
+    // Should match original PHP function signature
+    // phpcs:ignore
     public static function array_merge_recursive(array $array1, array $array2): array
     {
         $merged = $array1;
