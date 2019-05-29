@@ -45,6 +45,8 @@ class Tideways extends HttpClient
         $traceId = null;
         if (class_exists(\Tideways\Profiler::class)) {
             $span = \Tideways\Profiler::createSpan('http');
+            $span->startTimer();
+
             if ($traceId = \Tideways\Profiler::currentTraceId()) {
                 $headers[] = 'X-Correlation-ID: ' . $traceId;
             }
