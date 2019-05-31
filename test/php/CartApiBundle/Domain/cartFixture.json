@@ -1,0 +1,1755 @@
+{
+  "type": "Order",
+  "id": "2edd29de-61c6-41c2-b291-02e7093ac4b5",
+  "version": 2,
+  "lastMessageSequenceNumber": 2,
+  "createdAt": "2019-05-22T15:50:04.544Z",
+  "lastModifiedAt": "2019-05-22T15:58:49.391Z",
+  "lastModifiedBy": {
+    "clientId": "ItyRZg1vwuwduXnwuKRgYilu",
+    "isPlatformClient": false
+  },
+  "createdBy": {
+    "clientId": "LCgPDfSYGJTHBUp71noJvQNA",
+    "isPlatformClient": false
+  },
+  "orderNumber": "OR99-1000ABEZ",
+  "customerId": "52d0c0ce-c656-4d8b-ae8b-6c6f97aa63f0",
+  "customerEmail": "juergen@was-wollen-wir-trinken.de",
+  "totalPrice": {
+    "type": "centPrecision",
+    "currencyCode": "EUR",
+    "centAmount": 22000,
+    "fractionDigits": 2
+  },
+  "taxedPrice": {
+    "totalNet": {
+      "type": "centPrecision",
+      "currencyCode": "EUR",
+      "centAmount": 18487,
+      "fractionDigits": 2
+    },
+    "totalGross": {
+      "type": "centPrecision",
+      "currencyCode": "EUR",
+      "centAmount": 22000,
+      "fractionDigits": 2
+    },
+    "taxPortions": [
+      {
+        "rate": 0.19,
+        "amount": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 3513,
+          "fractionDigits": 2
+        },
+        "name": "Standard"
+      }
+    ]
+  },
+  "country": "DE",
+  "orderState": "Confirmed",
+  "syncInfo": [],
+  "returnInfo": [],
+  "shippingInfo": {
+    "shippingMethodName": "Versand an Lieferadresse",
+    "price": {
+      "type": "centPrecision",
+      "currencyCode": "EUR",
+      "centAmount": 0,
+      "fractionDigits": 2
+    },
+    "shippingRate": {
+      "price": {
+        "type": "centPrecision",
+        "currencyCode": "EUR",
+        "centAmount": 490,
+        "fractionDigits": 2
+      },
+      "freeAbove": {
+        "type": "centPrecision",
+        "currencyCode": "EUR",
+        "centAmount": 2900,
+        "fractionDigits": 2
+      },
+      "tiers": []
+    },
+    "taxRate": {
+      "name": "Standard",
+      "amount": 0.19,
+      "includedInPrice": true,
+      "country": "DE",
+      "id": "IEZ4wKnO",
+      "subRates": []
+    },
+    "taxCategory": {
+      "typeId": "tax-category",
+      "id": "08ab0389-e4e1-44ea-8a9d-7bf310bf9a9a"
+    },
+    "deliveries": [],
+    "shippingMethod": {
+      "typeId": "shipping-method",
+      "id": "850b8c3a-974a-4f07-bf29-e1fdcdad5406"
+    },
+    "taxedPrice": {
+      "totalNet": {
+        "type": "centPrecision",
+        "currencyCode": "EUR",
+        "centAmount": 0,
+        "fractionDigits": 2
+      },
+      "totalGross": {
+        "type": "centPrecision",
+        "currencyCode": "EUR",
+        "centAmount": 0,
+        "fractionDigits": 2
+      }
+    },
+    "shippingMethodState": "MatchesCart"
+  },
+  "taxMode": "Platform",
+  "inventoryMode": "ReserveOnOrder",
+  "taxRoundingMode": "HalfEven",
+  "taxCalculationMode": "LineItemLevel",
+  "origin": "Customer",
+  "lineItems": [
+    {
+      "id": "de74bc5c-9995-4a95-99d0-b6ba01769d85",
+      "productId": "893c7a8e-24bc-45ca-81c3-0afe27858c6f",
+      "name": {
+        "de": "ray-ban sonnenbrillen herren"
+      },
+      "productType": {
+        "typeId": "product-type",
+        "id": "a82bade3-27cc-4f08-8d1e-a6c192203c4a"
+      },
+      "productSlug": {
+        "de": "10108489"
+      },
+      "variant": {
+        "id": 1,
+        "sku": "10108489",
+        "key": "10108489",
+        "prices": [
+          {
+            "value": {
+              "type": "centPrecision",
+              "currencyCode": "EUR",
+              "centAmount": 10000,
+              "fractionDigits": 2
+            },
+            "id": "3615ef76-d358-4590-8b25-52af30edec17"
+          }
+        ],
+        "images": [],
+        "attributes": [
+          {
+            "name": "slug_intern",
+            "value": "ray-ban/sonnenbrillen/herren"
+          },
+          {
+            "name": "online_ready",
+            "value": true
+          },
+          {
+            "name": "processing_type",
+            "value": "HW"
+          },
+          {
+            "name": "product_family_key",
+            "value": "SOBRI"
+          },
+          {
+            "name": "product_family_value",
+            "value": "Sonnenbrille"
+          },
+          {
+            "name": "external_code",
+            "value": "328537"
+          },
+          {
+            "name": "ean",
+            "value": "0805289526575"
+          },
+          {
+            "name": "brand_key",
+            "value": "OC0280"
+          },
+          {
+            "name": "brand_value",
+            "value": "Ray-Ban"
+          },
+          {
+            "name": "brand_url",
+            "value": "ray-ban"
+          },
+          {
+            "name": "model_name",
+            "value": "JUSTIN"
+          },
+          {
+            "name": "ft_name",
+            "value": "Sonnenbrille-Ray-Ban-JUSTIN-Schwarz"
+          },
+          {
+            "name": "article_description",
+            "value": "Sonnenbrille-Ray-Ban-JUSTIN-Schwarz"
+          },
+          {
+            "name": "allergy_safe",
+            "value": false
+          },
+          {
+            "name": "gender_key",
+            "value": "M"
+          },
+          {
+            "name": "gender_value",
+            "value": "Herren"
+          },
+          {
+            "name": "targetgroup_key",
+            "value": "GV04"
+          },
+          {
+            "name": "targetgroup_value",
+            "value": "Erwachsene"
+          },
+          {
+            "name": "item_color1_key",
+            "value": "B"
+          },
+          {
+            "name": "item_color1_value",
+            "value": "Schwarz"
+          },
+          {
+            "name": "item_color2_key",
+            "value": "B"
+          },
+          {
+            "name": "item_color2_value",
+            "value": "Schwarz"
+          },
+          {
+            "name": "rimtype_tech_key",
+            "value": "N"
+          },
+          {
+            "name": "rimtype_fashion_key",
+            "value": "1"
+          },
+          {
+            "name": "rimtype_fashion_value",
+            "value": "Vollrand"
+          },
+          {
+            "name": "frame_style_key",
+            "value": "GV6"
+          },
+          {
+            "name": "frame_style_value",
+            "value": "Fashion"
+          },
+          {
+            "name": "material_detail_front_key",
+            "value": "076"
+          },
+          {
+            "name": "material_detail_front_value",
+            "value": "Kunststoff"
+          },
+          {
+            "name": "lens_material_detail_key",
+            "value": "018"
+          },
+          {
+            "name": "lens_material_detail_value",
+            "value": "Kunststoff"
+          },
+          {
+            "name": "frame_shape_key",
+            "value": "02"
+          },
+          {
+            "name": "frame_shape_value",
+            "value": "Eckig"
+          },
+          {
+            "name": "box_width",
+            "value": 54
+          },
+          {
+            "name": "box_height",
+            "value": 44
+          },
+          {
+            "name": "temple_length",
+            "value": 145
+          },
+          {
+            "name": "saddle_width",
+            "value": 16
+          },
+          {
+            "name": "temple_color1_key",
+            "value": "B"
+          },
+          {
+            "name": "temple_color1_value",
+            "value": "Schwarz"
+          },
+          {
+            "name": "temple_color2_key",
+            "value": "B"
+          },
+          {
+            "name": "temple_color2_value",
+            "value": "Schwarz"
+          },
+          {
+            "name": "caliber_size_key",
+            "value": "S"
+          },
+          {
+            "name": "caliber_size_value",
+            "value": "Klein"
+          },
+          {
+            "name": "caliber_value",
+            "value": 124
+          },
+          {
+            "name": "min_lens_package",
+            "value": 10
+          },
+          {
+            "name": "max_lens_package",
+            "value": 60
+          },
+          {
+            "name": "hinge_type_key",
+            "value": "1"
+          },
+          {
+            "name": "material_group_GV_value",
+            "value": "Kunststoff"
+          },
+          {
+            "name": "hinge_type_value",
+            "value": "Standard Scharnier"
+          },
+          {
+            "name": "multi_focable",
+            "value": true
+          },
+          {
+            "name": "prescription_ready",
+            "value": true
+          },
+          {
+            "name": "polarized",
+            "value": false
+          },
+          {
+            "name": "gradient",
+            "value": true
+          },
+          {
+            "name": "blue_blocking",
+            "value": false
+          },
+          {
+            "name": "ar_coated",
+            "value": false
+          },
+          {
+            "name": "mirror_coated",
+            "value": false
+          },
+          {
+            "name": "photocromatic",
+            "value": false
+          },
+          {
+            "name": "lens_color_key",
+            "value": 200
+          },
+          {
+            "name": "lens_color_value",
+            "value": "Grey"
+          },
+          {
+            "name": "filter_category_key",
+            "value": "3"
+          },
+          {
+            "name": "filter_category_value",
+            "value": "8-18% Lichtdurchlässigkeit"
+          },
+          {
+            "name": "filter_category_use_key",
+            "value": "2"
+          },
+          {
+            "name": "filter_category_use_value",
+            "value": "Verkehrstauglich"
+          },
+          {
+            "name": "cl_material_group_key",
+            "value": "Z2"
+          },
+          {
+            "name": "cl_material_detail_key",
+            "value": "076"
+          },
+          {
+            "name": "cl_material_detail_value",
+            "value": "Kunststoff"
+          },
+          {
+            "name": "list_price",
+            "value": {
+              "fractionDigits": 2,
+              "centAmount": 10000,
+              "currencyCode": "EUR",
+              "type": "centPrecision"
+            }
+          },
+          {
+            "name": "price_footer",
+            "value": "* in Sehstärke erhältlich"
+          },
+          {
+            "name": "offer_price",
+            "value": {
+              "fractionDigits": 2,
+              "centAmount": 0,
+              "currencyCode": "EUR",
+              "type": "centPrecision"
+            }
+          },
+          {
+            "name": "campaign_code_pos",
+            "value": "*V"
+          },
+          {
+            "name": "visibility",
+            "value": true
+          },
+          {
+            "name": "promo_sticker_key",
+            "value": [
+              20
+            ]
+          },
+          {
+            "name": "description_title",
+            "value": "Klassik trifft Kult"
+          },
+          {
+            "name": "promo_sticker_value",
+            "value": [
+              "Topseller"
+            ]
+          },
+          {
+            "name": "searchability",
+            "value": true
+          }
+        ],
+        "assets": [
+          {
+            "id": "b735f0bc-28a5-40ea-93d0-9edf1753cb48",
+            "sources": [
+              {
+                "uri": "https://cos.flexvault.de/shop-images/805289526575_Front_RayBan_V2.jpg",
+                "contentType": "image/png"
+              }
+            ],
+            "name": {
+              "de": "805289526575_Front_RayBan_V2"
+            },
+            "key": "805289526575_Front_RayBan_V2",
+            "description": {
+              "de": ""
+            },
+            "tags": [
+              "slider0",
+              "mood2"
+            ]
+          },
+          {
+            "id": "eb11ae03-f122-4241-86dd-2afaaa25fca5",
+            "sources": [
+              {
+                "uri": "https://cos.flexvault.de/shop-images/805289526575_Angle_RayBan_V2.jpg",
+                "contentType": "image/png"
+              }
+            ],
+            "name": {
+              "de": "805289526575_Angle_RayBan_V2"
+            },
+            "key": "805289526575_Angle_RayBan_V2",
+            "description": {
+              "de": ""
+            },
+            "tags": [
+              "mood1",
+              "slider1"
+            ]
+          }
+        ],
+        "availability": {
+          "isOnStock": true,
+          "availableQuantity": 1360
+        }
+      },
+      "price": {
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 10000,
+          "fractionDigits": 2
+        },
+        "id": "3615ef76-d358-4590-8b25-52af30edec17"
+      },
+      "quantity": 1,
+      "discountedPricePerQuantity": [],
+      "taxRate": {
+        "name": "Standard",
+        "amount": 0.19,
+        "includedInPrice": true,
+        "country": "DE",
+        "id": "IEZ4wKnO",
+        "subRates": []
+      },
+      "state": [
+        {
+          "quantity": 1,
+          "state": {
+            "typeId": "state",
+            "id": "94e36d2f-a84f-4516-98df-319012a0eb73"
+          }
+        }
+      ],
+      "priceMode": "Platform",
+      "totalPrice": {
+        "type": "centPrecision",
+        "currencyCode": "EUR",
+        "centAmount": 10000,
+        "fractionDigits": 2
+      },
+      "taxedPrice": {
+        "totalNet": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 8403,
+          "fractionDigits": 2
+        },
+        "totalGross": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 10000,
+          "fractionDigits": 2
+        }
+      },
+      "custom": {
+        "type": {
+          "typeId": "type",
+          "id": "a44b7319-1423-41fd-a16b-17d5bdd842f5"
+        },
+        "fields": {
+          "sonnewow": true,
+          "iwearwow": false,
+          "bundleNumber": 1,
+          "sunglasses_50_campaign": false,
+          "sunglasses_campaign": false,
+          "processingType": "HW",
+          "backendOrderId": 1
+        }
+      },
+      "lineItemMode": "Standard"
+    },
+    {
+      "id": "240e80b7-3931-40a6-b36c-bae540ae0c45",
+      "productId": "b46c1dbd-e68b-42a6-a426-bffca92fe45c",
+      "name": {
+        "de": "ray-ban sonnenbrillen herren"
+      },
+      "productType": {
+        "typeId": "product-type",
+        "id": "a82bade3-27cc-4f08-8d1e-a6c192203c4a"
+      },
+      "productSlug": {
+        "de": "10108411"
+      },
+      "variant": {
+        "id": 1,
+        "sku": "10108411",
+        "key": "10108411",
+        "prices": [
+          {
+            "value": {
+              "type": "centPrecision",
+              "currencyCode": "EUR",
+              "centAmount": 10000,
+              "fractionDigits": 2
+            },
+            "id": "4c73d51a-e69e-4f3d-8039-7c649668c173"
+          }
+        ],
+        "images": [],
+        "attributes": [
+          {
+            "name": "slug_intern",
+            "value": "ray-ban/sonnenbrillen/herren"
+          },
+          {
+            "name": "online_ready",
+            "value": true
+          },
+          {
+            "name": "processing_type",
+            "value": "HW"
+          },
+          {
+            "name": "product_family_key",
+            "value": "SOBRI"
+          },
+          {
+            "name": "product_family_value",
+            "value": "Sonnenbrille"
+          },
+          {
+            "name": "external_code",
+            "value": "326544"
+          },
+          {
+            "name": "ean",
+            "value": "0805289052418"
+          },
+          {
+            "name": "brand_key",
+            "value": "OC0280"
+          },
+          {
+            "name": "brand_value",
+            "value": "Ray-Ban"
+          },
+          {
+            "name": "brand_url",
+            "value": "ray-ban"
+          },
+          {
+            "name": "model_name",
+            "value": "New Wayfarer"
+          },
+          {
+            "name": "ft_name",
+            "value": "Sonnenbrille-Ray-Ban-New Wayfarer-Schwarz"
+          },
+          {
+            "name": "article_description",
+            "value": "Sonnenbrille-Ray-Ban-New Wayfarer-Schwarz"
+          },
+          {
+            "name": "allergy_safe",
+            "value": false
+          },
+          {
+            "name": "gender_key",
+            "value": "M"
+          },
+          {
+            "name": "gender_value",
+            "value": "Herren"
+          },
+          {
+            "name": "targetgroup_key",
+            "value": "GV04"
+          },
+          {
+            "name": "targetgroup_value",
+            "value": "Erwachsene"
+          },
+          {
+            "name": "item_color1_key",
+            "value": "B"
+          },
+          {
+            "name": "item_color1_value",
+            "value": "Schwarz"
+          },
+          {
+            "name": "item_color2_key",
+            "value": "B"
+          },
+          {
+            "name": "item_color2_value",
+            "value": "Schwarz"
+          },
+          {
+            "name": "rimtype_tech_key",
+            "value": "N"
+          },
+          {
+            "name": "rimtype_fashion_key",
+            "value": "1"
+          },
+          {
+            "name": "rimtype_fashion_value",
+            "value": "Vollrand"
+          },
+          {
+            "name": "frame_style_key",
+            "value": "GV6"
+          },
+          {
+            "name": "frame_style_value",
+            "value": "Fashion"
+          },
+          {
+            "name": "material_detail_front_key",
+            "value": "076"
+          },
+          {
+            "name": "material_detail_front_value",
+            "value": "Kunststoff"
+          },
+          {
+            "name": "frame_shape_key",
+            "value": "02"
+          },
+          {
+            "name": "frame_shape_value",
+            "value": "Eckig"
+          },
+          {
+            "name": "box_width",
+            "value": 55
+          },
+          {
+            "name": "box_height",
+            "value": 41
+          },
+          {
+            "name": "temple_length",
+            "value": 145
+          },
+          {
+            "name": "saddle_width",
+            "value": 18
+          },
+          {
+            "name": "temple_color1_key",
+            "value": "B"
+          },
+          {
+            "name": "temple_color1_value",
+            "value": "Schwarz"
+          },
+          {
+            "name": "temple_color2_key",
+            "value": "B"
+          },
+          {
+            "name": "temple_color2_value",
+            "value": "Schwarz"
+          },
+          {
+            "name": "caliber_size_key",
+            "value": "M"
+          },
+          {
+            "name": "caliber_size_value",
+            "value": "Mittel"
+          },
+          {
+            "name": "caliber_value",
+            "value": 128
+          },
+          {
+            "name": "min_lens_package",
+            "value": 10
+          },
+          {
+            "name": "max_lens_package",
+            "value": 60
+          },
+          {
+            "name": "hinge_type_key",
+            "value": "1"
+          },
+          {
+            "name": "material_group_GV_value",
+            "value": "Kunststoff"
+          },
+          {
+            "name": "hinge_type_value",
+            "value": "Standard Scharnier"
+          },
+          {
+            "name": "multi_focable",
+            "value": true
+          },
+          {
+            "name": "prescription_ready",
+            "value": true
+          },
+          {
+            "name": "polarized",
+            "value": false
+          },
+          {
+            "name": "gradient",
+            "value": false
+          },
+          {
+            "name": "blue_blocking",
+            "value": false
+          },
+          {
+            "name": "ar_coated",
+            "value": false
+          },
+          {
+            "name": "mirror_coated",
+            "value": false
+          },
+          {
+            "name": "photocromatic",
+            "value": false
+          },
+          {
+            "name": "vto_ready",
+            "value": false
+          },
+          {
+            "name": "lens_color_key",
+            "value": 100
+          },
+          {
+            "name": "lens_color_value",
+            "value": "Green"
+          },
+          {
+            "name": "filter_category_key",
+            "value": "3"
+          },
+          {
+            "name": "filter_category_value",
+            "value": "8-18% Lichtdurchlässigkeit"
+          },
+          {
+            "name": "filter_category_use_key",
+            "value": "2"
+          },
+          {
+            "name": "filter_category_use_value",
+            "value": "Verkehrstauglich"
+          },
+          {
+            "name": "cl_material_group_key",
+            "value": "Z2"
+          },
+          {
+            "name": "cl_material_detail_key",
+            "value": "076"
+          },
+          {
+            "name": "cl_material_detail_value",
+            "value": "Kunststoff"
+          },
+          {
+            "name": "list_price",
+            "value": {
+              "fractionDigits": 2,
+              "centAmount": 10000,
+              "currencyCode": "EUR",
+              "type": "centPrecision"
+            }
+          },
+          {
+            "name": "price_footer",
+            "value": "* in Sehstärke erhältlich"
+          },
+          {
+            "name": "offer_price",
+            "value": {
+              "type": "centPrecision",
+              "currencyCode": "EUR",
+              "centAmount": 0,
+              "fractionDigits": 2
+            }
+          },
+          {
+            "name": "campaign_code_pos",
+            "value": "*V"
+          },
+          {
+            "name": "visibility",
+            "value": true
+          },
+          {
+            "name": "promo_sticker_key",
+            "value": [
+              20
+            ]
+          },
+          {
+            "name": "description_title",
+            "value": "Alles auf Anfang"
+          },
+          {
+            "name": "promo_sticker_value",
+            "value": [
+              "Topseller"
+            ]
+          },
+          {
+            "name": "searchability",
+            "value": true
+          }
+        ],
+        "assets": [
+          {
+            "id": "8c66dd62-2072-4b58-8f37-1efded5564cb",
+            "sources": [
+              {
+                "uri": "https://cos.flexvault.de/shop-images/805289052418_Front_RayBan_V2.jpg",
+                "contentType": "image/png"
+              }
+            ],
+            "name": {
+              "de": "805289052418_Front_RayBan_V2"
+            },
+            "key": "805289052418_Front_RayBan_V2",
+            "description": {
+              "de": ""
+            },
+            "tags": [
+              "slider0",
+              "mood2"
+            ]
+          },
+          {
+            "id": "1dbd8149-8b12-4c58-848f-31b4b1d63b6f",
+            "sources": [
+              {
+                "uri": "https://cos.flexvault.de/shop-images/805289052418_Angle_RayBan_V2.jpg",
+                "contentType": "image/png"
+              }
+            ],
+            "name": {
+              "de": "805289052418_Angle_RayBan_V2"
+            },
+            "key": "805289052418_Angle_RayBan_V2",
+            "description": {
+              "de": ""
+            },
+            "tags": [
+              "mood1",
+              "slider1"
+            ]
+          }
+        ],
+        "availability": {
+          "isOnStock": true,
+          "availableQuantity": 481
+        }
+      },
+      "price": {
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 10000,
+          "fractionDigits": 2
+        },
+        "id": "4c73d51a-e69e-4f3d-8039-7c649668c173"
+      },
+      "quantity": 1,
+      "discountedPricePerQuantity": [],
+      "taxRate": {
+        "name": "Standard",
+        "amount": 0.19,
+        "includedInPrice": true,
+        "country": "DE",
+        "id": "IEZ4wKnO",
+        "subRates": []
+      },
+      "state": [
+        {
+          "quantity": 1,
+          "state": {
+            "typeId": "state",
+            "id": "94e36d2f-a84f-4516-98df-319012a0eb73"
+          }
+        }
+      ],
+      "priceMode": "Platform",
+      "totalPrice": {
+        "type": "centPrecision",
+        "currencyCode": "EUR",
+        "centAmount": 10000,
+        "fractionDigits": 2
+      },
+      "taxedPrice": {
+        "totalNet": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 8403,
+          "fractionDigits": 2
+        },
+        "totalGross": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 10000,
+          "fractionDigits": 2
+        }
+      },
+      "custom": {
+        "type": {
+          "typeId": "type",
+          "id": "a44b7319-1423-41fd-a16b-17d5bdd842f5"
+        },
+        "fields": {
+          "iwearwow": false,
+          "bundleNumber": 2,
+          "sunglasses_50_campaign": false,
+          "sunglasses_campaign": false,
+          "processingType": "HW",
+          "backendOrderId": 2
+        }
+      },
+      "lineItemMode": "Standard"
+    },
+    {
+      "id": "573a8ea7-5912-414c-aade-12f7104ce591",
+      "productId": "0291082d-12d1-4ed7-877e-c124ffcc0cdb",
+      "name": {
+        "de": "in-style sonnenbrillen herren"
+      },
+      "productType": {
+        "typeId": "product-type",
+        "id": "a82bade3-27cc-4f08-8d1e-a6c192203c4a"
+      },
+      "productSlug": {
+        "de": "10262227"
+      },
+      "variant": {
+        "id": 1,
+        "sku": "10262227",
+        "key": "10262227",
+        "prices": [
+          {
+            "value": {
+              "type": "centPrecision",
+              "currencyCode": "EUR",
+              "centAmount": 7000,
+              "fractionDigits": 2
+            },
+            "id": "eb56f8db-a620-403e-a224-d6948b51901d"
+          }
+        ],
+        "images": [],
+        "attributes": [
+          {
+            "name": "slug_intern",
+            "value": "in-style/sonnenbrillen/herren"
+          },
+          {
+            "name": "online_ready",
+            "value": true
+          },
+          {
+            "name": "processing_type",
+            "value": "HW"
+          },
+          {
+            "name": "product_family_key",
+            "value": "SOBRI"
+          },
+          {
+            "name": "product_family_value",
+            "value": "Sonnenbrille"
+          },
+          {
+            "name": "external_code",
+            "value": "335837"
+          },
+          {
+            "name": "ean",
+            "value": "8719154233036"
+          },
+          {
+            "name": "brand_key",
+            "value": "OC0142"
+          },
+          {
+            "name": "brand_value",
+            "value": "IN STYLE"
+          },
+          {
+            "name": "brand_url",
+            "value": "in-style"
+          },
+          {
+            "name": "model_name",
+            "value": "Mood"
+          },
+          {
+            "name": "ft_name",
+            "value": "Sonnenbrille-IN STYLE-Mood-Schwarz"
+          },
+          {
+            "name": "article_description",
+            "value": "Sonnenbrille-IN STYLE-Mood-Schwarz"
+          },
+          {
+            "name": "popularity",
+            "value": 0
+          },
+          {
+            "name": "allergy_safe",
+            "value": false
+          },
+          {
+            "name": "gender_key",
+            "value": "M"
+          },
+          {
+            "name": "gender_value",
+            "value": "Herren"
+          },
+          {
+            "name": "targetgroup_key",
+            "value": "GV04"
+          },
+          {
+            "name": "targetgroup_value",
+            "value": "Erwachsene"
+          },
+          {
+            "name": "item_color1_key",
+            "value": "B"
+          },
+          {
+            "name": "item_color1_value",
+            "value": "Schwarz"
+          },
+          {
+            "name": "item_color2_key",
+            "value": "G"
+          },
+          {
+            "name": "item_color2_value",
+            "value": "Grau"
+          },
+          {
+            "name": "rimtype_tech_key",
+            "value": "N"
+          },
+          {
+            "name": "rimtype_fashion_key",
+            "value": "1"
+          },
+          {
+            "name": "rimtype_fashion_value",
+            "value": "Vollrand"
+          },
+          {
+            "name": "frame_style_key",
+            "value": "GV6"
+          },
+          {
+            "name": "frame_style_value",
+            "value": "Fashion"
+          },
+          {
+            "name": "material_detail_front_key",
+            "value": "020"
+          },
+          {
+            "name": "material_detail_front_value",
+            "value": "Stahl"
+          },
+          {
+            "name": "lens_material_detail_key",
+            "value": "006"
+          },
+          {
+            "name": "lens_material_detail_value",
+            "value": "Kunststoff"
+          },
+          {
+            "name": "frame_shape_key",
+            "value": "04"
+          },
+          {
+            "name": "frame_shape_value",
+            "value": "Panto"
+          },
+          {
+            "name": "box_width",
+            "value": 53
+          },
+          {
+            "name": "box_height",
+            "value": 49
+          },
+          {
+            "name": "temple_length",
+            "value": 145
+          },
+          {
+            "name": "saddle_width",
+            "value": 20
+          },
+          {
+            "name": "temple_color1_key",
+            "value": "B"
+          },
+          {
+            "name": "temple_color1_value",
+            "value": "Schwarz"
+          },
+          {
+            "name": "temple_color2_key",
+            "value": "B"
+          },
+          {
+            "name": "temple_color2_value",
+            "value": "Schwarz"
+          },
+          {
+            "name": "caliber_size_key",
+            "value": "M"
+          },
+          {
+            "name": "caliber_size_value",
+            "value": "Mittel"
+          },
+          {
+            "name": "caliber_value",
+            "value": 126
+          },
+          {
+            "name": "min_lens_package",
+            "value": 10
+          },
+          {
+            "name": "max_lens_package",
+            "value": 60
+          },
+          {
+            "name": "face_shape_key",
+            "value": [
+              50,
+              40,
+              10
+            ]
+          },
+          {
+            "name": "face_shape_value",
+            "value": [
+              "40_Herzform",
+              "50_Eckig",
+              "10_Oval"
+            ]
+          },
+          {
+            "name": "hinge_type_key",
+            "value": "1"
+          },
+          {
+            "name": "material_group_GV_value",
+            "value": "Metall"
+          },
+          {
+            "name": "hinge_type_value",
+            "value": "Standard Scharnier"
+          },
+          {
+            "name": "multi_focable",
+            "value": true
+          },
+          {
+            "name": "prescription_ready",
+            "value": true
+          },
+          {
+            "name": "polarized",
+            "value": false
+          },
+          {
+            "name": "gradient",
+            "value": false
+          },
+          {
+            "name": "blue_blocking",
+            "value": false
+          },
+          {
+            "name": "ar_coated",
+            "value": false
+          },
+          {
+            "name": "mirror_coated",
+            "value": true
+          },
+          {
+            "name": "photocromatic",
+            "value": false
+          },
+          {
+            "name": "vto_ready",
+            "value": false
+          },
+          {
+            "name": "lens_color_key",
+            "value": 999
+          },
+          {
+            "name": "lens_color_value",
+            "value": "Bunt"
+          },
+          {
+            "name": "for_dry_eyes",
+            "value": false
+          },
+          {
+            "name": "filter_category_key",
+            "value": "3"
+          },
+          {
+            "name": "filter_category_value",
+            "value": "8-18% Lichtdurchlässigkeit"
+          },
+          {
+            "name": "filter_category_use_key",
+            "value": "2"
+          },
+          {
+            "name": "filter_category_use_value",
+            "value": "Verkehrstauglich"
+          },
+          {
+            "name": "cl_day_and_night",
+            "value": false
+          },
+          {
+            "name": "cl_handlings_tint",
+            "value": false
+          },
+          {
+            "name": "cl_material_group_key",
+            "value": "Z1"
+          },
+          {
+            "name": "cl_material_detail_key",
+            "value": "020"
+          },
+          {
+            "name": "cl_material_detail_value",
+            "value": "Stahl"
+          },
+          {
+            "name": "list_price",
+            "value": {
+              "type": "centPrecision",
+              "currencyCode": "EUR",
+              "centAmount": 7000,
+              "fractionDigits": 2
+            }
+          },
+          {
+            "name": "price_footer",
+            "value": "* in Sehstärke erhältlich"
+          },
+          {
+            "name": "offer_price",
+            "value": {
+              "type": "centPrecision",
+              "currencyCode": "EUR",
+              "centAmount": 0,
+              "fractionDigits": 2
+            }
+          },
+          {
+            "name": "campaign_code_pos",
+            "value": "*V"
+          },
+          {
+            "name": "visibility",
+            "value": true
+          },
+          {
+            "name": "tois_ready",
+            "value": false
+          },
+          {
+            "name": "delivery_time_min",
+            "value": 3
+          },
+          {
+            "name": "delivery_time_max",
+            "value": 14
+          },
+          {
+            "name": "default_sort",
+            "value": 1
+          },
+          {
+            "name": "promo_sticker_key",
+            "value": [
+              40
+            ]
+          },
+          {
+            "name": "promo_sticker_value",
+            "value": [
+              "Trend"
+            ]
+          },
+          {
+            "name": "searchability",
+            "value": true
+          }
+        ],
+        "assets": [
+          {
+            "id": "5f0e5015-50a5-4770-a9ac-68c7430000f4",
+            "sources": [
+              {
+                "uri": "https://cos.flexvault.de/shop-images/8719154233036_FRONT_InStyle_HD.jpg",
+                "contentType": "image/png"
+              }
+            ],
+            "name": {
+              "de": "8719154233036_FRONT_InStyle_HD"
+            },
+            "key": "8719154233036_FRONT_InStyle_HD",
+            "description": {
+              "de": ""
+            },
+            "tags": [
+              "slider0",
+              "mood2"
+            ]
+          },
+          {
+            "id": "e1e67244-004f-43a3-b5ce-00cee95593e7",
+            "sources": [
+              {
+                "uri": "https://cos.flexvault.de/shop-images/8719154233036_ANGLE_InStyle_HD.jpg",
+                "contentType": "image/png"
+              }
+            ],
+            "name": {
+              "de": "8719154233036_ANGLE_InStyle_HD"
+            },
+            "key": "8719154233036_ANGLE_InStyle_HD",
+            "description": {
+              "de": ""
+            },
+            "tags": [
+              "mood1",
+              "slider1"
+            ]
+          }
+        ],
+        "availability": {
+          "isOnStock": true,
+          "availableQuantity": 2742
+        }
+      },
+      "price": {
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 7000,
+          "fractionDigits": 2
+        },
+        "id": "eb56f8db-a620-403e-a224-d6948b51901d"
+      },
+      "quantity": 1,
+      "discountedPrice": {
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 2000,
+          "fractionDigits": 2
+        },
+        "includedDiscounts": [
+          {
+            "discount": {
+              "typeId": "cart-discount",
+              "id": "8ea0d64f-a806-4215-9fb3-0626045a69df",
+              "obj": {
+                "id": "8ea0d64f-a806-4215-9fb3-0626045a69df",
+                "version": 18,
+                "createdAt": "2019-03-12T09:18:08.058Z",
+                "lastModifiedAt": "2019-05-31T04:54:00.961Z",
+                "lastModifiedBy": {
+                  "isPlatformClient": true,
+                  "user": {
+                    "typeId": "user",
+                    "id": "07b06f6a-16bb-4b9f-a7bf-8159ad252b50"
+                  }
+                },
+                "createdBy": {
+                  "user": {
+                    "typeId": "user",
+                    "id": "9622024f-b3c5-4320-943f-7412ee08f697"
+                  }
+                },
+                "value": {
+                  "type": "absolute",
+                  "money": [
+                    {
+                      "type": "centPrecision",
+                      "currencyCode": "EUR",
+                      "centAmount": 5000,
+                      "fractionDigits": 2
+                    }
+                  ]
+                },
+                "cartPredicate": "1 = 1",
+                "target": {
+                  "type": "lineItems",
+                  "predicate": "custom.sunglasses_50_campaign = true"
+                },
+                "name": {
+                  "de": "Sonnenbrillen Special 2019 "
+                },
+                "description": {
+                  "de": "50€ Bonus auf jede billigere Sonnenbrille, wenn die teure 100€ Wert überschreitet"
+                },
+                "stackingMode": "Stacking",
+                "isActive": false,
+                "requiresDiscountCode": false,
+                "sortOrder": "0.999996",
+                "references": [],
+                "attributeTypes": {},
+                "cartFieldTypes": {},
+                "lineItemFieldTypes": {
+                  "sunglasses_50_campaign": {
+                    "name": "Boolean"
+                  }
+                },
+                "customLineItemFieldTypes": {}
+              }
+            },
+            "discountedAmount": {
+              "type": "centPrecision",
+              "currencyCode": "EUR",
+              "centAmount": 5000,
+              "fractionDigits": 2
+            }
+          }
+        ]
+      },
+      "discountedPricePerQuantity": [
+        {
+          "quantity": 1,
+          "discountedPrice": {
+            "value": {
+              "type": "centPrecision",
+              "currencyCode": "EUR",
+              "centAmount": 2000,
+              "fractionDigits": 2
+            },
+            "includedDiscounts": [
+              {
+                "discount": {
+                  "typeId": "cart-discount",
+                  "id": "8ea0d64f-a806-4215-9fb3-0626045a69df"
+                },
+                "discountedAmount": {
+                  "type": "centPrecision",
+                  "currencyCode": "EUR",
+                  "centAmount": 5000,
+                  "fractionDigits": 2
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "taxRate": {
+        "name": "Standard",
+        "amount": 0.19,
+        "includedInPrice": true,
+        "country": "DE",
+        "id": "IEZ4wKnO",
+        "subRates": []
+      },
+      "state": [
+        {
+          "quantity": 1,
+          "state": {
+            "typeId": "state",
+            "id": "94e36d2f-a84f-4516-98df-319012a0eb73"
+          }
+        }
+      ],
+      "priceMode": "Platform",
+      "totalPrice": {
+        "type": "centPrecision",
+        "currencyCode": "EUR",
+        "centAmount": 2000,
+        "fractionDigits": 2
+      },
+      "taxedPrice": {
+        "totalNet": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 1681,
+          "fractionDigits": 2
+        },
+        "totalGross": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 2000,
+          "fractionDigits": 2
+        }
+      },
+      "custom": {
+        "type": {
+          "typeId": "type",
+          "id": "a44b7319-1423-41fd-a16b-17d5bdd842f5"
+        },
+        "fields": {
+          "iwearwow": false,
+          "bundleNumber": 50,
+          "sunglasses_50_campaign": true,
+          "sunglasses_campaign": true,
+          "processingType": "HW",
+          "backendOrderId": 50
+        }
+      },
+      "lineItemMode": "Standard"
+    }
+  ],
+  "customLineItems": [],
+  "transactionFee": true,
+  "discountCodes": [],
+  "cart": {
+    "typeId": "cart",
+    "id": "7bf3f34a-6853-4f1f-975a-572268b61e84"
+  },
+  "custom": {
+    "type": {
+      "typeId": "type",
+      "id": "fd04377e-26eb-452e-94d7-22a6de064970"
+    },
+    "fields": {
+      "birthday": "1962-06-05",
+      "viewUrl": "/",
+      "viewToken": "60f48260896e4313d46b5c5755cab478",
+      "storeId": "6299"
+    }
+  },
+  "paymentInfo": {
+    "payments": [
+      {
+        "typeId": "payment",
+        "id": "b8093489-8dfb-4143-b5fe-1d8f70054814",
+        "obj": {
+          "id": "b8093489-8dfb-4143-b5fe-1d8f70054814",
+          "version": 1,
+          "lastMessageSequenceNumber": 1,
+          "createdAt": "2019-04-15T12:24:47.708Z",
+          "lastModifiedAt": "2019-04-15T12:24:47.708Z",
+          "lastModifiedBy": {
+            "clientId": "LCgPDfSYGJTHBUp71noJvQNA",
+            "isPlatformClient": false
+          },
+          "createdBy": {
+            "clientId": "LCgPDfSYGJTHBUp71noJvQNA",
+            "isPlatformClient": false
+          },
+          "interfaceId": "7ba6efec-da46-4b06-98c0-412feb9180dd",
+          "amountPlanned": {
+            "type": "centPrecision",
+            "currencyCode": "EUR",
+            "centAmount": 10000,
+            "fractionDigits": 2
+          },
+          "paymentMethodInfo": {
+            "paymentInterface": "paypal"
+          },
+          "paymentStatus": {
+            "interfaceCode": "wirecard",
+            "interfaceText": "{\"cancel-redirect-url\":\"https:\\/\\/de-apollo.frontastic.io\\/wirecard\\/confirm\\/cancel\\/https%3A%2F%2Fde-apollo.frontastic.io%2Fcheckout%2Fcheckout\",\"transaction-type\":\"debit\",\"success-redirect-url\":\"https:\\/\\/de-apollo.frontastic.io\\/wirecard\\/confirm\\/success\\/https%3A%2F%2Fde-apollo.frontastic.io%2Fcheckout%2Fcheckout\",\"fail-redirect-url\":\"https:\\/\\/de-apollo.frontastic.io\\/wirecard\\/confirm\\/fail\\/https%3A%2F%2Fde-apollo.frontastic.io%2Fcheckout%2Fcheckout\",\"transaction-id\":\"7ba6efec-da46-4b06-98c0-412feb9180dd\",\"completion-time-stamp\":\"2019-04-15T12:24:44\",\"requested-amount\":{\"currency\":\"EUR\",\"value\":100},\"statuses\":{\"status\":[{\"description\":\"The resource was successfully created.\",\"severity\":\"information\",\"code\":\"201.0000\",\"provider-transaction-id\":\"9G460140R7636835G\"}]},\"account-holder\":{\"first-name\":\"Test\",\"last-name\":\"Buyer\",\"email\":\"buyer@wirecard.com\"},\"merchant-account-id\":{\"value\":\"9abf05c1-c266-46ae-8eac-7f87ca97af28\"},\"transaction-state\":\"success\",\"parent-transaction-id\":\"ad198dd6-204e-4518-aa1f-1aa554114f23\",\"request-id\":\"7bf3f34a-6853-4f1f-975a-572268b61e84-14\",\"payment-methods\":{\"payment-method\":[{\"name\":\"paypal\"}]},\"shipping\":{\"first-name\":\"Damian\",\"last-name\":\"Schmidt\",\"phone\":\"788-264-0711\",\"address\":{\"country\":\"DE\",\"street1\":\"Humboltstra\\u00dfe 69\",\"city\":\"Bremen\",\"postal-code\":\"28203\"}},\"api-id\":\"wpp\",\"wallet\":{\"account-id\":\"B3XC9H53N9A3S\"}}"
+          },
+          "transactions": [],
+          "interfaceInteractions": []
+        }
+      },
+      {
+        "typeId": "payment",
+        "id": "a7def123-6b33-4491-a512-cb6fe75a2493",
+        "obj": {
+          "id": "a7def123-6b33-4491-a512-cb6fe75a2493",
+          "version": 1,
+          "lastMessageSequenceNumber": 1,
+          "createdAt": "2019-04-24T08:51:29.845Z",
+          "lastModifiedAt": "2019-04-24T08:51:29.845Z",
+          "lastModifiedBy": {
+            "clientId": "LCgPDfSYGJTHBUp71noJvQNA",
+            "isPlatformClient": false
+          },
+          "createdBy": {
+            "clientId": "LCgPDfSYGJTHBUp71noJvQNA",
+            "isPlatformClient": false
+          },
+          "interfaceId": "79b37c00-f700-43c1-9b98-efc39d795f39",
+          "amountPlanned": {
+            "type": "centPrecision",
+            "currencyCode": "EUR",
+            "centAmount": 15000,
+            "fractionDigits": 2
+          },
+          "paymentMethodInfo": {
+            "paymentInterface": "paypal"
+          },
+          "paymentStatus": {
+            "interfaceCode": "wirecard",
+            "interfaceText": "{\"transaction-state\":\"success\",\"transaction-type\":\"debit\",\"parent-transaction-id\":\"b5bf1b0c-f1ac-46d3-8a83-741eb55da43d\",\"api-id\":\"wpp\",\"merchant-account-id\":{\"value\":\"c990be4f-70a8-4200-819e-2736bb60416e\"},\"cancel-redirect-url\":\"https:\\/\\/www.apollo.de\\/wirecard\\/confirm\\/cancel\\/https%3A%2F%2Fwww.apollo.de%2Fcheckout%2Fcheckout\",\"shipping\":{\"first-name\":\"Groen\",\"last-name\":\"J\\u00fcrgen\",\"address\":{\"street1\":\"Wismarer Str, 29\",\"city\":\"Berlin\",\"postal-code\":\"12207\",\"country\":\"DE\"}},\"wallet\":{\"account-id\":\"UWR4UD8FW9SLN\"},\"payment-methods\":{\"payment-method\":[{\"name\":\"paypal\"}]},\"transaction-id\":\"79b37c00-f700-43c1-9b98-efc39d795f39\",\"completion-time-stamp\":\"2019-04-24T08:51:28\",\"requested-amount\":{\"currency\":\"EUR\",\"value\":50},\"statuses\":{\"status\":[{\"description\":\"The resource was successfully created.\",\"severity\":\"information\",\"code\":\"201.0000\",\"provider-transaction-id\":\"3K76541229988530S\"}]},\"account-holder\":{\"first-name\":\"J\\u00fcrgen\",\"last-name\":\"Groen\",\"email\":\"jgr@i-l.de\"},\"success-redirect-url\":\"https:\\/\\/www.apollo.de\\/wirecard\\/confirm\\/success\\/https%3A%2F%2Fwww.apollo.de%2Fcheckout%2Fcheckout\",\"fail-redirect-url\":\"https:\\/\\/www.apollo.de\\/wirecard\\/confirm\\/fail\\/https%3A%2F%2Fwww.apollo.de%2Fcheckout%2Fcheckout\",\"request-id\":\"7bf3f34a-6853-4f1f-975a-572268b61e84-48\"}"
+          },
+          "transactions": [],
+          "interfaceInteractions": []
+        }
+      }
+    ]
+  },
+  "shippingAddress": {
+    "id": "vSO4VhF-",
+    "salutation": "Herr",
+    "firstName": "Sven",
+    "lastName": "Groen",
+    "streetName": "Artilleriestraße",
+    "streetNumber": "23",
+    "additionalStreetInfo": "",
+    "postalCode": "49076",
+    "city": "Osnabrück",
+    "country": "DE"
+  },
+  "billingAddress": {
+    "id": "hjnUSQo7",
+    "salutation": "Herr",
+    "firstName": "Jürgen",
+    "lastName": "Groen",
+    "streetName": "Wismarer Strasse",
+    "streetNumber": "29",
+    "additionalStreetInfo": "2. OG",
+    "postalCode": "12207",
+    "city": "Berlin",
+    "country": "DE"
+  },
+  "itemShippingAddresses": [],
+  "refusedGifts": []
+}
