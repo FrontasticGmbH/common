@@ -20,6 +20,10 @@
         <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountAuthController::registerAction</default>
     </route>
 
+    <route id="Frontastic.AccountApi.Api.resendInvitation" path="/resendinvitation" methods="PUT">
+        <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountAuthController::resendInvitationEmail</default>
+    </route>
+
     <route id="Frontastic.AccountApi.Api.confirm" path="/confirm/{token}" methods="POST">
         <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\AccountAuthController::confirmAction</default>
     </route>
