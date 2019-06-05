@@ -1683,7 +1683,7 @@
           },
           "paymentStatus": {
             "interfaceCode": "wirecard",
-            "interfaceText": "{\"cancel-redirect-url\":\"https:\\/\\/de-apollo.frontastic.io\\/wirecard\\/confirm\\/cancel\\/https%3A%2F%2Fde-apollo.frontastic.io%2Fcheckout%2Fcheckout\",\"transaction-type\":\"debit\",\"success-redirect-url\":\"https:\\/\\/de-apollo.frontastic.io\\/wirecard\\/confirm\\/success\\/https%3A%2F%2Fde-apollo.frontastic.io%2Fcheckout%2Fcheckout\",\"fail-redirect-url\":\"https:\\/\\/de-apollo.frontastic.io\\/wirecard\\/confirm\\/fail\\/https%3A%2F%2Fde-apollo.frontastic.io%2Fcheckout%2Fcheckout\",\"transaction-id\":\"7ba6efec-da46-4b06-98c0-412feb9180dd\",\"completion-time-stamp\":\"2019-04-15T12:24:44\",\"requested-amount\":{\"currency\":\"EUR\",\"value\":100},\"statuses\":{\"status\":[{\"description\":\"The resource was successfully created.\",\"severity\":\"information\",\"code\":\"201.0000\",\"provider-transaction-id\":\"9G460140R7636835G\"}]},\"account-holder\":{\"first-name\":\"Test\",\"last-name\":\"Buyer\",\"email\":\"buyer@wirecard.com\"},\"merchant-account-id\":{\"value\":\"9abf05c1-c266-46ae-8eac-7f87ca97af28\"},\"transaction-state\":\"success\",\"parent-transaction-id\":\"ad198dd6-204e-4518-aa1f-1aa554114f23\",\"request-id\":\"7bf3f34a-6853-4f1f-975a-572268b61e84-14\",\"payment-methods\":{\"payment-method\":[{\"name\":\"paypal\"}]},\"shipping\":{\"first-name\":\"Damian\",\"last-name\":\"Schmidt\",\"phone\":\"788-264-0711\",\"address\":{\"country\":\"DE\",\"street1\":\"Humboltstra\\u00dfe 69\",\"city\":\"Bremen\",\"postal-code\":\"28203\"}},\"api-id\":\"wpp\",\"wallet\":{\"account-id\":\"B3XC9H53N9A3S\"}}"
+            "interfaceText": "{}"
           },
           "transactions": [],
           "interfaceInteractions": []
@@ -1718,7 +1718,7 @@
           },
           "paymentStatus": {
             "interfaceCode": "wirecard",
-            "interfaceText": "{\"transaction-state\":\"success\",\"transaction-type\":\"debit\",\"parent-transaction-id\":\"b5bf1b0c-f1ac-46d3-8a83-741eb55da43d\",\"api-id\":\"wpp\",\"merchant-account-id\":{\"value\":\"c990be4f-70a8-4200-819e-2736bb60416e\"},\"cancel-redirect-url\":\"https:\\/\\/www.apollo.de\\/wirecard\\/confirm\\/cancel\\/https%3A%2F%2Fwww.apollo.de%2Fcheckout%2Fcheckout\",\"shipping\":{\"first-name\":\"Groen\",\"last-name\":\"J\\u00fcrgen\",\"address\":{\"street1\":\"Wismarer Str, 29\",\"city\":\"Berlin\",\"postal-code\":\"12207\",\"country\":\"DE\"}},\"wallet\":{\"account-id\":\"UWR4UD8FW9SLN\"},\"payment-methods\":{\"payment-method\":[{\"name\":\"paypal\"}]},\"transaction-id\":\"79b37c00-f700-43c1-9b98-efc39d795f39\",\"completion-time-stamp\":\"2019-04-24T08:51:28\",\"requested-amount\":{\"currency\":\"EUR\",\"value\":50},\"statuses\":{\"status\":[{\"description\":\"The resource was successfully created.\",\"severity\":\"information\",\"code\":\"201.0000\",\"provider-transaction-id\":\"3K76541229988530S\"}]},\"account-holder\":{\"first-name\":\"J\\u00fcrgen\",\"last-name\":\"Groen\",\"email\":\"jgr@i-l.de\"},\"success-redirect-url\":\"https:\\/\\/www.apollo.de\\/wirecard\\/confirm\\/success\\/https%3A%2F%2Fwww.apollo.de%2Fcheckout%2Fcheckout\",\"fail-redirect-url\":\"https:\\/\\/www.apollo.de\\/wirecard\\/confirm\\/fail\\/https%3A%2F%2Fwww.apollo.de%2Fcheckout%2Fcheckout\",\"request-id\":\"7bf3f34a-6853-4f1f-975a-572268b61e84-48\"}"
+            "interfaceText": "{}"
           },
           "transactions": [],
           "interfaceInteractions": []
@@ -1729,25 +1729,25 @@
   "shippingAddress": {
     "id": "vSO4VhF-",
     "salutation": "Herr",
-    "firstName": "Sven",
-    "lastName": "Groen",
-    "streetName": "Artilleriestraße",
+    "firstName": "Max",
+    "lastName": "Mustermann",
+    "streetName": "Musterstrasse",
     "streetNumber": "23",
     "additionalStreetInfo": "",
-    "postalCode": "49076",
-    "city": "Osnabrück",
+    "postalCode": "12345",
+    "city": "Musterstadt",
     "country": "DE"
   },
   "billingAddress": {
     "id": "hjnUSQo7",
-    "salutation": "Herr",
-    "firstName": "Jürgen",
-    "lastName": "Groen",
-    "streetName": "Wismarer Strasse",
-    "streetNumber": "29",
-    "additionalStreetInfo": "2. OG",
-    "postalCode": "12207",
-    "city": "Berlin",
+    "salutation": "Frau",
+    "firstName": "Erika",
+    "lastName": "Mustermann",
+    "streetName": "Musterstrasse",
+    "streetNumber": "23",
+    "additionalStreetInfo": "",
+    "postalCode": "12345",
+    "city": "Musterstadt",
     "country": "DE"
   },
   "itemShippingAddresses": [],
