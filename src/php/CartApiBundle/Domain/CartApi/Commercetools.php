@@ -123,7 +123,7 @@ class Commercetools implements CartApi
     public function getAnonymous(string $anonymousId): Cart
     {
         $result = $this->client->fetch('/carts', [
-            'where' => 'anonymousId="' . $anonymousId . '"%20and%20paymentInfo%20is%20not%20defined',
+            'where' => 'anonymousId="' . $anonymousId . '" and paymentInfo is not defined',
             'limit' => 1,
             'expand' => self::EXPAND,
         ]);
