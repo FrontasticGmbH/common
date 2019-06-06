@@ -88,10 +88,15 @@ class Commercetools implements CartApi
     public function getForUser(string $userId): Cart
     {
         try {
-            return $this->mapCart($this->client->get('/carts', [
-                'customerId' => $userId,
+            $result = $this->client->fetch('/carts', [
+                'where' => 'customerId="' .  $userId . '" and paymentInfo is not defined',
                 'expand' => self::EXPAND,
-            ]));
+                'sort' => 'lastModifiedAt desc',
+                'limit' => 1
+            ]);
+            if ($result->count >= 1) {
+                return $this->mapCart($result->results[0]);
+            }
         } catch (RequestException $e) {
             return $this->mapCart($this->client->post(
                 '/carts',
@@ -118,12 +123,12 @@ class Commercetools implements CartApi
     public function getAnonymous(string $anonymousId): Cart
     {
         $result = $this->client->fetch('/carts', [
-            'where' => 'anonymousId="' . $anonymousId . '"',
+            'where' => 'anonymousId="' . $anonymousId . '"%20and%20paymentInfo%20is%20not%20defined',
             'limit' => 1,
             'expand' => self::EXPAND,
         ]);
 
-        if ($result->count >= 1) {
+        if ($result->count >= 1 && !isset($result->results[0]['paymentInfo'])) {
             return $this->mapCart($result->results[0]);
         }
 
