@@ -58,6 +58,7 @@
                 <argument>previewToken</argument>
                 <argument>secret</argument>
                 <argument>token</argument>
+                <argument>metaData</argument>
             </argument>
             <argument type="tagged" tag="frontastic.json_serializer.enhancer" />
         </service>
