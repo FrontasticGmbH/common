@@ -1,4 +1,4 @@
-import Page from '../../../src/js/domain/page.js'
+import Page, { DEFAULT_PAGE_NAME } from '../../../src/js/domain/page.js'
 import Region from '../../../src/js/domain/region.js'
 import Element from '../../../src/js/domain/cell.js'
 import Kit from '../../../src/js/domain/kit'
@@ -141,6 +141,7 @@ describe('Page', function () {
             layoutId: 'three_rows',
             nodes: [],
             pageId: null,
+            name: DEFAULT_PAGE_NAME,
             regions: {
                 region: {
                     regionId: 'region',
@@ -188,6 +189,7 @@ describe('Page', function () {
             layoutId: 'three_rows',
             nodes: [],
             pageId: null,
+            name: DEFAULT_PAGE_NAME,
             regions: {
                 a: {
                     regionId: 'a',
@@ -244,6 +246,7 @@ describe('Page', function () {
             layoutId: 'three_rows',
             nodes: [],
             pageId: null,
+            name: DEFAULT_PAGE_NAME,
             regions: {
                 a: {
                     regionId: 'a',
@@ -291,6 +294,7 @@ describe('Page', function () {
             layoutId: 'three_rows',
             nodes: [],
             pageId: null,
+            name: DEFAULT_PAGE_NAME,
             regions: {
                 a: {
                     regionId: 'a',
@@ -337,6 +341,7 @@ describe('Page', function () {
             layoutId: 'three_rows',
             nodes: [],
             pageId: null,
+            name: DEFAULT_PAGE_NAME,
             regions: {
                 a: {
                     regionId: 'a',
@@ -378,6 +383,7 @@ describe('Page', function () {
             layoutId: 'three_rows',
             nodes: [],
             pageId: null,
+            name: DEFAULT_PAGE_NAME,
             regions: {
                 a: {
                     regionId: 'a',
@@ -419,6 +425,7 @@ describe('Page', function () {
             layoutId: 'three_rows',
             nodes: [],
             pageId: null,
+            name: DEFAULT_PAGE_NAME,
             regions: {
                 a: {
                     regionId: 'a',
@@ -465,6 +472,7 @@ describe('Page', function () {
             layoutId: 'three_rows',
             nodes: [],
             pageId: null,
+            name: DEFAULT_PAGE_NAME,
             regions: {
                 a: {
                     regionId: 'a',
@@ -511,6 +519,7 @@ describe('Page', function () {
             layoutId: 'three_rows',
             nodes: [],
             pageId: null,
+            name: DEFAULT_PAGE_NAME,
             regions: {
                 a: {
                     regionId: 'a',
@@ -585,6 +594,7 @@ describe('Page', function () {
             layoutId: 'three_rows',
             nodes: [],
             pageId: null,
+            name: DEFAULT_PAGE_NAME,
             regions: {
                 regA: {
                     regionId: 'regA',
@@ -643,6 +653,7 @@ describe('Page', function () {
             layoutId: 'three_rows',
             nodes: [],
             pageId: null,
+            name: DEFAULT_PAGE_NAME,
             regions: {
                 regA: {
                     regionId: 'regA',
@@ -689,6 +700,7 @@ describe('Page', function () {
             layoutId: 'three_rows',
             nodes: [],
             pageId: null,
+            name: DEFAULT_PAGE_NAME,
             regions: {
                 regA: {
                     regionId: 'regA',
@@ -736,6 +748,7 @@ describe('Page', function () {
             layoutId: 'three_rows',
             nodes: [],
             pageId: null,
+            name: DEFAULT_PAGE_NAME,
             regions: {
                 regA: {
                     regionId: 'regA',
@@ -795,6 +808,7 @@ describe('Page', function () {
             layoutId: 'three_rows',
             nodes: [],
             pageId: null,
+            name: DEFAULT_PAGE_NAME,
             regions: {
                 regA: {
                     regionId: 'regA',
@@ -851,6 +865,7 @@ describe('Page', function () {
             layoutId: 'three_rows',
             nodes: [],
             pageId: null,
+            name: DEFAULT_PAGE_NAME,
             regions: {
                 regA: {
                     regionId: 'regA',
@@ -898,6 +913,7 @@ describe('Page', function () {
             layoutId: 'three_rows',
             nodes: [],
             pageId: null,
+            name: DEFAULT_PAGE_NAME,
             regions: {
                 regA: {
                     regionId: 'regA',

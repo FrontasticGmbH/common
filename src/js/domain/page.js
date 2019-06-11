@@ -2,12 +2,15 @@ import _ from 'lodash'
 
 import Region from './region'
 
+export const DEFAULT_PAGE_LAYOUT = 'three_rows'
+export const DEFAULT_PAGE_NAME = 'Unnamed Page'
+
 class Page {
     constructor (page = {}, layoutRegions = [], tastics = []) {
         this.pageId = page.pageId || null
         this.nodes = page.nodes || []
-        this.layoutId = page.layoutId || 'three_rows'
-        this.name = page.name || 'Unnamed Page'
+        this.layoutId = page.layoutId || DEFAULT_PAGE_LAYOUT
+        this.name = page.name || DEFAULT_PAGE_NAME
 
         this.regions = {}
 
@@ -214,6 +217,7 @@ class Page {
             pageId: this.pageId,
             nodes: this.nodes,
             layoutId: this.layoutId,
+            name: this.name,
             regions: _.mapValues(this.regions, (region) => {
                 return region.export()
             }),
