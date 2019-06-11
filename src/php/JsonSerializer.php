@@ -95,6 +95,10 @@ class JsonSerializer
             $this->enhanceSerialization($item)
         );
 
+        if ($result['_type'] === 'stdClass') {
+            unset($result['_type']);
+        }
+
         return $result;
     }
 
