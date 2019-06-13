@@ -1,9 +1,8 @@
 <?php
 
-namespace Frontastic;
+namespace Frontastic\Common;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Frontastic\Common\JsonSerializer;
 use Frontastic\Common\JsonSerializer\ObjectEnhancer;
 
 class JsonSerializerTest extends \PHPUnit\Framework\TestCase
@@ -19,12 +18,13 @@ class JsonSerializerTest extends \PHPUnit\Framework\TestCase
             ['string', 'string'],
             [[23, '42', null], [23, '42', null]],
             [['foo' => 'bar'], ['foo' => 'bar']],
-            [(object) ['foo' => 'bar'], ['_type' => 'stdClass', 'foo' => 'bar']],
-            [(object) ['password' => 'bar'], ['_type' => 'stdClass', 'password' => '_FILTERED_']],
-            [[(object) ['password' => 'bar']], [['_type' => 'stdClass', 'password' => '_FILTERED_']]],
-            [new ArrayCollection([(object) ['password' => 'bar']]), [['_type' => 'stdClass', 'password' => '_FILTERED_']]],
+            [(object) ['foo' => 'bar'], ['foo' => 'bar']],
+            [(object) ['password' => 'bar'], ['password' => '_FILTERED_']],
+            [[(object) ['password' => 'bar']], [['password' => '_FILTERED_']]],
+            [new ArrayCollection([(object) ['password' => 'bar']]), [['password' => '_FILTERED_']]],
             [new \DateTime('15.04.1981 8:16 CEST'), '1981-04-15T08:16:00+02:00'],
-            [(object) ['foo' => [(object) ['password' => 'bar']]], ['_type' => 'stdClass', 'foo' => [['_type' => 'stdClass', 'password' => '_FILTERED_']]]],
+            [(object) ['foo' => [(object) ['password' => 'bar']]], ['foo' => [['password' => '_FILTERED_']]]],
+            [new JsonSerializerDataObjectFixture(), ['_type' => 'Frontastic\\Common\\JsonSerializerDataObjectFixture', 'test' => 'foo']]
         );
     }
 
@@ -57,7 +57,6 @@ class JsonSerializerTest extends \PHPUnit\Framework\TestCase
         $actualData = $serializer->serialize($object);
 
         $this->assertEquals([
-            '_type' => 'stdClass',
             'property' => 42,
             'someKey' => 23,
         ], $actualData);
