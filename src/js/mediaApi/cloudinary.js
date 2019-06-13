@@ -14,7 +14,7 @@ class Cloudinary {
             media.mediaId,
             _.extend(
                 {
-                    fetch_format: "auto",
+                    fetch_format: 'auto',
                     width: width,
                     height: height,
                 },
@@ -34,7 +34,7 @@ class Cloudinary {
             url,
             _.extend(
                 {
-                    fetch_format: "auto",
+                    fetch_format: 'auto',
                     type: 'fetch',
                     width: width,
                     height: height,
