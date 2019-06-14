@@ -118,13 +118,16 @@ class Client
         $query .= $parameters ? http_build_query($parameters) : '';
 
         $headers[] = sprintf('Authorization: Bearer %s', $this->getAccessToken());
+
+        $defaultTimeout = (int)getenv('http_client_timeout');
+
         $response = $this->httpClient->request(
             $method,
             sprintf('https://api.sphere.io/%s%s%s', $this->projectKey, $uri, $query),
             $body,
             $headers,
             new HttpClient\Options([
-                'timeout' => $method === 'POST' ? 10 : 2,
+                'timeout' => ($method === 'POST' ? max(10, $defaultTimeout) : max(2, $defaultTimeout)),
             ])
         );
 
