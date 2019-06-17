@@ -217,7 +217,6 @@ class CartController extends CrudController
             throw new \DomainException('Cart not complete yet.');
         }
 
-        // @TODO: Ensure the cart has sufficient payments.
         $order = $cartApi->order($cart);
 
         // @TODO: Remove old cart instead (also for logged in users)
