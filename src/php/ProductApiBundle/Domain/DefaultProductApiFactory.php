@@ -54,13 +54,18 @@ class DefaultProductApiFactory implements ProductApiFactory
 
     public function factorFromConfiguration(array $config): ProductApi
     {
-        switch ($config['product']->engine) {
+        $productConfig = $config['product'];
+        if (is_array($productConfig)) {
+            $productConfig = (object)$productConfig;
+        }
+
+        switch ($productConfig->engine) {
             case 'commercetools':
                 return new Commercetools(
                     new Commercetools\Client(
-                        $config['product']->clientId,
-                        $config['product']->clientSecret,
-                        $config['product']->projectKey,
+                        $productConfig->clientId,
+                        $productConfig->clientSecret,
+                        $productConfig->projectKey,
                         $this->container->get(Stream::class),
                         $this->cache
                     ),
@@ -72,7 +77,7 @@ class DefaultProductApiFactory implements ProductApiFactory
             case 'semknox':
                 $searchIndexClients = [];
                 $dataStudioClients = [];
-                foreach ($config['product']['languages'] as $language => $languageConfig) {
+                foreach ($productConfig['languages'] as $language => $languageConfig) {
                     $searchIndexClients[$language] = new Semknox\SearchIndexClient(
                         $languageConfig['host'],
                         $languageConfig['customerId'],
