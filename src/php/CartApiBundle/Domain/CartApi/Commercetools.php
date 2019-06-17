@@ -308,6 +308,10 @@ class Commercetools implements CartApi
 
     public function setCustomField(Cart $cart, array $fields): Cart
     {
+        if (!count(array_filter($fields))) {
+            return $cart;
+        }
+
         $actions = [];
         foreach ($fields as $name => $value) {
             $actions[] = [
