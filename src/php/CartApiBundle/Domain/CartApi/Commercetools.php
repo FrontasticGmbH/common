@@ -724,7 +724,7 @@ class Commercetools implements CartApi
         foreach ($cart['paymentInfo']['payments'] as $payment) {
             $payment = isset($payment['obj']) ? $payment['obj'] : $payment;
             $payments[] = new Payment([
-                'paymentId' => $payment['interfaceId'],
+                'paymentId' => $payment['interfaceId'] ?? null,
                 'paymentProvider' => $payment['paymentMethodInfo']['paymentInterface'] ?? null,
                 'amount' => $payment['amountPlanned']['centAmount'] ?? null,
                 'currency' => $payment['amountPlanned']['currencyCode'] ?? null,
