@@ -17,6 +17,13 @@ interface CartApi
     public function getAnonymous(string $anonymousId): Cart;
 
     /**
+     * @param string $cartId
+     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
+     * @throws \RuntimeExcption if cart with $cartId was not found
+     */
+    public function getById(string $cartId): Cart;
+
+    /**
      * @param array $lineItemType
      * @fixme Is this a hard CT dependency?
      */

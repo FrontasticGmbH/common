@@ -143,6 +143,18 @@ class Commercetools implements CartApi
     }
 
     /**
+     * @param string $cartId
+     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
+     * @throws \RuntimeExcption if cart with $cartId was not found
+     */
+    public function getById(string $cartId): Cart
+    {
+        return $this->mapCart($this->client->get(
+            '/carts/' . urlencode($cartId)
+        ));
+    }
+
+    /**
      * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
      * @param \Frontastic\Common\CartApiBundle\Domain\LineItem $lineItem
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart

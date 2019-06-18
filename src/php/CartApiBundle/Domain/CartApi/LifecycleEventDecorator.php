@@ -56,6 +56,16 @@ class LifecycleEventDecorator implements CartApi
     }
 
     /**
+     * @param string $cartId
+     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
+     * @throws \RuntimeExcption if cart with $cartId was not found
+     */
+    public function getById(string $cartId): Cart
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
+    /**
      * @param string $anonymousId
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
