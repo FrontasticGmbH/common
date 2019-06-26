@@ -3,7 +3,8 @@
 namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 
 use Contentful\Delivery\Client;
-use Contentful\Delivery\DynamicEntry;
+use Contentful\Delivery\Resource\Entry;
+use Contentful\Delivery\Resource\Asset;
 use Contentful\Delivery\ContentType as ContentfulContentType;
 
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi;
@@ -67,28 +68,35 @@ class Contentful implements ContentApi
         ]);
     }
 
-    protected function convertContent(DynamicEntry $content): Content
+    protected function convertContent(Entry $content): Content
     {
         $contentType = $content->getContentType();
         $displayFieldId = $contentType->getDisplayField()->getId();
 
-        $contents = $content->jsonSerialize()->fields;
-
-        return new Content([
+        $result = new Content([
             'contentId' => $content->getId(),
-            'name' => $contents->$displayFieldId,
-            'attributes' => array_map(
-                function ($field) use ($contents): Attribute {
-                    return new Attribute([
-                        'attributeId' => $field->getId(),
-                        'content' => $contents->{$field->getId()} ?? null,
-                        'type' => $field->getType(),
-                    ]);
-                },
-                $contentType->getFields()
-            ),
+            'name' => $content->$displayFieldId,
             'dangerousInnerContent' => $content,
         ]);
+
+        $contents = $content->all();
+        foreach ($contents as $key => $value) {
+            if ($value instanceof Asset) {
+                $value = (object) [
+                    'url' => 'https:' . $value->getFile()->getUrl(),
+                    'title' => $value->getTitle(),
+                    'description' => $value->getDescription(),
+                ];
+            }
+
+            $result->attributes[$key] = new Attribute([
+                'attributeId' => $key,
+                'content' => $value,
+                'type' => null, //@todo
+            ]);
+        }
+
+        return $result;
     }
 
     public function getDangerousInnerClient()
