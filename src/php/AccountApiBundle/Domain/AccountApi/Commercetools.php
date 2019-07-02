@@ -46,12 +46,14 @@ class Commercetools implements AccountApi
      */
     public function get(string $email): Account
     {
-        $result = $this->client->fetch(
-            '/customers',
-            [
-                'where' => 'email="' . $email . '"',
-            ]
-        );
+        $result = $this->client
+            ->fetchAsync(
+                '/customers',
+                [
+                    'where' => 'email="' . $email . '"',
+                ]
+            )
+            ->wait();
 
         if ($result->count >= 1) {
             return $this->mapAccount($result->results[0]);

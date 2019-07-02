@@ -2,6 +2,9 @@
 
 namespace Frontastic\Common;
 
+use GuzzleHttp\Promise\FulfilledPromise;
+use GuzzleHttp\Promise\PromiseInterface;
+
 /**
  * Trait LifecycleTrait
  *
@@ -56,24 +59,38 @@ trait LifecycleTrait
             }
         }
 
-        $result = call_user_func_array([$this->getAggregate(), $method], $arguments);
-
-        $afterEvent = 'after' . ucfirst($method);
-        foreach ($this->listeners as $listener) {
-            if (is_callable([$listener, $afterEvent])) {
-                $returnValue = $listener->$afterEvent($this->getAggregate(), $result);
-
-                // If a listerner changes the return value, for example
-                // replacing the default return object with an enriched custom
-                // object we use this as a return value for now. The return
-                // type hints ensure this will stay valid.
-                if ($returnValue) {
-                    $result = $returnValue;
-                }
-            }
+        $rawResult = call_user_func_array([$this->getAggregate(), $method], $arguments);
+        if ($rawResult instanceof PromiseInterface) {
+            $resultPromise = $rawResult;
+            $returnPromise = true;
+        } else {
+            $resultPromise = new FulfilledPromise($rawResult);
+            $returnPromise = false;
         }
 
-        return $result;
+        $resultPromise = $resultPromise->then(function ($result) use ($method) {
+            $afterEvent = 'after' . ucfirst($method);
+            foreach ($this->listeners as $listener) {
+                if (is_callable([$listener, $afterEvent])) {
+                    $returnValue = $listener->$afterEvent($this->getAggregate(), $result);
+
+                    // If a listerner changes the return value, for example
+                    // replacing the default return object with an enriched custom
+                    // object we use this as a return value for now. The return
+                    // type hints ensure this will stay valid.
+                    if ($returnValue) {
+                        $result = $returnValue;
+                    }
+                }
+            }
+
+            return $result;
+        });
+
+        if ($returnPromise) {
+            return $resultPromise;
+        }
+        return $resultPromise->wait();
     }
 
     /**

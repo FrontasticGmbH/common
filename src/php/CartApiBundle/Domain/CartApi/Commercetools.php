@@ -117,11 +117,16 @@ class Commercetools implements CartApi
      */
     public function getAnonymous(string $anonymousId): Cart
     {
-        $result = $this->client->fetch('/carts', [
-            'where' => 'anonymousId="' . $anonymousId . '"',
-            'limit' => 1,
-            'expand' => self::EXPAND,
-        ]);
+        $result = $this->client
+            ->fetchAsync(
+                '/carts',
+                [
+                    'where' => 'anonymousId="' . $anonymousId . '"',
+                    'limit' => 1,
+                    'expand' => self::EXPAND,
+                ]
+            )
+            ->wait();
 
         if ($result->count >= 1) {
             return $this->mapCart($result->results[0]);
@@ -471,12 +476,14 @@ class Commercetools implements CartApi
      */
     public function getOrders(string $accountId): array
     {
-        $result = $this->client->fetch(
-            '/orders',
-            [
-                'where' => 'customerId="' . $accountId . '"',
-            ]
-        );
+        $result = $this->client
+            ->fetchAsync(
+                '/orders',
+                [
+                    'where' => 'customerId="' . $accountId . '"',
+                ]
+            )
+            ->wait();
 
         return array_map(
             [$this, 'mapOrder'],
@@ -496,12 +503,14 @@ class Commercetools implements CartApi
     {
         $since = @file_get_contents('/tmp/lastOrder') ?: '2000-01-01T01:00:00.000Z';
 
-        $result = $this->client->fetch(
-            '/messages',
-            [
-                'where' => 'type="OrderCreated" and createdAt > "' . $since . '"',
-            ]
-        );
+        $result = $this->client
+            ->fetchAsync(
+                '/messages',
+                [
+                    'where' => 'type="OrderCreated" and createdAt > "' . $since . '"',
+                ]
+            )
+            ->wait();
 
         $orders = [];
         foreach ($result->results as $orderCreated) {

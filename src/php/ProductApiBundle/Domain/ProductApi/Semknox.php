@@ -8,18 +8,18 @@ namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 use Frontastic\Common\ProductApiBundle\Domain\Category;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
-use Frontastic\Common\ProductApiBundle\Domain\ProductType;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\Term;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\TermFacet;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\Facet;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\RangeFacet;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\Term;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\TermFacet;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Semknox\DataStudioClient;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Semknox\Importer;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Semknox\Importer\FullImporter;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Semknox\SearchIndexClient;
+use Frontastic\Common\ProductApiBundle\Domain\ProductType;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 
 /**
@@ -91,7 +91,6 @@ class Semknox implements ProductApi
             }
         }
 
-
         $categoryMap = [];
         foreach ($options as $option) {
             $categoryMap[$option['valueName']] = new Category([
@@ -147,8 +146,12 @@ class Semknox implements ProductApi
         return ($this->filters = $result['filters']);
     }
 
-    public function getProduct(ProductQuery $query): ?Product
+    public function getProduct(ProductQuery $query, string $mode = self::QUERY_SYNC): ?object
     {
+        if ($mode !== self::QUERY_SYNC) {
+            throw new \RuntimeException('not implemented');
+        }
+
         $productId = $query->productId;
 
         $newQuery = clone $query;
@@ -189,12 +192,16 @@ class Semknox implements ProductApi
             'offset' => 0,
             'total' => count($products),
             'count' => count($products),
-            'items' => $products
+            'items' => $products,
         ]);
     }
 
-    public function query(ProductQuery $query): Result
+    public function query(ProductQuery $query, string $mode = self::QUERY_SYNC): object
     {
+        if ($mode !== self::QUERY_SYNC) {
+            throw new \RuntimeException('not implemented');
+        }
+
         if ($query->productIds) {
             return $this->getProductsById($query);
         }
@@ -272,12 +279,12 @@ class Semknox implements ProductApi
                 $filters[] = [
                     'id' => $facet->handle,
                     'minValue' => $facet->min,
-                    'maxValue' => $facet->max
+                    'maxValue' => $facet->max,
                 ];
             } else {
                 $filters[] = [
                     'id' => $facet->handle,
-                    'values' => $facet->terms
+                    'values' => $facet->terms,
                 ];
             }
         }
@@ -337,9 +344,9 @@ class Semknox implements ProductApi
     }
 
     /**
-     * @internal
      * @param string $locale
      * @return \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Semknox\Importer
+     * @internal
      */
     public function getImporter(string $locale): Importer
     {
@@ -386,7 +393,7 @@ class Semknox implements ProductApi
             'sku' => $variantData['articleNumber'],
             'groupId' => $variantData['groupId'],
             'price' => $price,
-             // @TODO: Currency should only be stored in context. Property should be removed.
+            // @TODO: Currency should only be stored in context. Property should be removed.
             'currency' => $currency,
             'images' => [$variantData['image']],
             'attributes' => $passOnData['attributes'],
@@ -501,7 +508,7 @@ class Semknox implements ProductApi
         $key = $this->filterToFacetKey($facetData['idName']);
 
         return new RangeFacet([
-            'handle'  => $facetData['id'],
+            'handle' => $facetData['id'],
             'key' => $key,
             'selected' => is_object($selectedFacet),
             'min' => $facetData['min'],
@@ -526,7 +533,7 @@ class Semknox implements ProductApi
                         'name' => $option['viewName'],
                         'value' => $option['valueName'],
                         'count' => $option['count'],
-                        'selected' => (is_object($selected) && in_array($option['id'], $selected->terms))
+                        'selected' => (is_object($selected) && in_array($option['id'], $selected->terms)),
                     ]);
                 },
                 $facetData['options']

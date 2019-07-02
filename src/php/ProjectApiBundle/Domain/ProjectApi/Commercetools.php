@@ -32,7 +32,7 @@ class Commercetools implements ProjectApi
 
     public function getSearchableAttributes(): array
     {
-        $productTypes = $this->productApi->getDangerousInnerClient()->fetch('/product-types');
+        $productTypes = $this->productApi->getDangerousInnerClient()->fetchAsync('/product-types')->wait();
 
         $attributes = [];
         foreach ($productTypes->results as $productType) {

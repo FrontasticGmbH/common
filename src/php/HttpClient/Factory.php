@@ -44,7 +44,7 @@ class Factory
             $configuration->options = clone $this->defaultOptions;
         }
 
-        $httpClient = new Stream($configuration->options);
+        $httpClient = new Guzzle($configuration->options);
         if ($configuration->defaultHeaders !== null) {
             $httpClient->addDefaultHeaders($configuration->defaultHeaders);
         }
