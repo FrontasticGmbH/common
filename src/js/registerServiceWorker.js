@@ -10,6 +10,7 @@
 
 const isLocalhost = Boolean(
     (typeof window === 'undefined') ||
+    !window.location.hostname ||
     window.location.hostname === 'localhost' ||
     // [::1] is the IPv6 localhost address.
     window.location.hostname === '[::1]' ||
