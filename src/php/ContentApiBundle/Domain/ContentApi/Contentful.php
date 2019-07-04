@@ -55,6 +55,15 @@ class Contentful implements ContentApi
             $contentfulQuery->where('query', $query->query);
         }
 
+        if (!empty($query->filter)) {
+            foreach($query->filter as $field => $filter) {
+                $contentfulQuery->where(
+                    'fields.'.$field,
+                    $filter
+                );
+            }
+        }
+
         $result = $this->client->getEntries($contentfulQuery);
         $items = $result->getItems();
 

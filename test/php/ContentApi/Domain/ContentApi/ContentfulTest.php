@@ -51,4 +51,47 @@ class ContentfulTest extends TestCase
 
         $this->assertSame(1, $result->total);
     }
+
+    public function testQueryByDepartmentAttribute()
+    {
+        $query = new Domain\Query([
+            'contentType' => 'blogPostWithAttributes',
+            'filter' => [
+                'department' => 'software-engineering',
+            ]
+        ]);
+
+        $result = $this->api->query($query);
+
+        $this->assertSame(1, $result->total);
+    }
+
+    public function testQueryByTagAttribute()
+    {
+        $query = new Domain\Query([
+            'contentType' => 'blogPostWithAttributes',
+            'filter' => [
+                'tags' => 'general',
+            ]
+        ]);
+
+        $result = $this->api->query($query);
+
+        $this->assertSame(2, $result->total);
+    }
+
+    public function testQueryByMultipleAttributes()
+    {
+        $query = new Domain\Query([
+            'contentType' => 'blogPostWithAttributes',
+            'filter' => [
+                'department' => 'software-engineering',
+                'tags' => 'general',
+            ]
+        ]);
+
+        $result = $this->api->query($query);
+
+        $this->assertSame(1, $result->total);
+    }
 }
