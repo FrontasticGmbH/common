@@ -56,13 +56,15 @@ class Contentful implements ContentApi
         }
 
         $result = $this->client->getEntries($contentfulQuery);
+        $items = $result->getItems();
+
         return new Result([
             'total' => $result->getTotal(),
-            'count' => $result->getLimit(),
+            'count' => count($items),
             'offset' => $result->getSkip(),
             'items' => array_map(
                 [$this, 'convertContent'],
-                $result->getItems()
+                $items
             ),
         ]);
     }
