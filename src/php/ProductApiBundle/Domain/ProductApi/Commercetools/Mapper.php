@@ -27,11 +27,13 @@ class Mapper
     {
         if (isset($productData['masterData']['current'])) {
             $productId = $productData['id'];
-            $productKey = $productData['key'];
+            $productKey = $productData['key'] ?? null;
 
             $productData = $productData['masterData']['current'];
             $productData['id'] = $productId;
-            $productData['key'] = $productKey;
+            if ($productKey !== null) {
+                $productData['key'] = $productKey;
+            }
         }
 
         $locale = Locale::createFromPosix($query->locale);
