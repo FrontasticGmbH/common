@@ -56,9 +56,9 @@ class Contentful implements ContentApi
         }
 
         if (!empty($query->filter)) {
-            foreach($query->filter as $field => $filter) {
+            foreach ($query->filter as $field => $filter) {
                 $contentfulQuery->where(
-                    'fields.'.$field,
+                    'fields.' . $field,
                     $filter
                 );
             }
