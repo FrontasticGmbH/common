@@ -6,6 +6,7 @@ use Contentful\Delivery\Client;
 use Contentful\Delivery\DynamicEntry;
 use Contentful\Delivery\ContentType as ContentfulContentType;
 
+use Frontastic\Common\ContentApiBundle\Domain\AttributeFilter;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 use Frontastic\Common\ContentApiBundle\Domain\ContentType;
 use Frontastic\Common\ContentApiBundle\Domain\Category;
@@ -55,11 +56,11 @@ class Contentful implements ContentApi
             $contentfulQuery->where('query', $query->query);
         }
 
-        if (!empty($query->filter)) {
-            foreach ($query->filter as $field => $filter) {
+        if (!empty($query->attributes)) {
+            foreach ($query->attributes as $attribute) {
                 $contentfulQuery->where(
-                    'fields.' . $field,
-                    $filter
+                    'fields.' . $attribute->name,
+                    $attribute->value
                 );
             }
         }

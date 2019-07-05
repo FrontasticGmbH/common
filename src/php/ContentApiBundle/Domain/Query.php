@@ -17,9 +17,24 @@ class Query extends DataObject
     public $query;
 
     /**
-     * Contains a key value pair of <field> => <value to filter for>
-     *
-     * @var array
+     * @var AttributeFilter[]
      */
-    public $filter = [];
+    public $attributes = [];
+
+    public static function fromArray(array $data)
+    {
+        $data['attributes'] = array_map(
+            function ($attribute) {
+                return new AttributeFilter($attribute);
+            },
+            array_filter(
+                $data['attributes'] ?? [],
+                function ($attribute) {
+                    return !is_null($attribute);
+                }
+            )
+        );
+
+        return new self($data);
+    }
 }

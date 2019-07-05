@@ -56,9 +56,12 @@ class ContentfulTest extends TestCase
     {
         $query = new Domain\Query([
             'contentType' => 'blogPostWithAttributes',
-            'filter' => [
-                'department' => 'software-engineering',
-            ]
+            'attributes' => [
+                new Domain\AttributeFilter([
+                    'name' => 'department',
+                    'value' => 'software-engineering',
+                ]),
+            ],
         ]);
 
         $result = $this->api->query($query);
@@ -70,8 +73,11 @@ class ContentfulTest extends TestCase
     {
         $query = new Domain\Query([
             'contentType' => 'blogPostWithAttributes',
-            'filter' => [
-                'tags' => 'general',
+            'attributes' => [
+                new Domain\AttributeFilter([
+                    'name' => 'tags',
+                    'value' => 'general',
+                ]),
             ]
         ]);
 
@@ -84,9 +90,15 @@ class ContentfulTest extends TestCase
     {
         $query = new Domain\Query([
             'contentType' => 'blogPostWithAttributes',
-            'filter' => [
-                'department' => 'software-engineering',
-                'tags' => 'general',
+            'attributes' => [
+                new Domain\AttributeFilter([
+                    'name' => 'department',
+                    'value' => 'software-engineering',
+                ]),
+                new Domain\AttributeFilter([
+                    'name' => 'tags',
+                    'value' => 'general',
+                ]),
             ]
         ]);
 
