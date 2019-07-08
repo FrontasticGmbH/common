@@ -1,13 +1,12 @@
 <?php
+
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 
 use Frontastic\Common\LifecycleTrait;
-use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
-use function PhotoAlbum\ret_var_dump;
 
 /**
  * Class LifecycleEventDecorator
@@ -70,7 +69,7 @@ class LifecycleEventDecorator implements ProductApi
      * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery $query
      * @return \Frontastic\Common\ProductApiBundle\Domain\Product|null
      */
-    public function getProduct(ProductQuery $query): ?Product
+    public function getProduct(ProductQuery $query, string $mode = self::QUERY_SYNC): ?object
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
@@ -79,7 +78,7 @@ class LifecycleEventDecorator implements ProductApi
      * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery $query
      * @return \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result
      */
-    public function query(ProductQuery $query): Result
+    public function query(ProductQuery $query, string $mode = self::QUERY_SYNC): object
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }

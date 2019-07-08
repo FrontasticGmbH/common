@@ -2,8 +2,9 @@
 
 namespace Frontastic\Common\HttpClient;
 
-use \Psr\Log\LoggerInterface;
 use Frontastic\Common\HttpClient;
+use GuzzleHttp\Promise\PromiseInterface;
+use Psr\Log\LoggerInterface;
 
 class Tideways extends HttpClient
 {
@@ -34,13 +35,13 @@ class Tideways extends HttpClient
         return $this->aggregate->addDefaultHeaders($headers);
     }
 
-    public function request(
+    public function requestAsync(
         string $method,
         string $url,
         string $body = '',
         array $headers = array(),
         Options $options = null
-    ): Response {
+    ): PromiseInterface {
         $span = null;
         $traceId = null;
         if (class_exists(\Tideways\Profiler::class)) {
@@ -52,43 +53,55 @@ class Tideways extends HttpClient
             }
         }
 
-        try {
-            $response = $this->aggregate->request($method, $url, $body, $headers, $options);
-        } catch (\Exception $e) {
-            $this->logger->error(sprintf(
-                '[HTTP] Exception: %s %s (%s)',
-                $method,
-                $url,
-                $body ?: '<null>'
-            ));
+        return $this->aggregate
+            ->requestAsync($method, $url, $body, $headers, $options)
+            ->then(
+                function ($response) use ($method, $url, $body, $headers, $span, $traceId) {
+                    $status = $response->status ?? 599;
 
-            throw $e;
-        } finally {
-            if (isset($response) && $response->status >= 500) {
-                $this->logger->error(
-                    sprintf(
-                        '[HTTP] Failed Request: %s %s (%s)',
+                    if ($status >= 500) {
+                        $this->logger->error(
+                            sprintf(
+                                '[HTTP] Failed Request: %s %s (%s)',
+                                $method,
+                                $url,
+                                $body ?: '<null>'
+                            ),
+                            ['status' => $status, 'CorrelationId' => $traceId]
+                        );
+                    }
+
+                    $this->finishSpan($span, $url, $status, $method, $body, $headers);
+
+                    return $response;
+                },
+                function (\Exception $reason) use ($method, $url, $body, $headers, $span, $traceId) {
+                    $this->logger->error(sprintf(
+                        '[HTTP] Exception: %s %s (%s)',
                         $method,
                         $url,
                         $body ?: '<null>'
-                    ),
-                    ['status' => $response->status ?? 599, 'CorrelationId' => $traceId]
-                );
-            }
+                    ));
 
-            if ($span) {
-                $span->annotate([
-                    'http.url' => $url,
-                    'http.status' => $response->status,
-                    'http.method' => $method,
-                    'http.body' => $body,
-                    'http.headers' => implode("\n", $headers),
-                    'frontastic.http_client_identifier' => $this->clientIdentifier,
-                ]);
-                $span->finish();
-            }
+                    $this->finishSpan($span, $url, 599, $method, $body, $headers);
+
+                    throw $reason;
+                }
+            );
+    }
+
+    private function finishSpan($span, $url, $status, $method, $body, $headers)
+    {
+        if ($span) {
+            $span->annotate([
+                'http.url' => $url,
+                'http.status' => $status,
+                'http.method' => $method,
+                'http.body' => $body,
+                'http.headers' => implode("\n", $headers),
+                'frontastic.http_client_identifier' => $this->clientIdentifier,
+            ]);
+            $span->finish();
         }
-
-        return $response;
     }
 }

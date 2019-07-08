@@ -3,8 +3,8 @@
 namespace Frontastic\Common\HttpClient;
 
 use Domnikl\Statsd\Client;
-
 use Frontastic\Common\HttpClient;
+use GuzzleHttp\Promise\PromiseInterface;
 
 class StatsD extends HttpClient
 {
@@ -35,21 +35,22 @@ class StatsD extends HttpClient
         return $this->aggregate->addDefaultHeaders($headers);
     }
 
-    public function request(
+    public function requestAsync(
         string $method,
         string $url,
         string $body = '',
         array $headers = array(),
         Options $options = null
-    ): Response {
+    ): PromiseInterface {
         $start = microtime(true);
 
-        $response = $this->aggregate->request($method, $url, $body, $headers, $options);
-
-        $duration = microtime(true) - $start;
-        $this->statsdClient->timing($this->name . '.request.time', $duration);
-        $this->statsdClient->increment($this->name . '.status.' . $response->status . '.count');
-
-        return $response;
+        return $this->aggregate
+            ->requestAsync($method, $url, $body, $headers, $options)
+            ->then(function ($response) use ($start) {
+                $duration = microtime(true) - $start;
+                $this->statsdClient->timing($this->name . '.request.time', $duration);
+                $this->statsdClient->increment($this->name . '.status.' . $response->status . '.count');
+                return $response;
+            });
     }
 }

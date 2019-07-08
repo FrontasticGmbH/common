@@ -3,7 +3,6 @@
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 
 use Frontastic\Common\ProductApiBundle\Domain\Category;
-use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
@@ -11,6 +10,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductType;
+use GuzzleHttp\Promise\PromiseInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -74,10 +74,15 @@ class Commercetools implements ProductApi
      */
     public function getCategories(CategoryQuery $query): array
     {
-        $categories = $this->client->fetch('/categories', [
-            'offset' => $query->offset,
-            'limit' => $query->limit
-        ]);
+        $categories = $this->client
+            ->fetchAsync(
+                '/categories',
+                [
+                    'offset' => $query->offset,
+                    'limit' => $query->limit,
+                ]
+            )
+            ->wait();
 
         $locale = Locale::createFromPosix($this->localeOverwrite ?: $query->locale);
 
@@ -88,29 +93,41 @@ class Commercetools implements ProductApi
 
         $categoryMap = [];
         foreach ($categories as $category) {
-            $path = rtrim(
-                '/' . implode(
-                    '/',
-                    array_map(
-                        function (array $ancestor) use ($categoryNameMap) {
-                            return $categoryNameMap[$ancestor['id']];
-                        },
-                        $category['ancestors']
-                    )
-                ),
-                '/'
-            ) . '/' . $category['name'][$locale->language];
+            $path =
+                rtrim(
+                    '/' .
+                    implode(
+                        '/',
+                        array_map(
+                            function (array $ancestor) use ($categoryNameMap) {
+                                return $categoryNameMap[$ancestor['id']];
+                            },
+                            $category['ancestors']
+                        )
+                    ),
+                    '/'
+                )
+                . '/' . $category['name'][$locale->language];
 
             $categoryMap[$path] = new Category([
                 'categoryId' => $category['id'],
                 'name' => $category['name'][$locale->language],
                 'depth' => count($category['ancestors']),
-                'path' => rtrim('/' . implode('/', array_map(
-                    function (array $ancestor) {
-                        return $ancestor['id'];
-                    },
-                    $category['ancestors']
-                )), '/') . '/' . $category['id']
+                'path' =>
+                    rtrim(
+                        '/' .
+                        implode(
+                            '/',
+                            array_map(
+                                function (array $ancestor) {
+                                    return $ancestor['id'];
+                                },
+                                $category['ancestors']
+                            )
+                        ),
+                        '/'
+                    )
+                    . '/' . $category['id'],
             ]);
         }
 
@@ -120,7 +137,7 @@ class Commercetools implements ProductApi
 
     public function getProductTypes(ProductTypeQuery $query): array
     {
-        $result = $this->client->fetch('/product-types');
+        $result = $this->client->fetchAsync('/product-types')->wait();
 
         return array_map(
             function ($productType) use ($query): ProductType {
@@ -134,20 +151,36 @@ class Commercetools implements ProductApi
         );
     }
 
-    public function getProduct(ProductQuery $query): ?Product
+    public function getProduct(ProductQuery $query, string $mode = self::QUERY_SYNC): ?object
     {
         if ($query->sku) {
-            $productQueryResult = $this->query($query);
-            $product = reset($productQueryResult->items);
-            return $product === false ? null : $product;
+            $promise = $this
+                ->query($query, self::QUERY_ASYNC)
+                ->then(
+                    function (Result $productQueryResult) {
+                        $product = reset($productQueryResult->items);
+                        return $product === false ? null : $product;
+                    }
+                );
+        } else {
+            $promise = $this->client
+                ->fetchAsyncById('/products', $query->productId)
+                ->then(function ($product) use ($query) {
+                    return $this->mapper->dataToProduct($product, $query);
+                });
         }
-        return $this->mapper->dataToProduct(
-            $this->client->fetchById('/products', $query->productId),
-            $query
-        );
+
+        if ($mode === self::QUERY_SYNC) {
+            return $promise->wait();
+        }
+
+        return $promise;
     }
 
-    public function query(ProductQuery $query): Result
+    /**
+     * @return Result|PromiseInterface
+     */
+    public function query(ProductQuery $query, string $mode = self::QUERY_SYNC): object
     {
         $locale = Locale::createFromPosix($this->localeOverwrite ?: $query->locale);
         $parameters = [
@@ -196,21 +229,29 @@ class Commercetools implements ProductApi
         $parameters['filter'] = $facetsToFilter;
         $parameters['filter.facets'] = $facetsToFilter;
 
-        $result = $this->client->fetch('/product-projections/search', array_filter($parameters));
+        $promise = $this->client
+            ->fetchAsync('/product-projections/search', array_filter($parameters))
+            ->then(function ($result) use ($query) {
+                return new Result([
+                    'offset' => $result->offset,
+                    'total' => $result->total,
+                    'count' => $result->count,
+                    'items' => array_map(
+                        function (array $productData) use ($query) {
+                            return $this->mapper->dataToProduct($productData, $query);
+                        },
+                        $result->results
+                    ),
+                    'facets' => $this->mapper->dataToFacets($result->facets, $query),
+                    'query' => clone $query,
+                ]);
+            });
 
-        return new Result([
-            'offset' => $result->offset,
-            'total' => $result->total,
-            'count' => $result->count,
-            'items' => array_map(
-                function (array $productData) use ($query) {
-                    return $this->mapper->dataToProduct($productData, $query);
-                },
-                $result->results
-            ),
-            'facets' => $this->mapper->dataToFacets($result->facets, $query),
-            'query' => clone $query,
-        ]);
+        if ($mode === self::QUERY_SYNC) {
+            return $promise->wait();
+        }
+
+        return $promise;
     }
 
     /**

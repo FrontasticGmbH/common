@@ -65,13 +65,15 @@ class Commercetools implements WishlistApi
      */
     public function getAnonymous(string $anonymousId, string $locale): Wishlist
     {
-        $result = $this->client->fetch(
-            '/shopping-lists',
-            [
-                'where' => 'anonymousId="' . $anonymousId . '"',
-                'expand' => self::EXPAND_VARIANTS,
-            ]
-        );
+        $result = $this->client
+            ->fetchAsync(
+                '/shopping-lists',
+                [
+                    'where' => 'anonymousId="' . $anonymousId . '"',
+                    'expand' => self::EXPAND_VARIANTS,
+                ]
+            )
+            ->wait();
 
         if (!count($result->results)) {
             throw new \OutOfBoundsException("No wishlist exists yet.");
@@ -92,13 +94,15 @@ class Commercetools implements WishlistApi
      */
     public function getWishlists(string $accountId, string $locale): array
     {
-        $result = $this->client->fetch(
-            '/shopping-lists',
-            [
-                'where' => 'customer(id="' . $accountId . '")',
-                'expand' => self::EXPAND_VARIANTS,
-            ]
-        );
+        $result = $this->client
+            ->fetchAsync(
+                '/shopping-lists',
+                [
+                    'where' => 'customer(id="' . $accountId . '")',
+                    'expand' => self::EXPAND_VARIANTS,
+                ]
+            )
+            ->wait();
 
         $locale = Locale::createFromPosix($locale);
 

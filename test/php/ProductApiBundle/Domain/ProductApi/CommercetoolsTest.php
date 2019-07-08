@@ -35,20 +35,24 @@ class CommercetoolsTest extends TestCase
             'variants.term-value:"red","blue"',
             'variants.price-max-only:range (0 to 42)',
             'variants.price-min-only:range (23 to ' . PHP_INT_MAX . ')',
-            'variants.price-min-max:range (23 to 42)'
+            'variants.price-min-max:range (23 to 42)',
         ];
 
-        $this->clientMock->expects($this->once())->method('fetch')->with(
-            $this->anything(),
-            $this->callback(
-            function ($parameters) use ($expectedFilterValues) {
-                $this->assertArrayHasKey('filter', $parameters);
-                foreach ($expectedFilterValues as $filterValue) {
-                    $this->assertContains($filterValue, $parameters['filter']);
-                }
-                return true;
-            })
-        );
+        $this->clientMock
+            ->expects($this->once())
+            ->method('fetchAsync')
+            ->with(
+                $this->anything(),
+                $this->callback(
+                    function ($parameters) use ($expectedFilterValues) {
+                        $this->assertArrayHasKey('filter', $parameters);
+                        foreach ($expectedFilterValues as $filterValue) {
+                            $this->assertContains($filterValue, $parameters['filter']);
+                        }
+                        return true;
+                    })
+            )
+            ->will($this->returnTestParseFacetsResult());
 
         $this->api->query(
             new ProductQuery([
@@ -70,7 +74,7 @@ class CommercetoolsTest extends TestCase
                         'handle' => 'variants.price-min-max',
                         'min' => 23,
                         'max' => 42,
-                    ])
+                    ]),
                 ],
             ])
         );
@@ -78,10 +82,9 @@ class CommercetoolsTest extends TestCase
 
     public function testParseFacetsResult()
     {
-        $this->clientMock->expects($this->any())->method('fetch')
-            ->will($this->returnValue(
-                require __DIR__ . '/_fixtures/CommercetoolsTest/testParseFacetsResult.php'
-            ));
+        $this->clientMock->expects($this->any())
+            ->method('fetchAsync')
+            ->will($this->returnTestParseFacetsResult());
 
         $result = $this->api->query(
             new ProductQuery([
@@ -95,7 +98,7 @@ class CommercetoolsTest extends TestCase
                         'handle' => 'variants.price.centAmount',
                         'max' => 42,
                     ]),
-                ]
+                ],
             ])
         );
 
@@ -141,18 +144,17 @@ class CommercetoolsTest extends TestCase
                 'handle' => 'variants.attributes.color.key',
                 'key' => 'variants.attributes.color.key',
                 'selected' => true,
-            ])],
+            ]),
+        ],
             $result->facets
         );
     }
 
     public function testReturnsQueryWithResult()
     {
-        $this->clientMock->expects($this->any())->method('fetch')
-            ->will($this->returnValue(
-                require __DIR__ . '/_fixtures/CommercetoolsTest/testParseFacetsResult.php'
-            ));
-
+        $this->clientMock->expects($this->any())
+            ->method('fetchAsync')
+            ->will($this->returnTestParseFacetsResult());
 
         $originalQuery = new ProductQuery([
             'locale' => 'en_GB',
@@ -162,5 +164,14 @@ class CommercetoolsTest extends TestCase
 
         $this->assertEquals($originalQuery, $result->query);
         $this->assertNotSame($originalQuery, $result->query);
+    }
+
+    private function returnTestParseFacetsResult()
+    {
+        return $this->returnValue(
+            \GuzzleHttp\Promise\promise_for(
+                require __DIR__ . '/_fixtures/CommercetoolsTest/testParseFacetsResult.php'
+            )
+        );
     }
 }

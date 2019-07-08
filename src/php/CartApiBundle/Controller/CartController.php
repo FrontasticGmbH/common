@@ -210,15 +210,13 @@ class CartController extends CrudController
 
     public function checkoutAction(Context $context, Request $request): array
     {
-        $payload = $this->getJsonContent($request);
         $cartApi = $this->getCartApi($context);
+        $cart = $this->getCart($context);
 
-        $cart = $this->updateAction($context, $request)['cart'];
         if (!$cart->isComplete()) {
             throw new \DomainException('Cart not complete yet.');
         }
 
-        // @TODO: Ensure the cart has sufficient payments.
         $order = $cartApi->order($cart);
 
         // @TODO: Remove old cart instead (also for logged in users)

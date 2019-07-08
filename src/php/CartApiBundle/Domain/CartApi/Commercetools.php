@@ -117,11 +117,16 @@ class Commercetools implements CartApi
      */
     public function getAnonymous(string $anonymousId): Cart
     {
-        $result = $this->client->fetch('/carts', [
-            'where' => 'anonymousId="' . $anonymousId . '"',
-            'limit' => 1,
-            'expand' => self::EXPAND,
-        ]);
+        $result = $this->client
+            ->fetchAsync(
+                '/carts',
+                [
+                    'where' => 'anonymousId="' . $anonymousId . '"',
+                    'limit' => 1,
+                    'expand' => self::EXPAND,
+                ]
+            )
+            ->wait();
 
         if ($result->count >= 1) {
             return $this->mapCart($result->results[0]);
@@ -139,6 +144,18 @@ class Commercetools implements CartApi
                 'state' => 'Active',
                 'inventoryMode' => 'ReserveOnOrder',
             ])
+        ));
+    }
+
+    /**
+     * @param string $cartId
+     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
+     * @throws \RuntimeExcption if cart with $cartId was not found
+     */
+    public function getById(string $cartId): Cart
+    {
+        return $this->mapCart($this->client->get(
+            '/carts/' . urlencode($cartId)
         ));
     }
 
@@ -308,6 +325,10 @@ class Commercetools implements CartApi
 
     public function setCustomField(Cart $cart, array $fields): Cart
     {
+        if (!count(array_filter($fields))) {
+            return $cart;
+        }
+
         $actions = [];
         foreach ($fields as $name => $value) {
             $actions[] = [
@@ -455,12 +476,14 @@ class Commercetools implements CartApi
      */
     public function getOrders(string $accountId): array
     {
-        $result = $this->client->fetch(
-            '/orders',
-            [
-                'where' => 'customerId="' . $accountId . '"',
-            ]
-        );
+        $result = $this->client
+            ->fetchAsync(
+                '/orders',
+                [
+                    'where' => 'customerId="' . $accountId . '"',
+                ]
+            )
+            ->wait();
 
         return array_map(
             [$this, 'mapOrder'],
@@ -480,12 +503,14 @@ class Commercetools implements CartApi
     {
         $since = @file_get_contents('/tmp/lastOrder') ?: '2000-01-01T01:00:00.000Z';
 
-        $result = $this->client->fetch(
-            '/messages',
-            [
-                'where' => 'type="OrderCreated" and createdAt > "' . $since . '"',
-            ]
-        );
+        $result = $this->client
+            ->fetchAsync(
+                '/messages',
+                [
+                    'where' => 'type="OrderCreated" and createdAt > "' . $since . '"',
+                ]
+            )
+            ->wait();
 
         $orders = [];
         foreach ($result->results as $orderCreated) {
@@ -708,7 +733,7 @@ class Commercetools implements CartApi
         foreach ($cart['paymentInfo']['payments'] as $payment) {
             $payment = isset($payment['obj']) ? $payment['obj'] : $payment;
             $payments[] = new Payment([
-                'paymentId' => $payment['interfaceId'],
+                'paymentId' => $payment['interfaceId'] ?? null,
                 'paymentProvider' => $payment['paymentMethodInfo']['paymentInterface'] ?? null,
                 'amount' => $payment['amountPlanned']['centAmount'] ?? null,
                 'currency' => $payment['amountPlanned']['currencyCode'] ?? null,

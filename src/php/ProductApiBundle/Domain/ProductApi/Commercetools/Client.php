@@ -3,14 +3,14 @@
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
 
 use Doctrine\Common\Cache\Cache;
-use League\OAuth2\Client\Grant\ClientCredentials;
-use League\OAuth2\Client\Token\AccessToken;
-
 use Frontastic\Common\HttpClient;
 use Frontastic\Common\HttpClient\Response;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client\AccessTokenProvider;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client\ResultSet;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
+use GuzzleHttp\Promise\PromiseInterface;
+use League\OAuth2\Client\Grant\ClientCredentials;
+use League\OAuth2\Client\Token\AccessToken;
 
 class Client
 {
@@ -45,10 +45,24 @@ class Client
      * @param array $parameters
      * @return \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client\ResultSet
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @deprecated Use `fetchAsync()->wait()` instead
      */
     public function fetch(string $uri, array $parameters = []): ResultSet
     {
-        return new ResultSet($this->request('GET', $uri, $parameters));
+        return $this->fetchAsync($uri, $parameters)->wait();
+    }
+
+    /**
+     * @param string $uri
+     * @param array $parameters
+     * @return PromiseInterface Containing a {@link ResultSet}
+     */
+    public function fetchAsync(string $uri, array $parameters = []): PromiseInterface
+    {
+        return $this->request('GET', $uri, $parameters)
+            ->then(function (array $response) {
+                return new ResultSet($response);
+            });
     }
 
     /**
@@ -57,8 +71,14 @@ class Client
      * @param array $parameters
      * @return array
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @deprecated Use `fetchAsyncById()->wait()` instead
      */
     public function fetchById(string $uri, string $id, array $parameters = []): array
+    {
+        return $this->fetchAsyncById($uri, $id, $parameters)->wait();
+    }
+
+    public function fetchAsyncById(string $uri, string $id, array $parameters = []): PromiseInterface
     {
         return $this->request('GET', sprintf('%s/%s', $uri, $id), $parameters);
     }
@@ -72,7 +92,7 @@ class Client
      */
     public function get(string $uri, array $parameters = [], array $headers = []): array
     {
-        return $this->request('GET', $uri, $parameters, $headers);
+        return $this->request('GET', $uri, $parameters, $headers)->wait();
     }
 
     /**
@@ -85,7 +105,7 @@ class Client
      */
     public function post(string $uri, array $parameters = [], array $headers = [], string $body = ''): array
     {
-        return $this->request('POST', $uri, $parameters, $headers, $body);
+        return $this->request('POST', $uri, $parameters, $headers, $body)->wait();
     }
 
     /**
@@ -97,13 +117,13 @@ class Client
      * @return array
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      */
-    public function request(
+    private function request(
         string $method,
         string $uri,
         array $parameters = [],
         array $headers = [],
         string $body = ''
-    ): array {
+    ): PromiseInterface {
         $query = '?';
         foreach ($parameters as $name => $parameter) {
             if (false === is_array($parameter)) {
@@ -121,26 +141,31 @@ class Client
 
         $defaultTimeout = (int)getenv('http_client_timeout');
 
-        $response = $this->httpClient->request(
-            $method,
-            sprintf('https://api.sphere.io/%s%s%s', $this->projectKey, $uri, $query),
-            $body,
-            $headers,
-            new HttpClient\Options([
-                'timeout' => ($method === 'POST' ? max(10, $defaultTimeout) : max(2, $defaultTimeout)),
-            ])
-        );
+        return $this->httpClient
+            ->requestAsync(
+                $method,
+                sprintf('https://api.sphere.io/%s%s%s', $this->projectKey, $uri, $query),
+                $body,
+                $headers,
+                new HttpClient\Options([
+                    'timeout' => ($method === 'POST' ? max(10, $defaultTimeout) : max(2, $defaultTimeout)),
+                ])
+            )
+            ->then(function (Response $response) {
+                if ($response->status >= 400) {
+                    throw $this->prepareException($response);
+                }
 
-        if ($response->status >= 400) {
-            throw $this->prepareException($response);
-        }
+                $data = json_decode($response->body, true);
+                if (JSON_ERROR_NONE === json_last_error()) {
+                    return $data;
+                }
 
-        $data = json_decode($response->body, true);
-        if (JSON_ERROR_NONE === json_last_error()) {
-            return $data;
-        }
-        // @todo Proper error handling or silent ignore
-        return [];
+                throw new RequestException(
+                    'JSON error: ' . json_last_error_msg(),
+                    $response->status
+                );
+            });
     }
 
     protected function prepareException(Response $response): \Exception
@@ -160,7 +185,7 @@ class Client
                 $exception->setTranslationData(
                     $error->code ?? 'Unknown',
                     array_diff_key(
-                        (array) $error,
+                        (array)$error,
                         ['action' => true, 'message' => true, 'code' => true]
                     )
                 );
@@ -183,7 +208,7 @@ class Client
 
         $accessToken = $this->cache->fetch($cacheId);
         if ($accessToken && false === $accessToken->hasExpired()) {
-            return ($this->accessToken = (string) $accessToken);
+            return ($this->accessToken = (string)$accessToken);
         }
 
         try {
@@ -197,7 +222,7 @@ class Client
         }
 
         $this->cache->save($cacheId, $accessToken);
-        return ($this->accessToken = (string) $accessToken);
+        return ($this->accessToken = (string)$accessToken);
     }
 
     private function obtainAccessToken(): AccessToken
