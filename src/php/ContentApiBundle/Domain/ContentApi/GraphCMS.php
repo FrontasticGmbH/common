@@ -29,25 +29,33 @@ class GraphCMS implements ContentApi
 
     public function getContent(string $contentId): Content
     {
-        $json = $this->client->query($contentId);
-        $content = new Content(['contentId' => $contentId, 'name' => null, 'attributes' => [], 'dangerousInnerContent' => $json]);
-        return $content;
+        // query only by id does not work, GraphCMS always needs a contentType, too
+        throw new Exception("not supported");
     }
 
     public function query(Query $query): Result
     {
-        /*
-        return new Result([
-            'total' => $result->getTotal(),
-            'count' => $result->getLimit(),
-            'offset' => $result->getSkip(),
-            'items' => array_map(
-                [$this, 'convertContent'],
-                $result->getItems()
-            ),
+        // TODO convert query object to graphQL query, use contentType as entity type, query as contentId (if set) and attributes as where attributes, return all fields of entity type
+        if ($query->contentType && $query->query) {
+            // query by contentType and contentId
+            $json = $this->client->get($query->contentType, $query->query);
+        } elseif ($query->contentType && ($query->query === null || trim($query->query) === '')) {
+            // query by contentType and where filter (AttributeFilter)
+        }
+        $data = json_decode($json, true);
+
+        $content = new Content([
+            'contentId' => $query->query,
+            'name' => array_keys($data['data'])[0],
+            'attributes' => $data['data'][lcfirst($query->contentType)],
+            'dangerousInnerContent' => $json
         ]);
-        */
-        return "not implemented";
+        return new Result([
+            'total' => 1,
+            'count' => 1,
+            'offset' => 0,
+            'items' => [$content]
+        ]);
     }
 
     public function getDangerousInnerClient()
