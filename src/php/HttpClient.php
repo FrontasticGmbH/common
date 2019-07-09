@@ -39,12 +39,15 @@ abstract class HttpClient
         Options $options = null
     ): PromiseInterface;
 
-    public function __call(string $functionName, array $arguments): Response
+    /**
+     * @return Response|PromiseInterface
+     */
+    public function __call(string $functionName, array $arguments): object
     {
         // Check if the method name ends in Async. Forward to request for non async calls and forward to requestAsync
         //for async requests.
         $asyncSuffix = 'Async';
-        if (substr_compare($functionName, $asyncSuffix, -strlen($asyncSuffix))) {
+        if (substr_compare($functionName, $asyncSuffix, -strlen($asyncSuffix) === 0)) {
             $httpMethod = substr($functionName, 0, -strlen($asyncSuffix));
             $callMethod = 'requestAsync';
         } else {
