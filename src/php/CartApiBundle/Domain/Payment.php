@@ -7,9 +7,10 @@ use Kore\DataObject\DataObject;
 class Payment extends DataObject
 {
 
-    public const INTERFACE_CODE_APPROVED = 'success';
-    public const INTERFACE_CODE_ACCEPTED = 'accepted';
+    public const INTERFACE_CODE_PAID = 'Paid';
+    public const INTERFACE_CODE_PENDING = 'Pending';
     public const INTERFACE_CODE_FAILED   = 'failed';
+    public const INTERFACE_CODE_CREDIT_OWED   = 'Credit owed';
 
     /**
      * @var string
