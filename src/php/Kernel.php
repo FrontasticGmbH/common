@@ -59,7 +59,9 @@ abstract class Kernel extends SymfonyKernel
         }
         $versionFile = dirname($cacheDir) . '/version.lock';
         if (false === file_exists($versionFile) || $version !== trim(file_get_contents($versionFile))) {
-            mkdir(dirname($versionFile), 0755, true);
+            if (!is_dir($cacheDir = dirname($versionFile))) {
+                mkdir($cacheDir, 0755, true);
+            }
             file_put_contents($versionFile, $version);
         }
         if ($version) {
