@@ -15,24 +15,24 @@ class Commercetools implements ProjectApi
     ];
 
     /**
-     * @var ProductApi\Commercetools
+     * @var ProductApi\Commercetools\Client
      */
-    private $productApi;
+    private $client;
 
     /**
      * @var string[]
      */
     private $languages;
 
-    public function __construct(ProductApi\Commercetools $productApi, array $languages)
+    public function __construct(ProductApi\Commercetools\Client $client, array $languages)
     {
-        $this->productApi = $productApi;
+        $this->client = $client;
         $this->languages = $languages;
     }
 
     public function getSearchableAttributes(): array
     {
-        $productTypes = $this->productApi->getDangerousInnerClient()->fetchAsync('/product-types')->wait();
+        $productTypes = $this->client->fetchAsync('/product-types')->wait();
 
         $attributes = [];
         foreach ($productTypes->results as $productType) {

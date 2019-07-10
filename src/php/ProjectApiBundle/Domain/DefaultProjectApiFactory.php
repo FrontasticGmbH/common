@@ -2,35 +2,54 @@
 
 namespace Frontastic\Common\ProjectApiBundle\Domain;
 
+use Doctrine\Common\Cache\Cache;
+use Frontastic\Common\HttpClient\Stream;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
+use Psr\Container\ContainerInterface;
 
 class DefaultProjectApiFactory implements ProjectApiFactory
 {
     /**
-     * @var ProductApiFactory
+     * @var ContainerInterface
      */
-    private $productApiFactory;
+    private $container;
 
-    public function __construct(ProductApiFactory $productApiFactory)
+    /**
+     * @var Cache
+     */
+    private $cache;
+
+    public function __construct(ContainerInterface $container, Cache $cache)
     {
-        $this->productApiFactory = $productApiFactory;
+        $this->container = $container;
+        $this->cache = $cache;
     }
 
     public function factor(Project $project): ProjectApi
     {
-        $productApi = $this->productApiFactory->factorFromConfiguration($project->configuration);
-
-        // KN: Sorry :D
-        while (method_exists($productApi, 'getAggregate')) {
-            $productApi = $productApi->getAggregate();
+        $productConfig = $project->configuration['product'];
+        if (is_array($productConfig)) {
+            $productConfig = (object)$productConfig;
         }
 
-        if ($productApi instanceof ProductApi\Commercetools) {
-            return new ProjectApi\Commercetools($productApi, $project->languages);
+        switch ($productConfig->engine) {
+            case 'commercetools':
+                return new ProjectApi\Commercetools(
+                    new ProductApi\Commercetools\Client(
+                        $productConfig->clientId,
+                        $productConfig->clientSecret,
+                        $productConfig->projectKey,
+                        $this->container->get(Stream::class),
+                        $this->cache
+                    ),
+                    $project->languages
+                );
         }
 
-        return new ProjectApi\Dummy();
+        throw new \OutOfBoundsException(
+            "No product API configured for project {$project->name}. " .
+            "Check the provisioned customer configuration in app/config/customers/."
+        );
     }
 }

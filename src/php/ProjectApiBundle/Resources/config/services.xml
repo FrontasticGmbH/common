@@ -11,7 +11,10 @@
                  alias="Frontastic\Common\ProjectApiBundle\Domain\DefaultProjectApiFactory" />
 
         <service id="Frontastic\Common\ProjectApiBundle\Domain\DefaultProjectApiFactory">
-            <argument type="service" id="Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory" />
+            <argument type="service" id="service_container" />
+            <argument type="service">
+                <service class="Doctrine\Common\Cache\ApcuCache" />
+            </argument>
         </service>
     </services>
 </container>
