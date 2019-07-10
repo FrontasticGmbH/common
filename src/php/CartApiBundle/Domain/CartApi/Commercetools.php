@@ -363,6 +363,19 @@ class Commercetools implements CartApi
         return $this->postCartActions($cart, $actions);
     }
 
+    public function setCustomType(Cart $cart, string $id): Cart
+    {
+        $actions = [];
+            $actions[] = [
+                'action' => 'setCustomType',
+                'type' => [
+                    "id"=> $id,
+                    "typeId"=> "type"
+                ]
+            ];
+        return $this->postCartActions($cart, $actions);
+    }
+
     /**
      * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
      * @param array $address
@@ -422,7 +435,7 @@ class Commercetools implements CartApi
                     'paymentInterface' => $payment->paymentProvider,
                 ],
                 'paymentStatus' => [
-                    'interfaceCode' => 'frontastic',
+                    'interfaceCode' => $payment->interfaceCode,
                     'interfaceText' => $payment->debug,
                 ],
                 'custom' => $custom,

@@ -6,6 +6,11 @@ use Kore\DataObject\DataObject;
 
 class Payment extends DataObject
 {
+
+    public const INTERFACE_CODE_APPROVED = 'success';
+    public const INTERFACE_CODE_ACCEPTED = 'accepted';
+    public const INTERFACE_CODE_FAILED   = 'failed';
+
     /**
      * @var string
      */
@@ -30,4 +35,7 @@ class Payment extends DataObject
      * @var string
      */
     public $debug;
+
+
+    public $interfaceCode;
 }

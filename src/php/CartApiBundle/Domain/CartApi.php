@@ -75,6 +75,8 @@ interface CartApi
 
     public function setCustomField(Cart $cart, array $fields): Cart;
 
+    public function setCustomType(Cart $cart, string $id): Cart;
+
     /**
      * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
      * @param array $address
