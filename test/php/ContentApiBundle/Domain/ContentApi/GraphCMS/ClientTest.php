@@ -51,4 +51,21 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             $result
         );
     }
+
+    public function testGetContentTypes()
+    {
+        $result = $this->client->getContentTypes();
+        $this->assertEquals(
+            [
+                'Asset',
+                'Step',
+                'Recipe',
+                'Ingredient',
+                'Category',
+                'Cuisine',
+                'PageInfo'
+            ],
+            $result
+        );
+    }
 }

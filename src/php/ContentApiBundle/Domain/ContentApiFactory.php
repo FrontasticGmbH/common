@@ -3,6 +3,7 @@
 namespace Frontastic\Common\ContentApiBundle\Domain;
 
 use Doctrine\Common\Cache\Cache;
+use Frontastic\Common\HttpClient\Guzzle;
 
 use Commercetools\Core\Client;
 use Commercetools\Core\Config;
@@ -31,7 +32,14 @@ class ContentApiFactory
                 );
                 $api = new ContentApi\Contentful($client);
                 break;
-
+            case 'graphcms':
+                $client = new ContentApi\GraphCMS\Client(
+                    $customer->configuration['content']->projectId,
+                    $customer->configuration['content']->apiToken,
+                    new Guzzle()
+                );
+                $api = new ContentApi\GraphCMS($client);
+                break;
             default:
                 throw new \OutOfBoundsException(
                     "No content API configured for customer {$customer->name}. " .

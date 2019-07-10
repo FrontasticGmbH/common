@@ -127,4 +127,52 @@ class Client
           }
         ");
     }
+
+    private function startsWith($haystack, $needle)
+    {
+        return substr_compare($haystack, $needle, 0, strlen($needle)) === 0;
+    }
+
+    private function endsWith($haystack, $needle)
+    {
+        return substr_compare($haystack, $needle, -strlen($needle)) === 0;
+    }
+
+    protected function hasNameOfSupplementalObject($name)
+    {
+        return $name === 'Query' ||
+            $name === 'Mutation' ||
+            $this->startsWith($name, '__') ||
+            $this->startsWith($name, 'Aggregate') ||
+            $this->endsWith($name, 'Edge') ||
+            $this->endsWith($name, 'Connection') ||
+            $this->endsWith($name, 'Payload') ||
+            $this->endsWith($name, 'PreviousValues') ||
+            ($this->endsWith($name, 'Asset') && $name !== 'Asset');
+    }
+
+    public function getContentTypes(): array
+    {
+        return array_map(
+            function ($e) {
+                return $e['name'];
+            },
+            array_filter(
+                json_decode($this->query("
+            {
+                __schema {
+                    types {
+                        name
+                        kind
+                    }
+                }
+            }
+        "), true)['data']['__schema']['types'],
+                function ($e) {
+                    return $e['kind'] === 'OBJECT' &&
+                        !$this->hasNameOfSupplementalObject($e['name']);
+                }
+            )
+        );
+    }
 }
