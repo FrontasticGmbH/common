@@ -19,6 +19,7 @@ class AttributesController extends Controller
         /* HACK: This request is stateless, so let the ContextService know that we do not need a session. */
         $request->attributes->set(Session::STATELESS, true);
 
+        /** @var ProjectApiFactory $projectApiFactory */
         $projectApiFactory = $this->get(ProjectApiFactory::class);
         $projectApi = $projectApiFactory->factor($context->project);
 
