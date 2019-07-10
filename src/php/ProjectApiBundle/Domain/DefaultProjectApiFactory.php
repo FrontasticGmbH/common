@@ -22,6 +22,11 @@ class DefaultProjectApiFactory implements ProjectApiFactory
     {
         $productApi = $this->productApiFactory->factorFromConfiguration($project->configuration);
 
+        // KN: Sorry :D
+        while (method_exists($productApi, 'getAggregate')) {
+            $productApi = $productApi->getAggregate();
+        }
+
         if ($productApi instanceof ProductApi\Commercetools) {
             return new ProjectApi\Commercetools($productApi, $project->languages);
         }
