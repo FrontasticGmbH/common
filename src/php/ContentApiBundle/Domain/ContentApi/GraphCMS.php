@@ -3,6 +3,7 @@
 namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS\Client;
+use Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS\Inflector;
 
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 use Frontastic\Common\ContentApiBundle\Domain\ContentType;
@@ -43,7 +44,6 @@ class GraphCMS implements ContentApi
 
     public function query(Query $query): Result
     {
-        // TODO convert query object to graphQL query, use contentType as entity type, query as contentId (if set) and attributes as where attributes, return all fields of entity type
         if ($query->contentType && $query->query) {
             // query by contentType and contentId
             $json = $this->client->get($query->contentType, $query->query);
@@ -66,13 +66,13 @@ class GraphCMS implements ContentApi
         } elseif ($query->contentType && ($query->query === null || trim($query->query) === '')) {
             // query by contentType and where filter (AttributeFilter)
             $json = $this->client->getAll($query->contentType);
-            $name = lcfirst($query->contentType) . 's';
+            $name = lcfirst(Inflector::pluralize($query->contentType));
             $data = json_decode($json, true);
             $contents = array_map(
                 function ($e) use ($name) {
                     return new Content([
                         'contentId' => $e['id'],
-                        'name' => $e['name'] || $name,
+                        'name' => $name,
                         'attributes' => $e,
                         'dangerousInnerContent' => $e
                     ]);
