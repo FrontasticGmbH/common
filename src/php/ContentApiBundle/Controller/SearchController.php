@@ -2,11 +2,11 @@
 
 namespace Frontastic\Common\ContentApiBundle\Controller;
 
+use Frontastic\Common\ContentApiBundle\Domain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 use Frontastic\Backstage\ApiBundle\Domain\Context;
-use Frontastic\Common\ContentApiBundle\Domain\Query;
 
 class SearchController extends Controller
 {
@@ -15,7 +15,7 @@ class SearchController extends Controller
         $contentApiFactory = $this->get('Frontastic\Common\ContentApiBundle\Domain\ContentApiFactory');
         $contentApi = $contentApiFactory->factor($context->customer);
 
-        $query = new Query(json_decode($request->getContent(), true));
+        $query = Domain\Query::fromArray(json_decode($request->getContent(), true));
 
         return [
             'result' => $contentApi->query($query),

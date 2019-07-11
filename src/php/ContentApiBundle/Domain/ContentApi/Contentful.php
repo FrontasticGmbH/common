@@ -7,6 +7,7 @@ use Contentful\Delivery\Resource\Entry;
 use Contentful\Delivery\Resource\Asset;
 use Contentful\Delivery\ContentType as ContentfulContentType;
 
+use Frontastic\Common\ContentApiBundle\Domain\AttributeFilter;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 use Frontastic\Common\ContentApiBundle\Domain\ContentType;
 use Frontastic\Common\ContentApiBundle\Domain\Category;
@@ -56,14 +57,25 @@ class Contentful implements ContentApi
             $contentfulQuery->where('query', $query->query);
         }
 
+        if (!empty($query->attributes)) {
+            foreach ($query->attributes as $attribute) {
+                $contentfulQuery->where(
+                    'fields.' . $attribute->name,
+                    $attribute->value
+                );
+            }
+        }
+
         $result = $this->client->getEntries($contentfulQuery);
+        $items = $result->getItems();
+
         return new Result([
             'total' => $result->getTotal(),
-            'count' => $result->getLimit(),
+            'count' => count($items),
             'offset' => $result->getSkip(),
             'items' => array_map(
                 [$this, 'convertContent'],
-                $result->getItems()
+                $items
             ),
         ]);
     }
