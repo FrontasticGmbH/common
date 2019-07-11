@@ -257,31 +257,27 @@ class Mapper
 
     public function dataToPrice(array $variantData, Locale $locale): array
     {
-        // @todo: Fallback if no default price exists?
-        $default = [-1, 'EUR', null];
+        // We rely on CommerceTools price selection
 
-        foreach ($variantData['prices'] as $price) {
-            /* @TODO: Do we support customer group related prices? */
-            if (isset($price['customerGroup'])) {
-                continue;
-            }
-            if ($locale->currency !== $price['value']['currencyCode']) {
-                continue;
-            }
-            if (isset($price['country']) && $locale->territory === $price['country']) {
-                return [
-                    $price['value']['centAmount'],
-                    $price['value']['currencyCode'],
-                    (isset($price['discounted']) ? $price['discounted']['value']['centAmount'] : null)
-                ];
-            }
-            $default = [
-                $price['value']['centAmount'],
-                $price['value']['currencyCode'],
-                (isset($price['discounted']) ? $price['discounted']['value']['centAmount'] : null)
+        if (isset($variantData['scopedPrice'])) {
+            return [
+                $variantData['scopedPrice']['currentValue']['centAmount'],
+                $variantData['scopedPrice']['currentValue']['currencyCode'],
+                ($variantData['scopedPriceDiscounted']
+                    ? $variantData['scopedPrice']['value']['centAmount']
+                    : null)
             ];
         }
-        return $default;
+
+        if (isset($variantData['price'])) {
+            return [
+                $variantData['price']['value']['centAmount'],
+                $variantData['price']['currencyCode'],
+                null
+            ];
+        }
+
+        return [null, null, null];
     }
 
     public function dataToAttributes(array $variantData, $locale): array
