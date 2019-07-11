@@ -24,7 +24,15 @@ class GraphCMS implements ContentApi
 
     public function getContentTypes(): array
     {
-        return [];
+        return array_map(
+            function ($e) {
+                $c = new ContentType();
+                $c->contentTypeId = $e;
+                $c->name = $e;
+                return $c;
+            },
+            $this->client->getContentTypes()
+        );
     }
 
     public function getContent(string $contentId): Content
@@ -39,22 +47,44 @@ class GraphCMS implements ContentApi
         if ($query->contentType && $query->query) {
             // query by contentType and contentId
             $json = $this->client->get($query->contentType, $query->query);
+            $name = lcfirst($query->contentType);
+
+            $data = json_decode($json, true);
+
+            $attributes = $data['data'][$name];
+            if ($attributes === null) {
+                $contents = [];
+            } else {
+                $content = new Content([
+                    'contentId' => $attributes['id'],
+                    'name' => array_keys($data['data'])[0],
+                    'attributes' => $attributes,
+                    'dangerousInnerContent' => $json
+                ]);
+                $contents = [$content];
+            }
         } elseif ($query->contentType && ($query->query === null || trim($query->query) === '')) {
             // query by contentType and where filter (AttributeFilter)
+            $json = $this->client->getAll($query->contentType);
+            $name = lcfirst($query->contentType) . 's';
+            $data = json_decode($json, true);
+            $contents = array_map(
+                function ($e) use ($name) {
+                    return new Content([
+                        'contentId' => $e['id'],
+                        'name' => $e['name'] || $name,
+                        'attributes' => $e,
+                        'dangerousInnerContent' => $e
+                    ]);
+                },
+                $data['data'][$name]
+            );
         }
-        $data = json_decode($json, true);
-
-        $content = new Content([
-            'contentId' => $query->query,
-            'name' => array_keys($data['data'])[0],
-            'attributes' => $data['data'][lcfirst($query->contentType)],
-            'dangerousInnerContent' => $json
-        ]);
         return new Result([
-            'total' => 1,
-            'count' => 1,
+            'total' => count($contents),
+            'count' => count($contents),
             'offset' => 0,
-            'items' => [$content]
+            'items' => $contents
         ]);
     }
 

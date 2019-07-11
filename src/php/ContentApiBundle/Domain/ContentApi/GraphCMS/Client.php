@@ -91,8 +91,7 @@ class Client
         return !$this->isReference($attribute);
     }
 
-    public function get($contentType, $contentId): string
-    {
+    protected function attributeQueryPart($contentType): string {
         $attributes = $this->getAttributes($contentType);
         $simpleAttributes = array_filter(
             $attributes,
@@ -102,7 +101,7 @@ class Client
             $attributes,
             [$this , 'isReference']
         );
-        $attributeString = implode(
+        return implode(
             array_merge(
                 $this->getAttributeNames($simpleAttributes),
                 array_map(
@@ -118,10 +117,28 @@ class Client
             ),
             ','
         );
+    }
+
+    public function get($contentType, $contentId): string
+    {
+        $attributeString = $this->attributeQueryPart($contentType);
         $name = lcfirst($contentType);
         return $this->query("
           query {
             $name(where: { id: \"$contentId\" }) {
+              $attributeString
+            }
+          }
+        ");
+    }
+
+    public function getAll($contentType): string
+    {
+        $attributeString = $this->attributeQueryPart($contentType);
+        $name = lcfirst($contentType).'s';
+        return $this->query("
+          query {
+            $name {
               $attributeString
             }
           }
@@ -153,25 +170,30 @@ class Client
 
     public function getContentTypes(): array
     {
-        return array_map(
-            function ($e) {
-                return $e['name'];
-            },
-            array_filter(
-                json_decode($this->query("
-            {
-                __schema {
+        $allTypes = json_decode(
+            $this->query(" {__schema {
                     types {
                         name
                         kind
                     }
                 }
+            }"
+            ),
+            true
+        )['data']['__schema']['types'];
+        $relevantTypes = array_filter(
+            $allTypes,
+            function ($e) {
+                return $e['kind'] === 'OBJECT' &&
+                                  !$this->hasNameOfSupplementalObject($e['name']);
             }
-        "), true)['data']['__schema']['types'],
+        );
+        return array_values(
+            array_map(
                 function ($e) {
-                    return $e['kind'] === 'OBJECT' &&
-                        !$this->hasNameOfSupplementalObject($e['name']);
-                }
+                    return $e['name'];
+                },
+                $relevantTypes
             )
         );
     }
