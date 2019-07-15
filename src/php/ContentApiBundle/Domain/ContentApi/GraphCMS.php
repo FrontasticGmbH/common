@@ -39,7 +39,7 @@ class GraphCMS implements ContentApi
     public function getContent(string $contentId): Content
     {
         // query only by id does not work, GraphCMS always needs a contentType, too
-        throw new Exception("not supported");
+        throw new \RuntimeException("getting content by ID is not supported by GraphCMS");
     }
 
     public function query(Query $query): Result
