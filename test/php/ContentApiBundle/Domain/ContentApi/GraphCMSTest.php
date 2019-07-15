@@ -23,7 +23,7 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
         $this->api = new GraphCMS($this->clientMock);
     }
 
-    public function testQuery()
+    public function testQueryWithContentId()
     {
         $contentType =  'Ingredient';
         $contentId = 'cjxac52hychgy0910j313jdyq';
@@ -56,5 +56,24 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
             ],
             'dangerousInnerContent' => $jsonContent
         ])], $result->items);
+    }
+
+
+    public function testQueryAllContentsEmpty()
+    {
+        $contentType =  'Steps';
+        $query = new Query(['contentType' => $contentType]);
+        $jsonContent = '{"data":{"steps":[]}}';
+        $this->clientMock->expects($this->once())->method('getAll')->with($contentType)->will($this->returnValue($jsonContent));
+
+        $result = $this->api->query($query);
+        $this->assertEquals([], $result->items);
+    }
+
+    public function testEmptyQuery()
+    {
+        $query = new Query();
+        $this->expectException(\InvalidArgumentException::class);
+        $result = $this->api->query($query);
     }
 }

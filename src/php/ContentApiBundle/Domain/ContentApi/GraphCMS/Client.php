@@ -83,7 +83,7 @@ class Client
 
     protected function isReference($attribute): bool
     {
-        return $attribute['type']['kind'] == 'LIST' || $attribute['type']['name'] == 'Asset';
+        return $attribute['type']['kind'] == 'LIST' || $attribute['type']['kind'] == 'OBJECT';
     }
 
     protected function isNoReference($attribute): bool
@@ -91,7 +91,9 @@ class Client
         return !$this->isReference($attribute);
     }
 
-    protected function attributeQueryPart($contentType): string {
+    // contentType must be capitalized and singular
+    protected function attributeQueryPart($contentType): string
+    {
         $attributes = $this->getAttributes($contentType);
         $simpleAttributes = array_filter(
             $attributes,
@@ -119,6 +121,7 @@ class Client
         );
     }
 
+    // contentType must be capitalized and singular
     public function get($contentType, $contentId): string
     {
         $attributeString = $this->attributeQueryPart($contentType);
@@ -132,10 +135,11 @@ class Client
         ");
     }
 
+    // contentType mus be capitalized and singular
     public function getAll($contentType): string
     {
         $attributeString = $this->attributeQueryPart($contentType);
-        $name = lcfirst($contentType).'s';
+        $name = lcfirst(Inflector::pluralize($contentType));
         return $this->query("
           query {
             $name {
@@ -171,13 +175,15 @@ class Client
     public function getContentTypes(): array
     {
         $allTypes = json_decode(
-            $this->query(" {__schema {
-                    types {
-                        name
-                        kind
+            $this->query(
+                "{
+                     __schema {
+                        types {
+                            name
+                            kind
+                        }
                     }
-                }
-            }"
+                 }"
             ),
             true
         )['data']['__schema']['types'];

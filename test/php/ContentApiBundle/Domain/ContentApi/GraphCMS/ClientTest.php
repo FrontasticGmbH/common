@@ -68,4 +68,13 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             $result
         );
     }
+
+    public function testGetAll()
+    {
+        $result = $this->client->getAll('Step');
+        $this->assertEquals(
+            '{"data":{"steps":[]}}',
+            $result
+        );
+    }
 }
