@@ -34,7 +34,7 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
         $result = $this->api->query($query);
         $this->assertEquals([new Content([
             'contentId' => $contentId,
-            'name' => 'ingredient',
+            'name' => 'Mehl',
             'attributes' => [
                 'status' => 'PUBLISHED',
                 'updatedAt' => '2019-07-09T10:01:19.803Z',
