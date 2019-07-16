@@ -435,7 +435,7 @@ class Commercetools implements CartApi
                     'paymentInterface' => $payment->paymentProvider,
                 ],
                 'paymentStatus' => [
-                    'interfaceCode' => $payment->interfaceCode,
+                    'interfaceCode' => $payment->paymentStatus,
                     'interfaceText' => $payment->debug,
                 ],
                 'custom' => $custom,
