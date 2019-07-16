@@ -9,7 +9,7 @@ use Commercetools\Core\Client;
 use Commercetools\Core\Config;
 use Commercetools\Core\Model\Common\Context;
 
-use Frontastic\Common\ReplicatorBundle\Domain\Customer;
+use Frontastic\Common\ReplicatorBundle\Domain\Project;
 
 class DefaultContentApiFactory implements ContentApiFactory
 {
@@ -22,27 +22,32 @@ class DefaultContentApiFactory implements ContentApiFactory
         $this->decorators = $decorators;
     }
 
-    public function factor(Customer $customer): ContentApi
+    public function factor(Project $project): ContentApi
     {
-        switch ($customer->configuration['content']->engine) {
+        // make sure the config is an object, not an array
+        $contentConfiguration = json_decode(json_encode($project->configuration['content']), false);
+
+        switch ($contentConfiguration->engine) {
             case 'contentful':
                 $client = new \Contentful\Delivery\Client(
-                    $customer->configuration['content']->accessToken,
-                    $customer->configuration['content']->spaceId
+                    $contentConfiguration->accessToken,
+                    $contentConfiguration->spaceId
                 );
                 $api = new ContentApi\Contentful($client);
                 break;
             case 'graphcms':
                 $client = new ContentApi\GraphCMS\Client(
-                    $customer->configuration['content']->projectId,
-                    $customer->configuration['content']->apiToken,
+                    $contentConfiguration->projectId,
+                    $contentConfiguration->apiToken,
+                    $contentConfiguration->region,
+                    $contentConfiguration->stage,
                     new Guzzle()
                 );
                 $api = new ContentApi\GraphCMS($client);
                 break;
             default:
                 throw new \OutOfBoundsException(
-                    "No content API configured for customer {$customer->name}. " .
+                    "No content API configured for project {$project->name}. " .
                     "Check the provisioned customer configuration in app/config/customers/."
                 );
         }

@@ -57,7 +57,7 @@ class GraphCMS implements ContentApi
             } else {
                 $content = new Content([
                     'contentId' => $attributes['id'],
-                    'name' => array_keys($data['data'])[0],
+                    'name' => isset($attributes['name']) ? $attributes['name'] : array_keys($data['data'])[0],
                     'attributes' => $attributes,
                     'dangerousInnerContent' => $json
                 ]);
@@ -72,7 +72,7 @@ class GraphCMS implements ContentApi
                 function ($e) use ($name) {
                     return new Content([
                         'contentId' => $e['id'],
-                        'name' => $name,
+                        'name' => isset($e['name']) ? $e['name'] : $e['id'],
                         'attributes' => $e,
                         'dangerousInnerContent' => $e
                     ]);

@@ -2,9 +2,9 @@
 
 namespace Frontastic\Common\ContentApiBundle\Domain;
 
-use Frontastic\Common\ReplicatorBundle\Domain\Customer;
+use Frontastic\Common\ReplicatorBundle\Domain\Project;
 
 interface ContentApiFactory
 {
-    public function factor(Customer $customer): ContentApi;
+    public function factor(Project $project): ContentApi;
 }

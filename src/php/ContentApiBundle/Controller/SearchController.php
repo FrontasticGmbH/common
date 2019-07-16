@@ -6,14 +6,14 @@ use Frontastic\Common\ContentApiBundle\Domain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-use Frontastic\Backstage\ApiBundle\Domain\Context;
+use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
 
 class SearchController extends Controller
 {
     public function listAction(Request $request, Context $context): array
     {
         $contentApiFactory = $this->get('Frontastic\Common\ContentApiBundle\Domain\ContentApiFactory');
-        $contentApi = $contentApiFactory->factor($context->customer);
+        $contentApi = $contentApiFactory->factor($context->project);
 
         $query = Domain\Query::fromArray(json_decode($request->getContent(), true));
 

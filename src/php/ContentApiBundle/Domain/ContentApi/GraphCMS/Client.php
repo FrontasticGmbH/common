@@ -17,14 +17,26 @@ class Client
     private $projectId;
 
     /**
+     * @var string
+     */
+    private $region;
+
+    /**
+     * @var string
+     */
+    private $stage;
+
+    /**
      * @var HttpClient
      */
     private $httpClient;
 
-    public function __construct(string $projectId, string $apiToken, HttpClient $httpClient)
+    public function __construct(string $projectId, string $apiToken, string $region, string $stage, HttpClient $httpClient)
     {
         $this->projectId = $projectId;
         $this->apiToken = $apiToken;
+        $this->region = $region;
+        $this->stage = $stage;
         $this->httpClient = $httpClient;
         $this->httpClient->setDefaultHeaders([
             'content-type: application/json',
@@ -37,9 +49,7 @@ class Client
      */
     public function query(string $query): string
     {
-        $REGION = "euwest";
-        $STAGE = "master";
-        $url = "https://api-{$REGION}.graphcms.com/v1/{$this->projectId}/{$STAGE}";
+        $url = "https://api-{$this->region}.graphcms.com/v1/{$this->projectId}/{$this->stage}";
         $body = json_encode(['query' => $query], JSON_HEX_QUOT);
         $result = $this->httpClient->requestAsync('GET', $url, $body)->wait();
         return $result->body;

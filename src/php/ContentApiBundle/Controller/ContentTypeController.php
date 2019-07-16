@@ -6,7 +6,7 @@ use Frontastic\Common\ContentApiBundle\Domain\ContentApiFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-use Frontastic\Backstage\ApiBundle\Domain\Context;
+use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
 
 class ContentTypeController extends Controller
 {
@@ -14,7 +14,7 @@ class ContentTypeController extends Controller
     {
         /** @var ContentApiFactory $contentApiFactory */
         $contentApiFactory = $this->get(ContentApiFactory::class);
-        $contentApi = $contentApiFactory->factor($context->customer);
+        $contentApi = $contentApiFactory->factor($context->project);
 
         return [
             'contentTypes' => $contentApi->getContentTypes(),
