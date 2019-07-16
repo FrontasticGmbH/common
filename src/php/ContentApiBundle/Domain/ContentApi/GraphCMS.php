@@ -80,7 +80,9 @@ class GraphCMS implements ContentApi
                 $data['data'][$name]
             );
         } else {
-            throw new \InvalidArgumentException('provide a ContentType or a ContentType and a ContentID (in the Text field)');
+            throw new \InvalidArgumentException(
+                'provide a ContentType or a ContentType and a ContentID (in the Text field)'
+            );
         }
         return new Result([
             'total' => count($contents),

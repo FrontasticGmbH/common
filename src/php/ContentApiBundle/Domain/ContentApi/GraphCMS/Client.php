@@ -31,8 +31,13 @@ class Client
      */
     private $httpClient;
 
-    public function __construct(string $projectId, string $apiToken, string $region, string $stage, HttpClient $httpClient)
-    {
+    public function __construct(
+        string $projectId,
+        string $apiToken,
+        string $region,
+        string $stage,
+        HttpClient $httpClient
+    ) {
         $this->projectId = $projectId;
         $this->apiToken = $apiToken;
         $this->region = $region;
@@ -169,6 +174,7 @@ class Client
         return substr_compare($haystack, $needle, -strlen($needle)) === 0;
     }
 
+    /** * @SuppressWarnings(PHPMD.CyclomaticComplexity) * */
     protected function hasNameOfSupplementalObject($name)
     {
         return $name === 'Query' ||

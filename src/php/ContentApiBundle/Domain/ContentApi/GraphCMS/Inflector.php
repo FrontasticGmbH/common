@@ -1,4 +1,5 @@
 <?php
+// phpcs:ignoreFile -- this is from the CakePHP project
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -22,6 +23,7 @@ namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS;
  *
  * @link https://book.cakephp.org/3.0/en/core-libraries/inflector.html
  */
+/** * @SuppressWarnings(PHPMD) */
 class Inflector
 {
 
