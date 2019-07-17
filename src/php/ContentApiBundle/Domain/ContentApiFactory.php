@@ -29,7 +29,7 @@ class ContentApiFactory
                     $customer->configuration['content']->accessToken,
                     $customer->configuration['content']->spaceId
                 );
-                $api = new ContentApi\Contentful($client);
+                $api = new ContentApi\Contentful($client, $customer->projects[0]->defaultLanguage);
                 break;
 
             default:

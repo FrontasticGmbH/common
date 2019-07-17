@@ -47,7 +47,7 @@ class LifecycleEventDecorator implements ContentApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function getContent(string $contentId): Content
+    public function getContent(string $contentId, string $locale = null): Content
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }

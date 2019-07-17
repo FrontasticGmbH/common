@@ -21,9 +21,15 @@ class Contentful implements ContentApi
      */
     private $client;
 
-    public function __construct(Client $client)
+    /**
+     * @var string
+     */
+    private $defaultLocale;
+
+    public function __construct(Client $client, string $defaultLocale)
     {
         $this->client = $client;
+        $this->defaultLocale = $defaultLocale;
     }
 
     public function getContentTypes(): array
@@ -39,10 +45,12 @@ class Contentful implements ContentApi
         );
     }
 
-    public function getContent(string $contentId): Content
+    public function getContent(string $contentId, string $locale = null): Content
     {
+        $locale = $locale ?? $this->defaultLocale;
+
         return $this->convertContent(
-            $this->client->getEntry($contentId)
+            $this->client->getEntry($contentId, $this->frontasticToContentfulLocale($locale))
         );
     }
 
@@ -114,5 +122,15 @@ class Contentful implements ContentApi
     public function getDangerousInnerClient()
     {
         return $this->client;
+    }
+
+    private function contenfulToFrontasticLocale(string $contentfulLocale): string
+    {
+        return strtr($contentfulLocale, '-', '_');
+    }
+
+    private function frontasticToContentfulLocale(string $frontasticLocale): string
+    {
+        return strtr($frontasticLocale, '_', '-');
     }
 }
