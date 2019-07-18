@@ -33,7 +33,7 @@ class DefaultContentApiFactory implements ContentApiFactory
                     $contentConfiguration->accessToken,
                     $contentConfiguration->spaceId
                 );
-                $api = new ContentApi\Contentful($client);
+                $api = new ContentApi\Contentful($client, $project->defaultLanguage);
                 break;
             case 'graphcms':
                 $client = new ContentApi\GraphCMS\Client(

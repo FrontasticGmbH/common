@@ -18,9 +18,15 @@ class GraphCMS implements ContentApi
      */
     private $client;
 
-    public function __construct(Client $client)
+    /**
+     * @var string
+     */
+    private $defaultLocale;
+
+    public function __construct(Client $client, string $defaultLocale)
     {
         $this->client = $client;
+        $this->defaultLocale = $defaultLocale;
     }
 
     public function getContentTypes(): array
@@ -36,7 +42,7 @@ class GraphCMS implements ContentApi
         );
     }
 
-    public function getContent(string $contentId): Content
+    public function getContent(string $contentId, string $locale = null): Content
     {
         // query only by id does not work, GraphCMS always needs a contentType, too
         throw new \RuntimeException("getting content by ID is not supported by GraphCMS");
