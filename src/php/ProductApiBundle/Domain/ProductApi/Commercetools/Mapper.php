@@ -273,7 +273,7 @@ class Mapper
             return [
                 $variantData['price']['value']['centAmount'],
                 $variantData['price']['value']['currencyCode'],
-                ($variantData['price']['discounted']
+                (isset($variantData['price']['discounted']['value']['centAmount'])
                     ? $variantData['price']['discounted']['value']['centAmount'] ?? null
                     : null)
             ];
