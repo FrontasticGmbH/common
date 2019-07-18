@@ -273,7 +273,9 @@ class Mapper
             return [
                 $variantData['price']['value']['centAmount'],
                 $variantData['price']['value']['currencyCode'],
-                null
+                ($variantData['price']['discounted']
+                    ? $variantData['price']['discounted']['value']['centAmount'] ?? null
+                    : null)
             ];
         }
 
