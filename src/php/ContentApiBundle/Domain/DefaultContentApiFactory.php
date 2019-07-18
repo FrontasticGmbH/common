@@ -43,7 +43,7 @@ class DefaultContentApiFactory implements ContentApiFactory
                     $contentConfiguration->stage,
                     new Guzzle()
                 );
-                $api = new ContentApi\GraphCMS($client);
+                $api = new ContentApi\GraphCMS($client, $project->defaultLanguage);
                 break;
             default:
                 throw new \OutOfBoundsException(

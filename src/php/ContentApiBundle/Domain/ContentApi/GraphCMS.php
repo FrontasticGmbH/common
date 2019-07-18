@@ -48,11 +48,13 @@ class GraphCMS implements ContentApi
         throw new \RuntimeException("getting content by ID is not supported by GraphCMS");
     }
 
-    public function query(Query $query): Result
+    public function query(Query $query, string $locale = null): Result
     {
+        $locale = $locale ?? $this->defaultLocale;
+
         if ($query->contentType && $query->query) {
             // query by contentType and contentId
-            $json = $this->client->get($query->contentType, $query->query);
+            $json = $this->client->get($query->contentType, $query->query, $this->frontasticToGraphCmsLocale($locale));
             $name = lcfirst($query->contentType);
 
             $data = json_decode($json, true);
@@ -71,7 +73,7 @@ class GraphCMS implements ContentApi
             }
         } elseif ($query->contentType && ($query->query === null || trim($query->query) === '')) {
             // query by contentType and where filter (AttributeFilter)
-            $json = $this->client->getAll($query->contentType);
+            $json = $this->client->getAll($query->contentType, $this->frontasticToGraphCmsLocale($locale));
             $name = lcfirst(Inflector::pluralize($query->contentType));
             $data = json_decode($json, true);
             $contents = array_map(
@@ -96,6 +98,27 @@ class GraphCMS implements ContentApi
             'offset' => 0,
             'items' => $contents
         ]);
+    }
+
+    private function graphCmsToFrontasticLocale(string $graphCmsLocale): string
+    {
+        if (strpos($graphCmsLocale, '_') === false) {
+            return $graphCmsLocale;
+        }
+        $parts = explode('_', $graphCmsLocale);
+        if (count($parts) == 2) {
+            $parts[1] = strtoupper($parts[1]);
+            return implode('_', $parts);
+        } else {
+            throw new \InvalidArgumentException(
+                'invalid formatted locale: '.$graphCmsLocale
+            );
+        }
+    }
+
+    private function frontasticToGraphCmsLocale(string $frontasticLocale): string
+    {
+        return strtoupper($frontasticLocale);
     }
 
     public function getDangerousInnerClient()

@@ -54,9 +54,12 @@ class Contentful implements ContentApi
         );
     }
 
-    public function query(Query $query): Result
+    public function query(Query $query, string $locale = null): Result
     {
         $contentfulQuery = new \Contentful\Delivery\Query();
+
+        $locale = $locale ?? $this->defaultLocale;
+        $contentfulQuery->setLocale($this->frontasticToContentfulLocale($locale));
         if ($query->contentType) {
             $contentfulQuery->setContentType($query->contentType);
         }

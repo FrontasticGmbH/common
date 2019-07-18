@@ -52,11 +52,15 @@ class Client
     /**
      * takes GraphQL query, returns JSON result as string
      */
-    public function query(string $query): string
+    public function query(string $query, string $locale = null): string
     {
         $url = "https://api-{$this->region}.graphcms.com/v1/{$this->projectId}/{$this->stage}";
         $body = json_encode(['query' => $query], JSON_HEX_QUOT);
-        $result = $this->httpClient->requestAsync('GET', $url, $body)->wait();
+        $headers = [];
+        if ($locale !== null) {
+            $headers[] = 'gcms-locale:'.$locale;
+        }
+        $result = $this->httpClient->requestAsync('GET', $url, $body, $headers)->wait();
         return $result->body;
     }
 
@@ -86,7 +90,7 @@ class Client
         return $json['data']['__type']['fields'];
     }
 
-    protected function getAttributeNames($attributes): array
+    protected function getAttributeNames(array $attributes): array
     {
         return array_map(
             function ($e) {
@@ -96,18 +100,18 @@ class Client
         );
     }
 
-    protected function isReference($attribute): bool
+    protected function isReference(array $attribute): bool
     {
         return $attribute['type']['kind'] == 'LIST' || $attribute['type']['kind'] == 'OBJECT';
     }
 
-    protected function isNoReference($attribute): bool
+    protected function isNoReference(array $attribute): bool
     {
         return !$this->isReference($attribute);
     }
 
     // contentType must be capitalized and singular
-    protected function attributeQueryPart($contentType): string
+    protected function attributeQueryPart(string $contentType): string
     {
         $attributes = $this->getAttributes($contentType);
         $simpleAttributes = array_filter(
@@ -137,7 +141,7 @@ class Client
     }
 
     // contentType must be capitalized and singular
-    public function get($contentType, $contentId): string
+    public function get(string $contentType, string $contentId, string $locale = null): string
     {
         $attributeString = $this->attributeQueryPart($contentType);
         $name = lcfirst($contentType);
@@ -151,7 +155,7 @@ class Client
     }
 
     // contentType mus be capitalized and singular
-    public function getAll($contentType): string
+    public function getAll(string $contentType, string $locale = null): string
     {
         $attributeString = $this->attributeQueryPart($contentType);
         $name = lcfirst(Inflector::pluralize($contentType));
@@ -164,18 +168,18 @@ class Client
         ");
     }
 
-    private function startsWith($haystack, $needle)
+    private function startsWith(string $haystack, string $needle): bool
     {
         return substr_compare($haystack, $needle, 0, strlen($needle)) === 0;
     }
 
-    private function endsWith($haystack, $needle)
+    private function endsWith(string $haystack, string $needle): bool
     {
         return substr_compare($haystack, $needle, -strlen($needle)) === 0;
     }
 
     /** * @SuppressWarnings(PHPMD.CyclomaticComplexity) * */
-    protected function hasNameOfSupplementalObject($name)
+    protected function hasNameOfSupplementalObject(string $name): bool
     {
         return $name === 'Query' ||
             $name === 'Mutation' ||
