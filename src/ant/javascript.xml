@@ -1,23 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="JavaScript Build">
-    <target name="yarn:link" unless="${production}" extensionOf="-prepare:after~hook">
-        <tool-exists executable="yarn" />
-
-        <exec executable="yarn" failonerror="true" dir="${basedir}">
-            <env key="CI" value="true" />
-
-            <arg value="--network-timeout" />
-            <arg value="1000000000" />
-            <arg value="install" />
-        </exec>
-
-        <exec executable="yarn" failonerror="true" dir="${basedir}">
-            <env key="CI" value="true" />
-
-            <arg value="link" />
-        </exec>
-    </target>
-
     <target name="yarn:test" unless="${production}" extensionOf="-test-unit:main~hook">
         <tool-exists executable="yarn" />
 
