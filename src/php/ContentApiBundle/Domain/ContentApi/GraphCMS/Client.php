@@ -145,13 +145,15 @@ class Client
     {
         $attributeString = $this->attributeQueryPart($contentType);
         $name = lcfirst($contentType);
-        return $this->query("
-          query {
-            $name(where: { id: \"$contentId\" }) {
-              $attributeString
-            }
-          }
-        ");
+        return $this->query(
+            "query {
+                $name(where: { id: \"$contentId\" }) {
+                  $attributeString
+                }
+              }
+            ",
+            $locale
+        );
     }
 
     // contentType mus be capitalized and singular
@@ -159,13 +161,16 @@ class Client
     {
         $attributeString = $this->attributeQueryPart($contentType);
         $name = lcfirst(Inflector::pluralize($contentType));
-        return $this->query("
-          query {
-            $name {
-              $attributeString
-            }
-          }
-        ");
+
+        return $this->query(
+            "query {
+                $name {
+                  $attributeString
+                }
+              }
+            ",
+            $locale
+        );
     }
 
     private function startsWith(string $haystack, string $needle): bool
