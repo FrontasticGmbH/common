@@ -191,7 +191,14 @@ class Client
     {
         return array_map(
             function ($attribute): Attribute {
-                $type = $attribute['type']['name'] ?? $attribute['type']['ofType']['kind'];
+                $type = $attribute['type']['name']
+                    ?? $attribute['type']['kind'];
+
+                // sometimes the "first" type here is of Type "NON_NULL" and the real one is in "ofType" field
+                if ($type === 'NON_NULL') {
+                    $type = $attribute['type']['ofType']['name']
+                        ?? $attribute['type']['ofType']['kind'];
+                }
 
                 // map type for frontastic
                 switch ($type) {
