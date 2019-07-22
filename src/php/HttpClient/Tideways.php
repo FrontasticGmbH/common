@@ -64,8 +64,8 @@ class Tideways extends HttpClient
                             sprintf(
                                 '[HTTP] Failed Request: %s %s (%s)',
                                 $method,
-                                $url,
-                                $body ?: '<null>'
+				$url,
+				substr($body, 0, 1000) ?: '<null>'
                             ),
                             ['status' => $status, 'CorrelationId' => $traceId]
                         );
