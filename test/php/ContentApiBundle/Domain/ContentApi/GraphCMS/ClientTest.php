@@ -2,10 +2,17 @@
 
 namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS;
 
+use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Attribute;
 use Frontastic\Common\HttpClient\Guzzle;
 
+/**
+ * @group integration
+ */
 class ClientTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var Client
+     */
     private $client;
 
     public function setup()
@@ -34,6 +41,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     public function testGetAttributes()
     {
         $result = $this->client->getAttributes('Ingredient');
+
         $this->assertEquals(
             ['status', 'updatedAt', 'createdAt', 'id', 'recipes', 'name', 'description', 'season', 'price', 'image'],
             array_map(
@@ -50,7 +58,22 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $result = $this->client->get('Ingredient', 'cjxac52hychgy0910j313jdyq');
         $this->assertEquals(
             '{"data":{"ingredient":{"status":"PUBLISHED","updatedAt":"2019-07-09T10:01:19.803Z","createdAt":"2019-06-24T12:06:28.582Z","id":"cjxac52hychgy0910j313jdyq","name":"Mehl","description":null,"season":["Winter","Fall"],"price":3,"recipes":[{"id":"cjxac6bziccie0941viedjs7x"}],"image":{"handle":"BA4Ao48KQHOiNukP58n1"}}}}',
-            $result
+            $result->queryResultJson
+        );
+        $this->assertEquals(
+            [
+                new Attribute(['attributeId' => 'status', 'type' => 'Status']),
+                new Attribute(['attributeId' => 'updatedAt', 'type' => 'DateTime']),
+                new Attribute(['attributeId' => 'createdAt', 'type' => 'DateTime']),
+                new Attribute(['attributeId' => 'id', 'type' => 'ID']),
+                new Attribute(['attributeId' => 'recipes', 'type' => 'LIST']),
+                new Attribute(['attributeId' => 'name', 'type' => 'String']),
+                new Attribute(['attributeId' => 'description', 'type' => 'String']),
+                new Attribute(['attributeId' => 'season', 'type' => 'LIST']),
+                new Attribute(['attributeId' => 'price', 'type' => 'Int']),
+                new Attribute(['attributeId' => 'image', 'type' => 'Asset']),
+            ],
+            $result->attributes
         );
     }
 
@@ -76,7 +99,19 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $result = $this->client->getAll('Step');
         $this->assertEquals(
             '{"data":{"steps":[]}}',
-            $result
+            $result->queryResultJson
+        );
+        $this->assertEquals(
+            [
+                new Attribute(['attributeId' => 'status', 'type' => 'Status']),
+                new Attribute(['attributeId' => 'updatedAt', 'type' => 'DateTime']),
+                new Attribute(['attributeId' => 'createdAt', 'type' => 'DateTime']),
+                new Attribute(['attributeId' => 'id', 'type' => 'ID']),
+                new Attribute(['attributeId' => 'recipe', 'type' => 'Recipe']),
+                new Attribute(['attributeId' => 'description', 'type' => 'String']),
+                new Attribute(['attributeId' => 'images', 'type' => 'LIST']),
+            ],
+            $result->attributes
         );
     }
 }
