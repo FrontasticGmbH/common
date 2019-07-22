@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS;
 
+use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Attribute;
 use Frontastic\Common\HttpClient;
 
 class Client
@@ -111,9 +112,8 @@ class Client
     }
 
     // contentType must be capitalized and singular
-    protected function attributeQueryPart(string $contentType): string
+    protected function attributeQueryPart(array $attributes): string
     {
-        $attributes = $this->getAttributes($contentType);
         $simpleAttributes = array_filter(
             $attributes,
             [$this , 'isNoReference']
@@ -129,6 +129,8 @@ class Client
                     function ($e) {
                         if ($e['type']['name'] == 'Asset') {
                             return "{$e['name']} { handle }";
+                        } else if ($e['type']['name'] == 'RichText') {
+                            return "{$e['name']} { markdown }";
                         } else {
                             return "{$e['name']} { id }";
                         }
@@ -141,31 +143,78 @@ class Client
     }
 
     // contentType must be capitalized and singular
-    public function get(string $contentType, string $contentId, string $locale = null): string
+    public function get(string $contentType, string $contentId, string $locale = null): ClientResult
     {
-        $attributeString = $this->attributeQueryPart($contentType);
+        $attributes = $this->getAttributes($contentType);
+        $attributeString = $this->attributeQueryPart($attributes);
         $name = lcfirst($contentType);
-        return $this->query("
-          query {
-            $name(where: { id: \"$contentId\" }) {
-              $attributeString
-            }
-          }
-        ");
+        $queryResultJson = $this->query(
+            "query {
+                $name(where: { id: \"$contentId\" }) {
+                  $attributeString
+                }
+              }
+            ",
+            $locale
+        );
+
+        return new ClientResult([
+            'queryResultJson' => $queryResultJson,
+            'attributes' => $this->convertAttributes($attributes)
+        ]);
     }
 
     // contentType mus be capitalized and singular
-    public function getAll(string $contentType, string $locale = null): string
+    public function getAll(string $contentType, string $locale = null): ClientResult
     {
-        $attributeString = $this->attributeQueryPart($contentType);
+        $attributes = $this->getAttributes($contentType);
+        $attributeString = $this->attributeQueryPart($attributes);
         $name = lcfirst(Inflector::pluralize($contentType));
-        return $this->query("
-          query {
-            $name {
-              $attributeString
-            }
-          }
-        ");
+
+        $queryResultJson = $this->query(
+            "query {
+                $name {
+                  $attributeString
+                }
+              }
+            ",
+            $locale
+        );
+
+        return new ClientResult([
+            'queryResultJson' => $queryResultJson,
+            'attributes' => $this->convertAttributes($attributes)
+        ]);
+    }
+
+    private function convertAttributes(array $attributes): array
+    {
+        return array_map(
+            function ($attribute): Attribute {
+                $type = $attribute['type']['name']
+                    ?? $attribute['type']['kind'];
+
+                // sometimes the "first" type here is of Type "NON_NULL" and the real one is in "ofType" field
+                if ($type === 'NON_NULL') {
+                    $type = $attribute['type']['ofType']['name']
+                        ?? $attribute['type']['ofType']['kind'];
+                }
+
+                // map type for frontastic
+                switch ($type) {
+                    case 'RichText':
+                        $type = 'Text';
+                        break;
+                }
+
+                return new Attribute([
+                    'attributeId' => $attribute['name'],
+                    'content' => null, // will be added later when it is fetched
+                    'type' => $type,
+                ]);
+            },
+            $attributes
+        );
     }
 
     private function startsWith(string $haystack, string $needle): bool

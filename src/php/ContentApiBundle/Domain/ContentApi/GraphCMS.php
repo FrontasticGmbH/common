@@ -44,8 +44,26 @@ class GraphCMS implements ContentApi
 
     public function getContent(string $contentId, string $locale = null): Content
     {
-        // query only by id does not work, GraphCMS always needs a contentType, too
-        throw new \RuntimeException("getting content by ID is not supported by GraphCMS");
+        list($contentId, $contentType) = explode(':', $contentId);
+        if ($contentId === null || $contentType === null) {
+            // query only by id does not work, GraphCMS always needs a contentType, too
+            throw new \RuntimeException("getting content by ID is not supported by GraphCMS, use '<contentId>:<contentType>' instead");
+        }
+
+        $clientResult = $this->client->get($contentType, $contentId, $this->frontasticToGraphCmsLocale($locale));
+
+        $name = lcfirst($contentType);
+
+        $data = json_decode($clientResult->queryResultJson, true);
+
+        $attributes = $data['data'][$name];
+
+        return new Content([
+            'contentId' => $attributes['id'],
+            'name' => $this->extractName($attributes),
+            'attributes' => $this->fillAttributesWithData($clientResult->attributes, $attributes),
+            'dangerousInnerContent' => $clientResult->queryResultJson
+        ]);
     }
 
     public function query(Query $query, string $locale = null): Result
@@ -54,10 +72,11 @@ class GraphCMS implements ContentApi
 
         if ($query->contentType && $query->query) {
             // query by contentType and contentId
-            $json = $this->client->get($query->contentType, $query->query, $this->frontasticToGraphCmsLocale($locale));
+            $clientResult = $this->client->get($query->contentType, $query->query, $this->frontasticToGraphCmsLocale($locale));
+
             $name = lcfirst($query->contentType);
 
-            $data = json_decode($json, true);
+            $data = json_decode($clientResult->queryResultJson, true);
 
             $attributes = $data['data'][$name];
             if ($attributes === null) {
@@ -65,23 +84,27 @@ class GraphCMS implements ContentApi
             } else {
                 $content = new Content([
                     'contentId' => $attributes['id'],
-                    'name' => isset($attributes['name']) ? $attributes['name'] : array_keys($data['data'])[0],
-                    'attributes' => $attributes,
-                    'dangerousInnerContent' => $json
+                    'name' => $this->extractName($attributes),
+                    'attributes' => $this->fillAttributesWithData($clientResult->attributes, $attributes),
+                    'dangerousInnerContent' => $clientResult->queryResultJson
                 ]);
                 $contents = [$content];
             }
         } elseif ($query->contentType && ($query->query === null || trim($query->query) === '')) {
             // query by contentType and where filter (AttributeFilter)
-            $json = $this->client->getAll($query->contentType, $this->frontasticToGraphCmsLocale($locale));
+            $clientResult = $this->client->getAll($query->contentType, $this->frontasticToGraphCmsLocale($locale));
+
             $name = lcfirst(Inflector::pluralize($query->contentType));
-            $data = json_decode($json, true);
+            $data = json_decode($clientResult->queryResultJson, true);
             $contents = array_map(
-                function ($e) use ($name) {
+                function ($e) use ($name, $clientResult) {
                     return new Content([
                         'contentId' => $e['id'],
-                        'name' => isset($e['name']) ? $e['name'] : $e['id'],
-                        'attributes' => $e,
+                        'name' => $this->extractName($e),
+                        'attributes' => $this->fillAttributesWithData(
+                            $clientResult->attributes,
+                            $e
+                        ),
                         'dangerousInnerContent' => $e
                     ]);
                 },
@@ -98,6 +121,41 @@ class GraphCMS implements ContentApi
             'offset' => 0,
             'items' => $contents
         ]);
+    }
+
+    /**
+     * @param Attribute[] $attributes
+     * @param array $fields
+     * @return Attribute[]
+     */
+    private function fillAttributesWithData(array $attributes, array $fields): array
+    {
+        return array_map(
+            function (Attribute $attribute) use ($fields): Attribute {
+                $attributeContent = $fields[(string) $attribute->attributeId];
+                if ($attribute->type === 'Text') {
+                    $attributeContent = $attributeContent['markdown'];
+                }
+
+                $attribute->content = $attributeContent;
+
+                return $attribute;
+            },
+            $attributes
+        );
+    }
+
+    private function extractName(array $attributes): string
+    {
+        if (isset($attributes['name'])) {
+            return $attributes['name'];
+        }
+
+        if (isset($attributes['title'])) {
+            return $attributes['title'];
+        }
+
+        return $attributes['id'];
     }
 
     private function graphCmsToFrontasticLocale(string $graphCmsLocale): string
