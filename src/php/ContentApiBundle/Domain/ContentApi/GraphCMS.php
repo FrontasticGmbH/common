@@ -44,8 +44,26 @@ class GraphCMS implements ContentApi
 
     public function getContent(string $contentId, string $locale = null): Content
     {
-        // query only by id does not work, GraphCMS always needs a contentType, too
-        throw new \RuntimeException("getting content by ID is not supported by GraphCMS");
+        list($contentId, $contentType) = explode(':', $contentId);
+        if ($contentId === null || $contentType === null) {
+            // query only by id does not work, GraphCMS always needs a contentType, too
+            throw new \RuntimeException("getting content by ID is not supported by GraphCMS, use '<contentId>:<contentType>' instead");
+        }
+
+        $clientResult = $this->client->get($contentType, $contentId, $this->frontasticToGraphCmsLocale($locale));
+
+        $name = lcfirst($contentType);
+
+        $data = json_decode($clientResult->queryResultJson, true);
+
+        $attributes = $data['data'][$name];
+
+        return new Content([
+            'contentId' => $attributes['id'],
+            'name' => $this->extractName($attributes),
+            'attributes' => $this->fillAttributesWithData($clientResult->attributes, $attributes),
+            'dangerousInnerContent' => $clientResult->queryResultJson
+        ]);
     }
 
     public function query(Query $query, string $locale = null): Result
