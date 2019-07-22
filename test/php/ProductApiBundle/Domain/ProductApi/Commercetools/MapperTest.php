@@ -162,9 +162,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     'terms' => ['large', 'small', 'medium']
                 ]),
                 [
-                    'variant.attribute.size.label.en:"large"',
-                    'variant.attribute.size.label.en:"small"',
-                    'variant.attribute.size.label.en:"medium"'
+                    'variant.attribute.size.label.en:"large","small","medium"',
                 ]
             ],
         ];
