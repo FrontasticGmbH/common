@@ -50,7 +50,7 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->api->query($query);
         $this->assertEquals([new Content([
-            'contentId' => $contentId,
+            'contentId' => $contentId . ':' . $contentType,
             'name' => 'Mehl',
             'attributes' => [
                 new Attribute(['attributeId' => 'status', 'type' => 'Status', 'content' => 'PUBLISHED']),

@@ -54,14 +54,20 @@ class GraphCMS implements ContentApi
 
         $clientResult = $this->client->get($contentType, $contentId, $this->frontasticToGraphCmsLocale($locale));
 
-        $name = lcfirst($contentType);
+        if (!$this->hasContent($clientResult, $contentType)) {
+            throw new \RuntimeException(
+                sprintf(
+                    'No content found for id: %s and contentType: %s',
+                    $contentId,
+                    $contentType
+                )
+            );
+        }
 
-        $data = json_decode($clientResult->queryResultJson, true);
-
-        $attributes = $data['data'][$name];
+        $attributes = $this->getDataFromResult($clientResult, $contentType);
 
         return new Content([
-            'contentId' => $attributes['id'],
+            'contentId' => $this->generateContentId($attributes['id'], $contentType),
             'name' => $this->extractName($attributes),
             'attributes' => $this->fillAttributesWithData($clientResult->attributes, $attributes),
             'dangerousInnerContent' => $clientResult->queryResultJson
@@ -80,16 +86,12 @@ class GraphCMS implements ContentApi
                 $this->frontasticToGraphCmsLocale($locale)
             );
 
-            $name = lcfirst($query->contentType);
-
-            $data = json_decode($clientResult->queryResultJson, true);
-
-            $attributes = $data['data'][$name];
-            if ($attributes === null) {
+            if (!$this->hasContent($clientResult, $query->contentType)) {
                 $contents = [];
             } else {
+                $attributes = $this->getDataFromResult($clientResult, $query->contentType);
                 $content = new Content([
-                    'contentId' => $attributes['id'],
+                    'contentId' => $this->generateContentId($attributes['id'], $query->contentType),
                     'name' => $this->extractName($attributes),
                     'attributes' => $this->fillAttributesWithData($clientResult->attributes, $attributes),
                     'dangerousInnerContent' => $clientResult->queryResultJson
@@ -103,9 +105,9 @@ class GraphCMS implements ContentApi
             $name = lcfirst(Inflector::pluralize($query->contentType));
             $data = json_decode($clientResult->queryResultJson, true);
             $contents = array_map(
-                function ($e) use ($name, $clientResult) {
+                function ($e) use ($name, $clientResult, $query) {
                     return new Content([
-                        'contentId' => $e['id'],
+                        'contentId' => $this->generateContentId($e['id'], $query->contentType),
                         'name' => $this->extractName($e),
                         'attributes' => $this->fillAttributesWithData(
                             $clientResult->attributes,
@@ -151,6 +153,11 @@ class GraphCMS implements ContentApi
         );
     }
 
+    private function generateContentId($id, $contentType): string
+    {
+        return $id . ':' . $contentType;
+    }
+
     private function extractName(array $attributes): string
     {
         if (isset($attributes['name'])) {
@@ -188,5 +195,23 @@ class GraphCMS implements ContentApi
     public function getDangerousInnerClient()
     {
         return $this->client;
+    }
+
+    private function getDataFromResult(ContentApi\GraphCMS\ClientResult $clientResult, $contentType): array
+    {
+        $name = lcfirst($contentType);
+
+        $data = json_decode($clientResult->queryResultJson, true);
+
+        if ($data === false) {
+            return null;
+        }
+
+        return $data['data'][$name];
+    }
+
+    private function hasContent(ContentApi\GraphCMS\ClientResult $clientResult, $contentType): bool
+    {
+        return $this->getDataFromResult($clientResult, $contentType) !== null;
     }
 }
