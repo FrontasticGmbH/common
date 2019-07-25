@@ -5,7 +5,7 @@ namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 use Contentful\Delivery\Client;
 use Contentful\Delivery\Resource\Entry;
 use Contentful\Delivery\Resource\Asset;
-use Contentful\Delivery\ContentType as ContentfulContentType;
+use Contentful\Delivery\Resource\ContentType as ContentfulContentType;
 
 use Frontastic\Common\ContentApiBundle\Domain\AttributeFilter;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi;
