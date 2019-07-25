@@ -13,12 +13,13 @@ class SearchController extends Controller
     public function listAction(Request $request, Context $context): array
     {
         $contentApiFactory = $this->get('Frontastic\Common\ContentApiBundle\Domain\ContentApiFactory');
+        /** @var Domain\ContentApi $contentApi */
         $contentApi = $contentApiFactory->factor($context->project);
 
         $query = Domain\Query::fromArray(json_decode($request->getContent(), true));
 
         return [
-            'result' => $contentApi->query($query),
+            'result' => $contentApi->query($query, $context->locale),
         ];
     }
 }
