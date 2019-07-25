@@ -23,7 +23,7 @@ class ContentfulTest extends TestCase
 
         $client = new \Contentful\Delivery\Client($testAccessToken, $testSpaceId);
 
-        $this->api = new Contentful($client);
+        $this->api = new Contentful($client, 'en_US');
     }
 
     public function testSimpleQueryAll()
