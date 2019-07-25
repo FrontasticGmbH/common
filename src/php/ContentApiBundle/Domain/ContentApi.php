@@ -11,9 +11,25 @@ interface ContentApi
      */
     public function getContentTypes(): array;
 
-    public function getContent(string $contentId): Content;
+    /**
+     * Fetch content with $contentId in $locale. If $locale is null, project default locale is used.
+     *
+     * @param string $contentId
+     * @param string|null $locale
+     * @return Content
+     */
+    public function getContent(string $contentId, string $locale = null): Content;
 
-    public function query(Query $query): Result;
+    /**
+     * Fetch content with by a $query in $locale. Interpretation of the query
+     * attributes depend on the content API implementation. If $locale is null,
+     * project default locale is used.
+     *
+     * @param Query $query
+     * @param string|null $locale
+     * @return Result
+     */
+    public function query(Query $query, string $locale = null): Result;
 
     /**
      * Get *dangerous* inner client

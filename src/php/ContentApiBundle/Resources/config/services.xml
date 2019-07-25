@@ -6,7 +6,11 @@
 
     <services>
         <defaults public="true" />
-        <service id="Frontastic\Common\ContentApiBundle\Domain\ContentApiFactory">
+
+        <service id="Frontastic\Common\ContentApiBundle\Domain\ContentApiFactory"
+            alias="Frontastic\Common\ContentApiBundle\Domain\DefaultContentApiFactory" />
+
+        <service id="Frontastic\Common\ContentApiBundle\Domain\DefaultContentApiFactory">
             <argument type="service" id="service_container" />
             <argument type="tagged" tag="contentApi.lifecycleEventListener" />
         </service>

@@ -354,17 +354,47 @@ describe('ConfigurationSchema', function () {
         expect(schema.hasMissingRequiredFieldValues()).toBe(false)
     })
 
-    it('claims to have missing required field values when stream field is not required', () => {
+    it('claims to have missing required field values when product stream field is not required', () => {
         const schema = new Schema([{
             name: 'Section',
             fields: [{
                 label: 'Test Field',
                 field: 'test',
                 type: 'stream',
+                streamType: 'product',
             }],
         }])
 
         expect(schema.hasMissingRequiredFieldValues()).toBe(true)
+    })
+
+    it('claims to have missing required field values when product stream field is un-required', () => {
+        const schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'stream',
+                streamType: 'product',
+                required: false,
+            }],
+        }])
+
+        expect(schema.hasMissingRequiredFieldValues()).toBe(false)
+    })
+
+    it('claims to have no missing required field values when custom stream field is not required', () => {
+        const schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'stream',
+                streamType: 'custom-stream',
+            }],
+        }])
+
+        expect(schema.hasMissingRequiredFieldValues()).toBe(false)
     })
 
     it('claims to have no missing required field values when skipping streams', () => {
@@ -374,6 +404,7 @@ describe('ConfigurationSchema', function () {
                 label: 'Test Field',
                 field: 'test',
                 type: 'stream',
+                streamType: 'product',
                 required: true,
             }],
         }])

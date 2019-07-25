@@ -65,7 +65,7 @@ class Tideways extends HttpClient
                                 '[HTTP] Failed Request: %s %s (%s)',
                                 $method,
                                 $url,
-                                $body ?: '<null>'
+                                substr($body, 0, 1000) ?: '<null>'
                             ),
                             ['status' => $status, 'CorrelationId' => $traceId]
                         );
@@ -80,7 +80,7 @@ class Tideways extends HttpClient
                         '[HTTP] Exception: %s %s (%s)',
                         $method,
                         $url,
-                        $body ?: '<null>'
+                        substr($body, 0, 1000) ?: '<null>'
                     ));
 
                     $this->finishSpan($span, $url, 599, $method, $body, $headers);

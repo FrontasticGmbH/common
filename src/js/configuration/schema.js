@@ -1,5 +1,21 @@
 import _ from 'lodash'
 
+const AUTOMATIC_REQUIRED_STREAM_TYPES = [
+    'product',
+    'product-list',
+    'content',
+    'content-list',
+]
+
+function fieldIsRequired (requiredFlag, type, streamType) {
+    if (requiredFlag !== undefined) {
+        return Boolean(requiredFlag)
+    }
+
+    // @TODO: Streams should be marked as required in the tastic configurations
+    return type === 'stream' && AUTOMATIC_REQUIRED_STREAM_TYPES.includes(streamType)
+}
+
 class ConfigurationSchema {
     constructor (schema = [], configuration = {}, id = null) {
         this.schema = schema
@@ -25,8 +41,10 @@ class ConfigurationSchema {
                     fields: this.schema[i].fields[j].fields || null,
                     min: this.schema[i].fields[j].min || 1,
                     max: this.schema[i].fields[j].max || 16,
-                    // @TODO: Streams should be marked as required in the tastic configurations
-                    required: Boolean(this.schema[i].fields[j].required) || type === 'stream',
+                    required: fieldIsRequired(
+                        this.schema[i].fields[j].required,
+                        type,
+                        this.schema[i].fields[j].streamType),
                     disabled: this.schema[i].fields[j].disabled === true,
                 }
             }
