@@ -124,7 +124,7 @@ class Contentful implements ContentApi
                 $value = $this->richTextRenderer->render($value);
             }
 
-            $result->attributes[$key] = new Attribute([;
+            $result->attributes[$key] = new Attribute([
                 'attributeId' => $key,
                 'content' => $value,
                 'type' => null, //@todo

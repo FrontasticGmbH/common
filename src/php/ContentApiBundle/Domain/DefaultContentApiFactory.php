@@ -31,13 +31,13 @@ class DefaultContentApiFactory implements ContentApiFactory
         switch ($contentConfiguration->engine) {
             case 'contentful':
                 $client = new \Contentful\Delivery\Client(
-                    $customer->configuration['content']->accessToken,
-                    $customer->configuration['content']->spaceId
+                    $contentConfiguration->accessToken,
+                    $contentConfiguration->spaceId
                 );
                 $api = new ContentApi\Contentful(
                     $client,
                     new Renderer(),
-                    $customer->projects[0]->defaultLanguage
+                    $project->defaultLanguage
                 );
                 break;
             case 'graphcms':
