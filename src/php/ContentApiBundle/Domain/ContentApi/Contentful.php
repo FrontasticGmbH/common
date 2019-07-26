@@ -13,6 +13,8 @@ use Frontastic\Common\ContentApiBundle\Domain\ContentType;
 use Frontastic\Common\ContentApiBundle\Domain\Category;
 use Frontastic\Common\ContentApiBundle\Domain\Query;
 use Frontastic\Common\ContentApiBundle\Domain\Result;
+use Contentful\RichText\Node\NodeInterface;
+use Contentful\RichText\Renderer;
 
 class Contentful implements ContentApi
 {
@@ -22,13 +24,19 @@ class Contentful implements ContentApi
     private $client;
 
     /**
+     * @var Renderer
+     */
+    private $richTextRenderer;
+
+    /**
      * @var string
      */
     private $defaultLocale;
 
-    public function __construct(Client $client, string $defaultLocale)
+    public function __construct(Client $client, Renderer $richTextRenderer, string $defaultLocale)
     {
         $this->client = $client;
+        $this->richTextRenderer = $richTextRenderer;
         $this->defaultLocale = $defaultLocale;
     }
 
@@ -112,7 +120,11 @@ class Contentful implements ContentApi
                 ];
             }
 
-            $result->attributes[$key] = new Attribute([
+            if ($value instanceof NodeInterface) {
+                $value = $this->richTextRenderer->render($value);
+            }
+
+            $result->attributes[$key] = new Attribute([;
                 'attributeId' => $key,
                 'content' => $value,
                 'type' => null, //@todo
