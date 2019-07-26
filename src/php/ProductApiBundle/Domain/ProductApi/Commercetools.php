@@ -163,8 +163,11 @@ class Commercetools implements ProductApi
                     }
                 );
         } else {
+            $locale = Locale::createFromPosix($this->localeOverwrite ?: $query->locale);
+            $parameters = ['priceCurrency' => $locale->currency, 'priceCountry' => $locale->territory];
+
             $promise = $this->client
-                ->fetchAsyncById('/products', $query->productId)
+                ->fetchAsyncById('/products', $query->productId, $parameters)
                 ->then(function ($product) use ($query) {
                     return $this->mapper->dataToProduct($product, $query);
                 });

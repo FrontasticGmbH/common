@@ -272,7 +272,7 @@ class Mapper
         if (isset($variantData['price'])) {
             return [
                 $variantData['price']['value']['centAmount'],
-                $variantData['price']['currencyCode'],
+                $variantData['price']['value']['currencyCode'],
                 null
             ];
         }
