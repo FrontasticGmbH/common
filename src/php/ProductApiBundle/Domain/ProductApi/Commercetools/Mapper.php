@@ -402,21 +402,15 @@ class Mapper
                     break;
 
                 case 'enum':
-                    foreach ($facet->terms as $term) {
-                        $filters[] = sprintf('%s.label:"%s"', $facet->handle, $term);
-                    }
+                    $filters[] = sprintf('%s.label:%s', $facet->handle, $this->termsToLogicalOrString($facet->terms));
                     break;
 
                 case 'localizedEnum':
-                    foreach ($facet->terms as $term) {
-                        $filters[] = sprintf('%s.label.%s:"%s"', $facet->handle, $locale->language, $term);
-                    }
+                    $filters[] = sprintf('%s.label.%s:%s', $facet->handle, $locale->language, $this->termsToLogicalOrString($facet->terms));
                     break;
 
                 case 'localizedText':
-                    foreach ($facet->terms as $term) {
-                        $filters[] = sprintf('%s.%s:"%s"', $facet->handle, $locale->language, $term);
-                    }
+                    $filters[] = sprintf('%s.%s:%s', $facet->handle, $locale->language, $this->termsToLogicalOrString($facet->terms));
                     break;
 
                 case 'number':
@@ -425,20 +419,10 @@ class Mapper
                 case 'reference':
                 default:
                     if ($facet instanceof Query\TermFacet) {
-                        $termsAsStringWithQuotes = implode(
-                            ",",
-                            array_map(
-                                function ($term) {
-                                    return sprintf('"%s"', $term);
-                                },
-                                $facet->terms
-                            )
-                        );
-
                         $filters[] = sprintf(
                             '%s:%s',
                             $facet->handle,
-                            $termsAsStringWithQuotes
+                            $this->termsToLogicalOrString($facet->terms)
                         );
                     } else {
                         $filters[] = sprintf('%s:range (%s to %s)', $facet->handle, $facet->min, $facet->max);
@@ -447,6 +431,19 @@ class Mapper
             }
         }
         return $filters;
+    }
+
+    private function termsToLogicalOrString(array $terms): string
+    {
+        return implode(
+            ",",
+            array_map(
+                function ($term) {
+                    return sprintf('"%s"', $term);
+                },
+                $terms
+            )
+        );
     }
 
     private function attributeTypeLookup(array $facetDefinitions): array
