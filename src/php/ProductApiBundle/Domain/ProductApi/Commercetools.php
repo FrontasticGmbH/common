@@ -88,7 +88,8 @@ class Commercetools implements ProductApi
 
         $categoryNameMap = [];
         foreach ($categories as $category) {
-            $categoryNameMap[$category['id']] = $category['name'][$locale->language];
+            $localizedCategoryName = $category['name'][$locale->language] ?? '';
+            $categoryNameMap[$category['id']] = $localizedCategoryName;
         }
 
         $categoryMap = [];
@@ -107,11 +108,11 @@ class Commercetools implements ProductApi
                     ),
                     '/'
                 )
-                . '/' . $category['name'][$locale->language];
+                . '/' . $categoryNameMap[$category['id']];
 
             $categoryMap[$path] = new Category([
                 'categoryId' => $category['id'],
-                'name' => $category['name'][$locale->language],
+                'name' => $categoryNameMap[$category['id']],
                 'depth' => count($category['ancestors']),
                 'path' =>
                     rtrim(
