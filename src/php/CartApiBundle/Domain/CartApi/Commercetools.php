@@ -549,6 +549,7 @@ class Commercetools implements CartApi
             'shippingAddress' => $this->mapAddress($cart['shippingAddress'] ?? []),
             'billingAddress' => $this->mapAddress($cart['billingAddress'] ?? []),
             'sum' => $cart['totalPrice']['centAmount'],
+            'currency' => $cart['totalPrice']['currencyCode'],
             'payments' => $this->mapPayments($cart),
             'discountCodes' => $this->mapDiscounts($cart),
             'dangerousInnerCart' => $cart,
@@ -676,6 +677,7 @@ class Commercetools implements CartApi
                             )
                         ),
                         'totalPrice' => $lineItem['totalPrice']['centAmount'],
+                        'currency' => $lineItem['totalPrice']['currencyCode'],
                         'isGift' => ($lineItem['lineItemMode'] === 'GiftLineItem'),
                         'dangerousInnerItem' => $lineItem,
                     ]);

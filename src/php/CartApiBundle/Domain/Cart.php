@@ -59,6 +59,11 @@ class Cart extends DataObject
     public $sum = 0;
 
     /**
+     * @var string
+     */
+    public $currency;
+
+    /**
      * @var Payment[]
      */
     public $payments = [];
