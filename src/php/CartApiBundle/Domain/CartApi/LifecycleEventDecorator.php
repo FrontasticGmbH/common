@@ -48,9 +48,10 @@ class LifecycleEventDecorator implements CartApi
 
     /**
      * @param string $userId
+     * @param string $locale
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function getForUser(string $userId): Cart
+    public function getForUser(string $userId, string $locale): Cart
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
@@ -67,9 +68,10 @@ class LifecycleEventDecorator implements CartApi
 
     /**
      * @param string $anonymousId
+     * @param string $locale
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function getAnonymous(string $anonymousId): Cart
+    public function getAnonymous(string $anonymousId, string $locale): Cart
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }

@@ -81,26 +81,30 @@ class Commercetools implements CartApi
 
     /**
      * @param string $userId
+     * @param string $localeString
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function getForUser(string $userId): Cart
+    public function getForUser(string $userId, string $localeString): Cart
     {
+        $locale = Locale::createFromPosix($localeString);
+
         try {
-            return $this->mapCart($this->client->get('/carts', [
+            $cart = $this->mapCart($this->client->get('/carts', [
                 'customerId' => $userId,
                 'expand' => self::EXPAND,
             ]));
+
+            return $this->assertCorrectLocale($cart, $locale);
         } catch (RequestException $e) {
             return $this->mapCart($this->client->post(
                 '/carts',
                 ['expand' => self::EXPAND],
                 [],
                 json_encode([
-                    // @TODO: Currency should only be stored in context. Property should be removed.
-                    'currency' => 'EUR',
-                    'country' => 'DE',
+                    'country' => $locale->territory,
+                    'currency' => $locale->currency,
                     'customerId' => $userId,
                     'state' => 'Active',
                     'inventoryMode' => 'ReserveOnOrder',
@@ -109,14 +113,33 @@ class Commercetools implements CartApi
         }
     }
 
+    private function assertCorrectLocale(Cart $cart, Locale $locale): Cart
+    {
+        if ($cart->currency !== strtoupper($locale->currency)
+            || $cart->dangerousInnerCart['country'] !== strtoupper($locale->territory)
+        ) {
+            $actions = [];
+            $actions[] = [
+                'action' => 'setCountry',
+                'country' => $locale->territory,
+            ];
+
+            return $this->postCartActions($cart, $actions);
+        }
+        return $cart;
+    }
+
     /**
      * @param string $anonymousId
+     * @param string $localeString
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function getAnonymous(string $anonymousId): Cart
+    public function getAnonymous(string $anonymousId, string $localeString): Cart
     {
+        $locale = Locale::createFromPosix($localeString);
+
         $result = $this->client
             ->fetchAsync(
                 '/carts',
@@ -129,7 +152,7 @@ class Commercetools implements CartApi
             ->wait();
 
         if ($result->count >= 1) {
-            return $this->mapCart($result->results[0]);
+            return $this->assertCorrectLocale($this->mapCart($result->results[0]), $locale);
         }
 
         return $this->mapCart($this->client->post(
@@ -137,9 +160,8 @@ class Commercetools implements CartApi
             ['expand' => self::EXPAND],
             [],
             json_encode([
-                // @TODO: Currency should only be stored in context. Property should be removed.
-                'currency' => 'EUR',
-                'country' => 'DE',
+                'country' => $locale->territory,
+                'currency' => $locale->currency,
                 'anonymousId' => $anonymousId,
                 'state' => 'Active',
                 'inventoryMode' => 'ReserveOnOrder',
