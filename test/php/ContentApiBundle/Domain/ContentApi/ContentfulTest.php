@@ -22,8 +22,9 @@ class ContentfulTest extends TestCase
         $testSpaceId = 'cho9or523rqg';
 
         $client = new \Contentful\Delivery\Client($testAccessToken, $testSpaceId);
+        $renderer = new \Contentful\RichText\Renderer();
 
-        $this->api = new Contentful($client, 'en_US');
+        $this->api = new Contentful($client, $renderer, 'en_US');
     }
 
     public function testSimpleQueryAll()
