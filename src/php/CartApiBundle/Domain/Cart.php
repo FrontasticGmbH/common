@@ -137,8 +137,18 @@ class Cart extends DataObject
 
     public function hasCompletePayments(): bool
     {
+        $paymentPaid = false;
+        if(0 < count($this->payments)){
+            foreach ($this->payments as $payment){
+                $paymentPaid = ($payment->paymentStatus === Payment::INTERFACE_CODE_PAID)? true : false;
+                if($paymentPaid){
+                    break;
+                }
+            }
+        }
+
         return (
-            $this->payments &&
+            $paymentPaid &&
             ($this->getPayedAmount() >= $this->sum)
         );
     }

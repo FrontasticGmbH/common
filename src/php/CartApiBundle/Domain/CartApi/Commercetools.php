@@ -778,6 +778,7 @@ class Commercetools implements CartApi
                 'amount' => $payment['amountPlanned']['centAmount'] ?? null,
                 'currency' => $payment['amountPlanned']['currencyCode'] ?? null,
                 'debug' => json_encode($payment),
+                'paymentStatus' => $payment['paymentStatus']['interfaceCode'] ?? null,
             ]);
         }
 
