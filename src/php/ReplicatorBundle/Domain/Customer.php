@@ -22,6 +22,11 @@ class Customer extends DataObject
     public $edition = 'micro';
 
     /**
+     * @var array
+     */
+    public $features = [];
+
+    /**
      * Used to indicate this customer is only "half" configured or similar.
      *
      * @var bool
