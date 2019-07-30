@@ -113,7 +113,7 @@ class Commercetools implements ProductApi
                 )
                 . '/' . $categoryNameMap[$category['id']];
 
-            $categoryMap[$path] = new Category([
+            $categoryObject = new Category([
                 'categoryId' => $category['id'],
                 'name' => $categoryNameMap[$category['id']],
                 'depth' => count($category['ancestors']),
@@ -133,6 +133,12 @@ class Commercetools implements ProductApi
                     )
                     . '/' . $category['id'],
             ]);
+
+            if ($query->loadDangerousInnerData) {
+                $categoryObject->dangerousInnerCategory = $category;
+            }
+
+            $categoryMap[$path] = $categoryObject;
         }
 
         ksort($categoryMap);
