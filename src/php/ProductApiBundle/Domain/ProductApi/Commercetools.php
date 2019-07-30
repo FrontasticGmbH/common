@@ -101,7 +101,10 @@ class Commercetools implements ProductApi
                         '/',
                         array_map(
                             function (array $ancestor) use ($categoryNameMap) {
-                                return $categoryNameMap[$ancestor['id']];
+                                // If the offset is > 0 we might not have seen the ancestor of this node. Since the
+                                // $path is only used to sort the categories we use the ID of the ancestor if we don't
+                                // know the path.
+                                return $categoryNameMap[$ancestor['id']] ?? $ancestor['id'];
                             },
                             $category['ancestors']
                         )
