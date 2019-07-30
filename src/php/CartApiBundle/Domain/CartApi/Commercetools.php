@@ -2,21 +2,21 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain\CartApi;
 
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
+use Frontastic\Common\AccountApiBundle\Domain\Address;
+use Frontastic\Common\CartApiBundle\Domain\Cart;
+use Frontastic\Common\CartApiBundle\Domain\CartApi;
+use Frontastic\Common\CartApiBundle\Domain\Category;
+use Frontastic\Common\CartApiBundle\Domain\Discount;
+use Frontastic\Common\CartApiBundle\Domain\LineItem;
+use Frontastic\Common\CartApiBundle\Domain\Order;
+use Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator;
+use Frontastic\Common\CartApiBundle\Domain\Payment;
+use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
-use Frontastic\Common\AccountApiBundle\Domain\Address;
-use Frontastic\Common\CartApiBundle\Domain\Category;
-use Frontastic\Common\CartApiBundle\Domain\Cart;
-use Frontastic\Common\CartApiBundle\Domain\Order;
-use Frontastic\Common\CartApiBundle\Domain\LineItem;
-use Frontastic\Common\CartApiBundle\Domain\CartApi;
-use Frontastic\Common\CartApiBundle\Domain\Payment;
-use Frontastic\Common\CartApiBundle\Domain\Discount;
-use Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator;
-use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to implementation of CartApi
@@ -426,19 +426,20 @@ class Commercetools implements CartApi
             [],
             [],
             json_encode([
-                'amountPlanned' => [
+                'key'               => $payment->id,
+                'amountPlanned'     => [
                     'centAmount' => $payment->amount,
                     'currencyCode' => $payment->currency,
                 ],
-                'interfaceId' => $payment->paymentId,
+                'interfaceId'       => $payment->paymentId,
                 'paymentMethodInfo' => [
                     'paymentInterface' => $payment->paymentProvider,
                 ],
-                'paymentStatus' => [
+                'paymentStatus'     => [
                     'interfaceCode' => $payment->paymentStatus,
                     'interfaceText' => $payment->debug,
                 ],
-                'custom' => $custom,
+                'custom'            => $custom,
             ])
         );
 
@@ -784,18 +785,28 @@ class Commercetools implements CartApi
 
         $payments = [];
         foreach ($cart['paymentInfo']['payments'] as $payment) {
-            $payment = isset($payment['obj']) ? $payment['obj'] : $payment;
-            $payments[] = new Payment([
-                'paymentId' => $payment['interfaceId'] ?? null,
-                'paymentProvider' => $payment['paymentMethodInfo']['paymentInterface'] ?? null,
-                'amount' => $payment['amountPlanned']['centAmount'] ?? null,
-                'currency' => $payment['amountPlanned']['currencyCode'] ?? null,
-                'debug' => json_encode($payment),
-                'paymentStatus' => $payment['paymentStatus']['interfaceCode'] ?? null,
-            ]);
+            $payments[] = $this->mapPayment($payment);
         }
 
         return $payments;
+    }
+
+    private function mapPayment(array $payment): Payment
+    {
+        $payment = isset($payment['obj']) ? $payment['obj'] : $payment;
+
+        return new Payment(
+            [
+                'id'              => $payment['key'] ?? null,
+                'paymentId'       => $payment['interfaceId'] ?? null,
+                'paymentProvider' => $payment['paymentMethodInfo']['paymentInterface'] ?? null,
+                'amount'          => $payment['amountPlanned']['centAmount'] ?? null,
+                'currency'        => $payment['amountPlanned']['currencyCode'] ?? null,
+                'debug'           => json_encode($payment),
+                'paymentStatus'   => $payment['paymentStatus']['interfaceCode'] ?? null,
+                'version'         => $payment['version'] ?? 0,
+            ]
+        );
     }
 
     private function mapDiscounts(array $cart): array
@@ -943,5 +954,59 @@ class Commercetools implements CartApi
         }
 
         return $this->taxCategory;
+    }
+
+    public function updatePaymentStatus(Payment $payment): void
+    {
+        $this->client->post(
+            'payments/key='.$payment->id,
+            [],
+            [],
+            json_encode(
+                [
+                    'version' => $payment->version,
+                    'actions' => [
+                        [
+                            'action'        => 'setStatusInterfaceCode',
+                            'interfaceCode' => $payment->paymentStatus,
+                        ],
+                    ],
+                ]
+            )
+        );
+    }
+
+    public function getPayment(string $paymentId): ?Payment
+    {
+        $payment = $this->client->get(
+            'payments/key='.$paymentId,
+            ['expand' => self::EXPAND]
+        );
+
+        if (empty($payment)) {
+            return null;
+        }
+
+        return $this->mapPayment($payment);
+    }
+
+    public function updatePaymentInterfaceId(Payment $payment): void
+    {
+        $this->client->post(
+            'payments/key='.$payment->id,
+            [],
+            [],
+            json_encode(
+                [
+                    'version' => $payment->version,
+                    'actions' => [
+                        [
+                            'action'      => 'setInterfaceId',
+                            'interfaceId' => $payment->paymentId,
+                        ],
+                    ],
+                ]
+            )
+        );
     }
 }

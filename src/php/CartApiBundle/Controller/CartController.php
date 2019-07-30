@@ -3,6 +3,7 @@
 namespace Frontastic\Common\CartApiBundle\Controller;
 
 use Frontastic\Common\CartApiBundle\Domain\Payment;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Request;
 
 use Frontastic\Common\CoreBundle\Controller\CrudController;
