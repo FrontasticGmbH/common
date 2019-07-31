@@ -191,6 +191,16 @@ class CartController extends CrudController
         $cart = $this->getCart($context);
         $cartApi->startTransaction($cart);
 
+        $languageCodeEndPosition = strpos($context->locale,'_',0);
+
+        $languageCode = ($languageCodeEndPosition !== false) ?
+            substr($context->locale,0,$languageCodeEndPosition) : "en";
+
+        $cart = $cartApi->setLocale(
+            $cart,
+            $languageCode
+        );
+
         if (!empty($payload['account'])) {
             $cart = $cartApi->setEmail(
                 $cart,

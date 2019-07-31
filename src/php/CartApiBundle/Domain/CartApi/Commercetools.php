@@ -329,6 +329,24 @@ class Commercetools implements CartApi
         );
     }
 
+    /**
+     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
+     * @param string $languageCode
+     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
+     */
+    public function setLocale(Cart $cart, string $languageCode): Cart
+    {
+        return $this->postCartActions(
+            $cart,
+            [
+                [
+                    'action' => 'setLocale',
+                    'locale' => $languageCode,
+                ],
+            ]
+        );
+    }
+
     public function setShippingMethod(Cart $cart, string $shippingMethod): Cart
     {
         return $this->postCartActions(
