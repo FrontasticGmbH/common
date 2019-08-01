@@ -105,6 +105,7 @@ class Commercetools implements CartApi
                 json_encode([
                     'country' => $locale->territory,
                     'currency' => $locale->currency,
+                    'locale' => $locale->language,
                     'customerId' => $userId,
                     'state' => 'Active',
                     'inventoryMode' => 'ReserveOnOrder',
@@ -117,12 +118,21 @@ class Commercetools implements CartApi
     {
         if ($cart->currency !== strtoupper($locale->currency)
             || $cart->dangerousInnerCart['country'] !== strtoupper($locale->territory)
+            || $cart->dangerousInnerCart['locale'] !== strtoupper($locale->language)
         ) {
             $actions = [];
-            $actions[] = [
+
+            $setCountryAction = [
                 'action' => 'setCountry',
                 'country' => $locale->territory,
             ];
+            $setLocaleAction = [
+                'action' => 'setLocale',
+                'locale' => $locale->language,
+            ];
+
+            array_push($actions,$setCountryAction);
+            array_push($actions,$setLocaleAction);
 
             return $this->postCartActions($cart, $actions);
         }
@@ -162,6 +172,7 @@ class Commercetools implements CartApi
             json_encode([
                 'country' => $locale->territory,
                 'currency' => $locale->currency,
+                'locale' => $locale->language,
                 'anonymousId' => $anonymousId,
                 'state' => 'Active',
                 'inventoryMode' => 'ReserveOnOrder',
@@ -324,24 +335,6 @@ class Commercetools implements CartApi
                 [
                     'action' => 'setCustomerEmail',
                     'email' => $email,
-                ],
-            ]
-        );
-    }
-
-    /**
-     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
-     * @param string $languageCode
-     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
-     */
-    public function setLocale(Cart $cart, string $languageCode): Cart
-    {
-        return $this->postCartActions(
-            $cart,
-            [
-                [
-                    'action' => 'setLocale',
-                    'locale' => $languageCode,
                 ],
             ]
         );

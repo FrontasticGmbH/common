@@ -71,13 +71,6 @@ interface CartApi
      */
     public function setEmail(Cart $cart, string $email): Cart;
 
-    /**
-     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
-     * @param string $languageCode
-     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
-     */
-    public function setLocale(Cart $cart, string $languageCode): Cart;
-
     public function setShippingMethod(Cart $cart, string $shippingMethod): Cart;
 
     public function setCustomField(Cart $cart, array $fields): Cart;
