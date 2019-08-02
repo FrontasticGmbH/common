@@ -505,7 +505,7 @@ class Commercetools implements CartApi
      */
     public function order(Cart $cart): Order
     {
-        return $this->mapOrder($this->client->post(
+        $order = $this->mapOrder($this->client->post(
             '/orders',
             ['expand' => self::EXPAND],
             [],
@@ -515,6 +515,14 @@ class Commercetools implements CartApi
                 'orderNumber' => $this->orderIdGenerator->getOrderId($cart),
             ])
         ));
+
+        $cart = $this->getById($cart->cartId);
+        $this->client->delete(
+            '/carts/' . urlencode($cart->cartId),
+            ['version' => $cart->cartVersion]
+        );
+
+        return $order;
     }
 
     /**

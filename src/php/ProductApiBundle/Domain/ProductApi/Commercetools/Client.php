@@ -109,6 +109,19 @@ class Client
     }
 
     /**
+     * @param string $uri
+     * @param array $parameters
+     * @param array $headers
+     * @param string $body
+     * @return array
+     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     */
+    public function delete(string $uri, array $parameters = [], array $headers = [], string $body = ''): array
+    {
+        return $this->request('DELETE', $uri, $parameters, $headers, $body)->wait();
+    }
+
+    /**
      * @param string $method
      * @param string $uri
      * @param array $parameters
@@ -117,7 +130,7 @@ class Client
      * @return array
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      */
-    private function request(
+    public function request(
         string $method,
         string $uri,
         array $parameters = [],
