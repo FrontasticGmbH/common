@@ -142,7 +142,7 @@ class GraphCMS implements ContentApi
             function (Attribute $attribute) use ($fields): Attribute {
                 $attributeContent = $fields[(string) $attribute->attributeId];
                 if ($attribute->type === 'Text') {
-                    $attributeContent = $attributeContent['markdown'];
+                    $attributeContent = $attributeContent['html'];
                 }
 
                 $attribute->content = $attributeContent;

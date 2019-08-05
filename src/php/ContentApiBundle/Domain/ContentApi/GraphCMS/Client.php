@@ -130,7 +130,7 @@ class Client
                         if ($e['type']['name'] == 'Asset') {
                             return "{$e['name']} { handle }";
                         } elseif ($e['type']['name'] == 'RichText') {
-                            return "{$e['name']} { markdown }";
+                            return "{$e['name']} { html }";
                         } else {
                             return "{$e['name']} { id }";
                         }
