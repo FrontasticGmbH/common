@@ -90,10 +90,6 @@ class Client
 
         $json = json_decode($this->query($query), true);
 
-        if ($json === false) {
-            return [];
-        }
-
         return $json['data']['__type']['fields'] ?? [];
     }
 
