@@ -11,4 +11,8 @@
     <route id="Frontastic.ContentApi.Api.search" path="/search" methods="POST">
         <default key="_controller">Frontastic\Common\ContentApiBundle\Controller\SearchController::listAction</default>
     </route>
+
+    <route id="Frontastic.ContentApi.Api.contentId" path="/contentId" methods="POST">
+        <default key="_controller">Frontastic\Common\ContentApiBundle\Controller\ContentIdController::listAction</default>
+    </route>
 </routes>
