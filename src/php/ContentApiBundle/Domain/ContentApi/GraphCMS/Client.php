@@ -87,8 +87,14 @@ class Client
                }
             }
         ";
+
         $json = json_decode($this->query($query), true);
-        return $json['data']['__type']['fields'];
+
+        if ($json === false) {
+            return [];
+        }
+
+        return $json['data']['__type']['fields'] ?? [];
     }
 
     protected function getAttributeNames(array $attributes): array
