@@ -212,6 +212,18 @@ class Page {
         return this.addTastic(region, cellId, tastic.tasticType, tasticIndex + 1, tastic.configuration)
     }
 
+    isActive = (page) => {
+        switch (page.state) {
+            case 'default':
+                return true
+            case 'scheduled':
+                const now = Date.now()
+                return new Date(page.scheduledFrom) <= now && new Date(page.scheduledTo) >= now
+            default:
+                return false
+        }
+    }
+
     export () {
         return {
             pageId: this.pageId,
