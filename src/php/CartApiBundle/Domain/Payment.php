@@ -42,5 +42,6 @@ class Payment extends DataObject
 
     public $paymentStatus;
     public $version;
+    public $paymentMethod;
 
 }

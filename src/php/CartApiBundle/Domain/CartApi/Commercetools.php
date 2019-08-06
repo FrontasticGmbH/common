@@ -445,6 +445,7 @@ class Commercetools implements CartApi
                 'interfaceId'       => $payment->paymentId,
                 'paymentMethodInfo' => [
                     'paymentInterface' => $payment->paymentProvider,
+                    'method' => $payment->paymentMethod,
                 ],
                 'paymentStatus'     => [
                     'interfaceCode' => $payment->paymentStatus,
@@ -819,6 +820,7 @@ class Commercetools implements CartApi
                 'id'              => $payment['key'] ?? null,
                 'paymentId'       => $payment['interfaceId'] ?? null,
                 'paymentProvider' => $payment['paymentMethodInfo']['paymentInterface'] ?? null,
+                'paymentMethod'   => $payment['paymentMethodInfo']['method'] ?? null,
                 'amount'          => $payment['amountPlanned']['centAmount'] ?? null,
                 'currency'        => $payment['amountPlanned']['currencyCode'] ?? null,
                 'debug'           => json_encode($payment),
