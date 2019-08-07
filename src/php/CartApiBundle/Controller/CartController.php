@@ -250,9 +250,9 @@ class CartController extends CrudController
     {
         $cartApi = $this->getCartApi($context);
         if ($context->session->loggedIn) {
-            return $cartApi->getForUser($context->session->account->accountId);
+            return $cartApi->getForUser($context->session->account->accountId, $context->locale);
         } else {
-            return $cartApi->getAnonymous(session_id());
+            return $cartApi->getAnonymous(session_id(), $context->locale);
         }
     }
 

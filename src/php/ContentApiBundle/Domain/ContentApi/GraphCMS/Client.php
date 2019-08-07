@@ -32,6 +32,11 @@ class Client
      */
     private $httpClient;
 
+    /**
+     * @const string[] names of attributes in which should be searched
+     */
+    private const SEARCH_ATTRIBUTES = ['name', 'fileName', 'title', 'label'];
+
     public function __construct(
         string $projectId,
         string $apiToken,
@@ -87,8 +92,10 @@ class Client
                }
             }
         ";
+
         $json = json_decode($this->query($query), true);
-        return $json['data']['__type']['fields'];
+
+        return $json['data']['__type']['fields'] ?? [];
     }
 
     protected function getAttributeNames(array $attributes): array
@@ -130,7 +137,7 @@ class Client
                         if ($e['type']['name'] == 'Asset') {
                             return "{$e['name']} { handle }";
                         } elseif ($e['type']['name'] == 'RichText') {
-                            return "{$e['name']} { markdown }";
+                            return "{$e['name']} { html }";
                         } else {
                             return "{$e['name']} { id }";
                         }
@@ -232,6 +239,7 @@ class Client
     {
         return $name === 'Query' ||
             $name === 'Mutation' ||
+            $name == 'PageInfo' ||
             $this->startsWith($name, '__') ||
             $this->startsWith($name, 'Aggregate') ||
             $this->endsWith($name, 'Edge') ||
@@ -271,5 +279,62 @@ class Client
                 $relevantTypes
             )
         );
+    }
+
+    public function search(string $searchString, array $contentTypes = [], string $locale = null): ClientResult
+    {
+        if (empty($contentTypes)) {
+            $contentTypes = $this->getContentTypes();
+        }
+        $attributesByContentType = [];
+        $queryParts = implode(",\n", array_filter(array_map(
+            function ($contentType) use ($searchString, &$attributesByContentType): string {
+                $name = lcfirst(Inflector::pluralize($contentType));
+                $attributes = $this->getAttributes($contentType);
+
+                $attributesByContentType[$name] = [];
+                foreach ($attributes as $attribute) {
+                    $attributesByContentType[$name][$attribute['name']] = $attribute;
+                }
+
+                $possibleSearchAttributes = array_filter(
+                    $attributes,
+                    function ($attribute) {
+                        return in_array(
+                            $attribute['name'],
+                            self::SEARCH_ATTRIBUTES
+                        );
+                    }
+                );
+
+                if (count($possibleSearchAttributes) === 0) {
+                    return '';
+                }
+                $searchAttribute = reset($possibleSearchAttributes); // get first entry of array, regardless of it's key
+                $attributeString = $this->attributeQueryPart($attributes);
+                $queryPart =
+                           $name . "(where: { ${searchAttribute['name']}_contains: \"$searchString\" }){ " .
+                           $attributeString .  " }";
+                return $queryPart;
+            },
+            $contentTypes
+        )));
+        $queryResultJson = $this->query(
+            "query data {
+                $queryParts
+              }
+            ",
+            $locale
+        );
+        return new ClientResult([
+            'queryResultJson' => $queryResultJson,
+            'attributes' => array_map(
+                function ($value) {
+                    return $this->convertAttributes(array_values($value));
+                },
+                $attributesByContentType
+            )
+        ]);
+        return [];
     }
 }

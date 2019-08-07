@@ -8,6 +8,10 @@
         <default key="_controller">Frontastic\Common\ContentApiBundle\Controller\ContentTypeController::listAction</default>
     </route>
 
+    <route id="Frontastic.ContentApi.Api.get" path="/get" methods="POST">
+        <default key="_controller">Frontastic\Common\ContentApiBundle\Controller\SearchController::showAction</default>
+    </route>
+
     <route id="Frontastic.ContentApi.Api.search" path="/search" methods="POST">
         <default key="_controller">Frontastic\Common\ContentApiBundle\Controller\SearchController::listAction</default>
     </route>

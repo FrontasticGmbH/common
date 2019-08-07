@@ -2,14 +2,13 @@
 
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
 
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\Term;
-use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\Term;
+use Frontastic\Common\ProductApiBundle\Domain\Variant;
 
 /**
  * @SuppressWarnings(PHPMD) TODO: Refactor or add more tests
@@ -43,9 +42,12 @@ class Mapper
             'name' => $this->getLocalizedValue($locale, $productData['name'] ?? []),
             'slug' => $this->getLocalizedValue($locale, $productData['slug'] ?? []),
             'description' => $this->getLocalizedValue($locale, $productData['description'] ?? []),
-            'categories' => array_map(function (array $category) {
-                return $category['id'];
-            }, $productData['categories']),
+            'categories' => array_map(
+                function (array $category) {
+                    return $category['id'];
+                },
+                $productData['categories']
+            ),
             'variants' => $this->dataToVariants($productData, $query, $locale),
             'dangerousInnerProduct' => $this->dataToDangerousInnerData($productData, $query),
         ]);
@@ -265,15 +267,17 @@ class Mapper
                 $variantData['scopedPrice']['currentValue']['currencyCode'],
                 ($variantData['scopedPriceDiscounted']
                     ? $variantData['scopedPrice']['value']['centAmount']
-                    : null)
+                    : null),
             ];
         }
 
         if (isset($variantData['price'])) {
             return [
                 $variantData['price']['value']['centAmount'],
-                $variantData['price']['currencyCode'],
-                null
+                $variantData['price']['value']['currencyCode'],
+                (isset($variantData['price']['discounted']['value']['centAmount'])
+                    ? $variantData['price']['discounted']['value']['centAmount'] ?? null
+                    : null),
             ];
         }
 
@@ -282,28 +286,31 @@ class Mapper
 
     public function dataToAttributes(array $variantData, $locale): array
     {
-        return array_merge(['baseId' => null], array_combine(
-            array_map(
-                function (array $attribute): string {
-                    return $attribute['name'];
-                },
-                $variantData['attributes']
-            ),
-            array_map(
-                function (array $attribute) use ($locale) {
-                    if (isset($attribute['value']['centAmount'])) {
+        return array_merge(
+            ['baseId' => null],
+            array_combine(
+                array_map(
+                    function (array $attribute): string {
+                        return $attribute['name'];
+                    },
+                    $variantData['attributes']
+                ),
+                array_map(
+                    function (array $attribute) use ($locale) {
+                        if (isset($attribute['value']['centAmount'])) {
+                            return $attribute['value'];
+                        }
+
+                        if (is_array($attribute['value']) && !$this->isNumericArray($attribute['value'])) {
+                            return $this->getLocalizedValue($locale, $attribute['value'] ?? []);
+                        }
+
                         return $attribute['value'];
-                    }
-
-                    if (is_array($attribute['value']) && !$this->isNumericArray($attribute['value'])) {
-                        return $this->getLocalizedValue($locale, $attribute['value'] ?? []);
-                    }
-
-                    return $attribute['value'];
-                },
-                $variantData['attributes']
+                    },
+                    $variantData['attributes']
+                )
             )
-        ));
+        );
     }
 
     private function isNumericArray(array $array): bool
@@ -400,21 +407,25 @@ class Mapper
                     break;
 
                 case 'enum':
-                    foreach ($facet->terms as $term) {
-                        $filters[] = sprintf('%s.label:"%s"', $facet->handle, $term);
-                    }
+                    $filters[] = sprintf('%s.label:%s', $facet->handle, $this->termsToLogicalOrString($facet->terms));
                     break;
 
                 case 'localizedEnum':
-                    foreach ($facet->terms as $term) {
-                        $filters[] = sprintf('%s.label.%s:"%s"', $facet->handle, $locale->language, $term);
-                    }
+                    $filters[] = sprintf(
+                        '%s.label.%s:%s',
+                        $facet->handle,
+                        $locale->language,
+                        $this->termsToLogicalOrString($facet->terms)
+                    );
                     break;
 
                 case 'localizedText':
-                    foreach ($facet->terms as $term) {
-                        $filters[] = sprintf('%s.%s:"%s"', $facet->handle, $locale->language, $term);
-                    }
+                    $filters[] = sprintf(
+                        '%s.%s:%s',
+                        $facet->handle,
+                        $locale->language,
+                        $this->termsToLogicalOrString($facet->terms)
+                    );
                     break;
 
                 case 'number':
@@ -423,20 +434,10 @@ class Mapper
                 case 'reference':
                 default:
                     if ($facet instanceof Query\TermFacet) {
-                        $termsAsStringWithQuotes = implode(
-                            ",",
-                            array_map(
-                                function ($term) {
-                                    return sprintf('"%s"', $term);
-                                },
-                                $facet->terms
-                            )
-                        );
-
                         $filters[] = sprintf(
                             '%s:%s',
                             $facet->handle,
-                            $termsAsStringWithQuotes
+                            $this->termsToLogicalOrString($facet->terms)
                         );
                     } else {
                         $filters[] = sprintf('%s:range (%s to %s)', $facet->handle, $facet->min, $facet->max);
@@ -445,6 +446,19 @@ class Mapper
             }
         }
         return $filters;
+    }
+
+    private function termsToLogicalOrString(array $terms): string
+    {
+        return implode(
+            ",",
+            array_map(
+                function ($term) {
+                    return sprintf('"%s"', $term);
+                },
+                $terms
+            )
+        );
     }
 
     private function attributeTypeLookup(array $facetDefinitions): array

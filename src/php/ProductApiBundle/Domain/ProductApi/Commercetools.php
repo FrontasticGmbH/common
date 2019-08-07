@@ -88,7 +88,8 @@ class Commercetools implements ProductApi
 
         $categoryNameMap = [];
         foreach ($categories as $category) {
-            $categoryNameMap[$category['id']] = $category['name'][$locale->language];
+            $localizedCategoryName = $category['name'][$locale->language] ?? '';
+            $categoryNameMap[$category['id']] = $localizedCategoryName;
         }
 
         $categoryMap = [];
@@ -100,18 +101,21 @@ class Commercetools implements ProductApi
                         '/',
                         array_map(
                             function (array $ancestor) use ($categoryNameMap) {
-                                return $categoryNameMap[$ancestor['id']];
+                                // If the offset is > 0 we might not have seen the ancestor of this node. Since the
+                                // $path is only used to sort the categories we use the ID of the ancestor if we don't
+                                // know the path.
+                                return $categoryNameMap[$ancestor['id']] ?? $ancestor['id'];
                             },
                             $category['ancestors']
                         )
                     ),
                     '/'
                 )
-                . '/' . $category['name'][$locale->language];
+                . '/' . $categoryNameMap[$category['id']];
 
-            $categoryMap[$path] = new Category([
+            $categoryObject = new Category([
                 'categoryId' => $category['id'],
-                'name' => $category['name'][$locale->language],
+                'name' => $categoryNameMap[$category['id']],
                 'depth' => count($category['ancestors']),
                 'path' =>
                     rtrim(
@@ -129,6 +133,12 @@ class Commercetools implements ProductApi
                     )
                     . '/' . $category['id'],
             ]);
+
+            if ($query->loadDangerousInnerData) {
+                $categoryObject->dangerousInnerCategory = $category;
+            }
+
+            $categoryMap[$path] = $categoryObject;
         }
 
         ksort($categoryMap);
@@ -163,8 +173,11 @@ class Commercetools implements ProductApi
                     }
                 );
         } else {
+            $locale = Locale::createFromPosix($this->localeOverwrite ?: $query->locale);
+            $parameters = ['priceCurrency' => $locale->currency, 'priceCountry' => $locale->territory];
+
             $promise = $this->client
-                ->fetchAsyncById('/products', $query->productId)
+                ->fetchAsyncById('/products', $query->productId, $parameters)
                 ->then(function ($product) use ($query) {
                     return $this->mapper->dataToProduct($product, $query);
                 });

@@ -11,13 +11,21 @@ class MapperTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
+     * @var Mapper
+     */
+    private $mapper;
+
+    public function setUp()
+    {
+        $this->mapper = new Mapper();
+    }
+
+    /**
      * @dataProvider provideFacetRequestExamples
      */
     public function testFacetsToRequest($facetDefinition, $expectedFacetQuery)
     {
-        $mapper = new Mapper();
-
-        $actualFacetQueries = $mapper->facetsToRequest(
+        $actualFacetQueries = $this->mapper->facetsToRequest(
             [$facetDefinition],
             new Locale(['language' => 'en'])
         );
@@ -73,9 +81,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
      */
     public function testFacetsToFilter($facetDefinition, $facet, $expectedFilters)
     {
-        $mapper = new Mapper();
-
-        $actualFilters = $mapper->facetsToFilter(
+        $actualFilters = $this->mapper->facetsToFilter(
             [$facet],
             [$facetDefinition],
             new Locale(['language' => 'en'])
@@ -162,11 +168,31 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     'terms' => ['large', 'small', 'medium']
                 ]),
                 [
-                    'variant.attribute.size.label.en:"large"',
-                    'variant.attribute.size.label.en:"small"',
-                    'variant.attribute.size.label.en:"medium"'
+                    'variant.attribute.size.label.en:"large","small","medium"',
                 ]
             ],
         ];
+    }
+
+    public function testDataToNumberRangeFacetValuesAvailable()
+    {
+        $fixture = $this->loadFixture('dataToNumberRangeFacet_values_available_input.json');
+
+        $actualResult = $this->mapper->dataToNumberRangeFacet('range-with-values', $fixture);
+
+        $expectedResult = $this->loadFixture('dataToNumberRangeFacet_values_available_output.json');
+
+        $this->assertEquals(
+            new \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\RangeFacet($expectedResult),
+            $actualResult
+        );
+    }
+
+    /**
+     * @return mixed
+     */
+    private function loadFixture(string $fileName)
+    {
+        return json_decode(file_get_contents(__DIR__ . '/_fixtures/' . $fileName), true);
     }
 }

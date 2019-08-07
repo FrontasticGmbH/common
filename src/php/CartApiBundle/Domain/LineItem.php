@@ -52,6 +52,11 @@ class LineItem extends DataObject
     public $totalPrice = 0;
 
     /**
+     * @var string
+     */
+    public $currency;
+
+    /**
      * @var bool
      */
     public $isGift = false;

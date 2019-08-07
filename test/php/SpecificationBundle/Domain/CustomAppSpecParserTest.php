@@ -32,7 +32,8 @@ class CustomAppSpecParserTest extends \PHPUnit\Framework\TestCase
         $this->expectException(InvalidSchemaException::class);
         $this->expectExceptionMessage($message);
 
-        $specParser->parse(file_get_contents(self::FIXTURE_DIR . '/' . $schemaFile));
+        $schema = file_get_contents(self::FIXTURE_DIR . '/' . $schemaFile);
+        $specParser->parse($schema);
     }
 
     public function testUnknownFieldTypeRaisesSenisbleError()

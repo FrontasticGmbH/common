@@ -111,6 +111,7 @@ class CustomerService
             'name' => $customer['name'],
             'secret' => $customer['secret'],
             'edition' => $customer['edition'] ?? 'mirco',
+            'features' => $customer['features'] ?? [],
             'isTransient' => $transient,
             'configuration' => $this->convertConfigurationToObjects($customerConfiguration),
             'environments' => $customer['environments'] ?? [

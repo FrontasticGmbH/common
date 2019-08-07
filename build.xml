@@ -32,5 +32,7 @@
     <!--
         Custom modules
     -->
+    <!-- TODO: Move to integration -->
+    <import file="${frontastic_basedir}/paas/catwalk/src/ant/react_bootstrap.xml" />
     <import file="${basedir}/src/ant/javascript.xml" />
 </project>

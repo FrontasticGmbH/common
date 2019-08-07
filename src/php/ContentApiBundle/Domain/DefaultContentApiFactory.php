@@ -8,6 +8,7 @@ use Frontastic\Common\HttpClient\Guzzle;
 use Commercetools\Core\Client;
 use Commercetools\Core\Config;
 use Commercetools\Core\Model\Common\Context;
+use Contentful\RichText\Renderer;
 
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 
@@ -33,7 +34,11 @@ class DefaultContentApiFactory implements ContentApiFactory
                     $contentConfiguration->accessToken,
                     $contentConfiguration->spaceId
                 );
-                $api = new ContentApi\Contentful($client, $project->defaultLanguage);
+                $api = new ContentApi\Contentful(
+                    $client,
+                    new Renderer(),
+                    $project->defaultLanguage
+                );
                 break;
             case 'graphcms':
                 $client = new ContentApi\GraphCMS\Client(

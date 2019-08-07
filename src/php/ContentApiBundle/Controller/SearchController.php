@@ -10,6 +10,23 @@ use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
 
 class SearchController extends Controller
 {
+    public function showAction(Request $request, Context $context): array
+    {
+        $contentApiFactory = $this->get('Frontastic\Common\ContentApiBundle\Domain\ContentApiFactory');
+        /** @var Domain\ContentApi $contentApi */
+        $contentApi = $contentApiFactory->factor($context->project);
+
+        $requestParameters = json_decode($request->getContent(), true);
+        if (!isset($requestParameters['contentId'])) {
+            throw new Exception("contentId is not set in request");
+        }
+        $contentId = $requestParameters['contentId'];
+
+        return [
+            'result' => $contentApi->getContent($contentId, $context->locale),
+        ];
+    }
+
     public function listAction(Request $request, Context $context): array
     {
         $contentApiFactory = $this->get('Frontastic\Common\ContentApiBundle\Domain\ContentApiFactory');
