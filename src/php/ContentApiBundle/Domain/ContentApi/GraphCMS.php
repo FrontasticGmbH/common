@@ -80,7 +80,7 @@ class GraphCMS implements ContentApi
     {
         $locale = $locale ?? $this->defaultLocale;
 
-        $contentTypeGiven = $query->contentType !== null;
+        $contentTypeGiven = $query->contentType !== null && trim($query->contentType) !== '' ;
         $queryGiven = $query->query !== null && trim($query->query) !== '';
 
         if ($queryGiven && !$contentTypeGiven) {
@@ -152,6 +152,11 @@ class GraphCMS implements ContentApi
 
             $name = lcfirst(Inflector::pluralize($query->contentType));
             $data = json_decode($clientResult->queryResultJson, true);
+            if (!isset($data['data'])) {
+                throw new \InvalidArgumentException(
+                    'invalid search parameters'
+                );
+            }
             $contents = array_map(
                 function ($e) use ($clientResult, $query) {
                     return new Content([
