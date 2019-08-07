@@ -178,11 +178,7 @@ class GraphCMS implements ContentApi
 
         $data = json_decode($clientResult->queryResultJson, true);
 
-        if ($data === false) {
-            return [];
-        }
-
-        return $data['data'][$name];
+        return $data['data'][$name] ?? [];
     }
 
     private function hasContent(ContentApi\GraphCMS\ClientResult $clientResult, $contentType): bool
