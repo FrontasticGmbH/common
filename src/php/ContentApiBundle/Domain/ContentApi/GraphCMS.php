@@ -2,12 +2,11 @@
 
 namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 
+use Frontastic\Common\ContentApiBundle\Domain\Category;
+use Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS\Client;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS\Inflector;
-
-use Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 use Frontastic\Common\ContentApiBundle\Domain\ContentType;
-use Frontastic\Common\ContentApiBundle\Domain\Category;
 use Frontastic\Common\ContentApiBundle\Domain\Query;
 use Frontastic\Common\ContentApiBundle\Domain\Result;
 
@@ -72,7 +71,7 @@ class GraphCMS implements ContentApi
             'contentId' => $this->generateContentId($attributes['id'], $contentType),
             'name' => $this->extractName($attributes),
             'attributes' => $this->fillAttributesWithData($clientResult->attributes, $attributes),
-            'dangerousInnerContent' => $clientResult->queryResultJson
+            'dangerousInnerContent' => $clientResult->queryResultJson,
         ]);
     }
 
@@ -80,7 +79,7 @@ class GraphCMS implements ContentApi
     {
         $locale = $locale ?? $this->defaultLocale;
 
-        $contentTypeGiven = $query->contentType !== null && trim($query->contentType) !== '' ;
+        $contentTypeGiven = $query->contentType !== null && trim($query->contentType) !== '';
         $queryGiven = $query->query !== null && trim($query->query) !== '';
 
         if ($queryGiven && !$contentTypeGiven) {
@@ -182,7 +181,7 @@ class GraphCMS implements ContentApi
             'total' => count($contents),
             'count' => count($contents),
             'offset' => 0,
-            'items' => $contents
+            'items' => $contents,
         ]);
     }
 
@@ -195,7 +194,7 @@ class GraphCMS implements ContentApi
     {
         return array_map(
             function (Attribute $attribute) use ($fields): Attribute {
-                $attributeContent = $fields[(string) $attribute->attributeId];
+                $attributeContent = $fields[(string)$attribute->attributeId];
                 if ($attribute->type === 'Text') {
                     $attributeContent = $attributeContent['html'];
                 }
@@ -241,7 +240,7 @@ class GraphCMS implements ContentApi
             return implode('_', $parts);
         } else {
             throw new \InvalidArgumentException(
-                'invalid formatted locale: '.$graphCmsLocale
+                'invalid formatted locale: ' . $graphCmsLocale
             );
         }
     }
