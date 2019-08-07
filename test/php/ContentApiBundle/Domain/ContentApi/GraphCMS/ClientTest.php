@@ -124,8 +124,26 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             $result->queryResultJson
         );
         $this->assertEquals(
-            29,
+            6,
             count($result->attributes)
+        );
+        $this->assertEquals(
+            [
+                new Attribute(['attributeId' => 'status', 'type' => 'Status']),
+                new Attribute(['attributeId' => 'updatedAt', 'type' => 'DateTime']),
+                new Attribute([ 'attributeId' => 'createdAt', 'type' => 'DateTime']),
+                new Attribute([ 'attributeId' => 'id', 'type' => 'ID']),
+                new Attribute(['attributeId' => 'title', 'type' => 'String']),
+                new Attribute(['attributeId' => 'description', 'type' => 'String']),
+                new Attribute(['attributeId' => 'ingredients', 'type' => 'LIST']),
+                new Attribute(['attributeId' => 'prepTime', 'type' => 'Int']),
+                new Attribute(['attributeId' => 'cookTime', 'type' => 'Int']),
+                new Attribute(['attributeId' => 'steps', 'type' => 'LIST']),
+                new Attribute(['attributeId' => 'categories', 'type' => 'LIST']),
+                new Attribute(['attributeId' => 'cuisine', 'type' => 'LIST']),
+                new Attribute(['attributeId' => 'images', 'type' => 'LIST']),
+            ],
+            $result->attributes['recipes']
         );
     }
 
@@ -141,7 +159,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertEquals(
             10,
-            count($result->attributes)
+            count($result->attributes['ingredients'])
         );
     }
 }

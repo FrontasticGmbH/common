@@ -91,11 +91,12 @@ class GraphCMS implements ContentApi
                 $this->frontasticToGraphCmsLocale($locale)
             );
             $data = json_decode($clientResult->queryResultJson, true);
+            $attributes = $clientResult->attributes;
             $contents = [];
             foreach ($data['data'] as $contentType => $items) {
                 // contentType is in plural lowercase version here
                 $contentsForContentType = array_map(
-                    function ($e) use ($contentType, $clientResult, $query) {
+                    function ($e) use ($contentType, $clientResult, $query, $attributes) {
                         $contentId = $this->generateContentId(
                             $e['id'],
                             ucfirst(Inflector::singularize($contentType))
@@ -104,7 +105,7 @@ class GraphCMS implements ContentApi
                             'contentId' => $contentId,
                             'name' => $this->extractName($e),
                             'attributes' => $this->fillAttributesWithData(
-                                [], // TODO
+                                $attributes[$contentType],
                                 $e
                             ),
                             'dangerousInnerContent' => $e
@@ -123,11 +124,12 @@ class GraphCMS implements ContentApi
             );
 
             $data = json_decode($clientResult->queryResultJson, true);
+            $attributes = $clientResult->attributes;
             $contents = [];
             foreach ($data['data'] as $contentType => $items) {
                 // contentType is in plural lowercase version here
                 $contentsForContentType = array_map(
-                    function ($e) use ($contentType, $clientResult, $query) {
+                    function ($e) use ($contentType, $clientResult, $query, $attributes) {
                         $contentId = $this->generateContentId(
                             $e['id'],
                             ucfirst(Inflector::singularize($contentType))
@@ -136,7 +138,7 @@ class GraphCMS implements ContentApi
                             'contentId' => $contentId,
                             'name' => $this->extractName($e),
                             'attributes' => $this->fillAttributesWithData(
-                                [], // TODO
+                                $attributes[$contentType],
                                 $e
                             ),
                             'dangerousInnerContent' => $e

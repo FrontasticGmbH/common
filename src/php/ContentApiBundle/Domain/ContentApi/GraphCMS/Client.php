@@ -286,14 +286,15 @@ class Client
         if (empty($contentTypes)) {
             $contentTypes = $this->getContentTypes();
         }
-        $allAttributes = [];
+        $attributesByContentType = [];
         $queryParts = implode(",\n", array_filter(array_map(
-            function ($contentType) use ($searchString, &$allAttributes): string {
+            function ($contentType) use ($searchString, &$attributesByContentType): string {
                 $name = lcfirst(Inflector::pluralize($contentType));
                 $attributes = $this->getAttributes($contentType);
 
+                $attributesByContentType[$name] = [];
                 foreach ($attributes as $attribute) {
-                    $allAttributes[$attribute['name']] = $attribute;
+                    $attributesByContentType[$name][$attribute['name']] = $attribute;
                 }
 
                 $possibleSearchAttributes = array_filter(
@@ -327,7 +328,12 @@ class Client
         );
         return new ClientResult([
             'queryResultJson' => $queryResultJson,
-            'attributes' => $this->convertAttributes(array_values($allAttributes))
+            'attributes' => array_map(
+                function ($value) {
+                    return $this->convertAttributes(array_values($value));
+                },
+                $attributesByContentType
+            )
         ]);
         return [];
     }

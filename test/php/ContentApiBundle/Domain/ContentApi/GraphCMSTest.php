@@ -101,7 +101,6 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
 
     public function testSearchQuery()
     {
-        // TODO attributes
         $query = new Query(['query' => 'er']);
         // should find category "Cracker", ingredients "Butter", "Zucker" ...
 
@@ -110,15 +109,62 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
         $clientResult = new ClientResult([
             'queryResultJson' => $jsonContent,
             'attributes' => [
-                /* TODO
-                new Attribute(['attributeId' => 'images', 'type' => 'LIST']),
-                */
+                /* not tested here, see testAttributesOnSearchQuery */
+                'assets' => [],
+                'ingredients' => [],
+                'categories' => []
             ],
         ]);
         $this->clientMock->expects($this->once())->method('search')->with('er')->will($this->returnValue($clientResult));
 
         $result = $this->api->query($query);
-        var_dump($result->items);
         $this->assertEquals(6, count($result->items));
+    }
+
+    public function testAttributesOnSearchQuery()
+    {
+        $query = new Query(['query' => 'er']);
+        // should find category "Cracker", ingredients "Butter", "Zucker" ...
+
+        // reduced content here
+        $jsonContent = '{"data": {"assets": [], "recipes": [], "ingredients": [{"status": "PUBLISHED", "updatedAt": "2019-07-09T07:01:58.640Z", "createdAt": "2019-06-24T12:06:44.389Z", "id": "cjxac5ep1fppw0d53nbrhqvlm", "name": "Butter", "description": null, "season": ["Winter"], "price": 2, "recipes": [{"id": "cjxac6bziccie0941viedjs7x"}], "image": null}], "categories": [], "cuisines": []}}';
+
+        $clientResult = new ClientResult([
+            'queryResultJson' => $jsonContent,
+            'attributes' => [
+                'ingredients' => [
+                    new Attribute(['attributeId' => 'status', 'type' => 'Status']),
+                    new Attribute(['attributeId' => 'updatedAt', 'type' => 'DateTime']),
+                    new Attribute(['attributeId' => 'createdAt', 'type' => 'DateTime']),
+                    new Attribute(['attributeId' => 'id', 'type' => 'ID']),
+                    new Attribute(['attributeId' => 'recipes', 'type' => 'LIST']),
+                    new Attribute(['attributeId' => 'name', 'type' => 'String']),
+                    new Attribute(['attributeId' => 'description', 'type' => 'String']),
+                    new Attribute(['attributeId' => 'season', 'type' => 'LIST']),
+                    new Attribute(['attributeId' => 'price', 'type' => 'Int']),
+                    new Attribute(['attributeId' => 'image', 'type' => 'Asset']),
+                ]
+            ]
+        ]);
+        $this->clientMock->expects($this->once())->method('search')->with('er')->will($this->returnValue($clientResult));
+
+        $result = $this->api->query($query);
+        $this->assertEquals(1, count($result->items));
+        $this->assertEquals(
+            [
+                new Attribute(['attributeId' => 'status', 'type' => 'Status', 'content' => 'PUBLISHED']),
+                new Attribute(['attributeId' => 'updatedAt', 'type' => 'DateTime', 'content' => "2019-07-09T07:01:58.640Z"]),
+                new Attribute(['attributeId' => 'createdAt', 'type' => 'DateTime', 'content' => "2019-06-24T12:06:44.389Z"]),
+                new Attribute(['attributeId' => 'id', 'type' => 'ID', 'content' => "cjxac5ep1fppw0d53nbrhqvlm"]),
+                new Attribute(['attributeId' => 'recipes', 'type' => 'LIST', 'content' => [['id' => "cjxac6bziccie0941viedjs7x"]]]),
+                new Attribute(['attributeId' => 'name', 'type' => 'String', 'content' => "Butter"]),
+                new Attribute(['attributeId' => 'description', 'type' => 'String', 'content' => null]),
+                new Attribute(['attributeId' => 'season', 'type' => 'LIST', 'content' => ["Winter"]]),
+                new Attribute(['attributeId' => 'price', 'type' => 'Int', 'content' => 2]),
+                new Attribute(['attributeId' => 'image', 'type' => 'Asset', 'content' => null]),
+            ],
+            $result->items[0]->attributes
+        );
+
     }
 }
