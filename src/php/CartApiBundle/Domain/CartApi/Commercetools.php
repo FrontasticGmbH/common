@@ -340,6 +340,7 @@ class Commercetools implements CartApi
         );
     }
 
+
     public function setShippingMethod(Cart $cart, string $shippingMethod): Cart
     {
         return $this->postCartActions(
@@ -360,6 +361,11 @@ class Commercetools implements CartApi
     {
         if (!count(array_filter($fields))) {
             return $cart;
+        }
+
+        // merge existing custom fields from old cart
+        if (is_array($cart->custom)) {
+            $fields = array_merge($cart->custom,$fields);
         }
 
         $actions = [];
