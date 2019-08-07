@@ -53,6 +53,7 @@ class GraphCMS implements ContentApi
         }
         list($contentId, $contentType) = $parts;
 
+        $locale = $locale ?? $this->defaultLocale;
         $clientResult = $this->client->get($contentType, $contentId, $this->frontasticToGraphCmsLocale($locale));
 
         if (!$this->hasContent($clientResult, $contentType)) {
@@ -115,23 +116,35 @@ class GraphCMS implements ContentApi
             }
         } elseif ($queryGiven && $contentTypeGiven) {
             // query by contentType and search string
-            $clientResult = $this->client->get(
-                $query->contentType,
+            $clientResult = $this->client->search(
                 $query->query,
+                [$query->contentType],
                 $this->frontasticToGraphCmsLocale($locale)
             );
 
-            if (!$this->hasContent($clientResult, $query->contentType)) {
-                $contents = [];
-            } else {
-                $attributes = $this->getDataFromResult($clientResult, $query->contentType);
-                $content = new Content([
-                    'contentId' => $this->generateContentId($attributes['id'], $query->contentType),
-                    'name' => $this->extractName($attributes),
-                    'attributes' => $this->fillAttributesWithData($clientResult->attributes, $attributes),
-                    'dangerousInnerContent' => $clientResult->queryResultJson
-                ]);
-                $contents = [$content];
+            $data = json_decode($clientResult->queryResultJson, true);
+            $contents = [];
+            foreach ($data['data'] as $contentType => $items) {
+                // contentType is in plural lowercase version here
+                $contentsForContentType = array_map(
+                    function ($e) use ($contentType, $clientResult, $query) {
+                        $contentId = $this->generateContentId(
+                            $e['id'],
+                            ucfirst(Inflector::singularize($contentType))
+                        );
+                        return new Content([
+                            'contentId' => $contentId,
+                            'name' => $this->extractName($e),
+                            'attributes' => $this->fillAttributesWithData(
+                                [], // TODO
+                                $e
+                            ),
+                            'dangerousInnerContent' => $e
+                        ]);
+                    },
+                    $items
+                );
+                $contents = array_merge($contents, $contentsForContentType);
             }
         } elseif (!$queryGiven && $contentTypeGiven) {
             // query by contentType
@@ -203,6 +216,10 @@ class GraphCMS implements ContentApi
             return $attributes['title'];
         }
 
+        if (isset($attributes['fileName'])) {
+            return $attributes['fileName'];
+        }
+
         return $attributes['id'];
     }
 
@@ -239,7 +256,7 @@ class GraphCMS implements ContentApi
         $data = json_decode($clientResult->queryResultJson, true);
 
         if ($data === false) {
-            return null;
+            return [];
         }
 
         return $data['data'][$name];

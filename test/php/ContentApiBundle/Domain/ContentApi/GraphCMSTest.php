@@ -29,7 +29,6 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
     {
         $contentType =  'Ingredient';
         $contentId = 'cjxac52hychgy0910j313jdyq';
-        $query = new Query(['contentType' => $contentType, 'query' => $contentId]);
         $jsonContent = '{"data":{"ingredient":{"status":"PUBLISHED","updatedAt":"2019-07-09T10:01:19.803Z","createdAt":"2019-06-24T12:06:28.582Z","id":"cjxac52hychgy0910j313jdyq","name":"Mehl","description":null,"season":["Winter","Fall"],"price":3,"recipes":[{"id":"cjxac6bziccie0941viedjs7x"}],"image":{"handle":"BA4Ao48KQHOiNukP58n1"}}}}';
         $clientResult = new ClientResult([
             'queryResultJson' => $jsonContent,
@@ -48,9 +47,10 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
         ]);
         $this->clientMock->expects($this->once())->method('get')->with($contentType, $contentId)->will($this->returnValue($clientResult));
 
-        $result = $this->api->query($query);
-        $this->assertEquals([new Content([
-            'contentId' => $contentId . ':' . $contentType,
+        $combinedContentId = $contentId . ':' . $contentType;
+        $result = $this->api->getContent($combinedContentId);
+        $this->assertEquals(new Content([
+            'contentId' => $combinedContentId,
             'name' => 'Mehl',
             'attributes' => [
                 new Attribute(['attributeId' => 'status', 'type' => 'Status', 'content' => 'PUBLISHED']),
@@ -65,7 +65,7 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
                 new Attribute(['attributeId' => 'image', 'type' => 'Asset', 'content' => ['handle' => 'BA4Ao48KQHOiNukP58n1']]),
             ],
             'dangerousInnerContent' => $jsonContent
-        ])], $result->items);
+        ]), $result);
     }
 
 
@@ -101,6 +101,7 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
 
     public function testSearchQuery()
     {
+        // TODO attributes
         $query = new Query(['query' => 'er']);
         // should find category "Cracker", ingredients "Butter", "Zucker" ...
 
@@ -118,6 +119,6 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->api->query($query);
         var_dump($result->items);
-        $this->assertEquals([], $result->items);
+        $this->assertEquals(6, count($result->items));
     }
 }
