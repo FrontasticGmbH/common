@@ -44,13 +44,14 @@ class GraphCMS implements ContentApi
 
     public function getContent(string $contentId, string $locale = null): Content
     {
-        list($contentId, $contentType) = explode(':', $contentId);
-        if ($contentId === null || $contentType === null) {
+        $parts = explode(':', $contentId);
+        if (count($parts) != 2) {
             // query only by id does not work, GraphCMS always needs a contentType, too
             throw new \RuntimeException(
                 "getting content by ID is not supported by GraphCMS, use '<contentId>:<contentType>' instead"
             );
         }
+        list($contentId, $contentType) = $parts;
 
         $clientResult = $this->client->get($contentType, $contentId, $this->frontasticToGraphCmsLocale($locale));
 
