@@ -363,11 +363,6 @@ class Commercetools implements CartApi
             return $cart;
         }
 
-        // merge existing custom fields from old cart
-        if (is_array($cart->custom)) {
-            $fields = array_merge($cart->custom,$fields);
-        }
-
         $actions = [];
         foreach ($fields as $name => $value) {
             $actions[] = [
