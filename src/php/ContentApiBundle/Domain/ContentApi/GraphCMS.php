@@ -85,9 +85,9 @@ class GraphCMS implements ContentApi
         if ($queryGiven && !$contentTypeGiven) {
             $contents = $this->queryBySearchString($query, $locale);
         } elseif ($queryGiven && $contentTypeGiven) {
-            $contents = $this->queryByContentTypeAndSearchString($query, $locale)
+            $contents = $this->queryByContentTypeAndSearchString($query, $locale);
         } elseif (!$queryGiven && $contentTypeGiven) {
-            $contents = $this->queryByContentType($query, $locale)
+            $contents = $this->queryByContentType($query, $locale);
         } else {
             throw new \InvalidArgumentException(
                 'provide a ContentType and/or a search text'
