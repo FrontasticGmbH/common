@@ -224,6 +224,10 @@ class Page {
         }
     }
 
+    isScheduledForFuture = (page) => { // TODO Sanja - is this the way?
+        return page.state === 'scheduled' && (new Date(page.scheduledTo) > Date.now())
+    }
+
     export () {
         return {
             pageId: this.pageId,
