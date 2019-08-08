@@ -212,7 +212,7 @@ class Page {
         return this.addTastic(region, cellId, tastic.tasticType, tasticIndex + 1, tastic.configuration)
     }
 
-    isActive = (page) => {
+    isActive = (page) => { // TODO Sanja - is this the way?
         switch (page.state) {
             case 'default':
                 return true
