@@ -84,8 +84,12 @@ class Client
                            name
                            kind
                            ofType {
-                              name
-                              kind
+                               name
+                               kind
+                               ofType {
+                                   name
+                                   kind
+                               }
                            }
                        }
                     }
@@ -163,7 +167,15 @@ class Client
         array $whitelistFields = []
     ): string
     {
-        $attributes = $this->getAttributes($this->determineAttributeType($referenceField));
+        $contentType = $this->determineAttributeType($referenceField);
+
+        if ($contentType === 'LIST'
+            && $referenceField['type']['ofType']['ofType']['kind'] === 'OBJECT'
+        ) {
+            $contentType = $referenceField['type']['ofType']['ofType']['name'];
+        }
+
+        $attributes = $this->getAttributes($contentType);
 
         if (!empty($attributes)) {
             $noReferenceAttributes = array_filter(
@@ -175,6 +187,10 @@ class Client
                 array_filter(
                     $this->getAttributeNames($noReferenceAttributes),
                     function ($attributeName) use ($whitelistFields) {
+                        if (empty($whitelistFields)) {
+                            return true;
+                        }
+
                         return in_array($attributeName, $whitelistFields);
                     }
                 ),
