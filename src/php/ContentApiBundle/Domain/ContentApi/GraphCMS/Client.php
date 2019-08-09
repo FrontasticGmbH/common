@@ -165,8 +165,7 @@ class Client
         array $referenceField,
         string $defaultAttributes = '',
         array $whitelistFields = []
-    ): string
-    {
+    ): string {
         $contentType = $this->determineAttributeType($referenceField);
 
         if ($contentType === 'LIST'
