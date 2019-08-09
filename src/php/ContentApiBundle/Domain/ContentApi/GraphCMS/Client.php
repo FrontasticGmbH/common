@@ -135,25 +135,17 @@ class Client
                 array_map(
                     function ($e) {
                         if ($e['type']['name'] == 'Asset') {
-                            return "{$e['name']} { handle }";
+                            $queryAttributesString = $this->getAdditionalAttributes(
+                                $e,
+                                'id, handle, mimeType',
+                                ['id', 'handle', 'mimeType', 'altText']
+                            );
+
+                            return "{$e['name']} { $queryAttributesString }";
                         } elseif ($e['type']['name'] == 'RichText') {
                             return "{$e['name']} { html }";
                         } else {
-                            $queryAttributesString = 'id';
-
-                            $attributes = $this->getAttributes($this->determineAttributeType($e));
-
-                            if (!empty($attributes)) {
-                                $noReferenceAttributes = array_filter(
-                                    $attributes,
-                                    [$this , 'isNoReference']
-                                );
-
-                                $queryAttributesString = implode(
-                                    $this->getAttributeNames($noReferenceAttributes),
-                                    ','
-                                );
-                            }
+                            $queryAttributesString = $this->getAdditionalAttributes($e, 'id');
 
                             return "{$e['name']} { $queryAttributesString }";
                         }
@@ -163,6 +155,34 @@ class Client
             ),
             ','
         );
+    }
+
+    private function getAdditionalAttributes(
+        array $referenceField,
+        string $defaultAttributes = '',
+        array $whitelistFields = []
+    ): string
+    {
+        $attributes = $this->getAttributes($this->determineAttributeType($referenceField));
+
+        if (!empty($attributes)) {
+            $noReferenceAttributes = array_filter(
+                $attributes,
+                [$this, 'isNoReference']
+            );
+
+            return implode(
+                array_filter(
+                    $this->getAttributeNames($noReferenceAttributes),
+                    function ($attributeName) use ($whitelistFields) {
+                        return in_array($attributeName, $whitelistFields);
+                    }
+                ),
+                ','
+            );
+        }
+
+        return $defaultAttributes;
     }
 
     // contentType must be capitalized and singular
@@ -230,7 +250,7 @@ class Client
      * @param array $attribute
      * @return string
      */
-    function determineAttributeType(array $attribute)
+    private function determineAttributeType(array $attribute)
     {
         $type = $attribute['type']['name']
             ?? $attribute['type']['kind'];
