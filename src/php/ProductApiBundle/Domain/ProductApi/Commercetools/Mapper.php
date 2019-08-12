@@ -284,33 +284,51 @@ class Mapper
         return [null, null, null];
     }
 
-    public function dataToAttributes(array $variantData, $locale): array
+    public function dataToAttributes(array $variantData, Locale $locale): array
     {
-        return array_merge(
-            ['baseId' => null],
-            array_combine(
-                array_map(
-                    function (array $attribute): string {
-                        return $attribute['name'];
-                    },
-                    $variantData['attributes']
-                ),
-                array_map(
-                    function (array $attribute) use ($locale) {
-                        if (isset($attribute['value']['centAmount'])) {
-                            return $attribute['value'];
-                        }
-
-                        if (is_array($attribute['value']) && !$this->isNumericArray($attribute['value'])) {
-                            return $this->getLocalizedValue($locale, $attribute['value'] ?? []);
-                        }
-
-                        return $attribute['value'];
-                    },
-                    $variantData['attributes']
-                )
+        return array_merge(['baseId' => null], array_combine(
+            array_map(
+                function (array $attribute): string {
+                    return $attribute['name'];
+                },
+                $variantData['attributes']
+            ),
+            array_map(
+                function (array $attribute) use ($locale) {
+                    return $this->extractAttributeValue($attribute['value'], $locale);
+                },
+                $variantData['attributes']
             )
-        );
+        ));
+    }
+
+    private function extractAttributeValue($attributeValue, Locale $locale)
+    {
+        if (isset($attributeValue['centAmount'])) {
+            return $attributeValue;
+        }
+
+        if (isset($attributeValue['key']) && isset($attributeValue['label'])) {
+            return [
+                'key' => $attributeValue['key'],
+                'label' => $this->extractAttributeValue($attributeValue['label'], $locale),
+            ];
+        }
+
+        if (is_array($attributeValue) && $this->isNumericArray($attributeValue)) {
+            return array_map(
+                function ($collectionValue) use ($locale) {
+                    return $this->extractAttributeValue($collectionValue, $locale);
+                },
+                $attributeValue
+            );
+        }
+
+        if (is_array($attributeValue) && !$this->isNumericArray($attributeValue)) {
+            return $this->getLocalizedValue($locale, $attributeValue ?? []);
+        }
+
+        return $attributeValue;
     }
 
     private function isNumericArray(array $array): bool

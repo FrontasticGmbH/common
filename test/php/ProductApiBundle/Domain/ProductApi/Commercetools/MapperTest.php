@@ -21,6 +21,119 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @dataProvider provideDataToAttributesExamples
+     */
+    public function testDataToAttributes($attributesFixture, $locale, $expectedResult)
+    {
+        $actualResult = $this->mapper->dataToAttributes(
+            ['attributes' => [$attributesFixture]],
+            Locale::createFromPosix($locale)
+        );
+
+        unset($actualResult['baseId']);
+
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    public function provideDataToAttributesExamples()
+    {
+        return [
+            'simpleStringAttribute' => [
+                [
+                    "name" => "submodel",
+                    "value" => "Something",
+                ],
+                'en_GB',
+                [
+                    "submodel" => "Something"
+                ],
+            ],
+            'keyValueAttribute' => [
+                [
+                    "name" => "brand",
+                    "value" => [
+                        "label" => "Rolex",
+                        "key" => "rolex",
+                    ],
+                ],
+                'en_GB',
+                [
+                    "brand" => [
+                        "key" => "rolex",
+                        "label" => "Rolex",
+                    ],
+                ],
+            ],
+            'translatedAttribute' => [
+                [
+                    "name" => "variantDescription",
+                    "value" => [
+                        "de" => "foo",
+                        "en" => "bar",
+                    ],
+                ],
+                'en_GB',
+                [
+                    "variantDescription" => "bar",
+                ]
+            ],
+            'translatedLabelAttribute' => [
+                [
+                    "name" => "gender",
+                    "value" => [
+                        "label" => [
+                            "de" => "",
+                            "en" => "Male",
+                        ],
+                        "key" => "male",
+                    ],
+                ],
+                'en_GB',
+                [
+                    "gender" => [
+                        "key" => "male",
+                        "label" => "Male",
+                    ]
+                ]
+            ],
+            'setAttribute' => [
+                [
+                    "name" => "features",
+                    "value" => [
+                        [
+                            "label" => [
+                                "en" => "Date",
+                                "de" => "",
+                            ],
+                            "key" => "date",
+                        ],
+                        [
+                            "label" => [
+                                "en" => "Luminescent Hands",
+                                "de" => "",
+                            ],
+                            "key" => "luminescent - hands",
+                        ],
+                    ],
+                ],
+                'en_GB',
+                [
+                    "features" => [
+                        [
+                            "key" => "date",
+                            "label" => "Date",
+                        ],
+                        [
+                            "key" => "luminescent - hands",
+                            "label" => "Luminescent Hands",
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
      * @dataProvider provideFacetRequestExamples
      */
     public function testFacetsToRequest($facetDefinition, $expectedFacetQuery)
