@@ -101,8 +101,8 @@ class Contentful implements ContentApi
         ]);
     }
 
-    private function createContentFromEntry(Entry $entry): Content{
-
+    private function createContentFromEntry(Entry $entry): Content
+    {
         $contentType = $entry->getContentType();
 
         $displayFieldId = $contentType->getDisplayField()->getId();
