@@ -35,19 +35,21 @@ class Contentful implements ContentApi
 
     public function __construct(Client $client, Renderer $richTextRenderer, string $defaultLocale)
     {
-        $this->client = $client;
+        $this->client           = $client;
         $this->richTextRenderer = $richTextRenderer;
-        $this->defaultLocale = $defaultLocale;
+        $this->defaultLocale    = $defaultLocale;
     }
 
     public function getContentTypes(): array
     {
         return array_map(
             function (ContentfulContentType $contentType): ContentType {
-                return new ContentType([
-                    'contentTypeId' => $contentType->getId(),
-                    'name' => $contentType->getName(),
-                ]);
+                return new ContentType(
+                    [
+                        'contentTypeId' => $contentType->getId(),
+                        'name'          => $contentType->getName(),
+                    ]
+                );
             },
             iterator_to_array($this->client->getContentTypes())
         );
@@ -57,9 +59,9 @@ class Contentful implements ContentApi
     {
         $locale = $locale ?? $this->defaultLocale;
 
-        return $this->convertContent(
-            $this->client->getEntry($contentId, $this->frontasticToContentfulLocale($locale))
-        );
+        $entry = $this->client->getEntry($contentId, $this->frontasticToContentfulLocale($locale));
+
+        return $this->createContentFromEntry($entry);
     }
 
     public function query(Query $query, string $locale = null): Result
@@ -93,45 +95,64 @@ class Contentful implements ContentApi
             'count' => count($items),
             'offset' => $result->getSkip(),
             'items' => array_map(
-                [$this, 'convertContent'],
+                [$this, 'createContentFromEntry'],
                 $items
             ),
         ]);
     }
 
-    protected function convertContent(Entry $content): Content
-    {
-        $contentType = $content->getContentType();
+    private function createContentFromEntry(Entry $entry): Content{
+
+        $contentType = $entry->getContentType();
+
         $displayFieldId = $contentType->getDisplayField()->getId();
 
-        $result = new Content([
-            'contentId' => $content->getId(),
-            'name' => $content->$displayFieldId,
-            'dangerousInnerContent' => $content,
+        $content = new Content([
+            'contentId' => $entry->getId(),
+            'name' => $entry->$displayFieldId,
+            'dangerousInnerContent' => $entry,
         ]);
 
-        $contents = $content->all();
+        $attributes = $this->convertContent($entry->all());
+
+        $content->attributes = $attributes;
+
+        return $content;
+    }
+
+    protected function convertContent(iterable $contents): array
+    {
+        $attributes = [];
+
         foreach ($contents as $key => $value) {
             if ($value instanceof Asset) {
-                $value = (object) [
+                $value = (object)[
                     'url' => 'https:' . $value->getFile()->getUrl(),
                     'title' => $value->getTitle(),
                     'description' => $value->getDescription(),
                 ];
             }
 
+            if (is_array($value)) {
+                $value = $this->convertContent($value);
+            }
+
+            if ($value instanceof Entry) {
+                $value = $this->convertContent($value->all());
+            }
+
             if ($value instanceof NodeInterface) {
                 $value = $this->richTextRenderer->render($value);
             }
 
-            $result->attributes[$key] = new Attribute([
+            $attributes[$key] = [
                 'attributeId' => $key,
                 'content' => $value,
                 'type' => null, //@todo
-            ]);
+            ];
         }
 
-        return $result;
+        return $attributes;
     }
 
     public function getDangerousInnerClient()
