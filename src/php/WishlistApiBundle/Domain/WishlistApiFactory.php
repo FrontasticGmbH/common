@@ -6,7 +6,7 @@ use Doctrine\Common\Cache\Cache;
 
 use Frontastic\Common\HttpClient\Stream;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory;
 use Frontastic\Common\ReplicatorBundle\Domain\Customer;
 
 class WishlistApiFactory
@@ -24,6 +24,9 @@ class WishlistApiFactory
 
     public function factor(Customer $customer): WishlistApi
     {
+        /* @var ProductApiFactory $productApiFactory */
+        $productApiFactory = $this->container->get(ProductApiFactory::class);
+
         switch ($customer->configuration['wishlist']->engine) {
             case 'commercetools':
                 $wishlistApi = new WishlistApi\Commercetools(
@@ -34,7 +37,7 @@ class WishlistApiFactory
                         $this->container->get(Stream::class),
                         $this->cache
                     ),
-                    new Mapper()
+                    $productApiFactory->factor($customer)
                 );
                 break;
 

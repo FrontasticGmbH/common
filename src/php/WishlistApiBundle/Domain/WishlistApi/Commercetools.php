@@ -2,6 +2,8 @@
 
 namespace Frontastic\Common\WishlistApiBundle\Domain\WishlistApi;
 
+use Frontastic\Common\ProductApiBundle\Domain\Product;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 use Frontastic\Common\WishlistApiBundle\Domain\Payment;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
@@ -22,20 +24,20 @@ class Commercetools implements WishlistApi
     private $client;
 
     /**
-     * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper
+     * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi
      */
-    private $mapper;
+    private $productApi;
 
     /**
      * Commercetools constructor.
      *
      * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client $client
-     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper $mapper
+     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi $productApi
      */
-    public function __construct(Client $client, Mapper $mapper)
+    public function __construct(Client $client, ProductApi $productApi)
     {
         $this->client = $client;
-        $this->mapper = $mapper;
+        $this->productApi = $productApi;
     }
 
     /**
@@ -336,16 +338,18 @@ class Commercetools implements WishlistApi
      */
     private function mapLineItems(array $wishlist, Locale $locale): array
     {
+        $wishlistVariantMap = $this->fetchWishlistVariantMap($wishlist, $locale);
+
         $lineItems = array_values(array_filter(
             array_map(
-                function (array $lineItem) use ($locale): LineItem {
+                function (array $lineItem) use ($locale, $wishlistVariantMap): LineItem {
                     return new LineItem\Variant([
                         'lineItemId' => $lineItem['id'],
                         'name' => reset($lineItem['name']),
                         'type' => 'variant',
                         'addedAt' => new \DateTimeImmutable($lineItem['addedAt']),
                         'variant' => !empty($lineItem['variant'])
-                            ? $this->mapper->dataToVariant($lineItem['variant'], new Query(), $locale)
+                            ? ($wishlistVariantMap[$lineItem['variant']['sku']] ?? null)
                             : null,
                         'count' => $lineItem['quantity'],
                         'dangerousInnerItem' => $lineItem,
@@ -360,6 +364,7 @@ class Commercetools implements WishlistApi
 
         return $lineItems;
     }
+
 
     /**
      * Get *dangerous* inner client
@@ -379,5 +384,35 @@ class Commercetools implements WishlistApi
     public function getDangerousInnerClient()
     {
         return $this->client;
+    }
+
+    /**
+     * @param array $wishlist
+     * @param Locale $locale
+     * @return array
+     */
+    private function fetchWishlistVariantMap(array $wishlist, Locale $locale): array
+    {
+        $wishlistVariantSkus = [];
+        foreach ($wishlist['lineItems'] as $rawLineItem) {
+            if (isset($rawLineItem['variant']) && isset($rawLineItem['variant']['sku'])) {
+                $wishlistVariantSkus[] = $rawLineItem['variant']['sku'];
+            }
+        }
+        $query = new Query\ProductQuery(['locale' => $locale->original]);
+        $query->skus = array_unique($wishlistVariantSkus);
+
+        $wishlistProducts = $this->productApi->query($query);
+
+        $wishlistVariantMap = [];
+        /* @var Product $wishlistProduct */
+        foreach ($wishlistProducts->items as $wishlistProduct) {
+            foreach ($wishlistProduct->variants as $wishlistVariant) {
+                if (in_array($wishlistVariant->sku, $wishlistVariantSkus)) {
+                    $wishlistVariantMap[$wishlistVariant->sku] = $wishlistVariant;
+                }
+            }
+        }
+        return $wishlistVariantMap;
     }
 }
