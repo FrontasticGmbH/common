@@ -456,6 +456,22 @@ class Commercetools implements CartApi
         );
     }
 
+    public function removeDiscountCode(Cart $cart, string $discountId): Cart
+    {
+        return $this->postCartActions(
+            $cart,
+            [
+                [
+                    'action' => 'removeDiscountCode',
+                    'discountCode' => [
+                        'typeId' => 'discount-code',
+                        'id' => $discountId
+                    ],
+                ],
+            ]
+        );
+    }
+
     /**
      * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
      * @return \Frontastic\Common\CartApiBundle\Domain\Order

@@ -241,6 +241,14 @@ class CartController extends CrudController
         ];
     }
 
+    public function removeDiscountAction(Context $context, Request $request): array
+    {
+        $payload = $this->getJsonContent($request);
+        return [
+            'cart' => $this->getCartApi($context)->removeDiscountCode($this->getCart($context), $payload['discountId']),
+        ];
+    }
+
     protected function getCartApi(Context $context): CartApi
     {
         if ($this->cartApi) {
