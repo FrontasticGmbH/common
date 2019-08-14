@@ -29,7 +29,7 @@ class AccountAuthController extends Controller
         return new JsonResponse($accountService->getSessionFor($account));
     }
 
-    public function registerAction(Request $request): JsonResponse
+    public function registerAction(Request $request, Context $context): JsonResponse
     {
         $accountService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
 
@@ -56,7 +56,7 @@ class AccountAuthController extends Controller
 
         $account = $accountService->create(
             $account,
-            $this->get('frontastic.catwalk.cart_api')->getAnonymous(session_id())
+            $this->get('frontastic.catwalk.cart_api')->getAnonymous(session_id(), $context->locale)
         );
         $accountService->sendConfirmationMail($account);
 
