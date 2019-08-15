@@ -19,6 +19,9 @@ use Frontastic\Common\AccountApiBundle\Domain\AuthentificationInformation;
 use Frontastic\Common\AccountApiBundle\Domain\AccountService;
 use Frontastic\Catwalk\ApiCoreBundle\Domain\ContextService;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) FIXME: Introcued by hotfix
+ */
 class Authenticator extends AbstractGuardAuthenticator
 {
     private $accountService;
