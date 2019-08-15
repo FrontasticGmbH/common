@@ -799,6 +799,7 @@ class Commercetools implements CartApi
             $discounts[] = new Discount([
                 'discountId' => $discount['id'] ?? 'undefined',
                 'name' => $discount['name'] ?? null,
+                'code' => $discount['code'] ?? null,
                 'description' => $discount['description'] ?? null,
                 'dangerousInnerDiscount' => $discount,
             ]);

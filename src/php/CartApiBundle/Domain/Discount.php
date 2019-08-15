@@ -12,6 +12,11 @@ class Discount extends DataObject
     public $discountId;
 
     /**
+     * @var string
+     */
+    public $code;
+
+    /**
      * @var Translatable
      */
     public $name;
