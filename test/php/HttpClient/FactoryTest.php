@@ -19,9 +19,7 @@ class FactoryTest extends TestCase
     public function setUp()
     {
         $this->factory = new Factory(
-            $this->getMockBuilder(LoggerInterface::class)->getMock(),
-            $this->getMockBuilder(\Domnikl\Statsd\Client::class)
-                ->disableOriginalConstructor()->getMock()
+            $this->getMockBuilder(LoggerInterface::class)->getMock()
         );
     }
 
@@ -31,7 +29,7 @@ class FactoryTest extends TestCase
 
         $aggregates = $this->unrollAggregates($httpClient);
 
-        $this->assertCount(3, $aggregates);
+        $this->assertCount(2, $aggregates);
     }
 
     public function testCreateSigning()
