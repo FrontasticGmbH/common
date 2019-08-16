@@ -15,19 +15,13 @@ class Factory
     private $logger;
 
     /**
-     * @var Client
-     */
-    private $statsClient;
-
-    /**
      * @var Options
      */
     private $defaultOptions;
 
-    public function __construct(LoggerInterface $logger, Client $statsClient, Options $defaultOptions = null)
+    public function __construct(LoggerInterface $logger, Options $defaultOptions = null)
     {
         $this->logger = $logger;
-        $this->statsClient = $statsClient;
 
         if ($defaultOptions === null) {
             $defaultOptions = new Options();
@@ -53,20 +47,8 @@ class Factory
             $httpClient = new Signing($httpClient, $configuration->signatureSecret);
         }
 
-        if ($configuration->collectProfiling) {
-            $httpClient = new Tideways(
-                $httpClient,
-                $this->logger,
-                $clientIdentifier
-            );
-        }
-
         if ($configuration->collectStats) {
-            $httpClient = new StatsD(
-                $clientIdentifier,
-                $this->statsClient,
-                $httpClient
-            );
+            $httpClient = new Logstash($httpClient);
         }
 
         return $httpClient;
