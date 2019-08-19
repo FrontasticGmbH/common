@@ -52,7 +52,8 @@ class ProductQuery extends Query
     public $query;
 
     /**
-     * @var array
+     * @stability trial This field might change to a more suffisticated structure
+     * @var array map of field identifiers to string filter values
      */
     public $filter = [];
 
