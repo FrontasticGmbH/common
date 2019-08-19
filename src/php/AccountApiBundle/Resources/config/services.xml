@@ -32,6 +32,7 @@
         <service id="Frontastic\Common\AccountApiBundle\Security\Authenticator">
             <argument type="service" id="Frontastic\Common\AccountApiBundle\Domain\AccountService" />
             <argument type="service" id="frontastic.catwalk.cart_api" />
+            <argument type="service" id="Frontastic\Catwalk\ApiCoreBundle\Domain\ContextService" />
         </service>
 
         <service id="Frontastic\Common\AccountApiBundle\Security\LogoutSuccessHandler" />

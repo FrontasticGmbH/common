@@ -84,8 +84,12 @@ class Client
                            name
                            kind
                            ofType {
-                              name
-                              kind
+                               name
+                               kind
+                               ofType {
+                                   name
+                                   kind
+                               }
                            }
                        }
                     }
@@ -135,11 +139,19 @@ class Client
                 array_map(
                     function ($e) {
                         if ($e['type']['name'] == 'Asset') {
-                            return "{$e['name']} { handle }";
+                            $queryAttributesString = $this->getAdditionalAttributes(
+                                $e,
+                                'id, handle, mimeType',
+                                ['id', 'handle', 'mimeType', 'altText']
+                            );
+
+                            return "{$e['name']} { $queryAttributesString }";
                         } elseif ($e['type']['name'] == 'RichText') {
                             return "{$e['name']} { html }";
                         } else {
-                            return "{$e['name']} { id }";
+                            $queryAttributesString = $this->getAdditionalAttributes($e, 'id');
+
+                            return "{$e['name']} { $queryAttributesString }";
                         }
                     },
                     $references
@@ -147,6 +159,45 @@ class Client
             ),
             ','
         );
+    }
+
+    private function getAdditionalAttributes(
+        array $referenceField,
+        string $defaultAttributes = '',
+        array $whitelistFields = []
+    ): string {
+        $contentType = $this->determineAttributeType($referenceField);
+
+        if ($contentType === 'LIST'
+            && $referenceField['type']['ofType']['ofType']['kind'] === 'OBJECT'
+        ) {
+            $contentType = $referenceField['type']['ofType']['ofType']['name'];
+        }
+
+        $attributes = $this->getAttributes($contentType);
+
+        if (!empty($attributes)) {
+            $noReferenceAttributes = array_filter(
+                $attributes,
+                [$this, 'isNoReference']
+            );
+
+            return implode(
+                array_filter(
+                    $this->getAttributeNames($noReferenceAttributes),
+                    function ($attributeName) use ($whitelistFields) {
+                        if (empty($whitelistFields)) {
+                            return true;
+                        }
+
+                        return in_array($attributeName, $whitelistFields);
+                    }
+                ),
+                ','
+            );
+        }
+
+        return $defaultAttributes;
     }
 
     // contentType must be capitalized and singular
@@ -198,30 +249,40 @@ class Client
     {
         return array_map(
             function ($attribute): Attribute {
-                $type = $attribute['type']['name']
-                    ?? $attribute['type']['kind'];
-
-                // sometimes the "first" type here is of Type "NON_NULL" and the real one is in "ofType" field
-                if ($type === 'NON_NULL') {
-                    $type = $attribute['type']['ofType']['name']
-                        ?? $attribute['type']['ofType']['kind'];
-                }
-
-                // map type for frontastic
-                switch ($type) {
-                    case 'RichText':
-                        $type = 'Text';
-                        break;
-                }
-
                 return new Attribute([
                     'attributeId' => $attribute['name'],
                     'content' => null, // will be added later when it is fetched
-                    'type' => $type,
+                    'type' => $this->determineAttributeType($attribute),
                 ]);
             },
             $attributes
         );
+    }
+
+    /**
+     * Determines the type of an attribute and returns it
+     *
+     * @param array $attribute
+     * @return string
+     */
+    private function determineAttributeType(array $attribute)
+    {
+        $type = $attribute['type']['name']
+            ?? $attribute['type']['kind'];
+
+        // sometimes the "first" type here is of Type "NON_NULL" and the real one is in "ofType" field
+        if ($type === 'NON_NULL') {
+            $type = $attribute['type']['ofType']['name']
+                ?? $attribute['type']['ofType']['kind'];
+        }
+
+        // map type for frontastic
+        switch ($type) {
+            case 'RichText':
+                $type = 'Text';
+                break;
+        }
+        return $type;
     }
 
     private function startsWith(string $haystack, string $needle): bool
@@ -335,6 +396,5 @@ class Client
                 $attributesByContentType
             )
         ]);
-        return [];
     }
 }

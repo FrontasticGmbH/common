@@ -17,17 +17,24 @@ use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Session;
 use Frontastic\Common\AccountApiBundle\Domain\AuthentificationInformation;
 use Frontastic\Common\AccountApiBundle\Domain\AccountService;
+use Frontastic\Catwalk\ApiCoreBundle\Domain\ContextService;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) FIXME: Introcued by hotfix
+ */
 class Authenticator extends AbstractGuardAuthenticator
 {
     private $accountService;
 
     private $cartApi;
 
-    public function __construct(AccountService $accountService, CartApi $cartApi)
+    private $contextService;
+
+    public function __construct(AccountService $accountService, CartApi $cartApi, ContextService $contextService)
     {
         $this->accountService = $accountService;
         $this->cartApi = $cartApi;
+        $this->contextService = $contextService;
     }
 
     /**
@@ -63,6 +70,8 @@ class Authenticator extends AbstractGuardAuthenticator
             return false;
         }
 
+        $context = $this->contextService->createContextFromRequest($request);
+        $content['locale'] = $context->locale;
         return $content;
     }
 
@@ -114,7 +123,7 @@ class Authenticator extends AbstractGuardAuthenticator
         $user->setPassword($credentials['password']);
         return $this->accountService->login(
             $user,
-            $this->cartApi->getAnonymous(session_id())
+            $this->cartApi->getAnonymous(session_id(), $credentials['locale'])
         );
     }
 

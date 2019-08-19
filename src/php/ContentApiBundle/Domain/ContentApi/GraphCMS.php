@@ -2,12 +2,11 @@
 
 namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 
+use Frontastic\Common\ContentApiBundle\Domain\Category;
+use Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS\Client;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS\Inflector;
-
-use Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 use Frontastic\Common\ContentApiBundle\Domain\ContentType;
-use Frontastic\Common\ContentApiBundle\Domain\Category;
 use Frontastic\Common\ContentApiBundle\Domain\Query;
 use Frontastic\Common\ContentApiBundle\Domain\Result;
 
@@ -72,7 +71,7 @@ class GraphCMS implements ContentApi
             'contentId' => $this->generateContentId($attributes['id'], $contentType),
             'name' => $this->extractName($attributes),
             'attributes' => $this->fillAttributesWithData($clientResult->attributes, $attributes),
-            'dangerousInnerContent' => $clientResult->queryResultJson
+            'dangerousInnerContent' => $clientResult->queryResultJson,
         ]);
     }
 
@@ -80,109 +79,26 @@ class GraphCMS implements ContentApi
     {
         $locale = $locale ?? $this->defaultLocale;
 
-        $contentTypeGiven = $query->contentType !== null && trim($query->contentType) !== '' ;
+        $contentTypeGiven = $query->contentType !== null && trim($query->contentType) !== '';
         $queryGiven = $query->query !== null && trim($query->query) !== '';
 
         if ($queryGiven && !$contentTypeGiven) {
-            // query by search string
-            $clientResult = $this->client->search(
-                $query->query,
-                [],
-                $this->frontasticToGraphCmsLocale($locale)
-            );
-            $data = json_decode($clientResult->queryResultJson, true);
-            $attributes = $clientResult->attributes;
-            $contents = [];
-            foreach ($data['data'] as $contentType => $items) {
-                // contentType is in plural lowercase version here
-                $contentsForContentType = array_map(
-                    function ($e) use ($contentType, $clientResult, $query, $attributes) {
-                        $contentId = $this->generateContentId(
-                            $e['id'],
-                            ucfirst(Inflector::singularize($contentType))
-                        );
-                        return new Content([
-                            'contentId' => $contentId,
-                            'name' => $this->extractName($e),
-                            'attributes' => $this->fillAttributesWithData(
-                                $attributes[$contentType],
-                                $e
-                            ),
-                            'dangerousInnerContent' => $e
-                        ]);
-                    },
-                    $items
-                );
-                $contents = array_merge($contents, $contentsForContentType);
-            }
+            $contents = $this->queryBySearchString($query, $locale);
         } elseif ($queryGiven && $contentTypeGiven) {
-            // query by contentType and search string
-            $clientResult = $this->client->search(
-                $query->query,
-                [$query->contentType],
-                $this->frontasticToGraphCmsLocale($locale)
-            );
-
-            $data = json_decode($clientResult->queryResultJson, true);
-            $attributes = $clientResult->attributes;
-            $contents = [];
-            foreach ($data['data'] as $contentType => $items) {
-                // contentType is in plural lowercase version here
-                $contentsForContentType = array_map(
-                    function ($e) use ($contentType, $clientResult, $query, $attributes) {
-                        $contentId = $this->generateContentId(
-                            $e['id'],
-                            ucfirst(Inflector::singularize($contentType))
-                        );
-                        return new Content([
-                            'contentId' => $contentId,
-                            'name' => $this->extractName($e),
-                            'attributes' => $this->fillAttributesWithData(
-                                $attributes[$contentType],
-                                $e
-                            ),
-                            'dangerousInnerContent' => $e
-                        ]);
-                    },
-                    $items
-                );
-                $contents = array_merge($contents, $contentsForContentType);
-            }
+            $contents = $this->queryByContentTypeAndSearchString($query, $locale);
         } elseif (!$queryGiven && $contentTypeGiven) {
-            // query by contentType
-            $clientResult = $this->client->getAll($query->contentType, $this->frontasticToGraphCmsLocale($locale));
-
-            $name = lcfirst(Inflector::pluralize($query->contentType));
-            $data = json_decode($clientResult->queryResultJson, true);
-            if (!isset($data['data'])) {
-                throw new \InvalidArgumentException(
-                    'invalid search parameters'
-                );
-            }
-            $contents = array_map(
-                function ($e) use ($clientResult, $query) {
-                    return new Content([
-                        'contentId' => $this->generateContentId($e['id'], $query->contentType),
-                        'name' => $this->extractName($e),
-                        'attributes' => $this->fillAttributesWithData(
-                            $clientResult->attributes,
-                            $e
-                        ),
-                        'dangerousInnerContent' => $e
-                    ]);
-                },
-                $data['data'][$name]
-            );
+            $contents = $this->queryByContentType($query, $locale);
         } else {
             throw new \InvalidArgumentException(
                 'provide a ContentType and/or a search text'
             );
         }
+
         return new Result([
             'total' => count($contents),
             'count' => count($contents),
             'offset' => 0,
-            'items' => $contents
+            'items' => $contents,
         ]);
     }
 
@@ -195,7 +111,7 @@ class GraphCMS implements ContentApi
     {
         return array_map(
             function (Attribute $attribute) use ($fields): Attribute {
-                $attributeContent = $fields[(string) $attribute->attributeId];
+                $attributeContent = $fields[(string)$attribute->attributeId];
                 if ($attribute->type === 'Text') {
                     $attributeContent = $attributeContent['html'];
                 }
@@ -241,7 +157,7 @@ class GraphCMS implements ContentApi
             return implode('_', $parts);
         } else {
             throw new \InvalidArgumentException(
-                'invalid formatted locale: '.$graphCmsLocale
+                'invalid formatted locale: ' . $graphCmsLocale
             );
         }
     }
@@ -262,15 +178,110 @@ class GraphCMS implements ContentApi
 
         $data = json_decode($clientResult->queryResultJson, true);
 
-        if ($data === false) {
-            return [];
-        }
-
-        return $data['data'][$name];
+        return $data['data'][$name] ?? [];
     }
 
     private function hasContent(ContentApi\GraphCMS\ClientResult $clientResult, $contentType): bool
     {
         return $this->getDataFromResult($clientResult, $contentType) !== null;
+    }
+
+    private function queryBySearchString(Query $query, string $locale): array
+    {
+        $clientResult = $this->client->search(
+            $query->query,
+            [],
+            $this->frontasticToGraphCmsLocale($locale)
+        );
+        $data = json_decode($clientResult->queryResultJson, true);
+        $attributes = $clientResult->attributes;
+        $contents = [];
+        foreach ($data['data'] as $contentType => $items) {
+            // contentType is in plural lowercase version here
+            $contentsForContentType = array_map(
+                function ($e) use ($contentType, $clientResult, $query, $attributes) {
+                    $contentId = $this->generateContentId(
+                        $e['id'],
+                        ucfirst(Inflector::singularize($contentType))
+                    );
+                    return new Content([
+                        'contentId' => $contentId,
+                        'name' => $this->extractName($e),
+                        'attributes' => $this->fillAttributesWithData(
+                            $attributes[$contentType],
+                            $e
+                        ),
+                        'dangerousInnerContent' => $e,
+                    ]);
+                },
+                $items
+            );
+            $contents = array_merge($contents, $contentsForContentType);
+        }
+        return $contents;
+    }
+
+    private function queryByContentTypeAndSearchString(Query $query, string $locale): array
+    {
+        $clientResult = $this->client->search(
+            $query->query,
+            [$query->contentType],
+            $this->frontasticToGraphCmsLocale($locale)
+        );
+
+        $data = json_decode($clientResult->queryResultJson, true);
+        $attributes = $clientResult->attributes;
+        $contents = [];
+        foreach ($data['data'] as $contentType => $items) {
+            // contentType is in plural lowercase version here
+            $contentsForContentType = array_map(
+                function ($e) use ($contentType, $clientResult, $query, $attributes) {
+                    $contentId = $this->generateContentId(
+                        $e['id'],
+                        ucfirst(Inflector::singularize($contentType))
+                    );
+                    return new Content([
+                        'contentId' => $contentId,
+                        'name' => $this->extractName($e),
+                        'attributes' => $this->fillAttributesWithData(
+                            $attributes[$contentType],
+                            $e
+                        ),
+                        'dangerousInnerContent' => $e,
+                    ]);
+                },
+                $items
+            );
+            $contents = array_merge($contents, $contentsForContentType);
+        }
+        return $contents;
+    }
+
+    private function queryByContentType(Query $query, string $locale): array
+    {
+        $clientResult = $this->client->getAll($query->contentType, $this->frontasticToGraphCmsLocale($locale));
+
+        $name = lcfirst(Inflector::pluralize($query->contentType));
+        $data = json_decode($clientResult->queryResultJson, true);
+        if (!isset($data['data'])) {
+            throw new \InvalidArgumentException(
+                'invalid search parameters'
+            );
+        }
+        $contents = array_map(
+            function ($e) use ($clientResult, $query) {
+                return new Content([
+                    'contentId' => $this->generateContentId($e['id'], $query->contentType),
+                    'name' => $this->extractName($e),
+                    'attributes' => $this->fillAttributesWithData(
+                        $clientResult->attributes,
+                        $e
+                    ),
+                    'dangerousInnerContent' => $e,
+                ]);
+            },
+            $data['data'][$name]
+        );
+        return $contents;
     }
 }

@@ -11,6 +11,7 @@ use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class CartController extends CrudController
 {
@@ -71,6 +72,11 @@ class CartController extends CrudController
     public function addMultipleAction(Context $context, Request $request): array
     {
         $payload = $this->getJsonContent($request);
+
+        if (!isset($payload['lineItems']) || !is_array($payload['lineItems'])) {
+            throw new BadRequestHttpException('Parameter "lineItems" in payload is not an array.');
+        }
+
         $cartApi = $this->getCartApi($context);
 
         $cart = $this->getCart($context);

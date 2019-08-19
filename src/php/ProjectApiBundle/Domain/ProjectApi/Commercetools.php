@@ -43,9 +43,14 @@ class Commercetools implements ProjectApi
 
                 $attributeId = 'variants.attributes.' . $rawAttribute['name'];
 
+                $type = $this->mapAttributeType($rawAttribute['type']['name']);
+                if ($type === 'set') {
+                    $type = $this->mapAttributeType($rawAttribute['type']['elementType']['name']);
+                }
+
                 $attributes[$attributeId] = new Attribute([
                     'attributeId' => $attributeId,
-                    'type' => $this->mapAttributeType($rawAttribute['type']['name']),
+                    'type' => $type,
                     'label' => $this->mapLocales($rawAttribute['label']),
                     'values' => (isset($rawAttribute['type']['values'])
                         ? $this->mapValueLocales($rawAttribute['type']['values'])
