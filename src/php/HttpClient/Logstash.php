@@ -35,7 +35,7 @@ class Logstash extends HttpClient
         return $this->aggregate
             ->requestAsync($method, $url, $body, $headers, $options)
             ->then(function ($response) use ($start, $method, $url) {
-                // [Fri, 16 Aug 2019 11:15:37 +0200] api.sphere.com POST https://api.sphere.com/cart/update?sajkfdhaj 340ms 200
+                // [Fri, 16 Aug 2019 11:15:37 +0200] api.sphere.com POST /cart/update?sajkfdhaj 340ms 200
                 file_put_contents(
                     '/var/log/frontastic/responses.log',
                     sprintf(
