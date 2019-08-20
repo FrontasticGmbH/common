@@ -6,6 +6,7 @@ use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\Filter;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\Term;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
@@ -464,6 +465,82 @@ class Mapper
             }
         }
         return $filters;
+    }
+
+    /**
+     * @param Query\Filter[]|string[] $filter
+     * @return string[]
+     */
+    public function prepareQueryFilter(array $filter): array
+    {
+        $preparedFilter = [];
+        foreach ($filter as $queryFilter) {
+            if (is_string($queryFilter)) {
+                // BC for original usage of this query field
+                $preparedFilter[] = $queryFilter;
+                continue;
+            }
+
+            $preparedFilter[] = $this->toFilterString($queryFilter);
+        }
+        return $preparedFilter;
+    }
+
+    /**
+     * Filter handling is similar to facet handling, but not locale aware and cannot rely on facet config lookup.
+     *
+     * @param Filter $queryFilter
+     * @return string
+     */
+    private function toFilterString(Filter $queryFilter): string
+    {
+        switch ($queryFilter->attributeType) {
+            case 'money':
+                // Only range filters valid for money
+                return sprintf(
+                    '%s.centAmount:range (%s to %s)',
+                    $queryFilter->handle,
+                    $queryFilter->min ?? '*',
+                    $queryFilter->max ?? '*'
+                );
+                break;
+
+            case 'enum':
+            case 'localizedEnum':
+                return sprintf(
+                    '%s.key:%s',
+                    $queryFilter->handle,
+                    // Only term filters valid for (l)enum
+                    $this->termsToLogicalOrString($queryFilter->terms ?? [])
+                );
+                break;
+
+            // FIXME: Do we need the language here or does it work without?
+            case 'localizedText':
+
+            case 'number':
+            case 'boolean':
+            case 'text':
+            case 'reference':
+            default:
+                // Default handling below
+                break;
+        }
+
+        if ($queryFilter instanceof Query\TermFacet) {
+            return sprintf(
+                '%s:%s',
+                $queryFilter->handle,
+                $this->termsToLogicalOrString($queryFilter->terms)
+            );
+        } else {
+            return sprintf(
+                '%s:range (%s to %s)',
+                $queryFilter->handle,
+                $queryFilter->min ?? '*',
+                $queryFilter->max ?? '*'
+            );
+        }
     }
 
     private function termsToLogicalOrString(array $terms): string
