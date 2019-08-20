@@ -10,4 +10,9 @@ class Filter extends DataObject
      * @var string
      */
     public $handle;
+
+    /**
+     * @var string?
+     */
+    public $attributeType;
 }
