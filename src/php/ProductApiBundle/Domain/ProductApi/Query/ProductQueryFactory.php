@@ -24,9 +24,20 @@ class ProductQueryFactory
             $overrides['facets'] ?? []
         );
 
+        $rawFilter = array_merge(
+            $defaults['filter'] ?? [],
+            $parameters['filter'] ?? [],
+            $overrides['filter'] ?? []
+        );
+
         $queryParameters['facets'] = [];
         foreach ($rawFacets as $facetHandle => $facetConfig) {
             $queryParameters['facets'][] = self::createFacet($facetHandle, $facetConfig);
+        }
+
+        $queryParameters['filter'] = [];
+        foreach ($rawFilter as $filterHandle => $filterConfig) {
+            $queryParameters['filter'][] = self::createFilter($filterHandle, $filterConfig);
         }
 
         if (isset($queryParameters['sortAttributeId'])) {
@@ -60,6 +71,27 @@ class ProductQueryFactory
 
             default:
                 throw new \RuntimeException("Unknown facet type for '{$facetHandle}'");
+        }
+    }
+
+    /**
+     * @param string $filterHandle
+     * @param array $filterConfig
+     * @return Facet
+     */
+    private static function createFilter(string $filterHandle, array $filterConfig) : Filter
+    {
+        $filterConfig['handle'] = $filterHandle;
+
+        switch (true) {
+            case (isset($filterConfig['min']) || isset($filterConfig['max'])):
+                return new RangeFilter($filterConfig);
+
+            case (isset($filterConfig['terms'])):
+                return new TermFilter($filterConfig);
+
+            default:
+                throw new \RuntimeException("Unknown filter type for '{$filterHandle}'");
         }
     }
 }
