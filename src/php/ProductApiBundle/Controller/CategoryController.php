@@ -2,7 +2,7 @@
 
 namespace Frontastic\Common\ProductApiBundle\Controller;
 
-use Frontastic\Backstage\ApiBundle\Domain\Context;
+use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
