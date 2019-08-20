@@ -52,8 +52,10 @@ class ProductQuery extends Query
     public $query;
 
     /**
-     * @stability trial This field might change to a more suffisticated structure
-     * @var array map of field identifiers to string filter values
+     * @stability experimental This field might change to a more sophisticate structure
+     *
+     * @var array of {@see Facet} queries that will be applied *before* the actual facets.
+     *            CommerceTools allowed a list of filter strings, too, but this is @deprecated!
      */
     public $filter = [];
 
