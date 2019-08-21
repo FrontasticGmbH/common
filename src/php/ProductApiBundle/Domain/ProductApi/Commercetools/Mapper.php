@@ -515,9 +515,7 @@ class Mapper
                 );
                 break;
 
-            // FIXME: Do we need the language here or does it work without?
-            case 'localizedText':
-
+            case 'localizedText': // FIXME: Do we need the language here or does it work without?
             case 'number':
             case 'boolean':
             case 'text':
