@@ -525,7 +525,7 @@ class Mapper
                 break;
         }
 
-        if ($queryFilter instanceof Query\TermFacet) {
+        if ($queryFilter instanceof Query\TermFilter) {
             return sprintf(
                 '%s:%s',
                 $queryFilter->handle,

@@ -5,7 +5,9 @@ namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
 
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\RangeFacet;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\RangeFilter;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\TermFacet;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\TermFilter;
 
 class MapperTest extends \PHPUnit\Framework\TestCase
 {
@@ -299,6 +301,85 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             new \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\RangeFacet($expectedResult),
             $actualResult
         );
+    }
+
+    /**
+     * @dataProvider providePrepareFilterQueryExamples
+     */
+    public function testPrepareQueryFilter(array $inputFilters, array $expectedFilterStrings)
+    {
+        $actualFilterStrings = $this->mapper->prepareQueryFilter($inputFilters);
+
+        $this->assertEquals(
+            $expectedFilterStrings,
+            $actualFilterStrings
+        );
+    }
+
+    public function providePrepareFilterQueryExamples()
+    {
+        return [
+            'legacyFilterStrings' => [
+                [
+                    'variants.attributes.visibility: true',
+                    'variants.attributes.searchability: "1"'
+                ],
+                [
+                    'variants.attributes.visibility: true',
+                    'variants.attributes.searchability: "1"'
+                ],
+            ],
+            'money' => [
+                [
+                    new RangeFilter([
+                        'min' => 100,
+                        'max' => 200,
+                        'handle' => 'variants.price',
+                        'attributeType' => 'money',
+                    ]),
+                ],
+                [
+                    'variants.price.centAmount:range (100 to 200)',
+                ]
+            ],
+            'enum' => [
+                [
+                    new TermFilter([
+                        'terms' => ['grey', 'red'],
+                        'handle' => 'variants.attributes.color',
+                        'attributeType' => 'enum',
+                    ]),
+                ],
+                [
+                    'variants.attributes.color.key:"grey","red"',
+                ]
+            ],
+            'number (misc range)' => [
+                [
+                    new RangeFilter([
+                        'min' => 3,
+                        'max' => 8,
+                        'handle' => 'variants.attributes.size',
+                        'attributeType' => 'number',
+                    ]),
+                ],
+                [
+                    'variants.attributes.size:range (3 to 8)',
+                ]
+            ],
+            'text (misc term)' => [
+                [
+                    new TermFilter([
+                        'terms' => ['levis', 'wrangler'],
+                        'handle' => 'variants.attributes.brand',
+                        'attributeType' => 'text',
+                    ]),
+                ],
+                [
+                    'variants.attributes.brand:"levis","wrangler"',
+                ]
+            ],
+        ];
     }
 
     /**
