@@ -18,6 +18,7 @@ class Cloudinary {
                     width: width,
                     height: height,
                     quality: 'auto',
+                    secure: true,
                 },
                 this.getGravityOptions(options),
                 this.cropOptions(options)
@@ -40,6 +41,7 @@ class Cloudinary {
                     width: width,
                     height: height,
                     quality: 'auto',
+                    secure: true,
                 },
                 this.getGravityOptions(options),
                 this.cropOptions(options)
