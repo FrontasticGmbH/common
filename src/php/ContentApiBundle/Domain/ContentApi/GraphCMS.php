@@ -58,7 +58,7 @@ class GraphCMS implements ContentApi
         if (!$this->hasContent($clientResult, $contentType)) {
             throw new \RuntimeException(
                 sprintf(
-                    'No content found for id: %s and contentType: %s',
+                    'No content found for id: "%s" and contentType: "%s"',
                     $contentId,
                     $contentType
                 )
@@ -66,6 +66,16 @@ class GraphCMS implements ContentApi
         }
 
         $attributes = $this->getDataFromResult($clientResult, $contentType);
+
+        if (empty($attributes)) {
+            throw new \RuntimeException(
+                sprintf(
+                    'No content found for id: "%s" and contentType: "%s"',
+                    $contentId,
+                    $contentType
+                )
+            );
+        }
 
         return new Content([
             'contentId' => $this->generateContentId($attributes['id'], $contentType),
