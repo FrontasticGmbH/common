@@ -14,6 +14,9 @@ use Frontastic\Common\ContentApiBundle\Domain\ContentType;
 use Frontastic\Common\ContentApiBundle\Domain\Query;
 use Frontastic\Common\ContentApiBundle\Domain\Result;
 use GuzzleHttp\Promise;
+use Contentful\RichText\Node\NodeInterface;
+use Contentful\RichText\Renderer;
+use LocaleMapper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -31,14 +34,25 @@ class Contentful implements ContentApi
     private $richTextRenderer;
 
     /**
+     * @var LocaleMapper
+     */
+    private $localeMapper;
+
+    /**
      * @var string
      */
     private $defaultLocale;
 
-    public function __construct(Client $client, Renderer $richTextRenderer, string $defaultLocale)
-    {
+
+    public function __construct(
+        Client $client,
+        Renderer $richTextRenderer,
+        LocaleMapper $localeMapper,
+        string $defaultLocale
+    ) {
         $this->client = $client;
         $this->richTextRenderer = $richTextRenderer;
+        $this->localeMapper = $localeMapper;
         $this->defaultLocale = $defaultLocale;
     }
 
@@ -194,6 +208,10 @@ class Contentful implements ContentApi
 
     private function frontasticToContentfulLocale(string $frontasticLocale): string
     {
-        return strtr($frontasticLocale, '_', '-');
+        return strtr(
+            $this->localeMapper->replaceLocale($frontasticLocale),
+            '_',
+            '-'
+        );
     }
 }
