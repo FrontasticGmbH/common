@@ -695,6 +695,7 @@ class Commercetools implements CartApi
         $lineItems = array_merge(
             array_map(
                 function (array $lineItem): LineItem {
+                    list($price, $currency, $discountedPrice) = $this->mapper->dataToPrice($lineItem, new Locale());
                     return new LineItem\Variant([
                         'lineItemId' => $lineItem['id'],
                         'name' => reset($lineItem['name']),
@@ -702,11 +703,8 @@ class Commercetools implements CartApi
                         'variant' => $this->mapper->dataToVariant($lineItem['variant'], new Query(), new Locale()),
                         'custom' => $lineItem['custom']['fields'] ?? [],
                         'count' => $lineItem['quantity'],
-                        'price' => $lineItem['price']['value']['centAmount'],
-                        'discountedPrice' => (isset($lineItem['discountedPrice'])
-                            ? $lineItem['totalPrice']['centAmount']
-                            : null
-                        ),
+                        'price' => $price,
+                        'discountedPrice' => $discountedPrice,
                         'discountTexts' => array_map(
                             function ($discount): array {
                                 return $discount['discount']['obj']['name'] ?? [];
@@ -717,7 +715,7 @@ class Commercetools implements CartApi
                             )
                         ),
                         'totalPrice' => $lineItem['totalPrice']['centAmount'],
-                        'currency' => $lineItem['totalPrice']['currencyCode'],
+                        'currency' => $currency,
                         'isGift' => ($lineItem['lineItemMode'] === 'GiftLineItem'),
                         'dangerousInnerItem' => $lineItem,
                     ]);

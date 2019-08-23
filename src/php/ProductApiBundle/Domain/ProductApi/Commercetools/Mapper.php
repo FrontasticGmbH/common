@@ -273,17 +273,13 @@ class Mapper
         }
 
         if (isset($variantData['price'])) {
-            return isset($variantData['price']['discounted'])
-                ? [
-                    $variantData['price']['discounted']['value']['centAmount'],
-                    $variantData['price']['value']['currencyCode'],
-                    $variantData['price']['value']['centAmount'],
-                ]
-                : [
-                    $variantData['price']['value']['centAmount'],
-                    $variantData['price']['value']['currencyCode'],
-                    null,
-                ];
+            return [
+                $variantData['price']['value']['centAmount'],
+                $variantData['price']['value']['currencyCode'],
+                (isset($variantData['price']['discounted']['value']['centAmount'])
+                    ? $variantData['price']['discounted']['value']['centAmount'] ?? null
+                    : null),
+            ];
         }
 
         return [null, null, null];
