@@ -116,26 +116,51 @@ class Commercetools implements CartApi
 
     private function assertCorrectLocale(Cart $cart, Locale $locale): Cart
     {
-        if ($cart->currency !== strtoupper($locale->currency)
-            || $cart->dangerousInnerCart['country'] !== strtoupper($locale->territory)
+        if ($cart->currency !== strtoupper($locale->currency)) {
+            $cartArray = $cart->dangerousInnerCart;
+            $cartArray['country'] = $locale->territory;
+            $cartArray['locale'] = $locale->language;
+            $cartArray['currency'] = $locale->currency;
+            return $this->recreate($cartArray);
+        }
+        if ($cart->dangerousInnerCart['country'] !== strtoupper($locale->territory)
             || $cart->dangerousInnerCart['locale'] !== strtoupper($locale->language)
         ) {
             $actions = [];
 
             $setCountryAction = [
-                'action' => 'setCountry',
+                'action'  => 'setCountry',
                 'country' => $locale->territory,
             ];
-            $setLocaleAction = [
+            $setLocaleAction  = [
                 'action' => 'setLocale',
                 'locale' => $locale->language,
             ];
 
-            array_push($actions,$setCountryAction);
-            array_push($actions,$setLocaleAction);
+            array_push($actions, $setCountryAction);
+            array_push($actions, $setLocaleAction);
 
             return $this->postCartActions($cart, $actions);
         }
+        return $cart;
+    }
+
+    private function recreate(array $dangerousInnerCart): Cart
+    {
+        $cartId = $dangerousInnerCart['id'];
+        $cartVersion = $dangerousInnerCart['version'];
+        unset($dangerousInnerCart['id'], $dangerousInnerCart['version']);
+        $cart = $this->mapCart($this->client->post(
+            '/carts',
+            ['expand' => self::EXPAND],
+            [],
+            json_encode($dangerousInnerCart)
+        ));
+        $this->client->delete(
+            '/carts/' . urlencode($cartId),
+            ['version' => $cartVersion]
+        );
+
         return $cart;
     }
 
