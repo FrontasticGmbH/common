@@ -114,7 +114,13 @@ class Client
 
     protected function isReference(array $attribute): bool
     {
-        return $attribute['type']['kind'] == 'LIST' || $attribute['type']['kind'] == 'OBJECT';
+        return $this->isListOrObject($attribute['type'])
+            || ($attribute['type']['kind'] == 'NON_NULL' && $this->isListOrObject($attribute['type']['ofType']));
+    }
+
+    private function isListOrObject(array $type): bool
+    {
+        return $type['kind'] == 'LIST' || $type['kind'] == 'OBJECT';
     }
 
     protected function isNoReference(array $attribute): bool
@@ -161,7 +167,7 @@ class Client
                         );
 
                         return "{$e['name']} { $queryAttributesString }";
-                    } elseif ($e['type']['name'] == 'RichText') {
+                    } elseif ($e['type']['name'] == 'RichText' || $e['type']['ofType']['name'] == 'RichText') {
                         return "{$e['name']} { html }";
                     } else {
                         $queryAttributesString = $this->getAdditionalAttributes($e, $maxDepth, $currentDepth, 'id');
