@@ -39,7 +39,7 @@ class ConfigurationSchema {
                         : null),
                     validate: this.schema[i].fields[j].validate || {},
                     fields: this.schema[i].fields[j].fields || null,
-                    min: this.schema[i].fields[j].min || 1,
+                    min: (typeof this.schema[i].fields[j].min === 'undefined') ? 1 : this.schema[i].fields[j].min,
                     max: this.schema[i].fields[j].max || 16,
                     required: fieldIsRequired(
                         this.schema[i].fields[j].required,
