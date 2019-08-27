@@ -1,5 +1,7 @@
 <?php
 
+namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful;
+
 interface LocaleMapper
 {
     /**

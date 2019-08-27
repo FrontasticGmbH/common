@@ -2,8 +2,6 @@
 
 namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful;
 
-use LocaleMapper;
-
 class NoopLocaleMapper implements LocaleMapper
 {
     /**
