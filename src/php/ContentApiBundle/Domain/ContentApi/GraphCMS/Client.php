@@ -114,7 +114,13 @@ class Client
 
     protected function isReference(array $attribute): bool
     {
-        return $attribute['type']['kind'] == 'LIST' || $attribute['type']['kind'] == 'OBJECT';
+        return $this->isListOrObject($attribute['type'])
+            || ($attribute['type']['kind'] == 'NON_NULL' && $this->isListOrObject($attribute['type']['ofType']));
+    }
+
+    private function isListOrObject(array $type): bool
+    {
+        return $type['kind'] == 'LIST' || $type['kind'] == 'OBJECT';
     }
 
     protected function isNoReference(array $attribute): bool
@@ -125,44 +131,59 @@ class Client
     // contentType must be capitalized and singular
     protected function attributeQueryPart(array $attributes): string
     {
+        return implode(
+            $this->fetchAttributeFields($attributes, 2),
+            ','
+        );
+    }
+
+    private function fetchAttributeFields(array $attributes, int $maxDepth, int $currentDepth = 0)
+    {
         $simpleAttributes = array_filter(
             $attributes,
-            [$this , 'isNoReference']
+            [$this, 'isNoReference']
         );
-        $references = array_filter(
-            $attributes,
-            [$this , 'isReference']
-        );
-        return implode(
-            array_merge(
-                $this->getAttributeNames($simpleAttributes),
-                array_map(
-                    function ($e) {
-                        if ($e['type']['name'] == 'Asset') {
-                            $queryAttributesString = $this->getAdditionalAttributes(
-                                $e,
-                                'id, handle, mimeType',
-                                ['id', 'handle', 'mimeType', 'altText']
-                            );
 
-                            return "{$e['name']} { $queryAttributesString }";
-                        } elseif ($e['type']['name'] == 'RichText') {
-                            return "{$e['name']} { html }";
-                        } else {
-                            $queryAttributesString = $this->getAdditionalAttributes($e, 'id');
+        if ($maxDepth > $currentDepth) {
+            $references = array_filter(
+                $attributes,
+                [$this, 'isReference']
+            );
+        } else {
+            $references = [];
+        }
 
-                            return "{$e['name']} { $queryAttributesString }";
-                        }
-                    },
-                    $references
-                )
-            ),
-            ','
+        return array_merge(
+            $this->getAttributeNames($simpleAttributes),
+            array_map(
+                function ($e) use ($maxDepth, $currentDepth) {
+                    if ($e['type']['name'] == 'Asset') {
+                        $queryAttributesString = $this->getAdditionalAttributes(
+                            $e,
+                            $maxDepth,
+                            $currentDepth,
+                            'id, handle, mimeType',
+                            ['id', 'handle', 'mimeType', 'altText']
+                        );
+
+                        return "{$e['name']} { $queryAttributesString }";
+                    } elseif ($e['type']['name'] == 'RichText' || $e['type']['ofType']['name'] == 'RichText') {
+                        return "{$e['name']} { html }";
+                    } else {
+                        $queryAttributesString = $this->getAdditionalAttributes($e, $maxDepth, $currentDepth, 'id');
+
+                        return "{$e['name']} { $queryAttributesString }";
+                    }
+                },
+                $references
+            )
         );
     }
 
     private function getAdditionalAttributes(
         array $referenceField,
+        int $maxDepth,
+        int $currentDepth,
         string $defaultAttributes = '',
         array $whitelistFields = []
     ): string {
@@ -177,14 +198,9 @@ class Client
         $attributes = $this->getAttributes($contentType);
 
         if (!empty($attributes)) {
-            $noReferenceAttributes = array_filter(
-                $attributes,
-                [$this, 'isNoReference']
-            );
-
             return implode(
                 array_filter(
-                    $this->getAttributeNames($noReferenceAttributes),
+                    $this->fetchAttributeFields($attributes, $maxDepth, $currentDepth + 1),
                     function ($attributeName) use ($whitelistFields) {
                         if (empty($whitelistFields)) {
                             return true;
