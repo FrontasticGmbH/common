@@ -119,8 +119,8 @@ class Client
     protected function isReference(array $attribute): bool
     {
         if ($this->isListOrObject($attribute['type'])
-            || ($attribute['type']['kind'] == 'NON_NULL' && $this->isListOrObject($attribute['type']['ofType'])))
-        {
+            || ($attribute['type']['kind'] == 'NON_NULL' && $this->isListOrObject($attribute['type']['ofType']))
+        ) {
             if ($attribute['type']['ofType']['ofType']['kind'] === 'SCALAR'
                 || ($attribute['type']['ofType']['ofType']['kind'] === 'NON_NULL'
                     && $attribute['type']['ofType']['ofType']['ofType']['kind'] === 'SCALAR')
