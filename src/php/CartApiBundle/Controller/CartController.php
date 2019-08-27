@@ -198,13 +198,6 @@ class CartController extends CrudController
             );
         }
 
-        if (!empty($payload['shipping']) || !empty($payload['billing'])) {
-            $cart = $cartApi->setShippingAddress(
-                $cart,
-                $payload['shipping'] ?: $payload['billing']
-            );
-        }
-
         if (isset($payload['custom']) && isset($payload['customType'])) {
             $cartApi->setCustomType($cart, $payload['customType']);
             $cart = $cartApi->setCustomField($cart,$payload["custom"]);
@@ -214,6 +207,13 @@ class CartController extends CrudController
             $cart = $cartApi->setBillingAddress(
                 $cart,
                 $payload['billing'] ?: $payload['shipping']
+            );
+        }
+
+        if (!empty($payload['shipping']) || !empty($payload['billing'])) {
+            $cart = $cartApi->setShippingAddress(
+                $cart,
+                $payload['shipping'] ?: $payload['billing']
             );
         }
 
