@@ -10,13 +10,13 @@ use Contentful\Delivery\Resource\Entry;
 use Contentful\RichText\Node\NodeInterface;
 use Contentful\RichText\Renderer;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi;
+use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful\LocaleMapper;
 use Frontastic\Common\ContentApiBundle\Domain\ContentType;
 use Frontastic\Common\ContentApiBundle\Domain\Query;
 use Frontastic\Common\ContentApiBundle\Domain\Result;
 use GuzzleHttp\Promise;
 use Contentful\RichText\Node\NodeInterface;
 use Contentful\RichText\Renderer;
-use LocaleMapper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
