@@ -121,14 +121,16 @@ class GraphCMS implements ContentApi
     {
         return array_map(
             function (Attribute $attribute) use ($fields): Attribute {
-                $attributeContent = $fields[(string)$attribute->attributeId];
+                $newAttribute = clone $attribute;
+
+                $attributeContent = $fields[(string) $attribute->attributeId];
                 if ($attribute->type === 'Text') {
                     $attributeContent = $attributeContent['html'];
                 }
 
-                $attribute->content = $attributeContent;
+                $newAttribute->content = $attributeContent;
 
-                return $attribute;
+                return $newAttribute;
             },
             $attributes
         );
