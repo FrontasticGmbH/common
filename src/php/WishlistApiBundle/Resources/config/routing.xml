@@ -16,6 +16,10 @@
         <default key="_controller">Frontastic\Common\WishlistApiBundle\Controller\WishlistController::addAction</default>
     </route>
 
+    <route id="Frontastic.WishlistApi.Wishlist.addMultiple" path="/wishlist/addMultiple" methods="POST">
+        <default key="_controller">Frontastic\Common\WishlistApiBundle\Controller\WishlistController::addMultipleAction</default>
+    </route>
+
     <route id="Frontastic.WishlistApi.Wishlist.updateLineItem" path="/wishlist/lineItem" methods="POST">
         <default key="_controller">Frontastic\Common\WishlistApiBundle\Controller\WishlistController::updateLineItemAction</default>
     </route>
