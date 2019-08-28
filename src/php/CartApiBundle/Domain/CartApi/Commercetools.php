@@ -69,7 +69,7 @@ class Commercetools implements CartApi
      * Commercetools constructor.
      *
      * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client  $client
-     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\CommerFcetools\Mapper $mapper
+     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper  $mapper
      * @param \Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator                    $orderIdGenerator
      */
     public function __construct(Client $client, Mapper $mapper, OrderIdGenerator $orderIdGenerator)
