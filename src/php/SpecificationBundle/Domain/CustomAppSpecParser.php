@@ -85,6 +85,13 @@ class CustomAppSpecParser implements SpecParser
                         $fields[$field] . " - supported types are: " . implode(', ', $validIndexTypes)
                     );
                 }
+
+                if (!preg_match('(^[0-9a-zA-Z_]+$)', $index->name)) {
+                    throw new InvalidSchemaException(
+                        "Invalid index field name.",
+                        "Invalid index field name {$index->name} - must match the pattern: ^[0-9a-zA-Z_]+$"
+                    );
+                }
             }
         }
 
