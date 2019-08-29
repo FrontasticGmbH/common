@@ -89,6 +89,10 @@ class Client
                                ofType {
                                    name
                                    kind
+                                   ofType {
+                                       name
+                                       kind
+                                   }
                                }
                            }
                        }
@@ -114,8 +118,21 @@ class Client
 
     protected function isReference(array $attribute): bool
     {
-        return $this->isListOrObject($attribute['type'])
-            || ($attribute['type']['kind'] == 'NON_NULL' && $this->isListOrObject($attribute['type']['ofType']));
+        if ($this->isListOrObject($attribute['type'])
+            || ($attribute['type']['kind'] == 'NON_NULL' && $this->isListOrObject($attribute['type']['ofType']))
+        ) {
+            if ($attribute['type']['ofType']['ofType']['kind'] === 'SCALAR'
+                || ($attribute['type']['ofType']['ofType']['kind'] === 'NON_NULL'
+                    && $attribute['type']['ofType']['ofType']['ofType']['kind'] === 'SCALAR')
+            ) {
+                // special handling for a list of scalar values
+                return false;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     private function isListOrObject(array $type): bool
@@ -290,6 +307,15 @@ class Client
         if ($type === 'NON_NULL') {
             $type = $attribute['type']['ofType']['name']
                 ?? $attribute['type']['ofType']['kind'];
+        }
+
+        if ($type === 'LIST') {
+            if ($attribute['type']['ofType']['ofType']['kind'] === 'SCALAR') {
+                $type = $attribute['type']['ofType']['ofType']['name'];
+            } elseif ($attribute['type']['ofType']['ofType']['kind'] === 'NON_NULL'
+                && $attribute['type']['ofType']['ofType']['ofType']['kind'] === 'SCALAR') {
+                $type = $attribute['type']['ofType']['ofType']['ofType']['name'];
+            }
         }
 
         // map type for frontastic
