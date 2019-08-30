@@ -60,6 +60,10 @@ class Address extends DataObject
      * @var string
      */
     public $country;
+    /**
+     * @var string
+     */
+    public $phone;
 
     /**
      * @var bool
