@@ -12,6 +12,9 @@
 
         <service id="Frontastic\Common\ContentApiBundle\Domain\DefaultContentApiFactory">
             <argument type="service" id="service_container" />
+            <argument type="service">
+                <service class="Doctrine\Common\Cache\ApcuCache" />
+            </argument>
             <argument type="tagged" tag="contentApi.lifecycleEventListener" />
         </service>
     </services>

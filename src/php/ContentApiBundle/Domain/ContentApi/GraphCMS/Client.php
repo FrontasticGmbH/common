@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS;
 
+use Doctrine\Common\Cache\Cache;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Attribute;
 use Frontastic\Common\HttpClient;
 
@@ -37,12 +38,18 @@ class Client
      */
     private const SEARCH_ATTRIBUTES = ['name', 'fileName', 'title', 'label'];
 
+    /**
+     * @var Cache
+     */
+    private $cache;
+
     public function __construct(
         string $projectId,
         string $apiToken,
         string $region,
         string $stage,
-        HttpClient $httpClient
+        HttpClient $httpClient,
+        Cache $cache
     ) {
         $this->projectId = $projectId;
         $this->apiToken = $apiToken;
@@ -53,6 +60,7 @@ class Client
             'content-type: application/json',
             'Authorization: Bearer '.$this->apiToken
         ]);
+        $this->cache = $cache;
     }
 
     /**
@@ -75,6 +83,16 @@ class Client
      */
     public function getAttributes(string $contentType): array
     {
+        $cacheId = sprintf(
+            'graphCMS:contentModel:%s',
+            md5($this->projectId . $this->stage . $contentType)
+        );
+
+        $cachedAttributes = $this->cache->fetch($cacheId);
+        if ($cachedAttributes !== false) {
+            return $cachedAttributes;
+        }
+
         $query = "
             query {
                 __type(name: \"$contentType\") {
@@ -103,7 +121,11 @@ class Client
 
         $json = json_decode($this->query($query), true);
 
-        return $json['data']['__type']['fields'] ?? [];
+        $attributes = $json['data']['__type']['fields'] ?? [];
+
+        $this->cache->save($cacheId, $cachedAttributes, 30 * 60);
+
+        return $attributes;
     }
 
     protected function getAttributeNames(array $attributes): array

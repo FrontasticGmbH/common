@@ -17,10 +17,16 @@ class DefaultContentApiFactory implements ContentApiFactory
     private $container;
     private $decorators = [];
 
-    public function __construct($container, iterable $decorators)
+    /**
+     * @var \Doctrine\Common\Cache\Cache
+     */
+    private $cache;
+
+    public function __construct($container, Cache $cache, iterable $decorators)
     {
         $this->container = $container;
         $this->decorators = $decorators;
+        $this->cache = $cache;
     }
 
     public function factor(Project $project): ContentApi
@@ -46,7 +52,8 @@ class DefaultContentApiFactory implements ContentApiFactory
                     $contentConfiguration->apiToken,
                     $contentConfiguration->region,
                     $contentConfiguration->stage,
-                    new Guzzle()
+                    new Guzzle(),
+                    $this->cache
                 );
                 $api = new ContentApi\GraphCMS($client, $project->defaultLanguage);
                 break;
