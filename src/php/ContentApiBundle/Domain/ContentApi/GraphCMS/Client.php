@@ -123,7 +123,7 @@ class Client
 
         $attributes = $json['data']['__type']['fields'] ?? [];
 
-        $this->cache->save($cacheId, $cachedAttributes, 24 * 60 * 60);
+        $this->cache->save($cacheId, $attributes, 24 * 60 * 60);
 
         return $attributes;
     }
