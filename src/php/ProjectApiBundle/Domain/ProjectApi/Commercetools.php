@@ -43,19 +43,18 @@ class Commercetools implements ProjectApi
 
                 $attributeId = 'variants.attributes.' . $rawAttribute['name'];
 
-                $type = $this->mapAttributeType($rawAttribute['type']['name']);
-                if ($type === 'set') {
-                    $type = $this->mapAttributeType($rawAttribute['type']['elementType']['name']);
+                $rawType = $rawAttribute['type']['name'];
+                $rawValues = $rawAttribute['type']['values'] ?? null;
+                if ($rawType === 'set') {
+                    $rawType = $rawAttribute['type']['elementType']['name'];
+                    $rawValues = $rawAttribute['type']['elementType']['values'] ?? null;
                 }
 
                 $attributes[$attributeId] = new Attribute([
                     'attributeId' => $attributeId,
-                    'type' => $type,
+                    'type' => $this->mapAttributeType($rawType),
                     'label' => $this->mapLocales($rawAttribute['label']),
-                    'values' => (isset($rawAttribute['type']['values'])
-                        ? $this->mapValueLocales($rawAttribute['type']['values'])
-                        : null
-                    ),
+                    'values' => $this->mapValueLocales($rawValues),
                 ]);
             }
         }
@@ -93,8 +92,12 @@ class Commercetools implements ProjectApi
         return $localizedResult;
     }
 
-    private function mapValueLocales(array $values): array
+    private function mapValueLocales(array $values = null): ?array
     {
+        if ($values === null) {
+            return null;
+        }
+
         foreach ($values as $key => $value) {
             if (is_array($value['label'])) {
                 $values[$key]['label'] = $this->mapLocales($value['label']);
