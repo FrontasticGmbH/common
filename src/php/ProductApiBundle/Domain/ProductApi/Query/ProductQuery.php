@@ -72,6 +72,11 @@ class ProductQuery extends Query
     public $sortAttributes = [];
 
     /**
+     * @var bool
+     */
+    public $fuzzy = false;
+
+    /**
      * @return void
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\InvalidQueryException
      */
@@ -85,5 +90,6 @@ class ProductQuery extends Query
         $this->validateProperty('query', 'string');
         $this->validateProperty('facets', 'array');
         $this->validateProperty('sortAttributes', 'array');
+        $this->validateProperty('fuzzy', 'boolean');
     }
 }

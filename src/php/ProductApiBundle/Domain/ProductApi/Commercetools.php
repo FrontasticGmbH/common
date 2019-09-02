@@ -212,6 +212,7 @@ class Commercetools implements ProductApi
             'facet' => $this->mapper->facetsToRequest($this->options->facetsToQuery, $locale),
             'priceCurrency' => $locale->currency,
             'priceCountry' => $locale->territory,
+            'fuzzy' => $query->fuzzy ? 'true' : 'false',
         ];
 
         if (count($query->filter) > 0) {
