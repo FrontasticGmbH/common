@@ -116,4 +116,48 @@ class ProductQueryFactoryTest extends TestCase
             )
         );
     }
+
+    public function testFilterCreate()
+    {
+        $this->assertEquals(
+            new ProductQuery([
+                'filter' => [
+                    new TermFilter([
+                        'handle' => 'variants.attributes.color',
+                        'terms' => ['grey'],
+                        'attributeType' => 'localizedEnum',
+                    ]),
+                    new RangeFilter([
+                        'handle' => 'variants.price',
+                        'min' => 10000,
+                        'max' => 20000,
+                        'attributeType' => 'money',
+                    ])
+                ]
+            ]),
+            ProductQueryFactory::queryFromParameters(
+                [],
+                [],
+                [
+                    'filter' =>
+                        [
+                            'variants.attributes.color' =>
+                                [
+                                    'terms' =>
+                                        [
+                                            0 => 'grey',
+                                        ],
+                                    'attributeType' => 'localizedEnum',
+                                ],
+                            'variants.price' =>
+                                [
+                                    'min' => 10000,
+                                    'max' => 20000,
+                                    'attributeType' => 'money',
+                                ],
+                        ],
+                ]
+            )
+        );
+    }
 }

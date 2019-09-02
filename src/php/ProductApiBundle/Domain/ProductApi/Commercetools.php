@@ -200,12 +200,16 @@ class Commercetools implements ProductApi
             'offset' => $query->offset,
             'limit' => $query->limit,
             'filter' => [],
-            'filter.query' => $query->filter ?: [],
+            'filter.query' => [],
             'filter.facets' => [],
             'facet' => $this->mapper->facetsToRequest($this->options->facetsToQuery, $locale),
             'priceCurrency' => $locale->currency,
             'priceCountry' => $locale->territory,
         ];
+
+        if (count($query->filter) > 0) {
+            $parameters['filter.query'] = $this->mapper->prepareQueryFilter($query->filter);
+        }
 
         if ($query->productType) {
             $parameters['filter.query'][] = sprintf('productType.id:"%s"', $query->productType);
@@ -225,6 +229,7 @@ class Commercetools implements ProductApi
         if ($query->skus) {
             $parameters['filter.query'][] = sprintf('variants.sku:"%s"', join('","', $query->skus));
         }
+
         if ($query->sortAttributes) {
             $parameters['sort'] = array_map(
                 function (string $direction, string $field): string {
