@@ -67,6 +67,13 @@ class Commercetools implements ProjectApi
             'label' => null, // Can we get the price label somehow?
         ]);
 
+        $attributeId = 'variants.scopedPrice.value';
+        $attributes[$attributeId] = new Attribute([
+            'attributeId' => $attributeId,
+            'type' => Attribute::TYPE_MONEY,
+            'label' => null, // Can we get the price label somehow?
+        ]);
+
         $attributeId = 'categories.id';
         $attributes[$attributeId] = new Attribute([
             'attributeId' => $attributeId,
