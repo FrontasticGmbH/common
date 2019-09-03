@@ -17,6 +17,11 @@ class Query extends DataObject
     public $query;
 
     /**
+     * @var array
+     */
+    public $contentIds;
+
+    /**
      * @var AttributeFilter[]
      */
     public $attributes = [];

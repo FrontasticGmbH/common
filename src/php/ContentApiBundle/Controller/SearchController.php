@@ -17,13 +17,19 @@ class SearchController extends Controller
         $contentApi = $contentApiFactory->factor($context->project);
 
         $requestParameters = json_decode($request->getContent(), true);
-        if (!isset($requestParameters['contentId'])) {
-            throw new Exception("contentId is not set in request");
+        if (isset($requestParameters['contentId'])) {
+            $contentId = $requestParameters['contentId'];
+            $result = $contentApi->getContent($contentId, $context->locale);
+        } elseif (isset($requestParameters['contentIds'])) {
+            $contentIds = $requestParameters['contentIds'];
+            $query = new Domain\Query(['contentIds' => $contentIds]);
+            $result = $contentApi->query($query, $context->locale);
+        } else {
+            throw new \RuntimeException("either contentId nor contentIds is set in request");
         }
-        $contentId = $requestParameters['contentId'];
 
         return [
-            'result' => $contentApi->getContent($contentId, $context->locale),
+            'result' => $result,
         ];
     }
 
