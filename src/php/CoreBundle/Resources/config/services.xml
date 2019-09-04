@@ -6,13 +6,14 @@
 
     <services>
         <defaults public="true" />
-        <service id="Frontastic\Common\HttpClient\Stream" class="Frontastic\Common\HttpClient\Tideways">
+        <service id="Frontastic\Common\HttpClient">
             <factory service="Frontastic\Common\HttpClient\Factory" method="create" />
 
-            <argument>unknown_http_client</argument>
-
-            <deprecated>%service_id% is deprecated in favor of creating a dedicated client using Frontastic\Common\HttpClient\Factory</deprecated>
+            <argument>default_http_client</argument>
         </service>
+
+        <!-- For BC reasons -->
+        <service id="Frontastic\Common\HttpClient\Stream" alias="Frontastic\Common\HttpClient" />
 
         <service id="Frontastic\Common\HttpClient\Factory">
             <argument type="service" id="logger"/>
