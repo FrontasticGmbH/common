@@ -25,6 +25,9 @@ class Mapper
 
     public function dataToProduct(array $productData, ProductQuery $query): Product
     {
+        $lastModified = $productData['lastModifiedAt'];
+        $version = $productData['version'] ?? 0;
+
         if (isset($productData['masterData']['current'])) {
             $productId = $productData['id'];
             $productKey = $productData['key'] ?? null;
@@ -39,8 +42,8 @@ class Mapper
         $locale = Locale::createFromPosix($query->locale);
         return new Product([
             'productId' => $productData['id'],
-            'changed' => $productData['lastModifiedAt'],
-            'version' => $productData['version'] ?? 0,
+            'changed' => $lastModified,
+            'version' => $version,
             'name' => $this->getLocalizedValue($locale, $productData['name'] ?? []),
             'slug' => $this->getLocalizedValue($locale, $productData['slug'] ?? []),
             'description' => $this->getLocalizedValue($locale, $productData['description'] ?? []),
