@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\ProductApiBundle\Domain;
 
+use Contentful\Core\Api\DateTimeImmutable;
 use Kore\DataObject\DataObject;
 
 /**
@@ -19,6 +20,11 @@ class Product extends DataObject
      * @var string
      */
     public $productId;
+
+    /**
+     * @var DateTimeImmutable|null
+     */
+    public $changed;
 
     /**
      * @var string
