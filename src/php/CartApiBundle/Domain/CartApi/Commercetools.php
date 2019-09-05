@@ -690,6 +690,7 @@ class Commercetools implements CartApi
             'discountCodes' => $this->mapDiscounts($order),
             'dangerousInnerCart' => $order,
             'dangerousInnerOrder' => $order,
+            'currency' =>  $order['totalPrice']['currencyCode']
         ]);
         return $order;
     }
