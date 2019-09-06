@@ -113,16 +113,17 @@ class Contentful implements ContentApi
             'dangerousInnerContent' => $entry,
         ]);
 
-        $attributes = $this->convertContent($entry->all());
+        $attributes = $this->convertContent($entry, $entry->all());
 
         $content->attributes = $attributes;
 
         return $content;
     }
 
-    protected function convertContent(iterable $contents): array
+    protected function convertContent(Entry $entry, iterable $contents): array
     {
         $attributes = [];
+        $fieldContentTypes = $entry->getContentType()->getFields();
 
         foreach ($contents as $key => $value) {
             if ($value instanceof Asset) {
@@ -148,7 +149,7 @@ class Contentful implements ContentApi
             $attributes[$key] = [
                 'attributeId' => $key,
                 'content' => $value,
-                'type' => null, //@todo
+                'type' => $fieldContentTypes[$key]->getType(),
             ];
         }
 
