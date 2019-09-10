@@ -123,8 +123,8 @@ class Commercetools implements CartApi
             $cartArray['currency'] = $locale->currency;
             return $this->recreate($cartArray);
         }
-        if ($cart->dangerousInnerCart['country'] !== strtoupper($locale->territory)
-            || $cart->dangerousInnerCart['locale'] !== strtoupper($locale->language)
+        if ($cart->dangerousInnerCart['country'] !== $locale->territory
+            || $cart->dangerousInnerCart['locale'] !== $locale->language
         ) {
             $actions = [];
 
