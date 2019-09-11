@@ -74,7 +74,19 @@ class Client
         if ($locale !== null) {
             $headers[] = 'gcms-locale:'.$locale;
         }
+
+        // logging graphcms queries to tideways in order to analyze slow queries
+        if (class_exists(\Tideways\Profiler::class)) {
+            $span = \Tideways\Profiler::createSpan('graphcms');
+            $span->annotate(array('query' => $body));
+        }
+
         $result = $this->httpClient->requestAsync('GET', $url, $body, $headers)->wait();
+
+        if (class_exists(\Tideways\Profiler::class)) {
+            $span->finish();
+        }
+
         return $result->body;
     }
 
