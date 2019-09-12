@@ -78,12 +78,24 @@ class Client
         // logging graphcms queries to tideways in order to analyze slow queries
         if (class_exists(\Tideways\Profiler::class)) {
             $span = \Tideways\Profiler::createSpan('graphcms');
-            $span->annotate(array('query' => $body));
+            $span->annotate(
+                [
+                    'title' => sprintf('graphcms(stage: %s, region: %s)', $this->stage, $this->region),
+                    'query' => $body,
+                ]
+            );
         }
 
+        /** @var HttpClient\Response $result */
         $result = $this->httpClient->requestAsync('GET', $url, $body, $headers)->wait();
 
         if (class_exists(\Tideways\Profiler::class)) {
+            $span->annotate(
+                [
+                    'response.status' => $result->status,
+                    'response.body' => $result->status !== 200 ? $result->body : null,
+                ]
+            );
             $span->finish();
         }
 
