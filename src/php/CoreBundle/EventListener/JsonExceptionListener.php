@@ -31,6 +31,7 @@ class JsonExceptionListener
         }
 
         $exception = $event->getException();
+        syslog(LOG_WARNING, $exception->getMessage() . PHP_EOL . $exception->getTraceAsString());
 
         $errorData = [
             'message' => $exception->getMessage(),
