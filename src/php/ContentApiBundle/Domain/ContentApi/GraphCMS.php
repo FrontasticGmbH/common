@@ -9,6 +9,8 @@ use Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS\Inflector;
 use Frontastic\Common\ContentApiBundle\Domain\ContentType;
 use Frontastic\Common\ContentApiBundle\Domain\Query;
 use Frontastic\Common\ContentApiBundle\Domain\Result;
+use GuzzleHttp\Promise;
+use GuzzleHttp\Promise\PromiseInterface;
 
 class GraphCMS implements ContentApi
 {
@@ -41,51 +43,72 @@ class GraphCMS implements ContentApi
         );
     }
 
-    public function getContent(string $contentId, string $locale = null): Content
+    public function getContent(string $contentId, string $locale = null, string $mode = self::QUERY_SYNC): ?object
     {
         $parts = explode(':', $contentId);
         if (count($parts) != 2) {
             // query only by id does not work, GraphCMS always needs a contentType, too
-            throw new \RuntimeException(
+            if ($mode === self::QUERY_SYNC) {
+                throw new \RuntimeException(
+                    "getting content by ID is not supported by GraphCMS, use '<contentId>:<contentType>' instead"
+                );
+            }
+
+            return Promise\rejection_for(
                 "getting content by ID is not supported by GraphCMS, use '<contentId>:<contentType>' instead"
             );
         }
         list($contentId, $contentType) = $parts;
 
         $locale = $locale ?? $this->defaultLocale;
-        $clientResult = $this->client->get($contentType, $contentId, $this->frontasticToGraphCmsLocale($locale));
+        $promise = $this->client
+            ->get($contentType, $contentId, $this->frontasticToGraphCmsLocale($locale))
+            ->then(function($clientResult) use ($contentType, $contentId, $mode) {
 
-        if (!$this->hasContent($clientResult, $contentType)) {
-            throw new \RuntimeException(
-                sprintf(
-                    'No content found for id: "%s" and contentType: "%s"',
-                    $contentId,
-                    $contentType
-                )
-            );
+                if (!$this->hasContent($clientResult, $contentType)) {
+                    $message = sprintf(
+                        'No content found for id: "%s" and contentType: "%s"',
+                        $contentId,
+                        $contentType
+                    );
+
+                    if ($mode === self::QUERY_SYNC) {
+                        throw new \RuntimeException($message);
+                    }
+                    return Promise\rejection_for($message);
+                }
+
+                $attributes = $this->getDataFromResult($clientResult, $contentType);
+
+                if (empty($attributes)) {
+                    $message = sprintf(
+                        'No content found for id: "%s" and contentType: "%s"',
+                        $contentId,
+                        $contentType
+                    );
+
+                    if ($mode === self::QUERY_SYNC) {
+                        throw new \RuntimeException($message);
+                    }
+                    return Promise\rejection_for($message);
+                }
+
+                return new Content([
+                    'contentId' => $this->generateContentId($attributes['id'], $contentType),
+                    'name' => $this->extractName($attributes),
+                    'attributes' => $this->fillAttributesWithData($clientResult->attributes, $attributes),
+                    'dangerousInnerContent' => $clientResult->queryResultJson
+                ]);
+            });
+
+        if ($mode === self::QUERY_SYNC) {
+            return $promise->wait();
         }
 
-        $attributes = $this->getDataFromResult($clientResult, $contentType);
-
-        if (empty($attributes)) {
-            throw new \RuntimeException(
-                sprintf(
-                    'No content found for id: "%s" and contentType: "%s"',
-                    $contentId,
-                    $contentType
-                )
-            );
-        }
-
-        return new Content([
-            'contentId' => $this->generateContentId($attributes['id'], $contentType),
-            'name' => $this->extractName($attributes),
-            'attributes' => $this->fillAttributesWithData($clientResult->attributes, $attributes),
-            'dangerousInnerContent' => $clientResult->queryResultJson,
-        ]);
+        return $promise;
     }
 
-    public function query(Query $query, string $locale = null): Result
+    public function query(Query $query, string $locale = null, string $mode = self::QUERY_SYNC): ?object
     {
         $locale = $locale ?? $this->defaultLocale;
 
@@ -93,23 +116,24 @@ class GraphCMS implements ContentApi
         $queryGiven = $query->query !== null && trim($query->query) !== '';
 
         if ($queryGiven && !$contentTypeGiven) {
-            $contents = $this->queryBySearchString($query, $locale);
+            $promise = $this->queryBySearchString($query, $locale);
         } elseif ($queryGiven && $contentTypeGiven) {
-            $contents = $this->queryByContentTypeAndSearchString($query, $locale);
+            $promise = $this->queryByContentTypeAndSearchString($query, $locale);
         } elseif (!$queryGiven && $contentTypeGiven) {
-            $contents = $this->queryByContentType($query, $locale);
+            $promise = $this->queryByContentType($query, $locale, $mode);
         } else {
-            throw new \InvalidArgumentException(
-                'provide a ContentType and/or a search text'
-            );
+            if ($mode === self::QUERY_SYNC) {
+                throw new \InvalidArgumentException('provide a ContentType and/or a search text');
+            }
+
+            return Promise\rejection_for('provide a ContentType and/or a search text');
         }
 
-        return new Result([
-            'total' => count($contents),
-            'count' => count($contents),
-            'offset' => 0,
-            'items' => $contents,
-        ]);
+        if ($mode === self::QUERY_SYNC) {
+            return $promise->wait();
+        }
+
+        return $promise;
     }
 
     /**
@@ -198,49 +222,91 @@ class GraphCMS implements ContentApi
         return $this->getDataFromResult($clientResult, $contentType) !== null;
     }
 
-    private function queryBySearchString(Query $query, string $locale): array
+    private function queryBySearchString(Query $query, string $locale): PromiseInterface
     {
-        $clientResult = $this->client->search(
-            $query->query,
-            [],
-            $this->frontasticToGraphCmsLocale($locale)
-        );
-        $data = json_decode($clientResult->queryResultJson, true);
-        $attributes = $clientResult->attributes;
-        $contents = [];
-        foreach ($data['data'] as $contentType => $items) {
-            // contentType is in plural lowercase version here
-            $contentsForContentType = array_map(
-                function ($e) use ($contentType, $clientResult, $query, $attributes) {
-                    $contentId = $this->generateContentId(
-                        $e['id'],
-                        ucfirst(Inflector::singularize($contentType))
-                    );
-                    return new Content([
-                        'contentId' => $contentId,
-                        'name' => $this->extractName($e),
-                        'attributes' => $this->fillAttributesWithData(
-                            $attributes[$contentType],
-                            $e
-                        ),
-                        'dangerousInnerContent' => $e,
-                    ]);
-                },
-                $items
-            );
-            $contents = array_merge($contents, $contentsForContentType);
-        }
-        return $contents;
+        return $this->client->search($query->query, [], $this->frontasticToGraphCmsLocale($locale))
+            ->then(function($clientSearchResult) use ($query) {
+                return $this->getContentFromClientSearchResult($clientSearchResult, $query);
+            })
+            ->then(function ($contents) {
+                return new Result([
+                    'total' => count($contents),
+                    'count' => count($contents),
+                    'offset' => 0,
+                    'items' => $contents
+                ]);
+            });
     }
 
-    private function queryByContentTypeAndSearchString(Query $query, string $locale): array
+    private function queryByContentTypeAndSearchString(Query $query, string $locale): PromiseInterface
     {
-        $clientResult = $this->client->search(
+        return $this->client->search(
             $query->query,
             [$query->contentType],
             $this->frontasticToGraphCmsLocale($locale)
-        );
+        )
+            ->then(function($clientSearchResult) use ($query) {
+                return $this->getContentFromClientSearchResult($clientSearchResult, $query);
+            })
+            ->then(function($contents) {
+                return new Result([
+                    'total' => count($contents),
+                    'count' => count($contents),
+                    'offset' => 0,
+                    'items' => $contents
+                ]);
+            });
+    }
 
+    private function queryByContentType(Query $query, string $locale, string $mode): PromiseInterface
+    {
+        return $this->client->getAll($query->contentType, $this->frontasticToGraphCmsLocale($locale))
+            ->then(function ($clientResult) use ($query, $mode) {
+                $name = lcfirst(Inflector::pluralize($query->contentType));
+                $data = json_decode($clientResult->queryResultJson, true);
+                if (!isset($data['data'])) {
+                    if ($mode === self::QUERY_SYNC) {
+                        throw new \InvalidArgumentException(
+                            'invalid search parameters'
+                        );
+                    }
+                    return Promise\rejection_for('invalid search parameters');
+                }
+                $contents = array_map(
+                    function ($e) use ($clientResult, $query) {
+                        return new Content([
+                            'contentId' => $this->generateContentId($e['id'], $query->contentType),
+                            'name' => $this->extractName($e),
+                            'attributes' => $this->fillAttributesWithData(
+                                $clientResult->attributes,
+                                $e
+                            ),
+                            'dangerousInnerContent' => $e
+                        ]);
+                    },
+                    $data['data'][$name]
+                );
+                return $contents;
+            })
+            ->then(function($contents) {
+                return new Result([
+                    'total' => count($contents),
+                    'count' => count($contents),
+                    'offset' => 0,
+                    'items' => $contents
+                ]);
+            });
+    }
+
+    /**
+     * @param GraphCMS\ClientResult $clientResult
+     * @param Query $query
+     * @return array
+     */
+    private function getContentFromClientSearchResult(
+        ContentApi\GraphCMS\ClientResult $clientResult,
+        Query $query
+    ): array {
         $data = json_decode($clientResult->queryResultJson, true);
         $attributes = $clientResult->attributes;
         $contents = [];
@@ -259,41 +325,13 @@ class GraphCMS implements ContentApi
                             $attributes[$contentType],
                             $e
                         ),
-                        'dangerousInnerContent' => $e,
+                        'dangerousInnerContent' => $e
                     ]);
                 },
                 $items
             );
             $contents = array_merge($contents, $contentsForContentType);
         }
-        return $contents;
-    }
-
-    private function queryByContentType(Query $query, string $locale): array
-    {
-        $clientResult = $this->client->getAll($query->contentType, $this->frontasticToGraphCmsLocale($locale));
-
-        $name = lcfirst(Inflector::pluralize($query->contentType));
-        $data = json_decode($clientResult->queryResultJson, true);
-        if (!isset($data['data'])) {
-            throw new \InvalidArgumentException(
-                'invalid search parameters'
-            );
-        }
-        $contents = array_map(
-            function ($e) use ($clientResult, $query) {
-                return new Content([
-                    'contentId' => $this->generateContentId($e['id'], $query->contentType),
-                    'name' => $this->extractName($e),
-                    'attributes' => $this->fillAttributesWithData(
-                        $clientResult->attributes,
-                        $e
-                    ),
-                    'dangerousInnerContent' => $e,
-                ]);
-            },
-            $data['data'][$name]
-        );
         return $contents;
     }
 }

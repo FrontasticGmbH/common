@@ -35,9 +35,11 @@ class ContentfulTest extends TestCase
         ]);
 
         $result = $this->api->query($query);
+        $asyncResult = $this->api->query($query, null, Domain\ContentApi::QUERY_ASYNC)->wait();
 
         // checking if there are really 3 blog posts
         $this->assertSame(3, $result->total);
+        $this->assertSame(3, $asyncResult->total);
     }
 
     public function testSimpleQuerySome()
@@ -49,8 +51,10 @@ class ContentfulTest extends TestCase
         ]);
 
         $result = $this->api->query($query);
+        $asyncResult = $this->api->query($query, null, Domain\ContentApi::QUERY_ASYNC)->wait();
 
         $this->assertSame(1, $result->total);
+        $this->assertSame(1, $asyncResult->total);
     }
 
     public function testQueryByDepartmentAttribute()
@@ -66,8 +70,10 @@ class ContentfulTest extends TestCase
         ]);
 
         $result = $this->api->query($query);
+        $asyncResult = $this->api->query($query, null, Domain\ContentApi::QUERY_ASYNC)->wait();
 
         $this->assertSame(1, $result->total);
+        $this->assertSame(1, $asyncResult->total);
     }
 
     public function testQueryByTagAttribute()
@@ -83,8 +89,10 @@ class ContentfulTest extends TestCase
         ]);
 
         $result = $this->api->query($query);
+        $asyncResult = $this->api->query($query, null, Domain\ContentApi::QUERY_ASYNC)->wait();
 
         $this->assertSame(2, $result->total);
+        $this->assertSame(2, $asyncResult->total);
     }
 
     public function testQueryByMultipleAttributes()
@@ -104,7 +112,9 @@ class ContentfulTest extends TestCase
         ]);
 
         $result = $this->api->query($query);
+        $asyncResult = $this->api->query($query, null, Domain\ContentApi::QUERY_ASYNC)->wait();
 
         $this->assertSame(1, $result->total);
+        $this->assertSame(1, $asyncResult->total);
     }
 }
