@@ -56,6 +56,13 @@ class Locale extends DataObject
         }
         return sprintf('%s_%s', $this->language, $this->territory);
     }
+    /**
+     * @return string
+     */
+    public function toString(): string
+    {
+        return sprintf('%s_%s.UTF-8@%s', $this->language, $this->territory, $this->currency);
+    }
 
     /**
      * @var string
@@ -591,7 +598,7 @@ class Locale extends DataObject
     {
         if (0 === preg_match(self::LOCALE, $locale, $matches)) {
             throw new \InvalidArgumentException(
-                "The given locale does not match <language[_territory[.codeset]][@modifier]>"
+                "The given locale does not match <language[_territory[.codeset]][@modifier]> (en_DE.UTF-8@EUR)"
             );
         }
 
@@ -625,6 +632,9 @@ class Locale extends DataObject
             case 'EUR':
             case 'euro':
                 return 'EUR';
+        }
+        if (in_array($modifier, self::TERRITORY_TO_CURRENCY)) {
+            return $modifier;
         }
         throw new \InvalidArgumentException("Unknown currency modifier {$modifier}.");
     }
