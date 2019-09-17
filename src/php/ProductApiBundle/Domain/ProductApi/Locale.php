@@ -594,6 +594,10 @@ class Locale extends DataObject
         'ZW' => 'Zimbabwe',
     ];
 
+    private const LANGUAGE_TO_TERRITORY = [
+        'en' => 'GB',
+    ];
+
     public static function createFromPosix(string $locale): Locale
     {
         if (0 === preg_match(self::LOCALE, $locale, $matches)) {
@@ -619,7 +623,7 @@ class Locale extends DataObject
 
     private static function guessTerritory(string $language): string
     {
-        return strtoupper($language);
+        return self::LANGUAGE_TO_TERRITORY[\strtolower($language)] ?? strtoupper($language);
     }
 
     /**

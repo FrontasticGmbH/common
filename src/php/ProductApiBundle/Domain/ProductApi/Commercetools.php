@@ -204,7 +204,7 @@ class Commercetools implements ProductApi
             'filter.facets' => [],
             'facet' => $this->mapper->facetsToRequest($this->options->facetsToQuery, $locale),
             'priceCurrency' => $locale->currency,
-            'priceCountry' => \strlen($locale->territory) > 2 ? $locale->territory : 'en_GB',
+            'priceCountry' => $locale->territory,
             'fuzzy' => $query->fuzzy ? 'true' : 'false',
         ];
 
