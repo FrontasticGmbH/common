@@ -120,10 +120,10 @@ class Contentful implements ContentApi
         return $content;
     }
 
-    protected function convertContent(Entry $entry, iterable $contents): array
+    protected function convertContent(?Entry $entry, iterable $contents): array
     {
         $attributes = [];
-        $fieldContentTypes = $entry->getContentType()->getFields();
+        $fieldContentTypes = $entry !== null ? $entry->getContentType()->getFields() : [];
 
         foreach ($contents as $key => $value) {
             if ($value instanceof Asset) {
@@ -135,21 +135,26 @@ class Contentful implements ContentApi
             }
 
             if (is_array($value)) {
-                $value = $this->convertContent($value);
+                $value = $this->convertContent(null, $value);
             }
 
             if ($value instanceof Entry) {
-                $value = $this->convertContent($value->all());
+                $value = $this->convertContent($value, $value->all());
             }
 
             if ($value instanceof NodeInterface) {
                 $value = $this->richTextRenderer->render($value);
             }
 
+            $type = null;
+            if (array_key_exists($key, $fieldContentTypes)) {
+                $type = $fieldContentTypes[$key]->getType();
+            }
+
             $attributes[$key] = [
                 'attributeId' => $key,
                 'content' => $value,
-                'type' => $fieldContentTypes[$key]->getType(),
+                'type' => $type,
             ];
         }
 
