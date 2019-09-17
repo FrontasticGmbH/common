@@ -143,7 +143,8 @@ class CustomerService
                                 return new Endpoint([
                                     'name' => $endpoint['name'],
                                     'url' => $endpoint['url'],
-                                    'push' => $endpoint['push'] ?? true
+                                    'push' => $endpoint['push'] ?? true,
+                                    'environment' => $endpoint['environment'] ?? 'production',
                                 ]);
                             },
                             $project['endpoints'] ?? []

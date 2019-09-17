@@ -20,4 +20,9 @@ class Endpoint extends DataObject
      * @var bool
      */
     public $push = true;
+
+    /**
+     * @var string
+     */
+    public $environment = 'production';
 }
