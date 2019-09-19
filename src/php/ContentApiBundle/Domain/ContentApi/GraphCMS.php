@@ -48,15 +48,15 @@ class GraphCMS implements ContentApi
         $parts = explode(':', $contentId);
         if (count($parts) != 2) {
             // query only by id does not work, GraphCMS always needs a contentType, too
-            if ($mode === self::QUERY_SYNC) {
-                throw new \RuntimeException(
-                    "getting content by ID is not supported by GraphCMS, use '<contentId>:<contentType>' instead"
-                );
-            }
-
-            return Promise\rejection_for(
+            $exception = new \RuntimeException(
                 "getting content by ID is not supported by GraphCMS, use '<contentId>:<contentType>' instead"
             );
+
+            if ($mode === self::QUERY_SYNC) {
+                throw $exception;
+            }
+
+            return Promise\rejection_for($exception);
         }
         list($contentId, $contentType) = $parts;
 
@@ -66,31 +66,35 @@ class GraphCMS implements ContentApi
             ->then(function($clientResult) use ($contentType, $contentId, $mode) {
 
                 if (!$this->hasContent($clientResult, $contentType)) {
-                    $message = sprintf(
-                        'No content found for id: "%s" and contentType: "%s"',
-                        $contentId,
-                        $contentType
+                    $exception = new \RuntimeException(
+                        sprintf(
+                            'No content found for id: "%s" and contentType: "%s"',
+                            $contentId,
+                            $contentType
+                        )
                     );
 
                     if ($mode === self::QUERY_SYNC) {
-                        throw new \RuntimeException($message);
+                        throw $exception;
                     }
-                    return Promise\rejection_for($message);
+                    return Promise\rejection_for($exception);
                 }
 
                 $attributes = $this->getDataFromResult($clientResult, $contentType);
 
                 if (empty($attributes)) {
-                    $message = sprintf(
-                        'No content found for id: "%s" and contentType: "%s"',
-                        $contentId,
-                        $contentType
+                    $exception = new \RuntimeException(
+                        sprintf(
+                            'No content found for id: "%s" and contentType: "%s"',
+                            $contentId,
+                            $contentType
+                        )
                     );
 
                     if ($mode === self::QUERY_SYNC) {
-                        throw new \RuntimeException($message);
+                        throw $exception;
                     }
-                    return Promise\rejection_for($message);
+                    return Promise\rejection_for($exception);
                 }
 
                 return new Content([
@@ -122,11 +126,13 @@ class GraphCMS implements ContentApi
         } elseif (!$queryGiven && $contentTypeGiven) {
             $promise = $this->queryByContentType($query, $locale, $mode);
         } else {
+            $exception = new \InvalidArgumentException('provide a ContentType and/or a search text');
+
             if ($mode === self::QUERY_SYNC) {
-                throw new \InvalidArgumentException('provide a ContentType and/or a search text');
+                throw $exception;
             }
 
-            return Promise\rejection_for('provide a ContentType and/or a search text');
+            return Promise\rejection_for($exception);
         }
 
         if ($mode === self::QUERY_SYNC) {
@@ -265,12 +271,12 @@ class GraphCMS implements ContentApi
                 $name = lcfirst(Inflector::pluralize($query->contentType));
                 $data = json_decode($clientResult->queryResultJson, true);
                 if (!isset($data['data'])) {
+                    $exception = new \InvalidArgumentException('invalid search parameters');
+
                     if ($mode === self::QUERY_SYNC) {
-                        throw new \InvalidArgumentException(
-                            'invalid search parameters'
-                        );
+                        throw $exception;
                     }
-                    return Promise\rejection_for('invalid search parameters');
+                    return Promise\rejection_for($exception);
                 }
                 $contents = array_map(
                     function ($e) use ($clientResult, $query) {
