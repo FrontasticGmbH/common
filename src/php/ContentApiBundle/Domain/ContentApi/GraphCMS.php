@@ -63,7 +63,7 @@ class GraphCMS implements ContentApi
         $locale = $locale ?? $this->defaultLocale;
         $promise = $this->client
             ->get($contentType, $contentId, $this->frontasticToGraphCmsLocale($locale))
-            ->then(function($clientResult) use ($contentType, $contentId, $mode) {
+            ->then(function ($clientResult) use ($contentType, $contentId, $mode) {
 
                 if (!$this->hasContent($clientResult, $contentType)) {
                     $exception = new \RuntimeException(
@@ -153,7 +153,7 @@ class GraphCMS implements ContentApi
             function (Attribute $attribute) use ($fields): Attribute {
                 $newAttribute = clone $attribute;
 
-                $attributeContent = $fields[(string) $attribute->attributeId];
+                $attributeContent = $fields[(string)$attribute->attributeId];
                 if ($attribute->type === 'Text') {
                     $attributeContent = $attributeContent['html'];
                 }
@@ -231,7 +231,7 @@ class GraphCMS implements ContentApi
     private function queryBySearchString(Query $query, string $locale): PromiseInterface
     {
         return $this->client->search($query->query, [], $this->frontasticToGraphCmsLocale($locale))
-            ->then(function($clientSearchResult) use ($query) {
+            ->then(function ($clientSearchResult) use ($query) {
                 return $this->getContentFromClientSearchResult($clientSearchResult, $query);
             })
             ->then(function ($contents) {
@@ -251,10 +251,10 @@ class GraphCMS implements ContentApi
             [$query->contentType],
             $this->frontasticToGraphCmsLocale($locale)
         )
-            ->then(function($clientSearchResult) use ($query) {
+            ->then(function ($clientSearchResult) use ($query) {
                 return $this->getContentFromClientSearchResult($clientSearchResult, $query);
             })
-            ->then(function($contents) {
+            ->then(function ($contents) {
                 return new Result([
                     'total' => count($contents),
                     'count' => count($contents),
@@ -294,7 +294,7 @@ class GraphCMS implements ContentApi
                 );
                 return $contents;
             })
-            ->then(function($contents) {
+            ->then(function ($contents) {
                 return new Result([
                     'total' => count($contents),
                     'count' => count($contents),
