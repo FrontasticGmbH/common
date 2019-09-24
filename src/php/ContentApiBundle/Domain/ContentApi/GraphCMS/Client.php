@@ -164,26 +164,7 @@ class Client
 
     protected function isReference(array $attribute): bool
     {
-        if ($this->isListOrObject($attribute['type'])
-            || ($attribute['type']['kind'] == 'NON_NULL' && $this->isListOrObject($attribute['type']['ofType']))
-        ) {
-            if ($attribute['type']['ofType']['ofType']['kind'] === 'SCALAR'
-                || ($attribute['type']['ofType']['ofType']['kind'] === 'NON_NULL'
-                    && $attribute['type']['ofType']['ofType']['ofType']['kind'] === 'SCALAR')
-            ) {
-                // special handling for a list of scalar values
-                return false;
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    private function isListOrObject(array $type): bool
-    {
-        return $type['kind'] == 'LIST' || $type['kind'] == 'OBJECT';
+        return $this->determineAttributeType($attribute)['kind'] === 'OBJECT';
     }
 
     protected function isNoReference(array $attribute): bool
@@ -250,13 +231,7 @@ class Client
         string $defaultAttributes = '',
         array $whitelistFields = []
     ): string {
-        $contentType = $this->determineAttributeType($referenceField);
-
-        if ($contentType === 'LIST'
-            && $referenceField['type']['ofType']['ofType']['kind'] === 'OBJECT'
-        ) {
-            $contentType = $referenceField['type']['ofType']['ofType']['name'];
-        }
+        $contentType = $this->determineAttributeType($referenceField)['type'];
 
         $attributes = $this->getAttributes($contentType);
 
@@ -328,10 +303,11 @@ class Client
     {
         return array_map(
             function ($attribute): Attribute {
+                $type = $this->determineAttributeType($attribute);
                 return new Attribute([
                     'attributeId' => $attribute['name'],
                     'content' => null, // will be added later when it is fetched
-                    'type' => $this->determineAttributeType($attribute),
+                    'type' => $type['list'] ? 'LIST' : $type['type'],
                 ]);
             },
             $attributes
@@ -342,27 +318,20 @@ class Client
      * Determines the type of an attribute and returns it
      *
      * @param array $attribute
-     * @return string
+     * @return array with keys 'kind' and 'name' and 'list'
      */
     private function determineAttributeType(array $attribute)
     {
-        $type = $attribute['type']['name']
-            ?? $attribute['type']['kind'];
-
-        // sometimes the "first" type here is of Type "NON_NULL" and the real one is in "ofType" field
-        if ($type === 'NON_NULL') {
-            $type = $attribute['type']['ofType']['name']
-                ?? $attribute['type']['ofType']['kind'];
-        }
-
-        if ($type === 'LIST') {
-            if ($attribute['type']['ofType']['ofType']['kind'] === 'SCALAR') {
-                $type = $attribute['type']['ofType']['ofType']['name'];
-            } elseif ($attribute['type']['ofType']['ofType']['kind'] === 'NON_NULL'
-                && $attribute['type']['ofType']['ofType']['ofType']['kind'] === 'SCALAR') {
-                $type = $attribute['type']['ofType']['ofType']['ofType']['name'];
+        $isList = false;
+        $deepestAttributes = $attribute['type'];
+        while (isset($deepestAttributes['ofType']) && $deepestAttributes['ofType'] !== null) {
+            if ($deepestAttributes['kind'] === 'LIST') {
+                $isList = true;
             }
+            $deepestAttributes = $deepestAttributes['ofType'];
         }
+        $type = $deepestAttributes['name'];
+        $kind = $deepestAttributes['kind'];
 
         // map type for frontastic
         switch ($type) {
@@ -370,7 +339,8 @@ class Client
                 $type = 'Text';
                 break;
         }
-        return $type;
+        $result = ['type' => $type, 'kind' => $kind, 'list' => $isList];
+        return $result;
     }
 
     private function startsWith(string $haystack, string $needle): bool
