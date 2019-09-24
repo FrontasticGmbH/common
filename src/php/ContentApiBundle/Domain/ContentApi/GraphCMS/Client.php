@@ -308,10 +308,11 @@ class Client
     {
         return array_map(
             function ($attribute): Attribute {
+                $type = $this->determineAttributeType($attribute);
                 return new Attribute([
                     'attributeId' => $attribute['name'],
                     'content' => null, // will be added later when it is fetched
-                    'type' => $this->determineAttributeType($attribute),
+                    'type' => $type['list'] ? 'LIST' : $type['type'],
                 ]);
             },
             $attributes
