@@ -23,7 +23,7 @@ class SearchController extends Controller
         $contentId = $requestParameters['contentId'];
 
         return [
-            'result' => $contentApi->getContent($contentId, $context->locale)->wait(),
+            'result' => $contentApi->getContent($contentId, $context->locale),
         ];
     }
 
@@ -36,7 +36,7 @@ class SearchController extends Controller
         $query = Domain\Query::fromArray(json_decode($request->getContent(), true));
 
         return [
-            'result' => $contentApi->query($query, $context->locale)->wait(),
+            'result' => $contentApi->query($query, $context->locale),
         ];
     }
 }
