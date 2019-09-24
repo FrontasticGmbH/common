@@ -27,9 +27,10 @@ class SearchController extends Controller
         } else {
             throw new \RuntimeException("either contentId nor contentIds is set in request");
         }
+        $contentId = $requestParameters['contentId'];
 
         return [
-            'result' => $result->wait(),
+            'result' => $result,
         ];
     }
 
@@ -42,7 +43,7 @@ class SearchController extends Controller
         $query = Domain\Query::fromArray(json_decode($request->getContent(), true));
 
         return [
-            'result' => $contentApi->query($query, $context->locale)->wait(),
+            'result' => $contentApi->query($query, $context->locale),
         ];
     }
 }
