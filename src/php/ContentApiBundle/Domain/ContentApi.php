@@ -3,9 +3,17 @@
 namespace Frontastic\Common\ContentApiBundle\Domain;
 
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Content;
+use GuzzleHttp\Promise\PromiseInterface;
 
 interface ContentApi
 {
+    /**
+     * @TODO Deprecate the sync version because of the added complexity. It makes the interface odd to use and the
+     *     async version can be made synchronous by calling `.wait()`.
+     */
+    const QUERY_SYNC = 'sync';
+    const QUERY_ASYNC = 'async';
+
     /**
      * @return ContentType[]
      */
@@ -16,9 +24,10 @@ interface ContentApi
      *
      * @param string $contentId
      * @param string|null $locale
-     * @return Content
+     * @param string $mode One of the QUERY_* connstants. Execute the query synchronously or asynchronously?
+     * @return Content|PromiseInterface|null A product or null when the mode is sync and a promise if the mode is async.
      */
-    public function getContent(string $contentId, string $locale = null): Content;
+    public function getContent(string $contentId, string $locale = null, string $mode = self::QUERY_SYNC): ?object;
 
     /**
      * Fetch content with by a $query in $locale. Interpretation of the query
@@ -27,9 +36,10 @@ interface ContentApi
      *
      * @param Query $query
      * @param string|null $locale
-     * @return Result
+     * @param string $mode One of the QUERY_* connstants. Execute the query synchronously or asynchronously?
+     * @return Result|PromiseInterface|null A product or null when the mode is sync and a promise if the mode is async.
      */
-    public function query(Query $query, string $locale = null): Result;
+    public function query(Query $query, string $locale = null, string $mode = self::QUERY_SYNC): ?object;
 
     /**
      * Get *dangerous* inner client

@@ -29,7 +29,7 @@ class SearchController extends Controller
         }
 
         return [
-            'result' => $result,
+            'result' => $result->wait(),
         ];
     }
 
@@ -42,7 +42,7 @@ class SearchController extends Controller
         $query = Domain\Query::fromArray(json_decode($request->getContent(), true));
 
         return [
-            'result' => $contentApi->query($query, $context->locale),
+            'result' => $contentApi->query($query, $context->locale)->wait(),
         ];
     }
 }

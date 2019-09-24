@@ -2,9 +2,12 @@
 
 namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 
+use Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS\Client;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS\ClientResult;
 use Frontastic\Common\ContentApiBundle\Domain\Query;
+use GuzzleHttp\Promise;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class GraphCMSTest extends \PHPUnit\Framework\TestCase
 {
@@ -18,11 +21,16 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
      */
     private $api;
 
+    /**
+     * @var string
+     */
+    private $locale;
+
     public function setup()
     {
-        $locale = 'de_DE';
+        $this->locale = 'de_DE';
         $this->clientMock = $this->createMock(Client::class);
-        $this->api = new GraphCMS($this->clientMock, $locale);
+        $this->api = new GraphCMS($this->clientMock, $this->locale);
     }
 
     public function testQueryWithContentId()
@@ -45,11 +53,13 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
                 new Attribute(['attributeId' => 'image', 'type' => 'Asset']),
             ],
         ]);
-        $this->clientMock->expects($this->once())->method('get')->with($contentType, $contentId)->will($this->returnValue($clientResult));
+
+        $promise = Promise\promise_for($clientResult);
+
+        $this->clientMock->expects($this->exactly(2))->method('get')->with($contentType, $contentId)->will($this->returnValue($promise));
 
         $combinedContentId = $contentId . ':' . $contentType;
-        $result = $this->api->getContent($combinedContentId);
-        $this->assertEquals(new Content([
+        $expectedContent = new Content([
             'contentId' => $combinedContentId,
             'name' => 'Mehl',
             'attributes' => [
@@ -65,7 +75,13 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
                 new Attribute(['attributeId' => 'image', 'type' => 'Asset', 'content' => ['handle' => 'BA4Ao48KQHOiNukP58n1']]),
             ],
             'dangerousInnerContent' => $jsonContent
-        ]), $result);
+        ]);
+
+        $result = $this->api->getContent($combinedContentId);
+        $this->assertEquals($expectedContent, $result);
+
+        $resultAsync = $this->api->getContent($combinedContentId, $this->locale, ContentApi::QUERY_ASYNC)->wait();
+        $this->assertEquals($expectedContent, $resultAsync);
     }
 
 
@@ -86,17 +102,32 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
                 new Attribute(['attributeId' => 'images', 'type' => 'LIST']),
             ],
         ]);
-        $this->clientMock->expects($this->once())->method('getAll')->with($contentType)->will($this->returnValue($clientResult));
+
+        $promise = Promise\promise_for($clientResult);
+
+        $this->clientMock->expects($this->exactly(2))->method('getAll')->with($contentType)->will($this->returnValue($promise));
 
         $result = $this->api->query($query);
         $this->assertEquals([], $result->items);
+
+        $resultAsync = $this->api->query($query, $this->locale, ContentApi::QUERY_ASYNC)->wait();
+        $this->assertEquals([], $resultAsync->items);
     }
 
     public function testEmptyQuery()
     {
         $query = new Query();
+
         $this->expectException(\InvalidArgumentException::class);
         $result = $this->api->query($query);
+    }
+
+    public function testEmptyQueryAsync()
+    {
+        $query = new Query();
+
+        $resultAsync = $this->api->query($query, $this->locale, ContentApi::QUERY_ASYNC);
+        $this->assertInstanceOf(Promise\RejectedPromise::class, $resultAsync);
     }
 
     public function testSearchQuery()
@@ -115,10 +146,19 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
                 'categories' => []
             ],
         ]);
-        $this->clientMock->expects($this->once())->method('search')->with('er')->will($this->returnValue($clientResult));
+
+        $promise = Promise\promise_for($clientResult);
+
+        $this->clientMock->expects($this->exactly(2))
+            ->method('search')
+            ->with('er', [], strtoupper($this->locale))
+            ->will($this->returnValue($promise));
 
         $result = $this->api->query($query);
         $this->assertEquals(6, count($result->items));
+
+        $resultAsync = $this->api->query($query, $this->locale, ContentApi::QUERY_ASYNC)->wait();
+        $this->assertEquals(6, count($resultAsync->items));
     }
 
     public function testAttributesOnSearchQuery()
@@ -146,25 +186,29 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         ]);
-        $this->clientMock->expects($this->once())->method('search')->with('er')->will($this->returnValue($clientResult));
+        $promise = Promise\promise_for($clientResult);
+
+        $this->clientMock->expects($this->exactly(2))->method('search')->with('er')->will($this->returnValue($promise));
+
+        $expectedAttributes = [
+            new Attribute(['attributeId' => 'status', 'type' => 'Status', 'content' => 'PUBLISHED']),
+            new Attribute(['attributeId' => 'updatedAt', 'type' => 'DateTime', 'content' => "2019-07-09T07:01:58.640Z"]),
+            new Attribute(['attributeId' => 'createdAt', 'type' => 'DateTime', 'content' => "2019-06-24T12:06:44.389Z"]),
+            new Attribute(['attributeId' => 'id', 'type' => 'ID', 'content' => "cjxac5ep1fppw0d53nbrhqvlm"]),
+            new Attribute(['attributeId' => 'recipes', 'type' => 'LIST', 'content' => [['id' => "cjxac6bziccie0941viedjs7x"]]]),
+            new Attribute(['attributeId' => 'name', 'type' => 'String', 'content' => "Butter"]),
+            new Attribute(['attributeId' => 'description', 'type' => 'String', 'content' => null]),
+            new Attribute(['attributeId' => 'season', 'type' => 'LIST', 'content' => ["Winter"]]),
+            new Attribute(['attributeId' => 'price', 'type' => 'Int', 'content' => 2]),
+            new Attribute(['attributeId' => 'image', 'type' => 'Asset', 'content' => null]),
+        ];
 
         $result = $this->api->query($query);
         $this->assertEquals(1, count($result->items));
-        $this->assertEquals(
-            [
-                new Attribute(['attributeId' => 'status', 'type' => 'Status', 'content' => 'PUBLISHED']),
-                new Attribute(['attributeId' => 'updatedAt', 'type' => 'DateTime', 'content' => "2019-07-09T07:01:58.640Z"]),
-                new Attribute(['attributeId' => 'createdAt', 'type' => 'DateTime', 'content' => "2019-06-24T12:06:44.389Z"]),
-                new Attribute(['attributeId' => 'id', 'type' => 'ID', 'content' => "cjxac5ep1fppw0d53nbrhqvlm"]),
-                new Attribute(['attributeId' => 'recipes', 'type' => 'LIST', 'content' => [['id' => "cjxac6bziccie0941viedjs7x"]]]),
-                new Attribute(['attributeId' => 'name', 'type' => 'String', 'content' => "Butter"]),
-                new Attribute(['attributeId' => 'description', 'type' => 'String', 'content' => null]),
-                new Attribute(['attributeId' => 'season', 'type' => 'LIST', 'content' => ["Winter"]]),
-                new Attribute(['attributeId' => 'price', 'type' => 'Int', 'content' => 2]),
-                new Attribute(['attributeId' => 'image', 'type' => 'Asset', 'content' => null]),
-            ],
-            $result->items[0]->attributes
-        );
+        $this->assertEquals($expectedAttributes, $result->items[0]->attributes);
 
+        $resultAsync = $this->api->query($query, $this->locale, ContentApi::QUERY_ASYNC)->wait();
+        $this->assertEquals(1, count($resultAsync->items));
+        $this->assertEquals($expectedAttributes, $resultAsync->items[0]->attributes);
     }
 }

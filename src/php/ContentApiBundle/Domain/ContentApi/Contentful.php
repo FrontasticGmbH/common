@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 
+use Contentful\Core\Resource\ResourceArray;
 use Contentful\Delivery\Client;
 use Contentful\Delivery\Resource\Entry;
 use Contentful\Delivery\Resource\Asset;
@@ -15,6 +16,7 @@ use Frontastic\Common\ContentApiBundle\Domain\Query;
 use Frontastic\Common\ContentApiBundle\Domain\Result;
 use Contentful\RichText\Node\NodeInterface;
 use Contentful\RichText\Renderer;
+use GuzzleHttp\Promise;
 
 class Contentful implements ContentApi
 {
@@ -55,16 +57,24 @@ class Contentful implements ContentApi
         );
     }
 
-    public function getContent(string $contentId, string $locale = null): Content
+    public function getContent(string $contentId, string $locale = null, string $mode = self::QUERY_SYNC): ?object
     {
         $locale = $locale ?? $this->defaultLocale;
 
-        $entry = $this->client->getEntry($contentId, $this->frontasticToContentfulLocale($locale));
+        $promise = Promise\promise_for(
+            $this->client->getEntry($contentId, $this->frontasticToContentfulLocale($locale))
+        )->then(function ($entry) {
+            return $this->createContentFromEntry($entry);
+        });
 
-        return $this->createContentFromEntry($entry);
+        if ($mode === self::QUERY_SYNC) {
+            return $promise->wait();
+        }
+
+        return $promise;
     }
 
-    public function query(Query $query, string $locale = null): Result
+    public function query(Query $query, string $locale = null, string $mode = self::QUERY_SYNC): ?object
     {
         $contentfulQuery = new \Contentful\Delivery\Query();
 
@@ -87,18 +97,27 @@ class Contentful implements ContentApi
             }
         }
 
-        $result = $this->client->getEntries($contentfulQuery);
-        $items = $result->getItems();
+        $promise = Promise\promise_for(
+            $this->client->getEntries($contentfulQuery)
+        )->then(function (ResourceArray $result) {
+            $items = $result->getItems();
 
-        return new Result([
-            'total' => $result->getTotal(),
-            'count' => count($items),
-            'offset' => $result->getSkip(),
-            'items' => array_map(
-                [$this, 'createContentFromEntry'],
-                $items
-            ),
-        ]);
+            return new Result([
+                'total' => $result->getTotal(),
+                'count' => count($items),
+                'offset' => $result->getSkip(),
+                'items' => array_map(
+                    [$this, 'createContentFromEntry'],
+                    $items
+                ),
+            ]);
+        });
+
+        if ($mode === self::QUERY_SYNC) {
+            return $promise->wait();
+        }
+
+        return $promise;
     }
 
     private function createContentFromEntry(Entry $entry): Content
@@ -113,7 +132,7 @@ class Contentful implements ContentApi
             'dangerousInnerContent' => $entry,
         ]);
 
-        $attributes = $this->convertContent($entry, $entry->all());
+        $attributes = $this->convertContent($entry->getContentType()->getFields(), $entry->all());
 
         $content->attributes = $attributes;
 

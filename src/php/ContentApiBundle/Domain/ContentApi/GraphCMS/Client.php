@@ -5,6 +5,7 @@ namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS;
 use Doctrine\Common\Cache\Cache;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Attribute;
 use Frontastic\Common\HttpClient;
+use GuzzleHttp\Promise\PromiseInterface;
 
 class Client
 {
@@ -66,7 +67,7 @@ class Client
     /**
      * takes GraphQL query, returns JSON result as string
      */
-    public function query(string $query, string $locale = null): string
+    public function query(string $query, string $locale = null): PromiseInterface
     {
         $url = "https://api-{$this->region}.graphcms.com/v1/{$this->projectId}/{$this->stage}";
         $body = json_encode(['query' => $query], JSON_HEX_QUOT);
@@ -75,6 +76,8 @@ class Client
             $headers[] = 'gcms-locale:'.$locale;
         }
 
+        // span needs to be defined in order to be able to pass it to the promise-function below
+        $span = null;
         // logging graphcms queries to tideways in order to analyze slow queries
         if (class_exists(\Tideways\Profiler::class)) {
             $span = \Tideways\Profiler::createSpan('graphcms');
@@ -86,20 +89,21 @@ class Client
             );
         }
 
-        /** @var HttpClient\Response $result */
-        $result = $this->httpClient->requestAsync('GET', $url, $body, $headers)->wait();
+        return $this->httpClient
+            ->requestAsync('GET', $url, $body, $headers)
+            ->then(function (HttpClient\Response $result) use ($span) {
+                if (class_exists(\Tideways\Profiler::class)) {
+                    $span->annotate(
+                        [
+                            'response.status' => $result->status,
+                            'response.body' => $result->status !== 200 ? $result->body : null,
+                        ]
+                    );
+                    $span->finish();
+                }
 
-        if (class_exists(\Tideways\Profiler::class)) {
-            $span->annotate(
-                [
-                    'response.status' => $result->status,
-                    'response.body' => $result->status !== 200 ? $result->body : null,
-                ]
-            );
-            $span->finish();
-        }
-
-        return $result->body;
+                return $result->body;
+            });
     }
 
     /**
@@ -143,13 +147,15 @@ class Client
             }
         ";
 
-        $json = json_decode($this->query($query), true);
+        return $this->query($query)->then(function (string $result) use ($cacheId) {
+            $json = json_decode($result, true);
 
-        $attributes = $json['data']['__type']['fields'] ?? [];
+            $attributes = $json['data']['__type']['fields'] ?? [];
 
-        $this->cache->save($cacheId, $attributes, 24 * 60 * 60);
+            $this->cache->save($cacheId, $attributes, 24 * 60 * 60);
 
-        return $attributes;
+            return $attributes;
+        })->wait();
     }
 
     protected function getAttributeNames(array $attributes): array
@@ -255,59 +261,57 @@ class Client
     }
 
     // contentType must be capitalized and singular
-    public function get(string $contentType, string $contentId, string $locale = null): ClientResult
+    public function get(string $contentType, string $contentId, string $locale = null): PromiseInterface
     {
         $attributes = $this->getAttributes($contentType);
         $attributeString = $this->attributeQueryPart($attributes);
         $name = lcfirst($contentType);
-        $queryResultJson = $this->query(
-            "query {
+        $queryString = "query {
                 $name(where: { id: \"$contentId\" }) {
                   $attributeString
                 }
               }
-            ",
-            $locale
-        );
+            ";
 
-        return new ClientResult([
-            'queryResultJson' => $queryResultJson,
-            'attributes' => $this->convertAttributes($attributes)
-        ]);
+        return $this->query($queryString, $locale)
+            ->then(function (string $queryResultJson) use ($attributes): ClientResult {
+                return new ClientResult([
+                    'queryResultJson' => $queryResultJson,
+                    'attributes' => $this->convertAttributes($attributes)
+                ]);
+            });
     }
 
     // contentType mus be capitalized and singular
-    public function getAll(string $contentType, string $locale = null): ClientResult
+    public function getAll(string $contentType, string $locale = null): PromiseInterface
     {
         $attributes = $this->getAttributes($contentType);
         $attributeString = $this->attributeQueryPart($attributes);
         $name = lcfirst(Inflector::pluralize($contentType));
-
-        $queryResultJson = $this->query(
-            "query {
+        $queryString = "query {
                 $name {
                   $attributeString
                 }
               }
-            ",
-            $locale
-        );
+            ";
 
-        return new ClientResult([
-            'queryResultJson' => $queryResultJson,
-            'attributes' => $this->convertAttributes($attributes)
-        ]);
+        return $this->query($queryString, $locale)
+            ->then(function (string $queryResultJson) use ($attributes): ClientResult {
+                return new ClientResult([
+                    'queryResultJson' => $queryResultJson,
+                    'attributes' => $this->convertAttributes($attributes)
+                ]);
+            });
     }
 
     private function convertAttributes(array $attributes): array
     {
         return array_map(
             function ($attribute): Attribute {
-                $type = $this->determineAttributeType($attribute);
                 return new Attribute([
                     'attributeId' => $attribute['name'],
                     'content' => null, // will be added later when it is fetched
-                    'type' => $type['list'] ? 'LIST' : $type['type'],
+                    'type' => $this->determineAttributeType($attribute),
                 ]);
             },
             $attributes
@@ -380,7 +384,7 @@ class Client
                         }
                     }
                  }"
-            ),
+            )->wait(),
             true
         )['data']['__schema']['types'];
         $relevantTypes = array_filter(
@@ -400,7 +404,7 @@ class Client
         );
     }
 
-    public function search(string $searchString, array $contentTypes = [], string $locale = null): ClientResult
+    public function search(string $searchString, array $contentTypes = [], string $locale = null): PromiseInterface
     {
         if (empty($contentTypes)) {
             $contentTypes = $this->getContentTypes();
@@ -438,21 +442,23 @@ class Client
             },
             $contentTypes
         )));
-        $queryResultJson = $this->query(
-            "query data {
+
+        $queryString = "query data {
                 $queryParts
               }
-            ",
-            $locale
-        );
-        return new ClientResult([
-            'queryResultJson' => $queryResultJson,
-            'attributes' => array_map(
-                function ($value) {
-                    return $this->convertAttributes(array_values($value));
-                },
-                $attributesByContentType
-            )
-        ]);
+            ";
+
+        return $this->query($queryString, $locale)
+            ->then(function ($queryResultJson) use ($attributesByContentType) {
+                return new ClientResult([
+                    'queryResultJson' => $queryResultJson,
+                    'attributes' => array_map(
+                        function ($value) {
+                            return $this->convertAttributes(array_values($value));
+                        },
+                        $attributesByContentType
+                    )
+                ]);
+            });
     }
 }
