@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 
 use Frontastic\Common\ContentApiBundle\Domain;
@@ -55,6 +56,23 @@ class ContentfulTest extends TestCase
 
         $this->assertSame(1, $result->total);
         $this->assertSame(1, $asyncResult->total);
+    }
+
+    // TODO: This test fails. Find out how to fetch by multiple ids
+    public function testSimpleQueryMultipleIds()
+    {
+        $query = new Domain\Query([
+            'contentType' => 'blogPost',
+            'contentIds' => [
+                '3K9b0esdy0q0yGqgW2g6Ke', // Hello World
+                '2PtC9h1YqIA6kaUaIsWEQ0', // Static sites are great
+                'not there'
+            ]
+        ]);
+
+        $result = $this->api->query($query);
+
+        $this->assertSame(2, $result->total);
     }
 
     public function testQueryByDepartmentAttribute()
