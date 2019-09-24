@@ -132,7 +132,7 @@ class Contentful implements ContentApi
             'dangerousInnerContent' => $entry,
         ]);
 
-        $attributes = $this->convertContent($entry->getContentType()->getFields(), $entry->all());
+        $attributes = $this->convertContent($entry, $entry->all());
 
         $content->attributes = $attributes;
 
