@@ -4,6 +4,7 @@ namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS;
 
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Attribute;
 use Frontastic\Common\HttpClient\Guzzle;
+use Doctrine\Common\Cache\ArrayCache;
 
 /**
  * @group integration
@@ -21,7 +22,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $projectId = "cjxabf0100d2101eduvwa3in4";
         $region = "euwest";
         $stage = "master";
-        $this->client = new Client($projectId, $apiToken, $region, $stage, new Guzzle());
+        $this->client = new Client($projectId, $apiToken, $region, $stage, new Guzzle(), new ArrayCache());
     }
 
     public function testQuery()
