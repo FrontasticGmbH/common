@@ -1682,7 +1682,7 @@
             "paymentInterface": "paypal"
           },
           "paymentStatus": {
-            "interfaceCode": "wirecard",
+            "interfaceCode": "paid",
             "interfaceText": "{}"
           },
           "transactions": [],
@@ -1717,7 +1717,7 @@
             "paymentInterface": "paypal"
           },
           "paymentStatus": {
-            "interfaceCode": "wirecard",
+            "interfaceCode": "paid",
             "interfaceText": "{}"
           },
           "transactions": [],
