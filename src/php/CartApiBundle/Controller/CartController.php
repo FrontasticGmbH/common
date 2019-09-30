@@ -200,7 +200,7 @@ class CartController extends CrudController
 
         if (isset($payload['custom']) && isset($payload['customType'])) {
             $cartApi->setCustomType($cart, $payload['customType']);
-            $cart = $cartApi->setCustomField($cart,$payload["custom"]);
+            $cart = $cartApi->setCustomField($cart, $payload["custom"]);
         }
 
         if (!empty($payload['billing']) || !empty($payload['shipping'])) {
