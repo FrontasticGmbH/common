@@ -602,7 +602,7 @@ class Locale extends DataObject
     {
         if (0 === preg_match(self::LOCALE, $locale, $matches)) {
             throw new \InvalidArgumentException(
-                "The given locale does not match <language[_territory[.codeset]][@modifier]> (en_DE.UTF-8@EUR)"
+                "The given locale $locale does not match <language[_territory[.codeset]][@modifier]> (en_DE.UTF-8@EUR)"
             );
         }
 
