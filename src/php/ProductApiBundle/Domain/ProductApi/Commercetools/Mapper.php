@@ -25,7 +25,7 @@ class Mapper
 
     public function dataToProduct(array $productData, ProductQuery $query): Product
     {
-        $lastModified = $productData['lastModifiedAt'];
+        $lastModified = $productData['lastModifiedAt'] ?? null;
         $version = $productData['version'] ?? 0;
 
         if (isset($productData['masterData']['current'])) {
