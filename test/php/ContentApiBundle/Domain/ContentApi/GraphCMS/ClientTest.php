@@ -95,6 +95,30 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testMultiple()
+    {
+        $result = $this->client->getMultiple('Ingredient', ["cjxac52hychgy0910j313jdyq", "cjxac5ep1fppw0d53nbrhqvlm"])->wait();
+        $this->assertEquals(
+            file_get_contents(__DIR__ . '/getMultiple.expected'),
+            $result->queryResultJson
+        );
+        $this->assertEquals(
+            [
+                new Attribute(['attributeId' => 'status', 'type' => 'Status']),
+                new Attribute(['attributeId' => 'updatedAt', 'type' => 'DateTime']),
+                new Attribute(['attributeId' => 'createdAt', 'type' => 'DateTime']),
+                new Attribute(['attributeId' => 'id', 'type' => 'ID']),
+                new Attribute(['attributeId' => 'recipes', 'type' => 'LIST']),
+                new Attribute(['attributeId' => 'name', 'type' => 'String']),
+                new Attribute(['attributeId' => 'description', 'type' => 'String']),
+                new Attribute(['attributeId' => 'season', 'type' => 'LIST']),
+                new Attribute(['attributeId' => 'price', 'type' => 'Int']),
+                new Attribute(['attributeId' => 'image', 'type' => 'Asset']),
+            ],
+            $result->attributes
+        );
+    }
+
     public function testGetAll()
     {
         $result = $this->client->getAll('Step')->wait();

@@ -117,13 +117,16 @@ class GraphCMS implements ContentApi
         $locale = $locale ?? $this->defaultLocale;
 
         $contentTypeGiven = $query->contentType !== null && trim($query->contentType) !== '';
-        $queryGiven = $query->query !== null && trim($query->query) !== '';
+        $contentIdsGiven = $query->contentType !== null && !empty($query->contentIds);
+        $searchStringGiven = $query->query !== null && trim($query->query) !== '';
 
-        if ($queryGiven && !$contentTypeGiven) {
+        if ($contentIdsGiven && $contentTypeGiven) {
+            $promise = $this->queryContentIds($query, $locale);
+        } elseif ($searchStringGiven && !$contentTypeGiven) {
             $promise = $this->queryBySearchString($query, $locale);
-        } elseif ($queryGiven && $contentTypeGiven) {
+        } elseif ($searchStringGiven && $contentTypeGiven) {
             $promise = $this->queryByContentTypeAndSearchString($query, $locale);
-        } elseif (!$queryGiven && $contentTypeGiven) {
+        } elseif (!$searchStringGiven && $contentTypeGiven) {
             $promise = $this->queryByContentType($query, $locale, $mode);
         } else {
             $exception = new \InvalidArgumentException('provide a ContentType and/or a search text');
@@ -216,11 +219,11 @@ class GraphCMS implements ContentApi
 
     private function getDataFromResult(ContentApi\GraphCMS\ClientResult $clientResult, $contentType): array
     {
-        $name = lcfirst($contentType);
+        $name = lcfirst(Inflector::pluralize($contentType));
 
         $data = json_decode($clientResult->queryResultJson, true);
 
-        return $data['data'][$name] ?? [];
+        return $data['data'][$name][0] ?? [];
     }
 
     private function hasContent(ContentApi\GraphCMS\ClientResult $clientResult, $contentType): bool
@@ -231,6 +234,26 @@ class GraphCMS implements ContentApi
     private function queryBySearchString(Query $query, string $locale): PromiseInterface
     {
         return $this->client->search($query->query, [], $this->frontasticToGraphCmsLocale($locale))
+            ->then(function ($clientSearchResult) use ($query) {
+                return $this->getContentFromClientSearchResult($clientSearchResult, $query);
+            })
+            ->then(function ($contents) {
+                return new Result([
+                    'total' => count($contents),
+                    'count' => count($contents),
+                    'offset' => 0,
+                    'items' => $contents
+                ]);
+            });
+    }
+
+    private function queryByContentIds(Query $query, string $locale): PromiseInterface
+    {
+        return $this->client->getMultiple(
+            $query->contentType,
+            $query->contentIds,
+            $this->frontasticToGraphCmsLocale($locale)
+        )
             ->then(function ($clientSearchResult) use ($query) {
                 return $this->getContentFromClientSearchResult($clientSearchResult, $query);
             })

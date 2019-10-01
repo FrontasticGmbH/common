@@ -263,11 +263,26 @@ class Client
     // contentType must be capitalized and singular
     public function get(string $contentType, string $contentId, string $locale = null): PromiseInterface
     {
+        return $this->getMultiple($contentType, [$contentId], $locale);
+    }
+
+    // contentType must be capitalized and singular
+    public function getMultiple(string $contentType, array $contentIds, string $locale = null): PromiseInterface
+    {
         $attributes = $this->getAttributes($contentType);
         $attributeString = $this->attributeQueryPart($attributes);
-        $name = lcfirst($contentType);
+        $name = lcfirst(Inflector::pluralize($contentType));
+        $contentIdsString = "[".implode(
+            array_map(
+                function ($id) {
+                    return "\"$id\"";
+                },
+                $contentIds
+            ),
+            ','
+        )."]";
         $queryString = "query {
-                $name(where: { id: \"$contentId\" }) {
+                $name(where: { id_in: $contentIdsString }) {
                   $attributeString
                 }
               }
@@ -282,7 +297,7 @@ class Client
             });
     }
 
-    // contentType mus be capitalized and singular
+    // contentType must be capitalized and singular
     public function getAll(string $contentType, string $locale = null): PromiseInterface
     {
         $attributes = $this->getAttributes($contentType);
