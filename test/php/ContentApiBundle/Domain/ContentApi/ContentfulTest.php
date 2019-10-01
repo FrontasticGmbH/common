@@ -21,8 +21,10 @@ class ContentfulTest extends TestCase
     {
         $testAccessToken = 'lf7mvelTkEFNMXTzSKRev4NmdsOzeRVN8xXR6ayyJOk';
         $testSpaceId = 'cho9or523rqg';
+        $environmentId = 'master';
 
-        $client = new \Contentful\Delivery\Client($testAccessToken, $testSpaceId);
+        $client = new \Contentful\Delivery\Client($testAccessToken, $testSpaceId, $environmentId);
+
         $renderer = new \Contentful\RichText\Renderer();
 
         $this->api = new Contentful($client, $renderer, 'en_US');
@@ -64,14 +66,13 @@ class ContentfulTest extends TestCase
         $query = new Domain\Query([
             'contentType' => 'blogPost',
             'contentIds' => [
-                '3K9b0esdy0q0yGqgW2g6Ke', // Hello World
+                '31TNnjHlfaGUoMOwU0M2og',
                 '2PtC9h1YqIA6kaUaIsWEQ0', // Static sites are great
                 'not there'
             ]
         ]);
 
         $result = $this->api->query($query);
-
         $this->assertSame(2, $result->total);
     }
 

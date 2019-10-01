@@ -85,7 +85,7 @@ class Contentful implements ContentApi
         }
 
         if ($query->contentIds) {
-            $contentfulQuery->where('sys.id', $query->contentIds, 'in');
+            $contentfulQuery->where('sys.id[in]', $query->contentIds);
         }
 
         if ($query->query) {
