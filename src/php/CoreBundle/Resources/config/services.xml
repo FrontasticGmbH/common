@@ -46,6 +46,7 @@
 
         <service id="Frontastic\Common\JsonSerializer">
             <argument type="collection">
+                <argument>trace</argument>
                 <argument>accessToken</argument>
                 <argument>apiKey</argument>
                 <argument>apiSecret</argument>

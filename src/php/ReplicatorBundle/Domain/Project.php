@@ -42,7 +42,7 @@ class Project extends DataObject
     public $webpackPort;
 
     /**
-     * @var array[]
+     * @var array
      */
     public $configuration = [];
 
