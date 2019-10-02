@@ -3,7 +3,7 @@
 namespace Frontastic\Common\ProjectApiBundle\Domain;
 
 use Doctrine\Common\Cache\Cache;
-use Frontastic\Common\HttpClient\Stream;
+use Frontastic\Common\HttpClient;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Psr\Container\ContainerInterface;
@@ -40,7 +40,7 @@ class DefaultProjectApiFactory implements ProjectApiFactory
                         $productConfig->clientId,
                         $productConfig->clientSecret,
                         $productConfig->projectKey,
-                        $this->container->get(Stream::class),
+                        $this->container->get(HttpClient::class),
                         $this->cache
                     ),
                     $project->languages

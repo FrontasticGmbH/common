@@ -3,7 +3,7 @@
 namespace Frontastic\Common\ProductApiBundle\Domain;
 
 use Doctrine\Common\Cache\Cache;
-use Frontastic\Common\HttpClient\Stream;
+use Frontastic\Common\HttpClient;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
 use Frontastic\Common\ReplicatorBundle\Domain\Customer;
 
@@ -65,7 +65,7 @@ class DefaultProductApiFactory implements ProductApiFactory
                         $productConfig->clientId,
                         $productConfig->clientSecret,
                         $productConfig->projectKey,
-                        $this->container->get(Stream::class),
+                        $this->container->get(HttpClient::class),
                         $this->cache
                     ),
                     new Commercetools\Mapper(

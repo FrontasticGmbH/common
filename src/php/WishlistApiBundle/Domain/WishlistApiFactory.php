@@ -3,8 +3,7 @@
 namespace Frontastic\Common\WishlistApiBundle\Domain;
 
 use Doctrine\Common\Cache\Cache;
-
-use Frontastic\Common\HttpClient\Stream;
+use Frontastic\Common\HttpClient;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory;
 use Frontastic\Common\ReplicatorBundle\Domain\Customer;
@@ -34,7 +33,7 @@ class WishlistApiFactory
                         $customer->configuration['wishlist']->clientId,
                         $customer->configuration['wishlist']->clientSecret,
                         $customer->configuration['wishlist']->projectKey,
-                        $this->container->get(Stream::class),
+                        $this->container->get(HttpClient::class),
                         $this->cache
                     ),
                     $productApiFactory->factor($customer)

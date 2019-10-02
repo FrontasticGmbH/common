@@ -3,8 +3,7 @@
 namespace Frontastic\Common\AccountApiBundle\Domain;
 
 use Doctrine\Common\Cache\Cache;
-
-use Frontastic\Common\HttpClient\Stream;
+use Frontastic\Common\HttpClient;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ReplicatorBundle\Domain\Customer;
 
@@ -30,7 +29,7 @@ class AccountApiFactory
                         $customer->configuration['account']->clientId,
                         $customer->configuration['account']->clientSecret,
                         $customer->configuration['account']->projectKey,
-                        $this->container->get(Stream::class),
+                        $this->container->get(HttpClient::class),
                         $this->cache
                     )
                 );

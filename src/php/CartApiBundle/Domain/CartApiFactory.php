@@ -3,8 +3,7 @@
 namespace Frontastic\Common\CartApiBundle\Domain;
 
 use Doctrine\Common\Cache\Cache;
-
-use Frontastic\Common\HttpClient\Stream;
+use Frontastic\Common\HttpClient;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
 use Frontastic\Common\ReplicatorBundle\Domain\Customer;
@@ -34,7 +33,7 @@ class CartApiFactory
                         $customer->configuration['cart']->clientId,
                         $customer->configuration['cart']->clientSecret,
                         $customer->configuration['cart']->projectKey,
-                        $this->container->get(Stream::class),
+                        $this->container->get(HttpClient::class),
                         $this->cache
                     ),
                     new Mapper(),
