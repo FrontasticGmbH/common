@@ -5,7 +5,6 @@ namespace Frontastic\Common\ProductApiBundle\Domain;
 use Doctrine\Common\Cache\Cache;
 use Frontastic\Common\HttpClient\Stream;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Semknox;
 use Frontastic\Common\ReplicatorBundle\Domain\Customer;
 
 /**
@@ -74,24 +73,6 @@ class DefaultProductApiFactory implements ProductApiFactory
                     ),
                     $config['commercetools']->localeOverwrite ?? null
                 );
-            case 'semknox':
-                $searchIndexClients = [];
-                $dataStudioClients = [];
-                foreach ($productConfig['languages'] as $language => $languageConfig) {
-                    $searchIndexClients[$language] = new Semknox\SearchIndexClient(
-                        $languageConfig['host'],
-                        $languageConfig['customerId'],
-                        $languageConfig['apiKey'],
-                        $this->container->get(Stream::class)
-                    );
-                    $dataStudioClients[$language] = new Semknox\DataStudioClient(
-                        $languageConfig['projectId'],
-                        $languageConfig['accessToken'],
-                        $this->container->get(Stream::class)
-                    );
-                }
-
-                return new Semknox($searchIndexClients, $dataStudioClients);
             default:
                 throw new \OutOfBoundsException('No valid API configuration found');
         }
