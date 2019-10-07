@@ -15,6 +15,9 @@ use Frontastic\Common\ContentApiBundle\Domain\Query;
 use Frontastic\Common\ContentApiBundle\Domain\Result;
 use GuzzleHttp\Promise;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Contentful implements ContentApi
 {
     /**
