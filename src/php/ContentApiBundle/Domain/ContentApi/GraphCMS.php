@@ -2,7 +2,6 @@
 
 namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 
-use Frontastic\Common\ContentApiBundle\Domain\Category;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS\Client;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS\Inflector;
@@ -101,7 +100,7 @@ class GraphCMS implements ContentApi
                     'contentId' => $this->generateContentId($attributes['id'], $contentType),
                     'name' => $this->extractName($attributes),
                     'attributes' => $this->fillAttributesWithData($clientResult->attributes, $attributes),
-                    'dangerousInnerContent' => $clientResult->queryResultJson
+                    'dangerousInnerContent' => $clientResult->queryResultJson,
                 ]);
             });
 
@@ -191,22 +190,6 @@ class GraphCMS implements ContentApi
         return $attributes['id'];
     }
 
-    private function graphCmsToFrontasticLocale(string $graphCmsLocale): string
-    {
-        if (strpos($graphCmsLocale, '_') === false) {
-            return $graphCmsLocale;
-        }
-        $parts = explode('_', $graphCmsLocale);
-        if (count($parts) == 2) {
-            $parts[1] = strtoupper($parts[1]);
-            return implode('_', $parts);
-        } else {
-            throw new \InvalidArgumentException(
-                'invalid formatted locale: ' . $graphCmsLocale
-            );
-        }
-    }
-
     private function frontasticToGraphCmsLocale(string $frontasticLocale): string
     {
         return strtoupper($frontasticLocale);
@@ -242,27 +225,7 @@ class GraphCMS implements ContentApi
                     'total' => count($contents),
                     'count' => count($contents),
                     'offset' => 0,
-                    'items' => $contents
-                ]);
-            });
-    }
-
-    private function queryByContentIds(Query $query, string $locale): PromiseInterface
-    {
-        return $this->client->getMultiple(
-            $query->contentType,
-            $query->contentIds,
-            $this->frontasticToGraphCmsLocale($locale)
-        )
-            ->then(function ($clientSearchResult) use ($query) {
-                return $this->getContentFromClientSearchResult($clientSearchResult, $query);
-            })
-            ->then(function ($contents) {
-                return new Result([
-                    'total' => count($contents),
-                    'count' => count($contents),
-                    'offset' => 0,
-                    'items' => $contents
+                    'items' => $contents,
                 ]);
             });
     }
@@ -282,7 +245,7 @@ class GraphCMS implements ContentApi
                     'total' => count($contents),
                     'count' => count($contents),
                     'offset' => 0,
-                    'items' => $contents
+                    'items' => $contents,
                 ]);
             });
     }
@@ -310,7 +273,7 @@ class GraphCMS implements ContentApi
                                 $clientResult->attributes,
                                 $e
                             ),
-                            'dangerousInnerContent' => $e
+                            'dangerousInnerContent' => $e,
                         ]);
                     },
                     $data['data'][$name]
@@ -322,7 +285,7 @@ class GraphCMS implements ContentApi
                     'total' => count($contents),
                     'count' => count($contents),
                     'offset' => 0,
-                    'items' => $contents
+                    'items' => $contents,
                 ]);
             });
     }
@@ -354,7 +317,7 @@ class GraphCMS implements ContentApi
                             $attributes[$contentType],
                             $e
                         ),
-                        'dangerousInnerContent' => $e
+                        'dangerousInnerContent' => $e,
                     ]);
                 },
                 $items

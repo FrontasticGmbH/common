@@ -4,18 +4,15 @@ namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 
 use Contentful\Core\Resource\ResourceArray;
 use Contentful\Delivery\Client;
-use Contentful\Delivery\Resource\Entry;
 use Contentful\Delivery\Resource\Asset;
 use Contentful\Delivery\Resource\ContentType as ContentfulContentType;
-
-use Frontastic\Common\ContentApiBundle\Domain\AttributeFilter;
-use Frontastic\Common\ContentApiBundle\Domain\ContentApi;
-use Frontastic\Common\ContentApiBundle\Domain\ContentType;
-use Frontastic\Common\ContentApiBundle\Domain\Category;
-use Frontastic\Common\ContentApiBundle\Domain\Query;
-use Frontastic\Common\ContentApiBundle\Domain\Result;
+use Contentful\Delivery\Resource\Entry;
 use Contentful\RichText\Node\NodeInterface;
 use Contentful\RichText\Renderer;
+use Frontastic\Common\ContentApiBundle\Domain\ContentApi;
+use Frontastic\Common\ContentApiBundle\Domain\ContentType;
+use Frontastic\Common\ContentApiBundle\Domain\Query;
+use Frontastic\Common\ContentApiBundle\Domain\Result;
 use GuzzleHttp\Promise;
 
 class Contentful implements ContentApi
@@ -37,9 +34,9 @@ class Contentful implements ContentApi
 
     public function __construct(Client $client, Renderer $richTextRenderer, string $defaultLocale)
     {
-        $this->client           = $client;
+        $this->client = $client;
         $this->richTextRenderer = $richTextRenderer;
-        $this->defaultLocale    = $defaultLocale;
+        $this->defaultLocale = $defaultLocale;
     }
 
     public function getContentTypes(): array
@@ -49,7 +46,7 @@ class Contentful implements ContentApi
                 return new ContentType(
                     [
                         'contentTypeId' => $contentType->getId(),
-                        'name'          => $contentType->getName(),
+                        'name' => $contentType->getName(),
                     ]
                 );
             },
@@ -187,11 +184,6 @@ class Contentful implements ContentApi
     public function getDangerousInnerClient()
     {
         return $this->client;
-    }
-
-    private function contenfulToFrontasticLocale(string $contentfulLocale): string
-    {
-        return strtr($contentfulLocale, '-', '_');
     }
 
     private function frontasticToContentfulLocale(string $frontasticLocale): string
