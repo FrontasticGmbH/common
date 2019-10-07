@@ -104,20 +104,16 @@ class GraphCMS implements ContentApi
                 ]);
             });
 
-        if ($mode === self::QUERY_SYNC) {
-            return $promise->wait();
-        }
-
-        return $promise;
+        return $this->returnPromiseOrResult($promise, $mode);
     }
 
     public function query(Query $query, string $locale = null, string $mode = self::QUERY_SYNC): ?object
     {
         $locale = $locale ?? $this->defaultLocale;
 
-        $contentTypeGiven = $query->contentType !== null && trim($query->contentType) !== '';
-        $contentIdsGiven = $query->contentType !== null && !empty($query->contentIds);
-        $searchStringGiven = $query->query !== null && trim($query->query) !== '';
+        $contentTypeGiven = $this->stringIsNonEmpty($query->contentType);
+        $contentIdsGiven = $this->arrayIsNonEmpty($query->contentIds);
+        $searchStringGiven = $this->stringIsNonEmpty($query->query);
 
         if ($contentIdsGiven && $contentTypeGiven) {
             $promise = $this->queryContentIds($query, $locale);
@@ -128,20 +124,12 @@ class GraphCMS implements ContentApi
         } elseif (!$searchStringGiven && $contentTypeGiven) {
             $promise = $this->queryByContentType($query, $locale, $mode);
         } else {
-            $exception = new \InvalidArgumentException('provide a ContentType and/or a search text');
-
-            if ($mode === self::QUERY_SYNC) {
-                throw $exception;
-            }
-
-            return Promise\rejection_for($exception);
+            $promise = Promise\rejection_for(
+                new \InvalidArgumentException('provide a ContentType and/or a search text')
+            );
         }
 
-        if ($mode === self::QUERY_SYNC) {
-            return $promise->wait();
-        }
-
-        return $promise;
+        return $this->returnPromiseOrResult($promise, $mode);
     }
 
     /**
@@ -325,5 +313,24 @@ class GraphCMS implements ContentApi
             $contents = array_merge($contents, $contentsForContentType);
         }
         return $contents;
+    }
+
+    private function stringIsNonEmpty(?string $value): bool
+    {
+        return $value !== null && trim($value) !== '';
+    }
+
+    private function arrayIsNonEmpty(?array $value): bool
+    {
+        return $value !== null && !empty($value);
+    }
+
+    private function returnPromiseOrResult(PromiseInterface $promise, string $mode)
+    {
+        if ($mode === self::QUERY_SYNC) {
+            return $promise->wait();
+        }
+
+        return $promise;
     }
 }
