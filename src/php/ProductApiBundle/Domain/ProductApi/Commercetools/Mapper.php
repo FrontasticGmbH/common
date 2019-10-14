@@ -471,7 +471,7 @@ class Mapper
      * @param Query\Filter[]|string[] $filter
      * @return string[]
      */
-    public function prepareQueryFilter(array $filter): array
+    public function prepareQueryFilter(array $filter, Locale $locale): array
     {
         $preparedFilter = [];
         foreach ($filter as $queryFilter) {
@@ -481,7 +481,7 @@ class Mapper
                 continue;
             }
 
-            $preparedFilter[] = $this->toFilterString($queryFilter);
+            $preparedFilter[] = $this->toFilterString($queryFilter, $locale);
         }
         return $preparedFilter;
     }
@@ -492,7 +492,7 @@ class Mapper
      * @param Filter $queryFilter
      * @return string
      */
-    private function toFilterString(Filter $queryFilter): string
+    private function toFilterString(Filter $queryFilter, Locale $locale): string
     {
         switch ($queryFilter->attributeType) {
             case 'money':
@@ -515,7 +515,15 @@ class Mapper
                 );
                 break;
 
-            case 'localizedText': // FIXME: Do we need the language here or does it work without?
+            case 'localizedText':
+                return sprintf(
+                    '%s.%s:%s',
+                    $queryFilter->handle,
+                    $locale->language,
+                    $this->termsToLogicalOrString($queryFilter->terms ?? [])
+                );
+                break;
+
             case 'number':
             case 'boolean':
             case 'text':

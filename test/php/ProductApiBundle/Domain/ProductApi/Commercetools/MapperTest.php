@@ -308,7 +308,10 @@ class MapperTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareQueryFilter(array $inputFilters, array $expectedFilterStrings)
     {
-        $actualFilterStrings = $this->mapper->prepareQueryFilter($inputFilters);
+        $actualFilterStrings = $this->mapper->prepareQueryFilter(
+            $inputFilters,
+            Locale::createFromPosix('en_GB')
+        );
 
         $this->assertEquals(
             $expectedFilterStrings,
@@ -377,6 +380,18 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 ],
                 [
                     'variants.attributes.brand:"levis","wrangler"',
+                ]
+            ],
+            'localized text' => [
+                [
+                    new TermFilter([
+                        'terms' => ['levis', 'wrangler'],
+                        'handle' => 'variants.attributes.brand',
+                        'attributeType' => 'localizedText',
+                    ]),
+                ],
+                [
+                    'variants.attributes.brand.en:"levis","wrangler"',
                 ]
             ],
         ];

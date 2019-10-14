@@ -6,6 +6,7 @@ use Doctrine\Common\Cache\Cache;
 use Frontastic\Common\HttpClient;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
 use Frontastic\Common\ReplicatorBundle\Domain\Customer;
+use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -71,6 +72,7 @@ class DefaultProductApiFactory implements ProductApiFactory
                     new Commercetools\Mapper(
                         $config['commercetools']->localeOverwrite ?? null
                     ),
+                    $this->container->get(Context::class)->project->defaultLanguage,
                     $config['commercetools']->localeOverwrite ?? null
                 );
             default:

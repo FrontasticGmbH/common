@@ -37,6 +37,11 @@ class Commercetools implements ProductApi
     private $options;
 
     /**
+     * @var string
+     */
+    private $defaultLocale;
+
+    /**
      * @var string?
      */
     private $localeOverwrite;
@@ -46,10 +51,11 @@ class Commercetools implements ProductApi
      * @param Mapper $mapper
      * @param string $localeOverwrite
      */
-    public function __construct(Client $client, Mapper $mapper, $localeOverwrite = null)
+    public function __construct(Client $client, Mapper $mapper, string $defaultLocale, $localeOverwrite = null)
     {
         $this->client = $client;
         $this->mapper = $mapper;
+        $this->defaultLocale = $defaultLocale;
         $this->localeOverwrite = $localeOverwrite;
         $this->options = new ProductApi\Commercetools\Options();
     }
@@ -196,6 +202,7 @@ class Commercetools implements ProductApi
     public function query(ProductQuery $query, string $mode = self::QUERY_SYNC): object
     {
         $locale = Locale::createFromPosix($this->localeOverwrite ?: $query->locale);
+        $defaultLocale = Locale::createFromPosix($this->localeOverwrite ?: $this->defaultLocale);
         $parameters = [
             'offset' => $query->offset,
             'limit' => $query->limit,
@@ -208,7 +215,7 @@ class Commercetools implements ProductApi
         ];
 
         if (count($query->filter) > 0) {
-            $parameters['filter.query'] = $this->mapper->prepareQueryFilter($query->filter);
+            $parameters['filter.query'] = $this->mapper->prepareQueryFilter($query->filter, $defaultLocale);
         }
 
         if ($query->productType) {
