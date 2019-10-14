@@ -3,7 +3,7 @@
 namespace Frontastic\Common\ContentApiBundle\Domain;
 
 use Doctrine\Common\Cache\Cache;
-use Frontastic\Common\HttpClient\Guzzle;
+use Frontastic\Common\HttpClient;
 
 use Commercetools\Core\Client;
 use Commercetools\Core\Config;
@@ -52,7 +52,7 @@ class DefaultContentApiFactory implements ContentApiFactory
                     $contentConfiguration->apiToken,
                     $contentConfiguration->region,
                     $contentConfiguration->stage,
-                    new Guzzle(),
+                    $this->container->get(HttpClient::class),
                     $this->cache
                 );
                 $api = new ContentApi\GraphCMS($client, $project->defaultLanguage);

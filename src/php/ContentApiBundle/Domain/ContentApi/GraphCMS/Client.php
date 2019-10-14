@@ -57,7 +57,7 @@ class Client
         $this->region = $region;
         $this->stage = $stage;
         $this->httpClient = $httpClient;
-        $this->httpClient->setDefaultHeaders([
+        $this->httpClient->addDefaultHeaders([
             'content-type: application/json',
             'Authorization: Bearer '.$this->apiToken
         ]);
