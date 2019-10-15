@@ -26,7 +26,7 @@ class CommercetoolsTest extends TestCase
     public function setup()
     {
         $this->clientMock = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->getMock();
-        $this->api = new Commercetools($this->clientMock, new Mapper());
+        $this->api = new Commercetools($this->clientMock, new Mapper(), 'en_GB');
     }
 
     public function testQueryWithFacets()
