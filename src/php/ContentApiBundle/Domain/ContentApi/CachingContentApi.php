@@ -114,7 +114,7 @@ class CachingContentApi implements ContentApi
             $result = $this->aggregate->query($query, $locale);
 
             /** @var Content $item */
-            foreach($result->items as $item) {
+            foreach ($result->items as $item) {
                 $item->dangerousInnerContent = null;
             }
             $this->cache->set($cacheKey, $result, $this->cacheTtl);

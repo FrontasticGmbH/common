@@ -79,6 +79,6 @@ class DefaultContentApiFactory implements ContentApiFactory
             new ContentApi\LifecycleEventDecorator($api, $this->decorators),
             $this->psrCache,
             true
-    );
+        );
     }
 }
