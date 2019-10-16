@@ -40,6 +40,7 @@ class Contentful implements ContentApi
         $this->client = $client;
         $this->richTextRenderer = $richTextRenderer;
         $this->defaultLocale = $defaultLocale;
+
     }
 
     public function getContentTypes(): array

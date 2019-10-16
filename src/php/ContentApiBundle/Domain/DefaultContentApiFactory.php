@@ -3,7 +3,10 @@
 namespace Frontastic\Common\ContentApiBundle\Domain;
 
 use Doctrine\Common\Cache\Cache;
+
 use Frontastic\Common\HttpClient;
+use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful\NoopLocaleMapper;
+use Frontastic\Common\ContentApiBundle\Domain\ContentApi\CachingContentApi;
 
 use Commercetools\Core\Client;
 use Commercetools\Core\Config;
@@ -11,6 +14,8 @@ use Commercetools\Core\Model\Common\Context;
 use Contentful\RichText\Renderer;
 
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
+use Psr\Container\ContainerInterface;
+use Psr\SimpleCache\CacheInterface;
 
 class DefaultContentApiFactory implements ContentApiFactory
 {
@@ -22,11 +27,17 @@ class DefaultContentApiFactory implements ContentApiFactory
      */
     private $cache;
 
-    public function __construct($container, Cache $cache, iterable $decorators)
+    /**
+     * @var CacheInterface
+     */
+    private $psrCache;
+
+    public function __construct($container, Cache $cache, CacheInterface $psrCache, iterable $decorators)
     {
         $this->container = $container;
         $this->decorators = $decorators;
         $this->cache = $cache;
+        $this->psrCache = $psrCache;
     }
 
     public function factor(Project $project): ContentApi
@@ -64,6 +75,10 @@ class DefaultContentApiFactory implements ContentApiFactory
                 );
         }
 
-        return new ContentApi\LifecycleEventDecorator($api, $this->decorators);
+        return new CachingContentApi(
+            new ContentApi\LifecycleEventDecorator($api, $this->decorators),
+            $this->psrCache,
+            true
+    );
     }
 }

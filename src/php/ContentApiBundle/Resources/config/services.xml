@@ -15,6 +15,7 @@
             <argument type="service">
                 <service class="Doctrine\Common\Cache\ApcuCache" />
             </argument>
+            <argument type="service" id="cache.app.simple" />
             <argument type="tagged" tag="contentApi.lifecycleEventListener" />
         </service>
     </services>
