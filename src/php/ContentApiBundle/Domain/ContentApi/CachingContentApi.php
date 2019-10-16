@@ -7,6 +7,7 @@ use Frontastic\Common\ContentApiBundle\Domain\ContentType;
 use Frontastic\Common\ContentApiBundle\Domain\Query;
 use Frontastic\Common\ContentApiBundle\Domain\Result;
 use Psr\SimpleCache\CacheInterface;
+use GuzzleHttp\Promise;
 
 class CachingContentApi implements ContentApi
 {
@@ -20,10 +21,16 @@ class CachingContentApi implements ContentApi
      */
     private $aggregate;
 
+    /**
+     * @var int
+     */
+    private $cacheTtl;
+
     public function __construct(ContentApi $aggregate, CacheInterface $cache)
     {
         $this->aggregate = $aggregate;
         $this->cache = $cache;
+        $this->cacheTtl = 600;
     }
 
     public function getContentTypes(): array
@@ -33,23 +40,74 @@ class CachingContentApi implements ContentApi
         return $this->aggregate->getContentTypes();
     }
 
-    public function getContent(string $contentId, string $locale = null): Content
+    public function getContent(string $contentId, string $locale = null, string $mode = self::QUERY_SYNC): ?object
     {
-        $cacheKey = 'frontastic.content.content.' . md5($contentId) . '.' . md5($locale);
+        if ($mode === self::QUERY_SYNC) {
+            return $this->getContentCachedSynced($contentId, $locale);
+        }
+
+        return $this->getContentCachedAsync($contentId, $locale);
+    }
+
+    public function query(Query $query, string $locale = null, string $mode = self::QUERY_SYNC): ?object
+    {
+        if ($mode === self::QUERY_SYNC) {
+            return $this->queryCachedSynced($query, $locale);
+        }
+
+        return $this->queryCachedAsync($query, $locale);
+    }
+
+    public function getDangerousInnerClient()
+    {
+        return $this->aggregate->getDangerousInnerClient();
+    }
+
+    private function getContentCachedSynced(string $contentId, string $locale)
+    {
+        $cacheKey = $this->generateCacheForContentKey($contentId, $locale);
         $result = $this->cache->get($cacheKey, false);
 
         if ($result === false) {
             $result = $this->aggregate->getContent($contentId, $locale);
             $result->dangerousInnerContent = null;
-            $this->cache->set($cacheKey, $result, 600);
+            $this->cache->set($cacheKey, $result, $this->cacheTtl);
         }
 
         return $result;
     }
 
-    public function query(Query $query, string $locale = null): Result
+    private function getContentCachedAsync(string $contentId, string $locale)
     {
-        $cacheKey = 'frontastic.content.query.' . md5(json_encode($query)) . '.' . md5($locale);
+        $cacheKey = $this->generateCacheForContentKey($contentId, $locale);
+        $result = $this->cache->get($cacheKey, false);
+
+        if ($result === false) {
+            return $this->aggregate->getContent($contentId, $locale, self::QUERY_ASYNC)
+                ->then(function ($result) use ($cacheKey) {
+                    $result->dangerousInnerContent = null;
+                    $this->cache->set($cacheKey, $result, $this->cacheTtl);
+
+                    return $result;
+                });
+        }
+
+        return Promise\promise_for($result);
+    }
+
+    /**
+     * @param string $contentId
+     * @param string $locale
+     * @return string
+     */
+    private function generateCacheForContentKey(string $contentId, string $locale): string
+    {
+        return 'frontastic.content.content.' . md5($contentId) . '.' . md5($locale);
+    }
+
+    private function queryCachedSynced(Query $query, string $locale)
+    {
+        $cacheKey = $this->generateCacheKeyForQuery($query, $locale);
 
         $result = $this->cache->get($cacheKey, false);
         if ($result === false) {
@@ -59,14 +117,41 @@ class CachingContentApi implements ContentApi
             foreach($result->items as $item) {
                 $item->dangerousInnerContent = null;
             }
-            $this->cache->set($cacheKey, $result, 600);
+            $this->cache->set($cacheKey, $result, $this->cacheTtl);
         }
 
         return $result;
     }
 
-    public function getDangerousInnerClient()
+    private function queryCachedAsync(Query $query, string $locale)
     {
-        return $this->aggregate->getDangerousInnerClient();
+        $cacheKey = $this->generateCacheKeyForQuery($query, $locale);
+        $result = $this->cache->get($cacheKey, false);
+
+        if ($result === false) {
+            return $this->aggregate->query($query, $locale, self::QUERY_ASYNC)
+                ->then(function ($result) use ($cacheKey) {
+                    /** @var Content $item */
+                    foreach ($result->items as $item) {
+                        $item->dangerousInnerContent = null;
+                    }
+                    $this->cache->set($cacheKey, $result, $this->cacheTtl);
+
+                    return $result;
+                });
+        }
+
+        return Promise\promise_for($result);
+    }
+
+    /**
+     * @param Query $query
+     * @param string $locale
+     * @return string
+     */
+    private function generateCacheKeyForQuery(Query $query, string $locale): string
+    {
+        $cacheKey = 'frontastic.content.query.' . md5(json_encode($query)) . '.' . md5($locale);
+        return $cacheKey;
     }
 }
