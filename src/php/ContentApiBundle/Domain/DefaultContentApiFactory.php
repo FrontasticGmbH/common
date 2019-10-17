@@ -3,20 +3,15 @@
 namespace Frontastic\Common\ContentApiBundle\Domain;
 
 use Doctrine\Common\Cache\Cache;
-
 use Frontastic\Common\HttpClient;
-use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful\NoopLocaleMapper;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\CachingContentApi;
-
-use Commercetools\Core\Client;
-use Commercetools\Core\Config;
-use Commercetools\Core\Model\Common\Context;
 use Contentful\RichText\Renderer;
-
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
-use Psr\Container\ContainerInterface;
 use Psr\SimpleCache\CacheInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DefaultContentApiFactory implements ContentApiFactory
 {
     private $container;
@@ -77,8 +72,7 @@ class DefaultContentApiFactory implements ContentApiFactory
 
         return new CachingContentApi(
             new ContentApi\LifecycleEventDecorator($api, $this->decorators),
-            $this->psrCache,
-            true
+            $this->psrCache
         );
     }
 }
