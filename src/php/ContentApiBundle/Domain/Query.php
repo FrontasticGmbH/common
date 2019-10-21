@@ -26,7 +26,10 @@ class Query extends DataObject
      */
     public $attributes = [];
 
-    public static function fromArray(array $data)
+    /**
+     * @deprecated use \Frontastic\Common\ContentApiBundle\Domain\ContentQueryFactory::queryFromParameters instead
+     */
+    public static function fromArray(array $data, bool $ignoreAdditionalAttributes = false): Query
     {
         $data['attributes'] = array_map(
             function ($attribute) {
@@ -40,6 +43,6 @@ class Query extends DataObject
             )
         );
 
-        return new self($data);
+        return new self($data, $ignoreAdditionalAttributes);
     }
 }

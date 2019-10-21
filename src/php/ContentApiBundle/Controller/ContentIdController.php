@@ -3,6 +3,7 @@
 namespace Frontastic\Common\ContentApiBundle\Controller;
 
 use Frontastic\Common\ContentApiBundle\Domain;
+use Frontastic\Common\ContentApiBundle\Domain\ContentQueryFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -16,7 +17,7 @@ class ContentIdController extends Controller
         /** @var Domain\ContentApi $contentApi */
         $contentApi = $contentApiFactory->factor($context->project);
 
-        $query = Domain\Query::fromArray(json_decode($request->getContent(), true));
+        $query = ContentQueryFactory::queryFromRequest($request);
 
         return [
             'result' => $contentApi->query($query, $context->locale),
