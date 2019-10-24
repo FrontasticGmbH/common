@@ -41,6 +41,12 @@ class JsonSchemaValidator
         }
 
         $object = json_decode($toParse);
+        if (!is_object($object)) {
+            throw new InvalidSchemaException(
+                "JSON does not follow schema.",
+                "JSON does not parse to object but " . gettype($object) . " instead."
+            );
+        }
 
         $errors = $this->validate($object, $schemaFile, $schemaLibraryFiles);
         if (count($errors) > 0) {
