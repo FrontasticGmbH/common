@@ -126,13 +126,16 @@ class Contentful implements ContentApi
 
     private function createContentFromEntry(Entry $entry): Content
     {
-        $contentType = $entry->getContentType();
-
-        $displayFieldId = $contentType->getDisplayField()->getId();
+        $name = '';
+        $displayField = $entry->getContentType()->getDisplayField();
+        if ($displayField !== null) {
+            $displayFieldId = $displayField->getId();
+            $name = $entry->$displayFieldId;
+        }
 
         $content = new Content([
             'contentId' => $entry->getId(),
-            'name' => $entry->$displayFieldId,
+            'name' => $name,
             'dangerousInnerContent' => $entry,
         ]);
 
