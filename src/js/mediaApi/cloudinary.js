@@ -17,6 +17,7 @@ class Cloudinary {
                     fetch_format: 'auto',
                     width: width,
                     height: height,
+                    quality: 'auto',
                 },
                 this.getGravityOptions(options),
                 this.cropOptions(options)
@@ -38,6 +39,7 @@ class Cloudinary {
                     type: 'fetch',
                     width: width,
                     height: height,
+                    quality: 'auto',
                 },
                 this.getGravityOptions(options),
                 this.cropOptions(options)
