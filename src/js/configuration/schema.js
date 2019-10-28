@@ -23,29 +23,26 @@ class ConfigurationSchema {
 
         this.fields = {}
 
-        for (let i = 0; i < this.schema.length; ++i) {
-            for (let j = 0; j < this.schema[i].fields.length; ++j) {
-                if (!this.schema[i].fields[j].field) {
+        for (let sectionIndex = 0; sectionIndex < this.schema.length; ++sectionIndex) {
+            const sectionSchema = this.schema[sectionIndex]
+            for (let fieldIndex = 0; fieldIndex < sectionSchema.fields.length; ++fieldIndex) {
+                const fieldSchema = sectionSchema.fields[fieldIndex]
+                if (!fieldSchema.field) {
                     continue
                 }
 
-                const type = this.schema[i].fields[j].type || 'text'
-                this.fields[this.schema[i].fields[j].field] = {
+                const type = fieldSchema.type || 'text'
+                this.fields[fieldSchema.field] = {
                     type: type,
-                    sectionName: this.schema[i].name || '',
-                    values: this.schema[i].fields[j].values || [],
-                    default: (typeof this.schema[i].fields[j].default !== 'undefined' ?
-                        this.schema[i].fields[j].default
-                        : null),
-                    validate: this.schema[i].fields[j].validate || {},
-                    fields: this.schema[i].fields[j].fields || null,
-                    min: (typeof this.schema[i].fields[j].min === 'undefined') ? 1 : this.schema[i].fields[j].min,
-                    max: this.schema[i].fields[j].max || 16,
-                    required: fieldIsRequired(
-                        this.schema[i].fields[j].required,
-                        type,
-                        this.schema[i].fields[j].streamType),
-                    disabled: this.schema[i].fields[j].disabled === true,
+                    sectionName: sectionSchema.name || '',
+                    values: fieldSchema.values || [],
+                    default: (typeof fieldSchema.default !== 'undefined' ? fieldSchema.default : null),
+                    validate: fieldSchema.validate || {},
+                    fields: fieldSchema.fields || null,
+                    min: (typeof fieldSchema.min === 'undefined') ? 1 : fieldSchema.min,
+                    max: fieldSchema.max || 16,
+                    required: fieldIsRequired(fieldSchema.required, type, fieldSchema.streamType),
+                    disabled: fieldSchema.disabled === true,
                 }
             }
         }
