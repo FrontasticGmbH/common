@@ -16,6 +16,70 @@ function fieldIsRequired (requiredFlag, type, streamType) {
     return type === 'stream' && AUTOMATIC_REQUIRED_STREAM_TYPES.includes(streamType)
 }
 
+function getFieldValue (schema, configuration) {
+    if (schema.type === 'group') {
+        let values = (configuration[schema.field] || []).slice(0, schema.max)
+        for (let i = values.length; i < schema.min; ++i) {
+            values[i] = {}
+        }
+        return completeGroupConfig(values, schema.fields)
+    }
+
+    if (typeof configuration[schema.field] === 'undefined' || configuration[schema.field] === null) {
+        return schema.default
+    }
+
+    return configuration[schema.field]
+}
+
+function completeGroupConfig (groupEntries, fieldDefinitions) {
+    return _.map(groupEntries, (groupEntry) => {
+        if (groupEntry === null || typeof groupEntry !== 'object') {
+            groupEntry = {}
+        }
+        _.forEach(fieldDefinitions, (fieldDefinition) => {
+            if (typeof groupEntry[fieldDefinition.field] === 'undefined' || groupEntry[fieldDefinition.field] === null) {
+                groupEntry[fieldDefinition.field] = fieldDefinition.default || null
+            }
+        })
+        return groupEntry
+    })
+}
+
+function getFieldsWithResolvedStreams (fields, configuration, streamData, customStreamData) {
+    return _.fromPairs(
+        Object.values(fields)
+            .map((schema) => {
+                return [schema.field, getSchemaWithResolvedStreams(schema, configuration, streamData, customStreamData)]
+            })
+    )
+}
+
+function getSchemaWithResolvedStreams (schema, configuration, streamData, customStreamData) {
+    const customStreamValue = customStreamData[schema.field]
+
+    if (schema.type === 'group') {
+        const groupFields = schema.fields || []
+        return getFieldValue(schema, configuration)
+            .map((value, groupIndex) => {
+                const elementCustomStreamData = typeof customStreamValue !== 'undefined' && customStreamValue.length > groupIndex ? customStreamValue[groupIndex] : {}
+                return getFieldsWithResolvedStreams(groupFields, value, streamData, elementCustomStreamData)
+            })
+    }
+
+    if (typeof customStreamValue !== 'undefined') {
+        return customStreamValue
+    }
+
+    const value = getFieldValue(schema, configuration)
+
+    if (schema.type === 'stream') {
+        return streamData[value] || null
+    }
+
+    return value
+}
+
 class ConfigurationSchema {
     constructor (schema = [], configuration = {}, id = null) {
         this.schema = schema
@@ -33,6 +97,7 @@ class ConfigurationSchema {
 
                 const type = fieldSchema.type || 'text'
                 this.fields[fieldSchema.field] = {
+                    field: fieldSchema.field,
                     type: type,
                     sectionName: sectionSchema.name || '',
                     values: fieldSchema.values || [],
@@ -83,19 +148,7 @@ class ConfigurationSchema {
             return this.configuration[field] || null
         }
 
-        if (fieldConfig.type === 'group') {
-            let values = (this.configuration[field] || []).slice(0, fieldConfig.max)
-            for (let i = values.length; i < fieldConfig.min; ++i) {
-                values[i] = {}
-            }
-            return this.completeGroupConfig(values, fieldConfig.fields)
-        }
-
-        if (typeof this.configuration[field] === 'undefined' || this.configuration[field] === null) {
-            return fieldConfig.default
-        }
-
-        return this.configuration[field]
+        return getFieldValue(fieldConfig, this.configuration)
     }
 
     getField (field) {
@@ -166,23 +219,8 @@ class ConfigurationSchema {
         })
     }
 
-    /**
-     * @private
-     * @param {object[]} groupEntries
-     * @param {object[]} fieldDefinitions
-     */
-    completeGroupConfig (groupEntries, fieldDefinitions) {
-        return _.map(groupEntries, (groupEntry) => {
-            if (groupEntry === null || typeof groupEntry !== 'object') {
-                groupEntry = {}
-            }
-            _.forEach(fieldDefinitions, (fieldDefinition) => {
-                if (typeof groupEntry[fieldDefinition.field] === 'undefined' || groupEntry[fieldDefinition.field] === null) {
-                    groupEntry[fieldDefinition.field] = fieldDefinition.default || null
-                }
-            })
-            return groupEntry
-        })
+    getConfigurationWithResolvedStreams (streamData = {}, customStreamData = {}) {
+        return getFieldsWithResolvedStreams(this.fields, this.configuration, streamData, customStreamData)
     }
 }
 

@@ -656,4 +656,198 @@ describe('ConfigurationSchema', function () {
 
         expect(schema.hasMissingRequiredFieldValuesInSection('Other Section')).toBe(false)
     })
+
+    it('returns the configuration when resolving streams', () => {
+        const schema = new Schema(
+            [
+                {
+                    name: 'Section',
+                    fields: [{
+                        label: 'Test Field',
+                        field: 'test',
+                        type: 'string',
+                        default: 'Default Value',
+                    }],
+                },
+            ],
+            {
+                test: 'My Value',
+            }
+        )
+
+        expect(schema.getConfigurationWithResolvedStreams()).toEqual({
+            test: 'My Value',
+        })
+    })
+
+    it('returns the default value when resolving streams', () => {
+        const schema = new Schema(
+            [
+                {
+                    name: 'Section',
+                    fields: [{
+                        label: 'Test Field',
+                        field: 'test',
+                        type: 'string',
+                        default: 'Default Value',
+                    }],
+                },
+            ],
+            {}
+        )
+
+        expect(schema.getConfigurationWithResolvedStreams()).toEqual({
+            test: 'Default Value',
+        })
+    })
+
+    it('returns null for missing streams when resolving streams', () => {
+        const schema = new Schema(
+            [
+                {
+                    name: 'Section',
+                    fields: [{
+                        label: 'Test Field',
+                        field: 'test',
+                        type: 'stream',
+                    }],
+                },
+            ],
+            {
+                test: 'testStream',
+            }
+        )
+
+        expect(schema.getConfigurationWithResolvedStreams()).toEqual({
+            test: null,
+        })
+    })
+
+    it('returns stream data when resolving streams', () => {
+        const schema = new Schema(
+            [{
+                name: 'Section',
+                fields: [{
+                    label: 'Test Field',
+                    field: 'test',
+                    type: 'stream',
+                }],
+            }],
+            {
+                test: 'testStream',
+            }
+        )
+
+        expect(schema.getConfigurationWithResolvedStreams(
+            {
+                testStream: ['foo', 'bar'],
+            }
+        )).toEqual({
+            test: ['foo', 'bar'],
+        })
+    })
+
+    it('returns custom stream data when resolving streams', () => {
+        const schema = new Schema(
+            [{
+                name: 'Section',
+                fields: [{
+                    label: 'Test Field',
+                    field: 'test',
+                    type: 'stream',
+                }],
+            }],
+            {
+                test: 'This value will be ignored',
+            }
+        )
+
+        expect(schema.getConfigurationWithResolvedStreams(
+            {},
+            {
+                test: ['foo', 'bar'],
+            }
+        )).toEqual({
+            test: ['foo', 'bar'],
+        })
+    })
+
+    it('returns stream data inside groups when resolving streams', () => {
+        const schema = new Schema(
+            [{
+                name: 'Section',
+                fields: [{
+                    label: 'Test Group',
+                    field: 'test',
+                    type: 'group',
+                    fields: [
+                        {
+                            label: 'First',
+                            field: 'groupFirst',
+                            type: 'stream',
+                        },
+                    ],
+                }],
+            }],
+            {
+                test: [
+                    { groupFirst: 'testStream' },
+                    { groupFirst: 'otherStream' },
+                ],
+            }
+        )
+
+        expect(schema.getConfigurationWithResolvedStreams(
+            {
+                testStream: ['foo', 'bar'],
+                otherStream: ['some', 'values'],
+            }
+        )).toEqual({
+            test: [
+                { groupFirst: ['foo', 'bar'] },
+                { groupFirst: ['some', 'values'] },
+            ],
+        })
+    })
+
+    it('returns custom stream data inside groups when resolving streams', () => {
+        const schema = new Schema(
+            [{
+                name: 'Section',
+                fields: [{
+                    label: 'Test Group',
+                    field: 'test',
+                    type: 'group',
+                    fields: [
+                        {
+                            label: 'First',
+                            field: 'groupFirst',
+                            type: 'stream',
+                        },
+                    ],
+                }],
+            }],
+            {
+                test: [
+                    { groupFirst: 'This value will be ignored' },
+                    { groupFirst: 'This will be ignored as well' },
+                ],
+            }
+        )
+
+        expect(schema.getConfigurationWithResolvedStreams(
+            {},
+            {
+                test: [
+                    { groupFirst: ['foo', 'bar'] },
+                    { groupFirst: ['some', 'values'] },
+                ],
+            }
+        )).toEqual({
+            test: [
+                { groupFirst: ['foo', 'bar'] },
+                { groupFirst: ['some', 'values'] },
+            ],
+        })
+    })
 })
