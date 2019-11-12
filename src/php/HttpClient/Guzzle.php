@@ -80,6 +80,7 @@ class Guzzle extends HttpClient
                     'connect_timeout' => $options->timeout,
                     'timeout' => $options->timeout,
                     'http_errors' => false,
+                    'allow_redirects' => false,
                 ]
             )
             ->then(
