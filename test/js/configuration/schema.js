@@ -291,7 +291,7 @@ describe('ConfigurationSchema', function () {
                 default: [
                     { foo: 1 },
                     { foo: 2 },
-                ]
+                ],
             }],
         }])
 
