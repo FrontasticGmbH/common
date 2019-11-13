@@ -26,10 +26,10 @@ abstract class CrudController extends Controller
     protected function fillFromRequest(DataObject $entity, Request $request): DataObject
     {
         $body = $this->getJsonContent($request);
-        
+
         return $this->fillFromArray($entity, $body);
     }
-    
+
     protected function fillFromArray(DataObject $entity, array $body): DataObject
     {
         $versioner = new Versioner();
