@@ -279,6 +279,25 @@ describe('ConfigurationSchema', function () {
         expect(schema.get('test')).toEqual([{}, {}, {}])
     })
 
+    it('uses default of groups and adds minimum number of entries afterwards', () => {
+        const schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'group',
+                fields: [],
+                min: 3,
+                default: [
+                    { foo: 1 },
+                    { foo: 2 },
+                ]
+            }],
+        }])
+
+        expect(schema.get('test')).toEqual([{ foo: 1 }, { foo: 2 }, {}])
+    })
+
     it('adds one entry to groups without minimum', () => {
         const schema = new Schema([{
             name: 'Section',

@@ -17,19 +17,20 @@ function fieldIsRequired (requiredFlag, type, streamType) {
 }
 
 function getFieldValue (schema, configuration) {
+    let value = schema.default
+    if (typeof configuration[schema.field] !== 'undefined' && configuration[schema.field] !== null) {
+        value = configuration[schema.field]
+    }
+
     if (schema.type === 'group') {
-        let values = (configuration[schema.field] || []).slice(0, schema.max)
+        let values = value.slice(0, schema.max)
         for (let i = values.length; i < schema.min; ++i) {
             values[i] = {}
         }
         return completeGroupConfig(values, schema.fields)
     }
 
-    if (typeof configuration[schema.field] === 'undefined' || configuration[schema.field] === null) {
-        return schema.default
-    }
-
-    return configuration[schema.field]
+    return value
 }
 
 function completeGroupConfig (groupEntries, fieldDefinitions) {
