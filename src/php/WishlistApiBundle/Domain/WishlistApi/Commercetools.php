@@ -148,71 +148,74 @@ class Commercetools implements WishlistApi
      */
     public function addToWishlist(Wishlist $wishlist, LineItem $lineItem, string $locale): Wishlist
     {
-        if ($lineItem instanceof LineItem\Variant) {
-            return $this->addVariantToWishlist($wishlist, $lineItem, $locale);
-        }
-
-        return $this->addCustomToWishlist($wishlist, $lineItem, $locale);
+        return $this->addMultipleToWishlist($wishlist, [$lineItem], $locale);
     }
 
     /**
      * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
+     * @param array $lineItems
+     * @param string $locale
+     * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+     */
+    public function addMultipleToWishlist(Wishlist $wishlist, array $lineItems, string $locale): Wishlist
+    {
+        $actions = [];
+        foreach ($lineItems as $lineItem) {
+            $actions[] = ($lineItem instanceof LineItem\Variant) ?
+                $this->addVariantToWishlist($lineItem, $locale) :
+                $this->addCustomToWishlist($wishlist, $lineItem, $locale);
+        }
+
+        return $this->mapWishlist(
+            $this->client->post(
+                '/shopping-lists/' . $wishlist->wishlistId,
+                ['expand' => self::EXPAND_VARIANTS],
+                [],
+                json_encode([
+                    'version' => $wishlist->wishlistVersion,
+                    'actions' => $actions,
+                ])
+            ),
+            Locale::createFromPosix($locale)
+        );
+    }
+
+    /**
      * @param \Frontastic\Common\WishlistApiBundle\Domain\LineItem\Variant $lineItem
      * @param string $locale
      * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      */
-    private function addVariantToWishlist(Wishlist $wishlist, LineItem\Variant $lineItem, string $locale): Wishlist
+    private function addVariantToWishlist(LineItem\Variant $lineItem, string $locale): Wishlist
     {
-        return $this->mapWishlist($this->client->post(
-            '/shopping-lists/' . $wishlist->wishlistId,
-            ['expand' => self::EXPAND_VARIANTS],
-            [],
-            json_encode([
-                'version' => $wishlist->wishlistVersion,
-                'actions' => [
-                    [
-                        'action' => 'addLineItem',
-                        'sku' => $lineItem->variant->sku,
-                        'quantity' => $lineItem->count,
-                    ]
-                ],
-            ])
-        ), Locale::createFromPosix($locale));
+        return [
+            'action' => 'addLineItem',
+            'sku' => $lineItem->variant->sku,
+            'quantity' => $lineItem->count,
+        ];
     }
 
     /**
-     * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
      * @param \Frontastic\Common\WishlistApiBundle\Domain\LineItem $lineItem
      * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      */
-    private function addCustomToWishlist(Wishlist $wishlist, LineItem $lineItem, string $locale): Wishlist
+    private function addCustomToWishlist(LineItem $lineItem, string $locale): Wishlist
     {
-        return $this->mapWishlist($this->client->post(
-            '/shopping-lists/' . $wishlist->wishlistId,
-            ['expand' => self::EXPAND_VARIANTS],
-            [],
-            json_encode([
-                'version' => $wishlist->wishlistVersion,
-                'actions' => [
-                    [
-                        'action' => 'addCustomLineItem',
-                        'name' => ['de' => $lineItem->name],
-                        // Must be unique inside the entire wishlist. We do not use
-                        // this for anything relevant. Random seems fine for now.
-                        'slug' => md5(microtime()),
-                        'taxCategory' => $this->getTaxCategory(),
-                        'money' => [
-                            'type' => 'centPrecision',
-                            'currencyCode' => 'EUR', // @TODO: Get from context
-                            'centAmount' => $lineItem->totalPrice,
-                        ],
-                        'quantity' => $lineItem->count,
-                    ],
-                ],
-            ])
-        ), Locale::createFromPosix($locale));
+        return [
+            'action' => 'addCustomLineItem',
+            'name' => ['de' => $lineItem->name],
+            // Must be unique inside the entire wishlist. We do not use
+            // this for anything relevant. Random seems fine for now.
+            'slug' => md5(microtime()),
+            'taxCategory' => $this->getTaxCategory(),
+            'money' => [
+                'type' => 'centPrecision',
+                'currencyCode' => 'EUR', // @TODO: Get from context
+                'centAmount' => $lineItem->totalPrice,
+            ],
+            'quantity' => $lineItem->count,
+        ];
     }
 
     /**

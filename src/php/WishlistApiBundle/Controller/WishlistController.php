@@ -48,6 +48,35 @@ class WishlistController extends CrudController
         ];
     }
 
+    public function addMultipleAction(Context $context, Request $request): array
+    {
+        $payload = $this->getJsonContent($request);
+
+        if (!isset($payload['lineItems']) || !is_array($payload['lineItems'])) {
+            throw new BadRequestHttpException('Parameter "lineItems" in payload is not an array.');
+        }
+
+        $wishlistApi = $this->getWishlistApi($context);
+
+        $wishlist = $this->getWishlist($context);
+
+        $wishlistApi->startTransaction($wishlist);
+        foreach (($payload['lineItems'] ?? []) as $lineItemData) {
+            $wishlistApi->addToWishlist(
+                $wishlist,
+                new LineItem\Variant([
+                    'variant' => new Variant(['sku' => $lineItemData['variant']['sku']]),
+                    'count' => $lineItemData['count'] ?? 1,
+                ])
+            );
+        }
+        $wishlist = $wishlistApi->commit();
+
+        return [
+            'wishlist' => $wishlist,
+        ];
+    }
+
     public function createAction(Context $context, Request $request): Wishlist
     {
         if (!$context->session->loggedIn) {

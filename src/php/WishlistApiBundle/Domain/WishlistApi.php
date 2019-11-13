@@ -44,6 +44,14 @@ interface WishlistApi
 
     /**
      * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
+     * @param array $lineItems
+     * @param string $locale
+     * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+     */
+    public function addMultipleToWishlist(Wishlist $wishlist, array $lineItems, string $locale): Wishlist;
+
+    /**
+     * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
      * @param \Frontastic\Common\WishlistApiBundle\Domain\LineItem $lineItem
      * @param int $count
      * @param string $locale
