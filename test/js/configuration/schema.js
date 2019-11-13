@@ -38,22 +38,6 @@ describe('ConfigurationSchema', function () {
                 field: 'test',
                 type: 'string',
                 default: '42',
-
-            }],
-        }])
-
-        expect(schema.get('test')).toBe('42')
-    })
-
-    it('gets default option for undefined existing field', () => {
-        let schema = new Schema([{
-            name: 'Section',
-            fields: [{
-                label: 'Test Field',
-                field: 'test',
-                type: 'string',
-                default: '42',
-
             }],
         }])
 
@@ -68,11 +52,186 @@ describe('ConfigurationSchema', function () {
                 field: 'test',
                 type: 'boolean',
                 default: false,
-
             }],
         }])
 
         expect(schema.get('test')).toBe(false)
+    })
+
+    it('gets correct "null" default for boolean field', () => {
+        let schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'boolean',
+                default: null,
+            }],
+        }])
+
+        expect(schema.get('test')).toBeNull()
+    })
+
+    it('gets "false" for undefined boolean field without default', () => {
+        let schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'boolean',
+            }],
+        }])
+
+        expect(schema.get('test')).toBe(false)
+    })
+
+    it('gets "false" for null boolean field without default', () => {
+        let schema = new Schema(
+            [{
+                name: 'Section',
+                fields: [{
+                    label: 'Test Field',
+                    field: 'test',
+                    type: 'boolean',
+                }],
+            }],
+            {
+                test: null,
+            }
+        )
+
+        expect(schema.get('test')).toBe(false)
+    })
+
+    it('gets 0 for undefined decimal field without default', () => {
+        let schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'decimal',
+            }],
+        }])
+
+        expect(schema.get('test')).toBe(0)
+    })
+
+    it('gets 0 for undefined integer field without default', () => {
+        let schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'integer',
+            }],
+        }])
+
+        expect(schema.get('test')).toBe(0)
+    })
+
+    it('gets 0 for undefined float field without default', () => {
+        let schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'float',
+            }],
+        }])
+
+        expect(schema.get('test')).toBe(0)
+    })
+
+    it('gets 0 for undefined number field without default', () => {
+        let schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'number',
+            }],
+        }])
+
+        expect(schema.get('test')).toBe(0)
+    })
+
+    it('gets empty string for undefined string field without default', () => {
+        let schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'string',
+            }],
+        }])
+
+        expect(schema.get('test')).toBe('')
+    })
+
+    it('gets empty string for undefined text field without default', () => {
+        let schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'text',
+            }],
+        }])
+
+        expect(schema.get('test')).toBe('')
+    })
+
+    it('gets empty string for undefined markdown field without default', () => {
+        let schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'markdown',
+            }],
+        }])
+
+        expect(schema.get('test')).toBe('')
+    })
+
+    it('gets "{}" for undefined json field without default', () => {
+        let schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'json',
+            }],
+        }])
+
+        expect(schema.get('test')).toBe('{}')
+    })
+
+    it('gets empty array for undefined group field without default with min 0', () => {
+        let schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'group',
+                min: 0,
+            }],
+        }])
+
+        expect(schema.get('test')).toStrictEqual([])
+    })
+
+    it('gets null for undefined custom field without default', () => {
+        let schema = new Schema([{
+            name: 'Section',
+            fields: [{
+                label: 'Test Field',
+                field: 'test',
+                type: 'custom',
+            }],
+        }])
+
+        expect(schema.get('test')).toBeNull()
     })
 
     it('claims to have defined field', () => {

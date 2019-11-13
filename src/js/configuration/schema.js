@@ -80,6 +80,32 @@ function getSchemaWithResolvedStreams (schema, configuration, streamData, custom
     return value
 }
 
+function getFieldDefaultValue (type, defaultValue) {
+    if (typeof defaultValue !== 'undefined') {
+        return defaultValue
+    }
+
+    switch (type) {
+    case 'group':
+        return []
+    case 'decimal':
+    case 'integer':
+    case 'float':
+    case 'number':
+        return 0
+    case 'string':
+    case 'text':
+    case 'markdown':
+        return ''
+    case 'json':
+        return '{}'
+    case 'boolean':
+        return false
+    default:
+        return null
+    }
+}
+
 class ConfigurationSchema {
     constructor (schema = [], configuration = {}, id = null) {
         this.schema = schema
@@ -101,7 +127,7 @@ class ConfigurationSchema {
                     type: type,
                     sectionName: sectionSchema.name || '',
                     values: fieldSchema.values || [],
-                    default: typeof fieldSchema.default !== 'undefined' ? fieldSchema.default : null,
+                    default: getFieldDefaultValue(type, fieldSchema.default),
                     validate: fieldSchema.validate || {},
                     fields: fieldSchema.fields || null,
                     min: typeof fieldSchema.min === 'undefined' ? 1 : fieldSchema.min,
