@@ -16,7 +16,7 @@ abstract class CrudController extends Controller
     protected function getJsonContent(Request $request)
     {
         if (!$request->getContent() ||
-            !($body = json_decode($request->getContent(), true))) {
+            ($body = json_decode($request->getContent(), true)) === null) {
             throw new \InvalidArgumentException("Invalid data passed: " . $request->getContent());
         }
 
