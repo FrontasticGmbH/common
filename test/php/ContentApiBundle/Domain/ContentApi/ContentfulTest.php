@@ -27,7 +27,9 @@ class ContentfulTest extends TestCase
 
         $renderer = new \Contentful\RichText\Renderer();
 
-        $this->api = new Contentful($client, $renderer, 'en_US');
+        $localeMapper = new Domain\ContentApi\Contentful\NoopLocaleMapper();
+
+        $this->api = new Contentful($client, $renderer, $localeMapper, 'en_US');
     }
 
     public function testSimpleQueryAll()
