@@ -15,8 +15,6 @@ use Frontastic\Common\ContentApiBundle\Domain\ContentType;
 use Frontastic\Common\ContentApiBundle\Domain\Query;
 use Frontastic\Common\ContentApiBundle\Domain\Result;
 use GuzzleHttp\Promise;
-use Contentful\RichText\Node\NodeInterface;
-use Contentful\RichText\Renderer;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
