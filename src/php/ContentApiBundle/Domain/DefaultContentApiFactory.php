@@ -38,8 +38,12 @@ class DefaultContentApiFactory implements ContentApiFactory
      */
     private $psrCache;
 
-    public function __construct(ContainerInterface $container, Cache $cache, CacheInterface $psrCache, iterable $decorators)
-    {
+    public function __construct(
+        ContainerInterface $container,
+        Cache $cache,
+        CacheInterface $psrCache,
+        iterable $decorators
+    ) {
         $this->container = $container;
         $this->decorators = $decorators;
         $this->cache = $cache;

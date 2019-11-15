@@ -10,4 +10,3 @@ interface LocaleMapper
      */
     public function replaceLocale(string $frontasticLocale): string;
 }
-
