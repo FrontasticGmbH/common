@@ -60,7 +60,12 @@ class Locale extends DataObject
     /**
      * @var string
      */
-    const LOCALE = '(([a-z]{2,})(_([A-Z]{2,})(.([A-Z0-9_\-\+]+))?|)(\@([a-z]+))?$)';
+    const LOCALE = '(^
+        (?P<language>[a-z]{2,})
+        (?:_(?P<territory>[A-Z]{2,}))?
+        (?:\\.(?P<codeset>[A-Z0-9_+-]+))?
+        (?:@(?P<modifier>[A-Za-z]+))?
+    $)x';
 
     /**
      * @var string
@@ -596,10 +601,10 @@ class Locale extends DataObject
             );
         }
 
-        $language = $matches[1];
-        $territory = $matches[3] ?? self::guessTerritory($language);
-        $currency = isset($matches[7]) ?
-            self::modifierToCurrency($matches[7]):
+        $language = $matches['language'];
+        $territory = $matches['territory'] ?? self::guessTerritory($language);
+        $currency = !empty($matches['modifier']) ?
+            self::modifierToCurrency($matches['modifier']):
             self::guessCurrency($territory);
 
         return new Locale([
@@ -623,6 +628,7 @@ class Locale extends DataObject
     private static function modifierToCurrency(string $modifier): string
     {
         switch ($modifier) {
+            case 'EUR':
             case 'euro':
                 return 'EUR';
         }
