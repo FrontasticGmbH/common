@@ -39,13 +39,16 @@ class AccountAuthController extends Controller
             'salutation' => $body['salutation'],
             'firstName' => $body['firstName'],
             'lastName' => $body['lastName'],
-            'birthday' => new \DateTimeImmutable($body['birthdayYear'] .
-                '-' . $body['birthdayMonth'] .
-                '-' . $body['birthdayDay'] .
-                'T12:00'),
+            'birthday' => isset($body['birthdayYear']) ?
+                new \DateTimeImmutable(
+                    $body['birthdayYear'] .
+                    '-' . ($body['birthdayMonth'] ?? 1 ) .
+                    '-' . ($body['birthdayDay'] ?? 1) .
+                    'T12:00'
+                ) : null,
             'data' => [
-                'phonePrefix' => $body['phonePrefix'],
-                'phone' => $body['phone'],
+                'phonePrefix' => $body['phonePrefix'] ?? null,
+                'phone' => $body['phone'] ?? null,
             ],
         ]);
         $account->setPassword($body['password']);
