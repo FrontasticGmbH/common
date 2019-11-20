@@ -129,6 +129,7 @@ class CustomerService
                         'publicUrl' => $project['publicUrl'] ?? null,
                         'previewUrl' => $project['previewUrl'] ?? null,
                         'webpackPort' => $project['webpackPort'] ?? 3000,
+                        'ssrPort' => $project['ssrPort'] ?? 8000,
                         'configuration' => $this->convertConfigurationToObjects(
                             array_replace_recursive(
                                 $customerConfiguration,

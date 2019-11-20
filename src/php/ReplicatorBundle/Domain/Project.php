@@ -42,6 +42,11 @@ class Project extends DataObject
     public $webpackPort;
 
     /**
+     * @var int
+     */
+    public $ssrPort;
+
+    /**
      * @var array
      */
     public $configuration = [];
