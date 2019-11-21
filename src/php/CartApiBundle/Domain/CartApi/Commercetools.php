@@ -636,6 +636,7 @@ class Commercetools implements CartApi
             'postalCode' => $address['postalCode'] ?? null,
             'city' => $address['city'] ?? null,
             'country' => $address['country'] ?? null,
+            'phone' => $address['phone'] ?? null,
         ]);
     }
 
@@ -653,6 +654,7 @@ class Commercetools implements CartApi
             'postalCode' => $address['postalCode'] ?? null,
             'city' => $address['city'] ?? null,
             'country' => $address['country'] ?? null,
+            'phone' => $address['phone'] ?? null,
         ];
     }
 
