@@ -50,7 +50,7 @@ class ProductQueryFactory
             unset($queryParameters['sortOrder']);
         }
 
-        return new ProductQuery($queryParameters);
+        return new ProductQuery($queryParameters, true);
     }
 
     /**
