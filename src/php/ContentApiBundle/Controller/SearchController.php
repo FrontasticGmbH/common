@@ -28,7 +28,6 @@ class SearchController extends Controller
         } else {
             throw new \RuntimeException("either contentId nor contentIds is set in request");
         }
-        $contentId = $requestParameters['contentId'];
 
         return [
             'result' => $result,
