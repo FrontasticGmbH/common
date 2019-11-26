@@ -1,7 +1,6 @@
 ; Properties determining, if the build should fail, if one of the tests fails
 env=prod
 
-test-static-phpstan.fail-on-violation=false
 test-static-cpd.fail-on-violation = false
 
 coding.standard=PSR2
