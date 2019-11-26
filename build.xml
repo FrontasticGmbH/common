@@ -28,6 +28,7 @@
     <import file="${frontastic_basedir}/paas/integration/build-commons/modules/pdepend.xml" />
     <import file="${frontastic_basedir}/paas/integration/build-commons/modules/phpcpd.xml" />
     <import file="${frontastic_basedir}/paas/integration/build-commons/modules/phpmd.xml" />
+    <import file="${frontastic_basedir}/paas/integration/build-commons/modules/phpstan.xml" />
 
     <!--
         Custom modules

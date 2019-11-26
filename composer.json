@@ -2,7 +2,7 @@
     "name": "frontastic/common",
     "config": {
         "platform": {
-            "php": "7.2"
+            "php": "7.3"
         }
     },
     "require": {
@@ -31,7 +31,8 @@
         "squizlabs/php_codesniffer": "@stable",
         "sebastian/phpcpd": "@stable",
         "doctrine/common": "^2.9",
-        "myclabs/deep-copy": "^1.0"
+        "myclabs/deep-copy": "^1.0",
+        "phpstan/phpstan": "^0.11.19"
     },
     "autoload": {
         "psr-4": {
