@@ -1,6 +1,6 @@
 <?php
 
-function debug(... $args)
+function debug(...$args)
 {
     \Frontastic\Common\DevelopmentBundle\Debugger::log(...$args);
 }
