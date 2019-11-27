@@ -24,7 +24,7 @@ class Product extends DataObject
     /**
      * @var DateTimeImmutable|null
      */
-    public $changed;
+    public $lastModifiedAt;
 
     /**
      * @var string
