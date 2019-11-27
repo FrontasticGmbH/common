@@ -865,8 +865,9 @@ class Commercetools implements CartApi
 
         $discounts = [];
         foreach ($cart['discountCodes'] as $discount) {
+            // Get the state from the $discount and save it in $discountCodeState variable
+            // before assigning $discount['discountCode'] to $discount.
             $discountCodeState = $discount['state'] ?? null;
-
             $discount = $discount['discountCode'] ?? [];
             $discount = isset($discount['obj']) ? $discount['obj'] : $discount;
             $discounts[] = new Discount([
