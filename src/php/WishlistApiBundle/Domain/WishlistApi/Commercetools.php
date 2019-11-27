@@ -163,7 +163,7 @@ class Commercetools implements WishlistApi
         foreach ($lineItems as $lineItem) {
             $actions[] = ($lineItem instanceof LineItem\Variant) ?
                 $this->addVariantToWishlist($lineItem, $locale) :
-                $this->addCustomToWishlist($wishlist, $lineItem, $locale);
+                $this->addCustomToWishlist($lineItem, $locale);
         }
 
         return $this->mapWishlist(
@@ -208,7 +208,6 @@ class Commercetools implements WishlistApi
             // Must be unique inside the entire wishlist. We do not use
             // this for anything relevant. Random seems fine for now.
             'slug' => md5(microtime()),
-            'taxCategory' => $this->getTaxCategory(),
             'money' => [
                 'type' => 'centPrecision',
                 'currencyCode' => 'EUR', // @TODO: Get from context
@@ -345,7 +344,7 @@ class Commercetools implements WishlistApi
 
         $lineItems = array_values(array_filter(
             array_map(
-                function (array $lineItem) use ($locale, $wishlistVariantMap): LineItem {
+                function (array $lineItem) use ($wishlistVariantMap): LineItem {
                     return new LineItem\Variant([
                         'lineItemId' => $lineItem['id'],
                         'name' => reset($lineItem['name']),

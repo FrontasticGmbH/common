@@ -2,10 +2,10 @@
 
 namespace Frontastic\Common\WishlistApiBundle\Controller;
 
-use Frontastic\Common\WishlistApiBundle\Domain\Payment;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 use Frontastic\Common\CoreBundle\Controller\CrudController;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
@@ -58,7 +58,7 @@ class WishlistController extends CrudController
 
         $wishlistApi = $this->getWishlistApi($context);
 
-        $wishlist = $this->getWishlist($context);
+        $wishlist = $this->getWishlist($context, $request->get('wishlist', null));
 
         $wishlistApi->startTransaction($wishlist);
         foreach (($payload['lineItems'] ?? []) as $lineItemData) {

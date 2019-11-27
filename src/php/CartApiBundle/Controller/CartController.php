@@ -2,16 +2,16 @@
 
 namespace Frontastic\Common\CartApiBundle\Controller;
 
-use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
+use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\CoreBundle\Controller\CrudController;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class CartController extends CrudController
 {

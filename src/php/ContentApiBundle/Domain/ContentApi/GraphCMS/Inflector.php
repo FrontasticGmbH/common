@@ -753,10 +753,6 @@ class Inflector
      */
     public static function slug($string, $replacement = '-')
     {
-        deprecationWarning(
-            'Inflector::slug() is deprecated. ' .
-            'Use Text::slug() instead.'
-        );
         $quotedReplacement = preg_quote($replacement, '/');
 
         $map = [
