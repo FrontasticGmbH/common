@@ -4,8 +4,7 @@ parameters:
         - src/
     inferPrivatePropertyTypeFromConstructor: true
     ignoreErrors:
-        - '#unknown class Tideways\\Profiler#'
-        - '#Tideways\\Profiler not found#'
+        - '#Tideways\\Profiler#'
         - '#invalid typehint type Frontastic\\Catwalk\\ApiCoreBundle\\Domain\\Context#'
         - '#Frontastic\\Catwalk\\ApiCoreBundle\\Domain\\Context not found#'
         - '#Result of method Kore\\DataObject\\DataObject::__get\(\) \(void\) is used.#'
