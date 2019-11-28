@@ -6,6 +6,7 @@ use Frontastic\Common\ProductApiBundle\Domain\Category;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
@@ -22,7 +23,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 class Commercetools implements ProductApi
 {
     /**
-     * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client
+     * @var Client
      */
     private $client;
 
@@ -42,16 +43,11 @@ class Commercetools implements ProductApi
     private $defaultLocale;
 
     /**
-     * @var string?
+     * @var string|null
      */
     private $localeOverwrite;
 
-    /**
-     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client $client
-     * @param Mapper $mapper
-     * @param string $localeOverwrite
-     */
-    public function __construct(Client $client, Mapper $mapper, string $defaultLocale, $localeOverwrite = null)
+    public function __construct(Client $client, Mapper $mapper, string $defaultLocale, string $localeOverwrite = null)
     {
         $this->client = $client;
         $this->mapper = $mapper;
@@ -63,10 +59,8 @@ class Commercetools implements ProductApi
     /**
      * Overwrite default commerecetools options.
      *
-     * Explicitely NOT part of the ProductApi interface because Commercetools specific and only to be used during
+     * Explicitly NOT part of the ProductApi interface because Commercetools specific and only to be used during
      * factoring!
-     *
-     * @param Commercetools\Options $options
      */
     public function setOptions(ProductApi\Commercetools\Options $options): void
     {
@@ -74,9 +68,8 @@ class Commercetools implements ProductApi
     }
 
     /**
-     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery $query
-     * @return \Frontastic\Common\ProductApiBundle\Domain\Category[]
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @return Category[]
+     * @throws RequestException
      */
     public function getCategories(CategoryQuery $query): array
     {
@@ -280,10 +273,7 @@ class Commercetools implements ProductApi
         return $promise;
     }
 
-    /**
-     * @return \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client
-     */
-    public function getDangerousInnerClient()
+    public function getDangerousInnerClient(): Client
     {
         return $this->client;
     }
