@@ -97,7 +97,7 @@ class Commercetools implements AccountApi
                     'salutation' => $account->salutation,
                     'firstName' => $account->firstName,
                     'lastName' => $account->lastName,
-                    'dateOfBirth' => $account->birthday->format('Y-m-d'),
+                    'dateOfBirth' => $account->birthday ? $account->birthday->format('Y-m-d') : null,
                     'password' => $this->sanitizePassword($account->getPassword()),
                     'isEmailVerified' => $account->confirmed,
                     'custom' => [
