@@ -59,6 +59,10 @@ class Product extends DataObject
      * this property might make your code unstable against future
      * changes.
      *
+     * Should only be accessed in lifecycle event listeners,
+     * and not in controllers, because ProductApiWithoutInner removes
+     * this value before the product is returned to a controller.
+     *
      * @var mixed
      */
     public $dangerousInnerProduct;
