@@ -42,7 +42,7 @@ class Mapper
         $locale = Locale::createFromPosix($query->locale);
         return new Product([
             'productId' => $productData['id'],
-            'lastModifiedAt' => $lastModified,
+            'changed' => $lastModified,
             'version' => $version,
             'name' => $this->getLocalizedValue($locale, $productData['name'] ?? []),
             'slug' => $this->getLocalizedValue($locale, $productData['slug'] ?? []),
