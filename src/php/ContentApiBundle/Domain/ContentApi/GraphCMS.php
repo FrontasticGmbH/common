@@ -115,14 +115,15 @@ class GraphCMS implements ContentApi
         $contentIdsGiven = $this->arrayIsNonEmpty($query->contentIds);
         $searchStringGiven = $this->stringIsNonEmpty($query->query);
 
-        if ($contentIdsGiven && $contentTypeGiven) {
-            $promise = $this->queryContentIds($query, $locale);
-        } elseif ($searchStringGiven && !$contentTypeGiven) {
+        if ($searchStringGiven && !$contentTypeGiven) {
             $promise = $this->queryBySearchString($query, $locale);
         } elseif ($searchStringGiven && $contentTypeGiven) {
             $promise = $this->queryByContentTypeAndSearchString($query, $locale);
         } elseif (!$searchStringGiven && $contentTypeGiven) {
             $promise = $this->queryByContentType($query, $locale, $mode);
+        // } elseif ($contentIdsGiven && $contentTypeGiven) {
+            // Method does not exist yet:
+            // $promise = $this->queryContentIds($query, $locale);
         } else {
             $promise = Promise\rejection_for(
                 new \InvalidArgumentException('provide a ContentType and/or a search text')
@@ -293,7 +294,7 @@ class GraphCMS implements ContentApi
         foreach ($data['data'] as $contentType => $items) {
             // contentType is in plural lowercase version here
             $contentsForContentType = array_map(
-                function ($e) use ($contentType, $clientResult, $query, $attributes) {
+                function ($e) use ($contentType, $attributes) {
                     $contentId = $this->generateContentId(
                         $e['id'],
                         ucfirst(Inflector::singularize($contentType))

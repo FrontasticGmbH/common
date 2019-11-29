@@ -1,6 +1,7 @@
 <?php
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception;
 
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception;
 
 class InvalidQueryException extends Exception

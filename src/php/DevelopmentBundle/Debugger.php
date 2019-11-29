@@ -24,7 +24,7 @@ class Debugger
      */
     private static $copier;
 
-    public static function log(... $args)
+    public static function log(...$args)
     {
         // Copy logged objects to avoid instance changes
         self::$debugMessages[] = self::getCopier()->copy($args);

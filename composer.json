@@ -6,6 +6,7 @@
         }
     },
     "require": {
+        "symfony/symfony": "^4.1",
         "symfony/dependency-injection": "^4.1",
         "symfony/config": "^4.1",
         "symfony/yaml": "^4.1",
@@ -21,7 +22,9 @@
         "seld/jsonlint": "@stable",
         "justinrainbow/json-schema": "@stable",
         "ext-json": "*",
-        "guzzlehttp/guzzle": "^6.3"
+        "guzzlehttp/guzzle": "^6.3",
+        "swiftmailer/swiftmailer": "^6.2",
+        "qafoolabs/no-framework-bundle": "^2.6"
     },
     "require-dev": {
         "phpunit/phpunit": "^6",
@@ -31,7 +34,8 @@
         "squizlabs/php_codesniffer": "@stable",
         "sebastian/phpcpd": "@stable",
         "doctrine/common": "^2.9",
-        "myclabs/deep-copy": "^1.0"
+        "myclabs/deep-copy": "^1.0",
+        "phpstan/phpstan": "^0.11.19"
     },
     "autoload": {
         "psr-4": {

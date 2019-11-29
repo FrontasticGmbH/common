@@ -75,7 +75,7 @@ class Tideways extends HttpClient
 
                     return $response;
                 },
-                function (\Exception $reason) use ($method, $url, $body, $headers, $span, $traceId) {
+                function (\Exception $reason) use ($method, $url, $body, $headers, $span) {
                     $this->logger->error(sprintf(
                         '[HTTP] Exception: %s %s (%s)',
                         $method,

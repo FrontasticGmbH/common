@@ -6,7 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 trait ContainerTestTrait
 {
-    abstract static protected function getContainer(): ContainerInterface;
+    abstract protected static function getContainer(): ContainerInterface;
 
     public function testContainerServicesAllFunctional()
     {

@@ -2,7 +2,7 @@
 
 namespace Frontastic\Common;
 
-use Frontastic\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel as SymfonyKernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
@@ -96,7 +96,7 @@ abstract class Kernel extends SymfonyKernel
     /**
      * Initialize configuration
      *
-     * @return void
+     * @return mixed
      * @todo This parse_ini_file() stuff is deprecated, we use dotenv now
      */
     public static function getConfiguration()
