@@ -2,47 +2,49 @@
 
 namespace Frontastic\Common\WishlistApiBundle\Domain;
 
-use Doctrine\Common\Cache\Cache;
-use Frontastic\Common\HttpClient;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory;
-use Frontastic\Common\ReplicatorBundle\Domain\Customer;
+use Frontastic\Common\ReplicatorBundle\Domain\Project;
 
 class WishlistApiFactory
 {
-    private $container;
-    private $cache;
+    /**
+     * @var ProductApiFactory
+     */
+    private $productApiFactory;
+
+    /**
+     * @var ClientFactory
+     */
+    private $commercetoolsClientFactory;
+
     private $decorators = [];
 
-    public function __construct($container, Cache $cache, iterable $decorators)
-    {
-        $this->container = $container;
-        $this->cache = $cache;
+    public function __construct(
+        ProductApiFactory $productApiFactory,
+        ClientFactory $commercetoolsClientFactory,
+        iterable $decorators
+    ) {
+        $this->productApiFactory = $productApiFactory;
+        $this->commercetoolsClientFactory = $commercetoolsClientFactory;
         $this->decorators = $decorators;
     }
 
-    public function factor(Customer $customer): WishlistApi
+    public function factor(Project $project): WishlistApi
     {
-        /* @var ProductApiFactory $productApiFactory */
-        $productApiFactory = $this->container->get(ProductApiFactory::class);
+        $config = $project->getConfigurationSection('wishlist');
 
-        switch ($customer->configuration['wishlist']->engine) {
+        switch ($config->engine) {
             case 'commercetools':
                 $wishlistApi = new WishlistApi\Commercetools(
-                    new Client(
-                        $customer->configuration['wishlist']->clientId,
-                        $customer->configuration['wishlist']->clientSecret,
-                        $customer->configuration['wishlist']->projectKey,
-                        $this->container->get(HttpClient::class),
-                        $this->cache
-                    ),
-                    $productApiFactory->factor($customer)
+                    $this->commercetoolsClientFactory->factorForConfiguration($config),
+                    $this->productApiFactory->factor($project)
                 );
                 break;
 
             default:
                 throw new \OutOfBoundsException(
-                    "No wishlist API configured for customer {$customer->name}. " .
+                    "No wishlist API configured for project {$project->name}. " .
                     "Check the provisioned customer configuration in app/config/customers/."
                 );
         }

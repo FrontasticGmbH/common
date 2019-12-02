@@ -2,11 +2,10 @@
 
 namespace Frontastic\Common\ProductApiBundle\Domain;
 
-use Doctrine\Common\Cache\Cache;
-use Frontastic\Common\HttpClient;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
-use Frontastic\Common\ReplicatorBundle\Domain\Customer;
 use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory;
+use Frontastic\Common\ReplicatorBundle\Domain\Project;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -14,69 +13,45 @@ use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
 class DefaultProductApiFactory implements ProductApiFactory
 {
     /**
-     * @var
+     * @var ClientFactory
      */
-    private $container;
-
-    /**
-     * @var \Doctrine\Common\Cache\Cache
-     */
-    private $cache;
+    private $commercetoolsClientFactory;
 
     /**
      * @var array
      */
     private $decorators;
 
-    public function __construct($container, Cache $cache, iterable $decorators = [])
+    public function __construct(ClientFactory $commercetoolsClientFactory, iterable $decorators = [])
     {
-        $this->container = $container;
-        $this->cache = $cache;
+        $this->commercetoolsClientFactory = $commercetoolsClientFactory;
         $this->decorators = $decorators;
     }
 
-    public function factor(Customer $customer): ProductApi
+    public function factor(Project $project): ProductApi
     {
-        try {
-            return new ProductApi\LifecycleEventDecorator(
-                $this->factorFromConfiguration($customer->configuration),
-                $this->decorators
-            );
-        } catch (\OutOfBoundsException $e) {
-            throw new \OutOfBoundsException(
-                "No product API configured for customer {$customer->name}. " .
-                "Check the provisioned customer configuration in app/config/customers/.",
-                0,
-                $e
-            );
-        }
-    }
-
-    public function factorFromConfiguration(array $config): ProductApi
-    {
-        $productConfig = $config['product'];
-        if (is_array($productConfig)) {
-            $productConfig = (object)$productConfig;
-        }
+        $productConfig = $project->getConfigurationSection('product');
 
         switch ($productConfig->engine) {
             case 'commercetools':
-                return new Commercetools(
-                    new Commercetools\Client(
-                        $productConfig->clientId,
-                        $productConfig->clientSecret,
-                        $productConfig->projectKey,
-                        $this->container->get(HttpClient::class),
-                        $this->cache
-                    ),
+                $commercetoolsConfig = $project->getConfigurationSection('commercetools');
+                $productApi = new Commercetools(
+                    $this->commercetoolsClientFactory->factorForProjectAndType($project, 'product'),
                     new Commercetools\Mapper(
-                        $config['commercetools']->localeOverwrite ?? null
+                        $commercetoolsConfig->localeOverwrite ?? null
                     ),
-                    $this->container->get(Context::class)->project->defaultLanguage,
-                    $config['commercetools']->localeOverwrite ?? null
+                    $project->defaultLanguage,
+                    $commercetoolsConfig->localeOverwrite ?? null
                 );
+                break;
+
             default:
-                throw new \OutOfBoundsException('No valid API configuration found');
+                throw new \OutOfBoundsException(
+                    "No product API configured for project {$project->name}. " .
+                    "Check the provisioned customer configuration in app/config/customers/."
+                );
         }
+
+        return new ProductApi\LifecycleEventDecorator($productApi, $this->decorators);
     }
 }

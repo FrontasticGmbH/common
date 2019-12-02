@@ -145,7 +145,7 @@ class WishlistController extends CrudController
 
         /** @var \Frontastic\Common\WishlistApiBundle\Domain\WishlistApiFactory $wishlistApiFactory */
         $wishlistApiFactory = $this->get('Frontastic\Common\WishlistApiBundle\Domain\WishlistApiFactory');
-        return $this->wishlistApi = $wishlistApiFactory->factor($context->customer);
+        return $this->wishlistApi = $wishlistApiFactory->factor($context->project);
     }
 
     /**
