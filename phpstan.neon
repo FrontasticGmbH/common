@@ -9,3 +9,4 @@ parameters:
         - '#Frontastic\\Catwalk\\ApiCoreBundle\\Domain\\Context not found#'
         - '#Result of method Kore\\DataObject\\DataObject::__get\(\) \(void\) is used.#'
         - '#Function debug not found while trying to analyse it - autoloading is probably not configured properly.#'
+    reportUnmatchedIgnoredErrors: false
