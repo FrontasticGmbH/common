@@ -1,5 +1,7 @@
 {
     "name": "frontastic/common",
+    "license": "None",
+    "version": "1.0.0",
     "config": {
         "platform": {
             "php": "7.2"
