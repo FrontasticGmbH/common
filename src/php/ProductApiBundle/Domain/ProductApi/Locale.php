@@ -51,16 +51,6 @@ class Locale extends DataObject
      */
     public function __toString(): string
     {
-        if ($this->original) {
-            return $this->original;
-        }
-        return sprintf('%s_%s', $this->language, $this->territory);
-    }
-    /**
-     * @return string
-     */
-    public function toString(): string
-    {
         return sprintf('%s_%s.UTF-8@%s', $this->language, $this->territory, $this->currency);
     }
 
