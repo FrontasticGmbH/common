@@ -37,7 +37,7 @@ class WishlistApiFactory
         switch ($config->engine) {
             case 'commercetools':
                 $wishlistApi = new WishlistApi\Commercetools(
-                    $this->commercetoolsClientFactory->factorForConfiguration($config),
+                    $this->commercetoolsClientFactory->factorForProjectAndType($project, 'wishlist'),
                     $this->productApiFactory->factor($project)
                 );
                 break;
