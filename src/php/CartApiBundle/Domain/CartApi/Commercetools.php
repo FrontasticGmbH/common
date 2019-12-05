@@ -515,36 +515,6 @@ class Commercetools implements CartApi
     }
 
     /**
-     * This method is a temporary hack to recieve new orders. The
-     * synchronization is based on a locally stored sequence number.
-     *
-     * @return \Frontastic\Common\CartApiBundle\Domain\Order[]
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
-     * @todo Should we catch the RequestException here?
-     */
-    public function getNewOrders(): array
-    {
-        $since = @file_get_contents('/tmp/lastOrder') ?: '2000-01-01T01:00:00.000Z';
-
-        $result = $this->client
-            ->fetchAsync(
-                '/messages',
-                [
-                    'where' => 'type="OrderCreated" and createdAt > "' . $since . '"',
-                ]
-            )
-            ->wait();
-
-        $orders = [];
-        foreach ($result->results as $orderCreated) {
-            $orders[] = $this->mapOrder($orderCreated['order']);
-            file_put_contents('/tmp/lastOrder', $orderCreated['createdAt']);
-        }
-
-        return $orders;
-    }
-
-    /**
      * @param array $cart
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
