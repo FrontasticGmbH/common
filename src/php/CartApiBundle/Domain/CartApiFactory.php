@@ -14,12 +14,26 @@ use Frontastic\Common\ReplicatorBundle\Domain\Project;
 class CartApiFactory
 {
     private $container;
+
+    /**
+     * @var OrderIdGenerator
+     */
+    private $orderIdGenerator;
+
+    /**
+     * @var Cache
+     */
     private $cache;
+
+    /**
+     * @var iterable
+     */
     private $decorators = [];
 
-    public function __construct($container, Cache $cache, iterable $decorators)
+    public function __construct($container, OrderIdGenerator $orderIdGenerator, Cache $cache, iterable $decorators)
     {
         $this->container = $container;
+        $this->orderIdGenerator = $orderIdGenerator;
         $this->cache = $cache;
         $this->decorators = $decorators;
     }
@@ -39,7 +53,7 @@ class CartApiFactory
                         $this->cache
                     ),
                     new Mapper(),
-                    $this->getOrderIdGenerator()
+                    $this->orderIdGenerator
                 );
                 break;
 
@@ -51,14 +65,5 @@ class CartApiFactory
         }
 
         return new CartApi\LifecycleEventDecorator($cartApi, $this->decorators);
-    }
-
-    private function getOrderIdGenerator(): OrderIdGenerator
-    {
-        try {
-            return $this->container->get('frontastic.order-id-generator');
-        } catch (\Exception $e) {
-            return new OrderIdGenerator\Random();
-        }
     }
 }

@@ -7,8 +7,15 @@
     <services>
         <defaults public="true" />
 
+        <service id="Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator\Random">
+        </service>
+
+        <service id="frontastic.order-id-generator"
+                 alias="Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator\Random" />
+
         <service id="Frontastic\Common\CartApiBundle\Domain\CartApiFactory">
             <argument type="service" id="service_container" />
+            <argument type="service" id="frontastic.order-id-generator" />
             <argument type="service">
                 <service class="Doctrine\Common\Cache\ApcuCache" />
             </argument>
