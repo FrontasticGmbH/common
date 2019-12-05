@@ -173,7 +173,7 @@ class Commercetools implements CartApi
     /**
      * @param string $cartId
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
-     * @throws \RuntimeExcption if cart with $cartId was not found
+     * @throws \RuntimeException if cart with $cartId was not found
      */
     public function getById(string $cartId): Cart
     {
