@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain\CartApi;
 
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
@@ -683,7 +684,12 @@ class Commercetools implements CartApi
                         'lineItemId' => $lineItem['id'],
                         'name' => reset($lineItem['name']),
                         'type' => 'variant',
-                        'variant' => $this->mapper->dataToVariant($lineItem['variant'], new Query(), new Locale()),
+                        'variant' => $this->mapper->dataToVariant(
+                            $lineItem['variant'],
+                            new Query(),
+                            /// @TODO use the users locale instead of picking a random translation during mapping
+                            new CommercetoolsLocale()
+                        ),
                         'custom' => $lineItem['custom']['fields'] ?? [],
                         'count' => $lineItem['quantity'],
                         'price' => $lineItem['price']['value']['centAmount'],

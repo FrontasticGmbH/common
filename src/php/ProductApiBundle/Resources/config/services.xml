@@ -15,6 +15,18 @@
         </service>
 
         <service
+            id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\DefaultCommercetoolsLocaleCreatorFactory">
+            <argument type="service">
+                <service class="Doctrine\Common\Cache\ApcuCache" />
+            </argument>
+        </service>
+
+        <service
+            id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory"
+            alias="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\DefaultCommercetoolsLocaleCreatorFactory"
+        />
+
+        <service
             id="Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory"
             alias="Frontastic\Common\ProductApiBundle\Domain\DefaultProductApiFactory"
         />
@@ -24,6 +36,8 @@
             class="Frontastic\Common\ProductApiBundle\Domain\DefaultProductApiFactory">
             <argument type="service"
                       id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory" />
+            <argument type="service"
+                      id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory" />
             <argument type="tagged" tag="productApi.lifecycleEventListener" />
         </service>
     </services>

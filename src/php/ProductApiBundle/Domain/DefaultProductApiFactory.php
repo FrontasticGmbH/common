@@ -2,7 +2,6 @@
 
 namespace Frontastic\Common\ProductApiBundle\Domain;
 
-use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
@@ -18,13 +17,22 @@ class DefaultProductApiFactory implements ProductApiFactory
     private $commercetoolsClientFactory;
 
     /**
+     * @var Commercetools\Locale\CommercetoolsLocaleCreatorFactory
+     */
+    private $localeCreatorFactory;
+
+    /**
      * @var array
      */
     private $decorators;
 
-    public function __construct(ClientFactory $commercetoolsClientFactory, iterable $decorators = [])
-    {
+    public function __construct(
+        ClientFactory $commercetoolsClientFactory,
+        Commercetools\Locale\CommercetoolsLocaleCreatorFactory $localeCreatorFactory,
+        iterable $decorators = []
+    ) {
         $this->commercetoolsClientFactory = $commercetoolsClientFactory;
+        $this->localeCreatorFactory = $localeCreatorFactory;
         $this->decorators = $decorators;
     }
 
@@ -34,14 +42,12 @@ class DefaultProductApiFactory implements ProductApiFactory
 
         switch ($productConfig->engine) {
             case 'commercetools':
-                $commercetoolsConfig = $project->getConfigurationSection('commercetools');
+                $client = $this->commercetoolsClientFactory->factorForProjectAndType($project, 'product');
                 $productApi = new Commercetools(
-                    $this->commercetoolsClientFactory->factorForProjectAndType($project, 'product'),
-                    new Commercetools\Mapper(
-                        $commercetoolsConfig->localeOverwrite ?? null
-                    ),
-                    $project->defaultLanguage,
-                    $commercetoolsConfig->localeOverwrite ?? null
+                    $client,
+                    new Commercetools\Mapper(),
+                    $this->localeCreatorFactory->factor($project, $client),
+                    $project->defaultLanguage
                 );
                 break;
 
