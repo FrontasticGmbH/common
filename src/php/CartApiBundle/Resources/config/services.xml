@@ -14,11 +14,9 @@
                  alias="Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator\Random" />
 
         <service id="Frontastic\Common\CartApiBundle\Domain\CartApiFactory">
-            <argument type="service" id="service_container" />
+            <argument type="service"
+                      id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory" />
             <argument type="service" id="frontastic.order-id-generator" />
-            <argument type="service">
-                <service class="Doctrine\Common\Cache\ApcuCache" />
-            </argument>
             <argument type="tagged" tag="cartApi.lifecycleEventListener" />
         </service>
     </services>

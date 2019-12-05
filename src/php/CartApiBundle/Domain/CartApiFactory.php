@@ -2,9 +2,7 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain;
 
-use Doctrine\Common\Cache\Cache;
-use Frontastic\Common\HttpClient;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 
@@ -13,7 +11,10 @@ use Frontastic\Common\ReplicatorBundle\Domain\Project;
  */
 class CartApiFactory
 {
-    private $container;
+    /**
+     * @var ClientFactory
+     */
+    private $commercetoolsClientFactory;
 
     /**
      * @var OrderIdGenerator
@@ -21,20 +22,17 @@ class CartApiFactory
     private $orderIdGenerator;
 
     /**
-     * @var Cache
-     */
-    private $cache;
-
-    /**
      * @var iterable
      */
     private $decorators = [];
 
-    public function __construct($container, OrderIdGenerator $orderIdGenerator, Cache $cache, iterable $decorators)
-    {
-        $this->container = $container;
+    public function __construct(
+        ClientFactory $commercetoolsClientFactory,
+        OrderIdGenerator $orderIdGenerator,
+        iterable $decorators
+    ) {
+        $this->commercetoolsClientFactory = $commercetoolsClientFactory;
         $this->orderIdGenerator = $orderIdGenerator;
-        $this->cache = $cache;
         $this->decorators = $decorators;
     }
 
@@ -45,13 +43,7 @@ class CartApiFactory
         switch ($cartConfig->engine) {
             case 'commercetools':
                 $cartApi = new CartApi\Commercetools(
-                    new Client(
-                        $cartConfig->clientId,
-                        $cartConfig->clientSecret,
-                        $cartConfig->projectKey,
-                        $this->container->get(HttpClient::class),
-                        $this->cache
-                    ),
+                    $this->commercetoolsClientFactory->factorForProjectAndType($project, 'cart'),
                     new Mapper(),
                     $this->orderIdGenerator
                 );
