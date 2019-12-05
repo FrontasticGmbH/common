@@ -53,9 +53,10 @@ class CartController extends CrudController
                 ]),
                 'custom' => $payload['option'] ?: [],
                 'count' => $payload['count']
-            ])
+            ]),
+            $context->locale
         );
-        $cart = $cartApi->commit();
+        $cart = $cartApi->commit($context->locale);
 
         return [
             'cart' => $cart,
@@ -93,10 +94,11 @@ class CartController extends CrudController
                     ]),
                     'custom' => $lineItemData['option'] ?? [],
                     'count' => $lineItemData['count'] ?? 1,
-                ])
+                ]),
+                $context->locale
             );
         }
-        $cart = $cartApi->commit();
+        $cart = $cartApi->commit($context->locale);
 
         return [
             'cart' => $cart,
@@ -121,9 +123,10 @@ class CartController extends CrudController
             $cart,
             $this->getLineItem($cart, $payload['lineItemId']),
             $payload['count'],
-            $payload['custom'] ?? null
+            $payload['custom'] ?? null,
+            $context->locale
         );
-        $cart = $cartApi->commit();
+        $cart = $cartApi->commit($context->locale);
 
         return [
             'cart' => $cart,
@@ -140,9 +143,10 @@ class CartController extends CrudController
         $cartApi->startTransaction($cart);
         $cartApi->removeLineItem(
             $cart,
-            ($item = $this->getLineItem($cart, $payload['lineItemId']))
+            $item = $this->getLineItem($cart, $payload['lineItemId']),
+            $context->locale
         );
-        $cart = $cartApi->commit();
+        $cart = $cartApi->commit($context->locale);
 
         return [
             'cart' => $cart,
@@ -193,25 +197,28 @@ class CartController extends CrudController
         if (!empty($payload['account'])) {
             $cart = $cartApi->setEmail(
                 $cart,
-                $payload['account']['email']
+                $payload['account']['email'],
+                $context->locale
             );
         }
 
         if (!empty($payload['shipping']) || !empty($payload['billing'])) {
             $cart = $cartApi->setShippingAddress(
                 $cart,
-                $payload['shipping'] ?: $payload['billing']
+                $payload['shipping'] ?: $payload['billing'],
+                $context->locale
             );
         }
 
         if (!empty($payload['billing']) || !empty($payload['shipping'])) {
             $cart = $cartApi->setBillingAddress(
                 $cart,
-                $payload['billing'] ?: $payload['shipping']
+                $payload['billing'] ?: $payload['shipping'],
+                $context->locale
             );
         }
 
-        return ['cart' => $cartApi->commit()];
+        return ['cart' => $cartApi->commit($context->locale)];
     }
 
     public function checkoutAction(Context $context, Request $request): array
@@ -236,8 +243,9 @@ class CartController extends CrudController
 
     public function redeemDiscountAction(Context $context, string $code): array
     {
+        $cartApi = $this->getCartApi($context);
         return [
-            'cart' => $this->getCartApi($context)->redeemDiscountCode($this->getCart($context), $code),
+            'cart' => $cartApi->redeemDiscountCode($this->getCart($context), $code, $context->locale),
         ];
     }
 

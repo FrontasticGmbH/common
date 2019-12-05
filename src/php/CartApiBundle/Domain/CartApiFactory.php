@@ -3,6 +3,7 @@
 namespace Frontastic\Common\CartApiBundle\Domain;
 
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 
@@ -17,6 +18,11 @@ class CartApiFactory
     private $commercetoolsClientFactory;
 
     /**
+     * @var CommercetoolsLocaleCreatorFactory
+     */
+    private $localeCreatorFactory;
+
+    /**
      * @var OrderIdGenerator
      */
     private $orderIdGenerator;
@@ -28,10 +34,12 @@ class CartApiFactory
 
     public function __construct(
         ClientFactory $commercetoolsClientFactory,
+        CommercetoolsLocaleCreatorFactory $localeCreatorFactory,
         OrderIdGenerator $orderIdGenerator,
         iterable $decorators
     ) {
         $this->commercetoolsClientFactory = $commercetoolsClientFactory;
+        $this->localeCreatorFactory = $localeCreatorFactory;
         $this->orderIdGenerator = $orderIdGenerator;
         $this->decorators = $decorators;
     }
@@ -42,9 +50,11 @@ class CartApiFactory
 
         switch ($cartConfig->engine) {
             case 'commercetools':
+                $client = $this->commercetoolsClientFactory->factorForProjectAndType($project, 'cart');
                 $cartApi = new CartApi\Commercetools(
-                    $this->commercetoolsClientFactory->factorForProjectAndType($project, 'cart'),
+                    $client,
                     new Mapper(),
+                    $this->localeCreatorFactory->factor($project, $client),
                     $this->orderIdGenerator
                 );
                 break;

@@ -13,9 +13,9 @@ use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreator;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 
 /**
@@ -39,6 +39,11 @@ class Commercetools implements CartApi
      * @var Mapper
      */
     private $mapper;
+
+    /**
+     * @var CommercetoolsLocaleCreator
+     */
+    private $localeCreator;
 
     /**
      * @var OrderIdGenerator
@@ -72,10 +77,15 @@ class Commercetools implements CartApi
      * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper $mapper
      * @param \Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator $orderIdGenerator
      */
-    public function __construct(Client $client, Mapper $mapper, OrderIdGenerator $orderIdGenerator)
-    {
+    public function __construct(
+        Client $client,
+        Mapper $mapper,
+        CommercetoolsLocaleCreator $localeCreator,
+        OrderIdGenerator $orderIdGenerator
+    ) {
         $this->client = $client;
         $this->mapper = $mapper;
+        $this->localeCreator = $localeCreator;
         $this->orderIdGenerator = $orderIdGenerator;
     }
 
@@ -88,7 +98,7 @@ class Commercetools implements CartApi
      */
     public function getForUser(string $userId, string $localeString): Cart
     {
-        $locale = Locale::createFromPosix($localeString);
+        $locale = $this->localeCreator->createLocaleFromString($localeString);
 
         try {
             $cart = $this->mapCart(
@@ -98,38 +108,42 @@ class Commercetools implements CartApi
                         'customerId' => $userId,
                         'expand' => self::EXPAND,
                     ]
-                )
+                ),
+                $locale
             );
 
             return $this->assertCorrectLocale($cart, $locale);
         } catch (RequestException $e) {
-            return $this->mapCart($this->client->post(
-                '/carts',
-                ['expand' => self::EXPAND],
-                [],
-                json_encode([
-                    'country' => $locale->territory,
-                    'currency' => $locale->currency,
-                    'customerId' => $userId,
-                    'state' => 'Active',
-                    'inventoryMode' => 'ReserveOnOrder',
-                ])
-            ));
+            return $this->mapCart(
+                $this->client->post(
+                    '/carts',
+                    ['expand' => self::EXPAND],
+                    [],
+                    json_encode([
+                        'country' => $locale->country,
+                        'currency' => $locale->currency,
+                        'customerId' => $userId,
+                        'state' => 'Active',
+                        'inventoryMode' => 'ReserveOnOrder',
+                    ])
+                ),
+                $locale
+            );
         }
     }
 
-    private function assertCorrectLocale(Cart $cart, Locale $locale): Cart
+    private function assertCorrectLocale(Cart $cart, CommercetoolsLocale $locale): Cart
     {
         if ($cart->currency !== strtoupper($locale->currency)
-            || $cart->dangerousInnerCart['country'] !== strtoupper($locale->territory)
+            || $cart->dangerousInnerCart['country'] !== strtoupper($locale->country)
         ) {
             $actions = [];
             $actions[] = [
                 'action' => 'setCountry',
-                'country' => $locale->territory,
+                'country' => $locale->country,
             ];
 
-            return $this->postCartActions($cart, $actions);
+            return $this->postCartActions($cart, $actions, $locale);
         }
         return $cart;
     }
@@ -143,7 +157,7 @@ class Commercetools implements CartApi
      */
     public function getAnonymous(string $anonymousId, string $localeString): Cart
     {
-        $locale = Locale::createFromPosix($localeString);
+        $locale = $this->localeCreator->createLocaleFromString($localeString);
 
         $result = $this->client
             ->fetchAsync(
@@ -157,21 +171,24 @@ class Commercetools implements CartApi
             ->wait();
 
         if ($result->count >= 1) {
-            return $this->assertCorrectLocale($this->mapCart($result->results[0]), $locale);
+            return $this->assertCorrectLocale($this->mapCart($result->results[0], $locale), $locale);
         }
 
-        return $this->mapCart($this->client->post(
-            '/carts',
-            ['expand' => self::EXPAND],
-            [],
-            json_encode([
-                'country' => $locale->territory,
-                'currency' => $locale->currency,
-                'anonymousId' => $anonymousId,
-                'state' => 'Active',
-                'inventoryMode' => 'ReserveOnOrder',
-            ])
-        ));
+        return $this->mapCart(
+            $this->client->post(
+                '/carts',
+                ['expand' => self::EXPAND],
+                [],
+                json_encode([
+                    'country' => $locale->country,
+                    'currency' => $locale->currency,
+                    'anonymousId' => $anonymousId,
+                    'state' => 'Active',
+                    'inventoryMode' => 'ReserveOnOrder',
+                ])
+            ),
+            $locale
+        );
     }
 
     /**
@@ -179,11 +196,14 @@ class Commercetools implements CartApi
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      * @throws \RuntimeException if cart with $cartId was not found
      */
-    public function getById(string $cartId): Cart
+    public function getById(string $cartId, string $localeString = null): Cart
     {
-        return $this->mapCart($this->client->get(
-            '/carts/' . urlencode($cartId)
-        ));
+        return $this->mapCart(
+            $this->client->get(
+                '/carts/' . urlencode($cartId)
+            ),
+            $this->parseLocaleString($localeString)
+        );
     }
 
     /**
@@ -191,13 +211,15 @@ class Commercetools implements CartApi
      * @param \Frontastic\Common\CartApiBundle\Domain\LineItem $lineItem
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function addToCart(Cart $cart, LineItem $lineItem): Cart
+    public function addToCart(Cart $cart, LineItem $lineItem, string $localeString = null): Cart
     {
+        $locale = $this->parseLocaleString($localeString);
+
         if ($lineItem instanceof LineItem\Variant) {
-            return $this->addVariantToCart($cart, $lineItem);
+            return $this->addVariantToCart($cart, $lineItem, $locale);
         }
 
-        return $this->addCustomToCart($cart, $lineItem);
+        return $this->addCustomToCart($cart, $lineItem, $locale);
     }
 
     /**
@@ -205,7 +227,7 @@ class Commercetools implements CartApi
      * @param \Frontastic\Common\CartApiBundle\Domain\LineItem\Variant $lineItem
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    private function addVariantToCart(Cart $cart, LineItem\Variant $lineItem): Cart
+    private function addVariantToCart(Cart $cart, LineItem\Variant $lineItem, CommercetoolsLocale $locale): Cart
     {
         return $this->postCartActions(
             $cart,
@@ -219,7 +241,8 @@ class Commercetools implements CartApi
                         'fields' => $lineItem->custom,
                     ],
                 ],
-            ]
+            ],
+            $locale
         );
     }
 
@@ -228,21 +251,21 @@ class Commercetools implements CartApi
      * @param \Frontastic\Common\CartApiBundle\Domain\LineItem $lineItem
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    private function addCustomToCart(Cart $cart, LineItem $lineItem): Cart
+    private function addCustomToCart(Cart $cart, LineItem $lineItem, CommercetoolsLocale $locale): Cart
     {
         return $this->postCartActions(
             $cart,
             [
                 [
                     'action' => 'addCustomLineItem',
-                    'name' => ['de' => $lineItem->name],
+                    'name' => [$locale->language => $lineItem->name],
                     // Must be unique inside the entire cart. We do not use
                     // this for anything relevant. Random seems fine for now.
                     'slug' => md5(microtime()),
                     'taxCategory' => $this->getTaxCategory(),
                     'money' => [
                         'type' => 'centPrecision',
-                        'currencyCode' => 'EUR', // @TODO: Get from context
+                        'currencyCode' => $locale->currency,
                         'centAmount' => $lineItem->totalPrice,
                     ],
                     'custom' => !$lineItem->custom ? null : [
@@ -251,12 +274,18 @@ class Commercetools implements CartApi
                     ],
                     'quantity' => $lineItem->count,
                 ],
-            ]
+            ],
+            $locale
         );
     }
 
-    public function updateLineItem(Cart $cart, LineItem $lineItem, int $count, ?array $custom = null): Cart
-    {
+    public function updateLineItem(
+        Cart $cart,
+        LineItem $lineItem,
+        int $count,
+        ?array $custom = null,
+        string $localeString = null
+    ): Cart {
         $actions = [];
         if ($lineItem instanceof LineItem\Variant) {
             $actions[] = [
@@ -283,7 +312,7 @@ class Commercetools implements CartApi
             }
         }
 
-        return $this->postCartActions($cart, $actions);
+        return $this->postCartActions($cart, $actions, $this->parseLocaleString($localeString));
     }
 
     /**
@@ -291,8 +320,10 @@ class Commercetools implements CartApi
      * @param \Frontastic\Common\CartApiBundle\Domain\LineItem $lineItem
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function removeLineItem(Cart $cart, LineItem $lineItem): Cart
+    public function removeLineItem(Cart $cart, LineItem $lineItem, string $localeString = null): Cart
     {
+        $locale = $this->parseLocaleString($localeString);
+
         if ($lineItem instanceof LineItem\Variant) {
             return $this->postCartActions(
                 $cart,
@@ -301,7 +332,8 @@ class Commercetools implements CartApi
                         'action' => 'removeLineItem',
                         'lineItemId' => $lineItem->lineItemId,
                     ],
-                ]
+                ],
+                $locale
             );
         } else {
             return $this->postCartActions(
@@ -311,7 +343,8 @@ class Commercetools implements CartApi
                         'action' => 'removeCustomLineItem',
                         'customLineItemId' => $lineItem->lineItemId,
                     ],
-                ]
+                ],
+                $locale
             );
         }
     }
@@ -321,7 +354,7 @@ class Commercetools implements CartApi
      * @param string $email
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function setEmail(Cart $cart, string $email): Cart
+    public function setEmail(Cart $cart, string $email, string $localeString = null): Cart
     {
         return $this->postCartActions(
             $cart,
@@ -330,11 +363,12 @@ class Commercetools implements CartApi
                     'action' => 'setCustomerEmail',
                     'email' => $email,
                 ],
-            ]
+            ],
+            $this->parseLocaleString($localeString)
         );
     }
 
-    public function setShippingMethod(Cart $cart, string $shippingMethod): Cart
+    public function setShippingMethod(Cart $cart, string $shippingMethod, string $localeString = null): Cart
     {
         return $this->postCartActions(
             $cart,
@@ -346,11 +380,12 @@ class Commercetools implements CartApi
                         'id' => $shippingMethod,
                     ],
                 ],
-            ]
+            ],
+            $this->parseLocaleString($localeString)
         );
     }
 
-    public function setCustomField(Cart $cart, array $fields): Cart
+    public function setCustomField(Cart $cart, array $fields, string $localeString = null): Cart
     {
         if (!count(array_filter($fields))) {
             return $cart;
@@ -365,7 +400,7 @@ class Commercetools implements CartApi
             ];
         }
 
-        return $this->postCartActions($cart, $actions);
+        return $this->postCartActions($cart, $actions, $this->parseLocaleString($localeString));
     }
 
     /**
@@ -373,7 +408,7 @@ class Commercetools implements CartApi
      * @param array $address
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function setShippingAddress(Cart $cart, array $address): Cart
+    public function setShippingAddress(Cart $cart, array $address, string $localeString = null): Cart
     {
         return $this->postCartActions(
             $cart,
@@ -382,7 +417,8 @@ class Commercetools implements CartApi
                     'action' => 'setShippingAddress',
                     'address' => $this->reverseMapAddress($address),
                 ],
-            ]
+            ],
+            $this->parseLocaleString($localeString)
         );
     }
 
@@ -391,7 +427,7 @@ class Commercetools implements CartApi
      * @param array $address
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function setBillingAddress(Cart $cart, array $address): Cart
+    public function setBillingAddress(Cart $cart, array $address, string $localeString = null): Cart
     {
         return $this->postCartActions(
             $cart,
@@ -400,7 +436,8 @@ class Commercetools implements CartApi
                     'action' => 'setBillingAddress',
                     'address' => $this->reverseMapAddress($address),
                 ],
-            ]
+            ],
+            $this->parseLocaleString($localeString)
         );
     }
 
@@ -411,7 +448,7 @@ class Commercetools implements CartApi
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function addPayment(Cart $cart, Payment $payment, ?array $custom = null): Cart
+    public function addPayment(Cart $cart, Payment $payment, ?array $custom = null, string $localeString = null): Cart
     {
         $payment = $this->client->post(
             '/payments',
@@ -444,11 +481,12 @@ class Commercetools implements CartApi
                         'id' => $payment['id'],
                     ],
                 ],
-            ]
+            ],
+            $this->parseLocaleString($localeString)
         );
     }
 
-    public function redeemDiscountCode(Cart $cart, string $code): Cart
+    public function redeemDiscountCode(Cart $cart, string $code, string $localeString = null): Cart
     {
         return $this->postCartActions(
             $cart,
@@ -457,7 +495,8 @@ class Commercetools implements CartApi
                     'action' => 'addDiscountCode',
                     'code' => str_replace('%', '', $code),
                 ],
-            ]
+            ],
+            $this->parseLocaleString($localeString)
         );
     }
 
@@ -522,7 +561,7 @@ class Commercetools implements CartApi
      * @param array $cart
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    private function mapCart(array $cart): Cart
+    private function mapCart(array $cart, CommercetoolsLocale $locale): Cart
     {
         /**
          * @TODO:
@@ -537,7 +576,7 @@ class Commercetools implements CartApi
             'cartId' => $cart['id'],
             'cartVersion' => $cart['version'],
             'custom' => $cart['custom']['fields'] ?? [],
-            'lineItems' => $this->mapLineItems($cart),
+            'lineItems' => $this->mapLineItems($cart, $locale),
             'email' => $cart['customerEmail'] ?? null,
             'birthday' => isset($cart['custom']['fields']['birthday']) ?
                 new \DateTimeImmutable($cart['custom']['fields']['birthday']) :
@@ -557,7 +596,7 @@ class Commercetools implements CartApi
      * @param array $order
      * @return \Frontastic\Common\CartApiBundle\Domain\Order
      */
-    private function mapOrder(array $order): Order
+    private function mapOrder(array $order, CommercetoolsLocale $locale = null): Order
     {
         /**
          * @TODO:
@@ -576,7 +615,7 @@ class Commercetools implements CartApi
             'createdAt' => new \DateTimeImmutable($order['createdAt']),
             'orderId' => $order['orderNumber'],
             'orderVersion' => $order['version'],
-            'lineItems' => $this->mapLineItems($order),
+            'lineItems' => $this->mapLineItems($order, $locale),
             'email' => $order['customerEmail'] ?? null,
             'birthday' => isset($order['custom']['fields']['birthday']) ?
                 new \DateTimeImmutable($order['custom']['fields']['birthday']) :
@@ -649,11 +688,11 @@ class Commercetools implements CartApi
      * @param array $cart
      * @return \Frontastic\Common\CartApiBundle\Domain\LineItem[]
      */
-    private function mapLineItems(array $cart): array
+    private function mapLineItems(array $cart, CommercetoolsLocale $locale): array
     {
         $lineItems = array_merge(
             array_map(
-                function (array $lineItem): LineItem {
+                function (array $lineItem) use ($locale): LineItem {
                     return new LineItem\Variant([
                         'lineItemId' => $lineItem['id'],
                         'name' => reset($lineItem['name']),
@@ -661,8 +700,7 @@ class Commercetools implements CartApi
                         'variant' => $this->mapper->dataToVariant(
                             $lineItem['variant'],
                             new Query(),
-                            /// @TODO use the users locale instead of picking a random translation during mapping
-                            new CommercetoolsLocale()
+                            $locale
                         ),
                         'custom' => $lineItem['custom']['fields'] ?? [],
                         'count' => $lineItem['quantity'],
@@ -777,7 +815,7 @@ class Commercetools implements CartApi
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      */
-    protected function postCartActions(Cart $cart, array $actions)
+    protected function postCartActions(Cart $cart, array $actions, CommercetoolsLocale $locale)
     {
         if ($cart === $this->inTransaction) {
             $this->actions = array_merge(
@@ -792,15 +830,18 @@ class Commercetools implements CartApi
         // seem to be instant, so that we stll run into version conflicts here…
         // $currentCart = $this->client->get('/carts/' . $cart->cartId);
 
-        return $this->mapCart($this->client->post(
-            '/carts/' . $cart->cartId,
-            ['expand' => self::EXPAND],
-            [],
-            json_encode([
-                'version' => $cart->cartVersion,
-                'actions' => $actions,
-            ])
-        ));
+        return $this->mapCart(
+            $this->client->post(
+                '/carts/' . $cart->cartId,
+                ['expand' => self::EXPAND],
+                [],
+                json_encode([
+                    'version' => $cart->cartVersion,
+                    'actions' => $actions,
+                ])
+            ),
+            $locale
+        );
     }
 
     /**
@@ -816,11 +857,11 @@ class Commercetools implements CartApi
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function commit(): Cart
+    public function commit(string $localeString = null): Cart
     {
         $cart = $this->inTransaction;
         $this->inTransaction = null;
-        $cart = $this->postCartActions($cart, $this->actions);
+        $cart = $this->postCartActions($cart, $this->actions, $this->parseLocaleString($localeString));
         $this->actions = [];
 
         return $cart;
@@ -894,5 +935,22 @@ class Commercetools implements CartApi
         }
 
         return $this->taxCategory;
+    }
+
+    /**
+     * @param string $localeString
+     * @return CommercetoolsLocale
+     */
+    private function parseLocaleString(?string $localeString): CommercetoolsLocale
+    {
+        if ($localeString !== null) {
+            return $this->localeCreator->createLocaleFromString($localeString);
+        }
+
+        return new CommercetoolsLocale([
+            'language' => 'de',
+            'country' => 'DE',
+            'currency' => 'EUR',
+        ]);
     }
 }

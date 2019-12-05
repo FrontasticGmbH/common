@@ -16,6 +16,8 @@
         <service id="Frontastic\Common\CartApiBundle\Domain\CartApiFactory">
             <argument type="service"
                       id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory" />
+            <argument type="service"
+                      id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\DefaultCommercetoolsLocaleCreatorFactory" />
             <argument type="service" id="frontastic.order-id-generator" />
             <argument type="tagged" tag="cartApi.lifecycleEventListener" />
         </service>
