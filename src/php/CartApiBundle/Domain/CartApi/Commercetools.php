@@ -2,21 +2,21 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain\CartApi;
 
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
-use Frontastic\Common\CartApiBundle\Domain\Order;
-use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
-use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\CartApiBundle\Domain\Discount;
+use Frontastic\Common\CartApiBundle\Domain\LineItem;
+use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator;
+use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to implementation of CartApi
@@ -91,10 +91,15 @@ class Commercetools implements CartApi
         $locale = Locale::createFromPosix($localeString);
 
         try {
-            $cart = $this->mapCart($this->client->get('/carts', [
-                'customerId' => $userId,
-                'expand' => self::EXPAND,
-            ]));
+            $cart = $this->mapCart(
+                $this->client->get(
+                    '/carts',
+                    [
+                        'customerId' => $userId,
+                        'expand' => self::EXPAND,
+                    ]
+                )
+            );
 
             return $this->assertCorrectLocale($cart, $locale);
         } catch (RequestException $e) {
@@ -436,8 +441,8 @@ class Commercetools implements CartApi
                     'action' => 'addPayment',
                     'payment' => [
                         'typeId' => 'payment',
-                        'id' => $payment['id']
-                    ]
+                        'id' => $payment['id'],
+                    ],
                 ],
             ]
         );
