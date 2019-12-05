@@ -2,47 +2,40 @@
 
 namespace Frontastic\Common\ProjectApiBundle\Domain;
 
-use Doctrine\Common\Cache\Cache;
-use Frontastic\Common\HttpClient;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
-use Psr\Container\ContainerInterface;
 
 class DefaultProjectApiFactory implements ProjectApiFactory
 {
     /**
-     * @var ContainerInterface
+     * @var ClientFactory
      */
-    private $container;
+    private $commercetoolsClientFactory;
 
     /**
-     * @var Cache
+     * @var CommercetoolsLocaleCreatorFactory
      */
-    private $cache;
+    private $localeCreatorFactory;
 
-    public function __construct(ContainerInterface $container, Cache $cache)
-    {
-        $this->container = $container;
-        $this->cache = $cache;
+    public function __construct(
+        ClientFactory $commercetoolsClientFactory,
+        CommercetoolsLocaleCreatorFactory $localeCreatorFactory
+    ) {
+        $this->commercetoolsClientFactory = $commercetoolsClientFactory;
+        $this->localeCreatorFactory = $localeCreatorFactory;
     }
 
     public function factor(Project $project): ProjectApi
     {
-        $productConfig = $project->configuration['product'];
-        if (is_array($productConfig)) {
-            $productConfig = (object)$productConfig;
-        }
+        $productConfig = $project->getConfigurationSection('product');
 
         switch ($productConfig->engine) {
             case 'commercetools':
+                $client = $this->commercetoolsClientFactory->factorForProjectAndType($project, 'product');
                 return new ProjectApi\Commercetools(
-                    new ProductApi\Commercetools\Client(
-                        $productConfig->clientId,
-                        $productConfig->clientSecret,
-                        $productConfig->projectKey,
-                        $this->container->get(HttpClient::class),
-                        $this->cache
-                    ),
+                    $client,
+                    $this->localeCreatorFactory->factor($project, $client),
                     $project->languages
                 );
         }
