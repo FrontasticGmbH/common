@@ -9,7 +9,6 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
-use Frontastic\Common\CartApiBundle\Domain\Category;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
