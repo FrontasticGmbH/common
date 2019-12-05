@@ -249,7 +249,7 @@ class CartController extends CrudController
 
         /** @var \Frontastic\Common\CartApiBundle\Domain\CartApiFactory $cartApiFactory */
         $cartApiFactory = $this->get('Frontastic\Common\CartApiBundle\Domain\CartApiFactory');
-        return $this->cartApi = $cartApiFactory->factor($context->customer);
+        return $this->cartApi = $cartApiFactory->factor($context->project);
     }
 
     protected function getCart(Context $context): Cart

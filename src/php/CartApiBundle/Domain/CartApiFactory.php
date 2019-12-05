@@ -6,7 +6,7 @@ use Doctrine\Common\Cache\Cache;
 use Frontastic\Common\HttpClient;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
-use Frontastic\Common\ReplicatorBundle\Domain\Customer;
+use Frontastic\Common\ReplicatorBundle\Domain\Project;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Factory
@@ -24,15 +24,17 @@ class CartApiFactory
         $this->decorators = $decorators;
     }
 
-    public function factor(Customer $customer): CartApi
+    public function factor(Project $project): CartApi
     {
-        switch ($customer->configuration['cart']->engine) {
+        $cartConfig = $project->getConfigurationSection('cart');
+
+        switch ($cartConfig->engine) {
             case 'commercetools':
                 $cartApi = new CartApi\Commercetools(
                     new Client(
-                        $customer->configuration['cart']->clientId,
-                        $customer->configuration['cart']->clientSecret,
-                        $customer->configuration['cart']->projectKey,
+                        $cartConfig->clientId,
+                        $cartConfig->clientSecret,
+                        $cartConfig->projectKey,
                         $this->container->get(HttpClient::class),
                         $this->cache
                     ),
@@ -43,7 +45,7 @@ class CartApiFactory
 
             default:
                 throw new \OutOfBoundsException(
-                    "No cart API configured for customer {$customer->name}. " .
+                    "No cart API configured for project {$project->name}. " .
                     "Check the provisioned customer configuration in app/config/customers/."
                 );
         }
