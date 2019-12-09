@@ -2,33 +2,22 @@
 
 namespace Frontastic\Common\SpecificationBundle\Domain;
 
-class CustomAppSpecParser implements SpecParser
+class CustomAppSpecParser extends ValidatingSpecParser
 {
-    /**
-     * @var JsonSchemaValidator
-     */
-    private $validator;
-
     public function __construct()
     {
-        $this->validator = new JsonSchemaValidator();
+        parent::__construct('appSchema.json');
     }
 
-    public function parse(string $schema): \StdClass
+    protected function verifySchema(\stdClass $schema): \stdClass
     {
-        $schema = $this->validator->parse(
-            $schema,
-            'appSchema.json',
-            ['library/common.json']
-        );
-
         $fields = $this->getVerifiedFieldArray($schema);
         $this->verifyDisplayedFields($schema, $fields);
         $this->verifyIndexedFields($schema, $fields);
         return $schema;
     }
 
-    private function getVerifiedFieldArray(\StdClass $schema): array
+    private function getVerifiedFieldArray(\stdClass $schema): array
     {
         $fields = [];
         foreach ($schema->schema as $group) {
@@ -51,7 +40,7 @@ class CustomAppSpecParser implements SpecParser
         return $fields;
     }
 
-    private function verifyDisplayedFields(\StdClass $schema, array $fields)
+    private function verifyDisplayedFields(\stdClass $schema, array $fields)
     {
         foreach ($schema->fields as $field) {
             if (!isset($fields[$field->field])) {
@@ -65,7 +54,7 @@ class CustomAppSpecParser implements SpecParser
         return $fields;
     }
 
-    private function verifyIndexedFields(\StdClass $schema, array $fields)
+    private function verifyIndexedFields(\stdClass $schema, array $fields)
     {
         $validIndexTypes = ["string", "integer", "boolean", "decimal"];
 
