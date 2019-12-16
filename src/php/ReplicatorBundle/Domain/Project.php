@@ -23,7 +23,7 @@ class Project extends DataObject
 
     /**
      * In the config this is the `secret`.
-     * 
+     *
      * @var string
      */
     public $apiKey;
