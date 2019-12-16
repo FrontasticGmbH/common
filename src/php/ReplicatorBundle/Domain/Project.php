@@ -22,6 +22,8 @@ class Project extends DataObject
     public $customer;
 
     /**
+     * In the config this is the `secret`.
+     * 
      * @var string
      */
     public $apiKey;
