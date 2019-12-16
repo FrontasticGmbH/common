@@ -1,15 +1,3 @@
 {
-    "schema": [
-        {
-            "name": "Page",
-            "fields": [
-                {
-                    "label": "Page Title",
-                    "field": "pageTitle",
-                    "type": "string",
-                    "translatable": true
-                }
-            ]
-        }
-    ]
+    "schema": []
 }
