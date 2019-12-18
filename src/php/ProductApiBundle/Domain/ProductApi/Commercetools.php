@@ -77,17 +77,20 @@ class Commercetools implements ProductApi
      */
     public function getCategories(CategoryQuery $query): array
     {
-        $categories = $this->client
-            ->fetchAsync(
-                '/categories',
-                [
-                    'offset' => $query->offset,
-                    'limit' => $query->limit,
-                ]
-            )
-            ->wait();
+        $parameters = [
+            'offset' => $query->offset,
+            'limit' => $query->limit,
+        ];
 
         $locale = $this->localeCreator->createLocaleFromString($query->locale);
+
+        if ($query->slug) {
+            $parameters['where'] = sprintf('slug(%s="%s")', $locale->language, $query->slug);
+        }
+
+        $categories = $this->client
+            ->fetchAsync('/categories', $parameters)
+            ->wait();
 
         $categoryNameMap = [];
         foreach ($categories as $category) {
