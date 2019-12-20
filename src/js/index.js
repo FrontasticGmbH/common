@@ -1,7 +1,7 @@
 import ConfigurationSchema from './configuration/schema'
 import DefaultSchemas from './configuration/defaultSchemas/index'
 import generateId from './generateId'
-import getTranslation from './translate'
+import getTranslation, { isTranslatableByDefault } from './translate'
 import httpBuildQuery from './httpBuildQuery'
 import httpParseQuery from './httpParseQuery'
 import registerServiceWorker from './registerServiceWorker'
@@ -20,6 +20,7 @@ export {
     getTranslation,
     httpBuildQuery,
     httpParseQuery,
+    isTranslatableByDefault,
     registerServiceWorker,
     VisibilityChange,
     Cell,
