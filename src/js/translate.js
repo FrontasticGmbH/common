@@ -45,3 +45,11 @@ export const isTranslatableByDefault = (fieldType) => {
         return false
     }
 }
+
+export const shouldFieldBeTranslated = (fieldSchema) => {
+    if (typeof fieldSchema.translatable !== 'undefined') {
+        return fieldSchema.translatable
+    }
+
+    return isTranslatableByDefault(fieldSchema.type)
+}
