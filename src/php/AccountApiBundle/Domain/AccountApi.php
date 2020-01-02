@@ -57,7 +57,7 @@ interface AccountApi
 
     /**
      * @param string $accountId
-     * @return \Frontastic\Common\AccountApiBundle\Domain\Account[]
+     * @return \Frontastic\Common\AccountApiBundle\Domain\Address[]
      */
     public function getAddresses(string $accountId): array;
 
