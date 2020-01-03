@@ -598,6 +598,10 @@ class Commercetools implements CartApi
      */
     private function mapOrder(array $order, CommercetoolsLocale $locale = null): Order
     {
+        if ($locale === null) {
+            $locale = $this->parseLocaleString(null);
+        }
+
         /**
          * @TODO:
          *
