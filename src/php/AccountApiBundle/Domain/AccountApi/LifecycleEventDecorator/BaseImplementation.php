@@ -88,8 +88,8 @@ abstract class BaseImplementation
         AccountApi $accountApi,
         string $accountId,
         string $oldPassword,
-        string $newPassword): void
-    {
+        string $newPassword
+    ): void {
     }
 
     public function afterUpdatePassword(AccountApi $accountApi, Account $account): ?Account
