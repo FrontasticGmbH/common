@@ -40,6 +40,11 @@ class Client
         $this->cache = $cache;
     }
 
+    public function getProjectKey(): string
+    {
+        return $this->projectKey;
+    }
+
     /**
      * @param string $uri
      * @param array $parameters

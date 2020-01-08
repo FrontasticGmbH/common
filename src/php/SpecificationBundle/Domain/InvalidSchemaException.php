@@ -9,6 +9,8 @@ class InvalidSchemaException extends \DomainException
 
     public function __construct(string $message, string $error)
     {
+        parent::__construct('Invalid Schema: ' . $message);
+
         $this->message = $message;
         $this->error = $error;
     }

@@ -1,0 +1,12 @@
+parameters:
+    level: 1
+    paths:
+        - src/
+    inferPrivatePropertyTypeFromConstructor: true
+    ignoreErrors:
+        - '#Tideways\\Profiler#'
+        - '#invalid typehint type Frontastic\\Catwalk\\ApiCoreBundle\\Domain\\Context#'
+        - '#Frontastic\\Catwalk\\ApiCoreBundle\\Domain\\Context not found#'
+        - '#Result of method Kore\\DataObject\\DataObject::__get\(\) \(void\) is used.#'
+        - '#Function debug not found.*#'
+    reportUnmatchedIgnoredErrors: false

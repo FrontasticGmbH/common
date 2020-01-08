@@ -135,6 +135,7 @@ class ConfigurationSchema {
                     max: fieldSchema.max || 16,
                     required: fieldIsRequired(fieldSchema.required, type, fieldSchema.streamType),
                     disabled: fieldSchema.disabled === true,
+                    translatable: fieldSchema.translatable,
                 }
             }
         }

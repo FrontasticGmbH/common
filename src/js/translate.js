@@ -33,3 +33,23 @@ export default function (value, currentLocale, defaultLocale) {
         translated: false,
     }
 }
+
+export const isTranslatableByDefault = (fieldType) => {
+    switch (fieldType) {
+    case 'string':
+    case 'text':
+    case 'markdown':
+    case 'json':
+        return true
+    default:
+        return false
+    }
+}
+
+export const shouldFieldBeTranslated = (fieldSchema) => {
+    if (typeof fieldSchema.translatable !== 'undefined') {
+        return fieldSchema.translatable
+    }
+
+    return isTranslatableByDefault(fieldSchema.type)
+}

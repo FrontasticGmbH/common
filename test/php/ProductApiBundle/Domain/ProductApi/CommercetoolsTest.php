@@ -3,6 +3,7 @@
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreator;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\RangeFacet;
@@ -19,6 +20,11 @@ class CommercetoolsTest extends TestCase
     private $clientMock;
 
     /**
+     * @var CommercetoolsLocaleCreator
+     */
+    private $localCreatorMock;
+
+    /**
      * @var Commercetools
      */
     private $api;
@@ -26,7 +32,8 @@ class CommercetoolsTest extends TestCase
     public function setup()
     {
         $this->clientMock = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->getMock();
-        $this->api = new Commercetools($this->clientMock, new Mapper(), 'en_GB');
+        $this->localCreatorMock = $this->createMock(CommercetoolsLocaleCreator::class);
+        $this->api = new Commercetools($this->clientMock, new Mapper(), $this->localCreatorMock, 'en_GB');
     }
 
     public function testQueryWithFacets()

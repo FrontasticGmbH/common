@@ -11,7 +11,6 @@ interface CartApi
      */
     public function getForUser(string $userId, string $locale): Cart;
 
-
     /**
      * @param string $anonymousId
      * @param string $locale
@@ -22,9 +21,9 @@ interface CartApi
     /**
      * @param string $cartId
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
-     * @throws \RuntimeExcption if cart with $cartId was not found
+     * @throws \RuntimeException if cart with $cartId was not found
      */
-    public function getById(string $cartId): Cart;
+    public function getById(string $cartId, string $locale = null): Cart;
 
     /**
      * @param array $lineItemType
@@ -53,50 +52,56 @@ interface CartApi
      * @param \Frontastic\Common\CartApiBundle\Domain\LineItem $lineItem
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function addToCart(Cart $cart, LineItem $lineItem): Cart;
+    public function addToCart(Cart $cart, LineItem $lineItem, string $locale = null): Cart;
 
-    public function updateLineItem(Cart $cart, LineItem $lineItem, int $count, ?array $custom = null): Cart;
+    public function updateLineItem(
+        Cart $cart,
+        LineItem $lineItem,
+        int $count,
+        ?array $custom = null,
+        string $locale = null
+    ): Cart;
 
     /**
      * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
      * @param \Frontastic\Common\CartApiBundle\Domain\LineItem $lineItem
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function removeLineItem(Cart $cart, LineItem $lineItem): Cart;
+    public function removeLineItem(Cart $cart, LineItem $lineItem, string $locale = null): Cart;
 
     /**
      * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
      * @param string $email
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function setEmail(Cart $cart, string $email): Cart;
+    public function setEmail(Cart $cart, string $email, string $locale = null): Cart;
 
-    public function setShippingMethod(Cart $cart, string $shippingMethod): Cart;
+    public function setShippingMethod(Cart $cart, string $shippingMethod, string $locale = null): Cart;
 
-    public function setCustomField(Cart $cart, array $fields): Cart;
-
-    /**
-     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
-     * @param array $address
-     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
-     */
-    public function setShippingAddress(Cart $cart, array $address): Cart;
+    public function setCustomField(Cart $cart, array $fields, string $locale = null): Cart;
 
     /**
      * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
      * @param array $address
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function setBillingAddress(Cart $cart, array $address): Cart;
+    public function setShippingAddress(Cart $cart, array $address, string $locale = null): Cart;
+
+    /**
+     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
+     * @param array $address
+     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
+     */
+    public function setBillingAddress(Cart $cart, array $address, string $locale = null): Cart;
 
     /**
      * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
      * @param \Frontastic\Common\CartApiBundle\Domain\Payment $payment
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function addPayment(Cart $cart, Payment $payment, ?array $custom = null): Cart;
+    public function addPayment(Cart $cart, Payment $payment, ?array $custom = null, string $locale = null): Cart;
 
-    public function redeemDiscountCode(Cart $cart, string $code): Cart;
+    public function redeemDiscountCode(Cart $cart, string $code, string $locale = null): Cart;
 
     /**
      * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
@@ -131,7 +136,7 @@ interface CartApi
     /**
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function commit(): Cart;
+    public function commit(string $locale = null): Cart;
 
     /**
      * Get *dangerous* inner client

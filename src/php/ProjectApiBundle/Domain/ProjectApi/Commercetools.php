@@ -3,7 +3,6 @@
 namespace Frontastic\Common\ProjectApiBundle\Domain\ProjectApi;
 
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
 use Frontastic\Common\ProjectApiBundle\Domain\Attribute;
 use Frontastic\Common\ProjectApiBundle\Domain\ProjectApi;
 
@@ -20,13 +19,22 @@ class Commercetools implements ProjectApi
     private $client;
 
     /**
+     * @var ProductApi\Commercetools\Locale\CommercetoolsLocaleCreator
+     */
+    private $localeCreator;
+
+    /**
      * @var string[]
      */
     private $languages;
 
-    public function __construct(ProductApi\Commercetools\Client $client, array $languages)
-    {
+    public function __construct(
+        ProductApi\Commercetools\Client $client,
+        ProductApi\Commercetools\Locale\CommercetoolsLocaleCreator $localeCreator,
+        array $languages
+    ) {
         $this->client = $client;
+        $this->localeCreator = $localeCreator;
         $this->languages = $languages;
     }
 
@@ -67,6 +75,13 @@ class Commercetools implements ProjectApi
             'label' => null, // Can we get the price label somehow?
         ]);
 
+        $attributeId = 'variants.scopedPrice.value';
+        $attributes[$attributeId] = new Attribute([
+            'attributeId' => $attributeId,
+            'type' => Attribute::TYPE_MONEY,
+            'label' => null, // Can we get the price label somehow?
+        ]);
+
         $attributeId = 'categories.id';
         $attributes[$attributeId] = new Attribute([
             'attributeId' => $attributeId,
@@ -77,17 +92,14 @@ class Commercetools implements ProjectApi
         return $attributes;
     }
 
-    /**
-     * @TODO: Is this a general way or do we need to resolve locales differently?
-     */
     private function mapLocales(array $localizedStrings): array
     {
         $localizedResult = [];
         foreach ($this->languages as $language) {
-            $locale = Locale::createFromPosix($language);
-            $localizedResult[$language] = (isset($localizedStrings[$locale->language])
-                ? $localizedStrings[$locale->language]
-                : '');
+            $locale = $this->localeCreator->createLocaleFromString($language);
+            $localizedResult[$language] =
+                $localizedStrings[$locale->language] ??
+                (reset($localizedStrings) ?: '');
         }
         return $localizedResult;
     }

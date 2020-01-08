@@ -2,61 +2,70 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain;
 
-use Doctrine\Common\Cache\Cache;
-use Frontastic\Common\HttpClient;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
-use Frontastic\Common\ReplicatorBundle\Domain\Customer;
+use Frontastic\Common\ReplicatorBundle\Domain\Project;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Factory
  */
 class CartApiFactory
 {
-    private $container;
-    private $cache;
+    /**
+     * @var ClientFactory
+     */
+    private $commercetoolsClientFactory;
+
+    /**
+     * @var CommercetoolsLocaleCreatorFactory
+     */
+    private $localeCreatorFactory;
+
+    /**
+     * @var OrderIdGenerator
+     */
+    private $orderIdGenerator;
+
+    /**
+     * @var iterable
+     */
     private $decorators = [];
 
-    public function __construct($container, Cache $cache, iterable $decorators)
-    {
-        $this->container = $container;
-        $this->cache = $cache;
+    public function __construct(
+        ClientFactory $commercetoolsClientFactory,
+        CommercetoolsLocaleCreatorFactory $localeCreatorFactory,
+        OrderIdGenerator $orderIdGenerator,
+        iterable $decorators
+    ) {
+        $this->commercetoolsClientFactory = $commercetoolsClientFactory;
+        $this->localeCreatorFactory = $localeCreatorFactory;
+        $this->orderIdGenerator = $orderIdGenerator;
         $this->decorators = $decorators;
     }
 
-    public function factor(Customer $customer): CartApi
+    public function factor(Project $project): CartApi
     {
-        switch ($customer->configuration['cart']->engine) {
+        $cartConfig = $project->getConfigurationSection('cart');
+
+        switch ($cartConfig->engine) {
             case 'commercetools':
+                $client = $this->commercetoolsClientFactory->factorForProjectAndType($project, 'cart');
                 $cartApi = new CartApi\Commercetools(
-                    new Client(
-                        $customer->configuration['cart']->clientId,
-                        $customer->configuration['cart']->clientSecret,
-                        $customer->configuration['cart']->projectKey,
-                        $this->container->get(HttpClient::class),
-                        $this->cache
-                    ),
+                    $client,
                     new Mapper(),
-                    $this->getOrderIdGenerator()
+                    $this->localeCreatorFactory->factor($project, $client),
+                    $this->orderIdGenerator
                 );
                 break;
 
             default:
                 throw new \OutOfBoundsException(
-                    "No cart API configured for customer {$customer->name}. " .
+                    "No cart API configured for project {$project->name}. " .
                     "Check the provisioned customer configuration in app/config/customers/."
                 );
         }
 
         return new CartApi\LifecycleEventDecorator($cartApi, $this->decorators);
-    }
-
-    private function getOrderIdGenerator(): OrderIdGenerator
-    {
-        try {
-            return $this->container->get('frontastic.order-id-generator');
-        } catch (\Exception $e) {
-            return new OrderIdGenerator\Random();
-        }
     }
 }

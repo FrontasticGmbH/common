@@ -2,24 +2,10 @@
 
 namespace Frontastic\Common\SpecificationBundle\Domain;
 
-class NodeSpecParser implements SpecParser
+class NodeSpecParser extends ValidatingSpecParser
 {
-    /**
-     * @var JsonSchemaValidator
-     */
-    private $validator;
-
     public function __construct()
     {
-        $this->validator = new JsonSchemaValidator();
-    }
-
-    public function parse(string $schema): \StdClass
-    {
-        return $this->validator->parse(
-            $schema,
-            'nodeSchema.json',
-            ['library/common.json']
-        );
+        parent::__construct('nodeSchema.json');
     }
 }

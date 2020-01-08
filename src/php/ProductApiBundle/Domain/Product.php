@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\ProductApiBundle\Domain;
 
+use Contentful\Core\Api\DateTimeImmutable;
 use Kore\DataObject\DataObject;
 
 /**
@@ -19,6 +20,11 @@ class Product extends DataObject
      * @var string
      */
     public $productId;
+
+    /**
+     * @var DateTimeImmutable|null
+     */
+    public $changed;
 
     /**
      * @var string
@@ -58,6 +64,10 @@ class Product extends DataObject
      * we can integrate those twith the common API. Any usage off
      * this property might make your code unstable against future
      * changes.
+     *
+     * Should only be accessed in lifecycle event listeners,
+     * and not in controllers, because ProductApiWithoutInner removes
+     * this value before the product is returned to a controller.
      *
      * @var mixed
      */

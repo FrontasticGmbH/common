@@ -1,6 +1,6 @@
 <?php
 
-namespace Frontastic\Backstage\UserBundle\Domain;
+namespace Frontastic\Common\AccountApiBundle\Domain;
 
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 

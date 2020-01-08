@@ -4,7 +4,7 @@ namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
 
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\Filter;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
@@ -16,15 +16,11 @@ use Frontastic\Common\ProductApiBundle\Domain\Variant;
  */
 class Mapper
 {
-    private $localeOverwrite;
-
-    public function __construct($localeOverwrite = null)
+    public function dataToProduct(array $productData, ProductQuery $query, CommercetoolsLocale $locale): Product
     {
-        $this->localeOverwrite = $localeOverwrite;
-    }
+        $lastModified = $productData['lastModifiedAt'] ?? null;
+        $version = $productData['version'] ?? 0;
 
-    public function dataToProduct(array $productData, ProductQuery $query): Product
-    {
         if (isset($productData['masterData']['current'])) {
             $productId = $productData['id'];
             $productKey = $productData['key'] ?? null;
@@ -36,10 +32,10 @@ class Mapper
             }
         }
 
-        $locale = Locale::createFromPosix($query->locale);
         return new Product([
             'productId' => $productData['id'],
-            'version' => $productData['version'] ?? 0,
+            'changed' => $lastModified,
+            'version' => $version,
             'name' => $this->getLocalizedValue($locale, $productData['name'] ?? []),
             'slug' => $this->getLocalizedValue($locale, $productData['slug'] ?? []),
             'description' => $this->getLocalizedValue($locale, $productData['description'] ?? []),
@@ -54,7 +50,7 @@ class Mapper
         ]);
     }
 
-    public function dataToVariants(array $productData, ProductQuery $query, Locale $locale): array
+    public function dataToVariants(array $productData, ProductQuery $query, CommercetoolsLocale $locale): array
     {
         $variants = [$this->dataToVariant($productData['masterVariant'], $query, $locale)];
         foreach ($productData['variants'] as $variantData) {
@@ -63,15 +59,9 @@ class Mapper
         return $variants;
     }
 
-    /**
-     * @param array $variantData
-     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query $query
-     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale $locale
-     * @return \Frontastic\Common\ProductApiBundle\Domain\Variant
-     */
-    public function dataToVariant(array $variantData, Query $query, Locale $locale): Variant
+    public function dataToVariant(array $variantData, Query $query, CommercetoolsLocale $locale): Variant
     {
-        list($price, $currency, $discountedPrice) = $this->dataToPrice($variantData, $locale);
+        list($price, $currency, $discountedPrice) = $this->dataToPrice($variantData);
 
         $attributes = $this->dataToAttributes($variantData, $locale);
         $groupId = $attributes['baseId'];
@@ -258,7 +248,7 @@ class Mapper
         return new ProductApi\Result\RangeFacet($facetValues);
     }
 
-    public function dataToPrice(array $variantData, Locale $locale): array
+    public function dataToPrice(array $variantData): array
     {
         // We rely on CommerceTools price selection
 
@@ -285,25 +275,28 @@ class Mapper
         return [null, null, null];
     }
 
-    public function dataToAttributes(array $variantData, Locale $locale): array
+    public function dataToAttributes(array $variantData, CommercetoolsLocale $locale): array
     {
-        return array_merge(['baseId' => null], array_combine(
-            array_map(
-                function (array $attribute): string {
-                    return $attribute['name'];
-                },
-                $variantData['attributes']
-            ),
-            array_map(
-                function (array $attribute) use ($locale) {
-                    return $this->extractAttributeValue($attribute['value'], $locale);
-                },
-                $variantData['attributes']
+        return array_merge(
+            ['baseId' => null],
+            array_combine(
+                array_map(
+                    function (array $attribute): string {
+                        return $attribute['name'];
+                    },
+                    $variantData['attributes']
+                ),
+                array_map(
+                    function (array $attribute) use ($locale) {
+                        return $this->extractAttributeValue($attribute['value'], $locale);
+                    },
+                    $variantData['attributes']
+                )
             )
-        ));
+        );
     }
 
-    private function extractAttributeValue($attributeValue, Locale $locale)
+    private function extractAttributeValue($attributeValue, CommercetoolsLocale $locale)
     {
         if (isset($attributeValue['centAmount'])) {
             return $attributeValue;
@@ -345,30 +338,25 @@ class Mapper
         return null;
     }
 
-    private function getLocalizedValue(Locale $locale, array $localizedString)
+    private function getLocalizedValue(CommercetoolsLocale $locale, array $localizedString)
     {
-        $commercetoolsLocale = str_replace('_', '-', $locale->original);
-        if (isset($localizedString[$this->localeOverwrite])) {
-            return $localizedString[$this->localeOverwrite];
-        } elseif (isset($localizedString[$commercetoolsLocale])) {
-            return $localizedString[$commercetoolsLocale];
-        } elseif (isset($localizedString[$locale->language])) {
+        if (isset($localizedString[$locale->language])) {
             return $localizedString[$locale->language];
-        } elseif (isset($localizedString['key'])) {
-            return $localizedString['key'];
-        } else {
-            return reset($localizedString) ?: '';
         }
+
+        if (isset($localizedString['key'])) {
+            return $localizedString['key'];
+        }
+
+        return reset($localizedString) ?: '';
     }
 
     /**
      * Converts the facets defined in {@see $this->options} to queryable format.
      *
-     * @param array $facetDefinitions
-     * @param Locale $locale
      * @return string[]
      */
-    public function facetsToRequest(array $facetDefinitions, Locale $locale): array
+    public function facetsToRequest(array $facetDefinitions, CommercetoolsLocale $locale): array
     {
         $facets = [];
         foreach ($facetDefinitions as $facetDefinition) {
@@ -410,11 +398,9 @@ class Mapper
 
     /**
      * @param ProductApi\Query\Facet[] $facets
-     * @param array $facetDefinitions
-     * @param Locale $locale
      * @return string[]
      */
-    public function facetsToFilter(array $facets, array $facetDefinitions, Locale $locale): array
+    public function facetsToFilter(array $facets, array $facetDefinitions, CommercetoolsLocale $locale): array
     {
         $typeLookup = $this->attributeTypeLookup($facetDefinitions);
 
@@ -471,7 +457,7 @@ class Mapper
      * @param Query\Filter[]|string[] $filter
      * @return string[]
      */
-    public function prepareQueryFilter(array $filter, Locale $locale): array
+    public function prepareQueryFilter(array $filter, CommercetoolsLocale $locale): array
     {
         $preparedFilter = [];
         foreach ($filter as $queryFilter) {
@@ -492,7 +478,7 @@ class Mapper
      * @param Filter $queryFilter
      * @return string
      */
-    private function toFilterString(Filter $queryFilter, Locale $locale): string
+    private function toFilterString(Filter $queryFilter, CommercetoolsLocale $locale): string
     {
         switch ($queryFilter->attributeType) {
             case 'money':

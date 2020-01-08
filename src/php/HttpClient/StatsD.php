@@ -21,7 +21,7 @@ class StatsD extends HttpClient
     /**
      * @var HttpClient
      */
-    private $sharedSecret;
+    private $aggregate;
 
     public function __construct(string $name, Client $statsdClient, HttpClient $aggregate)
     {
