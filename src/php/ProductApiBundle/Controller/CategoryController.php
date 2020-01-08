@@ -13,9 +13,7 @@ class CategoryController extends Controller
         /** @var \Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory $productApiFactory */
         $productApiFactory = $this->get('Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory');
 
-        $productApi = $productApiFactory->factorFromConfiguration(
-            (isset($context->project) ? $context->project->configuration : $context->customer->configuration)
-        );
+        $productApi = $productApiFactory->factor($context->project);
 
         $query = new CategoryQuery([
             'locale' => $context->locale,

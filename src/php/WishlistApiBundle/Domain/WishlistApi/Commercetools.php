@@ -186,7 +186,7 @@ class Commercetools implements WishlistApi
      * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      */
-    private function addVariantToWishlist(LineItem\Variant $lineItem, string $locale): Wishlist
+    private function addVariantToWishlist(LineItem\Variant $lineItem, string $locale): array
     {
         return [
             'action' => 'addLineItem',
@@ -200,7 +200,7 @@ class Commercetools implements WishlistApi
      * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
      * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
      */
-    private function addCustomToWishlist(LineItem $lineItem, string $locale): Wishlist
+    private function addCustomToWishlist(LineItem $lineItem, string $locale): array
     {
         return [
             'action' => 'addCustomLineItem',

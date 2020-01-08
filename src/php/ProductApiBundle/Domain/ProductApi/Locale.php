@@ -622,8 +622,12 @@ class Locale extends DataObject
      */
     private static function modifierToCurrency(string $modifier): string
     {
+        foreach (self::TERRITORY_TO_CURRENCY as $currency) {
+            if (strcasecmp($modifier, $currency) === 0) {
+                return $currency;
+            }
+        }
         switch ($modifier) {
-            case 'EUR':
             case 'euro':
                 return 'EUR';
         }

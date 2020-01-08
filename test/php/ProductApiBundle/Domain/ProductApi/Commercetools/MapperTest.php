@@ -3,6 +3,7 @@
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
 
 
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\RangeFacet;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\RangeFilter;
@@ -29,7 +30,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     {
         $actualResult = $this->mapper->dataToAttributes(
             ['attributes' => [$attributesFixture]],
-            Locale::createFromPosix($locale)
+            new CommercetoolsLocale($locale)
         );
 
         unset($actualResult['baseId']);
@@ -45,7 +46,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     "name" => "submodel",
                     "value" => "Something",
                 ],
-                'en_GB',
+                [
+                    'country' => 'GB',
+                    'language' => 'en',
+                    'currency' => 'GBP',
+                ],
                 [
                     "submodel" => "Something"
                 ],
@@ -58,7 +63,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                         "key" => "rolex",
                     ],
                 ],
-                'en_GB',
+                [
+                    'country' => 'GB',
+                    'language' => 'en',
+                    'currency' => 'GBP',
+                ],
                 [
                     "brand" => [
                         "key" => "rolex",
@@ -74,7 +83,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                         "en" => "bar",
                     ],
                 ],
-                'en_GB',
+                [
+                    'country' => 'GB',
+                    'language' => 'en',
+                    'currency' => 'GBP',
+                ],
                 [
                     "variantDescription" => "bar",
                 ]
@@ -90,7 +103,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                         "key" => "male",
                     ],
                 ],
-                'en_GB',
+                [
+                    'country' => 'GB',
+                    'language' => 'en',
+                    'currency' => 'GBP',
+                ],
                 [
                     "gender" => [
                         "key" => "male",
@@ -118,7 +135,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                         ],
                     ],
                 ],
-                'en_GB',
+                [
+                    'country' => 'GB',
+                    'language' => 'en',
+                    'currency' => 'GBP',
+                ],
                 [
                     "features" => [
                         [
@@ -142,7 +163,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     {
         $actualFacetQueries = $this->mapper->facetsToRequest(
             [$facetDefinition],
-            new Locale(['language' => 'en'])
+            new CommercetoolsLocale([
+                'country' => 'GB',
+                'language' => 'en',
+                'currency' => 'GBP',
+            ])
         );
 
         $this->assertCount(1, $actualFacetQueries, 'Number of generated queries');
@@ -199,7 +224,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
         $actualFilters = $this->mapper->facetsToFilter(
             [$facet],
             [$facetDefinition],
-            new Locale(['language' => 'en'])
+            new CommercetoolsLocale([
+                'country' => 'GB',
+                'language' => 'en',
+                'currency' => 'GBP',
+            ])
         );
 
         $this->assertSame($expectedFilters, $actualFilters);
@@ -310,7 +339,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     {
         $actualFilterStrings = $this->mapper->prepareQueryFilter(
             $inputFilters,
-            Locale::createFromPosix('en_GB')
+            new CommercetoolsLocale([
+                'country' => 'GB',
+                'language' => 'en',
+                'currency' => 'GBP',
+            ])
         );
 
         $this->assertEquals(

@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://frontastic.cloud/json/projectSchema",
+    "title": "Project Schema",
+    "description": "Meta Schema For Project Configuration Schema",
+    "type": "object",
+    "properties": {
+        "schema": {
+            "$ref": "https://frontastic.cloud/json/library/common#/definitions/schema"
+        }
+    },
+    "required": [
+        "schema"
+    ]
+}

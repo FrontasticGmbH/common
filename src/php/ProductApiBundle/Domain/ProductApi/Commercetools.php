@@ -38,21 +38,25 @@ class Commercetools implements ProductApi
     private $options;
 
     /**
+     * @var Commercetools\Locale\CommercetoolsLocaleCreator
+     */
+    private $localeCreator;
+
+    /**
      * @var string
      */
     private $defaultLocale;
 
-    /**
-     * @var string|null
-     */
-    private $localeOverwrite;
-
-    public function __construct(Client $client, Mapper $mapper, string $defaultLocale, string $localeOverwrite = null)
-    {
+    public function __construct(
+        Client $client,
+        Mapper $mapper,
+        Commercetools\Locale\CommercetoolsLocaleCreator $localeCreator,
+        string $defaultLocale
+    ) {
         $this->client = $client;
         $this->mapper = $mapper;
+        $this->localeCreator = $localeCreator;
         $this->defaultLocale = $defaultLocale;
-        $this->localeOverwrite = $localeOverwrite;
         $this->options = new ProductApi\Commercetools\Options();
     }
 
@@ -83,7 +87,7 @@ class Commercetools implements ProductApi
             )
             ->wait();
 
-        $locale = Locale::createFromPosix($this->localeOverwrite ?: $query->locale);
+        $locale = $this->localeCreator->createLocaleFromString($query->locale);
 
         $categoryNameMap = [];
         foreach ($categories as $category) {
@@ -172,13 +176,13 @@ class Commercetools implements ProductApi
                     }
                 );
         } else {
-            $locale = Locale::createFromPosix($this->localeOverwrite ?: $query->locale);
-            $parameters = ['priceCurrency' => $locale->currency, 'priceCountry' => $locale->territory];
+            $locale = $this->localeCreator->createLocaleFromString($query->locale);
+            $parameters = ['priceCurrency' => $locale->currency, 'priceCountry' => $locale->country];
 
             $promise = $this->client
                 ->fetchAsyncById('/products', $query->productId, $parameters)
-                ->then(function ($product) use ($query) {
-                    return $this->mapper->dataToProduct($product, $query);
+                ->then(function ($product) use ($query, $locale) {
+                    return $this->mapper->dataToProduct($product, $query, $locale);
                 });
         }
 
@@ -194,8 +198,8 @@ class Commercetools implements ProductApi
      */
     public function query(ProductQuery $query, string $mode = self::QUERY_SYNC): object
     {
-        $locale = Locale::createFromPosix($this->localeOverwrite ?: $query->locale);
-        $defaultLocale = Locale::createFromPosix($this->localeOverwrite ?: $this->defaultLocale);
+        $locale = $this->localeCreator->createLocaleFromString($query->locale);
+        $defaultLocale = $this->localeCreator->createLocaleFromString($this->defaultLocale);
         $parameters = [
             'offset' => $query->offset,
             'limit' => $query->limit,
@@ -204,7 +208,7 @@ class Commercetools implements ProductApi
             'filter.facets' => [],
             'facet' => $this->mapper->facetsToRequest($this->options->facetsToQuery, $locale),
             'priceCurrency' => $locale->currency,
-            'priceCountry' => $locale->territory,
+            'priceCountry' => $locale->country,
             'fuzzy' => $query->fuzzy ? 'true' : 'false',
         ];
 
@@ -250,14 +254,14 @@ class Commercetools implements ProductApi
 
         $promise = $this->client
             ->fetchAsync('/product-projections/search', array_filter($parameters))
-            ->then(function ($result) use ($query) {
+            ->then(function ($result) use ($query, $locale) {
                 return new Result([
                     'offset' => $result->offset,
                     'total' => $result->total,
                     'count' => $result->count,
                     'items' => array_map(
-                        function (array $productData) use ($query) {
-                            return $this->mapper->dataToProduct($productData, $query);
+                        function (array $productData) use ($query, $locale) {
+                            return $this->mapper->dataToProduct($productData, $query, $locale);
                         },
                         $result->results
                     ),

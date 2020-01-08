@@ -2,11 +2,9 @@
 
 namespace Frontastic\Common\ProductApiBundle\Domain;
 
-use Frontastic\Common\ReplicatorBundle\Domain\Customer;
+use Frontastic\Common\ReplicatorBundle\Domain\Project;
 
 interface ProductApiFactory
 {
-    public function factor(Customer $customer): ProductApi;
-
-    public function factorFromConfiguration(array $config): ProductApi;
+    public function factor(Project $project): ProductApi;
 }

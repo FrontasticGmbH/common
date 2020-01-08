@@ -8,4 +8,5 @@ parameters:
         - '#invalid typehint type Frontastic\\Catwalk\\ApiCoreBundle\\Domain\\Context#'
         - '#Frontastic\\Catwalk\\ApiCoreBundle\\Domain\\Context not found#'
         - '#Result of method Kore\\DataObject\\DataObject::__get\(\) \(void\) is used.#'
-        - '#Function debug not found while trying to analyse it - autoloading is probably not configured properly.#'
+        - '#Function debug not found.*#'
+    reportUnmatchedIgnoredErrors: false

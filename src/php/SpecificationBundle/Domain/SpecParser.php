@@ -7,5 +7,5 @@ interface SpecParser
     /**
      * @throws InvalidSchemaException
      */
-    public function parse(string $schema): \StdClass;
+    public function parse(string $schema): \stdClass;
 }
