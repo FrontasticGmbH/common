@@ -547,6 +547,7 @@ class Commercetools implements CartApi
                 '/orders',
                 [
                     'where' => 'customerId="' . $accountId . '"',
+                    'expand' => self::EXPAND,
                 ]
             )
             ->wait();
