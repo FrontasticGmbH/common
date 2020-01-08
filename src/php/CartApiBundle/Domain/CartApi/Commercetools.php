@@ -18,8 +18,6 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestExcept
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreator;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 
 /**
@@ -1088,6 +1086,7 @@ class Commercetools implements CartApi
                 ]
             )
         );
+    }
     /**
      * @param string $localeString
      * @return CommercetoolsLocale
