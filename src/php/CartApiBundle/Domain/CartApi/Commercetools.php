@@ -171,12 +171,14 @@ class Commercetools implements CartApi
         $cartId = $dangerousInnerCart['id'];
         $cartVersion = $dangerousInnerCart['version'];
         unset($dangerousInnerCart['id'], $dangerousInnerCart['version'], $dangerousInnerCart['discountCodes']);
-        $cart = $this->mapCart($this->client->post(
-            '/carts',
-            ['expand' => self::EXPAND],
-            [],
-            json_encode($dangerousInnerCart)
-        ));
+        $cart = $this->mapCart(
+            $this->client->post(
+                '/carts',
+                ['expand' => self::EXPAND],
+                [],
+                json_encode($dangerousInnerCart),
+            )
+        );
         $this->client->delete(
             '/carts/' . urlencode($cartId),
             ['version' => $cartVersion]
