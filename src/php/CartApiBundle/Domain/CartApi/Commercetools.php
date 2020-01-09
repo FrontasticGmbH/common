@@ -142,7 +142,7 @@ class Commercetools implements CartApi
             $cartArray['country'] = $locale->country;
             $cartArray['locale'] = $locale->language;
             $cartArray['currency'] = $locale->currency;
-            return $this->recreate($cartArray);
+            return $this->recreate($cartArray, $locale);
         }
         if ($cart->dangerousInnerCart['country'] !== $locale->country
             || $cart->dangerousInnerCart['locale'] !== $locale->language
@@ -166,7 +166,7 @@ class Commercetools implements CartApi
         return $cart;
     }
 
-    private function recreate(array $dangerousInnerCart): Cart
+    private function recreate(array $dangerousInnerCart, CommercetoolsLocale $locale): Cart
     {
         $cartId = $dangerousInnerCart['id'];
         $cartVersion = $dangerousInnerCart['version'];
@@ -176,8 +176,9 @@ class Commercetools implements CartApi
                 '/carts',
                 ['expand' => self::EXPAND],
                 [],
-                json_encode($dangerousInnerCart),
-            )
+                json_encode($dangerousInnerCart)
+            ),
+            $locale
         );
         $this->client->delete(
             '/carts/' . urlencode($cartId),
@@ -443,7 +444,7 @@ class Commercetools implements CartApi
         return $this->postCartActions($cart, $actions, $this->parseLocaleString($localeString));
     }
 
-    public function setCustomType(Cart $cart, string $id): Cart
+    public function setCustomType(Cart $cart, string $id, string $localeString = null): Cart
     {
         $actions = [];
         $actions[] = [
@@ -453,7 +454,7 @@ class Commercetools implements CartApi
                 "typeId"=> "type"
             ]
         ];
-        return $this->postCartActions($cart, $actions);
+        return $this->postCartActions($cart, $actions, $this->parseLocaleString($localeString));
     }
 
     /**
@@ -555,7 +556,7 @@ class Commercetools implements CartApi
         );
     }
 
-    public function removeDiscountCode(Cart $cart, string $discountId): Cart
+    public function removeDiscountCode(Cart $cart, string $discountId, string $localeString = null): Cart
     {
         return $this->postCartActions(
             $cart,
@@ -567,7 +568,8 @@ class Commercetools implements CartApi
                         'id' => $discountId
                     ],
                 ],
-            ]
+            ],
+            $this->parseLocaleString($localeString)
         );
     }
 

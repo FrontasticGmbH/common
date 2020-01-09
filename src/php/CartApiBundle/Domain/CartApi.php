@@ -108,7 +108,7 @@ interface CartApi
      * @param string $discountId
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function removeDiscountCode(Cart $cart, string $discountId): Cart;
+    public function removeDiscountCode(Cart $cart, string $discountId, string $locale = null): Cart;
 
     /**
      * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
