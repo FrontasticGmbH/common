@@ -779,7 +779,7 @@ class Commercetools implements CartApi
         $lineItems = array_merge(
             array_map(
                 function (array $lineItem) use ($locale): LineItem {
-                    list($price, $currency, $discountedPrice) = $this->mapper->dataToPrice($lineItem, new Locale());
+                    list($price, $currency, $discountedPrice) = $this->mapper->dataToPrice($lineItem);
                     return new LineItem\Variant([
                         'lineItemId' => $lineItem['id'],
                         'name' => reset($lineItem['name']),
