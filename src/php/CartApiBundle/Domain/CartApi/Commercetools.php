@@ -444,13 +444,13 @@ class Commercetools implements CartApi
     public function setCustomType(Cart $cart, string $id): Cart
     {
         $actions = [];
-            $actions[] = [
-                'action' => 'setCustomType',
-                'type' => [
-                    "id"=> $id,
-                    "typeId"=> "type"
-                ]
-            ];
+        $actions[] = [
+            'action' => 'setCustomType',
+            'type' => [
+                "id"=> $id,
+                "typeId"=> "type"
+            ]
+        ];
         return $this->postCartActions($cart, $actions);
     }
 
