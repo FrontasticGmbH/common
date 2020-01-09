@@ -140,7 +140,7 @@ class Cart extends DataObject
         $paymentPaid = false;
         if (0 < count($this->payments)) {
             foreach ($this->payments as $payment) {
-                $paymentPaid = ($payment->paymentStatus === Payment::INTERFACE_CODE_PAID) ? true : false;
+                $paymentPaid = ($payment->paymentStatus === Payment::PAYMENT_STATUS_PAID) ? true : false;
                 if ($paymentPaid) {
                     break;
                 }
