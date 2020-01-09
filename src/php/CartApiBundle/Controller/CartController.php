@@ -2,12 +2,9 @@
 
 namespace Frontastic\Common\CartApiBundle\Controller;
 
-use Frontastic\Common\CartApiBundle\Domain\Payment;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\CoreBundle\Controller\CrudController;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
@@ -222,13 +219,6 @@ class CartController extends CrudController
                 $cart,
                 $payload['billing'] ?: $payload['shipping'],
                 $context->locale
-            );
-        }
-
-        if (!empty($payload['shipping']) || !empty($payload['billing'])) {
-            $cart = $cartApi->setShippingAddress(
-                $cart,
-                $payload['shipping'] ?: $payload['billing']
             );
         }
 
