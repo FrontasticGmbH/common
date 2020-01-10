@@ -144,9 +144,7 @@ class Commercetools implements CartApi
             $cartArray['currency'] = $locale->currency;
             return $this->recreate($cartArray, $locale);
         }
-        if ($cart->dangerousInnerCart['country'] !== $locale->country
-            || $cart->dangerousInnerCart['locale'] !== $locale->language
-        ) {
+        if ($this->doesCartNeedLocaleUpdate($cart, $locale)) {
             $actions = [];
 
             $setCountryAction = [
@@ -1106,5 +1104,21 @@ class Commercetools implements CartApi
             'country' => 'DE',
             'currency' => 'EUR',
         ]);
+    }
+
+    private function doesCartNeedLocaleUpdate(Cart $cart, CommercetoolsLocale $locale): bool
+    {
+        $innerCart = $cart->dangerousInnerCart;
+
+        if (!isset($innerCart['country'])) {
+            return true;
+        }
+
+        if (!isset($innerCart['locale'])) {
+            return true;
+        }
+
+        return $innerCart['country'] !== $locale->country
+            || $innerCart['locale'] !== $locale->language;
     }
 }
