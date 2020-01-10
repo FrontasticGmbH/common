@@ -56,6 +56,13 @@ class Locale extends DataObject
         }
         return sprintf('%s_%s', $this->language, $this->territory);
     }
+    /**
+     * @return string
+     */
+    public function toString(): string
+    {
+        return sprintf('%s_%s', $this->language, $this->territory);
+    }
 
     /**
      * @var string

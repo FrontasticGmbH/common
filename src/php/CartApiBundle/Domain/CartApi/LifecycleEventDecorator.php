@@ -158,6 +158,11 @@ class LifecycleEventDecorator implements CartApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
+    public function setCustomType(Cart $cart, string $id): Cart
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
     /**
      * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
      * @param array $address
@@ -189,6 +194,16 @@ class LifecycleEventDecorator implements CartApi
     }
 
     public function redeemDiscountCode(Cart $cart, string $code, string $locale = null): Cart
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
+     * @param string $discountId
+     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
+     */
+    public function removeDiscountCode(Cart $cart, string $discountId, string $locale = null): Cart
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }

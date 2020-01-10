@@ -32,6 +32,10 @@
         <default key="_controller">Frontastic\Common\CartApiBundle\Controller\CartController::redeemDiscountAction</default>
     </route>
 
+    <route id="Frontastic.CartApi.Cart.removeDiscount" path="/cart/discount-remove" methods="POST">
+        <default key="_controller">Frontastic\Common\CartApiBundle\Controller\CartController::removeDiscountAction</default>
+    </route>
+
     <route id="Frontastic.CartApi.Cart.update" path="/cart/update" methods="POST">
         <default key="_controller">Frontastic\Common\CartApiBundle\Controller\CartController::updateAction</default>
     </route>

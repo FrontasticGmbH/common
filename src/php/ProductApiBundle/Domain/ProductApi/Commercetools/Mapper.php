@@ -254,10 +254,10 @@ class Mapper
 
         if (isset($variantData['scopedPrice'])) {
             return [
-                $variantData['scopedPrice']['currentValue']['centAmount'],
-                $variantData['scopedPrice']['currentValue']['currencyCode'],
+                $variantData['scopedPrice']['value']['centAmount'],
+                $variantData['scopedPrice']['value']['currencyCode'],
                 ($variantData['scopedPriceDiscounted']
-                    ? $variantData['scopedPrice']['value']['centAmount']
+                    ? $variantData['scopedPrice']['discounted']['value']['centAmount']
                     : null),
             ];
         }
