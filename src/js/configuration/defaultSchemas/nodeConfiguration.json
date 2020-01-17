@@ -22,6 +22,12 @@
                     "translatable": true
                 },
                 {
+                    "label": "Custom CSS Class",
+                    "field": "displayClassname",
+                    "type": "string",
+                    "translatable": false
+                },
+                {
                     "label": "Image",
                     "field": "displayMedia",
                     "type": "media",
