@@ -426,7 +426,7 @@ class Commercetools implements CartApi
 
     public function setCustomField(Cart $cart, array $fields, string $localeString = null): Cart
     {
-        if (!count(array_filter($fields))) {
+        if (!count($fields)) {
             return $cart;
         }
 
