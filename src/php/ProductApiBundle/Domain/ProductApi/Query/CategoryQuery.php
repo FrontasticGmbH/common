@@ -9,4 +9,9 @@ class CategoryQuery extends Query
      * @var string
      */
     public $parentId;
+
+    /**
+     * @var string
+     */
+    public $slug;
 }

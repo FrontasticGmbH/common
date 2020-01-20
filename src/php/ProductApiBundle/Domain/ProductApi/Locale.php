@@ -51,9 +51,13 @@ class Locale extends DataObject
      */
     public function __toString(): string
     {
-        if ($this->original) {
-            return $this->original;
-        }
+        return sprintf('%s_%s.UTF-8@%s', $this->language, $this->territory, $this->currency);
+    }
+    /**
+     * @return string
+     */
+    public function toString(): string
+    {
         return sprintf('%s_%s', $this->language, $this->territory);
     }
 
@@ -587,11 +591,15 @@ class Locale extends DataObject
         'ZW' => 'Zimbabwe',
     ];
 
+    private const LANGUAGE_TO_TERRITORY = [
+        'en' => 'GB',
+    ];
+
     public static function createFromPosix(string $locale): Locale
     {
         if (0 === preg_match(self::LOCALE, $locale, $matches)) {
             throw new \InvalidArgumentException(
-                "The given locale does not match <language[_territory[.codeset]][@modifier]>"
+                "The given locale $locale does not match <language[_territory[.codeset]][@modifier]> (en_DE.UTF-8@EUR)"
             );
         }
 
@@ -612,7 +620,7 @@ class Locale extends DataObject
 
     private static function guessTerritory(string $language): string
     {
-        return strtoupper($language);
+        return self::LANGUAGE_TO_TERRITORY[\strtolower($language)] ?? strtoupper($language);
     }
 
     /**
@@ -629,6 +637,9 @@ class Locale extends DataObject
         switch ($modifier) {
             case 'euro':
                 return 'EUR';
+        }
+        if (in_array($modifier, self::TERRITORY_TO_CURRENCY)) {
+            return $modifier;
         }
         throw new \InvalidArgumentException("Unknown currency modifier {$modifier}.");
     }

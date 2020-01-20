@@ -5,7 +5,6 @@ namespace Frontastic\Common\CartApiBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\CoreBundle\Controller\CrudController;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
@@ -202,6 +201,11 @@ class CartController extends CrudController
             );
         }
 
+        if (isset($payload['custom']) && isset($payload['customType'])) {
+            $cartApi->setCustomType($cart, $payload['customType']);
+            $cart = $cartApi->setCustomField($cart, $payload["custom"]);
+        }
+
         if (!empty($payload['shipping']) || !empty($payload['billing'])) {
             $cart = $cartApi->setShippingAddress(
                 $cart,
@@ -246,6 +250,14 @@ class CartController extends CrudController
         $cartApi = $this->getCartApi($context);
         return [
             'cart' => $cartApi->redeemDiscountCode($this->getCart($context), $code, $context->locale),
+        ];
+    }
+
+    public function removeDiscountAction(Context $context, Request $request): array
+    {
+        $payload = $this->getJsonContent($request);
+        return [
+            'cart' => $this->getCartApi($context)->removeDiscountCode($this->getCart($context), $payload['discountId']),
         ];
     }
 

@@ -15,7 +15,7 @@ class SystemController extends Controller
     public function versionAction(): JsonResponse
     {
         return new JsonResponse([
-            'version' => $this->getParameter('version'),
+            'version' => getenv('version') ?: $this->getParameter('version'),
             'environment' => $this->getParameter('env'),
         ]);
     }

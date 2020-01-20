@@ -105,6 +105,13 @@ interface CartApi
 
     /**
      * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
+     * @param string $discountId
+     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
+     */
+    public function removeDiscountCode(Cart $cart, string $discountId, string $locale = null): Cart;
+
+    /**
+     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
      * @return \Frontastic\Common\CartApiBundle\Domain\Order
      */
     public function order(Cart $cart): Order;
