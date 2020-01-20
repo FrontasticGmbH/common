@@ -64,38 +64,6 @@ abstract class BaseImplementation
         return null;
     }
 
-    /*** setCustomLineItemType() **************************************************************************************/
-    public function beforeSetCustomLineItemType(CartApi $cartApi, array $lineItemType): void
-    {
-    }
-    // as this original method returns `void` it does not make sense to have an after* method here
-
-    /*** getCustomLineItemType() **************************************************************************************/
-    public function beforeGetCustomLineItemType(CartApi $cartApi): void
-    {
-    }
-
-    public function afterGetCustomLineItemType(CartApi $cartApi, array $customLineItemType): ?array
-    {
-        return null;
-    }
-
-    /*** setTaxCategory() *********************************************************************************************/
-    public function beforeSetTaxCategory(CartApi $cartApi, array $taxCategory): void
-    {
-    }
-    // as this original method returns `void` it does not make sense to have an after* method here
-
-    /*** getTaxCategory() *********************************************************************************************/
-    public function beforeGetTaxCategory(CartApi $cartApi): void
-    {
-    }
-
-    public function afterGetTaxCategory(CartApi $cartApi, array $taxCategory): ?array
-    {
-        return null;
-    }
-
     /*** addToCart() **************************************************************************************************/
     public function beforeAddToCart(CartApi $cartApi, Cart $cart, LineItem $lineItem, string $locale = null): void
     {
