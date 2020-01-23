@@ -16,6 +16,39 @@ function fieldIsRequired (requiredFlag, type, streamType) {
     return type === 'stream' && AUTOMATIC_REQUIRED_STREAM_TYPES.includes(streamType)
 }
 
+function buildFieldsFromSectionSchema (sectionSchema) {
+    if (!_.isArray(sectionSchema.fields)) {
+        return {}
+    }
+
+    let fields = {}
+
+    for (let fieldIndex = 0; fieldIndex < sectionSchema.fields.length; ++fieldIndex) {
+        const fieldSchema = sectionSchema.fields[fieldIndex]
+        if (!fieldSchema.field) {
+            continue
+        }
+
+        const type = fieldSchema.type || 'text'
+        fields[fieldSchema.field] = {
+            field: fieldSchema.field,
+            type: type,
+            sectionName: sectionSchema.name || '',
+            values: fieldSchema.values || [],
+            default: getFieldDefaultValue(type, fieldSchema.default),
+            validate: fieldSchema.validate || {},
+            fields: fieldSchema.fields || null,
+            min: typeof fieldSchema.min === 'undefined' ? 1 : fieldSchema.min,
+            max: fieldSchema.max || 16,
+            required: fieldIsRequired(fieldSchema.required, type, fieldSchema.streamType),
+            disabled: fieldSchema.disabled === true,
+            translatable: fieldSchema.translatable,
+        }
+    }
+
+    return fields
+}
+
 function getFieldValue (schema, configuration) {
     let value = schema.default
     if (typeof configuration[schema.field] !== 'undefined' && configuration[schema.field] !== null) {
@@ -64,7 +97,7 @@ function getSchemaWithResolvedStreams (schema, configuration, streamData, custom
     const customStreamValue = customStreamData[schema.field]
 
     if (schema.type === 'group') {
-        const groupFields = schema.fields || []
+        const groupFields = buildFieldsFromSectionSchema(schema)
         return getFieldValue(schema, configuration)
             .map((value, groupIndex) => {
                 const elementCustomStreamData = typeof customStreamValue !== 'undefined' && customStreamValue.length > groupIndex ? customStreamValue[groupIndex] : {}
@@ -119,28 +152,9 @@ class ConfigurationSchema {
         this.fields = {}
 
         for (let sectionIndex = 0; sectionIndex < this.schema.length; ++sectionIndex) {
-            const sectionSchema = this.schema[sectionIndex]
-            for (let fieldIndex = 0; fieldIndex < sectionSchema.fields.length; ++fieldIndex) {
-                const fieldSchema = sectionSchema.fields[fieldIndex]
-                if (!fieldSchema.field) {
-                    continue
-                }
-
-                const type = fieldSchema.type || 'text'
-                this.fields[fieldSchema.field] = {
-                    field: fieldSchema.field,
-                    type: type,
-                    sectionName: sectionSchema.name || '',
-                    values: fieldSchema.values || [],
-                    default: getFieldDefaultValue(type, fieldSchema.default),
-                    validate: fieldSchema.validate || {},
-                    fields: fieldSchema.fields || null,
-                    min: typeof fieldSchema.min === 'undefined' ? 1 : fieldSchema.min,
-                    max: fieldSchema.max || 16,
-                    required: fieldIsRequired(fieldSchema.required, type, fieldSchema.streamType),
-                    disabled: fieldSchema.disabled === true,
-                    translatable: fieldSchema.translatable,
-                }
+            this.fields = {
+                ...this.fields,
+                ...buildFieldsFromSectionSchema(this.schema[sectionIndex]),
             }
         }
     }

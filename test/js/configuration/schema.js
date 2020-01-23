@@ -1071,4 +1071,44 @@ describe('ConfigurationSchema', function () {
             ],
         })
     })
+
+    it('return empty string for missing value inside group inside group when resolving streams', () => {
+        const schema = new Schema(
+            [{
+                name: 'Section',
+                fields: [
+                    {
+                        label: 'Outer Test Group',
+                        field: 'outerGroup',
+                        type: 'group',
+                        fields: [
+                            {
+                                label: 'Inner Test Group',
+                                field: 'innerGroup',
+                                type: 'group',
+                                fields: [
+                                    {
+                                        label: 'First',
+                                        field: 'groupFirst',
+                                        type: 'string',
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            }],
+            {}
+        )
+
+        expect(schema.getConfigurationWithResolvedStreams({}, {})).toEqual({
+            outerGroup: [
+                {
+                    innerGroup: [
+                        { groupFirst: '' },
+                    ],
+                },
+            ],
+        })
+    })
 })
