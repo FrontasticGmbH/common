@@ -1028,4 +1028,47 @@ describe('ConfigurationSchema', function () {
             ],
         })
     })
+
+    it('returns the configuration for a field in a group with a name of an array function and with empty custom stream data which is exported as array by PHP when resolving streams', () => {
+        const schema = new Schema(
+            [{
+                name: 'Section',
+                fields: [
+                    {
+                        label: 'Test Group',
+                        field: 'test',
+                        type: 'group',
+                        fields: [
+                            {
+                                label: 'First',
+                                field: 'filter',
+                                type: 'string',
+                                translatable: false,
+                                required: true,
+                            },
+                        ],
+                    },
+                ],
+            }],
+            {
+                test: [
+                    { filter: 'Value' },
+                ],
+            }
+        )
+
+        expect(schema.getConfigurationWithResolvedStreams(
+            {},
+            {
+                test: [
+                    [],
+                ],
+
+            }
+        )).toEqual({
+            test: [
+                { filter: 'Value' },
+            ],
+        })
+    })
 })

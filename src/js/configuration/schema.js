@@ -48,6 +48,10 @@ function completeGroupConfig (groupEntries, fieldDefinitions) {
 }
 
 function getFieldsWithResolvedStreams (fields, configuration, streamData, customStreamData) {
+    if (typeof customStreamData !== 'object' || _.isArray(customStreamData)) {
+        customStreamData = {}
+    }
+
     return _.fromPairs(
         Object.values(fields)
             .map((schema) => {
