@@ -1,7 +1,7 @@
 {
     "name": "frontastic/common",
     "license": "None",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "config": {
         "platform": {
             "php": "7.2"
@@ -17,6 +17,7 @@
         "justinrainbow/json-schema": "@stable",
         "kore/data-object": "@stable",
         "league/oauth2-client": "^2.3",
+        "myclabs/deep-copy": "^1.0",
         "qafoolabs/no-framework-bundle": "^2.6",
         "seld/jsonlint": "@stable",
         "swiftmailer/swiftmailer": "^6.2",
@@ -30,7 +31,6 @@
     },
     "require-dev": {
         "doctrine/common": "^2.9",
-        "myclabs/deep-copy": "^1.0",
         "pdepend/pdepend": "@stable",
         "phploc/phploc": "@stable",
         "phpmd/phpmd": "@stable",
