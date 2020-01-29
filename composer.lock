@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c6d319fd14e10982f52cf482fcd9166c",
+    "content-hash": "cd3bd346589c2af23623c8bbcdf9b1d1",
     "packages": [
         {
             "name": "cache/adapter-common",
@@ -5661,14 +5661,14 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "justinrainbow/json-schema": 0,
         "kore/data-object": 0,
         "seld/jsonlint": 0,
-        "justinrainbow/json-schema": 0,
-        "phpmd/phpmd": 0,
         "pdepend/pdepend": 0,
         "phploc/phploc": 0,
-        "squizlabs/php_codesniffer": 0,
-        "sebastian/phpcpd": 0
+        "phpmd/phpmd": 0,
+        "sebastian/phpcpd": 0,
+        "squizlabs/php_codesniffer": 0
     },
     "prefer-stable": false,
     "prefer-lowest": false,
