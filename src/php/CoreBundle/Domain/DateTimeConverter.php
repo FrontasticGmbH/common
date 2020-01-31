@@ -27,9 +27,12 @@ class DateTimeConverter
             return $original;
         }
 
+        /*
+         * `\DateTime::createFromImmutable` is only available in PHP 7.3
         if ($original instanceof \DateTimeImmutable) {
             return \DateTime::createFromImmutable($original);
         }
+        */
 
         return \DateTime::createFromFormat(
             \DateTime::ISO8601,
