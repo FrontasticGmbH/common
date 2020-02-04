@@ -69,6 +69,10 @@ class CustomerService
             try {
                 $customer = $this->parseCustomerFile($customerFile, true);
             } catch (\Throwable $e) {
+                if (strstr($customerFile, 'demo') !== false) {
+                    // throw yml-problem for normal customer (but not for demo)
+                    throw $e;
+                }
                 // Ignore wrong YML files
             }
         }
