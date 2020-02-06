@@ -1,0 +1,5 @@
+src/php/
+test/php/
+vendor/
+node_modules/
+build/
