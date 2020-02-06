@@ -1,4 +1,4 @@
-<?php;
+<?php
 
 namespace Frontastic\Common\CartApiBundle\Controller;
 
