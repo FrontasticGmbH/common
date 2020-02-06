@@ -1,4 +1,4 @@
-<?php
+<?php;
 
 namespace Frontastic\Common\CartApiBundle\Controller;
 
@@ -201,8 +201,7 @@ class CartController extends CrudController
             );
         }
 
-        if (isset($payload['custom']) && isset($payload['customType'])) {
-            $cartApi->setCustomType($cart, $payload['customType']);
+        if (isset($payload['custom'])) {
             $cart = $cartApi->setCustomField($cart, $payload["custom"]);
         }
 

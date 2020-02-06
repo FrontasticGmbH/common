@@ -442,13 +442,19 @@ class Commercetools implements CartApi
         return $this->postCartActions($cart, $actions, $this->parseLocaleString($localeString));
     }
 
-    public function setCustomType(Cart $cart, string $id, string $localeString = null): Cart
+
+    /**
+     * Intentionally not part of the CartAPI interface.
+     *
+     * Only for use in scenarios where CommerceTools is set as the backend API.
+     */
+    public function setCustomType(Cart $cart, string $key, string $localeString = null): Cart
     {
         $actions = [];
         $actions[] = [
             'action' => 'setCustomType',
             'type' => [
-                "id"=> $id,
+                "key"=> $key,
                 "typeId"=> "type"
             ]
         ];
