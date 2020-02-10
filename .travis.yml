@@ -1,0 +1,16 @@
+language: php
+php:
+  - '7.2'
+  - '7.3'
+  - '7.4'
+
+install:
+  - yarn install
+  - composer install
+
+script:
+  - yarn run test
+  - vendor/bin/phpunit
+  - vendor/bin/phpstan analyse
+  - vendor/bin/phpcs --extensions=php --standard=PSR2 src/php/
+  - yarn run check
