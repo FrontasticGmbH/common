@@ -66,7 +66,7 @@ class FieldConfiguration
     {
         $value = self::getSchemaString($schema, $key, null);
         if ($value === null) {
-            throw new \InvalidArgumentException('Required schema field ' . $key . ' is missing');
+            throw new \InvalidArgumentException('Required schema field "' . $key . '" is missing');
         }
 
         return $value;
@@ -80,7 +80,7 @@ class FieldConfiguration
 
         $value = $schema[$key];
         if (!is_string($value)) {
-            throw new \InvalidArgumentException($key . 'needs to be a string');
+            throw new \InvalidArgumentException('"' . $key . '" needs to be a string');
         }
 
         return $value;
