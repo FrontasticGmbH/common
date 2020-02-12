@@ -145,7 +145,7 @@ function getFieldDefaultValue (type, defaultValue) {
 }
 
 class ConfigurationSchema {
-    constructor (schema = [], configuration = {}, id = null) {
+    constructor (schema = [], configuration = {}) {
         this.schema = schema
         this.setConfiguration(configuration)
 
@@ -181,8 +181,7 @@ class ConfigurationSchema {
                 {},
                 this.configuration,
                 { [field]: value }
-            ),
-            this.id
+            )
         )
     }
 
