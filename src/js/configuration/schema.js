@@ -231,8 +231,8 @@ class ConfigurationSchema {
 
         if (schema.type === 'group') {
             return value.some(configuration => {
-                const gropuSchema = new ConfigurationSchema([schema], configuration)
-                return gropuSchema.hasMissingRequiredFieldValues(skipStreams)
+                const groupSchema = new ConfigurationSchema([schema], configuration)
+                return groupSchema.hasMissingRequiredFieldValues(skipStreams)
             })
         }
 
