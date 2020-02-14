@@ -25,11 +25,16 @@ class Client
     private $cache;
 
     private $accessToken;
+    /**
+     * @var string
+     */
+    private $hostUrl;
 
     public function __construct(
         string $clientId,
         string $sclientSecret,
         string $projectKey,
+        string $hostUrl,
         HttpClient $httpClient,
         Cache $cache
     ) {
@@ -38,6 +43,30 @@ class Client
         $this->projectKey = $projectKey;
         $this->httpClient = $httpClient;
         $this->cache = $cache;
+        $this->setHostUrl($hostUrl);
+    }
+
+    private function setHostUrl(string $hostUrl)
+    {
+        $urlParts = parse_url($hostUrl);
+
+        if ($urlParts === false) {
+            throw new \RuntimeException(
+                sprintf('Failed to properly parse config "hostUrl" (value: "%s")',  $hostUrl)
+            );
+        }
+
+        $this->hostUrl = implode(
+            '',
+            [
+                $urlParts['scheme'] ?? 'https',
+                '://',
+                isset($urlParts['user']) && isset($urlParts['pass'])
+                    ? $urlParts['user'] . ':' . $urlParts['pass'] . '@' : '',
+                $urlParts['host'],
+                isset($urlParts['port']) ? ':' . $urlParts['port'] : '',
+            ]
+        );
     }
 
     public function getProjectKey(): string
@@ -162,7 +191,7 @@ class Client
         return $this->httpClient
             ->requestAsync(
                 $method,
-                sprintf('https://api.sphere.io/%s%s%s', $this->projectKey, $uri, $query),
+                sprintf('%s/%s%s%s', $this->hostUrl, $this->projectKey, $uri, $query),
                 $body,
                 $headers,
                 new HttpClient\Options([

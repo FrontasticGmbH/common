@@ -29,6 +29,7 @@ class AccountApiFactory
                         $customer->configuration['account']->clientId,
                         $customer->configuration['account']->clientSecret,
                         $customer->configuration['account']->projectKey,
+                        $customer->configuration['account']->hostUrl ?? 'https://api.sphere.io',
                         $this->container->get(HttpClient::class),
                         $this->cache
                     )
