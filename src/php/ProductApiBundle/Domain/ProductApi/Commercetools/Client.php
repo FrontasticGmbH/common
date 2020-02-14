@@ -52,7 +52,10 @@ class Client
 
         if ($urlParts === false) {
             throw new \RuntimeException(
-                sprintf('Failed to properly parse config "hostUrl" (value: "%s")',  $hostUrl)
+                sprintf(
+                    'Failed to properly parse config "hostUrl" (value: "%s")',
+                    $hostUrl
+                )
             );
         }
 
