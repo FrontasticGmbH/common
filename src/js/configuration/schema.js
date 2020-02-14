@@ -145,7 +145,7 @@ function getFieldDefaultValue (type, defaultValue) {
 }
 
 class ConfigurationSchema {
-    constructor (schema = [], configuration = {}, id = null) {
+    constructor (schema = [], configuration = {}) {
         this.schema = schema
         this.setConfiguration(configuration)
 
@@ -181,8 +181,7 @@ class ConfigurationSchema {
                 {},
                 this.configuration,
                 { [field]: value }
-            ),
-            this.id
+            )
         )
     }
 
@@ -231,8 +230,8 @@ class ConfigurationSchema {
 
         if (schema.type === 'group') {
             return value.some(configuration => {
-                const gropuSchema = new ConfigurationSchema([schema], configuration)
-                return gropuSchema.hasMissingRequiredFieldValues(skipStreams)
+                const groupSchema = new ConfigurationSchema([schema], configuration)
+                return groupSchema.hasMissingRequiredFieldValues(skipStreams)
             })
         }
 
