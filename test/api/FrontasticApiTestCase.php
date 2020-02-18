@@ -8,7 +8,10 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class FrontasticApiTestCase extends KernelTestCase
 {
-    protected function setUp(): void
+    /**
+     * @before
+     */
+    protected function setUpKernel(): void
     {
         $environmentResolver = new EnvironmentResolver();
         $environmentResolver->loadEnvironmentVariables([

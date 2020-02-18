@@ -15,7 +15,6 @@ class ProjectApiTest extends FrontasticApiTestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
         $this->projectApiFactory = self::$container->get(ProjectApiFactory::class);
     }
 
