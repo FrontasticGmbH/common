@@ -11,5 +11,5 @@ configuration:
 projects:
     - projectId: test
       name: Commercetools Test Catwalk
-      languages: ["en_GB@EUR"]
-      defaultLanguage: en_GB@EUR
+      languages: ["en_GB@GBP", "de_DE@EUR", "fr_FR@EUR"]
+      defaultLanguage: en_GB@GBP

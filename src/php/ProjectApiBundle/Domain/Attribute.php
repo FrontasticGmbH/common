@@ -16,6 +16,18 @@ class Attribute extends DataObject
     const TYPE_LOCALIZED_ENUM = 'localizedEnum';
     const TYPE_CATEGORY_ID = 'categoryId';
 
+    const TYPES = [
+        self::TYPE_BOOLEAN,
+        self::TYPE_NUMBER,
+        self::TYPE_MONEY,
+        self::TYPE_REFERENCE,
+        self::TYPE_TEXT,
+        self::TYPE_LOCALIZED_TEXT,
+        self::TYPE_ENUM,
+        self::TYPE_LOCALIZED_ENUM,
+        self::TYPE_CATEGORY_ID,
+    ];
+
     /**
      * @var string
      */
