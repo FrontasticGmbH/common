@@ -115,6 +115,7 @@ class CustomerService
             'name' => $customer['name'],
             'secret' => $customer['secret'],
             'edition' => $customer['edition'] ?? 'mirco',
+            'hasPaasModifications' => $customer['hasPaasModifications'] ?? false,
             'features' => $customer['features'] ?? [],
             'isTransient' => $transient,
             'configuration' => $this->convertConfigurationToObjects($customerConfiguration),
