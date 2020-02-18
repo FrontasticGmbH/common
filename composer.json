@@ -37,7 +37,8 @@
         "phpstan/phpstan": "^0.11.19",
         "phpunit/phpunit": "^6",
         "sebastian/phpcpd": "@stable",
-        "squizlabs/php_codesniffer": "@stable"
+        "squizlabs/php_codesniffer": "@stable",
+        "symfony/swiftmailer-bundle": "^3.4"
     },
     "autoload": {
         "psr-4": {

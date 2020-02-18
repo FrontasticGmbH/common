@@ -1,0 +1,15 @@
+---
+name: "commercetools"
+secret: "secret"
+edition: "micro"
+features:
+configuration:
+    commercetools:
+        projectKey: frontastic-1
+        clientId: xQIEJY3is0ETFY-7lSf-fAUc
+        clientSecret: YjGgixzob0YJ6_H98Az9sqkhWp0bzZ-3
+projects:
+    - projectId: test
+      name: Commercetools Test Catwalk
+      languages: ["en_GB@EUR"]
+      defaultLanguage: en_GB@EUR
