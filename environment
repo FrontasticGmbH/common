@@ -1,4 +1,4 @@
-; Properties determining, if the build should fail, if one of the tests fails
+# Properties determining, if the build should fail, if one of the tests fails
 env=prod
 
-test-static-cpd.fail-on-violation = false
+test_static_cpd_fail_on_violation=false
