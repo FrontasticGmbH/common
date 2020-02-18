@@ -46,7 +46,13 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Frontastic\\Common\\": "test/php/"
+            "Frontastic\\Common\\": "test/php/",
+            "Frontastic\\Common\\ApiTests\\": "test/api/"
         }
+    },
+    "scripts": {
+        "api-tests": [
+            "phpunit --configuration phpunit.api.xml --colors=always"
+        ]
     }
 }
