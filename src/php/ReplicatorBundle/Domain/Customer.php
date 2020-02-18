@@ -22,6 +22,11 @@ class Customer extends DataObject
     public $edition = 'micro';
 
     /**
+     * @var bool
+     */
+    public $hasPaasModifications = false;
+
+    /**
      * @var array
      */
     public $features = [];
