@@ -38,8 +38,6 @@ class ProjectApiTest extends FrontasticApiTestCase
         $projectApi = $this->projectApiFactory->factor($project);
 
         $searchableAttributes = $projectApi->getSearchableAttributes();
-        foreach ($searchableAttributes as $searchableAttribute) {
-            $this->assertInstanceOf(Attribute::class, $searchableAttribute);
-        }
+        $this->assertContainsOnlyInstancesOf(Attribute::class, $searchableAttributes);
     }
 }
