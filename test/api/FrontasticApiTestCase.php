@@ -23,7 +23,7 @@ class FrontasticApiTestCase extends KernelTestCase
         self::bootKernel();
     }
 
-    public function projectsToTest(): array
+    public function customerAndProject(): array
     {
         $customerService = new CustomerService(__DIR__ . '/config/customers', '');
 
@@ -36,9 +36,35 @@ class FrontasticApiTestCase extends KernelTestCase
                     $project->name,
                     $project->projectId
                 );
-                $projects[$description] = [$project, $customer];
+                $projects[$description] = [$customer, $project];
             }
         }
         return $projects;
+    }
+
+    public function project(): array
+    {
+        return array_map(
+            function (array $customerAndProject): array {
+                return [$customerAndProject[1]];
+            },
+            $this->customerAndProject()
+        );
+    }
+
+    public function projectAndLanguage(): array
+    {
+        $projectsAndLocales = [];
+
+        foreach ($this->project() as $projectDescription => [$project]) {
+            foreach ($project->languages as $language) {
+                $projectsAndLocales[$projectDescription . ', language: ' . $language] = [
+                    $project,
+                    $language,
+                ];
+            }
+        }
+
+        return $projectsAndLocales;
     }
 }
