@@ -2,9 +2,9 @@
 
 namespace Frontastic\Common;
 
+use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel as SymfonyKernel;
-use Symfony\Component\Config\Loader\LoaderInterface;
 
 abstract class Kernel extends SymfonyKernel
 {
@@ -118,6 +118,16 @@ abstract class Kernel extends SymfonyKernel
 
     public static function getBaseConfiguration()
     {
+        $cacheDirectory = getenv('cache_dir');
+        if ($cacheDirectory === false) {
+            $cacheDirectory = static::getBaseDir() . '/var/cache';
+        }
+
+        $logDirectory = getenv('log_dir');
+        if ($logDirectory === false) {
+            $logDirectory = static::getBaseDir() . '/var/log';
+        }
+
         return array(
             'env' => 'prod',
             'locale' => 'en',
@@ -125,8 +135,8 @@ abstract class Kernel extends SymfonyKernel
             'mailer.transport' => 'sendmail',
             'debug' => false,
             'monolog_action_level' => 'error',
-            'cache_dir' => static::getBaseDir() . '/var/cache',
-            'log_dir' => static::getBaseDir() . '/var/log',
+            'cache_dir' => $cacheDirectory,
+            'log_dir' => $logDirectory,
         );
     }
 
