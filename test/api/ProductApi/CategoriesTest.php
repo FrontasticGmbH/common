@@ -13,6 +13,8 @@ class CategoriesTest extends FrontasticApiTestCase
 {
     private const NON_EXISTING_SLUG = 'THIS_SLUG_SHOULD_NEVER_EXIST_IN_ANY_DATA_SET';
 
+    private const URI_PATH_SEGMENT_REGEX = '/^[0-9a-zA-Z_.~-]+$/';
+
     /**
      * @var array<string, ProductApi>
      */
@@ -31,7 +33,7 @@ class CategoriesTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
-    public function testAllCategoriesAreNotEmpty(Project $project, string $language): void
+    public function testCategoriesAreNotEmpty(Project $project, string $language): void
     {
         $categories = $this->fetchCategories($project, $language);
         $this->assertNotEmpty($categories);
@@ -40,10 +42,12 @@ class CategoriesTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
-    public function testAllCategoriesReturnsCategories(Project $project, string $language): void
+    public function testQueryCategoriesTwiceProducesSameResult(Project $project, string $language): void
     {
-        $categories = $this->fetchCategories($project, $language);
-        $this->assertContainsOnlyInstancesOf(Category::class, $categories);
+        $firstCategories = $this->fetchCategories($project, $language);
+        $secondCategories = $this->fetchCategories($project, $language);
+
+        $this->assertEquals($firstCategories, $secondCategories);
     }
 
     /**
@@ -58,15 +62,23 @@ class CategoriesTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
+    public function testFetchCategoriesReturnsCategories(Project $project, string $language): void
+    {
+        $categories = $this->fetchAllCategories($project, $language);
+        $this->assertContainsOnlyInstancesOf(Category::class, $categories);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
     public function testCategoriesHaveNonEmptyStringId(Project $project, string $language): void
     {
-        $categories = $this->fetchCategories($project, $language);
+        $categories = $this->fetchAllCategories($project, $language);
 
         foreach ($categories as $category) {
             $this->assertInternalType('string', $category->categoryId);
             $this->assertNotEmpty($category->categoryId);
         }
-        $this->assertGreaterThanOrEqual(5, count($categories));
     }
 
     /**
@@ -74,13 +86,12 @@ class CategoriesTest extends FrontasticApiTestCase
      */
     public function testCategoriesHaveNonEmptyStringName(Project $project, string $language): void
     {
-        $categories = $this->fetchCategories($project, $language);
+        $categories = $this->fetchAllCategories($project, $language);
 
         foreach ($categories as $category) {
             $this->assertInternalType('string', $category->name);
             $this->assertNotEmpty($category->name);
         }
-        $this->assertGreaterThanOrEqual(5, count($categories));
     }
 
     /**
@@ -88,13 +99,75 @@ class CategoriesTest extends FrontasticApiTestCase
      */
     public function testCategoriesHaveNonEmptyStringSlug(Project $project, string $language): void
     {
-        $categories = $this->fetchCategories($project, $language);
+        $categories = $this->fetchAllCategories($project, $language);
 
         foreach ($categories as $category) {
             $this->assertInternalType('string', $category->slug);
             $this->assertNotEmpty($category->slug);
         }
-        $this->assertGreaterThanOrEqual(5, count($categories));
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testCategoriesHaveValidPathSegmentAsSlug(Project $project, string $language): void
+    {
+        $categories = $this->fetchAllCategories($project, $language);
+
+        foreach ($categories as $category) {
+            $this->assertRegExp(self::URI_PATH_SEGMENT_REGEX, $category->slug);
+        }
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testCategoriesHaveNonEmptyStringPath(Project $project, string $language): void
+    {
+        $categories = $this->fetchAllCategories($project, $language);
+
+        foreach ($categories as $category) {
+            $this->assertInternalType('integer', $category->depth);
+            $this->assertEquals(count($category->getAncestorIds()), $category->depth);
+        }
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testCategoriesHaveCorrectDepth(Project $project, string $language): void
+    {
+        $categories = $this->fetchAllCategories($project, $language);
+
+        foreach ($categories as $category) {
+            $this->assertInternalType('string', $category->path);
+            $this->assertNotEmpty($category->path);
+        }
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testCategoriesPathMatchesParentPath(Project $project, string $language): void
+    {
+        $categories = $this->fetchAllCategories($project, $language);
+
+        $pathByCategoryId = [];
+        foreach ($categories as $category) {
+            $pathByCategoryId[$category->categoryId] = $category->path;
+        }
+
+        foreach ($categories as $category) {
+            $parentCategoryId = $category->getParentCategoryId();
+
+            $parentPath = '';
+            if ($parentCategoryId !== null) {
+                $this->assertArrayHasKey($parentCategoryId, $pathByCategoryId);
+                $parentPath = $pathByCategoryId[$parentCategoryId];
+            }
+
+            $this->assertEquals($parentPath . '/' . $category->categoryId, $category->path);
+        }
     }
 
     /**
@@ -102,23 +175,12 @@ class CategoriesTest extends FrontasticApiTestCase
      */
     public function testCategoriesDontHaveDangerousInnerCategory(Project $project, string $language): void
     {
-        $categories = $this->fetchCategories($project, $language);
+        $categories = $this->fetchAllCategories($project, $language);
 
         foreach ($categories as $category) {
             $this->assertNull($category->dangerousInnerCategory);
         }
         $this->assertGreaterThanOrEqual(5, count($categories));
-    }
-
-    /**
-     * @dataProvider projectAndLanguage
-     */
-    public function testQueryCategoriesTwiceProducesSameResult(Project $project, string $language): void
-    {
-        $firstCategories = $this->fetchCategories($project, $language);
-        $secondCategories = $this->fetchCategories($project, $language);
-
-        $this->assertEquals($firstCategories, $secondCategories);
     }
 
     /**
@@ -144,7 +206,7 @@ class CategoriesTest extends FrontasticApiTestCase
      */
     public function testFetchingPastAllCategoriesReturnsEmptyResult(Project $project, string $language): void
     {
-        $limit = 50;
+        $limit = 10;
         $offset = 0;
         do {
             $categoriesFromCurrentStep = $this->fetchCategories($project, $language, $limit, $offset);
@@ -162,17 +224,7 @@ class CategoriesTest extends FrontasticApiTestCase
      */
     public function testFetchingAllCategoriesReturnsDistinctIds(Project $project, string $language): void
     {
-        $categories = [];
-
-        $limit = 50;
-        $offset = 0;
-        do {
-            $categoriesFromCurrentStep = $this->fetchCategories($project, $language, $limit, $offset);
-            $categories = array_merge($categories, $categoriesFromCurrentStep);
-
-            $offset += $limit;
-        } while (count($categoriesFromCurrentStep) === $limit);
-
+        $categories = $this->fetchAllCategories($project, $language);
         $categoryIds = array_map(
             function (Category $category): string {
                 return $category->categoryId;
@@ -224,6 +276,16 @@ class CategoriesTest extends FrontasticApiTestCase
         $this->assertEmpty($categories);
     }
 
+    private function productApiForProject(Project $project): ProductApi
+    {
+        $key = sprintf('%s_%s', $project->customer, $project->projectId);
+        if (!array_key_exists($key, $this->productApis)) {
+            $this->productApis[$key] = $this->productApiFactory->factor($project);
+        }
+
+        return $this->productApis[$key];
+    }
+
     /**
      * @return Category[]
      */
@@ -258,14 +320,23 @@ class CategoriesTest extends FrontasticApiTestCase
         return $productApi->getCategories($query);
     }
 
-    private function productApiForProject(Project $project): ProductApi
+    /**
+     * @return Category[]
+     */
+    private function fetchAllCategories(Project $project, string $language): array
     {
-        $key = sprintf('%s_%s', $project->customer, $project->projectId);
-        if (!array_key_exists($key, $this->productApis)) {
-            $this->productApis[$key] = $this->productApiFactory->factor($project);
-        }
+        $categories = [];
 
-        return $this->productApis[$key];
+        $limit = 50;
+        $offset = 0;
+        do {
+            $categoriesFromCurrentStep = $this->fetchCategories($project, $language, $limit, $offset);
+            $categories = array_merge($categories, $categoriesFromCurrentStep);
+
+            $offset += $limit;
+        } while (count($categoriesFromCurrentStep) === $limit);
+
+        return $categories;
     }
 
     /**
