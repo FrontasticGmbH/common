@@ -67,4 +67,14 @@ class FrontasticApiTestCase extends KernelTestCase
 
         return $projectsAndLocales;
     }
+
+    /**
+     * @param string[] $values
+     */
+    protected function assertArrayHasDistinctValues(array $values): void
+    {
+        foreach (array_count_values($values) as $value => $count) {
+            $this->assertEquals(1, $count, 'Value ' . $value . ' occurred more then once');
+        }
+    }
 }

@@ -46,9 +46,7 @@ class SearchableAttributesTest extends FrontasticApiTestCase
             },
             $this->getAttributesForProject($project)
         );
-        foreach (array_count_values($attributeIds) as $attributeId => $count) {
-            $this->assertEquals(1, $count, 'Attribute ' . $attributeId . ' returned more then once');
-        }
+        $this->assertArrayHasDistinctValues($attributeIds);
     }
 
     /**

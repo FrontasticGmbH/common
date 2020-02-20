@@ -11,6 +11,8 @@ use Frontastic\Common\ReplicatorBundle\Domain\Project;
 
 class CategoriesTest extends FrontasticApiTestCase
 {
+    private const NON_EXISTING_SLUG = 'THIS_SLUG_SHOULD_NEVER_EXIST_IN_ANY_DATA_SET';
+
     /**
      * @var array<string, ProductApi>
      */
@@ -38,6 +40,79 @@ class CategoriesTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
+    public function testAllCategoriesReturnsCategories(Project $project, string $language): void
+    {
+        $categories = $this->fetchCategories($project, $language);
+        $this->assertContainsOnlyInstancesOf(Category::class, $categories);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testAtLeastFiveCategoriesAreReturned(Project $project, string $language): void
+    {
+        $categories = $this->fetchCategories($project, $language);
+        $this->assertGreaterThanOrEqual(5, count($categories));
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testCategoriesHaveNonEmptyStringId(Project $project, string $language): void
+    {
+        $categories = $this->fetchCategories($project, $language);
+
+        foreach ($categories as $category) {
+            $this->assertInternalType('string', $category->categoryId);
+            $this->assertNotEmpty($category->categoryId);
+        }
+        $this->assertGreaterThanOrEqual(5, count($categories));
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testCategoriesHaveNonEmptyStringName(Project $project, string $language): void
+    {
+        $categories = $this->fetchCategories($project, $language);
+
+        foreach ($categories as $category) {
+            $this->assertInternalType('string', $category->name);
+            $this->assertNotEmpty($category->name);
+        }
+        $this->assertGreaterThanOrEqual(5, count($categories));
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testCategoriesHaveNonEmptyStringSlug(Project $project, string $language): void
+    {
+        $categories = $this->fetchCategories($project, $language);
+
+        foreach ($categories as $category) {
+            $this->assertInternalType('string', $category->slug);
+            $this->assertNotEmpty($category->slug);
+        }
+        $this->assertGreaterThanOrEqual(5, count($categories));
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testCategoriesDontHaveDangerousInnerCategory(Project $project, string $language): void
+    {
+        $categories = $this->fetchCategories($project, $language);
+
+        foreach ($categories as $category) {
+            $this->assertNull($category->dangerousInnerCategory);
+        }
+        $this->assertGreaterThanOrEqual(5, count($categories));
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
     public function testQueryCategoriesTwiceProducesSameResult(Project $project, string $language): void
     {
         $firstCategories = $this->fetchCategories($project, $language);
@@ -58,20 +133,98 @@ class CategoriesTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
+    public function testFetchingManyCategoriesWorks(Project $project, string $language): void
+    {
+        $categories = $this->fetchCategories($project, $language, 250);
+        $this->assertNotEmpty($categories);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testFetchingPastAllCategoriesReturnsEmptyResult(Project $project, string $language): void
+    {
+        $limit = 50;
+        $offset = 0;
+        do {
+            $categoriesFromCurrentStep = $this->fetchCategories($project, $language, $limit, $offset);
+            $this->assertNotEmpty($categoriesFromCurrentStep);
+
+            $offset += $limit;
+        } while (count($categoriesFromCurrentStep) === $limit);
+
+        $categoriesPastLastCategory = $this->fetchCategories($project, $language, $limit, $offset);
+        $this->assertEmpty($categoriesPastLastCategory);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testFetchingAllCategoriesReturnsDistinctIds(Project $project, string $language): void
+    {
+        $categories = [];
+
+        $limit = 50;
+        $offset = 0;
+        do {
+            $categoriesFromCurrentStep = $this->fetchCategories($project, $language, $limit, $offset);
+            $categories = array_merge($categories, $categoriesFromCurrentStep);
+
+            $offset += $limit;
+        } while (count($categoriesFromCurrentStep) === $limit);
+
+        $categoryIds = array_map(
+            function (Category $category): string {
+                return $category->categoryId;
+            },
+            $categories
+        );
+        $this->assertArrayHasDistinctValues($categoryIds);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
     public function testFetchCategoriesWithLowLimitReturnsSameAsWithHighLimit(Project $project, string $language): void
     {
         $limit = 24;
-        $stepSize = 2;
 
         $categoriesFetchedInOneRequest = $this->fetchCategories($project, $language, $limit);
-        $categoriesFetchedInMultipleRequests =
-            $this->fetchCategoriesInMultipleSteps($project, $language, $limit, $stepSize);
+        $categoriesFetchedInMultipleRequests = $this->fetchCategoriesInMultipleSteps($project, $language, $limit, 2);
 
         $this->assertCategoriesEqualIgnoringOrder($categoriesFetchedInOneRequest, $categoriesFetchedInMultipleRequests);
-        $this->assertGreaterThan($stepSize, count($categoriesFetchedInMultipleRequests));
     }
 
-    /*
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testFetchCategoryBySlugReturnsResult(Project $project, string $language): void
+    {
+        $categories = $this->fetchCategories($project, $language);
+        $this->assertNotEmpty($categories);
+
+        $category = $categories[0];
+
+        $categoriesBySlug = $this->fetchCategoriesBySlug($project, $language, $category->slug);
+
+        $this->assertNotEmpty($categoriesBySlug);
+        foreach ($categoriesBySlug as $categoryBySlug) {
+            $this->assertEquals($category->slug, $categoryBySlug->slug);
+        }
+
+        $this->assertContains($category, $categoriesBySlug, '', false, false);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testFetchCategoryByNotExistingSlugReturnsEmptyResult(Project $project, string $language): void
+    {
+        $categories = $this->fetchCategoriesBySlug($project, $language, self::NON_EXISTING_SLUG);
+        $this->assertEmpty($categories);
+    }
+
+    /**
      * @return Category[]
      */
     private function fetchCategories(Project $project, string $language, ?int $limit = null, ?int $offset = null): array
@@ -86,6 +239,21 @@ class CategoriesTest extends FrontasticApiTestCase
         if ($offset !== null) {
             $query->offset = $offset;
         }
+
+        return $productApi->getCategories($query);
+    }
+
+    /**
+     * @return Category[]
+     */
+    private function fetchCategoriesBySlug(Project $project, string $language, string $slug): array
+    {
+        $productApi = $this->productApiForProject($project);
+
+        $query = new CategoryQuery([
+            'locale' => $language,
+            'slug' => $slug,
+        ]);
 
         return $productApi->getCategories($query);
     }
