@@ -122,6 +122,7 @@ class Commercetools implements ProductApi
             $categoryObject = new Category([
                 'categoryId' => $category['id'],
                 'name' => $categoryNameMap[$category['id']],
+                'slug' => $category['slug'][$locale->language] ?? '',
                 'depth' => count($category['ancestors']),
                 'path' =>
                     rtrim(

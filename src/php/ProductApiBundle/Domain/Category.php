@@ -29,6 +29,11 @@ class Category extends DataObject
     public $path;
 
     /**
+     * @var string
+     */
+    public $slug;
+
+    /**
      * Access original object from backend
      *
      * This should only be used if you need very specific features
