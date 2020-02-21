@@ -39,7 +39,9 @@ Property|Type|Default|Description
 
 
 ```php
-public function setPassword(string $password): mixed
+public function setPassword(
+    string $password
+): mixed
 ```
 
 
@@ -49,7 +51,7 @@ public function setPassword(string $password): mixed
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$password`|`string`|``|
+`$password`|`string`||
 
 Return Value: `mixed`
 
@@ -57,7 +59,9 @@ Return Value: `mixed`
 
 
 ```php
-public function isValidPassword(string $password): bool
+public function isValidPassword(
+    string $password
+): bool
 ```
 
 
@@ -67,7 +71,7 @@ public function isValidPassword(string $password): bool
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$password`|`string`|``|
+`$password`|`string`||
 
 Return Value: `bool`
 
@@ -75,7 +79,9 @@ Return Value: `bool`
 
 
 ```php
-public function getUsername(): mixed
+public function getUsername(
+    
+): mixed
 ```
 
 
@@ -90,7 +96,9 @@ Return Value: `mixed`
 
 
 ```php
-public function getRoles(): mixed
+public function getRoles(
+    
+): mixed
 ```
 
 
@@ -105,7 +113,9 @@ Return Value: `mixed`
 
 
 ```php
-public function getPassword(): mixed
+public function getPassword(
+    
+): mixed
 ```
 
 
@@ -120,7 +130,9 @@ Return Value: `mixed`
 
 
 ```php
-public function getSalt(): mixed
+public function getSalt(
+    
+): mixed
 ```
 
 
@@ -135,7 +147,9 @@ Return Value: `mixed`
 
 
 ```php
-public function eraseCredentials(): mixed
+public function eraseCredentials(
+    
+): mixed
 ```
 
 
@@ -150,7 +164,9 @@ Return Value: `mixed`
 
 
 ```php
-public function assertPermission(string $required): mixed
+public function assertPermission(
+    string $required
+): mixed
 ```
 
 
@@ -160,7 +176,7 @@ public function assertPermission(string $required): mixed
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$required`|`string`|``|
+`$required`|`string`||
 
 Return Value: `mixed`
 
@@ -168,7 +184,9 @@ Return Value: `mixed`
 
 
 ```php
-public function cleanForSession(): Account
+public function cleanForSession(
+    
+): Account
 ```
 
 
@@ -183,7 +201,9 @@ Return Value: [`Account`](Account.md)
 
 
 ```php
-public function serialize(): mixed
+public function serialize(
+    
+): mixed
 ```
 
 
@@ -198,7 +218,9 @@ Return Value: `mixed`
 
 
 ```php
-public function unserialize(mixed $serialized): mixed
+public function unserialize(
+    mixed $serialized
+): mixed
 ```
 
 
@@ -208,7 +230,7 @@ public function unserialize(mixed $serialized): mixed
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$serialized`|`mixed`|``|
+`$serialized`|`mixed`||
 
 Return Value: `mixed`
 

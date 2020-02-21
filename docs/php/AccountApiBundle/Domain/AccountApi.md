@@ -29,7 +29,9 @@ Fully Qualified: [`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`](../..
 
 
 ```php
-public function get(string $email): Account
+public function get(
+    string $email
+): Account
 ```
 
 
@@ -39,7 +41,7 @@ public function get(string $email): Account
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$email`|`string`|``|
+`$email`|`string`||
 
 Return Value: [`Account`](Account.md)
 
@@ -47,7 +49,9 @@ Return Value: [`Account`](Account.md)
 
 
 ```php
-public function confirmEmail(string $token): Account
+public function confirmEmail(
+    string $token
+): Account
 ```
 
 
@@ -57,7 +61,7 @@ public function confirmEmail(string $token): Account
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$token`|`string`|``|
+`$token`|`string`||
 
 Return Value: [`Account`](Account.md)
 
@@ -65,7 +69,10 @@ Return Value: [`Account`](Account.md)
 
 
 ```php
-public function create(Account $account, ?Cart $cart = null): Account
+public function create(
+    Account $account,
+    ?Cart $cart = null
+): Account
 ```
 
 
@@ -75,7 +82,7 @@ public function create(Account $account, ?Cart $cart = null): Account
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$account`|[`Account`](Account.md)|``|
+`$account`|[`Account`](Account.md)||
 `$cart`|?[`Cart`](../../CartApiBundle/Domain/Cart.md)|`null`|
 
 Return Value: [`Account`](Account.md)
@@ -84,7 +91,9 @@ Return Value: [`Account`](Account.md)
 
 
 ```php
-public function verifyEmail(string $token): Account
+public function verifyEmail(
+    string $token
+): Account
 ```
 
 
@@ -94,7 +103,7 @@ public function verifyEmail(string $token): Account
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$token`|`string`|``|
+`$token`|`string`||
 
 Return Value: [`Account`](Account.md)
 
@@ -102,7 +111,9 @@ Return Value: [`Account`](Account.md)
 
 
 ```php
-public function update(Account $account): Account
+public function update(
+    Account $account
+): Account
 ```
 
 
@@ -112,7 +123,7 @@ public function update(Account $account): Account
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$account`|[`Account`](Account.md)|``|
+`$account`|[`Account`](Account.md)||
 
 Return Value: [`Account`](Account.md)
 
@@ -120,7 +131,11 @@ Return Value: [`Account`](Account.md)
 
 
 ```php
-public function updatePassword(string $accountId, string $oldPassword, string $newPassword): Account
+public function updatePassword(
+    string $accountId,
+    string $oldPassword,
+    string $newPassword
+): Account
 ```
 
 
@@ -130,9 +145,9 @@ public function updatePassword(string $accountId, string $oldPassword, string $n
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountId`|`string`|``|
-`$oldPassword`|`string`|``|
-`$newPassword`|`string`|``|
+`$accountId`|`string`||
+`$oldPassword`|`string`||
+`$newPassword`|`string`||
 
 Return Value: [`Account`](Account.md)
 
@@ -140,7 +155,9 @@ Return Value: [`Account`](Account.md)
 
 
 ```php
-public function generatePasswordResetToken(Account $account): Account
+public function generatePasswordResetToken(
+    Account $account
+): Account
 ```
 
 
@@ -150,7 +167,7 @@ public function generatePasswordResetToken(Account $account): Account
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$account`|[`Account`](Account.md)|``|
+`$account`|[`Account`](Account.md)||
 
 Return Value: [`Account`](Account.md)
 
@@ -158,7 +175,10 @@ Return Value: [`Account`](Account.md)
 
 
 ```php
-public function resetPassword(string $token, string $newPassword): Account
+public function resetPassword(
+    string $token,
+    string $newPassword
+): Account
 ```
 
 
@@ -168,8 +188,8 @@ public function resetPassword(string $token, string $newPassword): Account
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$token`|`string`|``|
-`$newPassword`|`string`|``|
+`$token`|`string`||
+`$newPassword`|`string`||
 
 Return Value: [`Account`](Account.md)
 
@@ -177,7 +197,10 @@ Return Value: [`Account`](Account.md)
 
 
 ```php
-public function login(Account $account, ?Cart $cart = null): bool
+public function login(
+    Account $account,
+    ?Cart $cart = null
+): bool
 ```
 
 
@@ -187,7 +210,7 @@ public function login(Account $account, ?Cart $cart = null): bool
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$account`|[`Account`](Account.md)|``|
+`$account`|[`Account`](Account.md)||
 `$cart`|?[`Cart`](../../CartApiBundle/Domain/Cart.md)|`null`|
 
 Return Value: `bool`
@@ -196,7 +219,9 @@ Return Value: `bool`
 
 
 ```php
-public function getAddresses(string $accountId): array
+public function getAddresses(
+    string $accountId
+): array
 ```
 
 
@@ -206,7 +231,7 @@ public function getAddresses(string $accountId): array
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountId`|`string`|``|
+`$accountId`|`string`||
 
 Return Value: `array`
 
@@ -214,7 +239,10 @@ Return Value: `array`
 
 
 ```php
-public function addAddress(string $accountId, Address $address): Account
+public function addAddress(
+    string $accountId,
+    Address $address
+): Account
 ```
 
 
@@ -224,8 +252,8 @@ public function addAddress(string $accountId, Address $address): Account
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountId`|`string`|``|
-`$address`|[`Address`](Address.md)|``|
+`$accountId`|`string`||
+`$address`|[`Address`](Address.md)||
 
 Return Value: [`Account`](Account.md)
 
@@ -233,7 +261,10 @@ Return Value: [`Account`](Account.md)
 
 
 ```php
-public function updateAddress(string $accountId, Address $address): Account
+public function updateAddress(
+    string $accountId,
+    Address $address
+): Account
 ```
 
 
@@ -243,8 +274,8 @@ public function updateAddress(string $accountId, Address $address): Account
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountId`|`string`|``|
-`$address`|[`Address`](Address.md)|``|
+`$accountId`|`string`||
+`$address`|[`Address`](Address.md)||
 
 Return Value: [`Account`](Account.md)
 
@@ -252,7 +283,10 @@ Return Value: [`Account`](Account.md)
 
 
 ```php
-public function removeAddress(string $accountId, string $addressId): Account
+public function removeAddress(
+    string $accountId,
+    string $addressId
+): Account
 ```
 
 
@@ -262,8 +296,8 @@ public function removeAddress(string $accountId, string $addressId): Account
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountId`|`string`|``|
-`$addressId`|`string`|``|
+`$accountId`|`string`||
+`$addressId`|`string`||
 
 Return Value: [`Account`](Account.md)
 
@@ -271,7 +305,10 @@ Return Value: [`Account`](Account.md)
 
 
 ```php
-public function setDefaultBillingAddress(string $accountId, string $addressId): Account
+public function setDefaultBillingAddress(
+    string $accountId,
+    string $addressId
+): Account
 ```
 
 
@@ -281,8 +318,8 @@ public function setDefaultBillingAddress(string $accountId, string $addressId): 
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountId`|`string`|``|
-`$addressId`|`string`|``|
+`$accountId`|`string`||
+`$addressId`|`string`||
 
 Return Value: [`Account`](Account.md)
 
@@ -290,7 +327,10 @@ Return Value: [`Account`](Account.md)
 
 
 ```php
-public function setDefaultShippingAddress(string $accountId, string $addressId): Account
+public function setDefaultShippingAddress(
+    string $accountId,
+    string $addressId
+): Account
 ```
 
 
@@ -300,8 +340,8 @@ public function setDefaultShippingAddress(string $accountId, string $addressId):
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountId`|`string`|``|
-`$addressId`|`string`|``|
+`$accountId`|`string`||
+`$addressId`|`string`||
 
 Return Value: [`Account`](Account.md)
 
@@ -309,7 +349,9 @@ Return Value: [`Account`](Account.md)
 
 
 ```php
-public function getDangerousInnerClient(): mixed
+public function getDangerousInnerClient(
+    
+): mixed
 ```
 
 

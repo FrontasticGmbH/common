@@ -20,7 +20,10 @@ Property|Type|Default|Description
 
 
 ```php
-static public function fromArray(array $data, bool $ignoreAdditionalAttributes = false): Query
+static public function fromArray(
+    array $data,
+    bool $ignoreAdditionalAttributes = false
+): Query
 ```
 
 
@@ -30,7 +33,7 @@ static public function fromArray(array $data, bool $ignoreAdditionalAttributes =
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$data`|`array`|``|
+`$data`|`array`||
 `$ignoreAdditionalAttributes`|`bool`|`false`|
 
 Return Value: [`Query`](Query.md)

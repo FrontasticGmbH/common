@@ -15,7 +15,9 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\SequenceProvider`]
 
 
 ```php
-public function get(): string
+public function get(
+    
+): string
 ```
 
 
@@ -30,7 +32,9 @@ Return Value: `string`
 
 
 ```php
-public function next(string $sequence): string
+public function next(
+    string $sequence
+): string
 ```
 
 
@@ -40,7 +44,7 @@ public function next(string $sequence): string
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$sequence`|`string`|``|
+`$sequence`|`string`||
 
 Return Value: `string`
 

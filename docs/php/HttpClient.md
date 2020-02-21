@@ -17,7 +17,9 @@ Fully Qualified: [`\Frontastic\Common\HttpClient`](../../src/php/HttpClient.php)
 
 
 ```php
-abstract public function addDefaultHeaders(array $headers): mixed
+abstract public function addDefaultHeaders(
+    array $headers
+): mixed
 ```
 
 
@@ -27,7 +29,7 @@ abstract public function addDefaultHeaders(array $headers): mixed
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$headers`|`array`|``|
+`$headers`|`array`||
 
 Return Value: `mixed`
 
@@ -35,7 +37,13 @@ Return Value: `mixed`
 
 
 ```php
-public function request(string $method, string $url, string $body = '', array $headers = array(), Options $options = null): Response
+public function request(
+    string $method,
+    string $url,
+    string $body = '',
+    array $headers = array(),
+    Options $options = null
+): Response
 ```
 
 
@@ -45,8 +53,8 @@ public function request(string $method, string $url, string $body = '', array $h
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$method`|`string`|``|
-`$url`|`string`|``|
+`$method`|`string`||
+`$url`|`string`||
 `$body`|`string`|`''`|
 `$headers`|`array`|`array()`|
 `$options`|[`Options`](HttpClient/Options.md)|`null`|
@@ -57,7 +65,13 @@ Return Value: [`Response`](HttpClient/Response.md)
 
 
 ```php
-abstract public function requestAsync(string $method, string $url, string $body = '', array $headers = array(), Options $options = null): \GuzzleHttp\Promise\PromiseInterface
+abstract public function requestAsync(
+    string $method,
+    string $url,
+    string $body = '',
+    array $headers = array(),
+    Options $options = null
+): \GuzzleHttp\Promise\PromiseInterface
 ```
 
 
@@ -67,8 +81,8 @@ abstract public function requestAsync(string $method, string $url, string $body 
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$method`|`string`|``|
-`$url`|`string`|``|
+`$method`|`string`||
+`$url`|`string`||
 `$body`|`string`|`''`|
 `$headers`|`array`|`array()`|
 `$options`|[`Options`](HttpClient/Options.md)|`null`|
@@ -79,7 +93,10 @@ Return Value: `\GuzzleHttp\Promise\PromiseInterface`
 
 
 ```php
-public function __call(string $functionName, array $arguments): object
+public function __call(
+    string $functionName,
+    array $arguments
+): object
 ```
 
 
@@ -91,8 +108,8 @@ will work. All parameters are passed on to the request() method.
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$functionName`|`string`|``|HTTP verb as method name
-`$arguments`|`array`|``|Arguments to pass to request method
+`$functionName`|`string`||HTTP verb as method name
+`$arguments`|`array`||Arguments to pass to request method
 
 Return Value: `object`
 

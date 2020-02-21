@@ -14,7 +14,9 @@ Fully Qualified: [`\Frontastic\Common\ProjectApiBundle\Domain\ProjectApi`](../..
 
 
 ```php
-public function getSearchableAttributes(): array
+public function getSearchableAttributes(
+    
+): array
 ```
 
 

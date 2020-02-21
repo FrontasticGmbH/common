@@ -25,7 +25,9 @@ Property|Type|Default|Description
 
 
 ```php
-public function __get(mixed $name): mixed
+public function __get(
+    mixed $name
+): mixed
 ```
 
 
@@ -35,7 +37,7 @@ public function __get(mixed $name): mixed
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$name`|`mixed`|``|
+`$name`|`mixed`||
 
 Return Value: `mixed`
 

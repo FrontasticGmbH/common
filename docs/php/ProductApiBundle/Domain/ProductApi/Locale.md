@@ -25,7 +25,9 @@ Property|Type|Default|Description
 
 
 ```php
-public function __toString(): string
+public function __toString(
+    
+): string
 ```
 
 
@@ -40,7 +42,9 @@ Return Value: `string`
 
 
 ```php
-public function toString(): string
+public function toString(
+    
+): string
 ```
 
 
@@ -55,7 +59,9 @@ Return Value: `string`
 
 
 ```php
-static public function createFromPosix(string $locale): Locale
+static public function createFromPosix(
+    string $locale
+): Locale
 ```
 
 
@@ -65,7 +71,7 @@ static public function createFromPosix(string $locale): Locale
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$locale`|`string`|``|
+`$locale`|`string`||
 
 Return Value: [`Locale`](Locale.md)
 

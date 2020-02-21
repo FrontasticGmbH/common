@@ -15,7 +15,11 @@ Fully Qualified: [`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApiFactor
 
 
 ```php
-public function __construct(ProductApiFactory $productApiFactory, ProductApi\Commercetools\ClientFactory $commercetoolsClientFactory, iterable $decorators): mixed
+public function __construct(
+    ProductApiFactory $productApiFactory,
+    ProductApi\Commercetools\ClientFactory $commercetoolsClientFactory,
+    iterable $decorators
+): mixed
 ```
 
 
@@ -25,9 +29,9 @@ public function __construct(ProductApiFactory $productApiFactory, ProductApi\Com
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$productApiFactory`|[`ProductApiFactory`](../../ProductApiBundle/Domain/ProductApiFactory.md)|``|
-`$commercetoolsClientFactory`|`ProductApi\Commercetools\ClientFactory`|``|
-`$decorators`|`iterable`|``|
+`$productApiFactory`|[`ProductApiFactory`](../../ProductApiBundle/Domain/ProductApiFactory.md)||
+`$commercetoolsClientFactory`|`ProductApi\Commercetools\ClientFactory`||
+`$decorators`|`iterable`||
 
 Return Value: `mixed`
 
@@ -35,7 +39,9 @@ Return Value: `mixed`
 
 
 ```php
-public function factor(Project $project): WishlistApi
+public function factor(
+    Project $project
+): WishlistApi
 ```
 
 
@@ -45,7 +51,7 @@ public function factor(Project $project): WishlistApi
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$project`|[`Project`](../../ReplicatorBundle/Domain/Project.md)|``|
+`$project`|[`Project`](../../ReplicatorBundle/Domain/Project.md)||
 
 Return Value: [`WishlistApi`](WishlistApi.md)
 

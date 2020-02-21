@@ -18,7 +18,10 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\EndpointService`](
 
 
 ```php
-public function addReplicationSource(string $channel, Source $source): void
+public function addReplicationSource(
+    string $channel,
+    Source $source
+): void
 ```
 
 
@@ -28,8 +31,8 @@ public function addReplicationSource(string $channel, Source $source): void
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$channel`|`string`|``|
-`$source`|[`Source`](Source.md)|``|
+`$channel`|`string`||
+`$source`|[`Source`](Source.md)||
 
 Return Value: `void`
 
@@ -37,7 +40,9 @@ Return Value: `void`
 
 
 ```php
-public function getReplicationSource(string $channel): mixed
+public function getReplicationSource(
+    string $channel
+): mixed
 ```
 
 
@@ -47,7 +52,7 @@ public function getReplicationSource(string $channel): mixed
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$channel`|`string`|``|
+`$channel`|`string`||
 
 Return Value: `mixed`
 
@@ -55,7 +60,10 @@ Return Value: `mixed`
 
 
 ```php
-public function addReplicationTarget(string $channel, Target $target): void
+public function addReplicationTarget(
+    string $channel,
+    Target $target
+): void
 ```
 
 
@@ -65,8 +73,8 @@ public function addReplicationTarget(string $channel, Target $target): void
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$channel`|`string`|``|
-`$target`|[`Target`](Target.md)|``|
+`$channel`|`string`||
+`$target`|[`Target`](Target.md)||
 
 Return Value: `void`
 
@@ -74,7 +82,9 @@ Return Value: `void`
 
 
 ```php
-public function getReplicationTarget(string $channel): mixed
+public function getReplicationTarget(
+    string $channel
+): mixed
 ```
 
 
@@ -84,7 +94,7 @@ public function getReplicationTarget(string $channel): mixed
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$channel`|`string`|``|
+`$channel`|`string`||
 
 Return Value: `mixed`
 
@@ -92,7 +102,9 @@ Return Value: `mixed`
 
 
 ```php
-public function dispatch(Command $command): Result
+public function dispatch(
+    Command $command
+): Result
 ```
 
 
@@ -102,7 +114,7 @@ public function dispatch(Command $command): Result
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$command`|[`Command`](Command.md)|``|
+`$command`|[`Command`](Command.md)||
 
 Return Value: [`Result`](Result.md)
 

@@ -15,7 +15,9 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\Target`](../../../
 
 
 ```php
-public function lastUpdate(): string
+public function lastUpdate(
+    
+): string
 ```
 
 
@@ -30,7 +32,9 @@ Return Value: `string`
 
 
 ```php
-public function replicate(array $updates): void
+public function replicate(
+    array $updates
+): void
 ```
 
 
@@ -40,7 +44,7 @@ public function replicate(array $updates): void
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$updates`|`array`|``|
+`$updates`|`array`||
 
 Return Value: `void`
 

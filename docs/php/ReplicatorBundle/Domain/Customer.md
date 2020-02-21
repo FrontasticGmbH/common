@@ -24,7 +24,9 @@ Property|Type|Default|Description
 
 
 ```php
-public function getLowestEnvironment(): string
+public function getLowestEnvironment(
+    
+): string
 ```
 
 

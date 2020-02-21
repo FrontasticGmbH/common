@@ -36,7 +36,9 @@ Property|Type|Default|Description
 
 
 ```php
-public function getPayedAmount(): int
+public function getPayedAmount(
+    
+): int
 ```
 
 
@@ -51,7 +53,9 @@ Return Value: `int`
 
 
 ```php
-public function hasUser(): bool
+public function hasUser(
+    
+): bool
 ```
 
 
@@ -66,7 +70,9 @@ Return Value: `bool`
 
 
 ```php
-public function hasShippingAddress(): bool
+public function hasShippingAddress(
+    
+): bool
 ```
 
 
@@ -81,7 +87,9 @@ Return Value: `bool`
 
 
 ```php
-public function hasBillingAddress(): bool
+public function hasBillingAddress(
+    
+): bool
 ```
 
 
@@ -96,7 +104,9 @@ Return Value: `bool`
 
 
 ```php
-public function hasAddresses(): bool
+public function hasAddresses(
+    
+): bool
 ```
 
 
@@ -111,7 +121,9 @@ Return Value: `bool`
 
 
 ```php
-public function hasCompletePayments(): bool
+public function hasCompletePayments(
+    
+): bool
 ```
 
 
@@ -126,7 +138,9 @@ Return Value: `bool`
 
 
 ```php
-public function isComplete(): bool
+public function isComplete(
+    
+): bool
 ```
 
 

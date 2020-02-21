@@ -15,7 +15,9 @@ Fully Qualified: [`\Frontastic\Common\Translatable`](../../src/php/Translatable.
 
 
 ```php
-public function getTranslationCode(): string
+public function getTranslationCode(
+    
+): string
 ```
 
 
@@ -30,7 +32,9 @@ Return Value: `string`
 
 
 ```php
-public function getTranslationParameters(): object
+public function getTranslationParameters(
+    
+): object
 ```
 
 

@@ -24,7 +24,9 @@ Property|Type|Default|Description
 
 
 ```php
-public function getPathAsArray(): array
+public function getPathAsArray(
+    
+): array
 ```
 
 
@@ -39,7 +41,9 @@ Return Value: `array`
 
 
 ```php
-public function getAncestorIds(): array
+public function getAncestorIds(
+    
+): array
 ```
 
 
@@ -54,7 +58,9 @@ Return Value: `array`
 
 
 ```php
-public function getParentCategoryId(): ?string
+public function getParentCategoryId(
+    
+): ?string
 ```
 
 

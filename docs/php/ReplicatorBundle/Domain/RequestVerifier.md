@@ -15,7 +15,10 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\RequestVerifier`](
 
 
 ```php
-public function isValid(\Symfony\Component\HttpFoundation\Request $request, string $secret): bool
+public function isValid(
+    \Symfony\Component\HttpFoundation\Request $request,
+    string $secret
+): bool
 ```
 
 
@@ -25,8 +28,8 @@ public function isValid(\Symfony\Component\HttpFoundation\Request $request, stri
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$request`|`\Symfony\Component\HttpFoundation\Request`|``|
-`$secret`|`string`|``|
+`$request`|`\Symfony\Component\HttpFoundation\Request`||
+`$secret`|`string`||
 
 Return Value: `bool`
 
@@ -34,7 +37,10 @@ Return Value: `bool`
 
 
 ```php
-public function ensure(\Symfony\Component\HttpFoundation\Request $request, string $secret): mixed
+public function ensure(
+    \Symfony\Component\HttpFoundation\Request $request,
+    string $secret
+): mixed
 ```
 
 
@@ -44,8 +50,8 @@ public function ensure(\Symfony\Component\HttpFoundation\Request $request, strin
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$request`|`\Symfony\Component\HttpFoundation\Request`|``|
-`$secret`|`string`|``|
+`$request`|`\Symfony\Component\HttpFoundation\Request`||
+`$secret`|`string`||
 
 Return Value: `mixed`
 

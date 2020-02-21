@@ -18,7 +18,10 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\CustomerService`](
 
 
 ```php
-public function __construct(string $customerDir, string $deployedCustomers): mixed
+public function __construct(
+    string $customerDir,
+    string $deployedCustomers
+): mixed
 ```
 
 
@@ -28,8 +31,8 @@ public function __construct(string $customerDir, string $deployedCustomers): mix
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$customerDir`|`string`|``|
-`$deployedCustomers`|`string`|``|
+`$customerDir`|`string`||
+`$deployedCustomers`|`string`||
 
 Return Value: `mixed`
 
@@ -37,7 +40,9 @@ Return Value: `mixed`
 
 
 ```php
-public function getCustomers(): array
+public function getCustomers(
+    
+): array
 ```
 
 
@@ -52,7 +57,9 @@ Return Value: `array`
 
 
 ```php
-public function getCustomer(string $customerName): Customer
+public function getCustomer(
+    string $customerName
+): Customer
 ```
 
 
@@ -62,7 +69,7 @@ public function getCustomer(string $customerName): Customer
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$customerName`|`string`|``|
+`$customerName`|`string`||
 
 Return Value: [`Customer`](Customer.md)
 
@@ -70,7 +77,10 @@ Return Value: [`Customer`](Customer.md)
 
 
 ```php
-public function getProject(string $customerName, string $projectName): Project
+public function getProject(
+    string $customerName,
+    string $projectName
+): Project
 ```
 
 
@@ -80,8 +90,8 @@ public function getProject(string $customerName, string $projectName): Project
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$customerName`|`string`|``|
-`$projectName`|`string`|``|
+`$customerName`|`string`||
+`$projectName`|`string`||
 
 Return Value: [`Project`](Project.md)
 
@@ -89,7 +99,9 @@ Return Value: [`Project`](Project.md)
 
 
 ```php
-public function getForHost(string $host): Customer
+public function getForHost(
+    string $host
+): Customer
 ```
 
 
@@ -99,7 +111,7 @@ public function getForHost(string $host): Customer
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$host`|`string`|``|
+`$host`|`string`||
 
 Return Value: [`Customer`](Customer.md)
 

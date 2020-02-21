@@ -22,7 +22,9 @@ Property|Type|Default|Description
 
 
 ```php
-static public function fromThrowable(\Throwable $e): mixed
+static public function fromThrowable(
+    \Throwable $e
+): mixed
 ```
 
 
@@ -32,7 +34,7 @@ static public function fromThrowable(\Throwable $e): mixed
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$e`|`\Throwable`|``|
+`$e`|`\Throwable`||
 
 Return Value: `mixed`
 

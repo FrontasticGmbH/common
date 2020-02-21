@@ -26,7 +26,10 @@ Fully Qualified: [`\Frontastic\Common\AccountApiBundle\Domain\AccountService`](.
 
 
 ```php
-public function __construct(AccountApi $accountApi, \Frontastic\Common\CoreBundle\Domain\Mailer $mailer): mixed
+public function __construct(
+    AccountApi $accountApi,
+    \Frontastic\Common\CoreBundle\Domain\Mailer $mailer
+): mixed
 ```
 
 
@@ -36,8 +39,8 @@ public function __construct(AccountApi $accountApi, \Frontastic\Common\CoreBundl
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](AccountApi.md)|``|
-`$mailer`|`\Frontastic\Common\CoreBundle\Domain\Mailer`|``|
+`$accountApi`|[`AccountApi`](AccountApi.md)||
+`$mailer`|`\Frontastic\Common\CoreBundle\Domain\Mailer`||
 
 Return Value: `mixed`
 
@@ -45,7 +48,9 @@ Return Value: `mixed`
 
 
 ```php
-public function getSessionFor(Account $account = null): mixed
+public function getSessionFor(
+    Account $account = null
+): mixed
 ```
 
 
@@ -63,7 +68,9 @@ Return Value: `mixed`
 
 
 ```php
-public function sendConfirmationMail(Account $account): mixed
+public function sendConfirmationMail(
+    Account $account
+): mixed
 ```
 
 
@@ -73,7 +80,7 @@ public function sendConfirmationMail(Account $account): mixed
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$account`|[`Account`](Account.md)|``|
+`$account`|[`Account`](Account.md)||
 
 Return Value: `mixed`
 
@@ -81,7 +88,9 @@ Return Value: `mixed`
 
 
 ```php
-public function sendPasswordResetMail(Account $account): mixed
+public function sendPasswordResetMail(
+    Account $account
+): mixed
 ```
 
 
@@ -91,7 +100,7 @@ public function sendPasswordResetMail(Account $account): mixed
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$account`|[`Account`](Account.md)|``|
+`$account`|[`Account`](Account.md)||
 
 Return Value: `mixed`
 
@@ -99,7 +108,9 @@ Return Value: `mixed`
 
 
 ```php
-public function get(string $email): Account
+public function get(
+    string $email
+): Account
 ```
 
 
@@ -109,7 +120,7 @@ public function get(string $email): Account
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$email`|`string`|``|
+`$email`|`string`||
 
 Return Value: [`Account`](Account.md)
 
@@ -117,7 +128,9 @@ Return Value: [`Account`](Account.md)
 
 
 ```php
-public function exists(string $email): bool
+public function exists(
+    string $email
+): bool
 ```
 
 
@@ -127,7 +140,7 @@ public function exists(string $email): bool
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$email`|`string`|``|
+`$email`|`string`||
 
 Return Value: `bool`
 
@@ -135,7 +148,9 @@ Return Value: `bool`
 
 
 ```php
-public function confirmEmail(string $confirmationToken): Account
+public function confirmEmail(
+    string $confirmationToken
+): Account
 ```
 
 
@@ -145,7 +160,7 @@ public function confirmEmail(string $confirmationToken): Account
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$confirmationToken`|`string`|``|
+`$confirmationToken`|`string`||
 
 Return Value: [`Account`](Account.md)
 
@@ -153,7 +168,10 @@ Return Value: [`Account`](Account.md)
 
 
 ```php
-public function login(Account $account, ?Cart $cart = null): bool
+public function login(
+    Account $account,
+    ?Cart $cart = null
+): bool
 ```
 
 
@@ -163,7 +181,7 @@ public function login(Account $account, ?Cart $cart = null): bool
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$account`|[`Account`](Account.md)|``|
+`$account`|[`Account`](Account.md)||
 `$cart`|?[`Cart`](../../CartApiBundle/Domain/Cart.md)|`null`|
 
 Return Value: `bool`
@@ -172,7 +190,10 @@ Return Value: `bool`
 
 
 ```php
-public function create(Account $account, ?Cart $cart = null): Account
+public function create(
+    Account $account,
+    ?Cart $cart = null
+): Account
 ```
 
 
@@ -182,7 +203,7 @@ public function create(Account $account, ?Cart $cart = null): Account
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$account`|[`Account`](Account.md)|``|
+`$account`|[`Account`](Account.md)||
 `$cart`|?[`Cart`](../../CartApiBundle/Domain/Cart.md)|`null`|
 
 Return Value: [`Account`](Account.md)
@@ -191,7 +212,9 @@ Return Value: [`Account`](Account.md)
 
 
 ```php
-public function update(Account $account): Account
+public function update(
+    Account $account
+): Account
 ```
 
 
@@ -201,7 +224,7 @@ public function update(Account $account): Account
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$account`|[`Account`](Account.md)|``|
+`$account`|[`Account`](Account.md)||
 
 Return Value: [`Account`](Account.md)
 
@@ -209,7 +232,11 @@ Return Value: [`Account`](Account.md)
 
 
 ```php
-public function updatePassword(Account $account, string $oldPassword, string $newPassword): Account
+public function updatePassword(
+    Account $account,
+    string $oldPassword,
+    string $newPassword
+): Account
 ```
 
 
@@ -219,9 +246,9 @@ public function updatePassword(Account $account, string $oldPassword, string $ne
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$account`|[`Account`](Account.md)|``|
-`$oldPassword`|`string`|``|
-`$newPassword`|`string`|``|
+`$account`|[`Account`](Account.md)||
+`$oldPassword`|`string`||
+`$newPassword`|`string`||
 
 Return Value: [`Account`](Account.md)
 
@@ -229,7 +256,10 @@ Return Value: [`Account`](Account.md)
 
 
 ```php
-public function resetPassword(string $token, string $newPassword): Account
+public function resetPassword(
+    string $token,
+    string $newPassword
+): Account
 ```
 
 
@@ -239,8 +269,8 @@ public function resetPassword(string $token, string $newPassword): Account
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$token`|`string`|``|
-`$newPassword`|`string`|``|
+`$token`|`string`||
+`$newPassword`|`string`||
 
 Return Value: [`Account`](Account.md)
 
@@ -248,7 +278,9 @@ Return Value: [`Account`](Account.md)
 
 
 ```php
-public function remove(Account $account): mixed
+public function remove(
+    Account $account
+): mixed
 ```
 
 
@@ -258,7 +290,7 @@ public function remove(Account $account): mixed
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$account`|[`Account`](Account.md)|``|
+`$account`|[`Account`](Account.md)||
 
 Return Value: `mixed`
 

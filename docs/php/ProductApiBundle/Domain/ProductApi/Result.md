@@ -23,7 +23,9 @@ Property|Type|Default|Description
 
 
 ```php
-public function getIterator(): \Traversable
+public function getIterator(
+    
+): \Traversable
 ```
 
 
@@ -38,7 +40,9 @@ Return Value: `\Traversable`
 
 
 ```php
-public function count(): int
+public function count(
+    
+): int
 ```
 
 

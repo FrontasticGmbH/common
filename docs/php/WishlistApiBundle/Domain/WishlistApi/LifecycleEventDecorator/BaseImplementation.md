@@ -47,7 +47,11 @@ need to tag your service based on this class with
 
 
 ```php
-public function beforeGetWishlist(WishlistApi $wishlistApi, string $wishlistId, string $locale): void
+public function beforeGetWishlist(
+    WishlistApi $wishlistApi,
+    string $wishlistId,
+    string $locale
+): void
 ```
 
 
@@ -57,9 +61,9 @@ public function beforeGetWishlist(WishlistApi $wishlistApi, string $wishlistId, 
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)|``|
-`$wishlistId`|`string`|``|
-`$locale`|`string`|``|
+`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)||
+`$wishlistId`|`string`||
+`$locale`|`string`||
 
 Return Value: `void`
 
@@ -67,7 +71,10 @@ Return Value: `void`
 
 
 ```php
-public function afterGetWishlist(WishlistApi $wishlistApi, Wishlist $wishlist): ?Wishlist
+public function afterGetWishlist(
+    WishlistApi $wishlistApi,
+    Wishlist $wishlist
+): ?Wishlist
 ```
 
 
@@ -77,8 +84,8 @@ public function afterGetWishlist(WishlistApi $wishlistApi, Wishlist $wishlist): 
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)|``|
-`$wishlist`|[`Wishlist`](../../Wishlist.md)|``|
+`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)||
+`$wishlist`|[`Wishlist`](../../Wishlist.md)||
 
 Return Value: ?[`Wishlist`](../../Wishlist.md)
 
@@ -86,7 +93,11 @@ Return Value: ?[`Wishlist`](../../Wishlist.md)
 
 
 ```php
-public function beforeGetAnonymous(WishlistApi $wishlistApi, string $anonymousId, string $locale): void
+public function beforeGetAnonymous(
+    WishlistApi $wishlistApi,
+    string $anonymousId,
+    string $locale
+): void
 ```
 
 
@@ -96,9 +107,9 @@ public function beforeGetAnonymous(WishlistApi $wishlistApi, string $anonymousId
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)|``|
-`$anonymousId`|`string`|``|
-`$locale`|`string`|``|
+`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)||
+`$anonymousId`|`string`||
+`$locale`|`string`||
 
 Return Value: `void`
 
@@ -106,7 +117,10 @@ Return Value: `void`
 
 
 ```php
-public function afterGetAnonymous(WishlistApi $wishlistApi, Wishlist $wishlist): ?Wishlist
+public function afterGetAnonymous(
+    WishlistApi $wishlistApi,
+    Wishlist $wishlist
+): ?Wishlist
 ```
 
 
@@ -116,8 +130,8 @@ public function afterGetAnonymous(WishlistApi $wishlistApi, Wishlist $wishlist):
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)|``|
-`$wishlist`|[`Wishlist`](../../Wishlist.md)|``|
+`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)||
+`$wishlist`|[`Wishlist`](../../Wishlist.md)||
 
 Return Value: ?[`Wishlist`](../../Wishlist.md)
 
@@ -125,7 +139,11 @@ Return Value: ?[`Wishlist`](../../Wishlist.md)
 
 
 ```php
-public function beforeGetWishlists(WishlistApi $wishlistApi, string $accountId, string $locale): void
+public function beforeGetWishlists(
+    WishlistApi $wishlistApi,
+    string $accountId,
+    string $locale
+): void
 ```
 
 
@@ -135,9 +153,9 @@ public function beforeGetWishlists(WishlistApi $wishlistApi, string $accountId, 
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)|``|
-`$accountId`|`string`|``|
-`$locale`|`string`|``|
+`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)||
+`$accountId`|`string`||
+`$locale`|`string`||
 
 Return Value: `void`
 
@@ -145,7 +163,10 @@ Return Value: `void`
 
 
 ```php
-public function afterGetWishlists(WishlistApi $wishlistApi, array $wishlists): ?array
+public function afterGetWishlists(
+    WishlistApi $wishlistApi,
+    array $wishlists
+): ?array
 ```
 
 
@@ -155,8 +176,8 @@ public function afterGetWishlists(WishlistApi $wishlistApi, array $wishlists): ?
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)|``|
-`$wishlists`|`array`|``|
+`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)||
+`$wishlists`|`array`||
 
 Return Value: `?array`
 
@@ -164,7 +185,11 @@ Return Value: `?array`
 
 
 ```php
-public function beforeCreate(WishlistApi $wishlistApi, Wishlist $wishlist, string $locale): void
+public function beforeCreate(
+    WishlistApi $wishlistApi,
+    Wishlist $wishlist,
+    string $locale
+): void
 ```
 
 
@@ -174,9 +199,9 @@ public function beforeCreate(WishlistApi $wishlistApi, Wishlist $wishlist, strin
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)|``|
-`$wishlist`|[`Wishlist`](../../Wishlist.md)|``|
-`$locale`|`string`|``|
+`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)||
+`$wishlist`|[`Wishlist`](../../Wishlist.md)||
+`$locale`|`string`||
 
 Return Value: `void`
 
@@ -184,7 +209,10 @@ Return Value: `void`
 
 
 ```php
-public function afterCreate(WishlistApi $wishlistApi, Wishlist $wishlist): ?Wishlist
+public function afterCreate(
+    WishlistApi $wishlistApi,
+    Wishlist $wishlist
+): ?Wishlist
 ```
 
 
@@ -194,8 +222,8 @@ public function afterCreate(WishlistApi $wishlistApi, Wishlist $wishlist): ?Wish
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)|``|
-`$wishlist`|[`Wishlist`](../../Wishlist.md)|``|
+`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)||
+`$wishlist`|[`Wishlist`](../../Wishlist.md)||
 
 Return Value: ?[`Wishlist`](../../Wishlist.md)
 
@@ -203,7 +231,12 @@ Return Value: ?[`Wishlist`](../../Wishlist.md)
 
 
 ```php
-public function beforeAddToWishlist(WishlistApi $wishlistApi, Wishlist $wishlist, LineItem $lineItem, string $locale): void
+public function beforeAddToWishlist(
+    WishlistApi $wishlistApi,
+    Wishlist $wishlist,
+    LineItem $lineItem,
+    string $locale
+): void
 ```
 
 
@@ -213,10 +246,10 @@ public function beforeAddToWishlist(WishlistApi $wishlistApi, Wishlist $wishlist
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)|``|
-`$wishlist`|[`Wishlist`](../../Wishlist.md)|``|
-`$lineItem`|[`LineItem`](../../LineItem.md)|``|
-`$locale`|`string`|``|
+`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)||
+`$wishlist`|[`Wishlist`](../../Wishlist.md)||
+`$lineItem`|[`LineItem`](../../LineItem.md)||
+`$locale`|`string`||
 
 Return Value: `void`
 
@@ -224,7 +257,10 @@ Return Value: `void`
 
 
 ```php
-public function afterAddToWishlist(WishlistApi $wishlistApi, Wishlist $wishlist): ?Wishlist
+public function afterAddToWishlist(
+    WishlistApi $wishlistApi,
+    Wishlist $wishlist
+): ?Wishlist
 ```
 
 
@@ -234,8 +270,8 @@ public function afterAddToWishlist(WishlistApi $wishlistApi, Wishlist $wishlist)
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)|``|
-`$wishlist`|[`Wishlist`](../../Wishlist.md)|``|
+`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)||
+`$wishlist`|[`Wishlist`](../../Wishlist.md)||
 
 Return Value: ?[`Wishlist`](../../Wishlist.md)
 
@@ -243,7 +279,12 @@ Return Value: ?[`Wishlist`](../../Wishlist.md)
 
 
 ```php
-public function beforeAddMultipleToWishlist(WishlistApi $wishlistApi, Wishlist $wishlist, array $lineItems, string $locale): void
+public function beforeAddMultipleToWishlist(
+    WishlistApi $wishlistApi,
+    Wishlist $wishlist,
+    array $lineItems,
+    string $locale
+): void
 ```
 
 
@@ -253,10 +294,10 @@ public function beforeAddMultipleToWishlist(WishlistApi $wishlistApi, Wishlist $
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)|``|
-`$wishlist`|[`Wishlist`](../../Wishlist.md)|``|
-`$lineItems`|`array`|``|
-`$locale`|`string`|``|
+`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)||
+`$wishlist`|[`Wishlist`](../../Wishlist.md)||
+`$lineItems`|`array`||
+`$locale`|`string`||
 
 Return Value: `void`
 
@@ -264,7 +305,10 @@ Return Value: `void`
 
 
 ```php
-public function afterAddMultipleToWishlist(WishlistApi $wishlistApi, Wishlist $wishlist): ?Wishlist
+public function afterAddMultipleToWishlist(
+    WishlistApi $wishlistApi,
+    Wishlist $wishlist
+): ?Wishlist
 ```
 
 
@@ -274,8 +318,8 @@ public function afterAddMultipleToWishlist(WishlistApi $wishlistApi, Wishlist $w
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)|``|
-`$wishlist`|[`Wishlist`](../../Wishlist.md)|``|
+`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)||
+`$wishlist`|[`Wishlist`](../../Wishlist.md)||
 
 Return Value: ?[`Wishlist`](../../Wishlist.md)
 
@@ -283,7 +327,13 @@ Return Value: ?[`Wishlist`](../../Wishlist.md)
 
 
 ```php
-public function beforeUpdateLineItem(WishlistApi $wishlistApi, Wishlist $wishlist, LineItem $lineItem, int $count, string $locale): void
+public function beforeUpdateLineItem(
+    WishlistApi $wishlistApi,
+    Wishlist $wishlist,
+    LineItem $lineItem,
+    int $count,
+    string $locale
+): void
 ```
 
 
@@ -293,11 +343,11 @@ public function beforeUpdateLineItem(WishlistApi $wishlistApi, Wishlist $wishlis
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)|``|
-`$wishlist`|[`Wishlist`](../../Wishlist.md)|``|
-`$lineItem`|[`LineItem`](../../LineItem.md)|``|
-`$count`|`int`|``|
-`$locale`|`string`|``|
+`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)||
+`$wishlist`|[`Wishlist`](../../Wishlist.md)||
+`$lineItem`|[`LineItem`](../../LineItem.md)||
+`$count`|`int`||
+`$locale`|`string`||
 
 Return Value: `void`
 
@@ -305,7 +355,10 @@ Return Value: `void`
 
 
 ```php
-public function afterUpdateLineItem(WishlistApi $wishlistApi, Wishlist $wishlist): ?Wishlist
+public function afterUpdateLineItem(
+    WishlistApi $wishlistApi,
+    Wishlist $wishlist
+): ?Wishlist
 ```
 
 
@@ -315,8 +368,8 @@ public function afterUpdateLineItem(WishlistApi $wishlistApi, Wishlist $wishlist
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)|``|
-`$wishlist`|[`Wishlist`](../../Wishlist.md)|``|
+`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)||
+`$wishlist`|[`Wishlist`](../../Wishlist.md)||
 
 Return Value: ?[`Wishlist`](../../Wishlist.md)
 
@@ -324,7 +377,12 @@ Return Value: ?[`Wishlist`](../../Wishlist.md)
 
 
 ```php
-public function beforeRemoveLineItem(WishlistApi $wishlistApi, Wishlist $wishlist, LineItem $lineItem, string $locale): void
+public function beforeRemoveLineItem(
+    WishlistApi $wishlistApi,
+    Wishlist $wishlist,
+    LineItem $lineItem,
+    string $locale
+): void
 ```
 
 
@@ -334,10 +392,10 @@ public function beforeRemoveLineItem(WishlistApi $wishlistApi, Wishlist $wishlis
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)|``|
-`$wishlist`|[`Wishlist`](../../Wishlist.md)|``|
-`$lineItem`|[`LineItem`](../../LineItem.md)|``|
-`$locale`|`string`|``|
+`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)||
+`$wishlist`|[`Wishlist`](../../Wishlist.md)||
+`$lineItem`|[`LineItem`](../../LineItem.md)||
+`$locale`|`string`||
 
 Return Value: `void`
 
@@ -345,7 +403,10 @@ Return Value: `void`
 
 
 ```php
-public function afterRemoveLineItem(WishlistApi $wishlistApi, Wishlist $wishlist): ?Wishlist
+public function afterRemoveLineItem(
+    WishlistApi $wishlistApi,
+    Wishlist $wishlist
+): ?Wishlist
 ```
 
 
@@ -355,8 +416,8 @@ public function afterRemoveLineItem(WishlistApi $wishlistApi, Wishlist $wishlist
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)|``|
-`$wishlist`|[`Wishlist`](../../Wishlist.md)|``|
+`$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)||
+`$wishlist`|[`Wishlist`](../../Wishlist.md)||
 
 Return Value: ?[`Wishlist`](../../Wishlist.md)
 

@@ -14,7 +14,11 @@ Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\P
 
 
 ```php
-static public function queryFromParameters(array $defaults, array $parameters, array $overrides = []): ProductQuery
+static public function queryFromParameters(
+    array $defaults,
+    array $parameters,
+    array $overrides = []
+): ProductQuery
 ```
 
 
@@ -24,8 +28,8 @@ static public function queryFromParameters(array $defaults, array $parameters, a
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$defaults`|`array`|``|Can be overwritten by $parameters
-`$parameters`|`array`|``|Query parameters (typically from HTTP request)
+`$defaults`|`array`||Can be overwritten by $parameters
+`$parameters`|`array`||Query parameters (typically from HTTP request)
 `$overrides`|`array`|`[]`|Overrides that eventually set fixed values, even if $parameters set these values
 
 Return Value: [`ProductQuery`](ProductQuery.md)

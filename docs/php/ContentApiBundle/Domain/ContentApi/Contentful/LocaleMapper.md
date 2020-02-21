@@ -14,7 +14,9 @@ Fully Qualified: [`\Frontastic\Common\ContentApiBundle\Domain\ContentApi\Content
 
 
 ```php
-public function replaceLocale(string $frontasticLocale): string
+public function replaceLocale(
+    string $frontasticLocale
+): string
 ```
 
 
@@ -24,7 +26,7 @@ public function replaceLocale(string $frontasticLocale): string
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$frontasticLocale`|`string`|``|
+`$frontasticLocale`|`string`||
 
 Return Value: `string`
 

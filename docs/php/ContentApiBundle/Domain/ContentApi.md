@@ -17,7 +17,9 @@ Fully Qualified: [`\Frontastic\Common\ContentApiBundle\Domain\ContentApi`](../..
 
 
 ```php
-public function getContentTypes(): array
+public function getContentTypes(
+    
+): array
 ```
 
 
@@ -32,7 +34,11 @@ Return Value: `array`
 
 
 ```php
-public function getContent(string $contentId, string $locale = null, string $mode = self::QUERY_SYNC): ?object
+public function getContent(
+    string $contentId,
+    string $locale = null,
+    string $mode = self::QUERY_SYNC
+): ?object
 ```
 
 
@@ -42,7 +48,7 @@ public function getContent(string $contentId, string $locale = null, string $mod
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$contentId`|`string`|``|
+`$contentId`|`string`||
 `$locale`|`string`|`null`|
 `$mode`|`string`|`self::QUERY_SYNC`|One of the QUERY_* connstants. Execute the query synchronously or asynchronously?
 
@@ -52,7 +58,11 @@ Return Value: `?object`
 
 
 ```php
-public function query(Query $query, string $locale = null, string $mode = self::QUERY_SYNC): ?object
+public function query(
+    Query $query,
+    string $locale = null,
+    string $mode = self::QUERY_SYNC
+): ?object
 ```
 
 
@@ -64,7 +74,7 @@ project default locale is used.*
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$query`|[`Query`](Query.md)|``|
+`$query`|[`Query`](Query.md)||
 `$locale`|`string`|`null`|
 `$mode`|`string`|`self::QUERY_SYNC`|One of the QUERY_* connstants. Execute the query synchronously or asynchronously?
 
@@ -74,7 +84,9 @@ Return Value: `?object`
 
 
 ```php
-public function getDangerousInnerClient(): mixed
+public function getDangerousInnerClient(
+    
+): mixed
 ```
 
 

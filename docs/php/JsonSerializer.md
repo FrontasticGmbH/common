@@ -16,7 +16,10 @@ Fully Qualified: [`\Frontastic\Common\JsonSerializer`](../../src/php/JsonSeriali
 
 
 ```php
-public function __construct(array $propertyExcludeList = [], iterable $objectEnhancers = []): mixed
+public function __construct(
+    array $propertyExcludeList = [],
+    iterable $objectEnhancers = []
+): mixed
 ```
 
 
@@ -35,7 +38,9 @@ Return Value: `mixed`
 
 
 ```php
-public function addEnhancer(JsonSerializer\ObjectEnhancer $enhancer): void
+public function addEnhancer(
+    JsonSerializer\ObjectEnhancer $enhancer
+): void
 ```
 
 
@@ -45,7 +50,7 @@ public function addEnhancer(JsonSerializer\ObjectEnhancer $enhancer): void
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$enhancer`|`JsonSerializer\ObjectEnhancer`|``|
+`$enhancer`|`JsonSerializer\ObjectEnhancer`||
 
 Return Value: `void`
 
@@ -53,7 +58,10 @@ Return Value: `void`
 
 
 ```php
-public function serialize(mixed $item, mixed $visitedIds = array()): mixed
+public function serialize(
+    mixed $item,
+    mixed $visitedIds = array()
+): mixed
 ```
 
 
@@ -64,7 +72,7 @@ Otherwise we consider it fine, since its tested anyways:*
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$item`|`mixed`|``|
+`$item`|`mixed`||
 `$visitedIds`|`mixed`|`array()`|
 
 Return Value: `mixed`

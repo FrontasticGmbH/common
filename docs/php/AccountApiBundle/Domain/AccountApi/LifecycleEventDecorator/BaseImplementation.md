@@ -61,7 +61,10 @@ need to tag your service based on this class with
 
 
 ```php
-public function beforeGet(AccountApi $accountApi, string $email): void
+public function beforeGet(
+    AccountApi $accountApi,
+    string $email
+): void
 ```
 
 
@@ -71,8 +74,8 @@ public function beforeGet(AccountApi $accountApi, string $email): void
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$email`|`string`|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$email`|`string`||
 
 Return Value: `void`
 
@@ -80,7 +83,10 @@ Return Value: `void`
 
 
 ```php
-public function afterGet(AccountApi $accountApi, Account $account): ?Account
+public function afterGet(
+    AccountApi $accountApi,
+    Account $account
+): ?Account
 ```
 
 
@@ -90,8 +96,8 @@ public function afterGet(AccountApi $accountApi, Account $account): ?Account
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$account`|[`Account`](../../Account.md)|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$account`|[`Account`](../../Account.md)||
 
 Return Value: ?[`Account`](../../Account.md)
 
@@ -99,7 +105,10 @@ Return Value: ?[`Account`](../../Account.md)
 
 
 ```php
-public function beforeConfirmEmail(AccountApi $accountApi, string $token): void
+public function beforeConfirmEmail(
+    AccountApi $accountApi,
+    string $token
+): void
 ```
 
 
@@ -109,8 +118,8 @@ public function beforeConfirmEmail(AccountApi $accountApi, string $token): void
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$token`|`string`|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$token`|`string`||
 
 Return Value: `void`
 
@@ -118,7 +127,10 @@ Return Value: `void`
 
 
 ```php
-public function afterConfirmEmail(AccountApi $accountApi, Account $account): ?Account
+public function afterConfirmEmail(
+    AccountApi $accountApi,
+    Account $account
+): ?Account
 ```
 
 
@@ -128,8 +140,8 @@ public function afterConfirmEmail(AccountApi $accountApi, Account $account): ?Ac
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$account`|[`Account`](../../Account.md)|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$account`|[`Account`](../../Account.md)||
 
 Return Value: ?[`Account`](../../Account.md)
 
@@ -137,7 +149,11 @@ Return Value: ?[`Account`](../../Account.md)
 
 
 ```php
-public function beforeCreate(AccountApi $accountApi, Account $account, ?Cart $cart = null): void
+public function beforeCreate(
+    AccountApi $accountApi,
+    Account $account,
+    ?Cart $cart = null
+): void
 ```
 
 
@@ -147,8 +163,8 @@ public function beforeCreate(AccountApi $accountApi, Account $account, ?Cart $ca
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$account`|[`Account`](../../Account.md)|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$account`|[`Account`](../../Account.md)||
 `$cart`|?[`Cart`](../../../../CartApiBundle/Domain/Cart.md)|`null`|
 
 Return Value: `void`
@@ -157,7 +173,10 @@ Return Value: `void`
 
 
 ```php
-public function afterCreate(AccountApi $accountApi, Account $account): ?Account
+public function afterCreate(
+    AccountApi $accountApi,
+    Account $account
+): ?Account
 ```
 
 
@@ -167,8 +186,8 @@ public function afterCreate(AccountApi $accountApi, Account $account): ?Account
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$account`|[`Account`](../../Account.md)|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$account`|[`Account`](../../Account.md)||
 
 Return Value: ?[`Account`](../../Account.md)
 
@@ -176,7 +195,10 @@ Return Value: ?[`Account`](../../Account.md)
 
 
 ```php
-public function beforeVerifyEmail(AccountApi $accountApi, string $token): void
+public function beforeVerifyEmail(
+    AccountApi $accountApi,
+    string $token
+): void
 ```
 
 
@@ -186,8 +208,8 @@ public function beforeVerifyEmail(AccountApi $accountApi, string $token): void
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$token`|`string`|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$token`|`string`||
 
 Return Value: `void`
 
@@ -195,7 +217,10 @@ Return Value: `void`
 
 
 ```php
-public function afterVerifyEmail(AccountApi $accountApi, Account $account): ?Account
+public function afterVerifyEmail(
+    AccountApi $accountApi,
+    Account $account
+): ?Account
 ```
 
 
@@ -205,8 +230,8 @@ public function afterVerifyEmail(AccountApi $accountApi, Account $account): ?Acc
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$account`|[`Account`](../../Account.md)|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$account`|[`Account`](../../Account.md)||
 
 Return Value: ?[`Account`](../../Account.md)
 
@@ -214,7 +239,10 @@ Return Value: ?[`Account`](../../Account.md)
 
 
 ```php
-public function beforeUpdate(AccountApi $accountApi, Account $account): void
+public function beforeUpdate(
+    AccountApi $accountApi,
+    Account $account
+): void
 ```
 
 
@@ -224,8 +252,8 @@ public function beforeUpdate(AccountApi $accountApi, Account $account): void
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$account`|[`Account`](../../Account.md)|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$account`|[`Account`](../../Account.md)||
 
 Return Value: `void`
 
@@ -233,7 +261,10 @@ Return Value: `void`
 
 
 ```php
-public function afterUpdate(AccountApi $accountApi, Account $account): ?Account
+public function afterUpdate(
+    AccountApi $accountApi,
+    Account $account
+): ?Account
 ```
 
 
@@ -243,8 +274,8 @@ public function afterUpdate(AccountApi $accountApi, Account $account): ?Account
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$account`|[`Account`](../../Account.md)|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$account`|[`Account`](../../Account.md)||
 
 Return Value: ?[`Account`](../../Account.md)
 
@@ -252,7 +283,12 @@ Return Value: ?[`Account`](../../Account.md)
 
 
 ```php
-public function beforeUpdatePassword(AccountApi $accountApi, string $accountId, string $oldPassword, string $newPassword): void
+public function beforeUpdatePassword(
+    AccountApi $accountApi,
+    string $accountId,
+    string $oldPassword,
+    string $newPassword
+): void
 ```
 
 
@@ -262,10 +298,10 @@ public function beforeUpdatePassword(AccountApi $accountApi, string $accountId, 
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$accountId`|`string`|``|
-`$oldPassword`|`string`|``|
-`$newPassword`|`string`|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$accountId`|`string`||
+`$oldPassword`|`string`||
+`$newPassword`|`string`||
 
 Return Value: `void`
 
@@ -273,7 +309,10 @@ Return Value: `void`
 
 
 ```php
-public function afterUpdatePassword(AccountApi $accountApi, Account $account): ?Account
+public function afterUpdatePassword(
+    AccountApi $accountApi,
+    Account $account
+): ?Account
 ```
 
 
@@ -283,8 +322,8 @@ public function afterUpdatePassword(AccountApi $accountApi, Account $account): ?
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$account`|[`Account`](../../Account.md)|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$account`|[`Account`](../../Account.md)||
 
 Return Value: ?[`Account`](../../Account.md)
 
@@ -292,7 +331,10 @@ Return Value: ?[`Account`](../../Account.md)
 
 
 ```php
-public function beforeGeneratePasswordResetToken(AccountApi $accountApi, Account $account): void
+public function beforeGeneratePasswordResetToken(
+    AccountApi $accountApi,
+    Account $account
+): void
 ```
 
 
@@ -302,8 +344,8 @@ public function beforeGeneratePasswordResetToken(AccountApi $accountApi, Account
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$account`|[`Account`](../../Account.md)|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$account`|[`Account`](../../Account.md)||
 
 Return Value: `void`
 
@@ -311,7 +353,10 @@ Return Value: `void`
 
 
 ```php
-public function afterGeneratePasswordResetToken(AccountApi $accountApi, Account $account): ?Account
+public function afterGeneratePasswordResetToken(
+    AccountApi $accountApi,
+    Account $account
+): ?Account
 ```
 
 
@@ -321,8 +366,8 @@ public function afterGeneratePasswordResetToken(AccountApi $accountApi, Account 
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$account`|[`Account`](../../Account.md)|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$account`|[`Account`](../../Account.md)||
 
 Return Value: ?[`Account`](../../Account.md)
 
@@ -330,7 +375,11 @@ Return Value: ?[`Account`](../../Account.md)
 
 
 ```php
-public function beforeResetPassword(AccountApi $accountApi, string $token, string $newPassword): void
+public function beforeResetPassword(
+    AccountApi $accountApi,
+    string $token,
+    string $newPassword
+): void
 ```
 
 
@@ -340,9 +389,9 @@ public function beforeResetPassword(AccountApi $accountApi, string $token, strin
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$token`|`string`|``|
-`$newPassword`|`string`|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$token`|`string`||
+`$newPassword`|`string`||
 
 Return Value: `void`
 
@@ -350,7 +399,10 @@ Return Value: `void`
 
 
 ```php
-public function afterResetPassword(AccountApi $accountApi, Account $account): ?Account
+public function afterResetPassword(
+    AccountApi $accountApi,
+    Account $account
+): ?Account
 ```
 
 
@@ -360,8 +412,8 @@ public function afterResetPassword(AccountApi $accountApi, Account $account): ?A
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$account`|[`Account`](../../Account.md)|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$account`|[`Account`](../../Account.md)||
 
 Return Value: ?[`Account`](../../Account.md)
 
@@ -369,7 +421,11 @@ Return Value: ?[`Account`](../../Account.md)
 
 
 ```php
-public function beforeLogin(AccountApi $accountApi, Account $account, ?Cart $cart = null): void
+public function beforeLogin(
+    AccountApi $accountApi,
+    Account $account,
+    ?Cart $cart = null
+): void
 ```
 
 
@@ -379,8 +435,8 @@ public function beforeLogin(AccountApi $accountApi, Account $account, ?Cart $car
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$account`|[`Account`](../../Account.md)|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$account`|[`Account`](../../Account.md)||
 `$cart`|?[`Cart`](../../../../CartApiBundle/Domain/Cart.md)|`null`|
 
 Return Value: `void`
@@ -389,7 +445,10 @@ Return Value: `void`
 
 
 ```php
-public function afterLogin(AccountApi $accountApi, bool $successful): ?bool
+public function afterLogin(
+    AccountApi $accountApi,
+    bool $successful
+): ?bool
 ```
 
 
@@ -399,8 +458,8 @@ public function afterLogin(AccountApi $accountApi, bool $successful): ?bool
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$successful`|`bool`|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$successful`|`bool`||
 
 Return Value: `?bool`
 
@@ -408,7 +467,10 @@ Return Value: `?bool`
 
 
 ```php
-public function beforeGetAddresses(AccountApi $accountApi, string $accountId): void
+public function beforeGetAddresses(
+    AccountApi $accountApi,
+    string $accountId
+): void
 ```
 
 
@@ -418,8 +480,8 @@ public function beforeGetAddresses(AccountApi $accountApi, string $accountId): v
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$accountId`|`string`|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$accountId`|`string`||
 
 Return Value: `void`
 
@@ -427,7 +489,10 @@ Return Value: `void`
 
 
 ```php
-public function afterGetAddresses(AccountApi $accountApi, array $addresses): ?array
+public function afterGetAddresses(
+    AccountApi $accountApi,
+    array $addresses
+): ?array
 ```
 
 
@@ -437,8 +502,8 @@ public function afterGetAddresses(AccountApi $accountApi, array $addresses): ?ar
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$addresses`|`array`|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$addresses`|`array`||
 
 Return Value: `?array`
 
@@ -446,7 +511,11 @@ Return Value: `?array`
 
 
 ```php
-public function beforeAddAddress(AccountApi $accountApi, string $accountId, Address $address): void
+public function beforeAddAddress(
+    AccountApi $accountApi,
+    string $accountId,
+    Address $address
+): void
 ```
 
 
@@ -456,9 +525,9 @@ public function beforeAddAddress(AccountApi $accountApi, string $accountId, Addr
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$accountId`|`string`|``|
-`$address`|[`Address`](../../Address.md)|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$accountId`|`string`||
+`$address`|[`Address`](../../Address.md)||
 
 Return Value: `void`
 
@@ -466,7 +535,10 @@ Return Value: `void`
 
 
 ```php
-public function afterAddAddress(AccountApi $accountApi, Account $account): ?Account
+public function afterAddAddress(
+    AccountApi $accountApi,
+    Account $account
+): ?Account
 ```
 
 
@@ -476,8 +548,8 @@ public function afterAddAddress(AccountApi $accountApi, Account $account): ?Acco
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$account`|[`Account`](../../Account.md)|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$account`|[`Account`](../../Account.md)||
 
 Return Value: ?[`Account`](../../Account.md)
 
@@ -485,7 +557,11 @@ Return Value: ?[`Account`](../../Account.md)
 
 
 ```php
-public function beforeUpdateAddress(AccountApi $accountApi, string $accountId, Address $address): void
+public function beforeUpdateAddress(
+    AccountApi $accountApi,
+    string $accountId,
+    Address $address
+): void
 ```
 
 
@@ -495,9 +571,9 @@ public function beforeUpdateAddress(AccountApi $accountApi, string $accountId, A
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$accountId`|`string`|``|
-`$address`|[`Address`](../../Address.md)|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$accountId`|`string`||
+`$address`|[`Address`](../../Address.md)||
 
 Return Value: `void`
 
@@ -505,7 +581,10 @@ Return Value: `void`
 
 
 ```php
-public function afterUpdateAddress(AccountApi $accountApi, Account $account): ?Account
+public function afterUpdateAddress(
+    AccountApi $accountApi,
+    Account $account
+): ?Account
 ```
 
 
@@ -515,8 +594,8 @@ public function afterUpdateAddress(AccountApi $accountApi, Account $account): ?A
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$account`|[`Account`](../../Account.md)|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$account`|[`Account`](../../Account.md)||
 
 Return Value: ?[`Account`](../../Account.md)
 
@@ -524,7 +603,11 @@ Return Value: ?[`Account`](../../Account.md)
 
 
 ```php
-public function beforeRemoveAddress(AccountApi $accountApi, string $accountId, string $addressId): void
+public function beforeRemoveAddress(
+    AccountApi $accountApi,
+    string $accountId,
+    string $addressId
+): void
 ```
 
 
@@ -534,9 +617,9 @@ public function beforeRemoveAddress(AccountApi $accountApi, string $accountId, s
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$accountId`|`string`|``|
-`$addressId`|`string`|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$accountId`|`string`||
+`$addressId`|`string`||
 
 Return Value: `void`
 
@@ -544,7 +627,10 @@ Return Value: `void`
 
 
 ```php
-public function afterRemoveAddress(AccountApi $accountApi, Account $account): ?Account
+public function afterRemoveAddress(
+    AccountApi $accountApi,
+    Account $account
+): ?Account
 ```
 
 
@@ -554,8 +640,8 @@ public function afterRemoveAddress(AccountApi $accountApi, Account $account): ?A
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$account`|[`Account`](../../Account.md)|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$account`|[`Account`](../../Account.md)||
 
 Return Value: ?[`Account`](../../Account.md)
 
@@ -563,7 +649,11 @@ Return Value: ?[`Account`](../../Account.md)
 
 
 ```php
-public function beforeSetDefaultBillingAddress(AccountApi $accountApi, string $accountId, string $addressId): void
+public function beforeSetDefaultBillingAddress(
+    AccountApi $accountApi,
+    string $accountId,
+    string $addressId
+): void
 ```
 
 
@@ -573,9 +663,9 @@ public function beforeSetDefaultBillingAddress(AccountApi $accountApi, string $a
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$accountId`|`string`|``|
-`$addressId`|`string`|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$accountId`|`string`||
+`$addressId`|`string`||
 
 Return Value: `void`
 
@@ -583,7 +673,10 @@ Return Value: `void`
 
 
 ```php
-public function afterSetDefaultBillingAddress(AccountApi $accountApi, Account $account): ?Account
+public function afterSetDefaultBillingAddress(
+    AccountApi $accountApi,
+    Account $account
+): ?Account
 ```
 
 
@@ -593,8 +686,8 @@ public function afterSetDefaultBillingAddress(AccountApi $accountApi, Account $a
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$account`|[`Account`](../../Account.md)|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$account`|[`Account`](../../Account.md)||
 
 Return Value: ?[`Account`](../../Account.md)
 
@@ -602,7 +695,11 @@ Return Value: ?[`Account`](../../Account.md)
 
 
 ```php
-public function beforeSetDefaultShippingAddress(AccountApi $accountApi, string $accountId, string $addressId): void
+public function beforeSetDefaultShippingAddress(
+    AccountApi $accountApi,
+    string $accountId,
+    string $addressId
+): void
 ```
 
 
@@ -612,9 +709,9 @@ public function beforeSetDefaultShippingAddress(AccountApi $accountApi, string $
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$accountId`|`string`|``|
-`$addressId`|`string`|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$accountId`|`string`||
+`$addressId`|`string`||
 
 Return Value: `void`
 
@@ -622,7 +719,10 @@ Return Value: `void`
 
 
 ```php
-public function afterSetDefaultShippingAddress(AccountApi $accountApi, Account $account): ?Account
+public function afterSetDefaultShippingAddress(
+    AccountApi $accountApi,
+    Account $account
+): ?Account
 ```
 
 
@@ -632,8 +732,8 @@ public function afterSetDefaultShippingAddress(AccountApi $accountApi, Account $
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
-`$account`|[`Account`](../../Account.md)|``|
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$account`|[`Account`](../../Account.md)||
 
 Return Value: ?[`Account`](../../Account.md)
 

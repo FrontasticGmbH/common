@@ -37,7 +37,9 @@ need to tag your service based on this class with
 
 
 ```php
-public function beforeGetContentTypes(ContentApi $contentApi): void
+public function beforeGetContentTypes(
+    ContentApi $contentApi
+): void
 ```
 
 
@@ -47,7 +49,7 @@ public function beforeGetContentTypes(ContentApi $contentApi): void
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$contentApi`|[`ContentApi`](../../ContentApi.md)|``|
+`$contentApi`|[`ContentApi`](../../ContentApi.md)||
 
 Return Value: `void`
 
@@ -55,7 +57,10 @@ Return Value: `void`
 
 
 ```php
-public function afterGetContentTypes(ContentApi $contentApi, array $contentTypes): ?array
+public function afterGetContentTypes(
+    ContentApi $contentApi,
+    array $contentTypes
+): ?array
 ```
 
 
@@ -65,8 +70,8 @@ public function afterGetContentTypes(ContentApi $contentApi, array $contentTypes
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$contentApi`|[`ContentApi`](../../ContentApi.md)|``|
-`$contentTypes`|`array`|``|
+`$contentApi`|[`ContentApi`](../../ContentApi.md)||
+`$contentTypes`|`array`||
 
 Return Value: `?array`
 
@@ -74,7 +79,12 @@ Return Value: `?array`
 
 
 ```php
-public function beforeGetContent(ContentApi $contentApi, string $contentId, string $locale = null, string $mode = ContentApi::QUERY_SYNC): void
+public function beforeGetContent(
+    ContentApi $contentApi,
+    string $contentId,
+    string $locale = null,
+    string $mode = ContentApi::QUERY_SYNC
+): void
 ```
 
 
@@ -84,8 +94,8 @@ public function beforeGetContent(ContentApi $contentApi, string $contentId, stri
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$contentApi`|[`ContentApi`](../../ContentApi.md)|``|
-`$contentId`|`string`|``|
+`$contentApi`|[`ContentApi`](../../ContentApi.md)||
+`$contentId`|`string`||
 `$locale`|`string`|`null`|
 `$mode`|`string`|`ContentApi::QUERY_SYNC`|
 
@@ -95,7 +105,10 @@ Return Value: `void`
 
 
 ```php
-public function afterGetContent(ContentApi $contentApi, ?Content $content): ?Content
+public function afterGetContent(
+    ContentApi $contentApi,
+    ?Content $content
+): ?Content
 ```
 
 
@@ -105,8 +118,8 @@ public function afterGetContent(ContentApi $contentApi, ?Content $content): ?Con
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$contentApi`|[`ContentApi`](../../ContentApi.md)|``|
-`$content`|?[`Content`](../Content.md)|``|
+`$contentApi`|[`ContentApi`](../../ContentApi.md)||
+`$content`|?[`Content`](../Content.md)||
 
 Return Value: ?[`Content`](../Content.md)
 
@@ -114,7 +127,12 @@ Return Value: ?[`Content`](../Content.md)
 
 
 ```php
-public function beforeQuery(ContentApi $contentApi, Query $query, string $locale = null, string $mode = ContentApi::QUERY_SYNC): void
+public function beforeQuery(
+    ContentApi $contentApi,
+    Query $query,
+    string $locale = null,
+    string $mode = ContentApi::QUERY_SYNC
+): void
 ```
 
 
@@ -124,8 +142,8 @@ public function beforeQuery(ContentApi $contentApi, Query $query, string $locale
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$contentApi`|[`ContentApi`](../../ContentApi.md)|``|
-`$query`|[`Query`](../../Query.md)|``|
+`$contentApi`|[`ContentApi`](../../ContentApi.md)||
+`$query`|[`Query`](../../Query.md)||
 `$locale`|`string`|`null`|
 `$mode`|`string`|`ContentApi::QUERY_SYNC`|
 
@@ -135,7 +153,10 @@ Return Value: `void`
 
 
 ```php
-public function afterQuery(ContentApi $contentApi, ?Result $result): ?Result
+public function afterQuery(
+    ContentApi $contentApi,
+    ?Result $result
+): ?Result
 ```
 
 
@@ -145,8 +166,8 @@ public function afterQuery(ContentApi $contentApi, ?Result $result): ?Result
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$contentApi`|[`ContentApi`](../../ContentApi.md)|``|
-`$result`|?[`Result`](../../Result.md)|``|
+`$contentApi`|[`ContentApi`](../../ContentApi.md)||
+`$result`|?[`Result`](../../Result.md)||
 
 Return Value: ?[`Result`](../../Result.md)
 

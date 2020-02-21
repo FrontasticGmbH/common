@@ -28,7 +28,9 @@ Property|Type|Default|Description
 
 
 ```php
-public function validate(): void
+public function validate(
+    
+): void
 ```
 
 

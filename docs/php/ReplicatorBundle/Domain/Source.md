@@ -14,7 +14,10 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\Source`](../../../
 
 
 ```php
-public function updates(string $since, int $count): array
+public function updates(
+    string $since,
+    int $count
+): array
 ```
 
 
@@ -24,8 +27,8 @@ public function updates(string $since, int $count): array
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$since`|`string`|``|
-`$count`|`int`|``|
+`$since`|`string`||
+`$count`|`int`||
 
 Return Value: `array`
 

@@ -18,7 +18,9 @@ Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi`](../..
 
 
 ```php
-public function getCategories(CategoryQuery $query): array
+public function getCategories(
+    CategoryQuery $query
+): array
 ```
 
 
@@ -28,7 +30,7 @@ public function getCategories(CategoryQuery $query): array
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$query`|[`CategoryQuery`](ProductApi/Query/CategoryQuery.md)|``|
+`$query`|[`CategoryQuery`](ProductApi/Query/CategoryQuery.md)||
 
 Return Value: `array`
 
@@ -36,7 +38,9 @@ Return Value: `array`
 
 
 ```php
-public function getProductTypes(ProductTypeQuery $query): array
+public function getProductTypes(
+    ProductTypeQuery $query
+): array
 ```
 
 
@@ -46,7 +50,7 @@ public function getProductTypes(ProductTypeQuery $query): array
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$query`|[`ProductTypeQuery`](ProductApi/Query/ProductTypeQuery.md)|``|
+`$query`|[`ProductTypeQuery`](ProductApi/Query/ProductTypeQuery.md)||
 
 Return Value: `array`
 
@@ -54,7 +58,10 @@ Return Value: `array`
 
 
 ```php
-public function getProduct(ProductQuery $query, string $mode = self::QUERY_SYNC): ?object
+public function getProduct(
+    ProductQuery $query,
+    string $mode = self::QUERY_SYNC
+): ?object
 ```
 
 
@@ -64,7 +71,7 @@ public function getProduct(ProductQuery $query, string $mode = self::QUERY_SYNC)
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$query`|[`ProductQuery`](ProductApi/Query/ProductQuery.md)|``|
+`$query`|[`ProductQuery`](ProductApi/Query/ProductQuery.md)||
 `$mode`|`string`|`self::QUERY_SYNC`|One of the QUERY_* connstants. Execute the query synchronously or asynchronously?
 
 Return Value: `?object`
@@ -73,7 +80,10 @@ Return Value: `?object`
 
 
 ```php
-public function query(ProductQuery $query, string $mode = self::QUERY_SYNC): object
+public function query(
+    ProductQuery $query,
+    string $mode = self::QUERY_SYNC
+): object
 ```
 
 
@@ -83,7 +93,7 @@ public function query(ProductQuery $query, string $mode = self::QUERY_SYNC): obj
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$query`|[`ProductQuery`](ProductApi/Query/ProductQuery.md)|``|
+`$query`|[`ProductQuery`](ProductApi/Query/ProductQuery.md)||
 `$mode`|`string`|`self::QUERY_SYNC`|One of the QUERY_* connstants. Execute the query synchronously or asynchronously?
 
 Return Value: `object`
@@ -92,7 +102,9 @@ Return Value: `object`
 
 
 ```php
-public function getDangerousInnerClient(): mixed
+public function getDangerousInnerClient(
+    
+): mixed
 ```
 
 

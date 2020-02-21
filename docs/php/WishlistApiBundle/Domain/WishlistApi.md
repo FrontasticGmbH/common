@@ -22,7 +22,10 @@ Fully Qualified: [`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi`](../
 
 
 ```php
-public function getWishlist(string $wishlistId, string $locale): Wishlist
+public function getWishlist(
+    string $wishlistId,
+    string $locale
+): Wishlist
 ```
 
 
@@ -32,8 +35,8 @@ public function getWishlist(string $wishlistId, string $locale): Wishlist
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistId`|`string`|``|
-`$locale`|`string`|``|
+`$wishlistId`|`string`||
+`$locale`|`string`||
 
 Return Value: [`Wishlist`](Wishlist.md)
 
@@ -41,7 +44,10 @@ Return Value: [`Wishlist`](Wishlist.md)
 
 
 ```php
-public function getAnonymous(string $anonymousId, string $locale): Wishlist
+public function getAnonymous(
+    string $anonymousId,
+    string $locale
+): Wishlist
 ```
 
 
@@ -51,8 +57,8 @@ public function getAnonymous(string $anonymousId, string $locale): Wishlist
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$anonymousId`|`string`|``|
-`$locale`|`string`|``|
+`$anonymousId`|`string`||
+`$locale`|`string`||
 
 Return Value: [`Wishlist`](Wishlist.md)
 
@@ -60,7 +66,10 @@ Return Value: [`Wishlist`](Wishlist.md)
 
 
 ```php
-public function getWishlists(string $accountId, string $locale): array
+public function getWishlists(
+    string $accountId,
+    string $locale
+): array
 ```
 
 
@@ -70,8 +79,8 @@ public function getWishlists(string $accountId, string $locale): array
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountId`|`string`|``|
-`$locale`|`string`|``|
+`$accountId`|`string`||
+`$locale`|`string`||
 
 Return Value: `array`
 
@@ -79,7 +88,10 @@ Return Value: `array`
 
 
 ```php
-public function create(Wishlist $wishlist, string $locale): Wishlist
+public function create(
+    Wishlist $wishlist,
+    string $locale
+): Wishlist
 ```
 
 
@@ -89,8 +101,8 @@ public function create(Wishlist $wishlist, string $locale): Wishlist
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlist`|[`Wishlist`](Wishlist.md)|``|
-`$locale`|`string`|``|
+`$wishlist`|[`Wishlist`](Wishlist.md)||
+`$locale`|`string`||
 
 Return Value: [`Wishlist`](Wishlist.md)
 
@@ -98,7 +110,11 @@ Return Value: [`Wishlist`](Wishlist.md)
 
 
 ```php
-public function addToWishlist(Wishlist $wishlist, LineItem $lineItem, string $locale): Wishlist
+public function addToWishlist(
+    Wishlist $wishlist,
+    LineItem $lineItem,
+    string $locale
+): Wishlist
 ```
 
 
@@ -108,9 +124,9 @@ public function addToWishlist(Wishlist $wishlist, LineItem $lineItem, string $lo
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlist`|[`Wishlist`](Wishlist.md)|``|
-`$lineItem`|[`LineItem`](LineItem.md)|``|
-`$locale`|`string`|``|
+`$wishlist`|[`Wishlist`](Wishlist.md)||
+`$lineItem`|[`LineItem`](LineItem.md)||
+`$locale`|`string`||
 
 Return Value: [`Wishlist`](Wishlist.md)
 
@@ -118,7 +134,11 @@ Return Value: [`Wishlist`](Wishlist.md)
 
 
 ```php
-public function addMultipleToWishlist(Wishlist $wishlist, array $lineItems, string $locale): Wishlist
+public function addMultipleToWishlist(
+    Wishlist $wishlist,
+    array $lineItems,
+    string $locale
+): Wishlist
 ```
 
 
@@ -128,9 +148,9 @@ public function addMultipleToWishlist(Wishlist $wishlist, array $lineItems, stri
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlist`|[`Wishlist`](Wishlist.md)|``|
-`$lineItems`|`array`|``|
-`$locale`|`string`|``|
+`$wishlist`|[`Wishlist`](Wishlist.md)||
+`$lineItems`|`array`||
+`$locale`|`string`||
 
 Return Value: [`Wishlist`](Wishlist.md)
 
@@ -138,7 +158,12 @@ Return Value: [`Wishlist`](Wishlist.md)
 
 
 ```php
-public function updateLineItem(Wishlist $wishlist, LineItem $lineItem, int $count, string $locale): Wishlist
+public function updateLineItem(
+    Wishlist $wishlist,
+    LineItem $lineItem,
+    int $count,
+    string $locale
+): Wishlist
 ```
 
 
@@ -148,10 +173,10 @@ public function updateLineItem(Wishlist $wishlist, LineItem $lineItem, int $coun
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlist`|[`Wishlist`](Wishlist.md)|``|
-`$lineItem`|[`LineItem`](LineItem.md)|``|
-`$count`|`int`|``|
-`$locale`|`string`|``|
+`$wishlist`|[`Wishlist`](Wishlist.md)||
+`$lineItem`|[`LineItem`](LineItem.md)||
+`$count`|`int`||
+`$locale`|`string`||
 
 Return Value: [`Wishlist`](Wishlist.md)
 
@@ -159,7 +184,11 @@ Return Value: [`Wishlist`](Wishlist.md)
 
 
 ```php
-public function removeLineItem(Wishlist $wishlist, LineItem $lineItem, string $locale): Wishlist
+public function removeLineItem(
+    Wishlist $wishlist,
+    LineItem $lineItem,
+    string $locale
+): Wishlist
 ```
 
 
@@ -169,9 +198,9 @@ public function removeLineItem(Wishlist $wishlist, LineItem $lineItem, string $l
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlist`|[`Wishlist`](Wishlist.md)|``|
-`$lineItem`|[`LineItem`](LineItem.md)|``|
-`$locale`|`string`|``|
+`$wishlist`|[`Wishlist`](Wishlist.md)||
+`$lineItem`|[`LineItem`](LineItem.md)||
+`$locale`|`string`||
 
 Return Value: [`Wishlist`](Wishlist.md)
 
@@ -179,7 +208,9 @@ Return Value: [`Wishlist`](Wishlist.md)
 
 
 ```php
-public function getDangerousInnerClient(): mixed
+public function getDangerousInnerClient(
+    
+): mixed
 ```
 
 

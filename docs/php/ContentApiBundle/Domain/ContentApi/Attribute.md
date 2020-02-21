@@ -19,7 +19,9 @@ Property|Type|Default|Description
 
 
 ```php
-public function __toString(): mixed
+public function __toString(
+    
+): mixed
 ```
 
 

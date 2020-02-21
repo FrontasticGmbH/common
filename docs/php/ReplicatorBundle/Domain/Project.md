@@ -31,7 +31,9 @@ follow any defined schema.
 
 
 ```php
-public function getConfigurationSection(string $sectionName): object
+public function getConfigurationSection(
+    string $sectionName
+): object
 ```
 
 
@@ -41,7 +43,7 @@ public function getConfigurationSection(string $sectionName): object
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$sectionName`|`string`|``|
+`$sectionName`|`string`||
 
 Return Value: `object`
 
