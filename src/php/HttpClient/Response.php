@@ -5,16 +5,22 @@ namespace Frontastic\Common\HttpClient;
 class Response extends \Kore\DataObject\DataObject
 {
     /**
+     * Response HTTP status code
+     *
      * @var integer
      */
     public $status;
 
     /**
+     * The HTTP headers from the response as a plain array
+     *
      * @var string[]
      */
     public $headers;
 
     /**
+     * Response body
+     *
      * @var string
      */
     public $body;

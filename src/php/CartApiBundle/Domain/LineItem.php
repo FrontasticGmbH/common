@@ -22,7 +22,7 @@ class LineItem extends DataObject
     public $type;
 
     /**
-     * @var [string => mixed]
+     * @var array
      */
     public $custom = [];
 

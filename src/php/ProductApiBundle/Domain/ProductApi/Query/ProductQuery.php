@@ -47,6 +47,8 @@ class ProductQuery extends Query
     public $currency;
 
     /**
+     * This is a full text search on the API
+     *
      * @var string
      */
     public $query;
