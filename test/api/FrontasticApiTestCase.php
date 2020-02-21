@@ -77,4 +77,21 @@ class FrontasticApiTestCase extends KernelTestCase
             $this->assertEquals(1, $count, 'Value ' . $value . ' occurred more then once');
         }
     }
+
+    protected function buildQueryParameters(string $language, ?int $limit = null, ?int $offset = null)
+    {
+        $parameters = [
+            'locale' => $language,
+        ];
+
+        if ($limit !== null) {
+            $parameters['limit'] = $limit;
+        }
+        if ($offset !== null) {
+            $parameters['offset'] = $offset;
+        }
+
+        return $parameters;
+    }
+
 }
