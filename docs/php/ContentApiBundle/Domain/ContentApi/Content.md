@@ -8,6 +8,6 @@ Property|Type|Default|Description
 --------|----|-------|-----------
 `contentId`|`string`||
 `name`|`string`||
-`attributes`|`Attribute[]`|`[]|
+`attributes`|`Attribute[]`|`[]`|
 `dangerousInnerContent`|`mixed`||Access original object from backend
 

@@ -8,5 +8,5 @@ Property|Type|Default|Description
 --------|----|-------|-----------
 `groupId`|`string`||
 `name`|`string`||
-`permissions`|`string[]`|`[]|
+`permissions`|`string[]`|`[]`|
 

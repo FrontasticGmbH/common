@@ -7,5 +7,5 @@ Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\LineItem\Variant`](..
 Property|Type|Default|Description
 --------|----|-------|-----------
 `variant`|`Variant`||
-`type`|`string`|`'variant'|
+`type`|`string`|`'variant'`|
 

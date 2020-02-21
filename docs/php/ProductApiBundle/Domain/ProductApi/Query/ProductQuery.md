@@ -14,10 +14,10 @@ Property|Type|Default|Description
 `productType`|`string`||
 `currency`|`string`||
 `query`|`string`||This is a full text search on the API
-`filter`|`Filter[]`|`[]|
-`facets`|`Facet[]`|`[]|
-`sortAttributes`|`mixed`|`[]|Map of sort attributes => sort order
-`fuzzy`|`bool`|`false|
+`filter`|`Filter[]`|`[]`|
+`facets`|`Facet[]`|`[]`|
+`sortAttributes`|`mixed`|`[]`|Map of sort attributes => sort order
+`fuzzy`|`bool`|`false`|
 
 ## Methods
 

@@ -9,8 +9,8 @@ Property|Type|Default|Description
 `offset`|`int`||
 `total`|`int`||
 `count`|`int`||
-`items`|`array`|`[]|
-`facets`|`Facet[]`|`[]|
+`items`|`array`|`[]`|
+`facets`|`Facet[]`|`[]`|
 `query`|`Query`||The query used to generate this result (cloned)
 
 ## Methods

@@ -6,5 +6,5 @@ Fully Qualified: [`\Frontastic\Common\HttpClient\Options`](../../../src/php/Http
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`timeout`|``|`1|
+`timeout`|``|`1`|
 

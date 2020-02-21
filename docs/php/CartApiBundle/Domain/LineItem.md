@@ -9,13 +9,13 @@ Property|Type|Default|Description
 `lineItemId`|`string`||
 `name`|`string`||
 `type`|`string`||
-`custom`|`array`|`[]|
+`custom`|`array`|`[]`|
 `count`|`int`||
 `price`|`int`||
 `discountedPrice`|`int`||
-`discountTexts`|`array`|`[]|
+`discountTexts`|`array`|`[]`|
 `totalPrice`|`int`||
 `currency`|`string`||
-`isGift`|`bool`|`false|
+`isGift`|`bool`|`false`|
 `dangerousInnerItem`|`mixed`||Access original object from backend
 

@@ -8,6 +8,6 @@ Property|Type|Default|Description
 --------|----|-------|-----------
 `name`|`string`||
 `url`|`string`||
-`push`|`bool`|`true|
-`environment`|`string`|`'production'|
+`push`|`bool`|`true`|
+`environment`|`string`|`'production'`|
 

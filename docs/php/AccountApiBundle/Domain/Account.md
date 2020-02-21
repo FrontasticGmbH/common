@@ -12,12 +12,12 @@ Property|Type|Default|Description
 `firstName`|`string`||
 `lastName`|`string`||
 `birthday`|`\DateTime`||
-`data`|`array`|`[]|
-`groups`|`Group[]`|`[]|
+`data`|`array`|`[]`|
+`groups`|`Group[]`|`[]`|
 `confirmationToken`|`string`||
-`confirmed`|`string`|`false|
+`confirmed`|`string`|`false`|
 `tokenValidUntil`|`\DateTime`||
-`addresses`|`Address[]`|`[]|
+`addresses`|`Address[]`|`[]`|
 `dangerousInnerAccount`|`mixed`||Access original object from backend
 
 ## Methods

@@ -9,5 +9,5 @@ Property|Type|Default|Description
 `command`|`string`||
 `channel`|`string`||
 `customer`|`string`||
-`payload`|`array`|`[]|
+`payload`|`array`|`[]`|
 

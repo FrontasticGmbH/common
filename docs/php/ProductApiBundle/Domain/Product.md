@@ -12,8 +12,8 @@ Property|Type|Default|Description
 `name`|`string`||
 `slug`|`string`||
 `description`|`string`||
-`categories`|`string[]`|`[]|
-`variants`|`Variant[]`|`[]|
+`categories`|`string[]`|`[]`|
+`variants`|`Variant[]`|`[]`|
 `dangerousInnerProduct`|`mixed`||Access original object from backend
 
 ## Methods

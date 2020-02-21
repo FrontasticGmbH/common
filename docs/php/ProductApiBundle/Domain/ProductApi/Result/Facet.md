@@ -9,5 +9,5 @@ Property|Type|Default|Description
 `type`|`string`||
 `handle`|`string`||
 `key`|`string`||
-`selected`|`bool`|`false|
+`selected`|`bool`|`false`|
 

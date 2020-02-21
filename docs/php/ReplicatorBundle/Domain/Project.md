@@ -14,13 +14,13 @@ Property|Type|Default|Description
 `publicUrl`|`string`||
 `webpackPort`|`int`||
 `ssrPort`|`int`||
-`configuration`|`array`|`[]|
-`data`|`array`|`[]|Additional external project data from sources like tideways. Does not
+`configuration`|`array`|`[]`|
+`data`|`array`|`[]`|Additional external project data from sources like tideways. Does not
 follow any defined schema.
-`languages`|`string[]`|`[]|
+`languages`|`string[]`|`[]`|
 `defaultLanguage`|`string[]`||
-`projectSpecific`|`string[]`|`[]|
-`endpoints`|`Endpoint[]`|`[]|
+`projectSpecific`|`string[]`|`[]`|
+`endpoints`|`Endpoint[]`|`[]`|
 
 ## Methods
 

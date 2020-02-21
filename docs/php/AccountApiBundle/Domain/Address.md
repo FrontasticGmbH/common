@@ -18,7 +18,7 @@ Property|Type|Default|Description
 `city`|`string`||
 `country`|`string`||
 `phone`|`string`||
-`isDefaultBillingAddress`|`bool`|`false|
-`isDefaultShippingAddress`|`bool`|`false|
+`isDefaultBillingAddress`|`bool`|`false`|
+`isDefaultShippingAddress`|`bool`|`false`|
 `dangerousInnerAddress`|`mixed`||Access original object from backend
 

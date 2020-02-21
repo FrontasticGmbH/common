@@ -10,7 +10,7 @@ Property|Type|Default|Description
 `wishlistVersion`|`string`||
 `anonymousId`|`string`||
 `accountId`|`string`||
-`name`|`string[]`|`[]|
-`lineItems`|`LineItem[]`|`[]|
+`name`|`string[]`|`[]`|
+`lineItems`|`LineItem[]`|`[]`|
 `dangerousInnerWishlist`|`mixed`||Access original object from backend
 

@@ -6,7 +6,7 @@ Fully Qualified: [`\Frontastic\Common\AccountApiBundle\Domain\Session`](../../..
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`loggedIn`|`bool`|`false|
-`account`|`Account`|`null|
-`message`|`string`|`null|
+`loggedIn`|`bool`|`false`|
+`account`|`Account`|`null`|
+`message`|`string`|`null`|
 
