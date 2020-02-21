@@ -18,7 +18,7 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\EndpointService`](
 
 
 ```php
-public function addReplicationSource(string $channel, [Source](Source.md) $source): void
+public function addReplicationSource(string $channel, Source $source): void
 ```
 
 
@@ -29,7 +29,9 @@ public function addReplicationSource(string $channel, [Source](Source.md) $sourc
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$channel`|`string`|``|
-`$source`|`[Source](Source.md)`|``|
+`$source`|[`Source`](Source.md)|``|
+
+Return Value: `void`
 
 ### getReplicationSource()
 
@@ -47,11 +49,13 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$channel`|`string`|``|
 
+Return Value: `mixed`
+
 ### addReplicationTarget()
 
 
 ```php
-public function addReplicationTarget(string $channel, [Target](Target.md) $target): void
+public function addReplicationTarget(string $channel, Target $target): void
 ```
 
 
@@ -62,7 +66,9 @@ public function addReplicationTarget(string $channel, [Target](Target.md) $targe
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$channel`|`string`|``|
-`$target`|`[Target](Target.md)`|``|
+`$target`|[`Target`](Target.md)|``|
+
+Return Value: `void`
 
 ### getReplicationTarget()
 
@@ -80,11 +86,13 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$channel`|`string`|``|
 
+Return Value: `mixed`
+
 ### dispatch()
 
 
 ```php
-public function dispatch([Command](Command.md) $command): [Result](Result.md)
+public function dispatch(Command $command): Result
 ```
 
 
@@ -94,5 +102,7 @@ public function dispatch([Command](Command.md) $command): [Result](Result.md)
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$command`|`[Command](Command.md)`|``|
+`$command`|[`Command`](Command.md)|``|
+
+Return Value: [`Result`](Result.md)
 

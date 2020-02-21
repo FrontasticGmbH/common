@@ -9,7 +9,7 @@ Property|Type|Default|Description
 `contentType`|`string`|``|
 `query`|`string`|``|
 `contentIds`|`array`|``|
-`attributes`|`[AttributeFilter](AttributeFilter.md)[]`|`[]`|
+`attributes`|`AttributeFilter[]`|`[]`|
 
 ## Methods
 
@@ -20,7 +20,7 @@ Property|Type|Default|Description
 
 
 ```php
-static public function fromArray(array $data, bool $ignoreAdditionalAttributes = false): [Query](Query.md)
+static public function fromArray(array $data, bool $ignoreAdditionalAttributes = false): Query
 ```
 
 
@@ -32,4 +32,6 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$data`|`array`|``|
 `$ignoreAdditionalAttributes`|`bool`|`false`|
+
+Return Value: [`Query`](Query.md)
 

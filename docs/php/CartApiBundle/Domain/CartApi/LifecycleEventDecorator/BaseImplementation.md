@@ -66,7 +66,7 @@ need to tag your service based on this class with
 
 
 ```php
-public function beforeGetForUser([CartApi](../../CartApi.md) $cartApi, string $userId, string $locale): void
+public function beforeGetForUser(CartApi $cartApi, string $userId, string $locale): void
 ```
 
 
@@ -76,15 +76,17 @@ public function beforeGetForUser([CartApi](../../CartApi.md) $cartApi, string $u
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
 `$userId`|`string`|``|
 `$locale`|`string`|``|
+
+Return Value: `void`
 
 ### afterGetForUser()
 
 
 ```php
-public function afterGetForUser([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart): ?[Cart](../../Cart.md)
+public function afterGetForUser(CartApi $cartApi, Cart $cart): ?Cart
 ```
 
 
@@ -94,14 +96,16 @@ public function afterGetForUser([CartApi](../../CartApi.md) $cartApi, [Cart](../
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
+
+Return Value: `?Cart`
 
 ### beforeGetAnonymous()
 
 
 ```php
-public function beforeGetAnonymous([CartApi](../../CartApi.md) $cartApi, string $anonymousId, string $locale): void
+public function beforeGetAnonymous(CartApi $cartApi, string $anonymousId, string $locale): void
 ```
 
 
@@ -111,15 +115,17 @@ public function beforeGetAnonymous([CartApi](../../CartApi.md) $cartApi, string 
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
 `$anonymousId`|`string`|``|
 `$locale`|`string`|``|
+
+Return Value: `void`
 
 ### afterGetAnonymous()
 
 
 ```php
-public function afterGetAnonymous([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart): ?[Cart](../../Cart.md)
+public function afterGetAnonymous(CartApi $cartApi, Cart $cart): ?Cart
 ```
 
 
@@ -129,14 +135,16 @@ public function afterGetAnonymous([CartApi](../../CartApi.md) $cartApi, [Cart](.
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
+
+Return Value: `?Cart`
 
 ### beforeGetById()
 
 
 ```php
-public function beforeGetById([CartApi](../../CartApi.md) $cartApi, string $cartId, string $locale = null): void
+public function beforeGetById(CartApi $cartApi, string $cartId, string $locale = null): void
 ```
 
 
@@ -146,15 +154,17 @@ public function beforeGetById([CartApi](../../CartApi.md) $cartApi, string $cart
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
 `$cartId`|`string`|``|
 `$locale`|`string`|`null`|
+
+Return Value: `void`
 
 ### afterGetById()
 
 
 ```php
-public function afterGetById([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart): ?[Cart](../../Cart.md)
+public function afterGetById(CartApi $cartApi, Cart $cart): ?Cart
 ```
 
 
@@ -164,14 +174,16 @@ public function afterGetById([CartApi](../../CartApi.md) $cartApi, [Cart](../../
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
+
+Return Value: `?Cart`
 
 ### beforeAddToCart()
 
 
 ```php
-public function beforeAddToCart([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart, [LineItem](../../LineItem.md) $lineItem, string $locale = null): void
+public function beforeAddToCart(CartApi $cartApi, Cart $cart, LineItem $lineItem, string $locale = null): void
 ```
 
 
@@ -181,16 +193,18 @@ public function beforeAddToCart([CartApi](../../CartApi.md) $cartApi, [Cart](../
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
-`$lineItem`|`[LineItem](../../LineItem.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
+`$lineItem`|[`LineItem`](../../LineItem.md)|``|
 `$locale`|`string`|`null`|
+
+Return Value: `void`
 
 ### afterAddToCart()
 
 
 ```php
-public function afterAddToCart([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart): ?[Cart](../../Cart.md)
+public function afterAddToCart(CartApi $cartApi, Cart $cart): ?Cart
 ```
 
 
@@ -200,14 +214,16 @@ public function afterAddToCart([CartApi](../../CartApi.md) $cartApi, [Cart](../.
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
+
+Return Value: `?Cart`
 
 ### beforeUpdateLineItem()
 
 
 ```php
-public function beforeUpdateLineItem([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart, [LineItem](../../LineItem.md) $lineItem, int $count, ?array $custom = null, string $locale = null): void
+public function beforeUpdateLineItem(CartApi $cartApi, Cart $cart, LineItem $lineItem, int $count, ?array $custom = null, string $locale = null): void
 ```
 
 
@@ -217,18 +233,20 @@ public function beforeUpdateLineItem([CartApi](../../CartApi.md) $cartApi, [Cart
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
-`$lineItem`|`[LineItem](../../LineItem.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
+`$lineItem`|[`LineItem`](../../LineItem.md)|``|
 `$count`|`int`|``|
 `$custom`|`?array`|`null`|
 `$locale`|`string`|`null`|
+
+Return Value: `void`
 
 ### afterUpdateLineItem()
 
 
 ```php
-public function afterUpdateLineItem([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart): ?[Cart](../../Cart.md)
+public function afterUpdateLineItem(CartApi $cartApi, Cart $cart): ?Cart
 ```
 
 
@@ -238,14 +256,16 @@ public function afterUpdateLineItem([CartApi](../../CartApi.md) $cartApi, [Cart]
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
+
+Return Value: `?Cart`
 
 ### beforeRemoveLineItem()
 
 
 ```php
-public function beforeRemoveLineItem([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart, [LineItem](../../LineItem.md) $lineItem, string $locale = null): void
+public function beforeRemoveLineItem(CartApi $cartApi, Cart $cart, LineItem $lineItem, string $locale = null): void
 ```
 
 
@@ -255,16 +275,18 @@ public function beforeRemoveLineItem([CartApi](../../CartApi.md) $cartApi, [Cart
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
-`$lineItem`|`[LineItem](../../LineItem.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
+`$lineItem`|[`LineItem`](../../LineItem.md)|``|
 `$locale`|`string`|`null`|
+
+Return Value: `void`
 
 ### afterRemoveLineItem()
 
 
 ```php
-public function afterRemoveLineItem([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart): ?[Cart](../../Cart.md)
+public function afterRemoveLineItem(CartApi $cartApi, Cart $cart): ?Cart
 ```
 
 
@@ -274,14 +296,16 @@ public function afterRemoveLineItem([CartApi](../../CartApi.md) $cartApi, [Cart]
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
+
+Return Value: `?Cart`
 
 ### beforeSetEmail()
 
 
 ```php
-public function beforeSetEmail([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart, string $email, string $locale = null): void
+public function beforeSetEmail(CartApi $cartApi, Cart $cart, string $email, string $locale = null): void
 ```
 
 
@@ -291,16 +315,18 @@ public function beforeSetEmail([CartApi](../../CartApi.md) $cartApi, [Cart](../.
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
 `$email`|`string`|``|
 `$locale`|`string`|`null`|
+
+Return Value: `void`
 
 ### afterSetEmail()
 
 
 ```php
-public function afterSetEmail([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart): ?[Cart](../../Cart.md)
+public function afterSetEmail(CartApi $cartApi, Cart $cart): ?Cart
 ```
 
 
@@ -310,14 +336,16 @@ public function afterSetEmail([CartApi](../../CartApi.md) $cartApi, [Cart](../..
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
+
+Return Value: `?Cart`
 
 ### beforeSetShippingMethod()
 
 
 ```php
-public function beforeSetShippingMethod([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart, string $shippingMethod, string $locale = null): void
+public function beforeSetShippingMethod(CartApi $cartApi, Cart $cart, string $shippingMethod, string $locale = null): void
 ```
 
 
@@ -327,16 +355,18 @@ public function beforeSetShippingMethod([CartApi](../../CartApi.md) $cartApi, [C
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
 `$shippingMethod`|`string`|``|
 `$locale`|`string`|`null`|
+
+Return Value: `void`
 
 ### afterSetShippingMethod()
 
 
 ```php
-public function afterSetShippingMethod([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart): ?[Cart](../../Cart.md)
+public function afterSetShippingMethod(CartApi $cartApi, Cart $cart): ?Cart
 ```
 
 
@@ -346,14 +376,16 @@ public function afterSetShippingMethod([CartApi](../../CartApi.md) $cartApi, [Ca
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
+
+Return Value: `?Cart`
 
 ### beforeSetCustomField()
 
 
 ```php
-public function beforeSetCustomField([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart, array $fields, string $locale = null): void
+public function beforeSetCustomField(CartApi $cartApi, Cart $cart, array $fields, string $locale = null): void
 ```
 
 
@@ -363,16 +395,18 @@ public function beforeSetCustomField([CartApi](../../CartApi.md) $cartApi, [Cart
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
 `$fields`|`array`|``|
 `$locale`|`string`|`null`|
+
+Return Value: `void`
 
 ### afterSetCustomField()
 
 
 ```php
-public function afterSetCustomField([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart): ?[Cart](../../Cart.md)
+public function afterSetCustomField(CartApi $cartApi, Cart $cart): ?Cart
 ```
 
 
@@ -382,14 +416,16 @@ public function afterSetCustomField([CartApi](../../CartApi.md) $cartApi, [Cart]
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
+
+Return Value: `?Cart`
 
 ### beforeSetShippingAddress()
 
 
 ```php
-public function beforeSetShippingAddress([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart, array $address, string $locale = null): void
+public function beforeSetShippingAddress(CartApi $cartApi, Cart $cart, array $address, string $locale = null): void
 ```
 
 
@@ -399,16 +435,18 @@ public function beforeSetShippingAddress([CartApi](../../CartApi.md) $cartApi, [
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
 `$address`|`array`|``|
 `$locale`|`string`|`null`|
+
+Return Value: `void`
 
 ### afterSetShippingAddress()
 
 
 ```php
-public function afterSetShippingAddress([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart): ?[Cart](../../Cart.md)
+public function afterSetShippingAddress(CartApi $cartApi, Cart $cart): ?Cart
 ```
 
 
@@ -418,14 +456,16 @@ public function afterSetShippingAddress([CartApi](../../CartApi.md) $cartApi, [C
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
+
+Return Value: `?Cart`
 
 ### beforeSetBillingAddress()
 
 
 ```php
-public function beforeSetBillingAddress([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart, array $address, string $locale = null): void
+public function beforeSetBillingAddress(CartApi $cartApi, Cart $cart, array $address, string $locale = null): void
 ```
 
 
@@ -435,16 +475,18 @@ public function beforeSetBillingAddress([CartApi](../../CartApi.md) $cartApi, [C
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
 `$address`|`array`|``|
 `$locale`|`string`|`null`|
+
+Return Value: `void`
 
 ### afterSetBillingAddress()
 
 
 ```php
-public function afterSetBillingAddress([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart): ?[Cart](../../Cart.md)
+public function afterSetBillingAddress(CartApi $cartApi, Cart $cart): ?Cart
 ```
 
 
@@ -454,14 +496,16 @@ public function afterSetBillingAddress([CartApi](../../CartApi.md) $cartApi, [Ca
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
+
+Return Value: `?Cart`
 
 ### beforeAddPayment()
 
 
 ```php
-public function beforeAddPayment([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart, [Payment](../../Payment.md) $payment, ?array $custom = null, string $locale = null): void
+public function beforeAddPayment(CartApi $cartApi, Cart $cart, Payment $payment, ?array $custom = null, string $locale = null): void
 ```
 
 
@@ -471,17 +515,19 @@ public function beforeAddPayment([CartApi](../../CartApi.md) $cartApi, [Cart](..
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
-`$payment`|`[Payment](../../Payment.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
+`$payment`|[`Payment`](../../Payment.md)|``|
 `$custom`|`?array`|`null`|
 `$locale`|`string`|`null`|
+
+Return Value: `void`
 
 ### afterAddPayment()
 
 
 ```php
-public function afterAddPayment([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart): ?[Cart](../../Cart.md)
+public function afterAddPayment(CartApi $cartApi, Cart $cart): ?Cart
 ```
 
 
@@ -491,14 +537,16 @@ public function afterAddPayment([CartApi](../../CartApi.md) $cartApi, [Cart](../
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
+
+Return Value: `?Cart`
 
 ### beforeRedeemDiscountCode()
 
 
 ```php
-public function beforeRedeemDiscountCode([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart, string $code, string $locale = null): void
+public function beforeRedeemDiscountCode(CartApi $cartApi, Cart $cart, string $code, string $locale = null): void
 ```
 
 
@@ -508,16 +556,18 @@ public function beforeRedeemDiscountCode([CartApi](../../CartApi.md) $cartApi, [
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
 `$code`|`string`|``|
 `$locale`|`string`|`null`|
+
+Return Value: `void`
 
 ### afterRedeemDiscountCode()
 
 
 ```php
-public function afterRedeemDiscountCode([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart): ?[Cart](../../Cart.md)
+public function afterRedeemDiscountCode(CartApi $cartApi, Cart $cart): ?Cart
 ```
 
 
@@ -527,14 +577,16 @@ public function afterRedeemDiscountCode([CartApi](../../CartApi.md) $cartApi, [C
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
+
+Return Value: `?Cart`
 
 ### beforeOrder()
 
 
 ```php
-public function beforeOrder([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart): void
+public function beforeOrder(CartApi $cartApi, Cart $cart): void
 ```
 
 
@@ -544,14 +596,16 @@ public function beforeOrder([CartApi](../../CartApi.md) $cartApi, [Cart](../../C
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
+
+Return Value: `void`
 
 ### afterOrder()
 
 
 ```php
-public function afterOrder([CartApi](../../CartApi.md) $cartApi, [Order](../../Order.md) $order): ?[Order](../../Order.md)
+public function afterOrder(CartApi $cartApi, Order $order): ?Order
 ```
 
 
@@ -561,14 +615,16 @@ public function afterOrder([CartApi](../../CartApi.md) $cartApi, [Order](../../O
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$order`|`[Order](../../Order.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$order`|[`Order`](../../Order.md)|``|
+
+Return Value: `?Order`
 
 ### beforeGetOrder()
 
 
 ```php
-public function beforeGetOrder([CartApi](../../CartApi.md) $cartApi, string $orderId): void
+public function beforeGetOrder(CartApi $cartApi, string $orderId): void
 ```
 
 
@@ -578,14 +634,16 @@ public function beforeGetOrder([CartApi](../../CartApi.md) $cartApi, string $ord
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
 `$orderId`|`string`|``|
+
+Return Value: `void`
 
 ### afterGetOrder()
 
 
 ```php
-public function afterGetOrder([CartApi](../../CartApi.md) $cartApi, [Order](../../Order.md) $orderId): ?[Order](../../Order.md)
+public function afterGetOrder(CartApi $cartApi, Order $orderId): ?Order
 ```
 
 
@@ -595,14 +653,16 @@ public function afterGetOrder([CartApi](../../CartApi.md) $cartApi, [Order](../.
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$orderId`|`[Order](../../Order.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$orderId`|[`Order`](../../Order.md)|``|
+
+Return Value: `?Order`
 
 ### beforeGetOrders()
 
 
 ```php
-public function beforeGetOrders([CartApi](../../CartApi.md) $cartApi, string $accountId): void
+public function beforeGetOrders(CartApi $cartApi, string $accountId): void
 ```
 
 
@@ -612,14 +672,16 @@ public function beforeGetOrders([CartApi](../../CartApi.md) $cartApi, string $ac
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
 `$accountId`|`string`|``|
+
+Return Value: `void`
 
 ### afterGetOrders()
 
 
 ```php
-public function afterGetOrders([CartApi](../../CartApi.md) $cartApi, array $orders): ?array
+public function afterGetOrders(CartApi $cartApi, array $orders): ?array
 ```
 
 
@@ -629,14 +691,16 @@ public function afterGetOrders([CartApi](../../CartApi.md) $cartApi, array $orde
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
 `$orders`|`array`|``|
+
+Return Value: `?array`
 
 ### beforeStartTransaction()
 
 
 ```php
-public function beforeStartTransaction([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart): void
+public function beforeStartTransaction(CartApi $cartApi, Cart $cart): void
 ```
 
 
@@ -646,14 +710,16 @@ public function beforeStartTransaction([CartApi](../../CartApi.md) $cartApi, [Ca
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
+
+Return Value: `void`
 
 ### beforeCommit()
 
 
 ```php
-public function beforeCommit([CartApi](../../CartApi.md) $cartApi, string $locale = null): void
+public function beforeCommit(CartApi $cartApi, string $locale = null): void
 ```
 
 
@@ -663,14 +729,16 @@ public function beforeCommit([CartApi](../../CartApi.md) $cartApi, string $local
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
 `$locale`|`string`|`null`|
+
+Return Value: `void`
 
 ### afterCommit()
 
 
 ```php
-public function afterCommit([CartApi](../../CartApi.md) $cartApi, [Cart](../../Cart.md) $cart): ?[Cart](../../Cart.md)
+public function afterCommit(CartApi $cartApi, Cart $cart): ?Cart
 ```
 
 
@@ -680,6 +748,8 @@ public function afterCommit([CartApi](../../CartApi.md) $cartApi, [Cart](../../C
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|`[CartApi](../../CartApi.md)`|``|
-`$cart`|`[Cart](../../Cart.md)`|``|
+`$cartApi`|[`CartApi`](../../CartApi.md)|``|
+`$cart`|[`Cart`](../../Cart.md)|``|
+
+Return Value: `?Cart`
 

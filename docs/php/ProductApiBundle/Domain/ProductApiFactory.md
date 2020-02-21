@@ -14,7 +14,7 @@ Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory`
 
 
 ```php
-public function factor([Project](../../ReplicatorBundle/Domain/Project.md) $project): [ProductApi](ProductApi.md)
+public function factor(Project $project): ProductApi
 ```
 
 
@@ -24,5 +24,7 @@ public function factor([Project](../../ReplicatorBundle/Domain/Project.md) $proj
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$project`|`[Project](../../ReplicatorBundle/Domain/Project.md)`|``|
+`$project`|[`Project`](../../ReplicatorBundle/Domain/Project.md)|``|
+
+Return Value: [`ProductApi`](ProductApi.md)
 

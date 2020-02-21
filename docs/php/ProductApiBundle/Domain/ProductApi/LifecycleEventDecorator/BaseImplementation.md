@@ -39,7 +39,7 @@ need to tag your service based on this class with
 
 
 ```php
-public function beforeGetCategories([ProductApi](../../ProductApi.md) $productApi, [CategoryQuery](../Query/CategoryQuery.md) $query): void
+public function beforeGetCategories(ProductApi $productApi, CategoryQuery $query): void
 ```
 
 
@@ -49,14 +49,16 @@ public function beforeGetCategories([ProductApi](../../ProductApi.md) $productAp
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$productApi`|`[ProductApi](../../ProductApi.md)`|``|
-`$query`|`[CategoryQuery](../Query/CategoryQuery.md)`|``|
+`$productApi`|[`ProductApi`](../../ProductApi.md)|``|
+`$query`|[`CategoryQuery`](../Query/CategoryQuery.md)|``|
+
+Return Value: `void`
 
 ### afterGetCategories()
 
 
 ```php
-public function afterGetCategories([ProductApi](../../ProductApi.md) $productApi, array $categories): ?array
+public function afterGetCategories(ProductApi $productApi, array $categories): ?array
 ```
 
 
@@ -66,14 +68,16 @@ public function afterGetCategories([ProductApi](../../ProductApi.md) $productApi
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$productApi`|`[ProductApi](../../ProductApi.md)`|``|
+`$productApi`|[`ProductApi`](../../ProductApi.md)|``|
 `$categories`|`array`|``|
+
+Return Value: `?array`
 
 ### beforeGetProductTypes()
 
 
 ```php
-public function beforeGetProductTypes([ProductApi](../../ProductApi.md) $productApi, [ProductTypeQuery](../Query/ProductTypeQuery.md) $query): void
+public function beforeGetProductTypes(ProductApi $productApi, ProductTypeQuery $query): void
 ```
 
 
@@ -83,14 +87,16 @@ public function beforeGetProductTypes([ProductApi](../../ProductApi.md) $product
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$productApi`|`[ProductApi](../../ProductApi.md)`|``|
-`$query`|`[ProductTypeQuery](../Query/ProductTypeQuery.md)`|``|
+`$productApi`|[`ProductApi`](../../ProductApi.md)|``|
+`$query`|[`ProductTypeQuery`](../Query/ProductTypeQuery.md)|``|
+
+Return Value: `void`
 
 ### afterGetProductTypes()
 
 
 ```php
-public function afterGetProductTypes([ProductApi](../../ProductApi.md) $productApi, array $productTypes): ?array
+public function afterGetProductTypes(ProductApi $productApi, array $productTypes): ?array
 ```
 
 
@@ -100,14 +106,16 @@ public function afterGetProductTypes([ProductApi](../../ProductApi.md) $productA
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$productApi`|`[ProductApi](../../ProductApi.md)`|``|
+`$productApi`|[`ProductApi`](../../ProductApi.md)|``|
 `$productTypes`|`array`|``|
+
+Return Value: `?array`
 
 ### beforeGetProduct()
 
 
 ```php
-public function beforeGetProduct([ProductApi](../../ProductApi.md) $productApi, [ProductQuery](../Query/ProductQuery.md) $query, string $mode = ProductApi::QUERY_SYNC): void
+public function beforeGetProduct(ProductApi $productApi, ProductQuery $query, string $mode = ProductApi::QUERY_SYNC): void
 ```
 
 
@@ -117,15 +125,17 @@ public function beforeGetProduct([ProductApi](../../ProductApi.md) $productApi, 
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$productApi`|`[ProductApi](../../ProductApi.md)`|``|
-`$query`|`[ProductQuery](../Query/ProductQuery.md)`|``|
+`$productApi`|[`ProductApi`](../../ProductApi.md)|``|
+`$query`|[`ProductQuery`](../Query/ProductQuery.md)|``|
 `$mode`|`string`|`ProductApi::QUERY_SYNC`|
+
+Return Value: `void`
 
 ### afterGetProduct()
 
 
 ```php
-public function afterGetProduct([ProductApi](../../ProductApi.md) $productApi, ?[Product](../../Product.md) $product): ?[Product](../../Product.md)
+public function afterGetProduct(ProductApi $productApi, ?Product $product): ?Product
 ```
 
 
@@ -135,14 +145,16 @@ public function afterGetProduct([ProductApi](../../ProductApi.md) $productApi, ?
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$productApi`|`[ProductApi](../../ProductApi.md)`|``|
-`$product`|`?[Product](../../Product.md)`|``|
+`$productApi`|[`ProductApi`](../../ProductApi.md)|``|
+`$product`|`?Product`|``|
+
+Return Value: `?Product`
 
 ### beforeQuery()
 
 
 ```php
-public function beforeQuery([ProductApi](../../ProductApi.md) $productApi, [ProductQuery](../Query/ProductQuery.md) $query, string $mode = ProductApi::QUERY_SYNC): void
+public function beforeQuery(ProductApi $productApi, ProductQuery $query, string $mode = ProductApi::QUERY_SYNC): void
 ```
 
 
@@ -152,15 +164,17 @@ public function beforeQuery([ProductApi](../../ProductApi.md) $productApi, [Prod
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$productApi`|`[ProductApi](../../ProductApi.md)`|``|
-`$query`|`[ProductQuery](../Query/ProductQuery.md)`|``|
+`$productApi`|[`ProductApi`](../../ProductApi.md)|``|
+`$query`|[`ProductQuery`](../Query/ProductQuery.md)|``|
 `$mode`|`string`|`ProductApi::QUERY_SYNC`|
+
+Return Value: `void`
 
 ### afterQuery()
 
 
 ```php
-public function afterQuery([ProductApi](../../ProductApi.md) $productApi, ?[Result](../Result.md) $result): ?[Result](../Result.md)
+public function afterQuery(ProductApi $productApi, ?Result $result): ?Result
 ```
 
 
@@ -170,6 +184,8 @@ public function afterQuery([ProductApi](../../ProductApi.md) $productApi, ?[Resu
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$productApi`|`[ProductApi](../../ProductApi.md)`|``|
-`$result`|`?[Result](../Result.md)`|``|
+`$productApi`|[`ProductApi`](../../ProductApi.md)|``|
+`$result`|`?Result`|``|
+
+Return Value: `?Result`
 

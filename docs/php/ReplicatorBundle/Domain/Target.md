@@ -24,6 +24,8 @@ public function lastUpdate(): string
 
 
 
+Return Value: `string`
+
 ### replicate()
 
 
@@ -39,4 +41,6 @@ public function replicate(array $updates): void
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$updates`|`array`|``|
+
+Return Value: `void`
 

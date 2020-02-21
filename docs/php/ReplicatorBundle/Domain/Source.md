@@ -27,3 +27,5 @@ Argument|Type|Default|Description
 `$since`|`string`|``|
 `$count`|`int`|``|
 
+Return Value: `array`
+

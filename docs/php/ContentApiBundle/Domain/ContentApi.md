@@ -26,6 +26,8 @@ public function getContentTypes(): array
 
 
 
+Return Value: `array`
+
 ### getContent()
 
 
@@ -44,11 +46,13 @@ Argument|Type|Default|Description
 `$locale`|`string`|`null`|
 `$mode`|`string`|`self::QUERY_SYNC`|One of the QUERY_* connstants. Execute the query synchronously or asynchronously?
 
+Return Value: `?object`
+
 ### query()
 
 
 ```php
-public function query([Query](Query.md) $query, string $locale = null, string $mode = self::QUERY_SYNC): ?object
+public function query(Query $query, string $locale = null, string $mode = self::QUERY_SYNC): ?object
 ```
 
 
@@ -60,9 +64,11 @@ project default locale is used.*
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$query`|`[Query](Query.md)`|``|
+`$query`|[`Query`](Query.md)|``|
 `$locale`|`string`|`null`|
 `$mode`|`string`|`self::QUERY_SYNC`|One of the QUERY_* connstants. Execute the query synchronously or asynchronously?
+
+Return Value: `?object`
 
 ### getDangerousInnerClient()
 
@@ -84,4 +90,6 @@ vendor provided abstraction.
 Use this with care for features necessary in your customer and talk with
 Frontastic about provising an abstraction.
 
+
+Return Value: `mixed`
 

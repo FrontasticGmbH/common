@@ -14,8 +14,8 @@ Property|Type|Default|Description
 `productType`|`string`|``|
 `currency`|`string`|``|
 `query`|`string`|``|This is a full text search on the API
-`filter`|`[Filter](Filter.md)[]`|`[]`|
-`facets`|`[Facet](Facet.md)[]`|`[]`|
+`filter`|`Filter[]`|`[]`|
+`facets`|`Facet[]`|`[]`|
 `sortAttributes`|`mixed`|`[]`|Map of sort attributes => sort order
 `fuzzy`|`bool`|`false`|
 
@@ -36,4 +36,6 @@ public function validate(): void
 
 
 
+
+Return Value: `void`
 

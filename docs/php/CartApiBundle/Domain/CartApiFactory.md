@@ -15,7 +15,7 @@ Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\CartApiFactory`](../.
 
 
 ```php
-public function __construct([ProductApi](../../ProductApiBundle/Domain/ProductApi.md)\Commercetools\ClientFactory $commercetoolsClientFactory, [ProductApi](../../ProductApiBundle/Domain/ProductApi.md)\Commercetools\Locale\CommercetoolsLocaleCreatorFactory $localeCreatorFactory, [OrderIdGenerator](OrderIdGenerator.md) $orderIdGenerator, iterable $decorators): mixed
+public function __construct(ProductApi\Commercetools\ClientFactory $commercetoolsClientFactory, ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory $localeCreatorFactory, OrderIdGenerator $orderIdGenerator, iterable $decorators): mixed
 ```
 
 
@@ -25,16 +25,18 @@ public function __construct([ProductApi](../../ProductApiBundle/Domain/ProductAp
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$commercetoolsClientFactory`|`[ProductApi](../../ProductApiBundle/Domain/ProductApi.md)\Commercetools\ClientFactory`|``|
-`$localeCreatorFactory`|`[ProductApi](../../ProductApiBundle/Domain/ProductApi.md)\Commercetools\Locale\CommercetoolsLocaleCreatorFactory`|``|
-`$orderIdGenerator`|`[OrderIdGenerator](OrderIdGenerator.md)`|``|
+`$commercetoolsClientFactory`|`ProductApi\Commercetools\ClientFactory`|``|
+`$localeCreatorFactory`|`ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory`|``|
+`$orderIdGenerator`|[`OrderIdGenerator`](OrderIdGenerator.md)|``|
 `$decorators`|`iterable`|``|
+
+Return Value: `mixed`
 
 ### factor()
 
 
 ```php
-public function factor([Project](../../ReplicatorBundle/Domain/Project.md) $project): [CartApi](CartApi.md)
+public function factor(Project $project): CartApi
 ```
 
 
@@ -44,5 +46,7 @@ public function factor([Project](../../ReplicatorBundle/Domain/Project.md) $proj
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$project`|`[Project](../../ReplicatorBundle/Domain/Project.md)`|``|
+`$project`|[`Project`](../../ReplicatorBundle/Domain/Project.md)|``|
+
+Return Value: [`CartApi`](CartApi.md)
 

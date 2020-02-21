@@ -34,3 +34,5 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$e`|`\Throwable`|``|
 
+Return Value: `mixed`
+

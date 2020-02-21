@@ -29,11 +29,13 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$headers`|`array`|``|
 
+Return Value: `mixed`
+
 ### request()
 
 
 ```php
-public function request(string $method, string $url, string $body = '', array $headers = array(), [Options](HttpClient/Options.md) $options = null): [Response](HttpClient/Response.md)
+public function request(string $method, string $url, string $body = '', array $headers = array(), Options $options = null): Response
 ```
 
 
@@ -47,13 +49,15 @@ Argument|Type|Default|Description
 `$url`|`string`|``|
 `$body`|`string`|`''`|
 `$headers`|`array`|`array()`|
-`$options`|`[Options](HttpClient/Options.md)`|`null`|
+`$options`|[`Options`](HttpClient/Options.md)|`null`|
+
+Return Value: [`Response`](HttpClient/Response.md)
 
 ### requestAsync()
 
 
 ```php
-abstract public function requestAsync(string $method, string $url, string $body = '', array $headers = array(), [Options](HttpClient/Options.md) $options = null): \GuzzleHttp\Promise\PromiseInterface
+abstract public function requestAsync(string $method, string $url, string $body = '', array $headers = array(), Options $options = null): \GuzzleHttp\Promise\PromiseInterface
 ```
 
 
@@ -67,7 +71,9 @@ Argument|Type|Default|Description
 `$url`|`string`|``|
 `$body`|`string`|`''`|
 `$headers`|`array`|`array()`|
-`$options`|`[Options](HttpClient/Options.md)`|`null`|
+`$options`|[`Options`](HttpClient/Options.md)|`null`|
+
+Return Value: `\GuzzleHttp\Promise\PromiseInterface`
 
 ### __call()
 
@@ -87,4 +93,6 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$functionName`|`string`|``|HTTP verb as method name
 `$arguments`|`array`|``|Arguments to pass to request method
+
+Return Value: `object`
 

@@ -34,6 +34,8 @@ public function __toString(): string
 
 
 
+Return Value: `string`
+
 ### toString()
 
 
@@ -47,11 +49,13 @@ public function toString(): string
 
 
 
+Return Value: `string`
+
 ### createFromPosix()
 
 
 ```php
-static public function createFromPosix(string $locale): [Locale](Locale.md)
+static public function createFromPosix(string $locale): Locale
 ```
 
 
@@ -62,4 +66,6 @@ static public function createFromPosix(string $locale): [Locale](Locale.md)
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$locale`|`string`|``|
+
+Return Value: [`Locale`](Locale.md)
 

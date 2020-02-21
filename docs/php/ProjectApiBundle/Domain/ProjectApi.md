@@ -23,3 +23,5 @@ public function getSearchableAttributes(): array
 
 
 
+Return Value: `array`
+

@@ -31,6 +31,8 @@ Argument|Type|Default|Description
 `$customerDir`|`string`|``|
 `$deployedCustomers`|`string`|``|
 
+Return Value: `mixed`
+
 ### getCustomers()
 
 
@@ -44,11 +46,13 @@ public function getCustomers(): array
 
 
 
+Return Value: `array`
+
 ### getCustomer()
 
 
 ```php
-public function getCustomer(string $customerName): [Customer](Customer.md)
+public function getCustomer(string $customerName): Customer
 ```
 
 
@@ -60,11 +64,13 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$customerName`|`string`|``|
 
+Return Value: [`Customer`](Customer.md)
+
 ### getProject()
 
 
 ```php
-public function getProject(string $customerName, string $projectName): [Project](Project.md)
+public function getProject(string $customerName, string $projectName): Project
 ```
 
 
@@ -77,11 +83,13 @@ Argument|Type|Default|Description
 `$customerName`|`string`|``|
 `$projectName`|`string`|``|
 
+Return Value: [`Project`](Project.md)
+
 ### getForHost()
 
 
 ```php
-public function getForHost(string $host): [Customer](Customer.md)
+public function getForHost(string $host): Customer
 ```
 
 
@@ -92,4 +100,6 @@ public function getForHost(string $host): [Customer](Customer.md)
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$host`|`string`|``|
+
+Return Value: [`Customer`](Customer.md)
 

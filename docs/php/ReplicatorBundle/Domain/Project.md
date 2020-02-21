@@ -20,7 +20,7 @@ follow any defined schema.
 `languages`|`string[]`|`[]`|
 `defaultLanguage`|`string[]`|``|
 `projectSpecific`|`string[]`|`[]`|
-`endpoints`|`[Endpoint](Endpoint.md)[]`|`[]`|
+`endpoints`|`Endpoint[]`|`[]`|
 
 ## Methods
 
@@ -42,4 +42,6 @@ public function getConfigurationSection(string $sectionName): object
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$sectionName`|`string`|``|
+
+Return Value: `object`
 

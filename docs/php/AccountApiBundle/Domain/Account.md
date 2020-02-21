@@ -13,11 +13,11 @@ Property|Type|Default|Description
 `lastName`|`string`|``|
 `birthday`|`\DateTime`|``|
 `data`|`array`|`[]`|
-`groups`|`[Group](Group.md)[]`|`[]`|
+`groups`|`Group[]`|`[]`|
 `confirmationToken`|`string`|``|
 `confirmed`|`string`|`false`|
 `tokenValidUntil`|`\Frontastic\Common\AccountApiBundle\Domain\DateTime`|``|
-`addresses`|`[Address](Address.md)[]`|`[]`|
+`addresses`|`Address[]`|`[]`|
 `dangerousInnerAccount`|`mixed`|``|Access original object from backend
 
 ## Methods
@@ -51,6 +51,8 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$password`|`string`|``|
 
+Return Value: `mixed`
+
 ### isValidPassword()
 
 
@@ -67,6 +69,8 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$password`|`string`|``|
 
+Return Value: `bool`
+
 ### getUsername()
 
 
@@ -79,6 +83,8 @@ public function getUsername(): mixed
 
 
 
+
+Return Value: `mixed`
 
 ### getRoles()
 
@@ -93,6 +99,8 @@ public function getRoles(): mixed
 
 
 
+Return Value: `mixed`
+
 ### getPassword()
 
 
@@ -105,6 +113,8 @@ public function getPassword(): mixed
 
 
 
+
+Return Value: `mixed`
 
 ### getSalt()
 
@@ -119,6 +129,8 @@ public function getSalt(): mixed
 
 
 
+Return Value: `mixed`
+
 ### eraseCredentials()
 
 
@@ -131,6 +143,8 @@ public function eraseCredentials(): mixed
 
 
 
+
+Return Value: `mixed`
 
 ### assertPermission()
 
@@ -148,11 +162,13 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$required`|`string`|``|
 
+Return Value: `mixed`
+
 ### cleanForSession()
 
 
 ```php
-public function cleanForSession(): [Account](Account.md)
+public function cleanForSession(): Account
 ```
 
 
@@ -160,6 +176,8 @@ public function cleanForSession(): [Account](Account.md)
 
 
 
+
+Return Value: [`Account`](Account.md)
 
 ### serialize()
 
@@ -173,6 +191,8 @@ public function serialize(): mixed
 
 
 
+
+Return Value: `mixed`
 
 ### unserialize()
 
@@ -189,4 +209,6 @@ public function unserialize(mixed $serialized): mixed
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$serialized`|`mixed`|``|
+
+Return Value: `mixed`
 

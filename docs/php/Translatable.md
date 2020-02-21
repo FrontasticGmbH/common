@@ -24,6 +24,8 @@ public function getTranslationCode(): string
 
 
 
+Return Value: `string`
+
 ### getTranslationParameters()
 
 
@@ -36,4 +38,6 @@ public function getTranslationParameters(): object
 
 
 
+
+Return Value: `object`
 

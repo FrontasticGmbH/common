@@ -29,11 +29,13 @@ Argument|Type|Default|Description
 `$propertyExcludeList`|`array`|`[]`|
 `$objectEnhancers`|`iterable`|`[]`|
 
+Return Value: `mixed`
+
 ### addEnhancer()
 
 
 ```php
-public function addEnhancer([JsonSerializer](JsonSerializer.md)\ObjectEnhancer $enhancer): void
+public function addEnhancer(JsonSerializer\ObjectEnhancer $enhancer): void
 ```
 
 
@@ -43,7 +45,9 @@ public function addEnhancer([JsonSerializer](JsonSerializer.md)\ObjectEnhancer $
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$enhancer`|`[JsonSerializer](JsonSerializer.md)\ObjectEnhancer`|``|
+`$enhancer`|`JsonSerializer\ObjectEnhancer`|``|
+
+Return Value: `void`
 
 ### serialize()
 
@@ -62,4 +66,6 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$item`|`mixed`|``|
 `$visitedIds`|`mixed`|`array()`|
+
+Return Value: `mixed`
 

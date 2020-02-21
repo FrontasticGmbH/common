@@ -13,7 +13,7 @@ Property|Type|Default|Description
 `slug`|`string`|``|
 `description`|`string`|``|
 `categories`|`string[]`|`[]`|
-`variants`|`[Variant](Variant.md)[]`|`[]`|
+`variants`|`Variant[]`|`[]`|
 `dangerousInnerProduct`|`mixed`|``|Access original object from backend
 
 ## Methods
@@ -36,4 +36,6 @@ public function __get(mixed $name): mixed
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$name`|`mixed`|``|
+
+Return Value: `mixed`
 

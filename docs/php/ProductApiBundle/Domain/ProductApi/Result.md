@@ -10,8 +10,8 @@ Property|Type|Default|Description
 `total`|`int`|``|
 `count`|`int`|``|
 `items`|`array`|`[]`|
-`facets`|`[Facet](Result/Facet.md)[]`|`[]`|
-`query`|`[Query](Query.md)`|``|The query used to generate this result (cloned)
+`facets`|`Facet[]`|`[]`|
+`query`|`Query`|``|The query used to generate this result (cloned)
 
 ## Methods
 
@@ -32,6 +32,8 @@ public function getIterator(): \Traversable
 
 
 
+Return Value: `\Traversable`
+
 ### count()
 
 
@@ -44,4 +46,6 @@ public function count(): int
 
 
 
+
+Return Value: `int`
 

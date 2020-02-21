@@ -27,3 +27,5 @@ Argument|Type|Default|Description
 `$directories`|`array`|``|
 `$baseConfig`|`array`|`[]`|
 
+Return Value: `void`
+

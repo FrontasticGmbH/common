@@ -11,6 +11,6 @@ Property|Type|Default|Description
 `anonymousId`|`string`|``|
 `accountId`|`string`|``|
 `name`|`string[]`|`[]`|
-`lineItems`|`[LineItem](LineItem.md)[]`|`[]`|
+`lineItems`|`LineItem[]`|`[]`|
 `dangerousInnerWishlist`|`mixed`|``|Access original object from backend
 

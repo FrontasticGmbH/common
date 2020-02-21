@@ -33,6 +33,8 @@ public function getPathAsArray(): array
 
 
 
+Return Value: `array`
+
 ### getAncestorIds()
 
 
@@ -46,6 +48,8 @@ public function getAncestorIds(): array
 
 
 
+Return Value: `array`
+
 ### getParentCategoryId()
 
 
@@ -58,4 +62,6 @@ public function getParentCategoryId(): ?string
 
 
 
+
+Return Value: `?string`
 

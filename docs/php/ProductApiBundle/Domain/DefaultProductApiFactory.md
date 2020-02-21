@@ -15,7 +15,7 @@ Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\DefaultProductApiF
 
 
 ```php
-public function __construct([ProductApi](ProductApi.md)\Commercetools\ClientFactory $commercetoolsClientFactory, [ProductApi](ProductApi.md)\Commercetools\Locale\CommercetoolsLocaleCreatorFactory $localeCreatorFactory, iterable $decorators = []): mixed
+public function __construct(ProductApi\Commercetools\ClientFactory $commercetoolsClientFactory, ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory $localeCreatorFactory, iterable $decorators = []): mixed
 ```
 
 
@@ -25,15 +25,17 @@ public function __construct([ProductApi](ProductApi.md)\Commercetools\ClientFact
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$commercetoolsClientFactory`|`[ProductApi](ProductApi.md)\Commercetools\ClientFactory`|``|
-`$localeCreatorFactory`|`[ProductApi](ProductApi.md)\Commercetools\Locale\CommercetoolsLocaleCreatorFactory`|``|
+`$commercetoolsClientFactory`|`ProductApi\Commercetools\ClientFactory`|``|
+`$localeCreatorFactory`|`ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory`|``|
 `$decorators`|`iterable`|`[]`|
+
+Return Value: `mixed`
 
 ### factor()
 
 
 ```php
-public function factor([Project](../../ReplicatorBundle/Domain/Project.md) $project): [ProductApi](ProductApi.md)
+public function factor(Project $project): ProductApi
 ```
 
 
@@ -43,5 +45,7 @@ public function factor([Project](../../ReplicatorBundle/Domain/Project.md) $proj
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$project`|`[Project](../../ReplicatorBundle/Domain/Project.md)`|``|
+`$project`|[`Project`](../../ReplicatorBundle/Domain/Project.md)|``|
+
+Return Value: [`ProductApi`](ProductApi.md)
 

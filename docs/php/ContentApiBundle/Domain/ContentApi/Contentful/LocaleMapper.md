@@ -26,3 +26,5 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$frontasticLocale`|`string`|``|
 
+Return Value: `string`
+

@@ -24,6 +24,8 @@ public function get(): string
 
 
 
+Return Value: `string`
+
 ### next()
 
 
@@ -39,4 +41,6 @@ public function next(string $sequence): string
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$sequence`|`string`|``|
+
+Return Value: `string`
 

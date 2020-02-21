@@ -9,15 +9,15 @@ Property|Type|Default|Description
 `cartId`|`string`|``|
 `cartVersion`|`string`|``|
 `custom`|`array`|`[]`|
-`lineItems`|`[LineItem](LineItem.md)[]`|`[]`|
+`lineItems`|`LineItem[]`|`[]`|
 `email`|`string`|``|
 `birthday`|`\DateTimeImmutable`|``|
-`shippingMethod`|`?[ShippingMethod](ShippingMethod.md)`|``|
-`shippingAddress`|`?[Address](../../AccountApiBundle/Domain/Address.md)`|``|
-`billingAddress`|`?[Address](../../AccountApiBundle/Domain/Address.md)`|``|
+`shippingMethod`|`?ShippingMethod`|``|
+`shippingAddress`|`?Address`|``|
+`billingAddress`|`?Address`|``|
 `sum`|`int`|``|
 `currency`|`string`|``|
-`payments`|`[Payment](Payment.md)[]`|`[]`|
+`payments`|`Payment[]`|`[]`|
 `discountCodes`|`string[]`|`[]`|
 `dangerousInnerCart`|`mixed`|``|Access original object from backend
 
@@ -45,6 +45,8 @@ public function getPayedAmount(): int
 
 
 
+Return Value: `int`
+
 ### hasUser()
 
 
@@ -57,6 +59,8 @@ public function hasUser(): bool
 
 
 
+
+Return Value: `bool`
 
 ### hasShippingAddress()
 
@@ -71,6 +75,8 @@ public function hasShippingAddress(): bool
 
 
 
+Return Value: `bool`
+
 ### hasBillingAddress()
 
 
@@ -83,6 +89,8 @@ public function hasBillingAddress(): bool
 
 
 
+
+Return Value: `bool`
 
 ### hasAddresses()
 
@@ -97,6 +105,8 @@ public function hasAddresses(): bool
 
 
 
+Return Value: `bool`
+
 ### hasCompletePayments()
 
 
@@ -110,6 +120,8 @@ public function hasCompletePayments(): bool
 
 
 
+Return Value: `bool`
+
 ### isComplete()
 
 
@@ -122,4 +134,6 @@ public function isComplete(): bool
 
 
 
+
+Return Value: `bool`
 

@@ -28,6 +28,8 @@ Argument|Type|Default|Description
 `$request`|`\Symfony\Component\HttpFoundation\Request`|``|
 `$secret`|`string`|``|
 
+Return Value: `bool`
+
 ### ensure()
 
 
@@ -44,4 +46,6 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$request`|`\Symfony\Component\HttpFoundation\Request`|``|
 `$secret`|`string`|``|
+
+Return Value: `mixed`
 

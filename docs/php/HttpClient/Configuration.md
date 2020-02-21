@@ -6,7 +6,7 @@ Fully Qualified: [`\Frontastic\Common\HttpClient\Configuration`](../../../src/ph
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`options`|`[Options](Options.md)`|`null`|
+`options`|`Options`|`null`|
 `defaultHeaders`|`string[]`|`[]`|List (not hashmap!) of headers
 `signatureSecret`|`string|null`|`null`|
 `collectStats`|`bool`|`true`|
