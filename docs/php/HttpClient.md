@@ -7,9 +7,18 @@ Fully Qualified: [`\Frontastic\Common\HttpClient`](../../src/php/HttpClient.php)
 
 ## Methods
 
-### addDefaultHeaders
+* [addDefaultHeaders()](#addDefaultHeaders)
+* [request()](#request)
+* [requestAsync()](#requestAsync)
+* [__call()](#call)
 
-`abstract function addDefaultHeaders(array headers): mixed`
+
+### addDefaultHeaders()
+
+
+```php
+abstract public function addDefaultHeaders(array headers): mixed
+```
 
 
 
@@ -20,30 +29,16 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$headers`|`array`|``|
 
-### request
+### request()
 
-`function request(string method, string url, string body = '', array headers = array(), \Frontastic\Common\HttpClient\Options options = null): \Frontastic\Common\HttpClient\Response`
+
+```php
+public function request(string method, string url, string body = '', array headers = array(), \Frontastic\Common\HttpClient\Options options = null): \Frontastic\Common\HttpClient\Response
+```
 
 
 *Make any HTTP request*
 
-**
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$method`|`string`|``|
-`$url`|`string`|``|
-`$body`|`string`|`''`|
-`$headers`|`array`|`array()`|
-`$options`|`\Frontastic\Common\HttpClient\Options`|`null`|
-
-### requestAsync
-
-`abstract function requestAsync(string method, string url, string body = '', array headers = array(), \Frontastic\Common\HttpClient\Options options = null): \GuzzleHttp\Promise\PromiseInterface`
-
-
-
-
 
 
 Argument|Type|Default|Description
@@ -54,16 +49,39 @@ Argument|Type|Default|Description
 `$headers`|`array`|`array()`|
 `$options`|`\Frontastic\Common\HttpClient\Options`|`null`|
 
-### __call
+### requestAsync()
 
-`function __call(string functionName, array arguments): object`
+
+```php
+abstract public function requestAsync(string method, string url, string body = '', array headers = array(), \Frontastic\Common\HttpClient\Options options = null): \GuzzleHttp\Promise\PromiseInterface
+```
+
+
+
+
+
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$method`|`string`|``|
+`$url`|`string`|``|
+`$body`|`string`|`''`|
+`$headers`|`array`|`array()`|
+`$options`|`\Frontastic\Common\HttpClient\Options`|`null`|
+
+### __call()
+
+
+```php
+public function __call(string functionName, array arguments): object
+```
 
 
 *Expose HTTP verbs as methods*
 
-*Magic wrapper for the request() method which allows you to use the HTTP
+Magic wrapper for the request() method which allows you to use the HTTP
 verbs as method names on this object. So ->get('http://example.com/')
-will work. All parameters are passed on to the request() method.*
+will work. All parameters are passed on to the request() method.
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

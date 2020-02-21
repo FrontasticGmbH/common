@@ -22,9 +22,25 @@ Property|Type|Default|Description
 
 ## Methods
 
-### setPassword
+* [setPassword()](#setPassword)
+* [isValidPassword()](#isValidPassword)
+* [getUsername()](#getUsername)
+* [getRoles()](#getRoles)
+* [getPassword()](#getPassword)
+* [getSalt()](#getSalt)
+* [eraseCredentials()](#eraseCredentials)
+* [assertPermission()](#assertPermission)
+* [cleanForSession()](#cleanForSession)
+* [serialize()](#serialize)
+* [unserialize()](#unserialize)
 
-`function setPassword(string password): mixed`
+
+### setPassword()
+
+
+```php
+public function setPassword(string password): mixed
+```
 
 
 
@@ -35,9 +51,12 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$password`|`string`|``|
 
-### isValidPassword
+### isValidPassword()
 
-`function isValidPassword(string password): bool`
+
+```php
+public function isValidPassword(string password): bool
+```
 
 
 
@@ -48,19 +67,12 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$password`|`string`|``|
 
-### getUsername
-
-`function getUsername(): mixed`
+### getUsername()
 
 
-
-
-
-
-
-### getRoles
-
-`function getRoles(): mixed`
+```php
+public function getUsername(): mixed
+```
 
 
 
@@ -68,19 +80,12 @@ Argument|Type|Default|Description
 
 
 
-### getPassword
-
-`function getPassword(): mixed`
+### getRoles()
 
 
-
-
-
-
-
-### getSalt
-
-`function getSalt(): mixed`
+```php
+public function getRoles(): mixed
+```
 
 
 
@@ -88,19 +93,51 @@ Argument|Type|Default|Description
 
 
 
-### eraseCredentials
-
-`function eraseCredentials(): mixed`
+### getPassword()
 
 
+```php
+public function getPassword(): mixed
+```
 
 
 
 
 
-### assertPermission
 
-`function assertPermission(string required): mixed`
+
+### getSalt()
+
+
+```php
+public function getSalt(): mixed
+```
+
+
+
+
+
+
+
+### eraseCredentials()
+
+
+```php
+public function eraseCredentials(): mixed
+```
+
+
+
+
+
+
+
+### assertPermission()
+
+
+```php
+public function assertPermission(string required): mixed
+```
 
 
 
@@ -111,19 +148,12 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$required`|`string`|``|
 
-### cleanForSession
-
-`function cleanForSession(): \Frontastic\Common\AccountApiBundle\Domain\Account`
+### cleanForSession()
 
 
-
-
-**
-
-
-### serialize
-
-`function serialize(): mixed`
+```php
+public function cleanForSession(): \Frontastic\Common\AccountApiBundle\Domain\Account
+```
 
 
 
@@ -131,9 +161,25 @@ Argument|Type|Default|Description
 
 
 
-### unserialize
+### serialize()
 
-`function unserialize(mixed serialized): mixed`
+
+```php
+public function serialize(): mixed
+```
+
+
+
+
+
+
+
+### unserialize()
+
+
+```php
+public function unserialize(mixed serialized): mixed
+```
 
 
 

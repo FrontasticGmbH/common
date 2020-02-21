@@ -7,19 +7,29 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\SequenceProvider`]
 
 ## Methods
 
-### get
-
-`function get(): string`
-
+* [get()](#get)
+* [next()](#next)
 
 
+### get()
+
+
+```php
+public function get(): string
+```
 
 
 
 
-### next
 
-`function next(string sequence): string`
+
+
+### next()
+
+
+```php
+public function next(string sequence): string
+```
 
 
 

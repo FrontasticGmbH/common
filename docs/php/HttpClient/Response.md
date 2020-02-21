@@ -12,9 +12,15 @@ Property|Type|Default|Description
 
 ## Methods
 
-### __toString
+* [__toString()](#toString)
 
-`function __toString(): mixed`
+
+### __toString()
+
+
+```php
+public function __toString(): mixed
+```
 
 
 

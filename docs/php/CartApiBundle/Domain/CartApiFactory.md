@@ -7,9 +7,16 @@ Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\CartApiFactory`](../.
 
 ## Methods
 
-### __construct
+* [__construct()](#construct)
+* [factor()](#factor)
 
-`function __construct(\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory commercetoolsClientFactory, \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory localeCreatorFactory, \Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator orderIdGenerator, iterable decorators): mixed`
+
+### __construct()
+
+
+```php
+public function __construct(\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory commercetoolsClientFactory, \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory localeCreatorFactory, \Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator orderIdGenerator, iterable decorators): mixed
+```
 
 
 
@@ -23,9 +30,12 @@ Argument|Type|Default|Description
 `$orderIdGenerator`|`\Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator`|``|
 `$decorators`|`iterable`|``|
 
-### factor
+### factor()
 
-`function factor(\Frontastic\Common\ReplicatorBundle\Domain\Project project): \Frontastic\Common\CartApiBundle\Domain\CartApi`
+
+```php
+public function factor(\Frontastic\Common\ReplicatorBundle\Domain\Project project): \Frontastic\Common\CartApiBundle\Domain\CartApi
+```
 
 
 

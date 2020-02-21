@@ -7,14 +7,20 @@ Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator`](..
 
 ## Methods
 
-### getOrderId
-
-`function getOrderId(\Frontastic\Common\CartApiBundle\Domain\Cart cart): string`
+* [getOrderId()](#getOrderId)
 
 
+### getOrderId()
 
 
-**
+```php
+public function getOrderId(\Frontastic\Common\CartApiBundle\Domain\Cart cart): string
+```
+
+
+
+
+
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

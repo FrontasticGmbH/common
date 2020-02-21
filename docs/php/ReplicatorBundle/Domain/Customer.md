@@ -17,13 +17,19 @@ Property|Type|Default|Description
 
 ## Methods
 
-### getLowestEnvironment
+* [getLowestEnvironment()](#getLowestEnvironment)
 
-`function getLowestEnvironment(): string`
+
+### getLowestEnvironment()
+
+
+```php
+public function getLowestEnvironment(): string
+```
 
 
 *Get the environment with the lowest priority. This will return 'development' for the default environments.*
 
-**
+
 
 

@@ -7,14 +7,20 @@ Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\P
 
 ## Methods
 
-### queryFromParameters
-
-`static function queryFromParameters(array defaults, array parameters, array overrides = []): \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery`
+* [queryFromParameters()](#queryFromParameters)
 
 
+### queryFromParameters()
 
 
-**
+```php
+static public function queryFromParameters(array defaults, array parameters, array overrides = []): \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery
+```
+
+
+
+
+
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

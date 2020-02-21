@@ -7,9 +7,16 @@ Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\DefaultProductApiF
 
 ## Methods
 
-### __construct
+* [__construct()](#construct)
+* [factor()](#factor)
 
-`function __construct(\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory commercetoolsClientFactory, \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory localeCreatorFactory, iterable decorators = []): mixed`
+
+### __construct()
+
+
+```php
+public function __construct(\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory commercetoolsClientFactory, \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory localeCreatorFactory, iterable decorators = []): mixed
+```
 
 
 
@@ -22,9 +29,12 @@ Argument|Type|Default|Description
 `$localeCreatorFactory`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory`|``|
 `$decorators`|`iterable`|`[]`|
 
-### factor
+### factor()
 
-`function factor(\Frontastic\Common\ReplicatorBundle\Domain\Project project): \Frontastic\Common\ProductApiBundle\Domain\ProductApi`
+
+```php
+public function factor(\Frontastic\Common\ReplicatorBundle\Domain\Project project): \Frontastic\Common\ProductApiBundle\Domain\ProductApi
+```
 
 
 

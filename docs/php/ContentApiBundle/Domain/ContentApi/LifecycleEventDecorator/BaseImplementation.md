@@ -25,9 +25,20 @@ need to tag your service based on this class with
 
 ## Methods
 
-### beforeGetContentTypes
+* [beforeGetContentTypes()](#beforeGetContentTypes)
+* [afterGetContentTypes()](#afterGetContentTypes)
+* [beforeGetContent()](#beforeGetContent)
+* [afterGetContent()](#afterGetContent)
+* [beforeQuery()](#beforeQuery)
+* [afterQuery()](#afterQuery)
 
-`function beforeGetContentTypes(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi): void`
+
+### beforeGetContentTypes()
+
+
+```php
+public function beforeGetContentTypes(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi): void
+```
 
 
 
@@ -38,23 +49,29 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$contentApi`|`\Frontastic\Common\ContentApiBundle\Domain\ContentApi`|``|
 
-### afterGetContentTypes
-
-`function afterGetContentTypes(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi, array contentTypes): ?array`
+### afterGetContentTypes()
 
 
+```php
+public function afterGetContentTypes(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi, array contentTypes): ?array
+```
 
 
-**
+
+
+
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$contentApi`|`\Frontastic\Common\ContentApiBundle\Domain\ContentApi`|``|
 `$contentTypes`|`array`|``|
 
-### beforeGetContent
+### beforeGetContent()
 
-`function beforeGetContent(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi, string contentId, string locale = null, string mode = ContentApi::QUERY_SYNC): void`
+
+```php
+public function beforeGetContent(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi, string contentId, string locale = null, string mode = ContentApi::QUERY_SYNC): void
+```
 
 
 
@@ -68,9 +85,12 @@ Argument|Type|Default|Description
 `$locale`|`string`|`null`|
 `$mode`|`string`|`ContentApi::QUERY_SYNC`|
 
-### afterGetContent
+### afterGetContent()
 
-`function afterGetContent(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi, ?\Frontastic\Common\ContentApiBundle\Domain\ContentApi\Content content): ?\Frontastic\Common\ContentApiBundle\Domain\ContentApi\Content`
+
+```php
+public function afterGetContent(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi, ?\Frontastic\Common\ContentApiBundle\Domain\ContentApi\Content content): ?\Frontastic\Common\ContentApiBundle\Domain\ContentApi\Content
+```
 
 
 
@@ -82,9 +102,12 @@ Argument|Type|Default|Description
 `$contentApi`|`\Frontastic\Common\ContentApiBundle\Domain\ContentApi`|``|
 `$content`|`?\Frontastic\Common\ContentApiBundle\Domain\ContentApi\Content`|``|
 
-### beforeQuery
+### beforeQuery()
 
-`function beforeQuery(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi, \Frontastic\Common\ContentApiBundle\Domain\Query query, string locale = null, string mode = ContentApi::QUERY_SYNC): void`
+
+```php
+public function beforeQuery(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi, \Frontastic\Common\ContentApiBundle\Domain\Query query, string locale = null, string mode = ContentApi::QUERY_SYNC): void
+```
 
 
 
@@ -98,9 +121,12 @@ Argument|Type|Default|Description
 `$locale`|`string`|`null`|
 `$mode`|`string`|`ContentApi::QUERY_SYNC`|
 
-### afterQuery
+### afterQuery()
 
-`function afterQuery(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi, ?\Frontastic\Common\ContentApiBundle\Domain\Result result): ?\Frontastic\Common\ContentApiBundle\Domain\Result`
+
+```php
+public function afterQuery(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi, ?\Frontastic\Common\ContentApiBundle\Domain\Result result): ?\Frontastic\Common\ContentApiBundle\Domain\Result
+```
 
 
 

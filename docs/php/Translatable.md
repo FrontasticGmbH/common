@@ -7,19 +7,29 @@ Fully Qualified: [`\Frontastic\Common\Translatable`](../../src/php/Translatable.
 
 ## Methods
 
-### getTranslationCode
-
-`function getTranslationCode(): string`
-
+* [getTranslationCode()](#getTranslationCode)
+* [getTranslationParameters()](#getTranslationParameters)
 
 
+### getTranslationCode()
+
+
+```php
+public function getTranslationCode(): string
+```
 
 
 
 
-### getTranslationParameters
 
-`function getTranslationParameters(): object`
+
+
+### getTranslationParameters()
+
+
+```php
+public function getTranslationParameters(): object
+```
 
 
 

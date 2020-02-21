@@ -15,29 +15,43 @@ Property|Type|Default|Description
 
 ## Methods
 
-### getPathAsArray
-
-`function getPathAsArray(): array`
-
-
+* [getPathAsArray()](#getPathAsArray)
+* [getAncestorIds()](#getAncestorIds)
+* [getParentCategoryId()](#getParentCategoryId)
 
 
-**
+### getPathAsArray()
 
 
-### getAncestorIds
-
-`function getAncestorIds(): array`
+```php
+public function getPathAsArray(): array
+```
 
 
 
 
-**
 
 
-### getParentCategoryId
 
-`function getParentCategoryId(): ?string`
+### getAncestorIds()
+
+
+```php
+public function getAncestorIds(): array
+```
+
+
+
+
+
+
+
+### getParentCategoryId()
+
+
+```php
+public function getParentCategoryId(): ?string
+```
 
 
 

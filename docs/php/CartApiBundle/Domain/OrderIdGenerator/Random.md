@@ -7,9 +7,15 @@ Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator\Rand
 
 ## Methods
 
-### getOrderId
+* [getOrderId()](#getOrderId)
 
-`function getOrderId(\Frontastic\Common\CartApiBundle\Domain\Cart cart): string`
+
+### getOrderId()
+
+
+```php
+public function getOrderId(\Frontastic\Common\CartApiBundle\Domain\Cart cart): string
+```
 
 
 

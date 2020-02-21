@@ -7,9 +7,16 @@ Fully Qualified: [`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApiFactor
 
 ## Methods
 
-### __construct
+* [__construct()](#construct)
+* [factor()](#factor)
 
-`function __construct(\Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory productApiFactory, \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory commercetoolsClientFactory, iterable decorators): mixed`
+
+### __construct()
+
+
+```php
+public function __construct(\Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory productApiFactory, \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory commercetoolsClientFactory, iterable decorators): mixed
+```
 
 
 
@@ -22,9 +29,12 @@ Argument|Type|Default|Description
 `$commercetoolsClientFactory`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory`|``|
 `$decorators`|`iterable`|``|
 
-### factor
+### factor()
 
-`function factor(\Frontastic\Common\ReplicatorBundle\Domain\Project project): \Frontastic\Common\WishlistApiBundle\Domain\WishlistApi`
+
+```php
+public function factor(\Frontastic\Common\ReplicatorBundle\Domain\Project project): \Frontastic\Common\WishlistApiBundle\Domain\WishlistApi
+```
 
 
 

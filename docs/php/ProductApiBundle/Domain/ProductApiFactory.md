@@ -7,9 +7,15 @@ Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory`
 
 ## Methods
 
-### factor
+* [factor()](#factor)
 
-`function factor(\Frontastic\Common\ReplicatorBundle\Domain\Project project): \Frontastic\Common\ProductApiBundle\Domain\ProductApi`
+
+### factor()
+
+
+```php
+public function factor(\Frontastic\Common\ReplicatorBundle\Domain\Project project): \Frontastic\Common\ProductApiBundle\Domain\ProductApi
+```
 
 
 

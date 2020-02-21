@@ -7,9 +7,15 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\Source`](../../../
 
 ## Methods
 
-### updates
+* [updates()](#updates)
 
-`function updates(string since, int count): array`
+
+### updates()
+
+
+```php
+public function updates(string since, int count): array
+```
 
 
 

@@ -24,9 +24,15 @@ follow any defined schema.
 
 ## Methods
 
-### getConfigurationSection
+* [getConfigurationSection()](#getConfigurationSection)
 
-`function getConfigurationSection(string sectionName): object`
+
+### getConfigurationSection()
+
+
+```php
+public function getConfigurationSection(string sectionName): object
+```
 
 
 

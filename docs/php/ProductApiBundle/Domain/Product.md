@@ -18,14 +18,20 @@ Property|Type|Default|Description
 
 ## Methods
 
-### __get
-
-`function __get(mixed name): mixed`
+* [__get()](#get)
 
 
+### __get()
 
 
-**
+```php
+public function __get(mixed name): mixed
+```
+
+
+
+
+
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

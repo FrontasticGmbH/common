@@ -13,14 +13,20 @@ Property|Type|Default|Description
 
 ## Methods
 
-### fromArray
-
-`static function fromArray(array data, bool ignoreAdditionalAttributes = false): \Frontastic\Common\ContentApiBundle\Domain\Query`
+* [fromArray()](#fromArray)
 
 
+### fromArray()
 
 
-**
+```php
+static public function fromArray(array data, bool ignoreAdditionalAttributes = false): \Frontastic\Common\ContentApiBundle\Domain\Query
+```
+
+
+
+
+
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

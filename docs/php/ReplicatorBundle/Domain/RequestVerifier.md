@@ -7,9 +7,16 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\RequestVerifier`](
 
 ## Methods
 
-### isValid
+* [isValid()](#isValid)
+* [ensure()](#ensure)
 
-`function isValid(\Symfony\Component\HttpFoundation\Request request, string secret): bool`
+
+### isValid()
+
+
+```php
+public function isValid(\Symfony\Component\HttpFoundation\Request request, string secret): bool
+```
 
 
 
@@ -21,9 +28,12 @@ Argument|Type|Default|Description
 `$request`|`\Symfony\Component\HttpFoundation\Request`|``|
 `$secret`|`string`|``|
 
-### ensure
+### ensure()
 
-`function ensure(\Symfony\Component\HttpFoundation\Request request, string secret): mixed`
+
+```php
+public function ensure(\Symfony\Component\HttpFoundation\Request request, string secret): mixed
+```
 
 
 

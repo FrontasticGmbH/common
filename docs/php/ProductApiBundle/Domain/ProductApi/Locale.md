@@ -16,29 +16,43 @@ Property|Type|Default|Description
 
 ## Methods
 
-### __toString
-
-`function __toString(): string`
-
-
+* [__toString()](#toString)
+* [toString()](#toString)
+* [createFromPosix()](#createFromPosix)
 
 
-**
+### __toString()
 
 
-### toString
-
-`function toString(): string`
+```php
+public function __toString(): string
+```
 
 
 
 
-**
 
 
-### createFromPosix
 
-`static function createFromPosix(string locale): \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale`
+### toString()
+
+
+```php
+public function toString(): string
+```
+
+
+
+
+
+
+
+### createFromPosix()
+
+
+```php
+static public function createFromPosix(string locale): \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale
+```
 
 
 

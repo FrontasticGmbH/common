@@ -7,14 +7,20 @@ Fully Qualified: [`\Frontastic\Common\ContentApiBundle\Domain\ContentApi\Content
 
 ## Methods
 
-### replaceLocale
-
-`function replaceLocale(string frontasticLocale): string`
+* [replaceLocale()](#replaceLocale)
 
 
+### replaceLocale()
 
 
-**
+```php
+public function replaceLocale(string frontasticLocale): string
+```
+
+
+
+
+
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

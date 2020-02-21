@@ -21,13 +21,19 @@ Property|Type|Default|Description
 
 ## Methods
 
-### validate
-
-`function validate(): void`
+* [validate()](#validate)
 
 
+### validate()
 
 
-**
+```php
+public function validate(): void
+```
+
+
+
+
+
 
 

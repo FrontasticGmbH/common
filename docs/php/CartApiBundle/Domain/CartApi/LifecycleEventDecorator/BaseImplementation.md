@@ -25,9 +25,49 @@ need to tag your service based on this class with
 
 ## Methods
 
-### beforeGetForUser
+* [beforeGetForUser()](#beforeGetForUser)
+* [afterGetForUser()](#afterGetForUser)
+* [beforeGetAnonymous()](#beforeGetAnonymous)
+* [afterGetAnonymous()](#afterGetAnonymous)
+* [beforeGetById()](#beforeGetById)
+* [afterGetById()](#afterGetById)
+* [beforeAddToCart()](#beforeAddToCart)
+* [afterAddToCart()](#afterAddToCart)
+* [beforeUpdateLineItem()](#beforeUpdateLineItem)
+* [afterUpdateLineItem()](#afterUpdateLineItem)
+* [beforeRemoveLineItem()](#beforeRemoveLineItem)
+* [afterRemoveLineItem()](#afterRemoveLineItem)
+* [beforeSetEmail()](#beforeSetEmail)
+* [afterSetEmail()](#afterSetEmail)
+* [beforeSetShippingMethod()](#beforeSetShippingMethod)
+* [afterSetShippingMethod()](#afterSetShippingMethod)
+* [beforeSetCustomField()](#beforeSetCustomField)
+* [afterSetCustomField()](#afterSetCustomField)
+* [beforeSetShippingAddress()](#beforeSetShippingAddress)
+* [afterSetShippingAddress()](#afterSetShippingAddress)
+* [beforeSetBillingAddress()](#beforeSetBillingAddress)
+* [afterSetBillingAddress()](#afterSetBillingAddress)
+* [beforeAddPayment()](#beforeAddPayment)
+* [afterAddPayment()](#afterAddPayment)
+* [beforeRedeemDiscountCode()](#beforeRedeemDiscountCode)
+* [afterRedeemDiscountCode()](#afterRedeemDiscountCode)
+* [beforeOrder()](#beforeOrder)
+* [afterOrder()](#afterOrder)
+* [beforeGetOrder()](#beforeGetOrder)
+* [afterGetOrder()](#afterGetOrder)
+* [beforeGetOrders()](#beforeGetOrders)
+* [afterGetOrders()](#afterGetOrders)
+* [beforeStartTransaction()](#beforeStartTransaction)
+* [beforeCommit()](#beforeCommit)
+* [afterCommit()](#afterCommit)
 
-`function beforeGetForUser(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, string userId, string locale): void`
+
+### beforeGetForUser()
+
+
+```php
+public function beforeGetForUser(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, string userId, string locale): void
+```
 
 
 
@@ -40,9 +80,12 @@ Argument|Type|Default|Description
 `$userId`|`string`|``|
 `$locale`|`string`|``|
 
-### afterGetForUser
+### afterGetForUser()
 
-`function afterGetForUser(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart`
+
+```php
+public function afterGetForUser(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart
+```
 
 
 
@@ -54,9 +97,12 @@ Argument|Type|Default|Description
 `$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
 `$cart`|`\Frontastic\Common\CartApiBundle\Domain\Cart`|``|
 
-### beforeGetAnonymous
+### beforeGetAnonymous()
 
-`function beforeGetAnonymous(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, string anonymousId, string locale): void`
+
+```php
+public function beforeGetAnonymous(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, string anonymousId, string locale): void
+```
 
 
 
@@ -69,9 +115,12 @@ Argument|Type|Default|Description
 `$anonymousId`|`string`|``|
 `$locale`|`string`|``|
 
-### afterGetAnonymous
+### afterGetAnonymous()
 
-`function afterGetAnonymous(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart`
+
+```php
+public function afterGetAnonymous(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart
+```
 
 
 
@@ -83,9 +132,12 @@ Argument|Type|Default|Description
 `$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
 `$cart`|`\Frontastic\Common\CartApiBundle\Domain\Cart`|``|
 
-### beforeGetById
+### beforeGetById()
 
-`function beforeGetById(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, string cartId, string locale = null): void`
+
+```php
+public function beforeGetById(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, string cartId, string locale = null): void
+```
 
 
 
@@ -98,9 +150,12 @@ Argument|Type|Default|Description
 `$cartId`|`string`|``|
 `$locale`|`string`|`null`|
 
-### afterGetById
+### afterGetById()
 
-`function afterGetById(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart`
+
+```php
+public function afterGetById(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart
+```
 
 
 
@@ -112,9 +167,12 @@ Argument|Type|Default|Description
 `$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
 `$cart`|`\Frontastic\Common\CartApiBundle\Domain\Cart`|``|
 
-### beforeAddToCart
+### beforeAddToCart()
 
-`function beforeAddToCart(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart, \Frontastic\Common\CartApiBundle\Domain\LineItem lineItem, string locale = null): void`
+
+```php
+public function beforeAddToCart(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart, \Frontastic\Common\CartApiBundle\Domain\LineItem lineItem, string locale = null): void
+```
 
 
 
@@ -128,9 +186,12 @@ Argument|Type|Default|Description
 `$lineItem`|`\Frontastic\Common\CartApiBundle\Domain\LineItem`|``|
 `$locale`|`string`|`null`|
 
-### afterAddToCart
+### afterAddToCart()
 
-`function afterAddToCart(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart`
+
+```php
+public function afterAddToCart(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart
+```
 
 
 
@@ -142,9 +203,12 @@ Argument|Type|Default|Description
 `$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
 `$cart`|`\Frontastic\Common\CartApiBundle\Domain\Cart`|``|
 
-### beforeUpdateLineItem
+### beforeUpdateLineItem()
 
-`function beforeUpdateLineItem(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart, \Frontastic\Common\CartApiBundle\Domain\LineItem lineItem, int count, ?array custom = null, string locale = null): void`
+
+```php
+public function beforeUpdateLineItem(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart, \Frontastic\Common\CartApiBundle\Domain\LineItem lineItem, int count, ?array custom = null, string locale = null): void
+```
 
 
 
@@ -160,9 +224,12 @@ Argument|Type|Default|Description
 `$custom`|`?array`|`null`|
 `$locale`|`string`|`null`|
 
-### afterUpdateLineItem
+### afterUpdateLineItem()
 
-`function afterUpdateLineItem(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart`
+
+```php
+public function afterUpdateLineItem(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart
+```
 
 
 
@@ -174,9 +241,12 @@ Argument|Type|Default|Description
 `$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
 `$cart`|`\Frontastic\Common\CartApiBundle\Domain\Cart`|``|
 
-### beforeRemoveLineItem
+### beforeRemoveLineItem()
 
-`function beforeRemoveLineItem(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart, \Frontastic\Common\CartApiBundle\Domain\LineItem lineItem, string locale = null): void`
+
+```php
+public function beforeRemoveLineItem(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart, \Frontastic\Common\CartApiBundle\Domain\LineItem lineItem, string locale = null): void
+```
 
 
 
@@ -190,9 +260,12 @@ Argument|Type|Default|Description
 `$lineItem`|`\Frontastic\Common\CartApiBundle\Domain\LineItem`|``|
 `$locale`|`string`|`null`|
 
-### afterRemoveLineItem
+### afterRemoveLineItem()
 
-`function afterRemoveLineItem(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart`
+
+```php
+public function afterRemoveLineItem(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart
+```
 
 
 
@@ -204,9 +277,12 @@ Argument|Type|Default|Description
 `$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
 `$cart`|`\Frontastic\Common\CartApiBundle\Domain\Cart`|``|
 
-### beforeSetEmail
+### beforeSetEmail()
 
-`function beforeSetEmail(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart, string email, string locale = null): void`
+
+```php
+public function beforeSetEmail(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart, string email, string locale = null): void
+```
 
 
 
@@ -220,9 +296,12 @@ Argument|Type|Default|Description
 `$email`|`string`|``|
 `$locale`|`string`|`null`|
 
-### afterSetEmail
+### afterSetEmail()
 
-`function afterSetEmail(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart`
+
+```php
+public function afterSetEmail(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart
+```
 
 
 
@@ -234,9 +313,12 @@ Argument|Type|Default|Description
 `$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
 `$cart`|`\Frontastic\Common\CartApiBundle\Domain\Cart`|``|
 
-### beforeSetShippingMethod
+### beforeSetShippingMethod()
 
-`function beforeSetShippingMethod(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart, string shippingMethod, string locale = null): void`
+
+```php
+public function beforeSetShippingMethod(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart, string shippingMethod, string locale = null): void
+```
 
 
 
@@ -250,9 +332,12 @@ Argument|Type|Default|Description
 `$shippingMethod`|`string`|``|
 `$locale`|`string`|`null`|
 
-### afterSetShippingMethod
+### afterSetShippingMethod()
 
-`function afterSetShippingMethod(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart`
+
+```php
+public function afterSetShippingMethod(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart
+```
 
 
 
@@ -264,9 +349,12 @@ Argument|Type|Default|Description
 `$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
 `$cart`|`\Frontastic\Common\CartApiBundle\Domain\Cart`|``|
 
-### beforeSetCustomField
+### beforeSetCustomField()
 
-`function beforeSetCustomField(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart, array fields, string locale = null): void`
+
+```php
+public function beforeSetCustomField(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart, array fields, string locale = null): void
+```
 
 
 
@@ -280,39 +368,12 @@ Argument|Type|Default|Description
 `$fields`|`array`|``|
 `$locale`|`string`|`null`|
 
-### afterSetCustomField
-
-`function afterSetCustomField(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart`
+### afterSetCustomField()
 
 
-
-
-
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
-`$cart`|`\Frontastic\Common\CartApiBundle\Domain\Cart`|``|
-
-### beforeSetShippingAddress
-
-`function beforeSetShippingAddress(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart, array address, string locale = null): void`
-
-
-
-
-
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
-`$cart`|`\Frontastic\Common\CartApiBundle\Domain\Cart`|``|
-`$address`|`array`|``|
-`$locale`|`string`|`null`|
-
-### afterSetShippingAddress
-
-`function afterSetShippingAddress(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart`
+```php
+public function afterSetCustomField(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart
+```
 
 
 
@@ -324,9 +385,12 @@ Argument|Type|Default|Description
 `$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
 `$cart`|`\Frontastic\Common\CartApiBundle\Domain\Cart`|``|
 
-### beforeSetBillingAddress
+### beforeSetShippingAddress()
 
-`function beforeSetBillingAddress(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart, array address, string locale = null): void`
+
+```php
+public function beforeSetShippingAddress(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart, array address, string locale = null): void
+```
 
 
 
@@ -340,9 +404,12 @@ Argument|Type|Default|Description
 `$address`|`array`|``|
 `$locale`|`string`|`null`|
 
-### afterSetBillingAddress
+### afterSetShippingAddress()
 
-`function afterSetBillingAddress(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart`
+
+```php
+public function afterSetShippingAddress(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart
+```
 
 
 
@@ -354,9 +421,48 @@ Argument|Type|Default|Description
 `$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
 `$cart`|`\Frontastic\Common\CartApiBundle\Domain\Cart`|``|
 
-### beforeAddPayment
+### beforeSetBillingAddress()
 
-`function beforeAddPayment(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart, \Frontastic\Common\CartApiBundle\Domain\Payment payment, ?array custom = null, string locale = null): void`
+
+```php
+public function beforeSetBillingAddress(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart, array address, string locale = null): void
+```
+
+
+
+
+
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
+`$cart`|`\Frontastic\Common\CartApiBundle\Domain\Cart`|``|
+`$address`|`array`|``|
+`$locale`|`string`|`null`|
+
+### afterSetBillingAddress()
+
+
+```php
+public function afterSetBillingAddress(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart
+```
+
+
+
+
+
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
+`$cart`|`\Frontastic\Common\CartApiBundle\Domain\Cart`|``|
+
+### beforeAddPayment()
+
+
+```php
+public function beforeAddPayment(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart, \Frontastic\Common\CartApiBundle\Domain\Payment payment, ?array custom = null, string locale = null): void
+```
 
 
 
@@ -371,9 +477,12 @@ Argument|Type|Default|Description
 `$custom`|`?array`|`null`|
 `$locale`|`string`|`null`|
 
-### afterAddPayment
+### afterAddPayment()
 
-`function afterAddPayment(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart`
+
+```php
+public function afterAddPayment(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart
+```
 
 
 
@@ -385,9 +494,12 @@ Argument|Type|Default|Description
 `$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
 `$cart`|`\Frontastic\Common\CartApiBundle\Domain\Cart`|``|
 
-### beforeRedeemDiscountCode
+### beforeRedeemDiscountCode()
 
-`function beforeRedeemDiscountCode(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart, string code, string locale = null): void`
+
+```php
+public function beforeRedeemDiscountCode(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart, string code, string locale = null): void
+```
 
 
 
@@ -401,23 +513,12 @@ Argument|Type|Default|Description
 `$code`|`string`|``|
 `$locale`|`string`|`null`|
 
-### afterRedeemDiscountCode
-
-`function afterRedeemDiscountCode(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart`
+### afterRedeemDiscountCode()
 
 
-
-
-
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
-`$cart`|`\Frontastic\Common\CartApiBundle\Domain\Cart`|``|
-
-### beforeOrder
-
-`function beforeOrder(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): void`
+```php
+public function afterRedeemDiscountCode(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart
+```
 
 
 
@@ -429,9 +530,29 @@ Argument|Type|Default|Description
 `$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
 `$cart`|`\Frontastic\Common\CartApiBundle\Domain\Cart`|``|
 
-### afterOrder
+### beforeOrder()
 
-`function afterOrder(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Order order): ?\Frontastic\Common\CartApiBundle\Domain\Order`
+
+```php
+public function beforeOrder(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): void
+```
+
+
+
+
+
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
+`$cart`|`\Frontastic\Common\CartApiBundle\Domain\Cart`|``|
+
+### afterOrder()
+
+
+```php
+public function afterOrder(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Order order): ?\Frontastic\Common\CartApiBundle\Domain\Order
+```
 
 
 
@@ -443,9 +564,12 @@ Argument|Type|Default|Description
 `$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
 `$order`|`\Frontastic\Common\CartApiBundle\Domain\Order`|``|
 
-### beforeGetOrder
+### beforeGetOrder()
 
-`function beforeGetOrder(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, string orderId): void`
+
+```php
+public function beforeGetOrder(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, string orderId): void
+```
 
 
 
@@ -457,9 +581,12 @@ Argument|Type|Default|Description
 `$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
 `$orderId`|`string`|``|
 
-### afterGetOrder
+### afterGetOrder()
 
-`function afterGetOrder(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Order orderId): ?\Frontastic\Common\CartApiBundle\Domain\Order`
+
+```php
+public function afterGetOrder(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Order orderId): ?\Frontastic\Common\CartApiBundle\Domain\Order
+```
 
 
 
@@ -471,9 +598,12 @@ Argument|Type|Default|Description
 `$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
 `$orderId`|`\Frontastic\Common\CartApiBundle\Domain\Order`|``|
 
-### beforeGetOrders
+### beforeGetOrders()
 
-`function beforeGetOrders(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, string accountId): void`
+
+```php
+public function beforeGetOrders(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, string accountId): void
+```
 
 
 
@@ -485,23 +615,29 @@ Argument|Type|Default|Description
 `$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
 `$accountId`|`string`|``|
 
-### afterGetOrders
-
-`function afterGetOrders(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, array orders): ?array`
+### afterGetOrders()
 
 
+```php
+public function afterGetOrders(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, array orders): ?array
+```
 
 
-**
+
+
+
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
 `$orders`|`array`|``|
 
-### beforeStartTransaction
+### beforeStartTransaction()
 
-`function beforeStartTransaction(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): void`
+
+```php
+public function beforeStartTransaction(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): void
+```
 
 
 
@@ -513,9 +649,12 @@ Argument|Type|Default|Description
 `$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
 `$cart`|`\Frontastic\Common\CartApiBundle\Domain\Cart`|``|
 
-### beforeCommit
+### beforeCommit()
 
-`function beforeCommit(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, string locale = null): void`
+
+```php
+public function beforeCommit(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, string locale = null): void
+```
 
 
 
@@ -527,9 +666,12 @@ Argument|Type|Default|Description
 `$cartApi`|`\Frontastic\Common\CartApiBundle\Domain\CartApi`|``|
 `$locale`|`string`|`null`|
 
-### afterCommit
+### afterCommit()
 
-`function afterCommit(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart`
+
+```php
+public function afterCommit(\Frontastic\Common\CartApiBundle\Domain\CartApi cartApi, \Frontastic\Common\CartApiBundle\Domain\Cart cart): ?\Frontastic\Common\CartApiBundle\Domain\Cart
+```
 
 
 

@@ -7,19 +7,29 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\Target`](../../../
 
 ## Methods
 
-### lastUpdate
-
-`function lastUpdate(): string`
-
+* [lastUpdate()](#lastUpdate)
+* [replicate()](#replicate)
 
 
+### lastUpdate()
+
+
+```php
+public function lastUpdate(): string
+```
 
 
 
 
-### replicate
 
-`function replicate(array updates): void`
+
+
+### replicate()
+
+
+```php
+public function replicate(array updates): void
+```
 
 
 

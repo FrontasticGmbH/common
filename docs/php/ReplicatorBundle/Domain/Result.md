@@ -15,9 +15,15 @@ Property|Type|Default|Description
 
 ## Methods
 
-### fromThrowable
+* [fromThrowable()](#fromThrowable)
 
-`static function fromThrowable(\Throwable e): mixed`
+
+### fromThrowable()
+
+
+```php
+static public function fromThrowable(\Throwable e): mixed
+```
 
 
 

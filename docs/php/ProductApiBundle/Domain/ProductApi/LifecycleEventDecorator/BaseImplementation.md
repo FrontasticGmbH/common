@@ -25,9 +25,22 @@ need to tag your service based on this class with
 
 ## Methods
 
-### beforeGetCategories
+* [beforeGetCategories()](#beforeGetCategories)
+* [afterGetCategories()](#afterGetCategories)
+* [beforeGetProductTypes()](#beforeGetProductTypes)
+* [afterGetProductTypes()](#afterGetProductTypes)
+* [beforeGetProduct()](#beforeGetProduct)
+* [afterGetProduct()](#afterGetProduct)
+* [beforeQuery()](#beforeQuery)
+* [afterQuery()](#afterQuery)
 
-`function beforeGetCategories(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery query): void`
+
+### beforeGetCategories()
+
+
+```php
+public function beforeGetCategories(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery query): void
+```
 
 
 
@@ -39,23 +52,29 @@ Argument|Type|Default|Description
 `$productApi`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi`|``|
 `$query`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery`|``|
 
-### afterGetCategories
-
-`function afterGetCategories(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, array categories): ?array`
+### afterGetCategories()
 
 
+```php
+public function afterGetCategories(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, array categories): ?array
+```
 
 
-**
+
+
+
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$productApi`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi`|``|
 `$categories`|`array`|``|
 
-### beforeGetProductTypes
+### beforeGetProductTypes()
 
-`function beforeGetProductTypes(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery query): void`
+
+```php
+public function beforeGetProductTypes(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery query): void
+```
 
 
 
@@ -67,23 +86,29 @@ Argument|Type|Default|Description
 `$productApi`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi`|``|
 `$query`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery`|``|
 
-### afterGetProductTypes
-
-`function afterGetProductTypes(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, array productTypes): ?array`
+### afterGetProductTypes()
 
 
+```php
+public function afterGetProductTypes(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, array productTypes): ?array
+```
 
 
-**
+
+
+
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$productApi`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi`|``|
 `$productTypes`|`array`|``|
 
-### beforeGetProduct
+### beforeGetProduct()
 
-`function beforeGetProduct(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery query, string mode = ProductApi::QUERY_SYNC): void`
+
+```php
+public function beforeGetProduct(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery query, string mode = ProductApi::QUERY_SYNC): void
+```
 
 
 
@@ -96,9 +121,12 @@ Argument|Type|Default|Description
 `$query`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery`|``|
 `$mode`|`string`|`ProductApi::QUERY_SYNC`|
 
-### afterGetProduct
+### afterGetProduct()
 
-`function afterGetProduct(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, ?\Frontastic\Common\ProductApiBundle\Domain\Product product): ?\Frontastic\Common\ProductApiBundle\Domain\Product`
+
+```php
+public function afterGetProduct(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, ?\Frontastic\Common\ProductApiBundle\Domain\Product product): ?\Frontastic\Common\ProductApiBundle\Domain\Product
+```
 
 
 
@@ -110,9 +138,12 @@ Argument|Type|Default|Description
 `$productApi`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi`|``|
 `$product`|`?\Frontastic\Common\ProductApiBundle\Domain\Product`|``|
 
-### beforeQuery
+### beforeQuery()
 
-`function beforeQuery(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery query, string mode = ProductApi::QUERY_SYNC): void`
+
+```php
+public function beforeQuery(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery query, string mode = ProductApi::QUERY_SYNC): void
+```
 
 
 
@@ -125,9 +156,12 @@ Argument|Type|Default|Description
 `$query`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery`|``|
 `$mode`|`string`|`ProductApi::QUERY_SYNC`|
 
-### afterQuery
+### afterQuery()
 
-`function afterQuery(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, ?\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result result): ?\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result`
+
+```php
+public function afterQuery(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, ?\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result result): ?\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result
+```
 
 
 

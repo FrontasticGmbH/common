@@ -15,23 +15,33 @@ Property|Type|Default|Description
 
 ## Methods
 
-### getIterator
-
-`function getIterator(): \Traversable`
-
+* [getIterator()](#getIterator)
+* [count()](#count)
 
 
+### getIterator()
 
-**
 
-
-### count
-
-`function count(): int`
+```php
+public function getIterator(): \Traversable
+```
 
 
 
 
-**
+
+
+
+### count()
+
+
+```php
+public function count(): int
+```
+
+
+
+
+
 
 

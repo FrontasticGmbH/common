@@ -23,29 +23,21 @@ Property|Type|Default|Description
 
 ## Methods
 
-### getPayedAmount
-
-`function getPayedAmount(): int`
-
-
-
-
-
-
-
-### hasUser
-
-`function hasUser(): bool`
+* [getPayedAmount()](#getPayedAmount)
+* [hasUser()](#hasUser)
+* [hasShippingAddress()](#hasShippingAddress)
+* [hasBillingAddress()](#hasBillingAddress)
+* [hasAddresses()](#hasAddresses)
+* [hasCompletePayments()](#hasCompletePayments)
+* [isComplete()](#isComplete)
 
 
+### getPayedAmount()
 
 
-
-
-
-### hasShippingAddress
-
-`function hasShippingAddress(): bool`
+```php
+public function getPayedAmount(): int
+```
 
 
 
@@ -53,19 +45,12 @@ Property|Type|Default|Description
 
 
 
-### hasBillingAddress
-
-`function hasBillingAddress(): bool`
+### hasUser()
 
 
-
-
-
-
-
-### hasAddresses
-
-`function hasAddresses(): bool`
+```php
+public function hasUser(): bool
+```
 
 
 
@@ -73,19 +58,64 @@ Property|Type|Default|Description
 
 
 
-### hasCompletePayments
-
-`function hasCompletePayments(): bool`
+### hasShippingAddress()
 
 
+```php
+public function hasShippingAddress(): bool
+```
 
 
 
 
 
-### isComplete
 
-`function isComplete(): bool`
+
+### hasBillingAddress()
+
+
+```php
+public function hasBillingAddress(): bool
+```
+
+
+
+
+
+
+
+### hasAddresses()
+
+
+```php
+public function hasAddresses(): bool
+```
+
+
+
+
+
+
+
+### hasCompletePayments()
+
+
+```php
+public function hasCompletePayments(): bool
+```
+
+
+
+
+
+
+
+### isComplete()
+
+
+```php
+public function isComplete(): bool
+```
 
 
 

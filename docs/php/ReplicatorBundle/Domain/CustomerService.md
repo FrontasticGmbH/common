@@ -7,9 +7,19 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\CustomerService`](
 
 ## Methods
 
-### __construct
+* [__construct()](#construct)
+* [getCustomers()](#getCustomers)
+* [getCustomer()](#getCustomer)
+* [getProject()](#getProject)
+* [getForHost()](#getForHost)
 
-`function __construct(string customerDir, string deployedCustomers): mixed`
+
+### __construct()
+
+
+```php
+public function __construct(string customerDir, string deployedCustomers): mixed
+```
 
 
 
@@ -21,19 +31,25 @@ Argument|Type|Default|Description
 `$customerDir`|`string`|``|
 `$deployedCustomers`|`string`|``|
 
-### getCustomers
-
-`function getCustomers(): array`
+### getCustomers()
 
 
+```php
+public function getCustomers(): array
+```
 
 
-**
 
 
-### getCustomer
 
-`function getCustomer(string customerName): \Frontastic\Common\ReplicatorBundle\Domain\Customer`
+
+
+### getCustomer()
+
+
+```php
+public function getCustomer(string customerName): \Frontastic\Common\ReplicatorBundle\Domain\Customer
+```
 
 
 
@@ -44,9 +60,12 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$customerName`|`string`|``|
 
-### getProject
+### getProject()
 
-`function getProject(string customerName, string projectName): \Frontastic\Common\ReplicatorBundle\Domain\Project`
+
+```php
+public function getProject(string customerName, string projectName): \Frontastic\Common\ReplicatorBundle\Domain\Project
+```
 
 
 
@@ -58,9 +77,12 @@ Argument|Type|Default|Description
 `$customerName`|`string`|``|
 `$projectName`|`string`|``|
 
-### getForHost
+### getForHost()
 
-`function getForHost(string host): \Frontastic\Common\ReplicatorBundle\Domain\Customer`
+
+```php
+public function getForHost(string host): \Frontastic\Common\ReplicatorBundle\Domain\Customer
+```
 
 
 

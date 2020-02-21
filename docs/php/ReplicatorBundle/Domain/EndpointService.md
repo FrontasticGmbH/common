@@ -7,9 +7,19 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\EndpointService`](
 
 ## Methods
 
-### addReplicationSource
+* [addReplicationSource()](#addReplicationSource)
+* [getReplicationSource()](#getReplicationSource)
+* [addReplicationTarget()](#addReplicationTarget)
+* [getReplicationTarget()](#getReplicationTarget)
+* [dispatch()](#dispatch)
 
-`function addReplicationSource(string channel, \Frontastic\Common\ReplicatorBundle\Domain\Source source): void`
+
+### addReplicationSource()
+
+
+```php
+public function addReplicationSource(string channel, \Frontastic\Common\ReplicatorBundle\Domain\Source source): void
+```
 
 
 
@@ -21,9 +31,12 @@ Argument|Type|Default|Description
 `$channel`|`string`|``|
 `$source`|`\Frontastic\Common\ReplicatorBundle\Domain\Source`|``|
 
-### getReplicationSource
+### getReplicationSource()
 
-`function getReplicationSource(string channel): mixed`
+
+```php
+public function getReplicationSource(string channel): mixed
+```
 
 
 
@@ -34,9 +47,12 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$channel`|`string`|``|
 
-### addReplicationTarget
+### addReplicationTarget()
 
-`function addReplicationTarget(string channel, \Frontastic\Common\ReplicatorBundle\Domain\Target target): void`
+
+```php
+public function addReplicationTarget(string channel, \Frontastic\Common\ReplicatorBundle\Domain\Target target): void
+```
 
 
 
@@ -48,9 +64,12 @@ Argument|Type|Default|Description
 `$channel`|`string`|``|
 `$target`|`\Frontastic\Common\ReplicatorBundle\Domain\Target`|``|
 
-### getReplicationTarget
+### getReplicationTarget()
 
-`function getReplicationTarget(string channel): mixed`
+
+```php
+public function getReplicationTarget(string channel): mixed
+```
 
 
 
@@ -61,9 +80,12 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$channel`|`string`|``|
 
-### dispatch
+### dispatch()
 
-`function dispatch(\Frontastic\Common\ReplicatorBundle\Domain\Command command): \Frontastic\Common\ReplicatorBundle\Domain\Result`
+
+```php
+public function dispatch(\Frontastic\Common\ReplicatorBundle\Domain\Command command): \Frontastic\Common\ReplicatorBundle\Domain\Result
+```
 
 
 
