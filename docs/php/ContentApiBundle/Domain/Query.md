@@ -13,7 +13,7 @@ Property|Type|Default|Description
 
 ## Methods
 
-* [fromArray()](#fromArray)
+* [fromArray()](#fromarray)
 
 
 ### fromArray()

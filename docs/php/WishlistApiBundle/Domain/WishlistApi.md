@@ -7,15 +7,15 @@ Fully Qualified: [`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi`](../
 
 ## Methods
 
-* [getWishlist()](#getWishlist)
-* [getAnonymous()](#getAnonymous)
-* [getWishlists()](#getWishlists)
+* [getWishlist()](#getwishlist)
+* [getAnonymous()](#getanonymous)
+* [getWishlists()](#getwishlists)
 * [create()](#create)
-* [addToWishlist()](#addToWishlist)
-* [addMultipleToWishlist()](#addMultipleToWishlist)
-* [updateLineItem()](#updateLineItem)
-* [removeLineItem()](#removeLineItem)
-* [getDangerousInnerClient()](#getDangerousInnerClient)
+* [addToWishlist()](#addtowishlist)
+* [addMultipleToWishlist()](#addmultipletowishlist)
+* [updateLineItem()](#updatelineitem)
+* [removeLineItem()](#removelineitem)
+* [getDangerousInnerClient()](#getdangerousinnerclient)
 
 
 ### getWishlist()

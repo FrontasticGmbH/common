@@ -12,7 +12,7 @@ Property|Type|Default|Description
 
 ## Methods
 
-* [__toString()](#toString)
+* [__toString()](#tostring)
 
 
 ### __toString()

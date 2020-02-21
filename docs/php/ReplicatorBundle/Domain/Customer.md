@@ -17,7 +17,7 @@ Property|Type|Default|Description
 
 ## Methods
 
-* [getLowestEnvironment()](#getLowestEnvironment)
+* [getLowestEnvironment()](#getlowestenvironment)
 
 
 ### getLowestEnvironment()

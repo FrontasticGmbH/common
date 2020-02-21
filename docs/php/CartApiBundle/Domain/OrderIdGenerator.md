@@ -7,7 +7,7 @@ Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator`](..
 
 ## Methods
 
-* [getOrderId()](#getOrderId)
+* [getOrderId()](#getorderid)
 
 
 ### getOrderId()

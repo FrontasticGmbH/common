@@ -23,13 +23,13 @@ Property|Type|Default|Description
 
 ## Methods
 
-* [getPayedAmount()](#getPayedAmount)
-* [hasUser()](#hasUser)
-* [hasShippingAddress()](#hasShippingAddress)
-* [hasBillingAddress()](#hasBillingAddress)
-* [hasAddresses()](#hasAddresses)
-* [hasCompletePayments()](#hasCompletePayments)
-* [isComplete()](#isComplete)
+* [getPayedAmount()](#getpayedamount)
+* [hasUser()](#hasuser)
+* [hasShippingAddress()](#hasshippingaddress)
+* [hasBillingAddress()](#hasbillingaddress)
+* [hasAddresses()](#hasaddresses)
+* [hasCompletePayments()](#hascompletepayments)
+* [isComplete()](#iscomplete)
 
 
 ### getPayedAmount()

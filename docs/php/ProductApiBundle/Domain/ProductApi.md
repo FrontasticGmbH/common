@@ -7,11 +7,11 @@ Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi`](../..
 
 ## Methods
 
-* [getCategories()](#getCategories)
-* [getProductTypes()](#getProductTypes)
-* [getProduct()](#getProduct)
+* [getCategories()](#getcategories)
+* [getProductTypes()](#getproducttypes)
+* [getProduct()](#getproduct)
 * [query()](#query)
-* [getDangerousInnerClient()](#getDangerousInnerClient)
+* [getDangerousInnerClient()](#getdangerousinnerclient)
 
 
 ### getCategories()

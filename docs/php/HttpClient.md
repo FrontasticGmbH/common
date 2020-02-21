@@ -7,9 +7,9 @@ Fully Qualified: [`\Frontastic\Common\HttpClient`](../../src/php/HttpClient.php)
 
 ## Methods
 
-* [addDefaultHeaders()](#addDefaultHeaders)
+* [addDefaultHeaders()](#adddefaultheaders)
 * [request()](#request)
-* [requestAsync()](#requestAsync)
+* [requestAsync()](#requestasync)
 * [__call()](#call)
 
 

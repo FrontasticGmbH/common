@@ -7,7 +7,7 @@ Fully Qualified: [`\Frontastic\Common\ProjectApiBundle\Domain\ProjectApi`](../..
 
 ## Methods
 
-* [getSearchableAttributes()](#getSearchableAttributes)
+* [getSearchableAttributes()](#getsearchableattributes)
 
 
 ### getSearchableAttributes()

@@ -7,10 +7,10 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\EndpointService`](
 
 ## Methods
 
-* [addReplicationSource()](#addReplicationSource)
-* [getReplicationSource()](#getReplicationSource)
-* [addReplicationTarget()](#addReplicationTarget)
-* [getReplicationTarget()](#getReplicationTarget)
+* [addReplicationSource()](#addreplicationsource)
+* [getReplicationSource()](#getreplicationsource)
+* [addReplicationTarget()](#addreplicationtarget)
+* [getReplicationTarget()](#getreplicationtarget)
 * [dispatch()](#dispatch)
 
 

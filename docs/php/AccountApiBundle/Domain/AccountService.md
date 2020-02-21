@@ -8,17 +8,17 @@ Fully Qualified: [`\Frontastic\Common\AccountApiBundle\Domain\AccountService`](.
 ## Methods
 
 * [__construct()](#construct)
-* [getSessionFor()](#getSessionFor)
-* [sendConfirmationMail()](#sendConfirmationMail)
-* [sendPasswordResetMail()](#sendPasswordResetMail)
+* [getSessionFor()](#getsessionfor)
+* [sendConfirmationMail()](#sendconfirmationmail)
+* [sendPasswordResetMail()](#sendpasswordresetmail)
 * [get()](#get)
 * [exists()](#exists)
-* [confirmEmail()](#confirmEmail)
+* [confirmEmail()](#confirmemail)
 * [login()](#login)
 * [create()](#create)
 * [update()](#update)
-* [updatePassword()](#updatePassword)
-* [resetPassword()](#resetPassword)
+* [updatePassword()](#updatepassword)
+* [resetPassword()](#resetpassword)
 * [remove()](#remove)
 
 
@@ -164,7 +164,7 @@ public function login(Account $account, ?Cart $cart = null): bool
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$account`|[`Account`](Account.md)|``|
-`$cart`|`?Cart`|`null`|
+`$cart`|?[`Cart`](../../CartApiBundle/Domain/Cart.md)|`null`|
 
 Return Value: `bool`
 
@@ -183,7 +183,7 @@ public function create(Account $account, ?Cart $cart = null): Account
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$account`|[`Account`](Account.md)|``|
-`$cart`|`?Cart`|`null`|
+`$cart`|?[`Cart`](../../CartApiBundle/Domain/Cart.md)|`null`|
 
 Return Value: [`Account`](Account.md)
 

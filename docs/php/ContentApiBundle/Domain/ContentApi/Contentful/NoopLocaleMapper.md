@@ -7,7 +7,7 @@ Fully Qualified: [`\Frontastic\Common\ContentApiBundle\Domain\ContentApi\Content
 
 ## Methods
 
-* [replaceLocale()](#replaceLocale)
+* [replaceLocale()](#replacelocale)
 
 
 ### replaceLocale()

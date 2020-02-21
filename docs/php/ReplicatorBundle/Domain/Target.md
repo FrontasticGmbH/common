@@ -7,7 +7,7 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\Target`](../../../
 
 ## Methods
 
-* [lastUpdate()](#lastUpdate)
+* [lastUpdate()](#lastupdate)
 * [replicate()](#replicate)
 
 

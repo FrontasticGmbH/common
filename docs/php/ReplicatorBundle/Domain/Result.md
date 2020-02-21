@@ -15,7 +15,7 @@ Property|Type|Default|Description
 
 ## Methods
 
-* [fromThrowable()](#fromThrowable)
+* [fromThrowable()](#fromthrowable)
 
 
 ### fromThrowable()

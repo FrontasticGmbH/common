@@ -15,7 +15,7 @@ Property|Type|Default|Description
 
 ## Methods
 
-* [getIterator()](#getIterator)
+* [getIterator()](#getiterator)
 * [count()](#count)
 
 

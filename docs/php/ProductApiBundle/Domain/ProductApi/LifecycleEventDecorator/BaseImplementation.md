@@ -25,14 +25,14 @@ need to tag your service based on this class with
 
 ## Methods
 
-* [beforeGetCategories()](#beforeGetCategories)
-* [afterGetCategories()](#afterGetCategories)
-* [beforeGetProductTypes()](#beforeGetProductTypes)
-* [afterGetProductTypes()](#afterGetProductTypes)
-* [beforeGetProduct()](#beforeGetProduct)
-* [afterGetProduct()](#afterGetProduct)
-* [beforeQuery()](#beforeQuery)
-* [afterQuery()](#afterQuery)
+* [beforeGetCategories()](#beforegetcategories)
+* [afterGetCategories()](#aftergetcategories)
+* [beforeGetProductTypes()](#beforegetproducttypes)
+* [afterGetProductTypes()](#aftergetproducttypes)
+* [beforeGetProduct()](#beforegetproduct)
+* [afterGetProduct()](#aftergetproduct)
+* [beforeQuery()](#beforequery)
+* [afterQuery()](#afterquery)
 
 
 ### beforeGetCategories()
@@ -146,9 +146,9 @@ public function afterGetProduct(ProductApi $productApi, ?Product $product): ?Pro
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$productApi`|[`ProductApi`](../../ProductApi.md)|``|
-`$product`|`?Product`|``|
+`$product`|?[`Product`](../../Product.md)|``|
 
-Return Value: `?Product`
+Return Value: ?[`Product`](../../Product.md)
 
 ### beforeQuery()
 
@@ -185,7 +185,7 @@ public function afterQuery(ProductApi $productApi, ?Result $result): ?Result
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$productApi`|[`ProductApi`](../../ProductApi.md)|``|
-`$result`|`?Result`|``|
+`$result`|?[`Result`](../Result.md)|``|
 
-Return Value: `?Result`
+Return Value: ?[`Result`](../Result.md)
 

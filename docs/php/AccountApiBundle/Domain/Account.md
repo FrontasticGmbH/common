@@ -22,15 +22,15 @@ Property|Type|Default|Description
 
 ## Methods
 
-* [setPassword()](#setPassword)
-* [isValidPassword()](#isValidPassword)
-* [getUsername()](#getUsername)
-* [getRoles()](#getRoles)
-* [getPassword()](#getPassword)
-* [getSalt()](#getSalt)
-* [eraseCredentials()](#eraseCredentials)
-* [assertPermission()](#assertPermission)
-* [cleanForSession()](#cleanForSession)
+* [setPassword()](#setpassword)
+* [isValidPassword()](#isvalidpassword)
+* [getUsername()](#getusername)
+* [getRoles()](#getroles)
+* [getPassword()](#getpassword)
+* [getSalt()](#getsalt)
+* [eraseCredentials()](#erasecredentials)
+* [assertPermission()](#assertpermission)
+* [cleanForSession()](#cleanforsession)
 * [serialize()](#serialize)
 * [unserialize()](#unserialize)
 

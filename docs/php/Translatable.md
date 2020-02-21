@@ -7,8 +7,8 @@ Fully Qualified: [`\Frontastic\Common\Translatable`](../../src/php/Translatable.
 
 ## Methods
 
-* [getTranslationCode()](#getTranslationCode)
-* [getTranslationParameters()](#getTranslationParameters)
+* [getTranslationCode()](#gettranslationcode)
+* [getTranslationParameters()](#gettranslationparameters)
 
 
 ### getTranslationCode()

@@ -25,22 +25,22 @@ need to tag your service based on this class with
 
 ## Methods
 
-* [beforeGetWishlist()](#beforeGetWishlist)
-* [afterGetWishlist()](#afterGetWishlist)
-* [beforeGetAnonymous()](#beforeGetAnonymous)
-* [afterGetAnonymous()](#afterGetAnonymous)
-* [beforeGetWishlists()](#beforeGetWishlists)
-* [afterGetWishlists()](#afterGetWishlists)
-* [beforeCreate()](#beforeCreate)
-* [afterCreate()](#afterCreate)
-* [beforeAddToWishlist()](#beforeAddToWishlist)
-* [afterAddToWishlist()](#afterAddToWishlist)
-* [beforeAddMultipleToWishlist()](#beforeAddMultipleToWishlist)
-* [afterAddMultipleToWishlist()](#afterAddMultipleToWishlist)
-* [beforeUpdateLineItem()](#beforeUpdateLineItem)
-* [afterUpdateLineItem()](#afterUpdateLineItem)
-* [beforeRemoveLineItem()](#beforeRemoveLineItem)
-* [afterRemoveLineItem()](#afterRemoveLineItem)
+* [beforeGetWishlist()](#beforegetwishlist)
+* [afterGetWishlist()](#aftergetwishlist)
+* [beforeGetAnonymous()](#beforegetanonymous)
+* [afterGetAnonymous()](#aftergetanonymous)
+* [beforeGetWishlists()](#beforegetwishlists)
+* [afterGetWishlists()](#aftergetwishlists)
+* [beforeCreate()](#beforecreate)
+* [afterCreate()](#aftercreate)
+* [beforeAddToWishlist()](#beforeaddtowishlist)
+* [afterAddToWishlist()](#afteraddtowishlist)
+* [beforeAddMultipleToWishlist()](#beforeaddmultipletowishlist)
+* [afterAddMultipleToWishlist()](#afteraddmultipletowishlist)
+* [beforeUpdateLineItem()](#beforeupdatelineitem)
+* [afterUpdateLineItem()](#afterupdatelineitem)
+* [beforeRemoveLineItem()](#beforeremovelineitem)
+* [afterRemoveLineItem()](#afterremovelineitem)
 
 
 ### beforeGetWishlist()
@@ -80,7 +80,7 @@ Argument|Type|Default|Description
 `$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)|``|
 `$wishlist`|[`Wishlist`](../../Wishlist.md)|``|
 
-Return Value: `?Wishlist`
+Return Value: ?[`Wishlist`](../../Wishlist.md)
 
 ### beforeGetAnonymous()
 
@@ -119,7 +119,7 @@ Argument|Type|Default|Description
 `$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)|``|
 `$wishlist`|[`Wishlist`](../../Wishlist.md)|``|
 
-Return Value: `?Wishlist`
+Return Value: ?[`Wishlist`](../../Wishlist.md)
 
 ### beforeGetWishlists()
 
@@ -197,7 +197,7 @@ Argument|Type|Default|Description
 `$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)|``|
 `$wishlist`|[`Wishlist`](../../Wishlist.md)|``|
 
-Return Value: `?Wishlist`
+Return Value: ?[`Wishlist`](../../Wishlist.md)
 
 ### beforeAddToWishlist()
 
@@ -237,7 +237,7 @@ Argument|Type|Default|Description
 `$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)|``|
 `$wishlist`|[`Wishlist`](../../Wishlist.md)|``|
 
-Return Value: `?Wishlist`
+Return Value: ?[`Wishlist`](../../Wishlist.md)
 
 ### beforeAddMultipleToWishlist()
 
@@ -277,7 +277,7 @@ Argument|Type|Default|Description
 `$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)|``|
 `$wishlist`|[`Wishlist`](../../Wishlist.md)|``|
 
-Return Value: `?Wishlist`
+Return Value: ?[`Wishlist`](../../Wishlist.md)
 
 ### beforeUpdateLineItem()
 
@@ -318,7 +318,7 @@ Argument|Type|Default|Description
 `$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)|``|
 `$wishlist`|[`Wishlist`](../../Wishlist.md)|``|
 
-Return Value: `?Wishlist`
+Return Value: ?[`Wishlist`](../../Wishlist.md)
 
 ### beforeRemoveLineItem()
 
@@ -358,5 +358,5 @@ Argument|Type|Default|Description
 `$wishlistApi`|[`WishlistApi`](../../WishlistApi.md)|``|
 `$wishlist`|[`Wishlist`](../../Wishlist.md)|``|
 
-Return Value: `?Wishlist`
+Return Value: ?[`Wishlist`](../../Wishlist.md)
 

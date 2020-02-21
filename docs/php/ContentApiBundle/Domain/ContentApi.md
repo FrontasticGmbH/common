@@ -7,10 +7,10 @@ Fully Qualified: [`\Frontastic\Common\ContentApiBundle\Domain\ContentApi`](../..
 
 ## Methods
 
-* [getContentTypes()](#getContentTypes)
-* [getContent()](#getContent)
+* [getContentTypes()](#getcontenttypes)
+* [getContent()](#getcontent)
 * [query()](#query)
-* [getDangerousInnerClient()](#getDangerousInnerClient)
+* [getDangerousInnerClient()](#getdangerousinnerclient)
 
 
 ### getContentTypes()

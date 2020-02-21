@@ -15,9 +15,9 @@ Property|Type|Default|Description
 
 ## Methods
 
-* [getPathAsArray()](#getPathAsArray)
-* [getAncestorIds()](#getAncestorIds)
-* [getParentCategoryId()](#getParentCategoryId)
+* [getPathAsArray()](#getpathasarray)
+* [getAncestorIds()](#getancestorids)
+* [getParentCategoryId()](#getparentcategoryid)
 
 
 ### getPathAsArray()

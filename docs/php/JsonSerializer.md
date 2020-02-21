@@ -8,7 +8,7 @@ Fully Qualified: [`\Frontastic\Common\JsonSerializer`](../../src/php/JsonSeriali
 ## Methods
 
 * [__construct()](#construct)
-* [addEnhancer()](#addEnhancer)
+* [addEnhancer()](#addenhancer)
 * [serialize()](#serialize)
 
 

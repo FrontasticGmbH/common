@@ -7,7 +7,7 @@ Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\P
 
 ## Methods
 
-* [queryFromParameters()](#queryFromParameters)
+* [queryFromParameters()](#queryfromparameters)
 
 
 ### queryFromParameters()

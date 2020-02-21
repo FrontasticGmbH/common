@@ -25,36 +25,36 @@ need to tag your service based on this class with
 
 ## Methods
 
-* [beforeGet()](#beforeGet)
-* [afterGet()](#afterGet)
-* [beforeConfirmEmail()](#beforeConfirmEmail)
-* [afterConfirmEmail()](#afterConfirmEmail)
-* [beforeCreate()](#beforeCreate)
-* [afterCreate()](#afterCreate)
-* [beforeVerifyEmail()](#beforeVerifyEmail)
-* [afterVerifyEmail()](#afterVerifyEmail)
-* [beforeUpdate()](#beforeUpdate)
-* [afterUpdate()](#afterUpdate)
-* [beforeUpdatePassword()](#beforeUpdatePassword)
-* [afterUpdatePassword()](#afterUpdatePassword)
-* [beforeGeneratePasswordResetToken()](#beforeGeneratePasswordResetToken)
-* [afterGeneratePasswordResetToken()](#afterGeneratePasswordResetToken)
-* [beforeResetPassword()](#beforeResetPassword)
-* [afterResetPassword()](#afterResetPassword)
-* [beforeLogin()](#beforeLogin)
-* [afterLogin()](#afterLogin)
-* [beforeGetAddresses()](#beforeGetAddresses)
-* [afterGetAddresses()](#afterGetAddresses)
-* [beforeAddAddress()](#beforeAddAddress)
-* [afterAddAddress()](#afterAddAddress)
-* [beforeUpdateAddress()](#beforeUpdateAddress)
-* [afterUpdateAddress()](#afterUpdateAddress)
-* [beforeRemoveAddress()](#beforeRemoveAddress)
-* [afterRemoveAddress()](#afterRemoveAddress)
-* [beforeSetDefaultBillingAddress()](#beforeSetDefaultBillingAddress)
-* [afterSetDefaultBillingAddress()](#afterSetDefaultBillingAddress)
-* [beforeSetDefaultShippingAddress()](#beforeSetDefaultShippingAddress)
-* [afterSetDefaultShippingAddress()](#afterSetDefaultShippingAddress)
+* [beforeGet()](#beforeget)
+* [afterGet()](#afterget)
+* [beforeConfirmEmail()](#beforeconfirmemail)
+* [afterConfirmEmail()](#afterconfirmemail)
+* [beforeCreate()](#beforecreate)
+* [afterCreate()](#aftercreate)
+* [beforeVerifyEmail()](#beforeverifyemail)
+* [afterVerifyEmail()](#afterverifyemail)
+* [beforeUpdate()](#beforeupdate)
+* [afterUpdate()](#afterupdate)
+* [beforeUpdatePassword()](#beforeupdatepassword)
+* [afterUpdatePassword()](#afterupdatepassword)
+* [beforeGeneratePasswordResetToken()](#beforegeneratepasswordresettoken)
+* [afterGeneratePasswordResetToken()](#aftergeneratepasswordresettoken)
+* [beforeResetPassword()](#beforeresetpassword)
+* [afterResetPassword()](#afterresetpassword)
+* [beforeLogin()](#beforelogin)
+* [afterLogin()](#afterlogin)
+* [beforeGetAddresses()](#beforegetaddresses)
+* [afterGetAddresses()](#aftergetaddresses)
+* [beforeAddAddress()](#beforeaddaddress)
+* [afterAddAddress()](#afteraddaddress)
+* [beforeUpdateAddress()](#beforeupdateaddress)
+* [afterUpdateAddress()](#afterupdateaddress)
+* [beforeRemoveAddress()](#beforeremoveaddress)
+* [afterRemoveAddress()](#afterremoveaddress)
+* [beforeSetDefaultBillingAddress()](#beforesetdefaultbillingaddress)
+* [afterSetDefaultBillingAddress()](#aftersetdefaultbillingaddress)
+* [beforeSetDefaultShippingAddress()](#beforesetdefaultshippingaddress)
+* [afterSetDefaultShippingAddress()](#aftersetdefaultshippingaddress)
 
 
 ### beforeGet()
@@ -93,7 +93,7 @@ Argument|Type|Default|Description
 `$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
 `$account`|[`Account`](../../Account.md)|``|
 
-Return Value: `?Account`
+Return Value: ?[`Account`](../../Account.md)
 
 ### beforeConfirmEmail()
 
@@ -131,7 +131,7 @@ Argument|Type|Default|Description
 `$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
 `$account`|[`Account`](../../Account.md)|``|
 
-Return Value: `?Account`
+Return Value: ?[`Account`](../../Account.md)
 
 ### beforeCreate()
 
@@ -149,7 +149,7 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
 `$account`|[`Account`](../../Account.md)|``|
-`$cart`|`?Cart`|`null`|
+`$cart`|?[`Cart`](../../../../CartApiBundle/Domain/Cart.md)|`null`|
 
 Return Value: `void`
 
@@ -170,7 +170,7 @@ Argument|Type|Default|Description
 `$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
 `$account`|[`Account`](../../Account.md)|``|
 
-Return Value: `?Account`
+Return Value: ?[`Account`](../../Account.md)
 
 ### beforeVerifyEmail()
 
@@ -208,7 +208,7 @@ Argument|Type|Default|Description
 `$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
 `$account`|[`Account`](../../Account.md)|``|
 
-Return Value: `?Account`
+Return Value: ?[`Account`](../../Account.md)
 
 ### beforeUpdate()
 
@@ -246,7 +246,7 @@ Argument|Type|Default|Description
 `$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
 `$account`|[`Account`](../../Account.md)|``|
 
-Return Value: `?Account`
+Return Value: ?[`Account`](../../Account.md)
 
 ### beforeUpdatePassword()
 
@@ -286,7 +286,7 @@ Argument|Type|Default|Description
 `$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
 `$account`|[`Account`](../../Account.md)|``|
 
-Return Value: `?Account`
+Return Value: ?[`Account`](../../Account.md)
 
 ### beforeGeneratePasswordResetToken()
 
@@ -324,7 +324,7 @@ Argument|Type|Default|Description
 `$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
 `$account`|[`Account`](../../Account.md)|``|
 
-Return Value: `?Account`
+Return Value: ?[`Account`](../../Account.md)
 
 ### beforeResetPassword()
 
@@ -363,7 +363,7 @@ Argument|Type|Default|Description
 `$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
 `$account`|[`Account`](../../Account.md)|``|
 
-Return Value: `?Account`
+Return Value: ?[`Account`](../../Account.md)
 
 ### beforeLogin()
 
@@ -381,7 +381,7 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
 `$account`|[`Account`](../../Account.md)|``|
-`$cart`|`?Cart`|`null`|
+`$cart`|?[`Cart`](../../../../CartApiBundle/Domain/Cart.md)|`null`|
 
 Return Value: `void`
 
@@ -479,7 +479,7 @@ Argument|Type|Default|Description
 `$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
 `$account`|[`Account`](../../Account.md)|``|
 
-Return Value: `?Account`
+Return Value: ?[`Account`](../../Account.md)
 
 ### beforeUpdateAddress()
 
@@ -518,7 +518,7 @@ Argument|Type|Default|Description
 `$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
 `$account`|[`Account`](../../Account.md)|``|
 
-Return Value: `?Account`
+Return Value: ?[`Account`](../../Account.md)
 
 ### beforeRemoveAddress()
 
@@ -557,7 +557,7 @@ Argument|Type|Default|Description
 `$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
 `$account`|[`Account`](../../Account.md)|``|
 
-Return Value: `?Account`
+Return Value: ?[`Account`](../../Account.md)
 
 ### beforeSetDefaultBillingAddress()
 
@@ -596,7 +596,7 @@ Argument|Type|Default|Description
 `$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
 `$account`|[`Account`](../../Account.md)|``|
 
-Return Value: `?Account`
+Return Value: ?[`Account`](../../Account.md)
 
 ### beforeSetDefaultShippingAddress()
 
@@ -635,5 +635,5 @@ Argument|Type|Default|Description
 `$accountApi`|[`AccountApi`](../../AccountApi.md)|``|
 `$account`|[`Account`](../../Account.md)|``|
 
-Return Value: `?Account`
+Return Value: ?[`Account`](../../Account.md)
 

@@ -25,41 +25,41 @@ need to tag your service based on this class with
 
 ## Methods
 
-* [beforeGetForUser()](#beforeGetForUser)
-* [afterGetForUser()](#afterGetForUser)
-* [beforeGetAnonymous()](#beforeGetAnonymous)
-* [afterGetAnonymous()](#afterGetAnonymous)
-* [beforeGetById()](#beforeGetById)
-* [afterGetById()](#afterGetById)
-* [beforeAddToCart()](#beforeAddToCart)
-* [afterAddToCart()](#afterAddToCart)
-* [beforeUpdateLineItem()](#beforeUpdateLineItem)
-* [afterUpdateLineItem()](#afterUpdateLineItem)
-* [beforeRemoveLineItem()](#beforeRemoveLineItem)
-* [afterRemoveLineItem()](#afterRemoveLineItem)
-* [beforeSetEmail()](#beforeSetEmail)
-* [afterSetEmail()](#afterSetEmail)
-* [beforeSetShippingMethod()](#beforeSetShippingMethod)
-* [afterSetShippingMethod()](#afterSetShippingMethod)
-* [beforeSetCustomField()](#beforeSetCustomField)
-* [afterSetCustomField()](#afterSetCustomField)
-* [beforeSetShippingAddress()](#beforeSetShippingAddress)
-* [afterSetShippingAddress()](#afterSetShippingAddress)
-* [beforeSetBillingAddress()](#beforeSetBillingAddress)
-* [afterSetBillingAddress()](#afterSetBillingAddress)
-* [beforeAddPayment()](#beforeAddPayment)
-* [afterAddPayment()](#afterAddPayment)
-* [beforeRedeemDiscountCode()](#beforeRedeemDiscountCode)
-* [afterRedeemDiscountCode()](#afterRedeemDiscountCode)
-* [beforeOrder()](#beforeOrder)
-* [afterOrder()](#afterOrder)
-* [beforeGetOrder()](#beforeGetOrder)
-* [afterGetOrder()](#afterGetOrder)
-* [beforeGetOrders()](#beforeGetOrders)
-* [afterGetOrders()](#afterGetOrders)
-* [beforeStartTransaction()](#beforeStartTransaction)
-* [beforeCommit()](#beforeCommit)
-* [afterCommit()](#afterCommit)
+* [beforeGetForUser()](#beforegetforuser)
+* [afterGetForUser()](#aftergetforuser)
+* [beforeGetAnonymous()](#beforegetanonymous)
+* [afterGetAnonymous()](#aftergetanonymous)
+* [beforeGetById()](#beforegetbyid)
+* [afterGetById()](#aftergetbyid)
+* [beforeAddToCart()](#beforeaddtocart)
+* [afterAddToCart()](#afteraddtocart)
+* [beforeUpdateLineItem()](#beforeupdatelineitem)
+* [afterUpdateLineItem()](#afterupdatelineitem)
+* [beforeRemoveLineItem()](#beforeremovelineitem)
+* [afterRemoveLineItem()](#afterremovelineitem)
+* [beforeSetEmail()](#beforesetemail)
+* [afterSetEmail()](#aftersetemail)
+* [beforeSetShippingMethod()](#beforesetshippingmethod)
+* [afterSetShippingMethod()](#aftersetshippingmethod)
+* [beforeSetCustomField()](#beforesetcustomfield)
+* [afterSetCustomField()](#aftersetcustomfield)
+* [beforeSetShippingAddress()](#beforesetshippingaddress)
+* [afterSetShippingAddress()](#aftersetshippingaddress)
+* [beforeSetBillingAddress()](#beforesetbillingaddress)
+* [afterSetBillingAddress()](#aftersetbillingaddress)
+* [beforeAddPayment()](#beforeaddpayment)
+* [afterAddPayment()](#afteraddpayment)
+* [beforeRedeemDiscountCode()](#beforeredeemdiscountcode)
+* [afterRedeemDiscountCode()](#afterredeemdiscountcode)
+* [beforeOrder()](#beforeorder)
+* [afterOrder()](#afterorder)
+* [beforeGetOrder()](#beforegetorder)
+* [afterGetOrder()](#aftergetorder)
+* [beforeGetOrders()](#beforegetorders)
+* [afterGetOrders()](#aftergetorders)
+* [beforeStartTransaction()](#beforestarttransaction)
+* [beforeCommit()](#beforecommit)
+* [afterCommit()](#aftercommit)
 
 
 ### beforeGetForUser()
@@ -99,7 +99,7 @@ Argument|Type|Default|Description
 `$cartApi`|[`CartApi`](../../CartApi.md)|``|
 `$cart`|[`Cart`](../../Cart.md)|``|
 
-Return Value: `?Cart`
+Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeGetAnonymous()
 
@@ -138,7 +138,7 @@ Argument|Type|Default|Description
 `$cartApi`|[`CartApi`](../../CartApi.md)|``|
 `$cart`|[`Cart`](../../Cart.md)|``|
 
-Return Value: `?Cart`
+Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeGetById()
 
@@ -177,7 +177,7 @@ Argument|Type|Default|Description
 `$cartApi`|[`CartApi`](../../CartApi.md)|``|
 `$cart`|[`Cart`](../../Cart.md)|``|
 
-Return Value: `?Cart`
+Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeAddToCart()
 
@@ -217,7 +217,7 @@ Argument|Type|Default|Description
 `$cartApi`|[`CartApi`](../../CartApi.md)|``|
 `$cart`|[`Cart`](../../Cart.md)|``|
 
-Return Value: `?Cart`
+Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeUpdateLineItem()
 
@@ -259,7 +259,7 @@ Argument|Type|Default|Description
 `$cartApi`|[`CartApi`](../../CartApi.md)|``|
 `$cart`|[`Cart`](../../Cart.md)|``|
 
-Return Value: `?Cart`
+Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeRemoveLineItem()
 
@@ -299,7 +299,7 @@ Argument|Type|Default|Description
 `$cartApi`|[`CartApi`](../../CartApi.md)|``|
 `$cart`|[`Cart`](../../Cart.md)|``|
 
-Return Value: `?Cart`
+Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeSetEmail()
 
@@ -339,7 +339,7 @@ Argument|Type|Default|Description
 `$cartApi`|[`CartApi`](../../CartApi.md)|``|
 `$cart`|[`Cart`](../../Cart.md)|``|
 
-Return Value: `?Cart`
+Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeSetShippingMethod()
 
@@ -379,7 +379,7 @@ Argument|Type|Default|Description
 `$cartApi`|[`CartApi`](../../CartApi.md)|``|
 `$cart`|[`Cart`](../../Cart.md)|``|
 
-Return Value: `?Cart`
+Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeSetCustomField()
 
@@ -419,7 +419,7 @@ Argument|Type|Default|Description
 `$cartApi`|[`CartApi`](../../CartApi.md)|``|
 `$cart`|[`Cart`](../../Cart.md)|``|
 
-Return Value: `?Cart`
+Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeSetShippingAddress()
 
@@ -459,7 +459,7 @@ Argument|Type|Default|Description
 `$cartApi`|[`CartApi`](../../CartApi.md)|``|
 `$cart`|[`Cart`](../../Cart.md)|``|
 
-Return Value: `?Cart`
+Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeSetBillingAddress()
 
@@ -499,7 +499,7 @@ Argument|Type|Default|Description
 `$cartApi`|[`CartApi`](../../CartApi.md)|``|
 `$cart`|[`Cart`](../../Cart.md)|``|
 
-Return Value: `?Cart`
+Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeAddPayment()
 
@@ -540,7 +540,7 @@ Argument|Type|Default|Description
 `$cartApi`|[`CartApi`](../../CartApi.md)|``|
 `$cart`|[`Cart`](../../Cart.md)|``|
 
-Return Value: `?Cart`
+Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeRedeemDiscountCode()
 
@@ -580,7 +580,7 @@ Argument|Type|Default|Description
 `$cartApi`|[`CartApi`](../../CartApi.md)|``|
 `$cart`|[`Cart`](../../Cart.md)|``|
 
-Return Value: `?Cart`
+Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeOrder()
 
@@ -618,7 +618,7 @@ Argument|Type|Default|Description
 `$cartApi`|[`CartApi`](../../CartApi.md)|``|
 `$order`|[`Order`](../../Order.md)|``|
 
-Return Value: `?Order`
+Return Value: ?[`Order`](../../Order.md)
 
 ### beforeGetOrder()
 
@@ -656,7 +656,7 @@ Argument|Type|Default|Description
 `$cartApi`|[`CartApi`](../../CartApi.md)|``|
 `$orderId`|[`Order`](../../Order.md)|``|
 
-Return Value: `?Order`
+Return Value: ?[`Order`](../../Order.md)
 
 ### beforeGetOrders()
 
@@ -751,5 +751,5 @@ Argument|Type|Default|Description
 `$cartApi`|[`CartApi`](../../CartApi.md)|``|
 `$cart`|[`Cart`](../../Cart.md)|``|
 
-Return Value: `?Cart`
+Return Value: ?[`Cart`](../../Cart.md)
 

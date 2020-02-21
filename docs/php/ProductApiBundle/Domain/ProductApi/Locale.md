@@ -16,9 +16,9 @@ Property|Type|Default|Description
 
 ## Methods
 
-* [__toString()](#toString)
-* [toString()](#toString)
-* [createFromPosix()](#createFromPosix)
+* [__toString()](#tostring)
+* [toString()](#tostring)
+* [createFromPosix()](#createfromposix)
 
 
 ### __toString()

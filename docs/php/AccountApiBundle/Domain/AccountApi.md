@@ -8,21 +8,21 @@ Fully Qualified: [`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`](../..
 ## Methods
 
 * [get()](#get)
-* [confirmEmail()](#confirmEmail)
+* [confirmEmail()](#confirmemail)
 * [create()](#create)
-* [verifyEmail()](#verifyEmail)
+* [verifyEmail()](#verifyemail)
 * [update()](#update)
-* [updatePassword()](#updatePassword)
-* [generatePasswordResetToken()](#generatePasswordResetToken)
-* [resetPassword()](#resetPassword)
+* [updatePassword()](#updatepassword)
+* [generatePasswordResetToken()](#generatepasswordresettoken)
+* [resetPassword()](#resetpassword)
 * [login()](#login)
-* [getAddresses()](#getAddresses)
-* [addAddress()](#addAddress)
-* [updateAddress()](#updateAddress)
-* [removeAddress()](#removeAddress)
-* [setDefaultBillingAddress()](#setDefaultBillingAddress)
-* [setDefaultShippingAddress()](#setDefaultShippingAddress)
-* [getDangerousInnerClient()](#getDangerousInnerClient)
+* [getAddresses()](#getaddresses)
+* [addAddress()](#addaddress)
+* [updateAddress()](#updateaddress)
+* [removeAddress()](#removeaddress)
+* [setDefaultBillingAddress()](#setdefaultbillingaddress)
+* [setDefaultShippingAddress()](#setdefaultshippingaddress)
+* [getDangerousInnerClient()](#getdangerousinnerclient)
 
 
 ### get()
@@ -76,7 +76,7 @@ public function create(Account $account, ?Cart $cart = null): Account
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$account`|[`Account`](Account.md)|``|
-`$cart`|`?Cart`|`null`|
+`$cart`|?[`Cart`](../../CartApiBundle/Domain/Cart.md)|`null`|
 
 Return Value: [`Account`](Account.md)
 
@@ -188,7 +188,7 @@ public function login(Account $account, ?Cart $cart = null): bool
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$account`|[`Account`](Account.md)|``|
-`$cart`|`?Cart`|`null`|
+`$cart`|?[`Cart`](../../CartApiBundle/Domain/Cart.md)|`null`|
 
 Return Value: `bool`
 

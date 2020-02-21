@@ -24,7 +24,7 @@ follow any defined schema.
 
 ## Methods
 
-* [getConfigurationSection()](#getConfigurationSection)
+* [getConfigurationSection()](#getconfigurationsection)
 
 
 ### getConfigurationSection()

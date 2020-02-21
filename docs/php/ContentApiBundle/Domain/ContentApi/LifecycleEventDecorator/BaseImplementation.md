@@ -25,12 +25,12 @@ need to tag your service based on this class with
 
 ## Methods
 
-* [beforeGetContentTypes()](#beforeGetContentTypes)
-* [afterGetContentTypes()](#afterGetContentTypes)
-* [beforeGetContent()](#beforeGetContent)
-* [afterGetContent()](#afterGetContent)
-* [beforeQuery()](#beforeQuery)
-* [afterQuery()](#afterQuery)
+* [beforeGetContentTypes()](#beforegetcontenttypes)
+* [afterGetContentTypes()](#aftergetcontenttypes)
+* [beforeGetContent()](#beforegetcontent)
+* [afterGetContent()](#aftergetcontent)
+* [beforeQuery()](#beforequery)
+* [afterQuery()](#afterquery)
 
 
 ### beforeGetContentTypes()
@@ -106,9 +106,9 @@ public function afterGetContent(ContentApi $contentApi, ?Content $content): ?Con
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$contentApi`|[`ContentApi`](../../ContentApi.md)|``|
-`$content`|`?Content`|``|
+`$content`|?[`Content`](../Content.md)|``|
 
-Return Value: `?Content`
+Return Value: ?[`Content`](../Content.md)
 
 ### beforeQuery()
 
@@ -146,7 +146,7 @@ public function afterQuery(ContentApi $contentApi, ?Result $result): ?Result
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$contentApi`|[`ContentApi`](../../ContentApi.md)|``|
-`$result`|`?Result`|``|
+`$result`|?[`Result`](../../Result.md)|``|
 
-Return Value: `?Result`
+Return Value: ?[`Result`](../../Result.md)
 
