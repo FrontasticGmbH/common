@@ -39,7 +39,7 @@ need to tag your service based on this class with
 
 
 ```php
-public function beforeGetCategories(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery query): void
+public function beforeGetCategories([ProductApi](../../ProductApi.md) $productApi, [CategoryQuery](../Query/CategoryQuery.md) $query): void
 ```
 
 
@@ -49,14 +49,14 @@ public function beforeGetCategories(\Frontastic\Common\ProductApiBundle\Domain\P
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$productApi`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi`|``|
-`$query`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery`|``|
+`$productApi`|`[ProductApi](../../ProductApi.md)`|``|
+`$query`|`[CategoryQuery](../Query/CategoryQuery.md)`|``|
 
 ### afterGetCategories()
 
 
 ```php
-public function afterGetCategories(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, array categories): ?array
+public function afterGetCategories([ProductApi](../../ProductApi.md) $productApi, array $categories): ?array
 ```
 
 
@@ -66,14 +66,14 @@ public function afterGetCategories(\Frontastic\Common\ProductApiBundle\Domain\Pr
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$productApi`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi`|``|
+`$productApi`|`[ProductApi](../../ProductApi.md)`|``|
 `$categories`|`array`|``|
 
 ### beforeGetProductTypes()
 
 
 ```php
-public function beforeGetProductTypes(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery query): void
+public function beforeGetProductTypes([ProductApi](../../ProductApi.md) $productApi, [ProductTypeQuery](../Query/ProductTypeQuery.md) $query): void
 ```
 
 
@@ -83,14 +83,14 @@ public function beforeGetProductTypes(\Frontastic\Common\ProductApiBundle\Domain
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$productApi`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi`|``|
-`$query`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery`|``|
+`$productApi`|`[ProductApi](../../ProductApi.md)`|``|
+`$query`|`[ProductTypeQuery](../Query/ProductTypeQuery.md)`|``|
 
 ### afterGetProductTypes()
 
 
 ```php
-public function afterGetProductTypes(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, array productTypes): ?array
+public function afterGetProductTypes([ProductApi](../../ProductApi.md) $productApi, array $productTypes): ?array
 ```
 
 
@@ -100,14 +100,14 @@ public function afterGetProductTypes(\Frontastic\Common\ProductApiBundle\Domain\
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$productApi`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi`|``|
+`$productApi`|`[ProductApi](../../ProductApi.md)`|``|
 `$productTypes`|`array`|``|
 
 ### beforeGetProduct()
 
 
 ```php
-public function beforeGetProduct(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery query, string mode = ProductApi::QUERY_SYNC): void
+public function beforeGetProduct([ProductApi](../../ProductApi.md) $productApi, [ProductQuery](../Query/ProductQuery.md) $query, string $mode = ProductApi::QUERY_SYNC): void
 ```
 
 
@@ -117,15 +117,15 @@ public function beforeGetProduct(\Frontastic\Common\ProductApiBundle\Domain\Prod
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$productApi`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi`|``|
-`$query`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery`|``|
+`$productApi`|`[ProductApi](../../ProductApi.md)`|``|
+`$query`|`[ProductQuery](../Query/ProductQuery.md)`|``|
 `$mode`|`string`|`ProductApi::QUERY_SYNC`|
 
 ### afterGetProduct()
 
 
 ```php
-public function afterGetProduct(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, ?\Frontastic\Common\ProductApiBundle\Domain\Product product): ?\Frontastic\Common\ProductApiBundle\Domain\Product
+public function afterGetProduct([ProductApi](../../ProductApi.md) $productApi, ?[Product](../../Product.md) $product): ?[Product](../../Product.md)
 ```
 
 
@@ -135,14 +135,14 @@ public function afterGetProduct(\Frontastic\Common\ProductApiBundle\Domain\Produ
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$productApi`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi`|``|
-`$product`|`?\Frontastic\Common\ProductApiBundle\Domain\Product`|``|
+`$productApi`|`[ProductApi](../../ProductApi.md)`|``|
+`$product`|`?[Product](../../Product.md)`|``|
 
 ### beforeQuery()
 
 
 ```php
-public function beforeQuery(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery query, string mode = ProductApi::QUERY_SYNC): void
+public function beforeQuery([ProductApi](../../ProductApi.md) $productApi, [ProductQuery](../Query/ProductQuery.md) $query, string $mode = ProductApi::QUERY_SYNC): void
 ```
 
 
@@ -152,15 +152,15 @@ public function beforeQuery(\Frontastic\Common\ProductApiBundle\Domain\ProductAp
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$productApi`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi`|``|
-`$query`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery`|``|
+`$productApi`|`[ProductApi](../../ProductApi.md)`|``|
+`$query`|`[ProductQuery](../Query/ProductQuery.md)`|``|
 `$mode`|`string`|`ProductApi::QUERY_SYNC`|
 
 ### afterQuery()
 
 
 ```php
-public function afterQuery(\Frontastic\Common\ProductApiBundle\Domain\ProductApi productApi, ?\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result result): ?\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result
+public function afterQuery([ProductApi](../../ProductApi.md) $productApi, ?[Result](../Result.md) $result): ?[Result](../Result.md)
 ```
 
 
@@ -170,6 +170,6 @@ public function afterQuery(\Frontastic\Common\ProductApiBundle\Domain\ProductApi
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$productApi`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi`|``|
-`$result`|`?\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result`|``|
+`$productApi`|`[ProductApi](../../ProductApi.md)`|``|
+`$result`|`?[Result](../Result.md)`|``|
 

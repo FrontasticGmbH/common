@@ -13,7 +13,7 @@ Property|Type|Default|Description
 `slug`|`string`|``|
 `description`|`string`|``|
 `categories`|`string[]`|`[]`|
-`variants`|`\Frontastic\Common\ProductApiBundle\Domain\Variant[]`|`[]`|
+`variants`|`[Variant](Variant.md)[]`|`[]`|
 `dangerousInnerProduct`|`mixed`|``|Access original object from backend
 
 ## Methods
@@ -25,7 +25,7 @@ Property|Type|Default|Description
 
 
 ```php
-public function __get(mixed name): mixed
+public function __get(mixed $name): mixed
 ```
 
 

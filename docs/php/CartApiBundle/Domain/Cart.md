@@ -9,15 +9,15 @@ Property|Type|Default|Description
 `cartId`|`string`|``|
 `cartVersion`|`string`|``|
 `custom`|`array`|`[]`|
-`lineItems`|`\Frontastic\Common\CartApiBundle\Domain\LineItem[]`|`[]`|
+`lineItems`|`[LineItem](LineItem.md)[]`|`[]`|
 `email`|`string`|``|
 `birthday`|`\DateTimeImmutable`|``|
-`shippingMethod`|`?\Frontastic\Common\CartApiBundle\Domain\ShippingMethod`|``|
-`shippingAddress`|`?\Frontastic\Common\AccountApiBundle\Domain\Address`|``|
-`billingAddress`|`?\Frontastic\Common\AccountApiBundle\Domain\Address`|``|
+`shippingMethod`|`?[ShippingMethod](ShippingMethod.md)`|``|
+`shippingAddress`|`?[Address](../../AccountApiBundle/Domain/Address.md)`|``|
+`billingAddress`|`?[Address](../../AccountApiBundle/Domain/Address.md)`|``|
 `sum`|`int`|``|
 `currency`|`string`|``|
-`payments`|`\Frontastic\Common\CartApiBundle\Domain\Payment[]`|`[]`|
+`payments`|`[Payment](Payment.md)[]`|`[]`|
 `discountCodes`|`string[]`|`[]`|
 `dangerousInnerCart`|`mixed`|``|Access original object from backend
 

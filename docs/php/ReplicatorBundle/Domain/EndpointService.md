@@ -18,7 +18,7 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\EndpointService`](
 
 
 ```php
-public function addReplicationSource(string channel, \Frontastic\Common\ReplicatorBundle\Domain\Source source): void
+public function addReplicationSource(string $channel, [Source](Source.md) $source): void
 ```
 
 
@@ -29,13 +29,13 @@ public function addReplicationSource(string channel, \Frontastic\Common\Replicat
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$channel`|`string`|``|
-`$source`|`\Frontastic\Common\ReplicatorBundle\Domain\Source`|``|
+`$source`|`[Source](Source.md)`|``|
 
 ### getReplicationSource()
 
 
 ```php
-public function getReplicationSource(string channel): mixed
+public function getReplicationSource(string $channel): mixed
 ```
 
 
@@ -51,7 +51,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function addReplicationTarget(string channel, \Frontastic\Common\ReplicatorBundle\Domain\Target target): void
+public function addReplicationTarget(string $channel, [Target](Target.md) $target): void
 ```
 
 
@@ -62,13 +62,13 @@ public function addReplicationTarget(string channel, \Frontastic\Common\Replicat
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$channel`|`string`|``|
-`$target`|`\Frontastic\Common\ReplicatorBundle\Domain\Target`|``|
+`$target`|`[Target](Target.md)`|``|
 
 ### getReplicationTarget()
 
 
 ```php
-public function getReplicationTarget(string channel): mixed
+public function getReplicationTarget(string $channel): mixed
 ```
 
 
@@ -84,7 +84,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function dispatch(\Frontastic\Common\ReplicatorBundle\Domain\Command command): \Frontastic\Common\ReplicatorBundle\Domain\Result
+public function dispatch([Command](Command.md) $command): [Result](Result.md)
 ```
 
 
@@ -94,5 +94,5 @@ public function dispatch(\Frontastic\Common\ReplicatorBundle\Domain\Command comm
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$command`|`\Frontastic\Common\ReplicatorBundle\Domain\Command`|``|
+`$command`|`[Command](Command.md)`|``|
 

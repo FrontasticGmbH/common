@@ -7,5 +7,5 @@ Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\
 Property|Type|Default|Description
 --------|----|-------|-----------
 `type`|`string`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Facets::TYPE_TERM`|
-`terms`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\Term[]`|`[]`|
+`terms`|`[Term](Term.md)[]`|`[]`|
 

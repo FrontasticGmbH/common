@@ -61,7 +61,7 @@ need to tag your service based on this class with
 
 
 ```php
-public function beforeGet(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, string email): void
+public function beforeGet([AccountApi](../../AccountApi.md) $accountApi, string $email): void
 ```
 
 
@@ -71,14 +71,14 @@ public function beforeGet(\Frontastic\Common\AccountApiBundle\Domain\AccountApi 
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
 `$email`|`string`|``|
 
 ### afterGet()
 
 
 ```php
-public function afterGet(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, \Frontastic\Common\AccountApiBundle\Domain\Account account): ?\Frontastic\Common\AccountApiBundle\Domain\Account
+public function afterGet([AccountApi](../../AccountApi.md) $accountApi, [Account](../../Account.md) $account): ?[Account](../../Account.md)
 ```
 
 
@@ -88,14 +88,14 @@ public function afterGet(\Frontastic\Common\AccountApiBundle\Domain\AccountApi a
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
-`$account`|`\Frontastic\Common\AccountApiBundle\Domain\Account`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
+`$account`|`[Account](../../Account.md)`|``|
 
 ### beforeConfirmEmail()
 
 
 ```php
-public function beforeConfirmEmail(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, string token): void
+public function beforeConfirmEmail([AccountApi](../../AccountApi.md) $accountApi, string $token): void
 ```
 
 
@@ -105,14 +105,14 @@ public function beforeConfirmEmail(\Frontastic\Common\AccountApiBundle\Domain\Ac
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
 `$token`|`string`|``|
 
 ### afterConfirmEmail()
 
 
 ```php
-public function afterConfirmEmail(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, \Frontastic\Common\AccountApiBundle\Domain\Account account): ?\Frontastic\Common\AccountApiBundle\Domain\Account
+public function afterConfirmEmail([AccountApi](../../AccountApi.md) $accountApi, [Account](../../Account.md) $account): ?[Account](../../Account.md)
 ```
 
 
@@ -122,14 +122,14 @@ public function afterConfirmEmail(\Frontastic\Common\AccountApiBundle\Domain\Acc
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
-`$account`|`\Frontastic\Common\AccountApiBundle\Domain\Account`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
+`$account`|`[Account](../../Account.md)`|``|
 
 ### beforeCreate()
 
 
 ```php
-public function beforeCreate(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, \Frontastic\Common\AccountApiBundle\Domain\Account account, ?\Frontastic\Common\CartApiBundle\Domain\Cart cart = null): void
+public function beforeCreate([AccountApi](../../AccountApi.md) $accountApi, [Account](../../Account.md) $account, ?[Cart](../../../../CartApiBundle/Domain/Cart.md) $cart = null): void
 ```
 
 
@@ -139,15 +139,15 @@ public function beforeCreate(\Frontastic\Common\AccountApiBundle\Domain\AccountA
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
-`$account`|`\Frontastic\Common\AccountApiBundle\Domain\Account`|``|
-`$cart`|`?\Frontastic\Common\CartApiBundle\Domain\Cart`|`null`|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
+`$account`|`[Account](../../Account.md)`|``|
+`$cart`|`?[Cart](../../../../CartApiBundle/Domain/Cart.md)`|`null`|
 
 ### afterCreate()
 
 
 ```php
-public function afterCreate(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, \Frontastic\Common\AccountApiBundle\Domain\Account account): ?\Frontastic\Common\AccountApiBundle\Domain\Account
+public function afterCreate([AccountApi](../../AccountApi.md) $accountApi, [Account](../../Account.md) $account): ?[Account](../../Account.md)
 ```
 
 
@@ -157,14 +157,14 @@ public function afterCreate(\Frontastic\Common\AccountApiBundle\Domain\AccountAp
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
-`$account`|`\Frontastic\Common\AccountApiBundle\Domain\Account`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
+`$account`|`[Account](../../Account.md)`|``|
 
 ### beforeVerifyEmail()
 
 
 ```php
-public function beforeVerifyEmail(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, string token): void
+public function beforeVerifyEmail([AccountApi](../../AccountApi.md) $accountApi, string $token): void
 ```
 
 
@@ -174,14 +174,14 @@ public function beforeVerifyEmail(\Frontastic\Common\AccountApiBundle\Domain\Acc
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
 `$token`|`string`|``|
 
 ### afterVerifyEmail()
 
 
 ```php
-public function afterVerifyEmail(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, \Frontastic\Common\AccountApiBundle\Domain\Account account): ?\Frontastic\Common\AccountApiBundle\Domain\Account
+public function afterVerifyEmail([AccountApi](../../AccountApi.md) $accountApi, [Account](../../Account.md) $account): ?[Account](../../Account.md)
 ```
 
 
@@ -191,14 +191,14 @@ public function afterVerifyEmail(\Frontastic\Common\AccountApiBundle\Domain\Acco
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
-`$account`|`\Frontastic\Common\AccountApiBundle\Domain\Account`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
+`$account`|`[Account](../../Account.md)`|``|
 
 ### beforeUpdate()
 
 
 ```php
-public function beforeUpdate(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, \Frontastic\Common\AccountApiBundle\Domain\Account account): void
+public function beforeUpdate([AccountApi](../../AccountApi.md) $accountApi, [Account](../../Account.md) $account): void
 ```
 
 
@@ -208,14 +208,14 @@ public function beforeUpdate(\Frontastic\Common\AccountApiBundle\Domain\AccountA
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
-`$account`|`\Frontastic\Common\AccountApiBundle\Domain\Account`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
+`$account`|`[Account](../../Account.md)`|``|
 
 ### afterUpdate()
 
 
 ```php
-public function afterUpdate(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, \Frontastic\Common\AccountApiBundle\Domain\Account account): ?\Frontastic\Common\AccountApiBundle\Domain\Account
+public function afterUpdate([AccountApi](../../AccountApi.md) $accountApi, [Account](../../Account.md) $account): ?[Account](../../Account.md)
 ```
 
 
@@ -225,14 +225,14 @@ public function afterUpdate(\Frontastic\Common\AccountApiBundle\Domain\AccountAp
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
-`$account`|`\Frontastic\Common\AccountApiBundle\Domain\Account`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
+`$account`|`[Account](../../Account.md)`|``|
 
 ### beforeUpdatePassword()
 
 
 ```php
-public function beforeUpdatePassword(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, string accountId, string oldPassword, string newPassword): void
+public function beforeUpdatePassword([AccountApi](../../AccountApi.md) $accountApi, string $accountId, string $oldPassword, string $newPassword): void
 ```
 
 
@@ -242,7 +242,7 @@ public function beforeUpdatePassword(\Frontastic\Common\AccountApiBundle\Domain\
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
 `$accountId`|`string`|``|
 `$oldPassword`|`string`|``|
 `$newPassword`|`string`|``|
@@ -251,7 +251,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function afterUpdatePassword(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, \Frontastic\Common\AccountApiBundle\Domain\Account account): ?\Frontastic\Common\AccountApiBundle\Domain\Account
+public function afterUpdatePassword([AccountApi](../../AccountApi.md) $accountApi, [Account](../../Account.md) $account): ?[Account](../../Account.md)
 ```
 
 
@@ -261,14 +261,14 @@ public function afterUpdatePassword(\Frontastic\Common\AccountApiBundle\Domain\A
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
-`$account`|`\Frontastic\Common\AccountApiBundle\Domain\Account`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
+`$account`|`[Account](../../Account.md)`|``|
 
 ### beforeGeneratePasswordResetToken()
 
 
 ```php
-public function beforeGeneratePasswordResetToken(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, \Frontastic\Common\AccountApiBundle\Domain\Account account): void
+public function beforeGeneratePasswordResetToken([AccountApi](../../AccountApi.md) $accountApi, [Account](../../Account.md) $account): void
 ```
 
 
@@ -278,14 +278,14 @@ public function beforeGeneratePasswordResetToken(\Frontastic\Common\AccountApiBu
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
-`$account`|`\Frontastic\Common\AccountApiBundle\Domain\Account`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
+`$account`|`[Account](../../Account.md)`|``|
 
 ### afterGeneratePasswordResetToken()
 
 
 ```php
-public function afterGeneratePasswordResetToken(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, \Frontastic\Common\AccountApiBundle\Domain\Account account): ?\Frontastic\Common\AccountApiBundle\Domain\Account
+public function afterGeneratePasswordResetToken([AccountApi](../../AccountApi.md) $accountApi, [Account](../../Account.md) $account): ?[Account](../../Account.md)
 ```
 
 
@@ -295,14 +295,14 @@ public function afterGeneratePasswordResetToken(\Frontastic\Common\AccountApiBun
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
-`$account`|`\Frontastic\Common\AccountApiBundle\Domain\Account`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
+`$account`|`[Account](../../Account.md)`|``|
 
 ### beforeResetPassword()
 
 
 ```php
-public function beforeResetPassword(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, string token, string newPassword): void
+public function beforeResetPassword([AccountApi](../../AccountApi.md) $accountApi, string $token, string $newPassword): void
 ```
 
 
@@ -312,7 +312,7 @@ public function beforeResetPassword(\Frontastic\Common\AccountApiBundle\Domain\A
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
 `$token`|`string`|``|
 `$newPassword`|`string`|``|
 
@@ -320,7 +320,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function afterResetPassword(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, \Frontastic\Common\AccountApiBundle\Domain\Account account): ?\Frontastic\Common\AccountApiBundle\Domain\Account
+public function afterResetPassword([AccountApi](../../AccountApi.md) $accountApi, [Account](../../Account.md) $account): ?[Account](../../Account.md)
 ```
 
 
@@ -330,14 +330,14 @@ public function afterResetPassword(\Frontastic\Common\AccountApiBundle\Domain\Ac
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
-`$account`|`\Frontastic\Common\AccountApiBundle\Domain\Account`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
+`$account`|`[Account](../../Account.md)`|``|
 
 ### beforeLogin()
 
 
 ```php
-public function beforeLogin(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, \Frontastic\Common\AccountApiBundle\Domain\Account account, ?\Frontastic\Common\CartApiBundle\Domain\Cart cart = null): void
+public function beforeLogin([AccountApi](../../AccountApi.md) $accountApi, [Account](../../Account.md) $account, ?[Cart](../../../../CartApiBundle/Domain/Cart.md) $cart = null): void
 ```
 
 
@@ -347,15 +347,15 @@ public function beforeLogin(\Frontastic\Common\AccountApiBundle\Domain\AccountAp
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
-`$account`|`\Frontastic\Common\AccountApiBundle\Domain\Account`|``|
-`$cart`|`?\Frontastic\Common\CartApiBundle\Domain\Cart`|`null`|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
+`$account`|`[Account](../../Account.md)`|``|
+`$cart`|`?[Cart](../../../../CartApiBundle/Domain/Cart.md)`|`null`|
 
 ### afterLogin()
 
 
 ```php
-public function afterLogin(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, bool successful): ?bool
+public function afterLogin([AccountApi](../../AccountApi.md) $accountApi, bool $successful): ?bool
 ```
 
 
@@ -365,14 +365,14 @@ public function afterLogin(\Frontastic\Common\AccountApiBundle\Domain\AccountApi
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
 `$successful`|`bool`|``|
 
 ### beforeGetAddresses()
 
 
 ```php
-public function beforeGetAddresses(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, string accountId): void
+public function beforeGetAddresses([AccountApi](../../AccountApi.md) $accountApi, string $accountId): void
 ```
 
 
@@ -382,14 +382,14 @@ public function beforeGetAddresses(\Frontastic\Common\AccountApiBundle\Domain\Ac
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
 `$accountId`|`string`|``|
 
 ### afterGetAddresses()
 
 
 ```php
-public function afterGetAddresses(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, array addresses): ?array
+public function afterGetAddresses([AccountApi](../../AccountApi.md) $accountApi, array $addresses): ?array
 ```
 
 
@@ -399,14 +399,14 @@ public function afterGetAddresses(\Frontastic\Common\AccountApiBundle\Domain\Acc
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
 `$addresses`|`array`|``|
 
 ### beforeAddAddress()
 
 
 ```php
-public function beforeAddAddress(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, string accountId, \Frontastic\Common\AccountApiBundle\Domain\Address address): void
+public function beforeAddAddress([AccountApi](../../AccountApi.md) $accountApi, string $accountId, [Address](../../Address.md) $address): void
 ```
 
 
@@ -416,15 +416,15 @@ public function beforeAddAddress(\Frontastic\Common\AccountApiBundle\Domain\Acco
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
 `$accountId`|`string`|``|
-`$address`|`\Frontastic\Common\AccountApiBundle\Domain\Address`|``|
+`$address`|`[Address](../../Address.md)`|``|
 
 ### afterAddAddress()
 
 
 ```php
-public function afterAddAddress(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, \Frontastic\Common\AccountApiBundle\Domain\Account account): ?\Frontastic\Common\AccountApiBundle\Domain\Account
+public function afterAddAddress([AccountApi](../../AccountApi.md) $accountApi, [Account](../../Account.md) $account): ?[Account](../../Account.md)
 ```
 
 
@@ -434,14 +434,14 @@ public function afterAddAddress(\Frontastic\Common\AccountApiBundle\Domain\Accou
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
-`$account`|`\Frontastic\Common\AccountApiBundle\Domain\Account`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
+`$account`|`[Account](../../Account.md)`|``|
 
 ### beforeUpdateAddress()
 
 
 ```php
-public function beforeUpdateAddress(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, string accountId, \Frontastic\Common\AccountApiBundle\Domain\Address address): void
+public function beforeUpdateAddress([AccountApi](../../AccountApi.md) $accountApi, string $accountId, [Address](../../Address.md) $address): void
 ```
 
 
@@ -451,15 +451,15 @@ public function beforeUpdateAddress(\Frontastic\Common\AccountApiBundle\Domain\A
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
 `$accountId`|`string`|``|
-`$address`|`\Frontastic\Common\AccountApiBundle\Domain\Address`|``|
+`$address`|`[Address](../../Address.md)`|``|
 
 ### afterUpdateAddress()
 
 
 ```php
-public function afterUpdateAddress(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, \Frontastic\Common\AccountApiBundle\Domain\Account account): ?\Frontastic\Common\AccountApiBundle\Domain\Account
+public function afterUpdateAddress([AccountApi](../../AccountApi.md) $accountApi, [Account](../../Account.md) $account): ?[Account](../../Account.md)
 ```
 
 
@@ -469,14 +469,14 @@ public function afterUpdateAddress(\Frontastic\Common\AccountApiBundle\Domain\Ac
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
-`$account`|`\Frontastic\Common\AccountApiBundle\Domain\Account`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
+`$account`|`[Account](../../Account.md)`|``|
 
 ### beforeRemoveAddress()
 
 
 ```php
-public function beforeRemoveAddress(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, string accountId, string addressId): void
+public function beforeRemoveAddress([AccountApi](../../AccountApi.md) $accountApi, string $accountId, string $addressId): void
 ```
 
 
@@ -486,7 +486,7 @@ public function beforeRemoveAddress(\Frontastic\Common\AccountApiBundle\Domain\A
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
 `$accountId`|`string`|``|
 `$addressId`|`string`|``|
 
@@ -494,7 +494,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function afterRemoveAddress(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, \Frontastic\Common\AccountApiBundle\Domain\Account account): ?\Frontastic\Common\AccountApiBundle\Domain\Account
+public function afterRemoveAddress([AccountApi](../../AccountApi.md) $accountApi, [Account](../../Account.md) $account): ?[Account](../../Account.md)
 ```
 
 
@@ -504,14 +504,14 @@ public function afterRemoveAddress(\Frontastic\Common\AccountApiBundle\Domain\Ac
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
-`$account`|`\Frontastic\Common\AccountApiBundle\Domain\Account`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
+`$account`|`[Account](../../Account.md)`|``|
 
 ### beforeSetDefaultBillingAddress()
 
 
 ```php
-public function beforeSetDefaultBillingAddress(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, string accountId, string addressId): void
+public function beforeSetDefaultBillingAddress([AccountApi](../../AccountApi.md) $accountApi, string $accountId, string $addressId): void
 ```
 
 
@@ -521,7 +521,7 @@ public function beforeSetDefaultBillingAddress(\Frontastic\Common\AccountApiBund
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
 `$accountId`|`string`|``|
 `$addressId`|`string`|``|
 
@@ -529,7 +529,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function afterSetDefaultBillingAddress(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, \Frontastic\Common\AccountApiBundle\Domain\Account account): ?\Frontastic\Common\AccountApiBundle\Domain\Account
+public function afterSetDefaultBillingAddress([AccountApi](../../AccountApi.md) $accountApi, [Account](../../Account.md) $account): ?[Account](../../Account.md)
 ```
 
 
@@ -539,14 +539,14 @@ public function afterSetDefaultBillingAddress(\Frontastic\Common\AccountApiBundl
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
-`$account`|`\Frontastic\Common\AccountApiBundle\Domain\Account`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
+`$account`|`[Account](../../Account.md)`|``|
 
 ### beforeSetDefaultShippingAddress()
 
 
 ```php
-public function beforeSetDefaultShippingAddress(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, string accountId, string addressId): void
+public function beforeSetDefaultShippingAddress([AccountApi](../../AccountApi.md) $accountApi, string $accountId, string $addressId): void
 ```
 
 
@@ -556,7 +556,7 @@ public function beforeSetDefaultShippingAddress(\Frontastic\Common\AccountApiBun
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
 `$accountId`|`string`|``|
 `$addressId`|`string`|``|
 
@@ -564,7 +564,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function afterSetDefaultShippingAddress(\Frontastic\Common\AccountApiBundle\Domain\AccountApi accountApi, \Frontastic\Common\AccountApiBundle\Domain\Account account): ?\Frontastic\Common\AccountApiBundle\Domain\Account
+public function afterSetDefaultShippingAddress([AccountApi](../../AccountApi.md) $accountApi, [Account](../../Account.md) $account): ?[Account](../../Account.md)
 ```
 
 
@@ -574,6 +574,6 @@ public function afterSetDefaultShippingAddress(\Frontastic\Common\AccountApiBund
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountApi`|`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`|``|
-`$account`|`\Frontastic\Common\AccountApiBundle\Domain\Account`|``|
+`$accountApi`|`[AccountApi](../../AccountApi.md)`|``|
+`$account`|`[Account](../../Account.md)`|``|
 

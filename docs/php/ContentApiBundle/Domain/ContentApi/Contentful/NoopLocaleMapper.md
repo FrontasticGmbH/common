@@ -14,7 +14,7 @@ Fully Qualified: [`\Frontastic\Common\ContentApiBundle\Domain\ContentApi\Content
 
 
 ```php
-public function replaceLocale(string frontasticLocale): string
+public function replaceLocale(string $frontasticLocale): string
 ```
 
 

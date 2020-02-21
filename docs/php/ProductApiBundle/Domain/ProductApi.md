@@ -18,7 +18,7 @@ Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi`](../..
 
 
 ```php
-public function getCategories(\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery query): array
+public function getCategories([CategoryQuery](ProductApi/Query/CategoryQuery.md) $query): array
 ```
 
 
@@ -28,13 +28,13 @@ public function getCategories(\Frontastic\Common\ProductApiBundle\Domain\Product
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$query`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery`|``|
+`$query`|`[CategoryQuery](ProductApi/Query/CategoryQuery.md)`|``|
 
 ### getProductTypes()
 
 
 ```php
-public function getProductTypes(\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery query): array
+public function getProductTypes([ProductTypeQuery](ProductApi/Query/ProductTypeQuery.md) $query): array
 ```
 
 
@@ -44,13 +44,13 @@ public function getProductTypes(\Frontastic\Common\ProductApiBundle\Domain\Produ
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$query`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery`|``|
+`$query`|`[ProductTypeQuery](ProductApi/Query/ProductTypeQuery.md)`|``|
 
 ### getProduct()
 
 
 ```php
-public function getProduct(\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery query, string mode = self::QUERY_SYNC): ?object
+public function getProduct([ProductQuery](ProductApi/Query/ProductQuery.md) $query, string $mode = self::QUERY_SYNC): ?object
 ```
 
 
@@ -60,14 +60,14 @@ public function getProduct(\Frontastic\Common\ProductApiBundle\Domain\ProductApi
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$query`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery`|``|
+`$query`|`[ProductQuery](ProductApi/Query/ProductQuery.md)`|``|
 `$mode`|`string`|`self::QUERY_SYNC`|One of the QUERY_* connstants. Execute the query synchronously or asynchronously?
 
 ### query()
 
 
 ```php
-public function query(\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery query, string mode = self::QUERY_SYNC): object
+public function query([ProductQuery](ProductApi/Query/ProductQuery.md) $query, string $mode = self::QUERY_SYNC): object
 ```
 
 
@@ -77,7 +77,7 @@ public function query(\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Quer
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$query`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery`|``|
+`$query`|`[ProductQuery](ProductApi/Query/ProductQuery.md)`|``|
 `$mode`|`string`|`self::QUERY_SYNC`|One of the QUERY_* connstants. Execute the query synchronously or asynchronously?
 
 ### getDangerousInnerClient()

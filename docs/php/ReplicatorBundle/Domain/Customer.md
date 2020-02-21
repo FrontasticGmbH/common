@@ -13,7 +13,7 @@ Property|Type|Default|Description
 `isTransient`|`bool`|`false`|Used to indicate this customer is only "half" configured or similar.
 `configuration`|`array`|`[]`|
 `environments`|`array`|`['production', 'staging', 'development']`|
-`projects`|`\Frontastic\Common\ReplicatorBundle\Domain\Project[]`|`[]`|
+`projects`|`[Project](Project.md)[]`|`[]`|
 
 ## Methods
 

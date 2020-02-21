@@ -6,6 +6,6 @@ Fully Qualified: [`\Frontastic\Common\WishlistApiBundle\Domain\LineItem\Variant`
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`variant`|`\Frontastic\Common\ProductApiBundle\Domain\Variant`|``|
+`variant`|`[Variant](../../../ProductApiBundle/Domain/Variant.md)`|``|
 `type`|`string`|`'variant'`|
 

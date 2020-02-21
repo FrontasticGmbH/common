@@ -15,7 +15,7 @@ Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\CartApiFactory`](../.
 
 
 ```php
-public function __construct(\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory commercetoolsClientFactory, \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory localeCreatorFactory, \Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator orderIdGenerator, iterable decorators): mixed
+public function __construct([ProductApi](../../ProductApiBundle/Domain/ProductApi.md)\Commercetools\ClientFactory $commercetoolsClientFactory, [ProductApi](../../ProductApiBundle/Domain/ProductApi.md)\Commercetools\Locale\CommercetoolsLocaleCreatorFactory $localeCreatorFactory, [OrderIdGenerator](OrderIdGenerator.md) $orderIdGenerator, iterable $decorators): mixed
 ```
 
 
@@ -25,16 +25,16 @@ public function __construct(\Frontastic\Common\ProductApiBundle\Domain\ProductAp
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$commercetoolsClientFactory`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory`|``|
-`$localeCreatorFactory`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory`|``|
-`$orderIdGenerator`|`\Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator`|``|
+`$commercetoolsClientFactory`|`[ProductApi](../../ProductApiBundle/Domain/ProductApi.md)\Commercetools\ClientFactory`|``|
+`$localeCreatorFactory`|`[ProductApi](../../ProductApiBundle/Domain/ProductApi.md)\Commercetools\Locale\CommercetoolsLocaleCreatorFactory`|``|
+`$orderIdGenerator`|`[OrderIdGenerator](OrderIdGenerator.md)`|``|
 `$decorators`|`iterable`|``|
 
 ### factor()
 
 
 ```php
-public function factor(\Frontastic\Common\ReplicatorBundle\Domain\Project project): \Frontastic\Common\CartApiBundle\Domain\CartApi
+public function factor([Project](../../ReplicatorBundle/Domain/Project.md) $project): [CartApi](CartApi.md)
 ```
 
 
@@ -44,5 +44,5 @@ public function factor(\Frontastic\Common\ReplicatorBundle\Domain\Project projec
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$project`|`\Frontastic\Common\ReplicatorBundle\Domain\Project`|``|
+`$project`|`[Project](../../ReplicatorBundle/Domain/Project.md)`|``|
 

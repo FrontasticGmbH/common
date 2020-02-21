@@ -28,7 +28,7 @@ public function get(): string
 
 
 ```php
-public function next(string sequence): string
+public function next(string $sequence): string
 ```
 
 

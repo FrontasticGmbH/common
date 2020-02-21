@@ -37,7 +37,7 @@ need to tag your service based on this class with
 
 
 ```php
-public function beforeGetContentTypes(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi): void
+public function beforeGetContentTypes([ContentApi](../../ContentApi.md) $contentApi): void
 ```
 
 
@@ -47,13 +47,13 @@ public function beforeGetContentTypes(\Frontastic\Common\ContentApiBundle\Domain
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$contentApi`|`\Frontastic\Common\ContentApiBundle\Domain\ContentApi`|``|
+`$contentApi`|`[ContentApi](../../ContentApi.md)`|``|
 
 ### afterGetContentTypes()
 
 
 ```php
-public function afterGetContentTypes(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi, array contentTypes): ?array
+public function afterGetContentTypes([ContentApi](../../ContentApi.md) $contentApi, array $contentTypes): ?array
 ```
 
 
@@ -63,14 +63,14 @@ public function afterGetContentTypes(\Frontastic\Common\ContentApiBundle\Domain\
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$contentApi`|`\Frontastic\Common\ContentApiBundle\Domain\ContentApi`|``|
+`$contentApi`|`[ContentApi](../../ContentApi.md)`|``|
 `$contentTypes`|`array`|``|
 
 ### beforeGetContent()
 
 
 ```php
-public function beforeGetContent(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi, string contentId, string locale = null, string mode = ContentApi::QUERY_SYNC): void
+public function beforeGetContent([ContentApi](../../ContentApi.md) $contentApi, string $contentId, string $locale = null, string $mode = ContentApi::QUERY_SYNC): void
 ```
 
 
@@ -80,7 +80,7 @@ public function beforeGetContent(\Frontastic\Common\ContentApiBundle\Domain\Cont
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$contentApi`|`\Frontastic\Common\ContentApiBundle\Domain\ContentApi`|``|
+`$contentApi`|`[ContentApi](../../ContentApi.md)`|``|
 `$contentId`|`string`|``|
 `$locale`|`string`|`null`|
 `$mode`|`string`|`ContentApi::QUERY_SYNC`|
@@ -89,7 +89,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function afterGetContent(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi, ?\Frontastic\Common\ContentApiBundle\Domain\ContentApi\Content content): ?\Frontastic\Common\ContentApiBundle\Domain\ContentApi\Content
+public function afterGetContent([ContentApi](../../ContentApi.md) $contentApi, ?[Content](../Content.md) $content): ?[Content](../Content.md)
 ```
 
 
@@ -99,14 +99,14 @@ public function afterGetContent(\Frontastic\Common\ContentApiBundle\Domain\Conte
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$contentApi`|`\Frontastic\Common\ContentApiBundle\Domain\ContentApi`|``|
-`$content`|`?\Frontastic\Common\ContentApiBundle\Domain\ContentApi\Content`|``|
+`$contentApi`|`[ContentApi](../../ContentApi.md)`|``|
+`$content`|`?[Content](../Content.md)`|``|
 
 ### beforeQuery()
 
 
 ```php
-public function beforeQuery(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi, \Frontastic\Common\ContentApiBundle\Domain\Query query, string locale = null, string mode = ContentApi::QUERY_SYNC): void
+public function beforeQuery([ContentApi](../../ContentApi.md) $contentApi, [Query](../../Query.md) $query, string $locale = null, string $mode = ContentApi::QUERY_SYNC): void
 ```
 
 
@@ -116,8 +116,8 @@ public function beforeQuery(\Frontastic\Common\ContentApiBundle\Domain\ContentAp
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$contentApi`|`\Frontastic\Common\ContentApiBundle\Domain\ContentApi`|``|
-`$query`|`\Frontastic\Common\ContentApiBundle\Domain\Query`|``|
+`$contentApi`|`[ContentApi](../../ContentApi.md)`|``|
+`$query`|`[Query](../../Query.md)`|``|
 `$locale`|`string`|`null`|
 `$mode`|`string`|`ContentApi::QUERY_SYNC`|
 
@@ -125,7 +125,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function afterQuery(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi, ?\Frontastic\Common\ContentApiBundle\Domain\Result result): ?\Frontastic\Common\ContentApiBundle\Domain\Result
+public function afterQuery([ContentApi](../../ContentApi.md) $contentApi, ?[Result](../../Result.md) $result): ?[Result](../../Result.md)
 ```
 
 
@@ -135,6 +135,6 @@ public function afterQuery(\Frontastic\Common\ContentApiBundle\Domain\ContentApi
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$contentApi`|`\Frontastic\Common\ContentApiBundle\Domain\ContentApi`|``|
-`$result`|`?\Frontastic\Common\ContentApiBundle\Domain\Result`|``|
+`$contentApi`|`[ContentApi](../../ContentApi.md)`|``|
+`$result`|`?[Result](../../Result.md)`|``|
 

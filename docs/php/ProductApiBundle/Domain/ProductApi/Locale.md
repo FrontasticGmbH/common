@@ -51,7 +51,7 @@ public function toString(): string
 
 
 ```php
-static public function createFromPosix(string locale): \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale
+static public function createFromPosix(string $locale): [Locale](Locale.md)
 ```
 
 

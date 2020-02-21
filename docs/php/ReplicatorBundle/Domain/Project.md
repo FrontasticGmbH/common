@@ -20,7 +20,7 @@ follow any defined schema.
 `languages`|`string[]`|`[]`|
 `defaultLanguage`|`string[]`|``|
 `projectSpecific`|`string[]`|`[]`|
-`endpoints`|`\Frontastic\Common\ReplicatorBundle\Domain\Endpoint[]`|`[]`|
+`endpoints`|`[Endpoint](Endpoint.md)[]`|`[]`|
 
 ## Methods
 
@@ -31,7 +31,7 @@ follow any defined schema.
 
 
 ```php
-public function getConfigurationSection(string sectionName): object
+public function getConfigurationSection(string $sectionName): object
 ```
 
 

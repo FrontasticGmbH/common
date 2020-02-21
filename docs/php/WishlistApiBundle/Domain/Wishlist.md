@@ -11,6 +11,6 @@ Property|Type|Default|Description
 `anonymousId`|`string`|``|
 `accountId`|`string`|``|
 `name`|`string[]`|`[]`|
-`lineItems`|`\Frontastic\Common\WishlistApiBundle\Domain\LineItem[]`|`[]`|
+`lineItems`|`[LineItem](LineItem.md)[]`|`[]`|
 `dangerousInnerWishlist`|`mixed`|``|Access original object from backend
 

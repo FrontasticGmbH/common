@@ -15,7 +15,7 @@ Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\DefaultProductApiF
 
 
 ```php
-public function __construct(\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory commercetoolsClientFactory, \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory localeCreatorFactory, iterable decorators = []): mixed
+public function __construct([ProductApi](ProductApi.md)\Commercetools\ClientFactory $commercetoolsClientFactory, [ProductApi](ProductApi.md)\Commercetools\Locale\CommercetoolsLocaleCreatorFactory $localeCreatorFactory, iterable $decorators = []): mixed
 ```
 
 
@@ -25,15 +25,15 @@ public function __construct(\Frontastic\Common\ProductApiBundle\Domain\ProductAp
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$commercetoolsClientFactory`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory`|``|
-`$localeCreatorFactory`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory`|``|
+`$commercetoolsClientFactory`|`[ProductApi](ProductApi.md)\Commercetools\ClientFactory`|``|
+`$localeCreatorFactory`|`[ProductApi](ProductApi.md)\Commercetools\Locale\CommercetoolsLocaleCreatorFactory`|``|
 `$decorators`|`iterable`|`[]`|
 
 ### factor()
 
 
 ```php
-public function factor(\Frontastic\Common\ReplicatorBundle\Domain\Project project): \Frontastic\Common\ProductApiBundle\Domain\ProductApi
+public function factor([Project](../../ReplicatorBundle/Domain/Project.md) $project): [ProductApi](ProductApi.md)
 ```
 
 
@@ -43,5 +43,5 @@ public function factor(\Frontastic\Common\ReplicatorBundle\Domain\Project projec
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$project`|`\Frontastic\Common\ReplicatorBundle\Domain\Project`|``|
+`$project`|`[Project](../../ReplicatorBundle/Domain/Project.md)`|``|
 

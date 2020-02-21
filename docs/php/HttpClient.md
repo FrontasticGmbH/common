@@ -17,7 +17,7 @@ Fully Qualified: [`\Frontastic\Common\HttpClient`](../../src/php/HttpClient.php)
 
 
 ```php
-abstract public function addDefaultHeaders(array headers): mixed
+abstract public function addDefaultHeaders(array $headers): mixed
 ```
 
 
@@ -33,7 +33,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function request(string method, string url, string body = '', array headers = array(), \Frontastic\Common\HttpClient\Options options = null): \Frontastic\Common\HttpClient\Response
+public function request(string $method, string $url, string $body = '', array $headers = array(), [Options](HttpClient/Options.md) $options = null): [Response](HttpClient/Response.md)
 ```
 
 
@@ -47,13 +47,13 @@ Argument|Type|Default|Description
 `$url`|`string`|``|
 `$body`|`string`|`''`|
 `$headers`|`array`|`array()`|
-`$options`|`\Frontastic\Common\HttpClient\Options`|`null`|
+`$options`|`[Options](HttpClient/Options.md)`|`null`|
 
 ### requestAsync()
 
 
 ```php
-abstract public function requestAsync(string method, string url, string body = '', array headers = array(), \Frontastic\Common\HttpClient\Options options = null): \GuzzleHttp\Promise\PromiseInterface
+abstract public function requestAsync(string $method, string $url, string $body = '', array $headers = array(), [Options](HttpClient/Options.md) $options = null): \GuzzleHttp\Promise\PromiseInterface
 ```
 
 
@@ -67,13 +67,13 @@ Argument|Type|Default|Description
 `$url`|`string`|``|
 `$body`|`string`|`''`|
 `$headers`|`array`|`array()`|
-`$options`|`\Frontastic\Common\HttpClient\Options`|`null`|
+`$options`|`[Options](HttpClient/Options.md)`|`null`|
 
 ### __call()
 
 
 ```php
-public function __call(string functionName, array arguments): object
+public function __call(string $functionName, array $arguments): object
 ```
 
 

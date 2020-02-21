@@ -16,7 +16,7 @@ Fully Qualified: [`\Frontastic\Common\JsonSerializer`](../../src/php/JsonSeriali
 
 
 ```php
-public function __construct(array propertyExcludeList = [], iterable objectEnhancers = []): mixed
+public function __construct(array $propertyExcludeList = [], iterable $objectEnhancers = []): mixed
 ```
 
 
@@ -33,7 +33,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function addEnhancer(\Frontastic\Common\JsonSerializer\ObjectEnhancer enhancer): void
+public function addEnhancer([JsonSerializer](JsonSerializer.md)\ObjectEnhancer $enhancer): void
 ```
 
 
@@ -43,13 +43,13 @@ public function addEnhancer(\Frontastic\Common\JsonSerializer\ObjectEnhancer enh
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$enhancer`|`\Frontastic\Common\JsonSerializer\ObjectEnhancer`|``|
+`$enhancer`|`[JsonSerializer](JsonSerializer.md)\ObjectEnhancer`|``|
 
 ### serialize()
 
 
 ```php
-public function serialize(mixed item, mixed visitedIds = array()): mixed
+public function serialize(mixed $item, mixed $visitedIds = array()): mixed
 ```
 
 

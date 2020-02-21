@@ -30,7 +30,7 @@ public function getContentTypes(): array
 
 
 ```php
-public function getContent(string contentId, string locale = null, string mode = self::QUERY_SYNC): ?object
+public function getContent(string $contentId, string $locale = null, string $mode = self::QUERY_SYNC): ?object
 ```
 
 
@@ -48,7 +48,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function query(\Frontastic\Common\ContentApiBundle\Domain\Query query, string locale = null, string mode = self::QUERY_SYNC): ?object
+public function query([Query](Query.md) $query, string $locale = null, string $mode = self::QUERY_SYNC): ?object
 ```
 
 
@@ -60,7 +60,7 @@ project default locale is used.*
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$query`|`\Frontastic\Common\ContentApiBundle\Domain\Query`|``|
+`$query`|`[Query](Query.md)`|``|
 `$locale`|`string`|`null`|
 `$mode`|`string`|`self::QUERY_SYNC`|One of the QUERY_* connstants. Execute the query synchronously or asynchronously?
 

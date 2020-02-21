@@ -29,7 +29,7 @@ Fully Qualified: [`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`](../..
 
 
 ```php
-public function get(string email): \Frontastic\Common\AccountApiBundle\Domain\Account
+public function get(string $email): [Account](Account.md)
 ```
 
 
@@ -45,7 +45,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function confirmEmail(string token): \Frontastic\Common\AccountApiBundle\Domain\Account
+public function confirmEmail(string $token): [Account](Account.md)
 ```
 
 
@@ -61,7 +61,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function create(\Frontastic\Common\AccountApiBundle\Domain\Account account, ?\Frontastic\Common\CartApiBundle\Domain\Cart cart = null): \Frontastic\Common\AccountApiBundle\Domain\Account
+public function create([Account](Account.md) $account, ?[Cart](../../CartApiBundle/Domain/Cart.md) $cart = null): [Account](Account.md)
 ```
 
 
@@ -71,14 +71,14 @@ public function create(\Frontastic\Common\AccountApiBundle\Domain\Account accoun
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$account`|`\Frontastic\Common\AccountApiBundle\Domain\Account`|``|
-`$cart`|`?\Frontastic\Common\CartApiBundle\Domain\Cart`|`null`|
+`$account`|`[Account](Account.md)`|``|
+`$cart`|`?[Cart](../../CartApiBundle/Domain/Cart.md)`|`null`|
 
 ### verifyEmail()
 
 
 ```php
-public function verifyEmail(string token): \Frontastic\Common\AccountApiBundle\Domain\Account
+public function verifyEmail(string $token): [Account](Account.md)
 ```
 
 
@@ -94,7 +94,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function update(\Frontastic\Common\AccountApiBundle\Domain\Account account): \Frontastic\Common\AccountApiBundle\Domain\Account
+public function update([Account](Account.md) $account): [Account](Account.md)
 ```
 
 
@@ -104,13 +104,13 @@ public function update(\Frontastic\Common\AccountApiBundle\Domain\Account accoun
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$account`|`\Frontastic\Common\AccountApiBundle\Domain\Account`|``|
+`$account`|`[Account](Account.md)`|``|
 
 ### updatePassword()
 
 
 ```php
-public function updatePassword(string accountId, string oldPassword, string newPassword): \Frontastic\Common\AccountApiBundle\Domain\Account
+public function updatePassword(string $accountId, string $oldPassword, string $newPassword): [Account](Account.md)
 ```
 
 
@@ -128,7 +128,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function generatePasswordResetToken(\Frontastic\Common\AccountApiBundle\Domain\Account account): \Frontastic\Common\AccountApiBundle\Domain\Account
+public function generatePasswordResetToken([Account](Account.md) $account): [Account](Account.md)
 ```
 
 
@@ -138,13 +138,13 @@ public function generatePasswordResetToken(\Frontastic\Common\AccountApiBundle\D
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$account`|`\Frontastic\Common\AccountApiBundle\Domain\Account`|``|
+`$account`|`[Account](Account.md)`|``|
 
 ### resetPassword()
 
 
 ```php
-public function resetPassword(string token, string newPassword): \Frontastic\Common\AccountApiBundle\Domain\Account
+public function resetPassword(string $token, string $newPassword): [Account](Account.md)
 ```
 
 
@@ -161,7 +161,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function login(\Frontastic\Common\AccountApiBundle\Domain\Account account, ?\Frontastic\Common\CartApiBundle\Domain\Cart cart = null): bool
+public function login([Account](Account.md) $account, ?[Cart](../../CartApiBundle/Domain/Cart.md) $cart = null): bool
 ```
 
 
@@ -171,14 +171,14 @@ public function login(\Frontastic\Common\AccountApiBundle\Domain\Account account
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$account`|`\Frontastic\Common\AccountApiBundle\Domain\Account`|``|
-`$cart`|`?\Frontastic\Common\CartApiBundle\Domain\Cart`|`null`|
+`$account`|`[Account](Account.md)`|``|
+`$cart`|`?[Cart](../../CartApiBundle/Domain/Cart.md)`|`null`|
 
 ### getAddresses()
 
 
 ```php
-public function getAddresses(string accountId): array
+public function getAddresses(string $accountId): array
 ```
 
 
@@ -194,7 +194,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function addAddress(string accountId, \Frontastic\Common\AccountApiBundle\Domain\Address address): \Frontastic\Common\AccountApiBundle\Domain\Account
+public function addAddress(string $accountId, [Address](Address.md) $address): [Account](Account.md)
 ```
 
 
@@ -205,13 +205,13 @@ public function addAddress(string accountId, \Frontastic\Common\AccountApiBundle
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$accountId`|`string`|``|
-`$address`|`\Frontastic\Common\AccountApiBundle\Domain\Address`|``|
+`$address`|`[Address](Address.md)`|``|
 
 ### updateAddress()
 
 
 ```php
-public function updateAddress(string accountId, \Frontastic\Common\AccountApiBundle\Domain\Address address): \Frontastic\Common\AccountApiBundle\Domain\Account
+public function updateAddress(string $accountId, [Address](Address.md) $address): [Account](Account.md)
 ```
 
 
@@ -222,13 +222,13 @@ public function updateAddress(string accountId, \Frontastic\Common\AccountApiBun
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$accountId`|`string`|``|
-`$address`|`\Frontastic\Common\AccountApiBundle\Domain\Address`|``|
+`$address`|`[Address](Address.md)`|``|
 
 ### removeAddress()
 
 
 ```php
-public function removeAddress(string accountId, string addressId): \Frontastic\Common\AccountApiBundle\Domain\Account
+public function removeAddress(string $accountId, string $addressId): [Account](Account.md)
 ```
 
 
@@ -245,7 +245,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function setDefaultBillingAddress(string accountId, string addressId): \Frontastic\Common\AccountApiBundle\Domain\Account
+public function setDefaultBillingAddress(string $accountId, string $addressId): [Account](Account.md)
 ```
 
 
@@ -262,7 +262,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function setDefaultShippingAddress(string accountId, string addressId): \Frontastic\Common\AccountApiBundle\Domain\Account
+public function setDefaultShippingAddress(string $accountId, string $addressId): [Account](Account.md)
 ```
 
 

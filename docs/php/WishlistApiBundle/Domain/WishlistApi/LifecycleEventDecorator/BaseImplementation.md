@@ -47,7 +47,7 @@ need to tag your service based on this class with
 
 
 ```php
-public function beforeGetWishlist(\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi wishlistApi, string wishlistId, string locale): void
+public function beforeGetWishlist([WishlistApi](../../WishlistApi.md) $wishlistApi, string $wishlistId, string $locale): void
 ```
 
 
@@ -57,7 +57,7 @@ public function beforeGetWishlist(\Frontastic\Common\WishlistApiBundle\Domain\Wi
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi`|``|
+`$wishlistApi`|`[WishlistApi](../../WishlistApi.md)`|``|
 `$wishlistId`|`string`|``|
 `$locale`|`string`|``|
 
@@ -65,7 +65,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function afterGetWishlist(\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi wishlistApi, \Frontastic\Common\WishlistApiBundle\Domain\Wishlist wishlist): ?\Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+public function afterGetWishlist([WishlistApi](../../WishlistApi.md) $wishlistApi, [Wishlist](../../Wishlist.md) $wishlist): ?[Wishlist](../../Wishlist.md)
 ```
 
 
@@ -75,14 +75,14 @@ public function afterGetWishlist(\Frontastic\Common\WishlistApiBundle\Domain\Wis
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi`|``|
-`$wishlist`|`\Frontastic\Common\WishlistApiBundle\Domain\Wishlist`|``|
+`$wishlistApi`|`[WishlistApi](../../WishlistApi.md)`|``|
+`$wishlist`|`[Wishlist](../../Wishlist.md)`|``|
 
 ### beforeGetAnonymous()
 
 
 ```php
-public function beforeGetAnonymous(\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi wishlistApi, string anonymousId, string locale): void
+public function beforeGetAnonymous([WishlistApi](../../WishlistApi.md) $wishlistApi, string $anonymousId, string $locale): void
 ```
 
 
@@ -92,7 +92,7 @@ public function beforeGetAnonymous(\Frontastic\Common\WishlistApiBundle\Domain\W
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi`|``|
+`$wishlistApi`|`[WishlistApi](../../WishlistApi.md)`|``|
 `$anonymousId`|`string`|``|
 `$locale`|`string`|``|
 
@@ -100,7 +100,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function afterGetAnonymous(\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi wishlistApi, \Frontastic\Common\WishlistApiBundle\Domain\Wishlist wishlist): ?\Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+public function afterGetAnonymous([WishlistApi](../../WishlistApi.md) $wishlistApi, [Wishlist](../../Wishlist.md) $wishlist): ?[Wishlist](../../Wishlist.md)
 ```
 
 
@@ -110,14 +110,14 @@ public function afterGetAnonymous(\Frontastic\Common\WishlistApiBundle\Domain\Wi
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi`|``|
-`$wishlist`|`\Frontastic\Common\WishlistApiBundle\Domain\Wishlist`|``|
+`$wishlistApi`|`[WishlistApi](../../WishlistApi.md)`|``|
+`$wishlist`|`[Wishlist](../../Wishlist.md)`|``|
 
 ### beforeGetWishlists()
 
 
 ```php
-public function beforeGetWishlists(\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi wishlistApi, string accountId, string locale): void
+public function beforeGetWishlists([WishlistApi](../../WishlistApi.md) $wishlistApi, string $accountId, string $locale): void
 ```
 
 
@@ -127,7 +127,7 @@ public function beforeGetWishlists(\Frontastic\Common\WishlistApiBundle\Domain\W
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi`|``|
+`$wishlistApi`|`[WishlistApi](../../WishlistApi.md)`|``|
 `$accountId`|`string`|``|
 `$locale`|`string`|``|
 
@@ -135,7 +135,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function afterGetWishlists(\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi wishlistApi, array wishlists): ?array
+public function afterGetWishlists([WishlistApi](../../WishlistApi.md) $wishlistApi, array $wishlists): ?array
 ```
 
 
@@ -145,14 +145,14 @@ public function afterGetWishlists(\Frontastic\Common\WishlistApiBundle\Domain\Wi
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi`|``|
+`$wishlistApi`|`[WishlistApi](../../WishlistApi.md)`|``|
 `$wishlists`|`array`|``|
 
 ### beforeCreate()
 
 
 ```php
-public function beforeCreate(\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi wishlistApi, \Frontastic\Common\WishlistApiBundle\Domain\Wishlist wishlist, string locale): void
+public function beforeCreate([WishlistApi](../../WishlistApi.md) $wishlistApi, [Wishlist](../../Wishlist.md) $wishlist, string $locale): void
 ```
 
 
@@ -162,15 +162,15 @@ public function beforeCreate(\Frontastic\Common\WishlistApiBundle\Domain\Wishlis
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi`|``|
-`$wishlist`|`\Frontastic\Common\WishlistApiBundle\Domain\Wishlist`|``|
+`$wishlistApi`|`[WishlistApi](../../WishlistApi.md)`|``|
+`$wishlist`|`[Wishlist](../../Wishlist.md)`|``|
 `$locale`|`string`|``|
 
 ### afterCreate()
 
 
 ```php
-public function afterCreate(\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi wishlistApi, \Frontastic\Common\WishlistApiBundle\Domain\Wishlist wishlist): ?\Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+public function afterCreate([WishlistApi](../../WishlistApi.md) $wishlistApi, [Wishlist](../../Wishlist.md) $wishlist): ?[Wishlist](../../Wishlist.md)
 ```
 
 
@@ -180,14 +180,14 @@ public function afterCreate(\Frontastic\Common\WishlistApiBundle\Domain\Wishlist
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi`|``|
-`$wishlist`|`\Frontastic\Common\WishlistApiBundle\Domain\Wishlist`|``|
+`$wishlistApi`|`[WishlistApi](../../WishlistApi.md)`|``|
+`$wishlist`|`[Wishlist](../../Wishlist.md)`|``|
 
 ### beforeAddToWishlist()
 
 
 ```php
-public function beforeAddToWishlist(\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi wishlistApi, \Frontastic\Common\WishlistApiBundle\Domain\Wishlist wishlist, \Frontastic\Common\WishlistApiBundle\Domain\LineItem lineItem, string locale): void
+public function beforeAddToWishlist([WishlistApi](../../WishlistApi.md) $wishlistApi, [Wishlist](../../Wishlist.md) $wishlist, [LineItem](../../LineItem.md) $lineItem, string $locale): void
 ```
 
 
@@ -197,16 +197,16 @@ public function beforeAddToWishlist(\Frontastic\Common\WishlistApiBundle\Domain\
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi`|``|
-`$wishlist`|`\Frontastic\Common\WishlistApiBundle\Domain\Wishlist`|``|
-`$lineItem`|`\Frontastic\Common\WishlistApiBundle\Domain\LineItem`|``|
+`$wishlistApi`|`[WishlistApi](../../WishlistApi.md)`|``|
+`$wishlist`|`[Wishlist](../../Wishlist.md)`|``|
+`$lineItem`|`[LineItem](../../LineItem.md)`|``|
 `$locale`|`string`|``|
 
 ### afterAddToWishlist()
 
 
 ```php
-public function afterAddToWishlist(\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi wishlistApi, \Frontastic\Common\WishlistApiBundle\Domain\Wishlist wishlist): ?\Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+public function afterAddToWishlist([WishlistApi](../../WishlistApi.md) $wishlistApi, [Wishlist](../../Wishlist.md) $wishlist): ?[Wishlist](../../Wishlist.md)
 ```
 
 
@@ -216,14 +216,14 @@ public function afterAddToWishlist(\Frontastic\Common\WishlistApiBundle\Domain\W
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi`|``|
-`$wishlist`|`\Frontastic\Common\WishlistApiBundle\Domain\Wishlist`|``|
+`$wishlistApi`|`[WishlistApi](../../WishlistApi.md)`|``|
+`$wishlist`|`[Wishlist](../../Wishlist.md)`|``|
 
 ### beforeAddMultipleToWishlist()
 
 
 ```php
-public function beforeAddMultipleToWishlist(\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi wishlistApi, \Frontastic\Common\WishlistApiBundle\Domain\Wishlist wishlist, array lineItems, string locale): void
+public function beforeAddMultipleToWishlist([WishlistApi](../../WishlistApi.md) $wishlistApi, [Wishlist](../../Wishlist.md) $wishlist, array $lineItems, string $locale): void
 ```
 
 
@@ -233,8 +233,8 @@ public function beforeAddMultipleToWishlist(\Frontastic\Common\WishlistApiBundle
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi`|``|
-`$wishlist`|`\Frontastic\Common\WishlistApiBundle\Domain\Wishlist`|``|
+`$wishlistApi`|`[WishlistApi](../../WishlistApi.md)`|``|
+`$wishlist`|`[Wishlist](../../Wishlist.md)`|``|
 `$lineItems`|`array`|``|
 `$locale`|`string`|``|
 
@@ -242,7 +242,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function afterAddMultipleToWishlist(\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi wishlistApi, \Frontastic\Common\WishlistApiBundle\Domain\Wishlist wishlist): ?\Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+public function afterAddMultipleToWishlist([WishlistApi](../../WishlistApi.md) $wishlistApi, [Wishlist](../../Wishlist.md) $wishlist): ?[Wishlist](../../Wishlist.md)
 ```
 
 
@@ -252,14 +252,14 @@ public function afterAddMultipleToWishlist(\Frontastic\Common\WishlistApiBundle\
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi`|``|
-`$wishlist`|`\Frontastic\Common\WishlistApiBundle\Domain\Wishlist`|``|
+`$wishlistApi`|`[WishlistApi](../../WishlistApi.md)`|``|
+`$wishlist`|`[Wishlist](../../Wishlist.md)`|``|
 
 ### beforeUpdateLineItem()
 
 
 ```php
-public function beforeUpdateLineItem(\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi wishlistApi, \Frontastic\Common\WishlistApiBundle\Domain\Wishlist wishlist, \Frontastic\Common\WishlistApiBundle\Domain\LineItem lineItem, int count, string locale): void
+public function beforeUpdateLineItem([WishlistApi](../../WishlistApi.md) $wishlistApi, [Wishlist](../../Wishlist.md) $wishlist, [LineItem](../../LineItem.md) $lineItem, int $count, string $locale): void
 ```
 
 
@@ -269,9 +269,9 @@ public function beforeUpdateLineItem(\Frontastic\Common\WishlistApiBundle\Domain
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi`|``|
-`$wishlist`|`\Frontastic\Common\WishlistApiBundle\Domain\Wishlist`|``|
-`$lineItem`|`\Frontastic\Common\WishlistApiBundle\Domain\LineItem`|``|
+`$wishlistApi`|`[WishlistApi](../../WishlistApi.md)`|``|
+`$wishlist`|`[Wishlist](../../Wishlist.md)`|``|
+`$lineItem`|`[LineItem](../../LineItem.md)`|``|
 `$count`|`int`|``|
 `$locale`|`string`|``|
 
@@ -279,7 +279,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function afterUpdateLineItem(\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi wishlistApi, \Frontastic\Common\WishlistApiBundle\Domain\Wishlist wishlist): ?\Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+public function afterUpdateLineItem([WishlistApi](../../WishlistApi.md) $wishlistApi, [Wishlist](../../Wishlist.md) $wishlist): ?[Wishlist](../../Wishlist.md)
 ```
 
 
@@ -289,14 +289,14 @@ public function afterUpdateLineItem(\Frontastic\Common\WishlistApiBundle\Domain\
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi`|``|
-`$wishlist`|`\Frontastic\Common\WishlistApiBundle\Domain\Wishlist`|``|
+`$wishlistApi`|`[WishlistApi](../../WishlistApi.md)`|``|
+`$wishlist`|`[Wishlist](../../Wishlist.md)`|``|
 
 ### beforeRemoveLineItem()
 
 
 ```php
-public function beforeRemoveLineItem(\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi wishlistApi, \Frontastic\Common\WishlistApiBundle\Domain\Wishlist wishlist, \Frontastic\Common\WishlistApiBundle\Domain\LineItem lineItem, string locale): void
+public function beforeRemoveLineItem([WishlistApi](../../WishlistApi.md) $wishlistApi, [Wishlist](../../Wishlist.md) $wishlist, [LineItem](../../LineItem.md) $lineItem, string $locale): void
 ```
 
 
@@ -306,16 +306,16 @@ public function beforeRemoveLineItem(\Frontastic\Common\WishlistApiBundle\Domain
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi`|``|
-`$wishlist`|`\Frontastic\Common\WishlistApiBundle\Domain\Wishlist`|``|
-`$lineItem`|`\Frontastic\Common\WishlistApiBundle\Domain\LineItem`|``|
+`$wishlistApi`|`[WishlistApi](../../WishlistApi.md)`|``|
+`$wishlist`|`[Wishlist](../../Wishlist.md)`|``|
+`$lineItem`|`[LineItem](../../LineItem.md)`|``|
 `$locale`|`string`|``|
 
 ### afterRemoveLineItem()
 
 
 ```php
-public function afterRemoveLineItem(\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi wishlistApi, \Frontastic\Common\WishlistApiBundle\Domain\Wishlist wishlist): ?\Frontastic\Common\WishlistApiBundle\Domain\Wishlist
+public function afterRemoveLineItem([WishlistApi](../../WishlistApi.md) $wishlistApi, [Wishlist](../../Wishlist.md) $wishlist): ?[Wishlist](../../Wishlist.md)
 ```
 
 
@@ -325,6 +325,6 @@ public function afterRemoveLineItem(\Frontastic\Common\WishlistApiBundle\Domain\
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$wishlistApi`|`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi`|``|
-`$wishlist`|`\Frontastic\Common\WishlistApiBundle\Domain\Wishlist`|``|
+`$wishlistApi`|`[WishlistApi](../../WishlistApi.md)`|``|
+`$wishlist`|`[Wishlist](../../Wishlist.md)`|``|
 

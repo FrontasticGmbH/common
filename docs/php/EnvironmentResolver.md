@@ -14,7 +14,7 @@ Fully Qualified: [`\Frontastic\Common\EnvironmentResolver`](../../src/php/Enviro
 
 
 ```php
-public function loadEnvironmentVariables(array directories, array baseConfig = []): void
+public function loadEnvironmentVariables(array $directories, array $baseConfig = []): void
 ```
 
 

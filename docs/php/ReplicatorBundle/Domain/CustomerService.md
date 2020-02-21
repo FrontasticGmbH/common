@@ -18,7 +18,7 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\CustomerService`](
 
 
 ```php
-public function __construct(string customerDir, string deployedCustomers): mixed
+public function __construct(string $customerDir, string $deployedCustomers): mixed
 ```
 
 
@@ -48,7 +48,7 @@ public function getCustomers(): array
 
 
 ```php
-public function getCustomer(string customerName): \Frontastic\Common\ReplicatorBundle\Domain\Customer
+public function getCustomer(string $customerName): [Customer](Customer.md)
 ```
 
 
@@ -64,7 +64,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function getProject(string customerName, string projectName): \Frontastic\Common\ReplicatorBundle\Domain\Project
+public function getProject(string $customerName, string $projectName): [Project](Project.md)
 ```
 
 
@@ -81,7 +81,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function getForHost(string host): \Frontastic\Common\ReplicatorBundle\Domain\Customer
+public function getForHost(string $host): [Customer](Customer.md)
 ```
 
 

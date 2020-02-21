@@ -14,7 +14,7 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\Source`](../../../
 
 
 ```php
-public function updates(string since, int count): array
+public function updates(string $since, int $count): array
 ```
 
 

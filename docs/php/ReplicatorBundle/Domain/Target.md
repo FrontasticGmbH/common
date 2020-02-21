@@ -28,7 +28,7 @@ public function lastUpdate(): string
 
 
 ```php
-public function replicate(array updates): void
+public function replicate(array $updates): void
 ```
 
 

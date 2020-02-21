@@ -13,11 +13,11 @@ Property|Type|Default|Description
 `lastName`|`string`|``|
 `birthday`|`\DateTime`|``|
 `data`|`array`|`[]`|
-`groups`|`\Frontastic\Common\AccountApiBundle\Domain\Group[]`|`[]`|
+`groups`|`[Group](Group.md)[]`|`[]`|
 `confirmationToken`|`string`|``|
 `confirmed`|`string`|`false`|
 `tokenValidUntil`|`\Frontastic\Common\AccountApiBundle\Domain\DateTime`|``|
-`addresses`|`\Frontastic\Common\AccountApiBundle\Domain\Address[]`|`[]`|
+`addresses`|`[Address](Address.md)[]`|`[]`|
 `dangerousInnerAccount`|`mixed`|``|Access original object from backend
 
 ## Methods
@@ -39,7 +39,7 @@ Property|Type|Default|Description
 
 
 ```php
-public function setPassword(string password): mixed
+public function setPassword(string $password): mixed
 ```
 
 
@@ -55,7 +55,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function isValidPassword(string password): bool
+public function isValidPassword(string $password): bool
 ```
 
 
@@ -136,7 +136,7 @@ public function eraseCredentials(): mixed
 
 
 ```php
-public function assertPermission(string required): mixed
+public function assertPermission(string $required): mixed
 ```
 
 
@@ -152,7 +152,7 @@ Argument|Type|Default|Description
 
 
 ```php
-public function cleanForSession(): \Frontastic\Common\AccountApiBundle\Domain\Account
+public function cleanForSession(): [Account](Account.md)
 ```
 
 
@@ -178,7 +178,7 @@ public function serialize(): mixed
 
 
 ```php
-public function unserialize(mixed serialized): mixed
+public function unserialize(mixed $serialized): mixed
 ```
 
 

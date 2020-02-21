@@ -15,7 +15,7 @@ Fully Qualified: [`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApiFactor
 
 
 ```php
-public function __construct(\Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory productApiFactory, \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory commercetoolsClientFactory, iterable decorators): mixed
+public function __construct([ProductApiFactory](../../ProductApiBundle/Domain/ProductApiFactory.md) $productApiFactory, [ProductApi](../../ProductApiBundle/Domain/ProductApi.md)\Commercetools\ClientFactory $commercetoolsClientFactory, iterable $decorators): mixed
 ```
 
 
@@ -25,15 +25,15 @@ public function __construct(\Frontastic\Common\ProductApiBundle\Domain\ProductAp
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$productApiFactory`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory`|``|
-`$commercetoolsClientFactory`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory`|``|
+`$productApiFactory`|`[ProductApiFactory](../../ProductApiBundle/Domain/ProductApiFactory.md)`|``|
+`$commercetoolsClientFactory`|`[ProductApi](../../ProductApiBundle/Domain/ProductApi.md)\Commercetools\ClientFactory`|``|
 `$decorators`|`iterable`|``|
 
 ### factor()
 
 
 ```php
-public function factor(\Frontastic\Common\ReplicatorBundle\Domain\Project project): \Frontastic\Common\WishlistApiBundle\Domain\WishlistApi
+public function factor([Project](../../ReplicatorBundle/Domain/Project.md) $project): [WishlistApi](WishlistApi.md)
 ```
 
 
@@ -43,5 +43,5 @@ public function factor(\Frontastic\Common\ReplicatorBundle\Domain\Project projec
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$project`|`\Frontastic\Common\ReplicatorBundle\Domain\Project`|``|
+`$project`|`[Project](../../ReplicatorBundle/Domain/Project.md)`|``|
 

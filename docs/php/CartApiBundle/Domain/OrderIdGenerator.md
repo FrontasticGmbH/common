@@ -14,7 +14,7 @@ Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator`](..
 
 
 ```php
-public function getOrderId(\Frontastic\Common\CartApiBundle\Domain\Cart cart): string
+public function getOrderId([Cart](Cart.md) $cart): string
 ```
 
 
@@ -24,5 +24,5 @@ public function getOrderId(\Frontastic\Common\CartApiBundle\Domain\Cart cart): s
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cart`|`\Frontastic\Common\CartApiBundle\Domain\Cart`|``|
+`$cart`|`[Cart](Cart.md)`|``|
 
