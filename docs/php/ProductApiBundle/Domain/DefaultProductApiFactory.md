@@ -7,7 +7,7 @@ Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\DefaultProductApiF
 
 ## Methods
 
-* [__construct()](#construct)
+* [__construct()](#__construct)
 * [factor()](#factor)
 
 

@@ -6,6 +6,6 @@ Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\C
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`parentId`|`string`|``|
-`slug`|`string`|``|
+`parentId`|`string`||
+`slug`|`string`||
 

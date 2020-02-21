@@ -6,19 +6,19 @@ Fully Qualified: [`\Frontastic\Common\AccountApiBundle\Domain\Account`](../../..
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`accountId`|`string`|``|
-`email`|`string`|``|
-`salutation`|`string`|``|
-`firstName`|`string`|``|
-`lastName`|`string`|``|
-`birthday`|`\DateTime`|``|
-`data`|`array`|`[]`|
-`groups`|`Group[]`|`[]`|
-`confirmationToken`|`string`|``|
-`confirmed`|`string`|`false`|
-`tokenValidUntil`|`\Frontastic\Common\AccountApiBundle\Domain\DateTime`|``|
-`addresses`|`Address[]`|`[]`|
-`dangerousInnerAccount`|`mixed`|``|Access original object from backend
+`accountId`|`string`||
+`email`|`string`||
+`salutation`|`string`||
+`firstName`|`string`||
+`lastName`|`string`||
+`birthday`|`\DateTime`||
+`data`|`array`|`[]|
+`groups`|`Group[]`|`[]|
+`confirmationToken`|`string`||
+`confirmed`|`string`|`false|
+`tokenValidUntil`|`\DateTime`||
+`addresses`|`Address[]`|`[]|
+`dangerousInnerAccount`|`mixed`||Access original object from backend
 
 ## Methods
 

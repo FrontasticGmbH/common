@@ -6,6 +6,6 @@ Fully Qualified: [`\Frontastic\Common\ContentApiBundle\Domain\AttributeFilter`](
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`name`|`string`|``|
-`value`|`string`|``|
+`name`|`string`||
+`value`|`string`||
 

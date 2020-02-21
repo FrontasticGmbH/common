@@ -6,7 +6,7 @@ Fully Qualified: [`\Frontastic\Common\AccountApiBundle\Domain\AuthentificationIn
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`email`|`string`|``|
-`password`|`string`|``|
-`newPassword`|`string`|``|
+`email`|`string`||
+`password`|`string`||
+`newPassword`|`string`||
 

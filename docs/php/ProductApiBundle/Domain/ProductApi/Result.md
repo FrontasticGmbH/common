@@ -6,12 +6,12 @@ Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result`
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`offset`|`int`|``|
-`total`|`int`|``|
-`count`|`int`|``|
-`items`|`array`|`[]`|
-`facets`|`Facet[]`|`[]`|
-`query`|`Query`|``|The query used to generate this result (cloned)
+`offset`|`int`||
+`total`|`int`||
+`count`|`int`||
+`items`|`array`|`[]|
+`facets`|`Facet[]`|`[]|
+`query`|`Query`||The query used to generate this result (cloned)
 
 ## Methods
 

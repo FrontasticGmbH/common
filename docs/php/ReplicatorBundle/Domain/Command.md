@@ -6,8 +6,8 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\Command`](../../..
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`command`|`string`|``|
-`channel`|`string`|``|
-`customer`|`string`|``|
-`payload`|`array`|`[]`|
+`command`|`string`||
+`channel`|`string`||
+`customer`|`string`||
+`payload`|`array`|`[]|
 

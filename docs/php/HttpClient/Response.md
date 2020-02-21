@@ -6,13 +6,13 @@ Fully Qualified: [`\Frontastic\Common\HttpClient\Response`](../../../src/php/Htt
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`status`|`int`|``|Response HTTP status code
-`headers`|`string[]`|``|The HTTP headers from the response as a plain array
-`body`|`string`|``|Response body
+`status`|`int`||Response HTTP status code
+`headers`|`string[]`||The HTTP headers from the response as a plain array
+`body`|`string`||Response body
 
 ## Methods
 
-* [__toString()](#tostring)
+* [__toString()](#__tostring)
 
 
 ### __toString()

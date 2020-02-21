@@ -7,7 +7,7 @@ Fully Qualified: [`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApiFactor
 
 ## Methods
 
-* [__construct()](#construct)
+* [__construct()](#__construct)
 * [factor()](#factor)
 
 

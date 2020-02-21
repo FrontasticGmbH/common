@@ -6,6 +6,6 @@ Fully Qualified: [`\Frontastic\Common\ContentApiBundle\Domain\ContentType`](../.
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`contentTypeId`|`string`|``|
-`name`|`string`|``|
+`contentTypeId`|`string`||
+`name`|`string`||
 

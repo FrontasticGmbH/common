@@ -6,13 +6,13 @@ Fully Qualified: [`\Frontastic\Common\ContentApiBundle\Domain\ContentApi\Attribu
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`attributeId`|`array`|``|
-`content`|`string`|``|
-`type`|`string`|``|
+`attributeId`|`array`||
+`content`|`string`||
+`type`|`string`||
 
 ## Methods
 
-* [__toString()](#tostring)
+* [__toString()](#__tostring)
 
 
 ### __toString()

@@ -7,7 +7,7 @@ Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\CartApiFactory`](../.
 
 ## Methods
 
-* [__construct()](#construct)
+* [__construct()](#__construct)
 * [factor()](#factor)
 
 

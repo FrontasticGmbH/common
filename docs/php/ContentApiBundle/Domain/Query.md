@@ -6,10 +6,10 @@ Fully Qualified: [`\Frontastic\Common\ContentApiBundle\Domain\Query`](../../../.
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`contentType`|`string`|``|
-`query`|`string`|``|
-`contentIds`|`array`|``|
-`attributes`|`AttributeFilter[]`|`[]`|
+`contentType`|`string`||
+`query`|`string`||
+`contentIds`|`array`||
+`attributes`|`AttributeFilter[]`|`[]|
 
 ## Methods
 

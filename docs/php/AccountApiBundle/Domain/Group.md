@@ -6,7 +6,7 @@ Fully Qualified: [`\Frontastic\Common\AccountApiBundle\Domain\Group`](../../../.
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`groupId`|`string`|``|
-`name`|`string`|``|
-`permissions`|`string[]`|`[]`|
+`groupId`|`string`||
+`name`|`string`||
+`permissions`|`string[]`|`[]|
 

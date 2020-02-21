@@ -6,6 +6,6 @@ Fully Qualified: [`\Frontastic\Common\AccountApiBundle\Domain\MetaData`](../../.
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`author`|`string`|``|
-`changed`|`\DateTimeImmutable`|``|
+`author`|`string`||
+`changed`|`\DateTimeImmutable`||
 

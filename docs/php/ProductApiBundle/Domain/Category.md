@@ -6,12 +6,12 @@ Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\Category`](../../.
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`categoryId`|`string`|``|
-`name`|`string`|``|
-`depth`|`int`|``|
-`path`|`string`|``|The materialized id path for this category.
-`slug`|`string`|``|
-`dangerousInnerCategory`|`mixed`|``|Access original object from backend
+`categoryId`|`string`||
+`name`|`string`||
+`depth`|`int`||
+`path`|`string`||The materialized id path for this category.
+`slug`|`string`||
+`dangerousInnerCategory`|`mixed`||Access original object from backend
 
 ## Methods
 

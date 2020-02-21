@@ -6,9 +6,9 @@ Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\Order`](../../../../s
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`orderId`|`string`|``|
-`orderVersion`|`string`|``|
-`orderState`|`string`|``|
-`createdAt`|`\DateTimeImmutable`|``|
-`dangerousInnerOrder`|`mixed`|``|Access original object from backend
+`orderId`|`string`||
+`orderVersion`|`string`||
+`orderState`|`string`||
+`createdAt`|`\DateTimeImmutable`||
+`dangerousInnerOrder`|`mixed`||Access original object from backend
 

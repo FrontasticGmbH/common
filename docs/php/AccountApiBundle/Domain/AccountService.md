@@ -7,7 +7,7 @@ Fully Qualified: [`\Frontastic\Common\AccountApiBundle\Domain\AccountService`](.
 
 ## Methods
 
-* [__construct()](#construct)
+* [__construct()](#__construct)
 * [getSessionFor()](#getsessionfor)
 * [sendConfirmationMail()](#sendconfirmationmail)
 * [sendPasswordResetMail()](#sendpasswordresetmail)

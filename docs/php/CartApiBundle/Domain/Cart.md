@@ -6,20 +6,20 @@ Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\Cart`](../../../../sr
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`cartId`|`string`|``|
-`cartVersion`|`string`|``|
-`custom`|`array`|`[]`|
-`lineItems`|`LineItem[]`|`[]`|
-`email`|`string`|``|
-`birthday`|`\DateTimeImmutable`|``|
-`shippingMethod`|`?ShippingMethod`|``|
-`shippingAddress`|`?Address`|``|
-`billingAddress`|`?Address`|``|
-`sum`|`int`|``|
-`currency`|`string`|``|
-`payments`|`Payment[]`|`[]`|
-`discountCodes`|`string[]`|`[]`|
-`dangerousInnerCart`|`mixed`|``|Access original object from backend
+`cartId`|`string`||
+`cartVersion`|`string`||
+`custom`|`array`|`[]|
+`lineItems`|`LineItem[]`|`[]|
+`email`|`string`||
+`birthday`|`\DateTimeImmutable`||
+`shippingMethod`|`?ShippingMethod`||
+`shippingAddress`|`?Address`||
+`billingAddress`|`?Address`||
+`sum`|`int`||
+`currency`|`string`||
+`payments`|`Payment[]`|`[]|
+`discountCodes`|`string[]`|`[]|
+`dangerousInnerCart`|`mixed`||Access original object from backend
 
 ## Methods
 

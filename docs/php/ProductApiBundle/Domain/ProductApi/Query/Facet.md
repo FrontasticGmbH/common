@@ -6,5 +6,5 @@ Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\F
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`handle`|`string`|``|
+`handle`|`string`||
 

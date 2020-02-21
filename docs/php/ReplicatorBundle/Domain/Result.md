@@ -6,12 +6,12 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\Result`](../../../
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`ok`|`bool`|`true`|
-`payload`|`array`|`[]`|
-`message`|`string`|`null`|
-`file`|`string`|``|
-`line`|`int`|``|
-`stack`|`array`|``|
+`ok`|`bool`|`true|
+`payload`|`array`|`[]|
+`message`|`string`|`null|
+`file`|`string`||
+`line`|`int`||
+`stack`|`array`||
 
 ## Methods
 

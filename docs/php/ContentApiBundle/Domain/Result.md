@@ -6,8 +6,8 @@ Fully Qualified: [`\Frontastic\Common\ContentApiBundle\Domain\Result`](../../../
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`offset`|`int`|``|
-`total`|`int`|``|
-`count`|`int`|``|
-`items`|`array`|``|
+`offset`|`int`||
+`total`|`int`||
+`count`|`int`||
+`items`|`array`||
 

@@ -6,13 +6,13 @@ Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\Payment`](../../../..
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`id`|`string`|``|
-`paymentProvider`|`string`|``|
-`paymentId`|`string`|``|
-`amount`|`int`|``|
-`currency`|`string`|``|
-`debug`|`string`|``|
-`paymentStatus`|``|``|
-`version`|``|``|
-`paymentMethod`|``|``|
+`id`|`string`||
+`paymentProvider`|`string`||
+`paymentId`|`string`||
+`amount`|`int`||
+`currency`|`string`||
+`debug`|`string`||
+`paymentStatus`|``||
+`version`|``||
+`paymentMethod`|``||
 

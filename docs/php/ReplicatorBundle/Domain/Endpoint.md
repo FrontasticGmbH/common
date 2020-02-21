@@ -6,8 +6,8 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\Endpoint`](../../.
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`name`|`string`|``|
-`url`|`string`|``|
-`push`|`bool`|`true`|
-`environment`|`string`|`'production'`|
+`name`|`string`||
+`url`|`string`||
+`push`|`bool`|`true|
+`environment`|`string`|`'production'|
 

@@ -6,8 +6,8 @@ Fully Qualified: [`\Frontastic\Common\ContentApiBundle\Domain\ContentApi\Content
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`contentId`|`string`|``|
-`name`|`string`|``|
-`attributes`|`Attribute[]`|`[]`|
-`dangerousInnerContent`|`mixed`|``|Access original object from backend
+`contentId`|`string`||
+`name`|`string`||
+`attributes`|`Attribute[]`|`[]|
+`dangerousInnerContent`|`mixed`||Access original object from backend
 

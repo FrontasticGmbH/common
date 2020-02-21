@@ -7,7 +7,7 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\CustomerService`](
 
 ## Methods
 
-* [__construct()](#construct)
+* [__construct()](#__construct)
 * [getCustomers()](#getcustomers)
 * [getCustomer()](#getcustomer)
 * [getProject()](#getproject)

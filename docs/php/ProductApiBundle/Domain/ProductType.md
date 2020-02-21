@@ -6,7 +6,7 @@ Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductType`](../.
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`productTypeId`|`string`|``|
-`name`|`string`|``|
-`dangerousInnerProductType`|`mixed`|``|Access original object from backend
+`productTypeId`|`string`||
+`name`|`string`||
+`dangerousInnerProductType`|`mixed`||Access original object from backend
 

@@ -6,9 +6,9 @@ Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`type`|`string`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Facets::TYPE_RANGE`|
-`min`|`int`|``|
-`max`|`int`|``|
-`step`|`int`|``|
-`value`|`array`|`['min' => 0, 'max' => 0]`|
+`type`|`string`|`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Facets::TYPE_RANGE|
+`min`|`int`||
+`max`|`int`||
+`step`|`int`||
+`value`|`array`|`['min' => 0, 'max' => 0]|
 

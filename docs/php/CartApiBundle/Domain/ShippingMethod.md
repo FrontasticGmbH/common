@@ -6,6 +6,6 @@ Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\ShippingMethod`](../.
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`name`|`string`|``|
-`price`|`int`|``|
+`name`|`string`||
+`price`|`int`||
 

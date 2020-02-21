@@ -6,10 +6,10 @@ Fully Qualified: [`\Frontastic\Common\WishlistApiBundle\Domain\LineItem`](../../
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`lineItemId`|`string`|``|
-`name`|`string`|``|
-`type`|`string`|``|
-`addedAt`|`\DateTimeImmutable`|``|
-`count`|`int`|``|
-`dangerousInnerItem`|`mixed`|``|Access original object from backend
+`lineItemId`|`string`||
+`name`|`string`||
+`type`|`string`||
+`addedAt`|`\DateTimeImmutable`||
+`count`|`int`||
+`dangerousInnerItem`|`mixed`||Access original object from backend
 

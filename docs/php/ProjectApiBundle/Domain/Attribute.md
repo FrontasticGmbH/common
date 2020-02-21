@@ -6,8 +6,8 @@ Fully Qualified: [`\Frontastic\Common\ProjectApiBundle\Domain\Attribute`](../../
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`attributeId`|`string`|``|
-`type`|`string`|``|
-`label`|`array<string,string>|null`|``|
-`values`|`array|null`|``|
+`attributeId`|`string`||
+`type`|`string`||
+`label`|`array<string,string>|null`||
+`values`|`array|null`||
 

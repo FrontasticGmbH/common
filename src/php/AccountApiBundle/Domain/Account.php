@@ -65,7 +65,7 @@ class Account extends DataObject implements UserInterface, \Serializable
     public $confirmed = false;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      */
     public $tokenValidUntil;
 

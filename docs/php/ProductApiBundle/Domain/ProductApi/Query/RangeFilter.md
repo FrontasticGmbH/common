@@ -6,6 +6,6 @@ Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\R
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`min`|`?int`|``|
-`max`|`?int`|``|
+`min`|`?int`||
+`max`|`?int`||
 

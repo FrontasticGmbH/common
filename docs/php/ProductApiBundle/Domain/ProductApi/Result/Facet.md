@@ -6,8 +6,8 @@ Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`type`|`string`|``|
-`handle`|`string`|``|
-`key`|`string`|``|
-`selected`|`bool`|`false`|
+`type`|`string`||
+`handle`|`string`||
+`key`|`string`||
+`selected`|`bool`|`false|
 
