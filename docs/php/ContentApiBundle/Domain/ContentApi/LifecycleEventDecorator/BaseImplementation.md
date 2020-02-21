@@ -2,7 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\ContentApiBundle\Domain\ContentApi\LifecycleEventDecorator\BaseImplementation`](../../../../../../src/php/ContentApiBundle/Domain/ContentApi/LifecycleEventDecorator/BaseImplementation.php)
 
-
 The before* Methods will be obviously called *before* the original method is
 executed and will get all the parameters handed over, which the original
 method will get called with. Overwriting this method can be useful if you want
@@ -32,20 +31,13 @@ need to tag your service based on this class with
 * [beforeQuery()](#beforequery)
 * [afterQuery()](#afterquery)
 
-
 ### beforeGetContentTypes()
-
 
 ```php
 public function beforeGetContentTypes(
     ContentApi $contentApi
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -55,18 +47,12 @@ Return Value: `void`
 
 ### afterGetContentTypes()
 
-
 ```php
 public function afterGetContentTypes(
     ContentApi $contentApi,
     array $contentTypes
 ): ?array
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -77,7 +63,6 @@ Return Value: `?array`
 
 ### beforeGetContent()
 
-
 ```php
 public function beforeGetContent(
     ContentApi $contentApi,
@@ -86,11 +71,6 @@ public function beforeGetContent(
     string $mode = ContentApi::QUERY_SYNC
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -103,18 +83,12 @@ Return Value: `void`
 
 ### afterGetContent()
 
-
 ```php
 public function afterGetContent(
     ContentApi $contentApi,
     ?Content $content
 ): ?Content
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -125,7 +99,6 @@ Return Value: ?[`Content`](../Content.md)
 
 ### beforeQuery()
 
-
 ```php
 public function beforeQuery(
     ContentApi $contentApi,
@@ -134,11 +107,6 @@ public function beforeQuery(
     string $mode = ContentApi::QUERY_SYNC
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -151,18 +119,12 @@ Return Value: `void`
 
 ### afterQuery()
 
-
 ```php
 public function afterQuery(
     ContentApi $contentApi,
     ?Result $result
 ): ?Result
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

@@ -2,9 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\EndpointService`](../../../../src/php/ReplicatorBundle/Domain/EndpointService.php)
 
-
-
-
 ## Methods
 
 * [addReplicationSource()](#addreplicationsource)
@@ -13,9 +10,7 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\EndpointService`](
 * [getReplicationTarget()](#getreplicationtarget)
 * [dispatch()](#dispatch)
 
-
 ### addReplicationSource()
-
 
 ```php
 public function addReplicationSource(
@@ -23,11 +18,6 @@ public function addReplicationSource(
     Source $source
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -38,17 +28,11 @@ Return Value: `void`
 
 ### getReplicationSource()
 
-
 ```php
 public function getReplicationSource(
     string $channel
 ): mixed
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -58,18 +42,12 @@ Return Value: `mixed`
 
 ### addReplicationTarget()
 
-
 ```php
 public function addReplicationTarget(
     string $channel,
     Target $target
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -80,17 +58,11 @@ Return Value: `void`
 
 ### getReplicationTarget()
 
-
 ```php
 public function getReplicationTarget(
     string $channel
 ): mixed
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -100,17 +72,11 @@ Return Value: `mixed`
 
 ### dispatch()
 
-
 ```php
 public function dispatch(
     Command $command
 ): Result
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

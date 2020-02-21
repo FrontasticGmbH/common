@@ -2,9 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\HttpClient`](../../src/php/HttpClient.php)
 
-
-
-
 ## Methods
 
 * [addDefaultHeaders()](#adddefaultheaders)
@@ -12,20 +9,13 @@ Fully Qualified: [`\Frontastic\Common\HttpClient`](../../src/php/HttpClient.php)
 * [requestAsync()](#requestasync)
 * [__call()](#__call)
 
-
 ### addDefaultHeaders()
-
 
 ```php
 abstract public function addDefaultHeaders(
     array $headers
 ): mixed
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -34,7 +24,6 @@ Argument|Type|Default|Description
 Return Value: `mixed`
 
 ### request()
-
 
 ```php
 public function request(
@@ -46,10 +35,7 @@ public function request(
 ): Response
 ```
 
-
 *Make any HTTP request*
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -63,7 +49,6 @@ Return Value: [`Response`](HttpClient/Response.md)
 
 ### requestAsync()
 
-
 ```php
 abstract public function requestAsync(
     string $method,
@@ -73,11 +58,6 @@ abstract public function requestAsync(
     Options $options = null
 ): \GuzzleHttp\Promise\PromiseInterface
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -91,14 +71,12 @@ Return Value: `\GuzzleHttp\Promise\PromiseInterface`
 
 ### __call()
 
-
 ```php
 public function __call(
     string $functionName,
     array $arguments
 ): object
 ```
-
 
 *Expose HTTP verbs as methods*
 

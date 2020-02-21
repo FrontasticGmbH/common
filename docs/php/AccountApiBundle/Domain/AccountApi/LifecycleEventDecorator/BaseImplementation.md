@@ -2,7 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\AccountApiBundle\Domain\AccountApi\LifecycleEventDecorator\BaseImplementation`](../../../../../../src/php/AccountApiBundle/Domain/AccountApi/LifecycleEventDecorator/BaseImplementation.php)
 
-
 The before* Methods will be obviously called *before* the original method is
 executed and will get all the parameters handed over, which the original
 method will get called with. Overwriting this method can be useful if you want
@@ -56,9 +55,7 @@ need to tag your service based on this class with
 * [beforeSetDefaultShippingAddress()](#beforesetdefaultshippingaddress)
 * [afterSetDefaultShippingAddress()](#aftersetdefaultshippingaddress)
 
-
 ### beforeGet()
-
 
 ```php
 public function beforeGet(
@@ -66,11 +63,6 @@ public function beforeGet(
     string $email
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -81,18 +73,12 @@ Return Value: `void`
 
 ### afterGet()
 
-
 ```php
 public function afterGet(
     AccountApi $accountApi,
     Account $account
 ): ?Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -103,18 +89,12 @@ Return Value: ?[`Account`](../../Account.md)
 
 ### beforeConfirmEmail()
 
-
 ```php
 public function beforeConfirmEmail(
     AccountApi $accountApi,
     string $token
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -125,18 +105,12 @@ Return Value: `void`
 
 ### afterConfirmEmail()
 
-
 ```php
 public function afterConfirmEmail(
     AccountApi $accountApi,
     Account $account
 ): ?Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -147,7 +121,6 @@ Return Value: ?[`Account`](../../Account.md)
 
 ### beforeCreate()
 
-
 ```php
 public function beforeCreate(
     AccountApi $accountApi,
@@ -155,11 +128,6 @@ public function beforeCreate(
     ?Cart $cart = null
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -171,18 +139,12 @@ Return Value: `void`
 
 ### afterCreate()
 
-
 ```php
 public function afterCreate(
     AccountApi $accountApi,
     Account $account
 ): ?Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -193,18 +155,12 @@ Return Value: ?[`Account`](../../Account.md)
 
 ### beforeVerifyEmail()
 
-
 ```php
 public function beforeVerifyEmail(
     AccountApi $accountApi,
     string $token
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -215,18 +171,12 @@ Return Value: `void`
 
 ### afterVerifyEmail()
 
-
 ```php
 public function afterVerifyEmail(
     AccountApi $accountApi,
     Account $account
 ): ?Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -237,18 +187,12 @@ Return Value: ?[`Account`](../../Account.md)
 
 ### beforeUpdate()
 
-
 ```php
 public function beforeUpdate(
     AccountApi $accountApi,
     Account $account
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -259,18 +203,12 @@ Return Value: `void`
 
 ### afterUpdate()
 
-
 ```php
 public function afterUpdate(
     AccountApi $accountApi,
     Account $account
 ): ?Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -281,7 +219,6 @@ Return Value: ?[`Account`](../../Account.md)
 
 ### beforeUpdatePassword()
 
-
 ```php
 public function beforeUpdatePassword(
     AccountApi $accountApi,
@@ -290,11 +227,6 @@ public function beforeUpdatePassword(
     string $newPassword
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -307,18 +239,12 @@ Return Value: `void`
 
 ### afterUpdatePassword()
 
-
 ```php
 public function afterUpdatePassword(
     AccountApi $accountApi,
     Account $account
 ): ?Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -329,18 +255,12 @@ Return Value: ?[`Account`](../../Account.md)
 
 ### beforeGeneratePasswordResetToken()
 
-
 ```php
 public function beforeGeneratePasswordResetToken(
     AccountApi $accountApi,
     Account $account
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -351,18 +271,12 @@ Return Value: `void`
 
 ### afterGeneratePasswordResetToken()
 
-
 ```php
 public function afterGeneratePasswordResetToken(
     AccountApi $accountApi,
     Account $account
 ): ?Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -373,7 +287,6 @@ Return Value: ?[`Account`](../../Account.md)
 
 ### beforeResetPassword()
 
-
 ```php
 public function beforeResetPassword(
     AccountApi $accountApi,
@@ -381,11 +294,6 @@ public function beforeResetPassword(
     string $newPassword
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -397,18 +305,12 @@ Return Value: `void`
 
 ### afterResetPassword()
 
-
 ```php
 public function afterResetPassword(
     AccountApi $accountApi,
     Account $account
 ): ?Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -419,7 +321,6 @@ Return Value: ?[`Account`](../../Account.md)
 
 ### beforeLogin()
 
-
 ```php
 public function beforeLogin(
     AccountApi $accountApi,
@@ -427,11 +328,6 @@ public function beforeLogin(
     ?Cart $cart = null
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -443,18 +339,12 @@ Return Value: `void`
 
 ### afterLogin()
 
-
 ```php
 public function afterLogin(
     AccountApi $accountApi,
     bool $successful
 ): ?bool
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -465,18 +355,12 @@ Return Value: `?bool`
 
 ### beforeGetAddresses()
 
-
 ```php
 public function beforeGetAddresses(
     AccountApi $accountApi,
     string $accountId
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -487,18 +371,12 @@ Return Value: `void`
 
 ### afterGetAddresses()
 
-
 ```php
 public function afterGetAddresses(
     AccountApi $accountApi,
     array $addresses
 ): ?array
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -509,7 +387,6 @@ Return Value: `?array`
 
 ### beforeAddAddress()
 
-
 ```php
 public function beforeAddAddress(
     AccountApi $accountApi,
@@ -517,11 +394,6 @@ public function beforeAddAddress(
     Address $address
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -533,18 +405,12 @@ Return Value: `void`
 
 ### afterAddAddress()
 
-
 ```php
 public function afterAddAddress(
     AccountApi $accountApi,
     Account $account
 ): ?Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -555,7 +421,6 @@ Return Value: ?[`Account`](../../Account.md)
 
 ### beforeUpdateAddress()
 
-
 ```php
 public function beforeUpdateAddress(
     AccountApi $accountApi,
@@ -563,11 +428,6 @@ public function beforeUpdateAddress(
     Address $address
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -579,18 +439,12 @@ Return Value: `void`
 
 ### afterUpdateAddress()
 
-
 ```php
 public function afterUpdateAddress(
     AccountApi $accountApi,
     Account $account
 ): ?Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -601,7 +455,6 @@ Return Value: ?[`Account`](../../Account.md)
 
 ### beforeRemoveAddress()
 
-
 ```php
 public function beforeRemoveAddress(
     AccountApi $accountApi,
@@ -609,11 +462,6 @@ public function beforeRemoveAddress(
     string $addressId
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -625,18 +473,12 @@ Return Value: `void`
 
 ### afterRemoveAddress()
 
-
 ```php
 public function afterRemoveAddress(
     AccountApi $accountApi,
     Account $account
 ): ?Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -647,7 +489,6 @@ Return Value: ?[`Account`](../../Account.md)
 
 ### beforeSetDefaultBillingAddress()
 
-
 ```php
 public function beforeSetDefaultBillingAddress(
     AccountApi $accountApi,
@@ -655,11 +496,6 @@ public function beforeSetDefaultBillingAddress(
     string $addressId
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -671,18 +507,12 @@ Return Value: `void`
 
 ### afterSetDefaultBillingAddress()
 
-
 ```php
 public function afterSetDefaultBillingAddress(
     AccountApi $accountApi,
     Account $account
 ): ?Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -693,7 +523,6 @@ Return Value: ?[`Account`](../../Account.md)
 
 ### beforeSetDefaultShippingAddress()
 
-
 ```php
 public function beforeSetDefaultShippingAddress(
     AccountApi $accountApi,
@@ -701,11 +530,6 @@ public function beforeSetDefaultShippingAddress(
     string $addressId
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -717,18 +541,12 @@ Return Value: `void`
 
 ### afterSetDefaultShippingAddress()
 
-
 ```php
 public function afterSetDefaultShippingAddress(
     AccountApi $accountApi,
     Account $account
 ): ?Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

@@ -2,17 +2,12 @@
 
 Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\CartApiFactory`](../../../../src/php/CartApiBundle/Domain/CartApiFactory.php)
 
-
-
-
 ## Methods
 
 * [__construct()](#__construct)
 * [factor()](#factor)
 
-
 ### __construct()
-
 
 ```php
 public function __construct(
@@ -22,11 +17,6 @@ public function __construct(
     iterable $decorators
 ): mixed
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -39,17 +29,11 @@ Return Value: `mixed`
 
 ### factor()
 
-
 ```php
 public function factor(
     Project $project
 ): CartApi
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

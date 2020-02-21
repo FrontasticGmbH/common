@@ -2,8 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery`](../../../../../../src/php/ProductApiBundle/Domain/ProductApi/Query/ProductQuery.php)
 
-
-
 Property|Type|Default|Description
 --------|----|-------|-----------
 `category`|`string`||
@@ -23,21 +21,11 @@ Property|Type|Default|Description
 
 * [validate()](#validate)
 
-
 ### validate()
 
-
 ```php
-public function validate(
-    
-): void
+public function validate(): void
 ```
-
-
-
-
-
-
 
 Return Value: `void`
 

@@ -2,8 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result`](../../../../../src/php/ProductApiBundle/Domain/ProductApi/Result.php)
 
-
-
 Property|Type|Default|Description
 --------|----|-------|-----------
 `offset`|`int`||
@@ -18,38 +16,19 @@ Property|Type|Default|Description
 * [getIterator()](#getiterator)
 * [count()](#count)
 
-
 ### getIterator()
 
-
 ```php
-public function getIterator(
-    
-): \Traversable
+public function getIterator(): \Traversable
 ```
-
-
-
-
-
-
 
 Return Value: `\Traversable`
 
 ### count()
 
-
 ```php
-public function count(
-    
-): int
+public function count(): int
 ```
-
-
-
-
-
-
 
 Return Value: `int`
 

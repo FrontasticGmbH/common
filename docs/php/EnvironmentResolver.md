@@ -2,16 +2,11 @@
 
 Fully Qualified: [`\Frontastic\Common\EnvironmentResolver`](../../src/php/EnvironmentResolver.php)
 
-
-
-
 ## Methods
 
 * [loadEnvironmentVariables()](#loadenvironmentvariables)
 
-
 ### loadEnvironmentVariables()
-
 
 ```php
 public function loadEnvironmentVariables(
@@ -19,11 +14,6 @@ public function loadEnvironmentVariables(
     array $baseConfig = []
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

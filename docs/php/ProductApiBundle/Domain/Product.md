@@ -2,8 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\Product`](../../../../src/php/ProductApiBundle/Domain/Product.php)
 
-
-
 Property|Type|Default|Description
 --------|----|-------|-----------
 `productId`|`string`||
@@ -20,20 +18,13 @@ Property|Type|Default|Description
 
 * [__get()](#__get)
 
-
 ### __get()
-
 
 ```php
 public function __get(
     mixed $name
 ): mixed
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

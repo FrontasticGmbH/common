@@ -2,9 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\AccountApiBundle\Domain\AccountService`](../../../../src/php/AccountApiBundle/Domain/AccountService.php)
 
-
-
-
 ## Methods
 
 * [__construct()](#__construct)
@@ -21,9 +18,7 @@ Fully Qualified: [`\Frontastic\Common\AccountApiBundle\Domain\AccountService`](.
 * [resetPassword()](#resetpassword)
 * [remove()](#remove)
 
-
 ### __construct()
-
 
 ```php
 public function __construct(
@@ -31,11 +26,6 @@ public function __construct(
     \Frontastic\Common\CoreBundle\Domain\Mailer $mailer
 ): mixed
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -46,17 +36,11 @@ Return Value: `mixed`
 
 ### getSessionFor()
 
-
 ```php
 public function getSessionFor(
     Account $account = null
 ): mixed
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -66,17 +50,11 @@ Return Value: `mixed`
 
 ### sendConfirmationMail()
 
-
 ```php
 public function sendConfirmationMail(
     Account $account
 ): mixed
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -86,17 +64,11 @@ Return Value: `mixed`
 
 ### sendPasswordResetMail()
 
-
 ```php
 public function sendPasswordResetMail(
     Account $account
 ): mixed
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -106,17 +78,11 @@ Return Value: `mixed`
 
 ### get()
 
-
 ```php
 public function get(
     string $email
 ): Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -126,17 +92,11 @@ Return Value: [`Account`](Account.md)
 
 ### exists()
 
-
 ```php
 public function exists(
     string $email
 ): bool
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -146,17 +106,11 @@ Return Value: `bool`
 
 ### confirmEmail()
 
-
 ```php
 public function confirmEmail(
     string $confirmationToken
 ): Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -166,18 +120,12 @@ Return Value: [`Account`](Account.md)
 
 ### login()
 
-
 ```php
 public function login(
     Account $account,
     ?Cart $cart = null
 ): bool
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -188,18 +136,12 @@ Return Value: `bool`
 
 ### create()
 
-
 ```php
 public function create(
     Account $account,
     ?Cart $cart = null
 ): Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -210,17 +152,11 @@ Return Value: [`Account`](Account.md)
 
 ### update()
 
-
 ```php
 public function update(
     Account $account
 ): Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -230,7 +166,6 @@ Return Value: [`Account`](Account.md)
 
 ### updatePassword()
 
-
 ```php
 public function updatePassword(
     Account $account,
@@ -238,11 +173,6 @@ public function updatePassword(
     string $newPassword
 ): Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -254,18 +184,12 @@ Return Value: [`Account`](Account.md)
 
 ### resetPassword()
 
-
 ```php
 public function resetPassword(
     string $token,
     string $newPassword
 ): Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -276,17 +200,11 @@ Return Value: [`Account`](Account.md)
 
 ### remove()
 
-
 ```php
 public function remove(
     Account $account
 ): mixed
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

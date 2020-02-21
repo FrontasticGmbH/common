@@ -2,17 +2,12 @@
 
 Fully Qualified: [`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApiFactory`](../../../../src/php/WishlistApiBundle/Domain/WishlistApiFactory.php)
 
-
-
-
 ## Methods
 
 * [__construct()](#__construct)
 * [factor()](#factor)
 
-
 ### __construct()
-
 
 ```php
 public function __construct(
@@ -21,11 +16,6 @@ public function __construct(
     iterable $decorators
 ): mixed
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -37,17 +27,11 @@ Return Value: `mixed`
 
 ### factor()
 
-
 ```php
 public function factor(
     Project $project
 ): WishlistApi
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

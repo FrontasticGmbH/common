@@ -2,7 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale`](../../../../../src/php/ProductApiBundle/Domain/ProductApi/Locale.php)
 
-
 language[_territory[.codeset]][@modifier]
 
 - de_DE - en_GB@euro
@@ -20,54 +19,29 @@ Property|Type|Default|Description
 * [toString()](#tostring)
 * [createFromPosix()](#createfromposix)
 
-
 ### __toString()
 
-
 ```php
-public function __toString(
-    
-): string
+public function __toString(): string
 ```
-
-
-
-
-
-
 
 Return Value: `string`
 
 ### toString()
 
-
 ```php
-public function toString(
-    
-): string
+public function toString(): string
 ```
-
-
-
-
-
-
 
 Return Value: `string`
 
 ### createFromPosix()
-
 
 ```php
 static public function createFromPosix(
     string $locale
 ): Locale
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

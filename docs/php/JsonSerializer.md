@@ -2,18 +2,13 @@
 
 Fully Qualified: [`\Frontastic\Common\JsonSerializer`](../../src/php/JsonSerializer.php)
 
-
-
-
 ## Methods
 
 * [__construct()](#__construct)
 * [addEnhancer()](#addenhancer)
 * [serialize()](#serialize)
 
-
 ### __construct()
-
 
 ```php
 public function __construct(
@@ -21,11 +16,6 @@ public function __construct(
     iterable $objectEnhancers = []
 ): mixed
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -36,17 +26,11 @@ Return Value: `mixed`
 
 ### addEnhancer()
 
-
 ```php
 public function addEnhancer(
     JsonSerializer\ObjectEnhancer $enhancer
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -56,7 +40,6 @@ Return Value: `void`
 
 ### serialize()
 
-
 ```php
 public function serialize(
     mixed $item,
@@ -64,11 +47,8 @@ public function serialize(
 ): mixed
 ```
 
-
 *Is there a sensible refactoring to reduce this methods compleixty?
 Otherwise we consider it fine, since its tested anyways:*
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

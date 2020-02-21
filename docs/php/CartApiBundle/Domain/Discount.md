@@ -2,8 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\Discount`](../../../../src/php/CartApiBundle/Domain/Discount.php)
 
-
-
 Property|Type|Default|Description
 --------|----|-------|-----------
 `discountId`|`string`||

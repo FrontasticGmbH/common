@@ -2,8 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\Payment`](../../../../src/php/CartApiBundle/Domain/Payment.php)
 
-
-
 Property|Type|Default|Description
 --------|----|-------|-----------
 `id`|`string`||

@@ -2,9 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\ContentApiBundle\Domain\ContentApi`](../../../../src/php/ContentApiBundle/Domain/ContentApi.php)
 
-
-
-
 ## Methods
 
 * [getContentTypes()](#getcontenttypes)
@@ -12,26 +9,15 @@ Fully Qualified: [`\Frontastic\Common\ContentApiBundle\Domain\ContentApi`](../..
 * [query()](#query)
 * [getDangerousInnerClient()](#getdangerousinnerclient)
 
-
 ### getContentTypes()
 
-
 ```php
-public function getContentTypes(
-    
-): array
+public function getContentTypes(): array
 ```
-
-
-
-
-
-
 
 Return Value: `array`
 
 ### getContent()
-
 
 ```php
 public function getContent(
@@ -41,10 +27,7 @@ public function getContent(
 ): ?object
 ```
 
-
 *Fetch content with $contentId in $locale. If $locale is null, project default locale is used.*
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -56,7 +39,6 @@ Return Value: `?object`
 
 ### query()
 
-
 ```php
 public function query(
     Query $query,
@@ -65,12 +47,9 @@ public function query(
 ): ?object
 ```
 
-
 *Fetch content with by a $query in $locale. Interpretation of the query
 attributes depend on the content API implementation. If $locale is null,
 project default locale is used.*
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -82,13 +61,9 @@ Return Value: `?object`
 
 ### getDangerousInnerClient()
 
-
 ```php
-public function getDangerousInnerClient(
-    
-): mixed
+public function getDangerousInnerClient(): mixed
 ```
-
 
 *Get *dangerous* inner client*
 
@@ -101,7 +76,6 @@ vendor provided abstraction.
 
 Use this with care for features necessary in your customer and talk with
 Frontastic about provising an abstraction.
-
 
 Return Value: `mixed`
 

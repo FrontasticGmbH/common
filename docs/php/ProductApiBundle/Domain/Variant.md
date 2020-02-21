@@ -2,8 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\Variant`](../../../../src/php/ProductApiBundle/Domain/Variant.php)
 
-
-
 Property|Type|Default|Description
 --------|----|-------|-----------
 `id`|`string`||

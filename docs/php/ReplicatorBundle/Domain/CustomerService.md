@@ -2,9 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\CustomerService`](../../../../src/php/ReplicatorBundle/Domain/CustomerService.php)
 
-
-
-
 ## Methods
 
 * [__construct()](#__construct)
@@ -13,9 +10,7 @@ Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\CustomerService`](
 * [getProject()](#getproject)
 * [getForHost()](#getforhost)
 
-
 ### __construct()
-
 
 ```php
 public function __construct(
@@ -23,11 +18,6 @@ public function __construct(
     string $deployedCustomers
 ): mixed
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -38,34 +28,19 @@ Return Value: `mixed`
 
 ### getCustomers()
 
-
 ```php
-public function getCustomers(
-    
-): array
+public function getCustomers(): array
 ```
-
-
-
-
-
-
 
 Return Value: `array`
 
 ### getCustomer()
-
 
 ```php
 public function getCustomer(
     string $customerName
 ): Customer
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -75,18 +50,12 @@ Return Value: [`Customer`](Customer.md)
 
 ### getProject()
 
-
 ```php
 public function getProject(
     string $customerName,
     string $projectName
 ): Project
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -97,17 +66,11 @@ Return Value: [`Project`](Project.md)
 
 ### getForHost()
 
-
 ```php
 public function getForHost(
     string $host
 ): Customer
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

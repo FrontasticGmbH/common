@@ -2,8 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\HttpClient\Response`](../../../src/php/HttpClient/Response.php)
 
-
-
 Property|Type|Default|Description
 --------|----|-------|-----------
 `status`|`int`||Response HTTP status code
@@ -14,21 +12,11 @@ Property|Type|Default|Description
 
 * [__toString()](#__tostring)
 
-
 ### __toString()
 
-
 ```php
-public function __toString(
-    
-): mixed
+public function __toString(): mixed
 ```
-
-
-
-
-
-
 
 Return Value: `mixed`
 

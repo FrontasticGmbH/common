@@ -2,17 +2,12 @@
 
 Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\RequestVerifier`](../../../../src/php/ReplicatorBundle/Domain/RequestVerifier.php)
 
-
-
-
 ## Methods
 
 * [isValid()](#isvalid)
 * [ensure()](#ensure)
 
-
 ### isValid()
-
 
 ```php
 public function isValid(
@@ -20,11 +15,6 @@ public function isValid(
     string $secret
 ): bool
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -35,18 +25,12 @@ Return Value: `bool`
 
 ### ensure()
 
-
 ```php
 public function ensure(
     \Symfony\Component\HttpFoundation\Request $request,
     string $secret
 ): mixed
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

@@ -2,8 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\Project`](../../../../src/php/ReplicatorBundle/Domain/Project.php)
 
-
-
 Property|Type|Default|Description
 --------|----|-------|-----------
 `projectId`|`string`||
@@ -26,20 +24,13 @@ follow any defined schema.
 
 * [getConfigurationSection()](#getconfigurationsection)
 
-
 ### getConfigurationSection()
-
 
 ```php
 public function getConfigurationSection(
     string $sectionName
 ): object
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

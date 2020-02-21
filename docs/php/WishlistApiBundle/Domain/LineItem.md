@@ -2,8 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\WishlistApiBundle\Domain\LineItem`](../../../../src/php/WishlistApiBundle/Domain/LineItem.php)
 
-
-
 Property|Type|Default|Description
 --------|----|-------|-----------
 `lineItemId`|`string`||

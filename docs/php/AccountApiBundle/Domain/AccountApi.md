@@ -2,9 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`](../../../../src/php/AccountApiBundle/Domain/AccountApi.php)
 
-
-
-
 ## Methods
 
 * [get()](#get)
@@ -24,20 +21,13 @@ Fully Qualified: [`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`](../..
 * [setDefaultShippingAddress()](#setdefaultshippingaddress)
 * [getDangerousInnerClient()](#getdangerousinnerclient)
 
-
 ### get()
-
 
 ```php
 public function get(
     string $email
 ): Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -47,17 +37,11 @@ Return Value: [`Account`](Account.md)
 
 ### confirmEmail()
 
-
 ```php
 public function confirmEmail(
     string $token
 ): Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -67,18 +51,12 @@ Return Value: [`Account`](Account.md)
 
 ### create()
 
-
 ```php
 public function create(
     Account $account,
     ?Cart $cart = null
 ): Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -89,17 +67,11 @@ Return Value: [`Account`](Account.md)
 
 ### verifyEmail()
 
-
 ```php
 public function verifyEmail(
     string $token
 ): Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -109,17 +81,11 @@ Return Value: [`Account`](Account.md)
 
 ### update()
 
-
 ```php
 public function update(
     Account $account
 ): Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -129,7 +95,6 @@ Return Value: [`Account`](Account.md)
 
 ### updatePassword()
 
-
 ```php
 public function updatePassword(
     string $accountId,
@@ -137,11 +102,6 @@ public function updatePassword(
     string $newPassword
 ): Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -153,17 +113,11 @@ Return Value: [`Account`](Account.md)
 
 ### generatePasswordResetToken()
 
-
 ```php
 public function generatePasswordResetToken(
     Account $account
 ): Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -173,18 +127,12 @@ Return Value: [`Account`](Account.md)
 
 ### resetPassword()
 
-
 ```php
 public function resetPassword(
     string $token,
     string $newPassword
 ): Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -195,18 +143,12 @@ Return Value: [`Account`](Account.md)
 
 ### login()
 
-
 ```php
 public function login(
     Account $account,
     ?Cart $cart = null
 ): bool
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -217,17 +159,11 @@ Return Value: `bool`
 
 ### getAddresses()
 
-
 ```php
 public function getAddresses(
     string $accountId
 ): array
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -237,18 +173,12 @@ Return Value: `array`
 
 ### addAddress()
 
-
 ```php
 public function addAddress(
     string $accountId,
     Address $address
 ): Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -259,18 +189,12 @@ Return Value: [`Account`](Account.md)
 
 ### updateAddress()
 
-
 ```php
 public function updateAddress(
     string $accountId,
     Address $address
 ): Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -281,18 +205,12 @@ Return Value: [`Account`](Account.md)
 
 ### removeAddress()
 
-
 ```php
 public function removeAddress(
     string $accountId,
     string $addressId
 ): Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -303,18 +221,12 @@ Return Value: [`Account`](Account.md)
 
 ### setDefaultBillingAddress()
 
-
 ```php
 public function setDefaultBillingAddress(
     string $accountId,
     string $addressId
 ): Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -325,18 +237,12 @@ Return Value: [`Account`](Account.md)
 
 ### setDefaultShippingAddress()
 
-
 ```php
 public function setDefaultShippingAddress(
     string $accountId,
     string $addressId
 ): Account
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -347,13 +253,9 @@ Return Value: [`Account`](Account.md)
 
 ### getDangerousInnerClient()
 
-
 ```php
-public function getDangerousInnerClient(
-    
-): mixed
+public function getDangerousInnerClient(): mixed
 ```
-
 
 *Get *dangerous* inner client*
 
@@ -366,7 +268,6 @@ vendor provided abstraction.
 
 Use this with care for features necessary in your customer and talk with
 Frontastic about provising an abstraction.
-
 
 Return Value: `mixed`
 

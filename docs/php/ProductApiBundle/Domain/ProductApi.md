@@ -2,9 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi`](../../../../src/php/ProductApiBundle/Domain/ProductApi.php)
 
-
-
-
 ## Methods
 
 * [getCategories()](#getcategories)
@@ -13,20 +10,13 @@ Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi`](../..
 * [query()](#query)
 * [getDangerousInnerClient()](#getdangerousinnerclient)
 
-
 ### getCategories()
-
 
 ```php
 public function getCategories(
     CategoryQuery $query
 ): array
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -36,17 +26,11 @@ Return Value: `array`
 
 ### getProductTypes()
 
-
 ```php
 public function getProductTypes(
     ProductTypeQuery $query
 ): array
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -56,18 +40,12 @@ Return Value: `array`
 
 ### getProduct()
 
-
 ```php
 public function getProduct(
     ProductQuery $query,
     string $mode = self::QUERY_SYNC
 ): ?object
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -78,18 +56,12 @@ Return Value: `?object`
 
 ### query()
 
-
 ```php
 public function query(
     ProductQuery $query,
     string $mode = self::QUERY_SYNC
 ): object
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -100,13 +72,9 @@ Return Value: `object`
 
 ### getDangerousInnerClient()
 
-
 ```php
-public function getDangerousInnerClient(
-    
-): mixed
+public function getDangerousInnerClient(): mixed
 ```
-
 
 *Get *dangerous* inner client*
 
@@ -119,7 +87,6 @@ vendor provided abstraction.
 
 Use this with care for features necessary in your customer and talk with
 Frontastic about provising an abstraction.
-
 
 Return Value: `mixed`
 

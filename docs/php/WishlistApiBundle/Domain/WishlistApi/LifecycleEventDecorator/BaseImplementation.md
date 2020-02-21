@@ -2,7 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi\LifecycleEventDecorator\BaseImplementation`](../../../../../../src/php/WishlistApiBundle/Domain/WishlistApi/LifecycleEventDecorator/BaseImplementation.php)
 
-
 The before* Methods will be obviously called *before* the original method is
 executed and will get all the parameters handed over, which the original
 method will get called with. Overwriting this method can be useful if you want
@@ -42,9 +41,7 @@ need to tag your service based on this class with
 * [beforeRemoveLineItem()](#beforeremovelineitem)
 * [afterRemoveLineItem()](#afterremovelineitem)
 
-
 ### beforeGetWishlist()
-
 
 ```php
 public function beforeGetWishlist(
@@ -53,11 +50,6 @@ public function beforeGetWishlist(
     string $locale
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -69,18 +61,12 @@ Return Value: `void`
 
 ### afterGetWishlist()
 
-
 ```php
 public function afterGetWishlist(
     WishlistApi $wishlistApi,
     Wishlist $wishlist
 ): ?Wishlist
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -91,7 +77,6 @@ Return Value: ?[`Wishlist`](../../Wishlist.md)
 
 ### beforeGetAnonymous()
 
-
 ```php
 public function beforeGetAnonymous(
     WishlistApi $wishlistApi,
@@ -99,11 +84,6 @@ public function beforeGetAnonymous(
     string $locale
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -115,18 +95,12 @@ Return Value: `void`
 
 ### afterGetAnonymous()
 
-
 ```php
 public function afterGetAnonymous(
     WishlistApi $wishlistApi,
     Wishlist $wishlist
 ): ?Wishlist
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -137,7 +111,6 @@ Return Value: ?[`Wishlist`](../../Wishlist.md)
 
 ### beforeGetWishlists()
 
-
 ```php
 public function beforeGetWishlists(
     WishlistApi $wishlistApi,
@@ -145,11 +118,6 @@ public function beforeGetWishlists(
     string $locale
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -161,18 +129,12 @@ Return Value: `void`
 
 ### afterGetWishlists()
 
-
 ```php
 public function afterGetWishlists(
     WishlistApi $wishlistApi,
     array $wishlists
 ): ?array
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -183,7 +145,6 @@ Return Value: `?array`
 
 ### beforeCreate()
 
-
 ```php
 public function beforeCreate(
     WishlistApi $wishlistApi,
@@ -191,11 +152,6 @@ public function beforeCreate(
     string $locale
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -207,18 +163,12 @@ Return Value: `void`
 
 ### afterCreate()
 
-
 ```php
 public function afterCreate(
     WishlistApi $wishlistApi,
     Wishlist $wishlist
 ): ?Wishlist
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -229,7 +179,6 @@ Return Value: ?[`Wishlist`](../../Wishlist.md)
 
 ### beforeAddToWishlist()
 
-
 ```php
 public function beforeAddToWishlist(
     WishlistApi $wishlistApi,
@@ -238,11 +187,6 @@ public function beforeAddToWishlist(
     string $locale
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -255,18 +199,12 @@ Return Value: `void`
 
 ### afterAddToWishlist()
 
-
 ```php
 public function afterAddToWishlist(
     WishlistApi $wishlistApi,
     Wishlist $wishlist
 ): ?Wishlist
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -277,7 +215,6 @@ Return Value: ?[`Wishlist`](../../Wishlist.md)
 
 ### beforeAddMultipleToWishlist()
 
-
 ```php
 public function beforeAddMultipleToWishlist(
     WishlistApi $wishlistApi,
@@ -286,11 +223,6 @@ public function beforeAddMultipleToWishlist(
     string $locale
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -303,18 +235,12 @@ Return Value: `void`
 
 ### afterAddMultipleToWishlist()
 
-
 ```php
 public function afterAddMultipleToWishlist(
     WishlistApi $wishlistApi,
     Wishlist $wishlist
 ): ?Wishlist
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -325,7 +251,6 @@ Return Value: ?[`Wishlist`](../../Wishlist.md)
 
 ### beforeUpdateLineItem()
 
-
 ```php
 public function beforeUpdateLineItem(
     WishlistApi $wishlistApi,
@@ -335,11 +260,6 @@ public function beforeUpdateLineItem(
     string $locale
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -353,18 +273,12 @@ Return Value: `void`
 
 ### afterUpdateLineItem()
 
-
 ```php
 public function afterUpdateLineItem(
     WishlistApi $wishlistApi,
     Wishlist $wishlist
 ): ?Wishlist
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -375,7 +289,6 @@ Return Value: ?[`Wishlist`](../../Wishlist.md)
 
 ### beforeRemoveLineItem()
 
-
 ```php
 public function beforeRemoveLineItem(
     WishlistApi $wishlistApi,
@@ -384,11 +297,6 @@ public function beforeRemoveLineItem(
     string $locale
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -401,18 +309,12 @@ Return Value: `void`
 
 ### afterRemoveLineItem()
 
-
 ```php
 public function afterRemoveLineItem(
     WishlistApi $wishlistApi,
     Wishlist $wishlist
 ): ?Wishlist
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

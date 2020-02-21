@@ -2,8 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\Result`](../../../../src/php/ReplicatorBundle/Domain/Result.php)
 
-
-
 Property|Type|Default|Description
 --------|----|-------|-----------
 `ok`|`bool`|`true`|
@@ -17,20 +15,13 @@ Property|Type|Default|Description
 
 * [fromThrowable()](#fromthrowable)
 
-
 ### fromThrowable()
-
 
 ```php
 static public function fromThrowable(
     \Throwable $e
 ): mixed
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

@@ -2,8 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\ContentApiBundle\Domain\Query`](../../../../src/php/ContentApiBundle/Domain/Query.php)
 
-
-
 Property|Type|Default|Description
 --------|----|-------|-----------
 `contentType`|`string`||
@@ -15,9 +13,7 @@ Property|Type|Default|Description
 
 * [fromArray()](#fromarray)
 
-
 ### fromArray()
-
 
 ```php
 static public function fromArray(
@@ -25,11 +21,6 @@ static public function fromArray(
     bool $ignoreAdditionalAttributes = false
 ): Query
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

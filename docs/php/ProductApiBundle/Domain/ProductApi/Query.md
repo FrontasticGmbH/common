@@ -2,8 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query`](../../../../../src/php/ProductApiBundle/Domain/ProductApi/Query.php)
 
-
-
 Property|Type|Default|Description
 --------|----|-------|-----------
 `locale`|`string`||

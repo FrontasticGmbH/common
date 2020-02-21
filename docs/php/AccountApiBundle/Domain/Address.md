@@ -2,8 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\AccountApiBundle\Domain\Address`](../../../../src/php/AccountApiBundle/Domain/Address.php)
 
-
-
 Property|Type|Default|Description
 --------|----|-------|-----------
 `addressId`|`string`||

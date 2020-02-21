@@ -2,16 +2,11 @@
 
 Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQueryFactory`](../../../../../../src/php/ProductApiBundle/Domain/ProductApi/Query/ProductQueryFactory.php)
 
-
-
-
 ## Methods
 
 * [queryFromParameters()](#queryfromparameters)
 
-
 ### queryFromParameters()
-
 
 ```php
 static public function queryFromParameters(
@@ -20,11 +15,6 @@ static public function queryFromParameters(
     array $overrides = []
 ): ProductQuery
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

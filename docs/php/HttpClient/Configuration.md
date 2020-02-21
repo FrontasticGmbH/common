@@ -2,8 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\HttpClient\Configuration`](../../../src/php/HttpClient/Configuration.php)
 
-
-
 Property|Type|Default|Description
 --------|----|-------|-----------
 `options`|`Options`|`null`|

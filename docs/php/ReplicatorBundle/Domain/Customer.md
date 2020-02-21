@@ -2,8 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\Customer`](../../../../src/php/ReplicatorBundle/Domain/Customer.php)
 
-
-
 Property|Type|Default|Description
 --------|----|-------|-----------
 `name`|`string`||
@@ -19,21 +17,13 @@ Property|Type|Default|Description
 
 * [getLowestEnvironment()](#getlowestenvironment)
 
-
 ### getLowestEnvironment()
 
-
 ```php
-public function getLowestEnvironment(
-    
-): string
+public function getLowestEnvironment(): string
 ```
 
-
 *Get the environment with the lowest priority. This will return 'development' for the default environments.*
-
-
-
 
 Return Value: `string`
 

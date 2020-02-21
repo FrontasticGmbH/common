@@ -2,8 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\LineItem`](../../../../src/php/CartApiBundle/Domain/LineItem.php)
 
-
-
 Property|Type|Default|Description
 --------|----|-------|-----------
 `lineItemId`|`string`||

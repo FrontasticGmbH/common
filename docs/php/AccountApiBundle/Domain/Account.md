@@ -2,8 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\AccountApiBundle\Domain\Account`](../../../../src/php/AccountApiBundle/Domain/Account.php)
 
-
-
 Property|Type|Default|Description
 --------|----|-------|-----------
 `accountId`|`string`||
@@ -34,20 +32,13 @@ Property|Type|Default|Description
 * [serialize()](#serialize)
 * [unserialize()](#unserialize)
 
-
 ### setPassword()
-
 
 ```php
 public function setPassword(
     string $password
 ): mixed
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -57,17 +48,11 @@ Return Value: `mixed`
 
 ### isValidPassword()
 
-
 ```php
 public function isValidPassword(
     string $password
 ): bool
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -77,102 +62,51 @@ Return Value: `bool`
 
 ### getUsername()
 
-
 ```php
-public function getUsername(
-    
-): mixed
+public function getUsername(): mixed
 ```
-
-
-
-
-
-
 
 Return Value: `mixed`
 
 ### getRoles()
 
-
 ```php
-public function getRoles(
-    
-): mixed
+public function getRoles(): mixed
 ```
-
-
-
-
-
-
 
 Return Value: `mixed`
 
 ### getPassword()
 
-
 ```php
-public function getPassword(
-    
-): mixed
+public function getPassword(): mixed
 ```
-
-
-
-
-
-
 
 Return Value: `mixed`
 
 ### getSalt()
 
-
 ```php
-public function getSalt(
-    
-): mixed
+public function getSalt(): mixed
 ```
-
-
-
-
-
-
 
 Return Value: `mixed`
 
 ### eraseCredentials()
 
-
 ```php
-public function eraseCredentials(
-    
-): mixed
+public function eraseCredentials(): mixed
 ```
-
-
-
-
-
-
 
 Return Value: `mixed`
 
 ### assertPermission()
-
 
 ```php
 public function assertPermission(
     string $required
 ): mixed
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -182,51 +116,27 @@ Return Value: `mixed`
 
 ### cleanForSession()
 
-
 ```php
-public function cleanForSession(
-    
-): Account
+public function cleanForSession(): Account
 ```
-
-
-
-
-
-
 
 Return Value: [`Account`](Account.md)
 
 ### serialize()
 
-
 ```php
-public function serialize(
-    
-): mixed
+public function serialize(): mixed
 ```
-
-
-
-
-
-
 
 Return Value: `mixed`
 
 ### unserialize()
-
 
 ```php
 public function unserialize(
     mixed $serialized
 ): mixed
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

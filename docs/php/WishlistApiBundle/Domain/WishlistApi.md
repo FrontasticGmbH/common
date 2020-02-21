@@ -2,9 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi`](../../../../src/php/WishlistApiBundle/Domain/WishlistApi.php)
 
-
-
-
 ## Methods
 
 * [getWishlist()](#getwishlist)
@@ -17,9 +14,7 @@ Fully Qualified: [`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi`](../
 * [removeLineItem()](#removelineitem)
 * [getDangerousInnerClient()](#getdangerousinnerclient)
 
-
 ### getWishlist()
-
 
 ```php
 public function getWishlist(
@@ -27,11 +22,6 @@ public function getWishlist(
     string $locale
 ): Wishlist
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -42,18 +32,12 @@ Return Value: [`Wishlist`](Wishlist.md)
 
 ### getAnonymous()
 
-
 ```php
 public function getAnonymous(
     string $anonymousId,
     string $locale
 ): Wishlist
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -64,18 +48,12 @@ Return Value: [`Wishlist`](Wishlist.md)
 
 ### getWishlists()
 
-
 ```php
 public function getWishlists(
     string $accountId,
     string $locale
 ): array
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -86,18 +64,12 @@ Return Value: `array`
 
 ### create()
 
-
 ```php
 public function create(
     Wishlist $wishlist,
     string $locale
 ): Wishlist
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -108,7 +80,6 @@ Return Value: [`Wishlist`](Wishlist.md)
 
 ### addToWishlist()
 
-
 ```php
 public function addToWishlist(
     Wishlist $wishlist,
@@ -116,11 +87,6 @@ public function addToWishlist(
     string $locale
 ): Wishlist
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -132,7 +98,6 @@ Return Value: [`Wishlist`](Wishlist.md)
 
 ### addMultipleToWishlist()
 
-
 ```php
 public function addMultipleToWishlist(
     Wishlist $wishlist,
@@ -140,11 +105,6 @@ public function addMultipleToWishlist(
     string $locale
 ): Wishlist
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -156,7 +116,6 @@ Return Value: [`Wishlist`](Wishlist.md)
 
 ### updateLineItem()
 
-
 ```php
 public function updateLineItem(
     Wishlist $wishlist,
@@ -165,11 +124,6 @@ public function updateLineItem(
     string $locale
 ): Wishlist
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -182,7 +136,6 @@ Return Value: [`Wishlist`](Wishlist.md)
 
 ### removeLineItem()
 
-
 ```php
 public function removeLineItem(
     Wishlist $wishlist,
@@ -190,11 +143,6 @@ public function removeLineItem(
     string $locale
 ): Wishlist
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -206,13 +154,9 @@ Return Value: [`Wishlist`](Wishlist.md)
 
 ### getDangerousInnerClient()
 
-
 ```php
-public function getDangerousInnerClient(
-    
-): mixed
+public function getDangerousInnerClient(): mixed
 ```
-
 
 *Get *dangerous* inner client*
 
@@ -225,7 +169,6 @@ vendor provided abstraction.
 
 Use this with care for features necessary in your customer and talk with
 Frontastic about provising an abstraction.
-
 
 Return Value: `mixed`
 

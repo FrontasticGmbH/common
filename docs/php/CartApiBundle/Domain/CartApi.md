@@ -2,9 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\CartApi`](../../../../src/php/CartApiBundle/Domain/CartApi.php)
 
-
-
-
 ## Methods
 
 * [getForUser()](#getforuser)
@@ -32,9 +29,7 @@ Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\CartApi`](../../../..
 * [commit()](#commit)
 * [getDangerousInnerClient()](#getdangerousinnerclient)
 
-
 ### getForUser()
-
 
 ```php
 public function getForUser(
@@ -42,11 +37,6 @@ public function getForUser(
     string $locale
 ): Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -57,18 +47,12 @@ Return Value: [`Cart`](Cart.md)
 
 ### getAnonymous()
 
-
 ```php
 public function getAnonymous(
     string $anonymousId,
     string $locale
 ): Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -79,18 +63,12 @@ Return Value: [`Cart`](Cart.md)
 
 ### getById()
 
-
 ```php
 public function getById(
     string $cartId,
     string $locale = null
 ): Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -101,17 +79,11 @@ Return Value: [`Cart`](Cart.md)
 
 ### setCustomLineItemType()
 
-
 ```php
 public function setCustomLineItemType(
     array $lineItemType
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -121,34 +93,19 @@ Return Value: `void`
 
 ### getCustomLineItemType()
 
-
 ```php
-public function getCustomLineItemType(
-    
-): array
+public function getCustomLineItemType(): array
 ```
-
-
-
-
-
-
 
 Return Value: `array`
 
 ### setTaxCategory()
-
 
 ```php
 public function setTaxCategory(
     array $taxCategory
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -158,23 +115,13 @@ Return Value: `void`
 
 ### getTaxCategory()
 
-
 ```php
-public function getTaxCategory(
-    
-): array
+public function getTaxCategory(): array
 ```
-
-
-
-
-
-
 
 Return Value: `array`
 
 ### addToCart()
-
 
 ```php
 public function addToCart(
@@ -183,11 +130,6 @@ public function addToCart(
     string $locale = null
 ): Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -199,7 +141,6 @@ Return Value: [`Cart`](Cart.md)
 
 ### updateLineItem()
 
-
 ```php
 public function updateLineItem(
     Cart $cart,
@@ -209,11 +150,6 @@ public function updateLineItem(
     string $locale = null
 ): Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -227,7 +163,6 @@ Return Value: [`Cart`](Cart.md)
 
 ### removeLineItem()
 
-
 ```php
 public function removeLineItem(
     Cart $cart,
@@ -235,11 +170,6 @@ public function removeLineItem(
     string $locale = null
 ): Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -251,7 +181,6 @@ Return Value: [`Cart`](Cart.md)
 
 ### setEmail()
 
-
 ```php
 public function setEmail(
     Cart $cart,
@@ -259,11 +188,6 @@ public function setEmail(
     string $locale = null
 ): Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -275,7 +199,6 @@ Return Value: [`Cart`](Cart.md)
 
 ### setShippingMethod()
 
-
 ```php
 public function setShippingMethod(
     Cart $cart,
@@ -283,11 +206,6 @@ public function setShippingMethod(
     string $locale = null
 ): Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -299,7 +217,6 @@ Return Value: [`Cart`](Cart.md)
 
 ### setCustomField()
 
-
 ```php
 public function setCustomField(
     Cart $cart,
@@ -307,11 +224,6 @@ public function setCustomField(
     string $locale = null
 ): Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -323,7 +235,6 @@ Return Value: [`Cart`](Cart.md)
 
 ### setShippingAddress()
 
-
 ```php
 public function setShippingAddress(
     Cart $cart,
@@ -331,11 +242,6 @@ public function setShippingAddress(
     string $locale = null
 ): Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -347,7 +253,6 @@ Return Value: [`Cart`](Cart.md)
 
 ### setBillingAddress()
 
-
 ```php
 public function setBillingAddress(
     Cart $cart,
@@ -355,11 +260,6 @@ public function setBillingAddress(
     string $locale = null
 ): Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -371,7 +271,6 @@ Return Value: [`Cart`](Cart.md)
 
 ### addPayment()
 
-
 ```php
 public function addPayment(
     Cart $cart,
@@ -380,11 +279,6 @@ public function addPayment(
     string $locale = null
 ): Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -397,7 +291,6 @@ Return Value: [`Cart`](Cart.md)
 
 ### redeemDiscountCode()
 
-
 ```php
 public function redeemDiscountCode(
     Cart $cart,
@@ -405,11 +298,6 @@ public function redeemDiscountCode(
     string $locale = null
 ): Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -421,7 +309,6 @@ Return Value: [`Cart`](Cart.md)
 
 ### removeDiscountCode()
 
-
 ```php
 public function removeDiscountCode(
     Cart $cart,
@@ -429,11 +316,6 @@ public function removeDiscountCode(
     string $locale = null
 ): Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -445,17 +327,11 @@ Return Value: [`Cart`](Cart.md)
 
 ### order()
 
-
 ```php
 public function order(
     Cart $cart
 ): Order
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -465,17 +341,11 @@ Return Value: [`Order`](Order.md)
 
 ### getOrder()
 
-
 ```php
 public function getOrder(
     string $orderId
 ): Order
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -485,17 +355,11 @@ Return Value: [`Order`](Order.md)
 
 ### getOrders()
 
-
 ```php
 public function getOrders(
     string $accountId
 ): array
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -505,17 +369,11 @@ Return Value: `array`
 
 ### startTransaction()
 
-
 ```php
 public function startTransaction(
     Cart $cart
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -525,17 +383,11 @@ Return Value: `void`
 
 ### commit()
 
-
 ```php
 public function commit(
     string $locale = null
 ): Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -545,13 +397,9 @@ Return Value: [`Cart`](Cart.md)
 
 ### getDangerousInnerClient()
 
-
 ```php
-public function getDangerousInnerClient(
-    
-): mixed
+public function getDangerousInnerClient(): mixed
 ```
-
 
 *Get *dangerous* inner client*
 
@@ -564,7 +412,6 @@ vendor provided abstraction.
 
 Use this with care for features necessary in your customer and talk with
 Frontastic about provising an abstraction.
-
 
 Return Value: `mixed`
 

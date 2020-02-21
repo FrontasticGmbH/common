@@ -2,7 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\CartApi\LifecycleEventDecorator\BaseImplementation`](../../../../../../src/php/CartApiBundle/Domain/CartApi/LifecycleEventDecorator/BaseImplementation.php)
 
-
 The before* Methods will be obviously called *before* the original method is
 executed and will get all the parameters handed over, which the original
 method will get called with. Overwriting this method can be useful if you want
@@ -61,9 +60,7 @@ need to tag your service based on this class with
 * [beforeCommit()](#beforecommit)
 * [afterCommit()](#aftercommit)
 
-
 ### beforeGetForUser()
-
 
 ```php
 public function beforeGetForUser(
@@ -72,11 +69,6 @@ public function beforeGetForUser(
     string $locale
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -88,18 +80,12 @@ Return Value: `void`
 
 ### afterGetForUser()
 
-
 ```php
 public function afterGetForUser(
     CartApi $cartApi,
     Cart $cart
 ): ?Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -110,7 +96,6 @@ Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeGetAnonymous()
 
-
 ```php
 public function beforeGetAnonymous(
     CartApi $cartApi,
@@ -118,11 +103,6 @@ public function beforeGetAnonymous(
     string $locale
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -134,18 +114,12 @@ Return Value: `void`
 
 ### afterGetAnonymous()
 
-
 ```php
 public function afterGetAnonymous(
     CartApi $cartApi,
     Cart $cart
 ): ?Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -156,7 +130,6 @@ Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeGetById()
 
-
 ```php
 public function beforeGetById(
     CartApi $cartApi,
@@ -164,11 +137,6 @@ public function beforeGetById(
     string $locale = null
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -180,18 +148,12 @@ Return Value: `void`
 
 ### afterGetById()
 
-
 ```php
 public function afterGetById(
     CartApi $cartApi,
     Cart $cart
 ): ?Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -202,7 +164,6 @@ Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeAddToCart()
 
-
 ```php
 public function beforeAddToCart(
     CartApi $cartApi,
@@ -211,11 +172,6 @@ public function beforeAddToCart(
     string $locale = null
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -228,18 +184,12 @@ Return Value: `void`
 
 ### afterAddToCart()
 
-
 ```php
 public function afterAddToCart(
     CartApi $cartApi,
     Cart $cart
 ): ?Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -249,7 +199,6 @@ Argument|Type|Default|Description
 Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeUpdateLineItem()
-
 
 ```php
 public function beforeUpdateLineItem(
@@ -261,11 +210,6 @@ public function beforeUpdateLineItem(
     string $locale = null
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -280,18 +224,12 @@ Return Value: `void`
 
 ### afterUpdateLineItem()
 
-
 ```php
 public function afterUpdateLineItem(
     CartApi $cartApi,
     Cart $cart
 ): ?Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -302,7 +240,6 @@ Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeRemoveLineItem()
 
-
 ```php
 public function beforeRemoveLineItem(
     CartApi $cartApi,
@@ -311,11 +248,6 @@ public function beforeRemoveLineItem(
     string $locale = null
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -328,18 +260,12 @@ Return Value: `void`
 
 ### afterRemoveLineItem()
 
-
 ```php
 public function afterRemoveLineItem(
     CartApi $cartApi,
     Cart $cart
 ): ?Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -350,7 +276,6 @@ Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeSetEmail()
 
-
 ```php
 public function beforeSetEmail(
     CartApi $cartApi,
@@ -359,11 +284,6 @@ public function beforeSetEmail(
     string $locale = null
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -376,18 +296,12 @@ Return Value: `void`
 
 ### afterSetEmail()
 
-
 ```php
 public function afterSetEmail(
     CartApi $cartApi,
     Cart $cart
 ): ?Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -398,7 +312,6 @@ Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeSetShippingMethod()
 
-
 ```php
 public function beforeSetShippingMethod(
     CartApi $cartApi,
@@ -407,11 +320,6 @@ public function beforeSetShippingMethod(
     string $locale = null
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -424,18 +332,12 @@ Return Value: `void`
 
 ### afterSetShippingMethod()
 
-
 ```php
 public function afterSetShippingMethod(
     CartApi $cartApi,
     Cart $cart
 ): ?Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -446,7 +348,6 @@ Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeSetCustomField()
 
-
 ```php
 public function beforeSetCustomField(
     CartApi $cartApi,
@@ -455,11 +356,6 @@ public function beforeSetCustomField(
     string $locale = null
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -472,18 +368,12 @@ Return Value: `void`
 
 ### afterSetCustomField()
 
-
 ```php
 public function afterSetCustomField(
     CartApi $cartApi,
     Cart $cart
 ): ?Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -494,7 +384,6 @@ Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeSetShippingAddress()
 
-
 ```php
 public function beforeSetShippingAddress(
     CartApi $cartApi,
@@ -503,11 +392,6 @@ public function beforeSetShippingAddress(
     string $locale = null
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -520,18 +404,12 @@ Return Value: `void`
 
 ### afterSetShippingAddress()
 
-
 ```php
 public function afterSetShippingAddress(
     CartApi $cartApi,
     Cart $cart
 ): ?Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -542,7 +420,6 @@ Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeSetBillingAddress()
 
-
 ```php
 public function beforeSetBillingAddress(
     CartApi $cartApi,
@@ -551,11 +428,6 @@ public function beforeSetBillingAddress(
     string $locale = null
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -568,18 +440,12 @@ Return Value: `void`
 
 ### afterSetBillingAddress()
 
-
 ```php
 public function afterSetBillingAddress(
     CartApi $cartApi,
     Cart $cart
 ): ?Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -590,7 +456,6 @@ Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeAddPayment()
 
-
 ```php
 public function beforeAddPayment(
     CartApi $cartApi,
@@ -600,11 +465,6 @@ public function beforeAddPayment(
     string $locale = null
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -618,18 +478,12 @@ Return Value: `void`
 
 ### afterAddPayment()
 
-
 ```php
 public function afterAddPayment(
     CartApi $cartApi,
     Cart $cart
 ): ?Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -640,7 +494,6 @@ Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeRedeemDiscountCode()
 
-
 ```php
 public function beforeRedeemDiscountCode(
     CartApi $cartApi,
@@ -649,11 +502,6 @@ public function beforeRedeemDiscountCode(
     string $locale = null
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -666,18 +514,12 @@ Return Value: `void`
 
 ### afterRedeemDiscountCode()
 
-
 ```php
 public function afterRedeemDiscountCode(
     CartApi $cartApi,
     Cart $cart
 ): ?Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -688,18 +530,12 @@ Return Value: ?[`Cart`](../../Cart.md)
 
 ### beforeOrder()
 
-
 ```php
 public function beforeOrder(
     CartApi $cartApi,
     Cart $cart
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -710,18 +546,12 @@ Return Value: `void`
 
 ### afterOrder()
 
-
 ```php
 public function afterOrder(
     CartApi $cartApi,
     Order $order
 ): ?Order
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -732,18 +562,12 @@ Return Value: ?[`Order`](../../Order.md)
 
 ### beforeGetOrder()
 
-
 ```php
 public function beforeGetOrder(
     CartApi $cartApi,
     string $orderId
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -754,18 +578,12 @@ Return Value: `void`
 
 ### afterGetOrder()
 
-
 ```php
 public function afterGetOrder(
     CartApi $cartApi,
     Order $orderId
 ): ?Order
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -776,18 +594,12 @@ Return Value: ?[`Order`](../../Order.md)
 
 ### beforeGetOrders()
 
-
 ```php
 public function beforeGetOrders(
     CartApi $cartApi,
     string $accountId
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -798,18 +610,12 @@ Return Value: `void`
 
 ### afterGetOrders()
 
-
 ```php
 public function afterGetOrders(
     CartApi $cartApi,
     array $orders
 ): ?array
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -820,18 +626,12 @@ Return Value: `?array`
 
 ### beforeStartTransaction()
 
-
 ```php
 public function beforeStartTransaction(
     CartApi $cartApi,
     Cart $cart
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -842,18 +642,12 @@ Return Value: `void`
 
 ### beforeCommit()
 
-
 ```php
 public function beforeCommit(
     CartApi $cartApi,
     string $locale = null
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -864,18 +658,12 @@ Return Value: `void`
 
 ### afterCommit()
 
-
 ```php
 public function afterCommit(
     CartApi $cartApi,
     Cart $cart
 ): ?Cart
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

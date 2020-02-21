@@ -2,7 +2,6 @@
 
 Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\LifecycleEventDecorator\BaseImplementation`](../../../../../../src/php/ProductApiBundle/Domain/ProductApi/LifecycleEventDecorator/BaseImplementation.php)
 
-
 The before* Methods will be obviously called *before* the original method is
 executed and will get all the parameters handed over, which the original
 method will get called with. Overwriting this method can be useful if you want
@@ -34,9 +33,7 @@ need to tag your service based on this class with
 * [beforeQuery()](#beforequery)
 * [afterQuery()](#afterquery)
 
-
 ### beforeGetCategories()
-
 
 ```php
 public function beforeGetCategories(
@@ -44,11 +41,6 @@ public function beforeGetCategories(
     CategoryQuery $query
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -59,18 +51,12 @@ Return Value: `void`
 
 ### afterGetCategories()
 
-
 ```php
 public function afterGetCategories(
     ProductApi $productApi,
     array $categories
 ): ?array
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -81,18 +67,12 @@ Return Value: `?array`
 
 ### beforeGetProductTypes()
 
-
 ```php
 public function beforeGetProductTypes(
     ProductApi $productApi,
     ProductTypeQuery $query
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -103,18 +83,12 @@ Return Value: `void`
 
 ### afterGetProductTypes()
 
-
 ```php
 public function afterGetProductTypes(
     ProductApi $productApi,
     array $productTypes
 ): ?array
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -125,7 +99,6 @@ Return Value: `?array`
 
 ### beforeGetProduct()
 
-
 ```php
 public function beforeGetProduct(
     ProductApi $productApi,
@@ -133,11 +106,6 @@ public function beforeGetProduct(
     string $mode = ProductApi::QUERY_SYNC
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -149,18 +117,12 @@ Return Value: `void`
 
 ### afterGetProduct()
 
-
 ```php
 public function afterGetProduct(
     ProductApi $productApi,
     ?Product $product
 ): ?Product
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -171,7 +133,6 @@ Return Value: ?[`Product`](../../Product.md)
 
 ### beforeQuery()
 
-
 ```php
 public function beforeQuery(
     ProductApi $productApi,
@@ -179,11 +140,6 @@ public function beforeQuery(
     string $mode = ProductApi::QUERY_SYNC
 ): void
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -195,18 +151,12 @@ Return Value: `void`
 
 ### afterQuery()
 
-
 ```php
 public function afterQuery(
     ProductApi $productApi,
     ?Result $result
 ): ?Result
 ```
-
-
-
-
-
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
