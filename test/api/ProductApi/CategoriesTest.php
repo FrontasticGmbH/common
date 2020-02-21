@@ -2,33 +2,15 @@
 
 namespace Frontastic\Common\ApiTests\ProductApi;
 
-use Frontastic\Common\ApiTests\FrontasticApiTestCase;
 use Frontastic\Common\ProductApiBundle\Domain\Category;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 
-class CategoriesTest extends FrontasticApiTestCase
+class CategoriesTest extends ProductApiTestCase
 {
     private const NON_EXISTING_SLUG = 'THIS_SLUG_SHOULD_NEVER_EXIST_IN_ANY_DATA_SET';
 
     private const URI_PATH_SEGMENT_REGEX = '/^[0-9a-zA-Z_.~-]+$/';
-
-    /**
-     * @var array<string, ProductApi>
-     */
-    private $productApis = [];
-
-    /**
-     * @var ProductApiFactory
-     */
-    private $productApiFactory;
-
-    protected function setUp()
-    {
-        $this->productApiFactory = self::$container->get(ProductApiFactory::class);
-    }
 
     /**
      * @dataProvider projectAndLanguage
@@ -276,33 +258,14 @@ class CategoriesTest extends FrontasticApiTestCase
         $this->assertEmpty($categories);
     }
 
-    private function productApiForProject(Project $project): ProductApi
-    {
-        $key = sprintf('%s_%s', $project->customer, $project->projectId);
-        if (!array_key_exists($key, $this->productApis)) {
-            $this->productApis[$key] = $this->productApiFactory->factor($project);
-        }
-
-        return $this->productApis[$key];
-    }
-
     /**
      * @return Category[]
      */
     private function fetchCategories(Project $project, string $language, ?int $limit = null, ?int $offset = null): array
     {
-        $productApi = $this->productApiForProject($project);
-
-        $query = new CategoryQuery(['locale' => $language]);
-
-        if ($limit !== null) {
-            $query->limit = $limit;
-        }
-        if ($offset !== null) {
-            $query->offset = $offset;
-        }
-
-        return $productApi->getCategories($query);
+        return $this
+            ->productApiForProject($project)
+            ->getCategories(new CategoryQuery($this->buildQueryParameters($language, $limit, $offset)));
     }
 
     /**
@@ -310,14 +273,10 @@ class CategoriesTest extends FrontasticApiTestCase
      */
     private function fetchCategoriesBySlug(Project $project, string $language, string $slug): array
     {
-        $productApi = $this->productApiForProject($project);
+        $query = new CategoryQuery($this->buildQueryParameters($language));
+        $query->slug = $slug;
 
-        $query = new CategoryQuery([
-            'locale' => $language,
-            'slug' => $slug,
-        ]);
-
-        return $productApi->getCategories($query);
+        return $this->productApiForProject($project)->getCategories($query);
     }
 
     /**
