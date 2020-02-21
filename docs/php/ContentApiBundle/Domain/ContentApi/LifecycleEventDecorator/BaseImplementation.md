@@ -1,0 +1,114 @@
+# `abstract`  BaseImplementation
+
+Fully Qualified: [`\Frontastic\Common\ContentApiBundle\Domain\ContentApi\LifecycleEventDecorator\BaseImplementation`](../../../../../../src/php/ContentApiBundle/Domain/ContentApi/LifecycleEventDecorator/BaseImplementation.php)
+
+
+The before* Methods will be obviously called *before* the original method is
+executed and will get all the parameters handed over, which the original
+method will get called with. Overwriting this method can be useful if you want
+to manipulate the handed over parameters by simply manipulating it. These
+methods doesn't return anything.
+
+The after* Methods will be oviously called *after* the orignal method is
+executed and will get the unwrapped result from the original method handed
+over. So if the original methods returns a Promise, the resolved value will be
+handed over to this function here. Overwriting this method could be useful if
+you want to manipulate the result. These methods need to return null if
+nothing should be manipulating, thus will lead to the original result being
+returned or they need to return the same data-type as the original method
+returns, otherwise you will get Type-Errors at some point.
+
+In order to make this class available to the Lifecycle-Decorator, you will
+need to tag your service based on this class with
+"contentApi.lifecycleEventListener": e.g. by adding the tag inside the
+`services.xml` ``` <tag name="contentApi.lifecycleEventListener" /> ```
+
+## Methods
+
+### beforeGetContentTypes
+
+`function beforeGetContentTypes(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi): void`
+
+
+
+
+
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$contentApi`|`\Frontastic\Common\ContentApiBundle\Domain\ContentApi`|``|
+
+### afterGetContentTypes
+
+`function afterGetContentTypes(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi, array contentTypes): ?array`
+
+
+
+
+**
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$contentApi`|`\Frontastic\Common\ContentApiBundle\Domain\ContentApi`|``|
+`$contentTypes`|`array`|``|
+
+### beforeGetContent
+
+`function beforeGetContent(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi, string contentId, string locale = null, string mode = ContentApi::QUERY_SYNC): void`
+
+
+
+
+
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$contentApi`|`\Frontastic\Common\ContentApiBundle\Domain\ContentApi`|``|
+`$contentId`|`string`|``|
+`$locale`|`string`|`null`|
+`$mode`|`string`|`ContentApi::QUERY_SYNC`|
+
+### afterGetContent
+
+`function afterGetContent(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi, ?\Frontastic\Common\ContentApiBundle\Domain\ContentApi\Content content): ?\Frontastic\Common\ContentApiBundle\Domain\ContentApi\Content`
+
+
+
+
+
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$contentApi`|`\Frontastic\Common\ContentApiBundle\Domain\ContentApi`|``|
+`$content`|`?\Frontastic\Common\ContentApiBundle\Domain\ContentApi\Content`|``|
+
+### beforeQuery
+
+`function beforeQuery(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi, \Frontastic\Common\ContentApiBundle\Domain\Query query, string locale = null, string mode = ContentApi::QUERY_SYNC): void`
+
+
+
+
+
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$contentApi`|`\Frontastic\Common\ContentApiBundle\Domain\ContentApi`|``|
+`$query`|`\Frontastic\Common\ContentApiBundle\Domain\Query`|``|
+`$locale`|`string`|`null`|
+`$mode`|`string`|`ContentApi::QUERY_SYNC`|
+
+### afterQuery
+
+`function afterQuery(\Frontastic\Common\ContentApiBundle\Domain\ContentApi contentApi, ?\Frontastic\Common\ContentApiBundle\Domain\Result result): ?\Frontastic\Common\ContentApiBundle\Domain\Result`
+
+
+
+
+
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$contentApi`|`\Frontastic\Common\ContentApiBundle\Domain\ContentApi`|``|
+`$result`|`?\Frontastic\Common\ContentApiBundle\Domain\Result`|``|
+
