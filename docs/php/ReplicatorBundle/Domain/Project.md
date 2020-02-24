@@ -13,8 +13,7 @@ Property|Type|Default|Description
 `webpackPort`|`int`||
 `ssrPort`|`int`||
 `configuration`|`array`|`[]`|
-`data`|`array`|`[]`|Additional external project data from sources like tideways. Does not
-follow any defined schema.
+`data`|`array`|`[]`|Additional external project data from sources like tideways. Does not follow any defined schema.
 `languages`|`string[]`|`[]`|
 `defaultLanguage`|`string[]`||
 `projectSpecific`|`string[]`|`[]`|
