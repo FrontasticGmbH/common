@@ -7,6 +7,8 @@ use Kore\DataObject\DataObject;
 
 class Query extends DataObject
 {
+    const DEFAULT_LIMIT = 24;
+
     /**
      * @var string
      */
@@ -32,7 +34,7 @@ class Query extends DataObject
      *
      * @var integer
      */
-    public $limit = 24;
+    public $limit = self::DEFAULT_LIMIT;
 
     /**
      * Optional start offset, default is <b>0</b>.
