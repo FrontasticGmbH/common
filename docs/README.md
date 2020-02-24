@@ -1,6 +1,6 @@
 # Frontastic Common Library
 
-
+Here you find the API documentation for the relevant classes:
 
 * [AccountApiBundle\Domain\AccountApi\LifecycleEventDecorator\BaseImplementation](php/AccountApiBundle/Domain/AccountApi/LifecycleEventDecorator/BaseImplementation.md)
 * [AccountApiBundle\Domain\AccountApi](php/AccountApiBundle/Domain/AccountApi.md)
