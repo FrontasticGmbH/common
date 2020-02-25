@@ -8,10 +8,6 @@ use Frontastic\Common\ReplicatorBundle\Domain\Project;
 
 class CategoriesTest extends ProductApiTestCase
 {
-    private const NON_EXISTING_SLUG = 'THIS_SLUG_SHOULD_NEVER_EXIST_IN_ANY_DATA_SET';
-
-    private const URI_PATH_SEGMENT_REGEX = '/^[0-9a-zA-Z_.~-]+$/';
-
     /**
      * @dataProvider projectAndLanguage
      */

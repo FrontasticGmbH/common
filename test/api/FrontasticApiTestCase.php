@@ -8,17 +8,23 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class FrontasticApiTestCase extends KernelTestCase
 {
+    const NON_EXISTING_SLUG = 'THIS_SLUG_SHOULD_NEVER_EXIST_IN_ANY_DATA_SET';
+
+    const URI_PATH_SEGMENT_REGEX = '/^[0-9a-zA-Z_.~-]+$/';
+
     /**
      * @before
      */
     protected function setUpKernel(): void
     {
         $environmentResolver = new EnvironmentResolver();
-        $environmentResolver->loadEnvironmentVariables([
-            dirname(__DIR__, 5),
-            dirname(__DIR__, 2),
-            __DIR__,
-        ]);
+        $environmentResolver->loadEnvironmentVariables(
+            [
+                dirname(__DIR__, 5),
+                dirname(__DIR__, 2),
+                __DIR__,
+            ]
+        );
 
         self::bootKernel();
     }
