@@ -1,6 +1,8 @@
 #  Result
 
-Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\Result`](../../../../src/php/ReplicatorBundle/Domain/Result.php)
+**Fully Qualified**: [`\Frontastic\Common\ReplicatorBundle\Domain\Result`](../../../../src/php/ReplicatorBundle/Domain/Result.php)
+
+**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
 Property|Type|Default|Description
 --------|----|-------|-----------
@@ -25,7 +27,7 @@ static public function fromThrowable(
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$e`|`\Throwable`||
+`$e`|[`\Throwable`](https://www.php.net/manual/de/class.throwable.php)||
 
 Return Value: `mixed`
 

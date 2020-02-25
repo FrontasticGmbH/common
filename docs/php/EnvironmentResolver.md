@@ -1,6 +1,6 @@
 #  EnvironmentResolver
 
-Fully Qualified: [`\Frontastic\Common\EnvironmentResolver`](../../src/php/EnvironmentResolver.php)
+**Fully Qualified**: [`\Frontastic\Common\EnvironmentResolver`](../../src/php/EnvironmentResolver.php)
 
 ## Methods
 

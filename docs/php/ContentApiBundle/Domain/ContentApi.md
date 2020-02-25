@@ -1,6 +1,6 @@
 # `interface`  ContentApi
 
-Fully Qualified: [`\Frontastic\Common\ContentApiBundle\Domain\ContentApi`](../../../../src/php/ContentApiBundle/Domain/ContentApi.php)
+**Fully Qualified**: [`\Frontastic\Common\ContentApiBundle\Domain\ContentApi`](../../../../src/php/ContentApiBundle/Domain/ContentApi.php)
 
 ## Methods
 

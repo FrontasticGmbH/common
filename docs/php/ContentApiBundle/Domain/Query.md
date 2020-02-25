@@ -1,6 +1,8 @@
 #  Query
 
-Fully Qualified: [`\Frontastic\Common\ContentApiBundle\Domain\Query`](../../../../src/php/ContentApiBundle/Domain/Query.php)
+**Fully Qualified**: [`\Frontastic\Common\ContentApiBundle\Domain\Query`](../../../../src/php/ContentApiBundle/Domain/Query.php)
+
+**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
 Property|Type|Default|Description
 --------|----|-------|-----------

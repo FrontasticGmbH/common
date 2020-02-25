@@ -1,6 +1,6 @@
 # `interface`  OrderIdGenerator
 
-Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator`](../../../../src/php/CartApiBundle/Domain/OrderIdGenerator.php)
+**Fully Qualified**: [`\Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator`](../../../../src/php/CartApiBundle/Domain/OrderIdGenerator.php)
 
 ## Methods
 

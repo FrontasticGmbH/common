@@ -1,6 +1,6 @@
 #  EndpointService
 
-Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\EndpointService`](../../../../src/php/ReplicatorBundle/Domain/EndpointService.php)
+**Fully Qualified**: [`\Frontastic\Common\ReplicatorBundle\Domain\EndpointService`](../../../../src/php/ReplicatorBundle/Domain/EndpointService.php)
 
 ## Methods
 

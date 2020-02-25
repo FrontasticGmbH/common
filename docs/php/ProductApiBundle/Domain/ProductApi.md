@@ -1,6 +1,6 @@
 # `interface`  ProductApi
 
-Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi`](../../../../src/php/ProductApiBundle/Domain/ProductApi.php)
+**Fully Qualified**: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi`](../../../../src/php/ProductApiBundle/Domain/ProductApi.php)
 
 ## Methods
 

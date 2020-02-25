@@ -1,6 +1,6 @@
 # `interface`  Translatable
 
-Fully Qualified: [`\Frontastic\Common\Translatable`](../../src/php/Translatable.php)
+**Fully Qualified**: [`\Frontastic\Common\Translatable`](../../src/php/Translatable.php)
 
 ## Methods
 

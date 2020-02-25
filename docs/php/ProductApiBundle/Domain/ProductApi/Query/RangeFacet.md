@@ -1,6 +1,8 @@
 #  RangeFacet
 
-Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\RangeFacet`](../../../../../../src/php/ProductApiBundle/Domain/ProductApi/Query/RangeFacet.php)
+**Fully Qualified**: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\RangeFacet`](../../../../../../src/php/ProductApiBundle/Domain/ProductApi/Query/RangeFacet.php)
+
+**Extends**: [`Facet`](Facet.md)
 
 Property|Type|Default|Description
 --------|----|-------|-----------

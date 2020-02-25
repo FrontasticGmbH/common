@@ -1,6 +1,8 @@
 #  Response
 
-Fully Qualified: [`\Frontastic\Common\HttpClient\Response`](../../../src/php/HttpClient/Response.php)
+**Fully Qualified**: [`\Frontastic\Common\HttpClient\Response`](../../../src/php/HttpClient/Response.php)
+
+**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
 Property|Type|Default|Description
 --------|----|-------|-----------

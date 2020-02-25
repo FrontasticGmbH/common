@@ -1,6 +1,10 @@
 #  Account
 
-Fully Qualified: [`\Frontastic\Common\AccountApiBundle\Domain\Account`](../../../../src/php/AccountApiBundle/Domain/Account.php)
+**Fully Qualified**: [`\Frontastic\Common\AccountApiBundle\Domain\Account`](../../../../src/php/AccountApiBundle/Domain/Account.php)
+
+**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
+
+**Implements**: `\Symfony\Component\Security\Core\User\UserInterface`, [`\Serializable`](https://www.php.net/manual/de/class.serializable.php)
 
 Property|Type|Default|Description
 --------|----|-------|-----------

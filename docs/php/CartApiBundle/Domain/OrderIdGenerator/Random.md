@@ -1,6 +1,8 @@
 #  Random
 
-Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator\Random`](../../../../../src/php/CartApiBundle/Domain/OrderIdGenerator/Random.php)
+**Fully Qualified**: [`\Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator\Random`](../../../../../src/php/CartApiBundle/Domain/OrderIdGenerator/Random.php)
+
+**Implements**: [`OrderIdGenerator`](../OrderIdGenerator.md)
 
 ## Methods
 

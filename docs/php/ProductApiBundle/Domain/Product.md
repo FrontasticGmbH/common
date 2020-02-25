@@ -1,6 +1,8 @@
 #  Product
 
-Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\Product`](../../../../src/php/ProductApiBundle/Domain/Product.php)
+**Fully Qualified**: [`\Frontastic\Common\ProductApiBundle\Domain\Product`](../../../../src/php/ProductApiBundle/Domain/Product.php)
+
+**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
 Property|Type|Default|Description
 --------|----|-------|-----------

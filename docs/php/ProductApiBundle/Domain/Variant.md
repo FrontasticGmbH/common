@@ -1,6 +1,8 @@
 #  Variant
 
-Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\Variant`](../../../../src/php/ProductApiBundle/Domain/Variant.php)
+**Fully Qualified**: [`\Frontastic\Common\ProductApiBundle\Domain\Variant`](../../../../src/php/ProductApiBundle/Domain/Variant.php)
+
+**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
 Property|Type|Default|Description
 --------|----|-------|-----------

@@ -1,6 +1,6 @@
 # `interface`  WishlistApi
 
-Fully Qualified: [`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi`](../../../../src/php/WishlistApiBundle/Domain/WishlistApi.php)
+**Fully Qualified**: [`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi`](../../../../src/php/WishlistApiBundle/Domain/WishlistApi.php)
 
 ## Methods
 

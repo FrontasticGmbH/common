@@ -1,6 +1,8 @@
 #  Address
 
-Fully Qualified: [`\Frontastic\Common\AccountApiBundle\Domain\Address`](../../../../src/php/AccountApiBundle/Domain/Address.php)
+**Fully Qualified**: [`\Frontastic\Common\AccountApiBundle\Domain\Address`](../../../../src/php/AccountApiBundle/Domain/Address.php)
+
+**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
 Property|Type|Default|Description
 --------|----|-------|-----------

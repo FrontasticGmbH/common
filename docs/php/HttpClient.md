@@ -1,6 +1,6 @@
 # `abstract`  HttpClient
 
-Fully Qualified: [`\Frontastic\Common\HttpClient`](../../src/php/HttpClient.php)
+**Fully Qualified**: [`\Frontastic\Common\HttpClient`](../../src/php/HttpClient.php)
 
 ## Methods
 

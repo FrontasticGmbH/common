@@ -1,6 +1,6 @@
 #  ProductQueryFactory
 
-Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQueryFactory`](../../../../../../src/php/ProductApiBundle/Domain/ProductApi/Query/ProductQueryFactory.php)
+**Fully Qualified**: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQueryFactory`](../../../../../../src/php/ProductApiBundle/Domain/ProductApi/Query/ProductQueryFactory.php)
 
 ## Methods
 

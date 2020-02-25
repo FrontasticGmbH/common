@@ -1,6 +1,8 @@
 #  TermFacet
 
-Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\TermFacet`](../../../../../../src/php/ProductApiBundle/Domain/ProductApi/Result/TermFacet.php)
+**Fully Qualified**: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\TermFacet`](../../../../../../src/php/ProductApiBundle/Domain/ProductApi/Result/TermFacet.php)
+
+**Extends**: [`Facet`](Facet.md)
 
 Property|Type|Default|Description
 --------|----|-------|-----------

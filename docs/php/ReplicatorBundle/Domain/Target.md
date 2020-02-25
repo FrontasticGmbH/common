@@ -1,6 +1,6 @@
 # `interface`  Target
 
-Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\Target`](../../../../src/php/ReplicatorBundle/Domain/Target.php)
+**Fully Qualified**: [`\Frontastic\Common\ReplicatorBundle\Domain\Target`](../../../../src/php/ReplicatorBundle/Domain/Target.php)
 
 ## Methods
 

@@ -1,6 +1,8 @@
 #  Configuration
 
-Fully Qualified: [`\Frontastic\Common\HttpClient\Configuration`](../../../src/php/HttpClient/Configuration.php)
+**Fully Qualified**: [`\Frontastic\Common\HttpClient\Configuration`](../../../src/php/HttpClient/Configuration.php)
+
+**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
 Property|Type|Default|Description
 --------|----|-------|-----------

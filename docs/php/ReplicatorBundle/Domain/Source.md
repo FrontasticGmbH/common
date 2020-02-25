@@ -1,6 +1,6 @@
 # `interface`  Source
 
-Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\Source`](../../../../src/php/ReplicatorBundle/Domain/Source.php)
+**Fully Qualified**: [`\Frontastic\Common\ReplicatorBundle\Domain\Source`](../../../../src/php/ReplicatorBundle/Domain/Source.php)
 
 ## Methods
 

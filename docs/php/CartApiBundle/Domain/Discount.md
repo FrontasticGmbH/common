@@ -1,6 +1,8 @@
 #  Discount
 
-Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\Discount`](../../../../src/php/CartApiBundle/Domain/Discount.php)
+**Fully Qualified**: [`\Frontastic\Common\CartApiBundle\Domain\Discount`](../../../../src/php/CartApiBundle/Domain/Discount.php)
+
+**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
 Property|Type|Default|Description
 --------|----|-------|-----------

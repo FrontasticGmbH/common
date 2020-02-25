@@ -1,6 +1,8 @@
 #  Customer
 
-Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\Customer`](../../../../src/php/ReplicatorBundle/Domain/Customer.php)
+**Fully Qualified**: [`\Frontastic\Common\ReplicatorBundle\Domain\Customer`](../../../../src/php/ReplicatorBundle/Domain/Customer.php)
+
+**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
 Property|Type|Default|Description
 --------|----|-------|-----------

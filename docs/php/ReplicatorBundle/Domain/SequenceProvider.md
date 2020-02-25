@@ -1,6 +1,6 @@
 #  SequenceProvider
 
-Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\SequenceProvider`](../../../../src/php/ReplicatorBundle/Domain/SequenceProvider.php)
+**Fully Qualified**: [`\Frontastic\Common\ReplicatorBundle\Domain\SequenceProvider`](../../../../src/php/ReplicatorBundle/Domain/SequenceProvider.php)
 
 ## Methods
 

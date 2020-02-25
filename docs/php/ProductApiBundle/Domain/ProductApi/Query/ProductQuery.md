@@ -1,6 +1,8 @@
 #  ProductQuery
 
-Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery`](../../../../../../src/php/ProductApiBundle/Domain/ProductApi/Query/ProductQuery.php)
+**Fully Qualified**: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery`](../../../../../../src/php/ProductApiBundle/Domain/ProductApi/Query/ProductQuery.php)
+
+**Extends**: [`Query`](../Query.md)
 
 Property|Type|Default|Description
 --------|----|-------|-----------

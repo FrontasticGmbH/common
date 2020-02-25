@@ -1,6 +1,6 @@
 # `interface`  CartApi
 
-Fully Qualified: [`\Frontastic\Common\CartApiBundle\Domain\CartApi`](../../../../src/php/CartApiBundle/Domain/CartApi.php)
+**Fully Qualified**: [`\Frontastic\Common\CartApiBundle\Domain\CartApi`](../../../../src/php/CartApiBundle/Domain/CartApi.php)
 
 ## Methods
 

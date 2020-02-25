@@ -1,6 +1,8 @@
 #  Wishlist
 
-Fully Qualified: [`\Frontastic\Common\WishlistApiBundle\Domain\Wishlist`](../../../../src/php/WishlistApiBundle/Domain/Wishlist.php)
+**Fully Qualified**: [`\Frontastic\Common\WishlistApiBundle\Domain\Wishlist`](../../../../src/php/WishlistApiBundle/Domain/Wishlist.php)
+
+**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
 Property|Type|Default|Description
 --------|----|-------|-----------

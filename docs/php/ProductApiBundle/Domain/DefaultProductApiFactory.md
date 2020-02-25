@@ -1,6 +1,8 @@
 #  DefaultProductApiFactory
 
-Fully Qualified: [`\Frontastic\Common\ProductApiBundle\Domain\DefaultProductApiFactory`](../../../../src/php/ProductApiBundle/Domain/DefaultProductApiFactory.php)
+**Fully Qualified**: [`\Frontastic\Common\ProductApiBundle\Domain\DefaultProductApiFactory`](../../../../src/php/ProductApiBundle/Domain/DefaultProductApiFactory.php)
+
+**Implements**: [`ProductApiFactory`](ProductApiFactory.md)
 
 ## Methods
 

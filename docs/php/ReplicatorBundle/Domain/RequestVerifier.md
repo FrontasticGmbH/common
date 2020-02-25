@@ -1,6 +1,6 @@
 #  RequestVerifier
 
-Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\RequestVerifier`](../../../../src/php/ReplicatorBundle/Domain/RequestVerifier.php)
+**Fully Qualified**: [`\Frontastic\Common\ReplicatorBundle\Domain\RequestVerifier`](../../../../src/php/ReplicatorBundle/Domain/RequestVerifier.php)
 
 ## Methods
 

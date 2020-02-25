@@ -1,6 +1,8 @@
 #  Project
 
-Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\Project`](../../../../src/php/ReplicatorBundle/Domain/Project.php)
+**Fully Qualified**: [`\Frontastic\Common\ReplicatorBundle\Domain\Project`](../../../../src/php/ReplicatorBundle/Domain/Project.php)
+
+**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
 Property|Type|Default|Description
 --------|----|-------|-----------

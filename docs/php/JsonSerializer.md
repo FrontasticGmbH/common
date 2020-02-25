@@ -1,6 +1,6 @@
 #  JsonSerializer
 
-Fully Qualified: [`\Frontastic\Common\JsonSerializer`](../../src/php/JsonSerializer.php)
+**Fully Qualified**: [`\Frontastic\Common\JsonSerializer`](../../src/php/JsonSerializer.php)
 
 ## Methods
 

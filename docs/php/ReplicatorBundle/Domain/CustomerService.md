@@ -1,6 +1,6 @@
 #  CustomerService
 
-Fully Qualified: [`\Frontastic\Common\ReplicatorBundle\Domain\CustomerService`](../../../../src/php/ReplicatorBundle/Domain/CustomerService.php)
+**Fully Qualified**: [`\Frontastic\Common\ReplicatorBundle\Domain\CustomerService`](../../../../src/php/ReplicatorBundle/Domain/CustomerService.php)
 
 ## Methods
 

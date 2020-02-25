@@ -1,6 +1,6 @@
 # `abstract`  BaseImplementation
 
-Fully Qualified: [`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi\LifecycleEventDecorator\BaseImplementation`](../../../../../../src/php/WishlistApiBundle/Domain/WishlistApi/LifecycleEventDecorator/BaseImplementation.php)
+**Fully Qualified**: [`\Frontastic\Common\WishlistApiBundle\Domain\WishlistApi\LifecycleEventDecorator\BaseImplementation`](../../../../../../src/php/WishlistApiBundle/Domain/WishlistApi/LifecycleEventDecorator/BaseImplementation.php)
 
 The before* Methods will be obviously called *before* the original method is
 executed and will get all the parameters handed over, which the original

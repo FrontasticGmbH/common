@@ -1,6 +1,6 @@
 # `interface`  AccountApi
 
-Fully Qualified: [`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`](../../../../src/php/AccountApiBundle/Domain/AccountApi.php)
+**Fully Qualified**: [`\Frontastic\Common\AccountApiBundle\Domain\AccountApi`](../../../../src/php/AccountApiBundle/Domain/AccountApi.php)
 
 ## Methods
 

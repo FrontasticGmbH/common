@@ -1,6 +1,8 @@
 #  NoopLocaleMapper
 
-Fully Qualified: [`\Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful\NoopLocaleMapper`](../../../../../../src/php/ContentApiBundle/Domain/ContentApi/Contentful/NoopLocaleMapper.php)
+**Fully Qualified**: [`\Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful\NoopLocaleMapper`](../../../../../../src/php/ContentApiBundle/Domain/ContentApi/Contentful/NoopLocaleMapper.php)
+
+**Implements**: [`LocaleMapper`](LocaleMapper.md)
 
 ## Methods
 
