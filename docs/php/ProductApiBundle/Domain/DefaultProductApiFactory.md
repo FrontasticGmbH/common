@@ -21,8 +21,8 @@ public function __construct(
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$commercetoolsClientFactory`|`ProductApi\Commercetools\ClientFactory`||
-`$localeCreatorFactory`|`ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory`||
+`$commercetoolsClientFactory`|[`ProductApi`](ProductApi.md)\Commercetools\ClientFactory||
+`$localeCreatorFactory`|[`ProductApi`](ProductApi.md)\Commercetools\Locale\CommercetoolsLocaleCreatorFactory||
 `$decorators`|`iterable`|`[]`|
 
 Return Value: `mixed`

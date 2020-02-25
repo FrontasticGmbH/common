@@ -9,7 +9,7 @@ Property|Type|Default|Description
 `contentType`|`string`||
 `query`|`string`||
 `contentIds`|`array`||
-`attributes`|`AttributeFilter[]`|`[]`|
+`attributes`|[`AttributeFilter`](AttributeFilter.md)[]|`[]`|
 
 ## Methods
 

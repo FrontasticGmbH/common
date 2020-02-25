@@ -14,8 +14,8 @@ Property|Type|Default|Description
 `productType`|`string`||
 `currency`|`string`||
 `query`|`string`||This is a full text search on the API
-`filter`|`Filter[]`|`[]`|
-`facets`|`Facet[]`|`[]`|
+`filter`|[`Filter`](Filter.md)[]|`[]`|
+`facets`|[`Facet`](Facet.md)[]|`[]`|
 `sortAttributes`|`mixed`|`[]`|Map of sort attributes => sort order
 `fuzzy`|`bool`|`false`|
 

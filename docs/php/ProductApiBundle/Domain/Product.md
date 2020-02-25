@@ -13,7 +13,7 @@ Property|Type|Default|Description
 `slug`|`string`||
 `description`|`string`||
 `categories`|`string[]`|`[]`|
-`variants`|`Variant[]`|`[]`|
+`variants`|[`Variant`](Variant.md)[]|`[]`|
 `dangerousInnerProduct`|`mixed`||Access original object from backend
 
 ## Methods

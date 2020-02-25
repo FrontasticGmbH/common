@@ -7,6 +7,6 @@
 Property|Type|Default|Description
 --------|----|-------|-----------
 `loggedIn`|`bool`|`false`|
-`account`|`Account`|`null`|
+`account`|[`Account`](Account.md)|`null`|
 `message`|`string`|`null`|
 

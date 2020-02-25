@@ -20,7 +20,7 @@ public function __construct(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$productApiFactory`|[`ProductApiFactory`](../../ProductApiBundle/Domain/ProductApiFactory.md)||
-`$commercetoolsClientFactory`|`ProductApi\Commercetools\ClientFactory`||
+`$commercetoolsClientFactory`|[`ProductApi`](../../ProductApiBundle/Domain/ProductApi.md)\Commercetools\ClientFactory||
 `$decorators`|`iterable`||
 
 Return Value: `mixed`

@@ -19,7 +19,7 @@ Property|Type|Default|Description
 `languages`|`string[]`|`[]`|
 `defaultLanguage`|`string[]`||
 `projectSpecific`|`string[]`|`[]`|
-`endpoints`|`Endpoint[]`|`[]`|
+`endpoints`|[`Endpoint`](Endpoint.md)[]|`[]`|
 
 ## Methods
 

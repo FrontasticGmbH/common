@@ -20,8 +20,8 @@ public function __construct(
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$commercetoolsClientFactory`|`ProductApi\Commercetools\ClientFactory`||
-`$localeCreatorFactory`|`ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory`||
+`$commercetoolsClientFactory`|[`ProductApi`](../../ProductApiBundle/Domain/ProductApi.md)\Commercetools\ClientFactory||
+`$localeCreatorFactory`|[`ProductApi`](../../ProductApiBundle/Domain/ProductApi.md)\Commercetools\Locale\CommercetoolsLocaleCreatorFactory||
 `$orderIdGenerator`|[`OrderIdGenerator`](OrderIdGenerator.md)||
 `$decorators`|`iterable`||
 

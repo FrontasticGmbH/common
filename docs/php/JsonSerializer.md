@@ -34,7 +34,7 @@ public function addEnhancer(
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$enhancer`|`JsonSerializer\ObjectEnhancer`||
+`$enhancer`|[`JsonSerializer`](JsonSerializer.md)\ObjectEnhancer||
 
 Return Value: `void`
 

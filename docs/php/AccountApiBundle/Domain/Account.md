@@ -15,11 +15,11 @@ Property|Type|Default|Description
 `lastName`|`string`||
 `birthday`|`\DateTime`||
 `data`|`array`|`[]`|
-`groups`|`Group[]`|`[]`|
+`groups`|[`Group`](Group.md)[]|`[]`|
 `confirmationToken`|`string`||
 `confirmed`|`string`|`false`|
 `tokenValidUntil`|`\DateTime`||
-`addresses`|`Address[]`|`[]`|
+`addresses`|[`Address`](Address.md)[]|`[]`|
 `dangerousInnerAccount`|`mixed`||Access original object from backend
 
 ## Methods

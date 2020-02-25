@@ -6,6 +6,6 @@
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`variant`|`Variant`||
+`variant`|[`Variant`](../../../ProductApiBundle/Domain/Variant.md)||
 `type`|`string`|`'variant'`|
 

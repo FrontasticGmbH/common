@@ -9,15 +9,15 @@ Property|Type|Default|Description
 `cartId`|`string`||
 `cartVersion`|`string`||
 `custom`|`array`|`[]`|
-`lineItems`|`LineItem[]`|`[]`|
+`lineItems`|[`LineItem`](LineItem.md)[]|`[]`|
 `email`|`string`||
 `birthday`|`\DateTimeImmutable`||
-`shippingMethod`|`?ShippingMethod`||
-`shippingAddress`|`?Address`||
-`billingAddress`|`?Address`||
+`shippingMethod`|?[`ShippingMethod`](ShippingMethod.md)||
+`shippingAddress`|?[`Address`](../../AccountApiBundle/Domain/Address.md)||
+`billingAddress`|?[`Address`](../../AccountApiBundle/Domain/Address.md)||
 `sum`|`int`||
 `currency`|`string`||
-`payments`|`Payment[]`|`[]`|
+`payments`|[`Payment`](Payment.md)[]|`[]`|
 `discountCodes`|`string[]`|`[]`|
 `dangerousInnerCart`|`mixed`||Access original object from backend
 

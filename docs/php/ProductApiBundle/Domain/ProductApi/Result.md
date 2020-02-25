@@ -12,8 +12,8 @@ Property|Type|Default|Description
 `total`|`int`||
 `count`|`int`||
 `items`|`array`|`[]`|
-`facets`|`Facet[]`|`[]`|
-`query`|`Query`||The query used to generate this result (cloned)
+`facets`|[`Facet`](Result/Facet.md)[]|`[]`|
+`query`|[`Query`](Query.md)||The query used to generate this result (cloned)
 
 ## Methods
 
