@@ -47,21 +47,17 @@ class CategoriesTest extends ProductApiTestCase
         $this->assertContainsOnlyInstancesOf(Category::class, $categories);
 
         foreach ($categories as $category) {
-            $this->assertInternalType('string', $category->categoryId);
-            $this->assertNotEmpty($category->categoryId);
+            $this->assertNotEmptyString($category->categoryId);
 
-            $this->assertInternalType('string', $category->name);
-            $this->assertNotEmpty($category->name);
+            $this->assertNotEmptyString($category->name);
 
-            $this->assertInternalType('string', $category->slug);
-            $this->assertNotEmpty($category->slug);
+            $this->assertNotEmptyString($category->slug);
             $this->assertRegExp(self::URI_PATH_SEGMENT_REGEX, $category->slug);
 
             $this->assertInternalType('integer', $category->depth);
             $this->assertEquals(count($category->getAncestorIds()), $category->depth);
 
-            $this->assertInternalType('string', $category->path);
-            $this->assertNotEmpty($category->path);
+            $this->assertNotEmptyString($category->path);
 
             $this->assertNull($category->dangerousInnerCategory);
         }

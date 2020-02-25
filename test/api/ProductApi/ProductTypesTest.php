@@ -37,12 +37,8 @@ class ProductTypesTest extends ProductApiTestCase
         $this->assertContainsOnlyInstancesOf(ProductType::class, $productTypes);
 
         foreach ($productTypes as $productType) {
-            $this->assertInternalType('string', $productType->productTypeId);
-            $this->assertNotEmpty($productType->productTypeId);
-
-            $this->assertInternalType('string', $productType->name);
-            $this->assertNotEmpty($productType->name);
-
+            $this->assertNotEmptyString($productType->productTypeId);
+            $this->assertNotEmptyString($productType->name);
             $this->assertNull($productType->dangerousInnerProductType);
         }
     }
