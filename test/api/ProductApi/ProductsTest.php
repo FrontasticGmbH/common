@@ -155,7 +155,11 @@ class ProductsTest extends ProductApiTestCase
                 $this->assertNotEmptyString($variant->currency);
 
                 $this->assertInternalType('array', $variant->attributes);
+
                 $this->assertInternalType('array', $variant->images);
+                foreach ($variant->images as $image) {
+                    $this->assertNotEmptyString($image);
+                }
 
                 $this->assertInternalType('boolean', $variant->isOnStock);
 
