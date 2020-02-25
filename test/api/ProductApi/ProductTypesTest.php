@@ -30,35 +30,20 @@ class ProductTypesTest extends ProductApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
-    public function testProductTypesAreProductTypes(Project $project, string $language): void
+    public function testProductTypesAreWellFormed(Project $project, string $language): void
     {
         $productTypes = $this->fetchProductTypes($project, $language);
-        $this->assertContainsOnlyInstancesOf(ProductType::class, $productTypes);
-    }
 
-    /**
-     * @dataProvider projectAndLanguage
-     */
-    public function testProductTypesHaveNonEmptyStringId(Project $project, string $language): void
-    {
-        $productTypes = $this->fetchProductTypes($project, $language);
+        $this->assertContainsOnlyInstancesOf(ProductType::class, $productTypes);
 
         foreach ($productTypes as $productType) {
             $this->assertInternalType('string', $productType->productTypeId);
             $this->assertNotEmpty($productType->productTypeId);
-        }
-    }
 
-    /**
-     * @dataProvider projectAndLanguage
-     */
-    public function testProductTypesHaveNonEmptyStringName(Project $project, string $language): void
-    {
-        $productTypes = $this->fetchProductTypes($project, $language);
-
-        foreach ($productTypes as $productType) {
             $this->assertInternalType('string', $productType->name);
             $this->assertNotEmpty($productType->name);
+
+            $this->assertNull($productType->dangerousInnerProductType);
         }
     }
 
@@ -75,18 +60,6 @@ class ProductTypesTest extends ProductApiTestCase
             $productTypes
         );
         $this->assertArrayHasDistinctValues($productTypeIds);
-    }
-
-    /**
-     * @dataProvider projectAndLanguage
-     */
-    public function testProductTypesDontHaveDangerousInnerProductType(Project $project, string $language): void
-    {
-        $productTypes = $this->fetchProductTypes($project, $language);
-
-        foreach ($productTypes as $productType) {
-            $this->assertNull($productType->dangerousInnerProductType);
-        }
     }
 
     /**

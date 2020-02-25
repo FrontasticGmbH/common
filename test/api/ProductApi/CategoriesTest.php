@@ -40,86 +40,30 @@ class CategoriesTest extends ProductApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
-    public function testFetchCategoriesReturnsCategories(Project $project, string $language): void
+    public function testCategoriesAreWellFormed(Project $project, string $language): void
     {
         $categories = $this->fetchAllCategories($project, $language);
-        $this->assertContainsOnlyInstancesOf(Category::class, $categories);
-    }
 
-    /**
-     * @dataProvider projectAndLanguage
-     */
-    public function testCategoriesHaveNonEmptyStringId(Project $project, string $language): void
-    {
-        $categories = $this->fetchAllCategories($project, $language);
+        $this->assertContainsOnlyInstancesOf(Category::class, $categories);
 
         foreach ($categories as $category) {
             $this->assertInternalType('string', $category->categoryId);
             $this->assertNotEmpty($category->categoryId);
-        }
-    }
 
-    /**
-     * @dataProvider projectAndLanguage
-     */
-    public function testCategoriesHaveNonEmptyStringName(Project $project, string $language): void
-    {
-        $categories = $this->fetchAllCategories($project, $language);
-
-        foreach ($categories as $category) {
             $this->assertInternalType('string', $category->name);
             $this->assertNotEmpty($category->name);
-        }
-    }
 
-    /**
-     * @dataProvider projectAndLanguage
-     */
-    public function testCategoriesHaveNonEmptyStringSlug(Project $project, string $language): void
-    {
-        $categories = $this->fetchAllCategories($project, $language);
-
-        foreach ($categories as $category) {
             $this->assertInternalType('string', $category->slug);
             $this->assertNotEmpty($category->slug);
-        }
-    }
-
-    /**
-     * @dataProvider projectAndLanguage
-     */
-    public function testCategoriesHaveValidPathSegmentAsSlug(Project $project, string $language): void
-    {
-        $categories = $this->fetchAllCategories($project, $language);
-
-        foreach ($categories as $category) {
             $this->assertRegExp(self::URI_PATH_SEGMENT_REGEX, $category->slug);
-        }
-    }
 
-    /**
-     * @dataProvider projectAndLanguage
-     */
-    public function testCategoriesHaveNonEmptyStringPath(Project $project, string $language): void
-    {
-        $categories = $this->fetchAllCategories($project, $language);
-
-        foreach ($categories as $category) {
             $this->assertInternalType('integer', $category->depth);
             $this->assertEquals(count($category->getAncestorIds()), $category->depth);
-        }
-    }
 
-    /**
-     * @dataProvider projectAndLanguage
-     */
-    public function testCategoriesHaveCorrectDepth(Project $project, string $language): void
-    {
-        $categories = $this->fetchAllCategories($project, $language);
-
-        foreach ($categories as $category) {
             $this->assertInternalType('string', $category->path);
             $this->assertNotEmpty($category->path);
+
+            $this->assertNull($category->dangerousInnerCategory);
         }
     }
 
@@ -146,19 +90,6 @@ class CategoriesTest extends ProductApiTestCase
 
             $this->assertEquals($parentPath . '/' . $category->categoryId, $category->path);
         }
-    }
-
-    /**
-     * @dataProvider projectAndLanguage
-     */
-    public function testCategoriesDontHaveDangerousInnerCategory(Project $project, string $language): void
-    {
-        $categories = $this->fetchAllCategories($project, $language);
-
-        foreach ($categories as $category) {
-            $this->assertNull($category->dangerousInnerCategory);
-        }
-        $this->assertGreaterThanOrEqual(5, count($categories));
     }
 
     /**

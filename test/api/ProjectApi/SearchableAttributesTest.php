@@ -30,9 +30,21 @@ class SearchableAttributesTest extends FrontasticApiTestCase
     /**
      * @dataProvider project
      */
-    public function testAttributesContainAttributeInstances(Project $project): void
+    public function testAttributesAreWellFormed(Project $project): void
     {
-        $this->assertContainsOnlyInstancesOf(Attribute::class, $this->getAttributesForProject($project));
+        $attributes = $this->getAttributesForProject($project);
+
+        $this->assertContainsOnlyInstancesOf(Attribute::class, $attributes);
+
+        foreach ($attributes as $key => $searchableAttribute) {
+            $this->assertEquals($searchableAttribute->attributeId, $key);
+
+            $this->assertContains(
+                $searchableAttribute->type,
+                Attribute::TYPES,
+                $searchableAttribute->attributeId . ' has invalid type'
+            );
+        }
     }
 
     /**
@@ -47,32 +59,6 @@ class SearchableAttributesTest extends FrontasticApiTestCase
             $this->getAttributesForProject($project)
         );
         $this->assertArrayHasDistinctValues($attributeIds);
-    }
-
-    /**
-     * @dataProvider project
-     */
-    public function testAttributesHaveAttributeIdAsKey(Project $project): void
-    {
-        $attributes = $this->getAttributesForProject($project);
-        foreach ($attributes as $key => $searchableAttribute) {
-            $this->assertEquals($searchableAttribute->attributeId, $key);
-        }
-    }
-
-    /**
-     * @dataProvider project
-     */
-    public function testAttributesHaveValidType(Project $project)
-    {
-        $attributes = $this->getAttributesForProject($project);
-        foreach ($attributes as $searchableAttribute) {
-            $this->assertContains(
-                $searchableAttribute->type,
-                Attribute::TYPES,
-                $searchableAttribute->attributeId . ' has invalid type'
-            );
-        }
     }
 
     /**
