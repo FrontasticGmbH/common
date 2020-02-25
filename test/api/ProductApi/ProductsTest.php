@@ -106,11 +106,10 @@ class ProductsTest extends ProductApiTestCase
         $result = $this->queryProducts($project, $language);
 
         foreach ($result->items as $product) {
-            $this->assertInternalType('string', $product->productId);
-            $this->assertNotEmpty($product->productId);
+            $this->assertNotEmptyString($product->productId);
 
             if ($product->changed !== null) {
-                $this->assertInternalType('string', $product->changed);
+                $this->assertNotEmptyString($product->changed);
                 $changedDate =
                     \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC3339_EXTENDED, $product->changed);
                 $this->assertLessThan(new \DateTimeImmutable(), $changedDate);
@@ -118,11 +117,9 @@ class ProductsTest extends ProductApiTestCase
 
             $this->assertInternalType('integer', $product->version);
 
-            $this->assertInternalType('string', $product->name);
-            $this->assertNotEmpty($product->name);
+            $this->assertNotEmptyString($product->name);
 
-            $this->assertInternalType('string', $product->slug);
-            $this->assertNotEmpty($product->slug);
+            $this->assertNotEmptyString($product->slug);
             $this->assertRegExp(self::URI_PATH_SEGMENT_REGEX, $product->slug);
 
             $this->assertInternalType('string', $product->description);
@@ -137,6 +134,33 @@ class ProductsTest extends ProductApiTestCase
             $this->assertInternalType('array', $product->variants);
             $this->assertNotEmpty($product->variants);
             $this->assertContainsOnlyInstancesOf(Variant::class, $product->variants);
+
+            foreach ($product->variants as $variant) {
+                $this->assertInternalType('integer', $variant->id);
+
+                $this->assertNotEmptyString($variant->sku);
+                $this->assertNotEmptyString($variant->groupId);
+
+                $this->assertInternalType('integer', $variant->price);
+                $this->assertGreaterThanOrEqual(0, $variant->price);
+
+                if ($variant->discountedPrice !== null) {
+                    $this->assertInternalType('integer', $variant->discountedPrice);
+                    $this->assertGreaterThanOrEqual(0, $variant->discountedPrice);
+                    $this->assertLessThanOrEqual($variant->price, $variant->discountedPrice);
+                }
+
+                $this->assertInternalType('array', $variant->discounts);
+
+                $this->assertNotEmptyString($variant->currency);
+
+                $this->assertInternalType('array', $variant->attributes);
+                $this->assertInternalType('array', $variant->images);
+
+                $this->assertInternalType('boolean', $variant->isOnStock);
+
+                $this->assertNull($variant->dangerousInnerVariant);
+            }
 
             $this->assertNull($product->dangerousInnerProduct);
         }

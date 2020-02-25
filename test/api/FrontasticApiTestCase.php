@@ -84,6 +84,12 @@ class FrontasticApiTestCase extends KernelTestCase
         }
     }
 
+    protected function assertNotEmptyString($actual): void
+    {
+        $this->assertInternalType('string', $actual);
+        $this->assertNotEmpty($actual);
+    }
+
     protected function buildQueryParameters(string $language, ?int $limit = null, ?int $offset = null)
     {
         $parameters = [
