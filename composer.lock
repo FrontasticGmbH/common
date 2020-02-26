@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cd6941b9237e2301dde0ba547d3583c0",
+    "content-hash": "4bfd395479e69c9cd002d6444c7916f1",
     "packages": [
         {
             "name": "cache/adapter-common",
@@ -55,7 +55,7 @@
                 {
                     "name": "Tobias Nyholm",
                     "email": "tobias.nyholm@gmail.com",
-                    "homepage": "https://github.com/nyholm"
+                    "homepage": "https://github.com/Nyholm"
                 }
             ],
             "description": "Common classes for PSR-6 adapters",
@@ -122,7 +122,7 @@
                 {
                     "name": "Tobias Nyholm",
                     "email": "tobias.nyholm@gmail.com",
-                    "homepage": "https://github.com/nyholm"
+                    "homepage": "https://github.com/Nyholm"
                 }
             ],
             "description": "A PSR-6 cache implementation using filesystem. This implementation supports tags",
@@ -184,7 +184,7 @@
                 {
                     "name": "Tobias Nyholm",
                     "email": "tobias.nyholm@gmail.com",
-                    "homepage": "https://github.com/nyholm"
+                    "homepage": "https://github.com/Nyholm"
                 }
             ],
             "description": "A helper trait and interface to your PSR-6 cache to support hierarchical keys.",
@@ -234,7 +234,7 @@
                 {
                     "name": "Tobias Nyholm",
                     "email": "tobias.nyholm@gmail.com",
-                    "homepage": "https://github.com/nyholm"
+                    "homepage": "https://github.com/Nyholm"
                 },
                 {
                     "name": "Nicolas Grekas",
@@ -307,7 +307,7 @@
                 {
                     "name": "Tobias Nyholm",
                     "email": "tobias.nyholm@gmail.com",
-                    "homepage": "https://github.com/nyholm"
+                    "homepage": "https://github.com/Nyholm"
                 }
             ],
             "description": "A PSR-6 cache implementation using Void. This implementation supports tags",
@@ -3249,6 +3249,37 @@
             "time": "2019-10-21T16:45:58+00:00"
         },
         {
+            "name": "frontastic/apidocs",
+            "version": "1.0.0-alpha.7",
+            "dist": {
+                "type": "path",
+                "url": "../apidocs",
+                "reference": "64bc99d92d0c0eb6db6881d8f03f638f3d5f601c"
+            },
+            "require": {
+                "phpdocumentor/reflection": "^4.0",
+                "phpdocumentor/reflection-docblock": "^5.0",
+                "symfony/yaml": "^4.4"
+            },
+            "bin": [
+                "bin/apidocs"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Frontastic\\Apidocs\\": "src/php/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Frontastic\\Apidocs\\": "test/php/"
+                }
+            },
+            "license": [
+                "MIT"
+            ]
+        },
+        {
             "name": "nette/bootstrap",
             "version": "v3.0.1",
             "source": {
@@ -3582,16 +3613,16 @@
         },
         {
             "name": "nette/robot-loader",
-            "version": "v3.2.1",
+            "version": "v3.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/robot-loader.git",
-                "reference": "d2a100e1f5cab390c78bc88709abbc91249c3993"
+                "reference": "38e8a270567a4ad9fe716b40fcda5a6580afa3c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/robot-loader/zipball/d2a100e1f5cab390c78bc88709abbc91249c3993",
-                "reference": "d2a100e1f5cab390c78bc88709abbc91249c3993",
+                "url": "https://api.github.com/repos/nette/robot-loader/zipball/38e8a270567a4ad9fe716b40fcda5a6580afa3c0",
+                "reference": "38e8a270567a4ad9fe716b40fcda5a6580afa3c0",
                 "shasum": ""
             },
             "require": {
@@ -3619,8 +3650,8 @@
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause",
-                "GPL-2.0",
-                "GPL-3.0"
+                "GPL-2.0-only",
+                "GPL-3.0-only"
             ],
             "authors": [
                 {
@@ -3641,7 +3672,7 @@
                 "nette",
                 "trait"
             ],
-            "time": "2019-12-26T22:32:02+00:00"
+            "time": "2020-02-20T22:17:50+00:00"
         },
         {
             "name": "nette/schema",
@@ -3977,6 +4008,58 @@
             ],
             "description": "Library for handling version information and constraints",
             "time": "2017-03-05T17:38:23+00:00"
+        },
+        {
+            "name": "phpdocumentor/reflection",
+            "version": "4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpDocumentor/Reflection.git",
+                "reference": "509e84ccfe654998e9744fe106e7c1e8b255389c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpDocumentor/Reflection/zipball/509e84ccfe654998e9744fe106e7c1e8b255389c",
+                "reference": "509e84ccfe654998e9744fe106e7c1e8b255389c",
+                "shasum": ""
+            },
+            "require": {
+                "nikic/php-parser": "^4.0",
+                "php": ">=7.2",
+                "phpdocumentor/reflection-common": "^2.0",
+                "phpdocumentor/reflection-docblock": "^5",
+                "phpdocumentor/type-resolver": "^1.0",
+                "psr/log": "~1.0",
+                "webmozart/assert": "^1.0"
+            },
+            "require-dev": {
+                "mikey179/vfsstream": "~1.2",
+                "mockery/mockery": "~1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "phpDocumentor\\": "src/phpDocumentor"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Reflection library to do Static Analysis for PHP Projects",
+            "homepage": "http://www.phpdoc.org",
+            "keywords": [
+                "phpDocumentor",
+                "phpdoc",
+                "reflection",
+                "static analysis"
+            ],
+            "time": "2020-02-09T09:40:11+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -5677,16 +5760,16 @@
         },
         {
             "name": "webmozart/assert",
-            "version": "1.6.0",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozart/assert.git",
-                "reference": "573381c0a64f155a0d9a23f4b0c797194805b925"
+                "reference": "aed98a490f9a8f78468232db345ab9cf606cf598"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/573381c0a64f155a0d9a23f4b0c797194805b925",
-                "reference": "573381c0a64f155a0d9a23f4b0c797194805b925",
+                "url": "https://api.github.com/repos/webmozart/assert/zipball/aed98a490f9a8f78468232db345ab9cf606cf598",
+                "reference": "aed98a490f9a8f78468232db345ab9cf606cf598",
                 "shasum": ""
             },
             "require": {
@@ -5721,7 +5804,7 @@
                 "check",
                 "validate"
             ],
-            "time": "2019-11-24T13:36:37+00:00"
+            "time": "2020-02-14T12:15:55+00:00"
         }
     ],
     "aliases": [],
@@ -5730,6 +5813,7 @@
         "justinrainbow/json-schema": 0,
         "kore/data-object": 0,
         "seld/jsonlint": 0,
+        "frontastic/apidocs": 20,
         "pdepend/pdepend": 0,
         "phploc/phploc": 0,
         "phpmd/phpmd": 0,

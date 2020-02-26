@@ -5,9 +5,9 @@ namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 class ProductQueryFactory
 {
     /**
-     * @param mixed[string] $defaults Can be overwritten by $parameters
-     * @param mixed[string] $parameters Query parameters (typically from HTTP request)
-     * @param mixed[string] $overrides Overrides that eventually set fixed values, even if $parameters set these values
+     * @param mixed $defaults Can be overwritten by $parameters
+     * @param mixed $parameters Query parameters (typically from HTTP request)
+     * @param mixed $overrides Overrides that eventually set fixed values, even if $parameters set these values
      * @return ProductQuery
      */
     public static function queryFromParameters(array $defaults, array $parameters, array $overrides = []): ProductQuery

@@ -37,9 +37,14 @@ class ClientFactory
         $typeSpecificConfiguration = $project->getConfigurationSection($typeName);
         $commercetoolsConfig = $project->getConfigurationSection('commercetools');
 
-        $config = [];
-        foreach (['clientId', 'clientSecret', 'projectKey'] as $option) {
-            $value = $typeSpecificConfiguration->$option ?? $commercetoolsConfig->$option ?? null;
+        $config = [
+            'clientId' => null,
+            'clientSecret' => null,
+            'projectKey' => null,
+            'hostUrl' => 'https://api.sphere.io', // provide a default value to keep BC
+        ];
+        foreach (array_keys($config) as $option) {
+            $value = $typeSpecificConfiguration->$option ?? $commercetoolsConfig->$option ?? $config[$option];
             if ($value === null) {
                 throw new \RuntimeException('Commercetools config option ' . $option . ' is not set');
             }
@@ -52,11 +57,6 @@ class ClientFactory
 
             $config[$option] = $value;
         }
-
-        // checking for hostUrl here as it is a optional config for now for keeping BC
-        $config['hostUrl'] = $typeSpecificConfiguration->hostUrl
-            ?? $commercetoolsConfig->hostUrl
-            ?? 'https://api.sphere.io';
 
         return new Client(
             $config['clientId'],

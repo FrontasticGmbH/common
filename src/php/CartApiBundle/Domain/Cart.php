@@ -19,7 +19,7 @@ class Cart extends DataObject
     public $cartVersion;
 
     /**
-     * @var [string => mixed]
+     * @var array
      */
     public $custom = [];
 

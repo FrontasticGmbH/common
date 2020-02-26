@@ -12,7 +12,7 @@ class Filter extends DataObject
     public $handle;
 
     /**
-     * @var string?
+     * @var ?string
      */
     public $attributeType;
 }

@@ -1,7 +1,13 @@
 {
     "name": "frontastic/common",
     "license": "None",
-    "version": "1.0.0-alpha.6",
+    "version": "1.0.0-alpha.8",
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../*"
+        }
+    ],
     "config": {
         "platform": {
             "php": "7.2"
@@ -31,6 +37,7 @@
     },
     "require-dev": {
         "doctrine/common": "^2.9",
+        "frontastic/apidocs": "@dev",
         "pdepend/pdepend": "@stable",
         "phploc/phploc": "@stable",
         "phpmd/phpmd": "@stable",

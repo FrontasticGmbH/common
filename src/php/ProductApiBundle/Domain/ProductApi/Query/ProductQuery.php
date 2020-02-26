@@ -47,6 +47,8 @@ class ProductQuery extends Query
     public $currency;
 
     /**
+     * This is a full text search on the API
+     *
      * @var string
      */
     public $query;
@@ -55,7 +57,7 @@ class ProductQuery extends Query
      * @stability experimental This field might change to a more sophisticate structure
      *
      * @var Filter[] filters that will be applied *before* the actual facets.
-     *               CommerceTools allowed a list of filter strings, too, but this is @deprecated!
+     *               CommerceTools allowed a list of filter strings, too, but this is deprecated in commercetools.
      */
     public $filter = [];
 

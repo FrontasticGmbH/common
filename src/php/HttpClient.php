@@ -21,6 +21,9 @@ abstract class HttpClient
 {
     abstract public function addDefaultHeaders(array $headers);
 
+    /**
+     * Make any HTTP request
+     */
     public function request(
         string $method,
         string $url,
@@ -40,6 +43,14 @@ abstract class HttpClient
     ): PromiseInterface;
 
     /**
+     * Expose HTTP verbs as methods
+     *
+     * Magic wrapper for the request() method which allows you to use the HTTP
+     * verbs as method names on this object. So ->get('http://example.com/')
+     * will work. All parameters are passed on to the request() method.
+     *
+     * @param string $functionName HTTP verb as method name
+     * @param array $arguments Arguments to pass to request method
      * @return Response|PromiseInterface
      */
     public function __call(string $functionName, array $arguments): object

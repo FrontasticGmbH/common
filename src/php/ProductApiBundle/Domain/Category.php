@@ -29,6 +29,11 @@ class Category extends DataObject
     public $path;
 
     /**
+     * @var string
+     */
+    public $slug;
+
+    /**
      * Access original object from backend
      *
      * This should only be used if you need very specific features
@@ -40,4 +45,28 @@ class Category extends DataObject
      * @var mixed
      */
     public $dangerousInnerCategory;
+
+    /**
+     * @return string[]
+     */
+    public function getPathAsArray(): array
+    {
+        return array_values(array_filter(explode('/', $this->path)));
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAncestorIds(): array
+    {
+        $pathArray = $this->getPathAsArray();
+        array_pop($pathArray);
+        return $pathArray;
+    }
+
+    public function getParentCategoryId(): ?string
+    {
+        $ancestorIds = $this->getAncestorIds();
+        return array_pop($ancestorIds);
+    }
 }

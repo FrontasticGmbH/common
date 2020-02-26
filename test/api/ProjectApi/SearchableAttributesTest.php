@@ -1,12 +1,13 @@
 <?php
 
-namespace Frontastic\Common\ApiTests;
+namespace Frontastic\Common\ApiTests\ProjectApi;
 
+use Frontastic\Common\ApiTests\FrontasticApiTestCase;
 use Frontastic\Common\ProjectApiBundle\Domain\Attribute;
 use Frontastic\Common\ProjectApiBundle\Domain\ProjectApiFactory;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 
-class ProjectApiTest extends FrontasticApiTestCase
+class SearchableAttributesTest extends FrontasticApiTestCase
 {
     /**
      * @var ProjectApiFactory
@@ -19,55 +20,25 @@ class ProjectApiTest extends FrontasticApiTestCase
     }
 
     /**
-     * @dataProvider projectsToTest
+     * @dataProvider project
      */
-    public function testSearchableAttributesAreNotEmpty(Project $project): void
+    public function testAttributesAreNotEmpty(Project $project): void
     {
-        $this->assertNotEmpty($this->getSearchableAttributesForProject($project));
+        $this->assertNotEmpty($this->getAttributesForProject($project));
     }
 
     /**
-     * @dataProvider projectsToTest
+     * @dataProvider project
      */
-    public function testSearchableAttributesContainAttributeInstances(Project $project): void
+    public function testAttributesAreWellFormed(Project $project): void
     {
-        $this->assertContainsOnlyInstancesOf(Attribute::class, $this->getSearchableAttributesForProject($project));
-    }
+        $attributes = $this->getAttributesForProject($project);
 
-    /**
-     * @dataProvider projectsToTest
-     */
-    public function testSearchableAttributesHaveUniqueIds(Project $project): void
-    {
-        $attributeIds = array_map(
-            function (Attribute $attribute) {
-                return $attribute->attributeId;
-            },
-            $this->getSearchableAttributesForProject($project)
-        );
-        foreach (array_count_values($attributeIds) as $attributeId => $count) {
-            $this->assertEquals(1, $count, 'Attribute ' . $attributeId . ' returned more then once');
-        }
-    }
+        $this->assertContainsOnlyInstancesOf(Attribute::class, $attributes);
 
-    /**
-     * @dataProvider projectsToTest
-     */
-    public function testSearchableAttributesHaveAttributeIdAsKey(Project $project): void
-    {
-        $searchableAttributes = $this->getSearchableAttributesForProject($project);
-        foreach ($searchableAttributes as $key => $searchableAttribute) {
+        foreach ($attributes as $key => $searchableAttribute) {
             $this->assertEquals($searchableAttribute->attributeId, $key);
-        }
-    }
 
-    /**
-     * @dataProvider projectsToTest
-     */
-    public function testSearchableAttributesHaveValidType(Project $project)
-    {
-        $searchableAttributes = $this->getSearchableAttributesForProject($project);
-        foreach ($searchableAttributes as $searchableAttribute) {
             $this->assertContains(
                 $searchableAttribute->type,
                 Attribute::TYPES,
@@ -77,12 +48,26 @@ class ProjectApiTest extends FrontasticApiTestCase
     }
 
     /**
-     * @dataProvider projectsToTest
+     * @dataProvider project
      */
-    public function testSearchableAttributesHaveALabelForAllLanguages(Project $project)
+    public function testAttributesHaveUniqueIds(Project $project): void
     {
-        $searchableAttributes = $this->getSearchableAttributesForProject($project);
-        foreach ($searchableAttributes as $searchableAttribute) {
+        $attributeIds = array_map(
+            function (Attribute $attribute) {
+                return $attribute->attributeId;
+            },
+            $this->getAttributesForProject($project)
+        );
+        $this->assertArrayHasDistinctValues($attributeIds);
+    }
+
+    /**
+     * @dataProvider project
+     */
+    public function testAttributesHaveALabelForAllLanguages(Project $project)
+    {
+        $attributes = $this->getAttributesForProject($project);
+        foreach ($attributes as $searchableAttribute) {
             if ($searchableAttribute->label === null) {
                 // Special case for money
                 continue;
@@ -93,15 +78,15 @@ class ProjectApiTest extends FrontasticApiTestCase
     }
 
     /**
-     * @dataProvider projectsToTest
+     * @dataProvider project
      */
-    public function testSearchableAttributesContainsRequiredAttributeTypesAtLeastOnce(Project $project)
+    public function testAttributesContainsRequiredAttributeTypesAtLeastOnce(Project $project)
     {
         $attributeTypes = array_map(
             function (Attribute $attribute) {
                 return $attribute->type;
             },
-            $this->getSearchableAttributesForProject($project)
+            $this->getAttributesForProject($project)
         );
         foreach ([Attribute::TYPE_MONEY, Attribute::TYPE_CATEGORY_ID] as $attributeType) {
             $this->assertContains($attributeType, $attributeTypes);
@@ -109,12 +94,12 @@ class ProjectApiTest extends FrontasticApiTestCase
     }
 
     /**
-     * @dataProvider projectsToTest
+     * @dataProvider project
      */
-    public function testSearchableAttributesHaveValidValues(Project $project)
+    public function testAttributesHaveValidValues(Project $project)
     {
-        $searchableAttributes = $this->getSearchableAttributesForProject($project);
-        foreach ($searchableAttributes as $searchableAttribute) {
+        $attributes = $this->getAttributesForProject($project);
+        foreach ($attributes as $searchableAttribute) {
             if ($searchableAttribute->type === Attribute::TYPE_ENUM ||
                 $searchableAttribute->type === Attribute::TYPE_LOCALIZED_ENUM) {
                 $this->assertNotNull($searchableAttribute->values);
@@ -137,7 +122,7 @@ class ProjectApiTest extends FrontasticApiTestCase
         }
     }
 
-    private function getSearchableAttributesForProject(Project $project)
+    private function getAttributesForProject(Project $project)
     {
         $projectApi = $this->projectApiFactory->factor($project);
         return $projectApi->getSearchableAttributes();

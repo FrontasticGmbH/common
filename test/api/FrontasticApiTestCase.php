@@ -8,22 +8,28 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class FrontasticApiTestCase extends KernelTestCase
 {
+    const NON_EXISTING_SLUG = 'THIS_SLUG_SHOULD_NEVER_EXIST_IN_ANY_DATA_SET';
+
+    const URI_PATH_SEGMENT_REGEX = '/^[0-9a-zA-Z_.~-]+$/';
+
     /**
      * @before
      */
     protected function setUpKernel(): void
     {
         $environmentResolver = new EnvironmentResolver();
-        $environmentResolver->loadEnvironmentVariables([
-            dirname(__DIR__, 5),
-            dirname(__DIR__, 2),
-            __DIR__,
-        ]);
+        $environmentResolver->loadEnvironmentVariables(
+            [
+                dirname(__DIR__, 5),
+                dirname(__DIR__, 2),
+                __DIR__,
+            ]
+        );
 
         self::bootKernel();
     }
 
-    public function projectsToTest(): array
+    public function customerAndProject(): array
     {
         $customerService = new CustomerService(__DIR__ . '/config/customers', '');
 
@@ -36,9 +42,68 @@ class FrontasticApiTestCase extends KernelTestCase
                     $project->name,
                     $project->projectId
                 );
-                $projects[$description] = [$project, $customer];
+                $projects[$description] = [$customer, $project];
             }
         }
         return $projects;
     }
+
+    public function project(): array
+    {
+        return array_map(
+            function (array $customerAndProject): array {
+                return [$customerAndProject[1]];
+            },
+            $this->customerAndProject()
+        );
+    }
+
+    public function projectAndLanguage(): array
+    {
+        $projectsAndLocales = [];
+
+        foreach ($this->project() as $projectDescription => [$project]) {
+            foreach ($project->languages as $language) {
+                $projectsAndLocales[$projectDescription . ', language: ' . $language] = [
+                    $project,
+                    $language,
+                ];
+            }
+        }
+
+        return $projectsAndLocales;
+    }
+
+    /**
+     * @param string[] $values
+     */
+    protected function assertArrayHasDistinctValues(array $values): void
+    {
+        foreach (array_count_values($values) as $value => $count) {
+            $this->assertEquals(1, $count, 'Value ' . $value . ' occurred more then once');
+        }
+    }
+
+    protected function assertNotEmptyString($actual): void
+    {
+        $this->assertInternalType('string', $actual);
+        $this->assertNotEmpty($actual);
+    }
+
+    protected function buildQueryParameters(string $language, ?int $limit = null, ?int $offset = null)
+    {
+        $parameters = [
+            'locale' => $language,
+        ];
+
+        if ($limit !== null) {
+            $parameters['limit'] = $limit;
+        }
+        if ($offset !== null) {
+            $parameters['offset'] = $offset;
+        }
+
+        return $parameters;
+    }
+
 }
