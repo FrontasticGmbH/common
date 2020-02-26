@@ -64,6 +64,158 @@ class ProductsTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
+    public function testGetProductSyncBySkuReturnsProduct(Project $project, string $language): void
+    {
+        $product = $this->queryProducts($project, $language)->items[0];
+        $sku = $product->variants[0]->sku;
+        $this->assertNotEmptyString($sku);
+
+        $productBySku = $this->getProductApiForProject($project)
+            ->getProduct(
+                new ProductQuery(array_merge($this->buildQueryParameters($language), ['sku' => $sku])),
+                ProductApi::QUERY_SYNC
+            );
+
+        $this->assertInstanceOf(Product::class, $productBySku);
+        $this->assertEquals($product, $productBySku);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testGetProductSyncByNonExistingSkuReturnsNull(Project $project, string $language): void
+    {
+        $productBySku = $this->getProductApiForProject($project)
+            ->getProduct(
+                new ProductQuery(
+                    array_merge($this->buildQueryParameters($language), ['sku' => self::NON_EXISTING_SKU])
+                ),
+                ProductApi::QUERY_SYNC
+            );
+
+        $this->assertNull($productBySku);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testGetProductAsyncBySkuReturnsPromiseToProduct(Project $project, string $language): void
+    {
+        $product = $this->queryProducts($project, $language)->items[0];
+        $sku = $product->variants[0]->sku;
+        $this->assertNotEmptyString($sku);
+
+        $promise = $this->getProductApiForProject($project)
+            ->getProduct(
+                new ProductQuery(array_merge($this->buildQueryParameters($language), ['sku' => $sku])),
+                ProductApi::QUERY_ASYNC
+            );
+
+        $this->assertInstanceOf(PromiseInterface::class, $promise);
+
+        $productBySku = $promise->wait();
+
+        $this->assertInstanceOf(Product::class, $productBySku);
+        $this->assertEquals($product, $productBySku);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testGetProductAsyncByNonExistingSkuReturnsPromiseToNull(Project $project, string $language): void
+    {
+        $promise = $this->getProductApiForProject($project)
+            ->getProduct(
+                new ProductQuery(
+                    array_merge($this->buildQueryParameters($language), ['sku' => self::NON_EXISTING_SKU])
+                ),
+                ProductApi::QUERY_ASYNC
+            );
+
+        $this->assertInstanceOf(PromiseInterface::class, $promise);
+
+        $productBySku = $promise->wait();
+
+        $this->assertNull($productBySku);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testGetProductSyncByIdReturnsProduct(Project $project, string $language): void
+    {
+        $product = $this->queryProducts($project, $language)->items[0];
+        $productId = $product->productId;
+        $this->assertNotEmptyString($productId);
+
+        $productById = $this->getProductApiForProject($project)
+            ->getProduct(
+                new ProductQuery(array_merge($this->buildQueryParameters($language), ['productId' => $productId])),
+                ProductApi::QUERY_SYNC
+            );
+
+        $this->assertInstanceOf(Product::class, $productById);
+        $this->assertEquals($product, $productById);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testGetProductSyncByNonExistingIdThrowsException(Project $project, string $language): void
+    {
+        $query = new ProductQuery(
+            array_merge($this->buildQueryParameters($language), ['productId' => self::NON_EXISTING_PRODUCT_ID])
+        );
+
+        $this->expectException(ProductApi\Exception::class);
+        $this->getProductApiForProject($project)->getProduct($query, ProductApi::QUERY_SYNC);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testGetProductAsyncByIdReturnsPromiseToProduct(Project $project, string $language): void
+    {
+        $product = $this->queryProducts($project, $language)->items[0];
+        $productId = $product->productId;
+        $this->assertNotEmptyString($productId);
+
+        $promise = $this->getProductApiForProject($project)
+            ->getProduct(
+                new ProductQuery(array_merge($this->buildQueryParameters($language), ['productId' => $productId])),
+                ProductApi::QUERY_ASYNC
+            );
+
+        $this->assertInstanceOf(PromiseInterface::class, $promise);
+
+        $productById = $promise->wait();
+
+        $this->assertInstanceOf(Product::class, $productById);
+        $this->assertEquals($product, $productById);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testGetProductAsyncByNonExistingIdReturnsFailedPromise(Project $project, string $language): void
+    {
+        $promise = $this->getProductApiForProject($project)
+            ->getProduct(
+                new ProductQuery(
+                    array_merge($this->buildQueryParameters($language), ['productId' => self::NON_EXISTING_PRODUCT_ID])
+                ),
+                ProductApi::QUERY_ASYNC
+            );
+
+        $this->assertInstanceOf(PromiseInterface::class, $promise);
+
+        $this->expectException(ProductApi\Exception::class);
+        $promise->wait();
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
     public function testQueryAllProductsOrderedByIdTwiceReturnsSameResult(Project $project, string $language): void
     {
         $firstResult = $this->queryProducts($project, $language, $this->sortReproducibly());
