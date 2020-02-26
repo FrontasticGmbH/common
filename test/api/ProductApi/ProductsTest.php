@@ -66,7 +66,7 @@ class ProductsTest extends FrontasticApiTestCase
      */
     public function testGetProductSyncBySkuReturnsProduct(Project $project, string $language): void
     {
-        $product = $this->queryProducts($project, $language)->items[0];
+        $product = $this->getAProduct($project, $language);
         $sku = $product->variants[0]->sku;
         $this->assertNotEmptyString($sku);
 
@@ -101,7 +101,7 @@ class ProductsTest extends FrontasticApiTestCase
      */
     public function testGetProductAsyncBySkuReturnsPromiseToProduct(Project $project, string $language): void
     {
-        $product = $this->queryProducts($project, $language)->items[0];
+        $product = $this->getAProduct($project, $language);
         $sku = $product->variants[0]->sku;
         $this->assertNotEmptyString($sku);
 
@@ -144,7 +144,7 @@ class ProductsTest extends FrontasticApiTestCase
      */
     public function testGetProductSyncByIdReturnsProduct(Project $project, string $language): void
     {
-        $product = $this->queryProducts($project, $language)->items[0];
+        $product = $this->getAProduct($project, $language);
         $productId = $product->productId;
         $this->assertNotEmptyString($productId);
 
@@ -176,7 +176,7 @@ class ProductsTest extends FrontasticApiTestCase
      */
     public function testGetProductAsyncByIdReturnsPromiseToProduct(Project $project, string $language): void
     {
-        $product = $this->queryProducts($project, $language)->items[0];
+        $product = $this->getAProduct($project, $language);
         $productId = $product->productId;
         $this->assertNotEmptyString($productId);
 
@@ -393,7 +393,7 @@ class ProductsTest extends FrontasticApiTestCase
      */
     public function testQueryProductBySkuReturnsOnlyProduct(Project $project, string $language): void
     {
-        $product = $this->queryProducts($project, $language)->items[0];
+        $product = $this->getAProduct($project, $language);
         $sku = $product->variants[0]->sku;
         $this->assertNotEmptyString($sku);
 
@@ -406,7 +406,7 @@ class ProductsTest extends FrontasticApiTestCase
      */
     public function testQueryProductBySkusReturnsOnlyProduct(Project $project, string $language): void
     {
-        $product = $this->queryProducts($project, $language)->items[0];
+        $product = $this->getAProduct($project, $language);
         $sku = $product->variants[0]->sku;
         $this->assertNotEmptyString($sku);
 
@@ -419,7 +419,7 @@ class ProductsTest extends FrontasticApiTestCase
      */
     public function testQueryProductByProductIdsReturnsOnlyProduct(Project $project, string $language): void
     {
-        $product = $this->queryProducts($project, $language)->items[0];
+        $product = $this->getAProduct($project, $language);
         $productId = $product->productId;
         $this->assertNotEmptyString($productId);
 
@@ -508,5 +508,13 @@ class ProductsTest extends FrontasticApiTestCase
         $this->assertGreaterThanOrEqual($actual->count, $actual->total);
         $this->assertCount($actual->count, $actual->items);
         $this->assertContains($expectedProduct, $actual->items, '', false, false);
+    }
+
+    private function getAProduct(Project $project, string $language): Product
+    {
+        $result = $this->queryProducts($project, $language);
+        $this->assertNotEmpty($result->items);
+
+        return $result->items[0];
     }
 }
