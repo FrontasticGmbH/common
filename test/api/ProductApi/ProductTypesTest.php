@@ -2,11 +2,12 @@
 
 namespace Frontastic\Common\ApiTests\ProductApi;
 
+use Frontastic\Common\ApiTests\FrontasticApiTestCase;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductType;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 
-class ProductTypesTest extends ProductApiTestCase
+class ProductTypesTest extends FrontasticApiTestCase
 {
     /**
      * @dataProvider projectAndLanguage
@@ -68,7 +69,7 @@ class ProductTypesTest extends ProductApiTestCase
         ?int $offset = null
     ): array {
         return $this
-            ->productApiForProject($project)
+            ->getProductApiForProject($project)
             ->getProductTypes(new ProductTypeQuery($this->buildQueryParameters($language, $limit, $offset)));
     }
 }

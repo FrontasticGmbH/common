@@ -3,7 +3,11 @@
 namespace Frontastic\Common\ApiTests;
 
 use Frontastic\Common\EnvironmentResolver;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory;
+use Frontastic\Common\ProjectApiBundle\Domain\ProjectApiFactory;
 use Frontastic\Common\ReplicatorBundle\Domain\CustomerService;
+use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class FrontasticApiTestCase extends KernelTestCase
@@ -11,6 +15,11 @@ class FrontasticApiTestCase extends KernelTestCase
     const NON_EXISTING_SLUG = 'THIS_SLUG_SHOULD_NEVER_EXIST_IN_ANY_DATA_SET';
 
     const URI_PATH_SEGMENT_REGEX = '/^[0-9a-zA-Z_.~-]+$/';
+
+    /**
+     * @var array<string, ProductApi>
+     */
+    private $productApis = [];
 
     /**
      * @before
@@ -88,6 +97,31 @@ class FrontasticApiTestCase extends KernelTestCase
     {
         $this->assertInternalType('string', $actual);
         $this->assertNotEmpty($actual);
+    }
+
+    protected function assertIsValidTranslatedLabel(Project $project, $label): void
+    {
+        $this->assertInternalType('array', $label);
+        $this->assertContainsOnly('string', $label);
+        $this->assertEquals($project->languages, array_keys($label));
+    }
+
+    protected function getSearchableAttributesForProject(Project $project)
+    {
+        return self::$container
+            ->get(ProjectApiFactory::class)
+            ->factor($project)
+            ->getSearchableAttributes();
+    }
+
+    protected function getProductApiForProject(Project $project): ProductApi
+    {
+        $key = sprintf('%s_%s', $project->customer, $project->projectId);
+        if (!array_key_exists($key, $this->productApis)) {
+            $this->productApis[$key] = self::$container->get(ProductApiFactory::class)->factor($project);
+        }
+
+        return $this->productApis[$key];
     }
 
     protected function buildQueryParameters(string $language, ?int $limit = null, ?int $offset = null)
