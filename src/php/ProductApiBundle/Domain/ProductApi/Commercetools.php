@@ -174,9 +174,11 @@ class Commercetools implements ProductApi
             $promise = $this
                 ->query($query, self::QUERY_ASYNC)
                 ->then(
-                    function (Result $productQueryResult) {
-                        $product = reset($productQueryResult->items);
-                        return $product === false ? null : $product;
+                    function (Result $productQueryResult) use ($query) {
+                        if (count($productQueryResult->items) === 0) {
+                            throw ProductNotFoundException::bySku($query->sku);
+                        }
+                        return reset($productQueryResult->items);
                     }
                 );
         } else {
@@ -185,9 +187,18 @@ class Commercetools implements ProductApi
 
             $promise = $this->client
                 ->fetchAsyncById('/products', $query->productId, $parameters)
-                ->then(function ($product) use ($query, $locale) {
-                    return $this->mapper->dataToProduct($product, $query, $locale);
-                });
+                ->then(
+                    function ($product) use ($query, $locale) {
+                        return $this->mapper->dataToProduct($product, $query, $locale);
+                    },
+                    function (\Throwable $exception) use ($query) {
+                        if ($exception instanceof RequestException && $exception->getCode() === 404) {
+                            throw ProductNotFoundException::byProductId($query->productId);
+                        }
+
+                        throw $exception;
+                    }
+                );
         }
 
         if ($mode === self::QUERY_SYNC) {

@@ -85,15 +85,12 @@ class ProductsTest extends FrontasticApiTestCase
      */
     public function testGetProductSyncByNonExistingSkuReturnsNull(Project $project, string $language): void
     {
-        $productBySku = $this->getProductApiForProject($project)
-            ->getProduct(
-                new ProductQuery(
-                    array_merge($this->buildQueryParameters($language), ['sku' => self::NON_EXISTING_SKU])
-                ),
-                ProductApi::QUERY_SYNC
-            );
+        $query = new ProductQuery(
+            array_merge($this->buildQueryParameters($language), ['sku' => self::NON_EXISTING_SKU])
+        );
 
-        $this->assertNull($productBySku);
+        $this->expectException(ProductApi\ProductNotFoundException::class);
+        $this->getProductApiForProject($project)->getProduct($query, ProductApi::QUERY_SYNC);
     }
 
     /**
@@ -122,7 +119,7 @@ class ProductsTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
-    public function testGetProductAsyncByNonExistingSkuReturnsPromiseToNull(Project $project, string $language): void
+    public function testGetProductAsyncByNonExistingSkuReturnsFailedPromise(Project $project, string $language): void
     {
         $promise = $this->getProductApiForProject($project)
             ->getProduct(
@@ -134,9 +131,8 @@ class ProductsTest extends FrontasticApiTestCase
 
         $this->assertInstanceOf(PromiseInterface::class, $promise);
 
-        $productBySku = $promise->wait();
-
-        $this->assertNull($productBySku);
+        $this->expectException(ProductApi\ProductNotFoundException::class);
+        $promise->wait();
     }
 
     /**
@@ -167,7 +163,7 @@ class ProductsTest extends FrontasticApiTestCase
             array_merge($this->buildQueryParameters($language), ['productId' => self::NON_EXISTING_PRODUCT_ID])
         );
 
-        $this->expectException(ProductApi\Exception::class);
+        $this->expectException(ProductApi\ProductNotFoundException::class);
         $this->getProductApiForProject($project)->getProduct($query, ProductApi::QUERY_SYNC);
     }
 
@@ -209,7 +205,7 @@ class ProductsTest extends FrontasticApiTestCase
 
         $this->assertInstanceOf(PromiseInterface::class, $promise);
 
-        $this->expectException(ProductApi\Exception::class);
+        $this->expectException(ProductApi\ProductNotFoundException::class);
         $promise->wait();
     }
 
