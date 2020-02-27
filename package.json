@@ -33,7 +33,9 @@
         "webpack-command": "^0.4.2",
         "whatwg-fetch": "3.0.0"
     },
-    "dependencies": {},
+    "dependencies": {
+        "mime": "^1.4.1"
+    },
     "peerDependencies": {
         "lodash": "^4"
     },
