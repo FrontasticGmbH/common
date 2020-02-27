@@ -21,16 +21,6 @@ class ProductTypesTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
-    public function testGetProductTypesIgnoresLimitAndOffset(Project $project, string $language): void
-    {
-        $manyProductTypes = $this->fetchProductTypes($project, $language, 100, 0);
-        $fewProductTypesWithOffset = $this->fetchProductTypes($project, $language, 5, 20);
-        $this->assertEquals($manyProductTypes, $fewProductTypesWithOffset);
-    }
-
-    /**
-     * @dataProvider projectAndLanguage
-     */
     public function testProductTypesAreWellFormed(Project $project, string $language): void
     {
         $productTypes = $this->fetchProductTypes($project, $language);

@@ -1,9 +1,9 @@
 <?php
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\PaginatedQuery;
 
-class CategoryQuery extends Query
+class CategoryQuery extends PaginatedQuery
 {
     /**
      * @var string

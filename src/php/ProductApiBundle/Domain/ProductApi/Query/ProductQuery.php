@@ -2,9 +2,9 @@
 
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\PaginatedQuery;
 
-class ProductQuery extends Query
+class ProductQuery extends PaginatedQuery
 {
     public const SORT_ORDER_ASCENDING = 'ascending';
     public const SORT_ORDER_DESCENDING = 'descending';
