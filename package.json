@@ -27,15 +27,13 @@
         "eslint-plugin-standard": "^4.0.0",
         "jest": "^24.8.0",
         "lodash": "^4.17.14",
-        "mime": "1",
+        "mime": "^1.4.1",
         "uuid": "^3.3.2",
         "webpack": "4.41.2",
         "webpack-command": "^0.4.2",
         "whatwg-fetch": "3.0.0"
     },
-    "dependencies": {
-        "mime": "^1.4.1"
-    },
+    "dependencies": {},
     "peerDependencies": {
         "lodash": "^4"
     },
