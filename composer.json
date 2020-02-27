@@ -1,7 +1,7 @@
 {
     "name": "frontastic/common",
     "license": "None",
-    "version": "1.0.0-beta.1",
+    "version": "1.0.0-beta.2",
     "repositories": [
         {
             "type": "path",
