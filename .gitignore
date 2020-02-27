@@ -1,0 +1,6 @@
+# This duplicates the monorepo .gitignore, but is usefull in the splitted out
+# repositories
+vendor/
+node_modules/
+yarn.lock
+composer.lock
