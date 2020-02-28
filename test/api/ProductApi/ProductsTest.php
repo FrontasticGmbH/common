@@ -284,7 +284,6 @@ class ProductsTest extends FrontasticApiTestCase
             $this->assertInternalType('string', $product->description);
 
             $this->assertInternalType('array', $product->categories);
-            $this->assertNotEmpty($product->categories);
             foreach ($product->categories as $category) {
                 $this->assertInternalType('string', $category);
                 $this->assertNotEmpty($category);
