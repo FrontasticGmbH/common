@@ -785,7 +785,7 @@ class Commercetools implements CartApi
                     list($price, $currency, $discountedPrice) = $this->mapper->dataToPrice($lineItem);
                     return new LineItem\Variant([
                         'lineItemId' => $lineItem['id'],
-                        'name' => reset($lineItem['name']),
+                        'name' => $this->mapper->getLocalizedValue($locale, $lineItem['name']),
                         'type' => 'variant',
                         'variant' => $this->mapper->dataToVariant(
                             $lineItem['variant'],
@@ -814,10 +814,10 @@ class Commercetools implements CartApi
                 $cart['lineItems']
             ),
             array_map(
-                function (array $lineItem): LineItem {
+                function (array $lineItem) use ($locale): LineItem {
                     return new LineItem([
                         'lineItemId' => $lineItem['id'],
-                        'name' => reset($lineItem['name']),
+                        'name' => $this->mapper->getLocalizedValue($locale, $lineItem['name']),
                         'type' => $lineItem['custom']['type'] ?? $lineItem['slug'],
                         'custom' => $lineItem['custom']['fields'] ?? [],
                         'count' => $lineItem['quantity'],
