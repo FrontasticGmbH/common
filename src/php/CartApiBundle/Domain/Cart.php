@@ -2,9 +2,8 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain;
 
-use Kore\DataObject\DataObject;
-
 use Frontastic\Common\AccountApiBundle\Domain\Address;
+use Kore\DataObject\DataObject;
 
 class Cart extends DataObject
 {
@@ -100,7 +99,7 @@ class Cart extends DataObject
 
     public function hasUser(): bool
     {
-        return (bool) $this->email;
+        return (bool)$this->email;
     }
 
     public function hasShippingAddress(): bool
