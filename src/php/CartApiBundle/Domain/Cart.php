@@ -38,17 +38,17 @@ class Cart extends DataObject
     public $birthday;
 
     /**
-     * @var ?ShippingMethod
+     * @var ShippingMethod|null
      */
     public $shippingMethod;
 
     /**
-     * @var ?Address
+     * @var Address|null
      */
     public $shippingAddress;
 
     /**
-     * @var ?Address
+     * @var Address|null
      */
     public $billingAddress;
 
