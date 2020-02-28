@@ -14,7 +14,7 @@ class Cart extends DataObject
     public $cartId;
 
     /**
-     * @var string
+     * @var integer
      */
     public $cartVersion;
 
