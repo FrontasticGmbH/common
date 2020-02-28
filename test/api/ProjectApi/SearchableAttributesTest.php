@@ -10,21 +10,11 @@ use Frontastic\Common\ReplicatorBundle\Domain\Project;
 class SearchableAttributesTest extends FrontasticApiTestCase
 {
     /**
-     * @var ProjectApiFactory
-     */
-    private $projectApiFactory;
-
-    protected function setUp(): void
-    {
-        $this->projectApiFactory = self::$container->get(ProjectApiFactory::class);
-    }
-
-    /**
      * @dataProvider project
      */
     public function testAttributesAreNotEmpty(Project $project): void
     {
-        $this->assertNotEmpty($this->getAttributesForProject($project));
+        $this->assertNotEmpty($this->getSearchableAttributesForProject($project));
     }
 
     /**
@@ -32,7 +22,7 @@ class SearchableAttributesTest extends FrontasticApiTestCase
      */
     public function testAttributesAreWellFormed(Project $project): void
     {
-        $attributes = $this->getAttributesForProject($project);
+        $attributes = $this->getSearchableAttributesForProject($project);
 
         $this->assertContainsOnlyInstancesOf(Attribute::class, $attributes);
 
@@ -56,7 +46,7 @@ class SearchableAttributesTest extends FrontasticApiTestCase
             function (Attribute $attribute) {
                 return $attribute->attributeId;
             },
-            $this->getAttributesForProject($project)
+            $this->getSearchableAttributesForProject($project)
         );
         $this->assertArrayHasDistinctValues($attributeIds);
     }
@@ -66,7 +56,7 @@ class SearchableAttributesTest extends FrontasticApiTestCase
      */
     public function testAttributesHaveALabelForAllLanguages(Project $project)
     {
-        $attributes = $this->getAttributesForProject($project);
+        $attributes = $this->getSearchableAttributesForProject($project);
         foreach ($attributes as $searchableAttribute) {
             if ($searchableAttribute->label === null) {
                 // Special case for money
@@ -86,7 +76,7 @@ class SearchableAttributesTest extends FrontasticApiTestCase
             function (Attribute $attribute) {
                 return $attribute->type;
             },
-            $this->getAttributesForProject($project)
+            $this->getSearchableAttributesForProject($project)
         );
         foreach ([Attribute::TYPE_MONEY, Attribute::TYPE_CATEGORY_ID] as $attributeType) {
             $this->assertContains($attributeType, $attributeTypes);
@@ -98,7 +88,7 @@ class SearchableAttributesTest extends FrontasticApiTestCase
      */
     public function testAttributesHaveValidValues(Project $project)
     {
-        $attributes = $this->getAttributesForProject($project);
+        $attributes = $this->getSearchableAttributesForProject($project);
         foreach ($attributes as $searchableAttribute) {
             if ($searchableAttribute->type === Attribute::TYPE_ENUM ||
                 $searchableAttribute->type === Attribute::TYPE_LOCALIZED_ENUM) {
@@ -120,18 +110,5 @@ class SearchableAttributesTest extends FrontasticApiTestCase
                 $this->assertNull($searchableAttribute->values);
             }
         }
-    }
-
-    private function getAttributesForProject(Project $project)
-    {
-        $projectApi = $this->projectApiFactory->factor($project);
-        return $projectApi->getSearchableAttributes();
-    }
-
-    private function assertIsValidTranslatedLabel(Project $project, $label): void
-    {
-        $this->assertInternalType('array', $label);
-        $this->assertContainsOnly('string', $label);
-        $this->assertEquals($project->languages, array_keys($label));
     }
 }

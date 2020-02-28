@@ -2,11 +2,12 @@
 
 namespace Frontastic\Common\ApiTests\ProductApi;
 
+use Frontastic\Common\ApiTests\FrontasticApiTestCase;
 use Frontastic\Common\ProductApiBundle\Domain\Category;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 
-class CategoriesTest extends ProductApiTestCase
+class CategoriesTest extends FrontasticApiTestCase
 {
     /**
      * @dataProvider projectAndLanguage
@@ -187,7 +188,7 @@ class CategoriesTest extends ProductApiTestCase
     private function fetchCategories(Project $project, string $language, ?int $limit = null, ?int $offset = null): array
     {
         return $this
-            ->productApiForProject($project)
+            ->getProductApiForProject($project)
             ->getCategories(new CategoryQuery($this->buildQueryParameters($language, $limit, $offset)));
     }
 
@@ -199,7 +200,7 @@ class CategoriesTest extends ProductApiTestCase
         $query = new CategoryQuery($this->buildQueryParameters($language));
         $query->slug = $slug;
 
-        return $this->productApiForProject($project)->getCategories($query);
+        return $this->getProductApiForProject($project)->getCategories($query);
     }
 
     /**

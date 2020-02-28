@@ -221,7 +221,10 @@ class Client
     protected function prepareException(Response $response): \Exception
     {
         $errorData = json_decode($response->body);
-        $exception = new RequestException(($errorData->message ?? $response->body) ?: 'Internal Server Error', 503);
+        $exception = new RequestException(
+            ($errorData->message ?? $response->body) ?: 'Internal Server Error',
+            $response->status ?? 503
+        );
 
         if (isset($errorData->errors)) {
             $errorData->errors = array_reverse($errorData->errors);
