@@ -424,29 +424,6 @@ class ProductsTest extends FrontasticApiTestCase
         $this->assertSingleProductResult($product, $productsByProductId);
     }
 
-    private function queryProducts(
-        Project $project,
-        string $language,
-        array $queryParameters = [],
-        ?int $limit = null,
-        ?int $offset = null
-    ): Result {
-        $query = new ProductQuery(
-            array_merge(
-                $this->buildQueryParameters($language, $limit, $offset),
-                $queryParameters
-            )
-        );
-        $result = $this
-            ->getProductApiForProject($project)
-            ->query($query, ProductApi::QUERY_ASYNC)
-            ->wait();
-
-        $this->assertEquals($query, $result->query);
-
-        return $result;
-    }
-
     /**
      * @return Product[]
      */
@@ -504,13 +481,5 @@ class ProductsTest extends FrontasticApiTestCase
         $this->assertGreaterThanOrEqual($actual->count, $actual->total);
         $this->assertCount($actual->count, $actual->items);
         $this->assertContains($expectedProduct, $actual->items, '', false, false);
-    }
-
-    private function getAProduct(Project $project, string $language): Product
-    {
-        $result = $this->queryProducts($project, $language);
-        $this->assertNotEmpty($result->items);
-
-        return $result->items[0];
     }
 }

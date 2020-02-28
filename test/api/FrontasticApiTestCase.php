@@ -2,8 +2,13 @@
 
 namespace Frontastic\Common\ApiTests;
 
+use Frontastic\Common\CartApiBundle\Domain\CartApi;
+use Frontastic\Common\CartApiBundle\Domain\CartApiFactory;
 use Frontastic\Common\EnvironmentResolver;
+use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory;
 use Frontastic\Common\ProjectApiBundle\Domain\ProjectApiFactory;
 use Frontastic\Common\ReplicatorBundle\Domain\CustomerService;
@@ -122,6 +127,44 @@ class FrontasticApiTestCase extends KernelTestCase
         }
 
         return $this->productApis[$key];
+    }
+
+    protected function queryProducts(
+        Project $project,
+        string $language,
+        array $queryParameters = [],
+        ?int $limit = null,
+        ?int $offset = null
+    ): Result {
+        $query = new ProductQuery(
+            array_merge(
+                $this->buildQueryParameters($language, $limit, $offset),
+                $queryParameters
+            )
+        );
+        $result = $this
+            ->getProductApiForProject($project)
+            ->query($query, ProductApi::QUERY_ASYNC)
+            ->wait();
+
+        $this->assertEquals($query, $result->query);
+
+        return $result;
+    }
+
+    protected function getAProduct(Project $project, string $language): Product
+    {
+        $result = $this->queryProducts($project, $language);
+        $this->assertNotEmpty($result->items);
+
+        return $result->items[0];
+    }
+
+    protected function getCartApiForProject(Project $project): CartApi
+    {
+        return self::$container
+            ->get(CartApiFactory::class)
+            ->factor($project);
     }
 
     protected function buildQueryParameters(string $language, ?int $limit = null, ?int $offset = null)
