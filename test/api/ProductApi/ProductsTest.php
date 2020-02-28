@@ -3,6 +3,7 @@
 namespace Frontastic\Common\ApiTests\ProductApi;
 
 use Frontastic\Common\ApiTests\FrontasticApiTestCase;
+use Frontastic\Common\ProductApiBundle\Domain\Category;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
@@ -264,6 +265,13 @@ class ProductsTest extends FrontasticApiTestCase
     {
         $result = $this->queryProducts($project, $language);
 
+        $existingCategoryIds = array_map(
+            function (Category $category): string {
+                return $category->categoryId;
+            },
+            $this->fetchAllCategories($project, $language)
+        );
+
         foreach ($result->items as $product) {
             $this->assertNotEmptyString($product->productId);
 
@@ -287,6 +295,7 @@ class ProductsTest extends FrontasticApiTestCase
             foreach ($product->categories as $category) {
                 $this->assertInternalType('string', $category);
                 $this->assertNotEmpty($category);
+                $this->assertContains($category, $existingCategoryIds);
             }
 
             $this->assertInternalType('array', $product->variants);
