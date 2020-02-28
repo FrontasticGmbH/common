@@ -185,41 +185,12 @@ class CategoriesTest extends FrontasticApiTestCase
     /**
      * @return Category[]
      */
-    private function fetchCategories(Project $project, string $language, ?int $limit = null, ?int $offset = null): array
-    {
-        return $this
-            ->getProductApiForProject($project)
-            ->getCategories(new CategoryQuery($this->buildQueryParameters($language, $limit, $offset)));
-    }
-
-    /**
-     * @return Category[]
-     */
     private function fetchCategoriesBySlug(Project $project, string $language, string $slug): array
     {
         $query = new CategoryQuery($this->buildQueryParameters($language));
         $query->slug = $slug;
 
         return $this->getProductApiForProject($project)->getCategories($query);
-    }
-
-    /**
-     * @return Category[]
-     */
-    private function fetchAllCategories(Project $project, string $language): array
-    {
-        $categories = [];
-
-        $limit = 50;
-        $offset = 0;
-        do {
-            $categoriesFromCurrentStep = $this->fetchCategories($project, $language, $limit, $offset);
-            $categories = array_merge($categories, $categoriesFromCurrentStep);
-
-            $offset += $limit;
-        } while (count($categoriesFromCurrentStep) === $limit);
-
-        return $categories;
     }
 
     /**

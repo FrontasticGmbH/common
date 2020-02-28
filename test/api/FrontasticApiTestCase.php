@@ -5,8 +5,10 @@ namespace Frontastic\Common\ApiTests;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\CartApiFactory;
 use Frontastic\Common\EnvironmentResolver;
+use Frontastic\Common\ProductApiBundle\Domain\Category;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory;
@@ -150,6 +152,39 @@ class FrontasticApiTestCase extends KernelTestCase
         $this->assertEquals($query, $result->query);
 
         return $result;
+    }
+
+    /**
+     * @return Category[]
+     */
+    protected function fetchCategories(
+        Project $project,
+        string $language,
+        ?int $limit = null,
+        ?int $offset = null
+    ): array {
+        return $this
+            ->getProductApiForProject($project)
+            ->getCategories(new CategoryQuery($this->buildQueryParameters($language, $limit, $offset)));
+    }
+
+    /**
+     * @return Category[]
+     */
+    protected function fetchAllCategories(Project $project, string $language): array
+    {
+        $categories = [];
+
+        $limit = 50;
+        $offset = 0;
+        do {
+            $categoriesFromCurrentStep = $this->fetchCategories($project, $language, $limit, $offset);
+            $categories = array_merge($categories, $categoriesFromCurrentStep);
+
+            $offset += $limit;
+        } while (count($categoriesFromCurrentStep) === $limit);
+
+        return $categories;
     }
 
     protected function getAProduct(Project $project, string $language): Product

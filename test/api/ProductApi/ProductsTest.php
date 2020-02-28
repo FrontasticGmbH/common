@@ -379,8 +379,15 @@ class ProductsTest extends FrontasticApiTestCase
         $this->assertResultContainsProduct($product, $productsByCategory);
         $this->assertLessThanOrEqual($allProducts->total, $productsByCategory->total);
 
+        $descendantCategories = [];
+        foreach ($this->fetchAllCategories($project, $language) as $category) {
+            if (in_array($categoryId, $category->getPathAsArray())) {
+                $descendantCategories[] = $category->categoryId;
+            }
+        }
+
         foreach ($productsByCategory->items as $product) {
-            $this->assertContains($categoryId, $product->categories);
+            $this->assertNotEmpty(array_intersect($descendantCategories, $product->categories));
         }
     }
 
