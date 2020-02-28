@@ -13,11 +13,10 @@ use Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreator;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 
 /**
@@ -75,9 +74,9 @@ class Commercetools implements CartApi
     /**
      * Commercetools constructor.
      *
-     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client  $client
-     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper  $mapper
-     * @param \Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator                    $orderIdGenerator
+     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client $client
+     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper $mapper
+     * @param \Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator $orderIdGenerator
      */
     public function __construct(
         Client $client,
@@ -148,10 +147,10 @@ class Commercetools implements CartApi
             $actions = [];
 
             $setCountryAction = [
-                'action'  => 'setCountry',
+                'action' => 'setCountry',
                 'country' => $locale->country,
             ];
-            $setLocaleAction  = [
+            $setLocaleAction = [
                 'action' => 'setLocale',
                 'locale' => $locale->language,
             ];
@@ -442,7 +441,6 @@ class Commercetools implements CartApi
         return $this->postCartActions($cart, $actions, $this->parseLocaleString($localeString));
     }
 
-
     /**
      * Intentionally not part of the CartAPI interface.
      *
@@ -454,9 +452,9 @@ class Commercetools implements CartApi
         $actions[] = [
             'action' => 'setCustomType',
             'type' => [
-                "key"=> $key,
-                "typeId"=> "type"
-            ]
+                "key" => $key,
+                "typeId" => "type",
+            ],
         ];
         return $this->postCartActions($cart, $actions, $this->parseLocaleString($localeString));
     }
@@ -513,21 +511,21 @@ class Commercetools implements CartApi
             [],
             [],
             json_encode([
-                'key'               => $payment->id,
-                'amountPlanned'     => [
+                'key' => $payment->id,
+                'amountPlanned' => [
                     'centAmount' => $payment->amount,
                     'currencyCode' => $payment->currency,
                 ],
-                'interfaceId'       => $payment->paymentId,
+                'interfaceId' => $payment->paymentId,
                 'paymentMethodInfo' => [
                     'paymentInterface' => $payment->paymentProvider,
                     'method' => $payment->paymentMethod,
                 ],
-                'paymentStatus'     => [
+                'paymentStatus' => [
                     'interfaceCode' => $payment->paymentStatus,
                     'interfaceText' => $payment->debug,
                 ],
-                'custom'            => $custom,
+                'custom' => $custom,
             ])
         );
 
@@ -569,7 +567,7 @@ class Commercetools implements CartApi
                     'action' => 'removeDiscountCode',
                     'discountCode' => [
                         'typeId' => 'discount-code',
-                        'id' => $discountId
+                        'id' => $discountId,
                     ],
                 ],
             ],
@@ -718,7 +716,7 @@ class Commercetools implements CartApi
             'discountCodes' => $this->mapDiscounts($order),
             'dangerousInnerCart' => $order,
             'dangerousInnerOrder' => $order,
-            'currency' =>  $order['totalPrice']['currencyCode']
+            'currency' => $order['totalPrice']['currencyCode'],
         ]);
         return $order;
     }
@@ -876,15 +874,15 @@ class Commercetools implements CartApi
 
         return new Payment(
             [
-                'id'              => $payment['key'] ?? null,
-                'paymentId'       => $payment['interfaceId'] ?? null,
+                'id' => $payment['key'] ?? null,
+                'paymentId' => $payment['interfaceId'] ?? null,
                 'paymentProvider' => $payment['paymentMethodInfo']['paymentInterface'] ?? null,
-                'paymentMethod'   => $payment['paymentMethodInfo']['method'] ?? null,
-                'amount'          => $payment['amountPlanned']['centAmount'] ?? null,
-                'currency'        => $payment['amountPlanned']['currencyCode'] ?? null,
-                'debug'           => json_encode($payment),
-                'paymentStatus'   => $payment['paymentStatus']['interfaceCode'] ?? null,
-                'version'         => $payment['version'] ?? 0,
+                'paymentMethod' => $payment['paymentMethodInfo']['method'] ?? null,
+                'amount' => $payment['amountPlanned']['centAmount'] ?? null,
+                'currency' => $payment['amountPlanned']['currencyCode'] ?? null,
+                'debug' => json_encode($payment),
+                'paymentStatus' => $payment['paymentStatus']['interfaceCode'] ?? null,
+                'version' => $payment['version'] ?? 0,
             ]
         );
     }
@@ -1046,7 +1044,7 @@ class Commercetools implements CartApi
     public function updatePaymentStatus(Payment $payment): void
     {
         $this->client->post(
-            'payments/key='.$payment->id,
+            'payments/key=' . $payment->id,
             [],
             [],
             json_encode(
@@ -1054,7 +1052,7 @@ class Commercetools implements CartApi
                     'version' => $payment->version,
                     'actions' => [
                         [
-                            'action'        => 'setStatusInterfaceCode',
+                            'action' => 'setStatusInterfaceCode',
                             'interfaceCode' => $payment->paymentStatus,
                         ],
                     ],
@@ -1066,7 +1064,7 @@ class Commercetools implements CartApi
     public function getPayment(string $paymentId): ?Payment
     {
         $payment = $this->client->get(
-            'payments/key='.$paymentId,
+            'payments/key=' . $paymentId,
             ['expand' => self::EXPAND]
         );
 
@@ -1080,7 +1078,7 @@ class Commercetools implements CartApi
     public function updatePaymentInterfaceId(Payment $payment): void
     {
         $this->client->post(
-            'payments/key='.$payment->id,
+            'payments/key=' . $payment->id,
             [],
             [],
             json_encode(
@@ -1088,7 +1086,7 @@ class Commercetools implements CartApi
                     'version' => $payment->version,
                     'actions' => [
                         [
-                            'action'      => 'setInterfaceId',
+                            'action' => 'setInterfaceId',
                             'interfaceId' => $payment->paymentId,
                         ],
                     ],
@@ -1096,6 +1094,7 @@ class Commercetools implements CartApi
             )
         );
     }
+
     /**
      * @param string $localeString
      * @return CommercetoolsLocale
