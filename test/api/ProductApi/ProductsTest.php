@@ -3,6 +3,7 @@
 namespace Frontastic\Common\ApiTests\ProductApi;
 
 use Frontastic\Common\ApiTests\FrontasticApiTestCase;
+use Frontastic\Common\ProductApiBundle\Domain\Category;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
@@ -264,6 +265,13 @@ class ProductsTest extends FrontasticApiTestCase
     {
         $result = $this->queryProducts($project, $language);
 
+        $existingCategoryIds = array_map(
+            function (Category $category): string {
+                return $category->categoryId;
+            },
+            $this->fetchAllCategories($project, $language)
+        );
+
         foreach ($result->items as $product) {
             $this->assertNotEmptyString($product->productId);
 
@@ -284,10 +292,10 @@ class ProductsTest extends FrontasticApiTestCase
             $this->assertInternalType('string', $product->description);
 
             $this->assertInternalType('array', $product->categories);
-            $this->assertNotEmpty($product->categories);
             foreach ($product->categories as $category) {
                 $this->assertInternalType('string', $category);
                 $this->assertNotEmpty($category);
+                $this->assertContains($category, $existingCategoryIds);
             }
 
             $this->assertInternalType('array', $product->variants);
@@ -379,8 +387,15 @@ class ProductsTest extends FrontasticApiTestCase
         $this->assertResultContainsProduct($product, $productsByCategory);
         $this->assertLessThanOrEqual($allProducts->total, $productsByCategory->total);
 
+        $descendantCategories = [];
+        foreach ($this->fetchAllCategories($project, $language) as $category) {
+            if (in_array($categoryId, $category->getPathAsArray())) {
+                $descendantCategories[] = $category->categoryId;
+            }
+        }
+
         foreach ($productsByCategory->items as $product) {
-            $this->assertContains($categoryId, $product->categories);
+            $this->assertNotEmpty(array_intersect($descendantCategories, $product->categories));
         }
     }
 
@@ -422,29 +437,6 @@ class ProductsTest extends FrontasticApiTestCase
         $productsByProductId =
             $this->queryProducts($project, $language, ['productIds' => [$productId, self::NON_EXISTING_PRODUCT_ID]]);
         $this->assertSingleProductResult($product, $productsByProductId);
-    }
-
-    private function queryProducts(
-        Project $project,
-        string $language,
-        array $queryParameters = [],
-        ?int $limit = null,
-        ?int $offset = null
-    ): Result {
-        $query = new ProductQuery(
-            array_merge(
-                $this->buildQueryParameters($language, $limit, $offset),
-                $queryParameters
-            )
-        );
-        $result = $this
-            ->getProductApiForProject($project)
-            ->query($query, ProductApi::QUERY_ASYNC)
-            ->wait();
-
-        $this->assertEquals($query, $result->query);
-
-        return $result;
     }
 
     /**
@@ -504,13 +496,5 @@ class ProductsTest extends FrontasticApiTestCase
         $this->assertGreaterThanOrEqual($actual->count, $actual->total);
         $this->assertCount($actual->count, $actual->items);
         $this->assertContains($expectedProduct, $actual->items, '', false, false);
-    }
-
-    private function getAProduct(Project $project, string $language): Product
-    {
-        $result = $this->queryProducts($project, $language);
-        $this->assertNotEmpty($result->items);
-
-        return $result->items[0];
     }
 }
