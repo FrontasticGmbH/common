@@ -137,12 +137,9 @@ class Commercetools implements CartApi
     private function assertCorrectLocale(Cart $cart, CommercetoolsLocale $locale): Cart
     {
         if ($cart->currency !== strtoupper($locale->currency)) {
-            $cartArray = $cart->dangerousInnerCart;
-            $cartArray['country'] = $locale->country;
-            $cartArray['locale'] = $locale->language;
-            $cartArray['currency'] = $locale->currency;
-            return $this->recreate($cartArray, $locale);
+            return $this->recreate($cart, $locale);
         }
+
         if ($this->doesCartNeedLocaleUpdate($cart, $locale)) {
             $actions = [];
 
@@ -163,24 +160,71 @@ class Commercetools implements CartApi
         return $cart;
     }
 
-    private function recreate(array $dangerousInnerCart, CommercetoolsLocale $locale): Cart
+
+    private function recreate(Cart $cart, CommercetoolsLocale $locale): Cart
     {
+        // Finish current cart transaction if necessary
+        $wasInTransaction = ($this->inTransaction !== null);
+        if ($wasInTransaction && $cart !== $this->inTransaction) {
+            throw new \RuntimeException(
+                'Cart to be re-created is not the one in transaction!'
+            );
+        }
+        if ($wasInTransaction) {
+            $cart = $this->commit($cart);
+        }
+
+        $dangerousInnerCart = $cart->dangerousInnerCart;
+
         $cartId = $dangerousInnerCart['id'];
+        $newCountry = $dangerousInnerCart['country'];
         $cartVersion = $dangerousInnerCart['version'];
-        unset($dangerousInnerCart['id'], $dangerousInnerCart['version'], $dangerousInnerCart['discountCodes']);
-        $cart = $this->mapCart(
-            $this->client->post(
-                '/carts',
-                ['expand' => self::EXPAND],
-                [],
-                json_encode($dangerousInnerCart)
-            ),
-            $locale
+        $lineItems = $dangerousInnerCart['lineItems'];
+
+        unset(
+            $dangerousInnerCart['id'],
+            $dangerousInnerCart['version'],
+            $dangerousInnerCart['lineItems'],
+            $dangerousInnerCart['discountCodes']
         );
+
+        $dangerousInnerCart['country'] = $locale->country;
+        $dangerousInnerCart['locale'] = $locale->language;
+        $dangerousInnerCart['currency'] = $locale->currency;
+
+        $cart = $this->mapCart($this->client->post(
+            '/carts',
+            ['expand' => self::EXPAND],
+            [],
+            \json_encode($dangerousInnerCart),
+            $locale
+        ), $locale);
+
+        foreach ($lineItems as $lineItem) {
+            try {
+                $actions = [
+                    [
+                        'action' => 'addLineItem',
+                        'productId' => $lineItem['productId'],
+                        'variantId' => $lineItem['variant']['id'],
+                        'quantity' => $lineItem['quantity']
+                    ]
+                ];
+                // Will directly be posted without transaction batching
+                $cart = $this->postCartActions($cart, $actions, $locale);
+            } catch (\Exception $e) {
+                // Ignore that a line item could not be added due to missing price, etc.
+            }
+        }
+
         $this->client->delete(
             '/carts/' . urlencode($cartId),
             ['version' => $cartVersion]
         );
+
+        if ($wasInTransaction) {
+            $this->startTransaction($cart);
+        }
 
         return $cart;
     }
