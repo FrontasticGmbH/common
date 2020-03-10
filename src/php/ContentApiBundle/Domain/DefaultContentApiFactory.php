@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\ContentApiBundle\Domain;
 
+use Contentful\RichText\Renderer;
 use Doctrine\Common\Cache\Cache;
 use Frontastic\Common\HttpClient;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\CachingContentApi;
@@ -11,7 +12,6 @@ use Frontastic\Common\HttpClient\Guzzle;
 use Commercetools\Core\Client;
 use Commercetools\Core\Config;
 use Commercetools\Core\Model\Common\Context;
-use Contentful\RichText\Renderer;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Psr\SimpleCache\CacheInterface;
 use Psr\Container\ContainerInterface;
@@ -38,16 +38,23 @@ class DefaultContentApiFactory implements ContentApiFactory
      */
     private $psrCache;
 
+    /**
+     * @var Renderer
+     */
+    private $richtextRenderer;
+
     public function __construct(
         ContainerInterface $container,
         Cache $cache,
         CacheInterface $psrCache,
+        Renderer $richtextRenderer,
         iterable $decorators
     ) {
         $this->container = $container;
         $this->decorators = $decorators;
         $this->cache = $cache;
         $this->psrCache = $psrCache;
+        $this->richtextRenderer = $richtextRenderer;
     }
 
     public function factor(Project $project): ContentApi
@@ -70,7 +77,7 @@ class DefaultContentApiFactory implements ContentApiFactory
 
                 $api = new ContentApi\Contentful(
                     $client,
-                    new Renderer(),
+                    $this->richtextRenderer,
                     $localeMapper,
                     $project->defaultLanguage
                 );
