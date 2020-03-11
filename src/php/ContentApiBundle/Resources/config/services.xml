@@ -19,5 +19,7 @@
             <argument type="service" id="Contentful\RichText\Renderer" />
             <argument type="tagged" tag="contentApi.lifecycleEventListener" />
         </service>
+
+        <service id="Contentful\RichText\Renderer" />
     </services>
 </container>
