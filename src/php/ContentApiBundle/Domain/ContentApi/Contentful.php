@@ -147,6 +147,7 @@ class Contentful implements ContentApi
 
         $content = new Content([
             'contentId' => $entry->getId(),
+            'contentTypeId' => $entry->getContentType()->getId(),
             'name' => $name,
             'dangerousInnerContent' => $entry,
         ]);
