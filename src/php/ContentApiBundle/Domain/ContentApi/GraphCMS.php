@@ -98,6 +98,7 @@ class GraphCMS implements ContentApi
 
                 return new Content([
                     'contentId' => $this->generateContentId($attributes['id'], $contentType),
+                    'contentTypeId' => $contentType,
                     'name' => $this->extractName($attributes),
                     'attributes' => $this->fillAttributesWithData($clientResult->attributes, $attributes),
                     'dangerousInnerContent' => $clientResult->queryResultJson,
@@ -257,6 +258,7 @@ class GraphCMS implements ContentApi
                     function ($e) use ($clientResult, $query) {
                         return new Content([
                             'contentId' => $this->generateContentId($e['id'], $query->contentType),
+                            'contentTypeId' => $query->contentType,
                             'name' => $this->extractName($e),
                             'attributes' => $this->fillAttributesWithData(
                                 $clientResult->attributes,
@@ -301,6 +303,7 @@ class GraphCMS implements ContentApi
                     );
                     return new Content([
                         'contentId' => $contentId,
+                        'contentTypeId' => $contentType,
                         'name' => $this->extractName($e),
                         'attributes' => $this->fillAttributesWithData(
                             $attributes[$contentType],

@@ -61,6 +61,7 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
         $combinedContentId = $contentId . ':' . $contentType;
         $expectedContent = new Content([
             'contentId' => $combinedContentId,
+            'contentTypeId' => $contentType,
             'name' => 'Mehl',
             'attributes' => [
                 new Attribute(['attributeId' => 'status', 'type' => 'Status', 'content' => 'PUBLISHED']),
