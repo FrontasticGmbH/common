@@ -160,7 +160,6 @@ class Commercetools implements CartApi
         return $cart;
     }
 
-
     private function recreate(Cart $cart, CommercetoolsLocale $locale): Cart
     {
         // Finish current cart transaction if necessary
@@ -192,13 +191,15 @@ class Commercetools implements CartApi
         $dangerousInnerCart['locale'] = $locale->language;
         $dangerousInnerCart['currency'] = $locale->currency;
 
-        $cart = $this->mapCart($this->client->post(
-            '/carts',
-            ['expand' => self::EXPAND],
-            [],
-            \json_encode($dangerousInnerCart),
+        $cart = $this->mapCart(
+            $this->client->post(
+                '/carts',
+                ['expand' => self::EXPAND],
+                [],
+                \json_encode($dangerousInnerCart)
+            ),
             $locale
-        ), $locale);
+        );
 
         foreach ($lineItems as $lineItem) {
             try {
@@ -207,8 +208,8 @@ class Commercetools implements CartApi
                         'action' => 'addLineItem',
                         'productId' => $lineItem['productId'],
                         'variantId' => $lineItem['variant']['id'],
-                        'quantity' => $lineItem['quantity']
-                    ]
+                        'quantity' => $lineItem['quantity'],
+                    ],
                 ];
                 // Will directly be posted without transaction batching
                 $cart = $this->postCartActions($cart, $actions, $locale);
