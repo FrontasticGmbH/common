@@ -30,9 +30,7 @@ class AnonymousCartTest extends FrontasticApiTestCase
         $cart = $this->getAnonymousCart($project, $language);
 
         $this->assertNotEmptyString($cart->cartId);
-
-        $this->assertInternalType('int', $cart->cartVersion);
-        $this->assertGreaterThanOrEqual(0, $cart->cartVersion);
+        $this->assertNotEmptyString($cart->cartVersion);
 
         $this->assertSame([], $cart->custom);
         $this->assertSame([], $cart->lineItems);

@@ -27,7 +27,7 @@ class Product extends DataObject
     public $changed;
 
     /**
-     * @var int
+     * @var string
      */
     public $version;
 

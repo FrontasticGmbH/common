@@ -282,8 +282,7 @@ class ProductsTest extends FrontasticApiTestCase
                 $this->assertLessThan(new \DateTimeImmutable(), $changedDate);
             }
 
-            $this->assertInternalType('integer', $product->version);
-
+            $this->assertNotEmptyString($product->version);
             $this->assertNotEmptyString($product->name);
 
             $this->assertNotEmptyString($product->slug);
@@ -303,8 +302,7 @@ class ProductsTest extends FrontasticApiTestCase
             $this->assertContainsOnlyInstancesOf(Variant::class, $product->variants);
 
             foreach ($product->variants as $variant) {
-                $this->assertInternalType('integer', $variant->id);
-
+                $this->assertNotEmptyString($variant->id);
                 $this->assertNotEmptyString($variant->sku);
                 $this->assertNotEmptyString($variant->groupId);
 

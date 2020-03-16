@@ -633,7 +633,7 @@ class Commercetools implements CartApi
             [],
             json_encode([
                 'id' => $cart->cartId,
-                'version' => $cart->cartVersion,
+                'version' => (int)$cart->cartVersion,
                 'orderNumber' => $this->orderIdGenerator->getOrderId($cart),
             ])
         ));
@@ -641,7 +641,7 @@ class Commercetools implements CartApi
         $cart = $this->getById($cart->cartId);
         $this->client->delete(
             '/carts/' . urlencode($cart->cartId),
-            ['version' => $cart->cartVersion]
+            ['version' => (int)$cart->cartVersion]
         );
 
         return $order;
@@ -702,7 +702,7 @@ class Commercetools implements CartApi
          */
         return new Cart([
             'cartId' => $cart['id'],
-            'cartVersion' => $cart['version'],
+            'cartVersion' => (string)$cart['version'],
             'custom' => $cart['custom']['fields'] ?? [],
             'lineItems' => $this->mapLineItems($cart, $locale),
             'email' => $cart['customerEmail'] ?? null,
@@ -984,7 +984,7 @@ class Commercetools implements CartApi
                 ['expand' => self::EXPAND],
                 [],
                 json_encode([
-                    'version' => $cart->cartVersion,
+                    'version' => (int)$cart->cartVersion,
                     'actions' => $actions,
                 ])
             ),

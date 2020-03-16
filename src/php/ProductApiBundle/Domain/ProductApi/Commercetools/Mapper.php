@@ -19,7 +19,7 @@ class Mapper
     public function dataToProduct(array $productData, ProductQuery $query, CommercetoolsLocale $locale): Product
     {
         $lastModified = $productData['lastModifiedAt'] ?? null;
-        $version = $productData['version'] ?? 0;
+        $version = (string)$productData['version'] ?? '0';
 
         if (isset($productData['masterData']['current'])) {
             $productId = $productData['id'];
@@ -77,7 +77,7 @@ class Mapper
         }
 
         return new Variant([
-            'id' => $variantData['id'],
+            'id' => (string)$variantData['id'],
             'sku' => $variantData['sku'] ?? null,
             'groupId' => $groupId,
             'price' => $price,
