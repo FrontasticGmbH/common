@@ -18,8 +18,10 @@ class Mapper
 {
     public function dataToProduct(array $productData, ProductQuery $query, CommercetoolsLocale $locale): Product
     {
-        $lastModified = $productData['lastModifiedAt'] ?? null;
         $version = (string)$productData['version'] ?? '0';
+
+        $lastModified = $productData['lastModifiedAt'] ?? null;
+        $changed = $lastModified !== null ? $this->parseDate($lastModified) : null;
 
         if (isset($productData['masterData']['current'])) {
             $productId = $productData['id'];
@@ -34,7 +36,7 @@ class Mapper
 
         return new Product([
             'productId' => $productData['id'],
-            'changed' => $lastModified,
+            'changed' => $changed,
             'version' => $version,
             'name' => $this->getLocalizedValue($locale, $productData['name'] ?? []),
             'slug' => $this->getLocalizedValue($locale, $productData['slug'] ?? []),
@@ -555,5 +557,23 @@ class Mapper
             $lookup[$facetDefinition['attributeId']] = $facetDefinition['attributeType'];
         }
         return $lookup;
+    }
+
+    private function parseDate(string $string): \DateTimeImmutable
+    {
+        $formats = [
+            'Y-m-d\TH:i:s.uP',
+            \DateTimeInterface::RFC3339,
+            \DateTimeInterface::RFC3339_EXTENDED,
+        ];
+
+        foreach ($formats as $format) {
+            $date = \DateTimeImmutable::createFromFormat($format, $string);
+            if ($date !== false) {
+                return $date;
+            }
+        }
+
+        throw new \RuntimeException('Invalid date: ' . $string);
     }
 }

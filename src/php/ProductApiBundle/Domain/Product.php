@@ -21,8 +21,8 @@ class Product extends DataObject
     public $productId;
 
     /**
-     * @var string|null The date and time when this product was last changed in ISO8601 format
-     *     (`\DateTimeImmutable::RFC3339_EXTENDED`) or `null` if the date is unknown.
+     * @var \DateTimeImmutable|null The date and time when this product was last changed or `null` if the date is
+     *     unknown.
      */
     public $changed;
 
