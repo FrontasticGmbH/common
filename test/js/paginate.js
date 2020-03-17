@@ -1,4 +1,4 @@
-import Paginate from '../../test/js/paginate'
+import Paginate from '../../src/js/paginate'
 import _ from 'lodash'
 
 const buildStream = (firstPage, lastPage, currentPage, addition = 5) => {
