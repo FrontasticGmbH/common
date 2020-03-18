@@ -280,7 +280,10 @@ class ProductsTest extends FrontasticApiTestCase
                 $this->assertLessThan(new \DateTimeImmutable(), $product->changed);
             }
 
-            $this->assertNotEmptyString($product->version);
+            if ($product->version !== null) {
+                $this->assertNotEmptyString($product->version);
+            }
+
             $this->assertNotEmptyString($product->name);
 
             $this->assertNotEmptyString($product->slug);
