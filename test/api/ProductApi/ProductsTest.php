@@ -77,8 +77,8 @@ class ProductsTest extends FrontasticApiTestCase
                 ProductApi::QUERY_SYNC
             );
 
-        $this->assertInstanceOf(Product::class, $productBySku);
-        $this->assertEquals($product, $productBySku);
+        $this->assertProductsAreWellFormed($project, $language, [$productBySku]);
+        $this->assertSameProduct($product, $productBySku);
     }
 
     /**
@@ -113,8 +113,8 @@ class ProductsTest extends FrontasticApiTestCase
 
         $productBySku = $promise->wait();
 
-        $this->assertInstanceOf(Product::class, $productBySku);
-        $this->assertEquals($product, $productBySku);
+        $this->assertProductsAreWellFormed($project, $language, [$productBySku]);
+        $this->assertSameProduct($product, $productBySku);
     }
 
     /**
@@ -151,8 +151,8 @@ class ProductsTest extends FrontasticApiTestCase
                 ProductApi::QUERY_SYNC
             );
 
-        $this->assertInstanceOf(Product::class, $productById);
-        $this->assertEquals($product, $productById);
+        $this->assertProductsAreWellFormed($project, $language, [$productById]);
+        $this->assertSameProduct($product, $productById);
     }
 
     /**
@@ -187,8 +187,8 @@ class ProductsTest extends FrontasticApiTestCase
 
         $productById = $promise->wait();
 
-        $this->assertInstanceOf(Product::class, $productById);
-        $this->assertEquals($product, $productById);
+        $this->assertProductsAreWellFormed($project, $language, [$productById]);
+        $this->assertSameProduct($product, $productById);
     }
 
     /**
@@ -245,95 +245,10 @@ class ProductsTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
-    public function testProductsHaveDistinctIds(Project $project, string $language): void
+    public function testProductsFromSearchAreWellFormed(Project $project, string $language): void
     {
-        $result = $this->queryProducts($project, $language);
-        $productIds = array_map(
-            function (Product $product): string {
-                return $product->productId;
-            },
-            $result->items
-        );
-
-        $this->assertArrayHasDistinctValues($productIds);
-    }
-
-    /**
-     * @dataProvider projectAndLanguage
-     */
-    public function testProductsAreWellFormed(Project $project, string $language): void
-    {
-        $result = $this->queryProducts($project, $language);
-
-        $existingCategoryIds = array_map(
-            function (Category $category): string {
-                return $category->categoryId;
-            },
-            $this->fetchAllCategories($project, $language)
-        );
-
-        foreach ($result->items as $product) {
-            $this->assertNotEmptyString($product->productId);
-
-            if ($product->changed !== null) {
-                $this->assertInstanceOf(\DateTimeImmutable::class, $product->changed);
-                $this->assertLessThan(new \DateTimeImmutable(), $product->changed);
-            }
-
-            if ($product->version !== null) {
-                $this->assertNotEmptyString($product->version);
-            }
-
-            $this->assertNotEmptyString($product->name);
-
-            $this->assertNotEmptyString($product->slug);
-            $this->assertRegExp(self::URI_PATH_SEGMENT_REGEX, $product->slug);
-
-            $this->assertInternalType('string', $product->description);
-
-            $this->assertInternalType('array', $product->categories);
-            foreach ($product->categories as $category) {
-                $this->assertInternalType('string', $category);
-                $this->assertNotEmpty($category);
-                $this->assertContains($category, $existingCategoryIds);
-            }
-
-            $this->assertInternalType('array', $product->variants);
-            $this->assertNotEmpty($product->variants);
-            $this->assertContainsOnlyInstancesOf(Variant::class, $product->variants);
-
-            foreach ($product->variants as $variant) {
-                $this->assertNotEmptyString($variant->id);
-                $this->assertNotEmptyString($variant->sku);
-                $this->assertNotEmptyString($variant->groupId);
-
-                $this->assertInternalType('integer', $variant->price);
-                $this->assertGreaterThanOrEqual(0, $variant->price);
-
-                if ($variant->discountedPrice !== null) {
-                    $this->assertInternalType('integer', $variant->discountedPrice);
-                    $this->assertGreaterThanOrEqual(0, $variant->discountedPrice);
-                    $this->assertLessThanOrEqual($variant->price, $variant->discountedPrice);
-                }
-
-                $this->assertInternalType('array', $variant->discounts);
-
-                $this->assertNotEmptyString($variant->currency);
-
-                $this->assertInternalType('array', $variant->attributes);
-
-                $this->assertInternalType('array', $variant->images);
-                foreach ($variant->images as $image) {
-                    $this->assertNotEmptyString($image);
-                }
-
-                $this->assertInternalType('boolean', $variant->isOnStock);
-
-                $this->assertNull($variant->dangerousInnerVariant);
-            }
-
-            $this->assertNull($product->dangerousInnerProduct);
-        }
+        $result = $this->queryProducts($project, $language, [], 50);
+        $this->assertProductsAreWellFormed($project, $language, $result->items);
     }
 
     /**
@@ -378,12 +293,10 @@ class ProductsTest extends FrontasticApiTestCase
     public function testQueryProductByCategoryReturnsProduct(Project $project, string $language): void
     {
         $allProducts = $this->queryProducts($project, $language);
-        $product = $allProducts->items[0];
-        $categoryId = $product->categories[0];
+        $categoryId = $allProducts->items[0]->categories[0];
         $this->assertNotEmptyString($categoryId);
 
         $productsByCategory = $this->queryProducts($project, $language, ['category' => $categoryId]);
-        $this->assertResultContainsProduct($product, $productsByCategory);
         $this->assertLessThanOrEqual($allProducts->total, $productsByCategory->total);
 
         $descendantCategories = [];
@@ -494,6 +407,139 @@ class ProductsTest extends FrontasticApiTestCase
         $this->assertGreaterThanOrEqual(1, $actual->count);
         $this->assertGreaterThanOrEqual($actual->count, $actual->total);
         $this->assertCount($actual->count, $actual->items);
-        $this->assertContains($expectedProduct, $actual->items, '', false, false);
+
+        $actualProducts = [];
+        foreach ($actual->items as $product) {
+            $actualProducts[$product->productId] = $product;
+        }
+
+        $this->assertArrayHasKey($expectedProduct->productId, $actualProducts);
+        $this->assertSameProduct($expectedProduct, $actualProducts[$expectedProduct->productId]);
+    }
+
+    private function assertSameProduct(Product $expected, Product $actual): void
+    {
+        // We only check certain attributes here since the search index may contain less data then the product DB and
+        // the information from the search index might be outdated.
+
+        $this->assertSame($expected->productId, $actual->productId);
+        $this->assertSame($expected->name, $actual->name);
+        $this->assertSame($expected->slug, $actual->slug);
+        $this->assertSame($expected->description, $actual->description);
+
+        $this->assertSameSize($expected->variants, $actual->variants);
+        for ($variantIndex = 0; $variantIndex < count($expected->variants); ++$variantIndex) {
+            $this->assertArrayHasKey($variantIndex, $expected->variants);
+            $this->assertArrayHasKey($variantIndex, $actual->variants);
+
+            $expectedVariant = $expected->variants[$variantIndex];
+            $actualVariant = $actual->variants[$variantIndex];
+
+            $this->assertSame($expectedVariant->id, $actualVariant->id);
+            $this->assertSame($expectedVariant->sku, $actualVariant->sku);
+            $this->assertSame($expectedVariant->groupId, $actualVariant->groupId);
+            $this->assertSame($expectedVariant->currency, $actualVariant->currency);
+        }
+    }
+
+    /**
+     * @param Product[] $products
+     */
+    private function assertProductsAreWellFormed(Project $project, string $language, array $products): void
+    {
+        $existingCategoryIds = array_map(
+            function (Category $category): string {
+                return $category->categoryId;
+            },
+            $this->fetchAllCategories($project, $language)
+        );
+
+        $productIds = array_map(
+            function (Product $product): string {
+                return $product->productId;
+            },
+            $products
+        );
+        $this->assertArrayHasDistinctValues($productIds);
+
+        $previousGroupIds = [];
+        foreach ($products as $product) {
+            $this->assertNotEmptyString($product->productId);
+
+            if ($product->changed !== null) {
+                $this->assertInstanceOf(\DateTimeImmutable::class, $product->changed);
+                $this->assertLessThan(new \DateTimeImmutable(), $product->changed);
+            }
+
+            if ($product->version !== null) {
+                $this->assertNotEmptyString($product->version);
+            }
+
+            $this->assertNotEmptyString($product->name);
+
+            $this->assertNotEmptyString($product->slug);
+            $this->assertRegExp(self::URI_PATH_SEGMENT_REGEX, $product->slug);
+
+            $this->assertInternalType('string', $product->description);
+
+            $this->assertInternalType('array', $product->categories);
+            foreach ($product->categories as $category) {
+                $this->assertInternalType('string', $category);
+                $this->assertNotEmpty($category);
+                $this->assertContains($category, $existingCategoryIds);
+            }
+
+            $this->assertInternalType('array', $product->variants);
+            $this->assertNotEmpty($product->variants);
+            $this->assertContainsOnlyInstancesOf(Variant::class, $product->variants);
+
+            $currentProductGroupId = null;
+            foreach ($product->variants as $variant) {
+                $this->assertNotEmptyString($variant->id);
+                $this->assertNotEmptyString($variant->sku);
+
+                $this->assertNotEmptyString($variant->groupId);
+                if ($currentProductGroupId === null) {
+                    $currentProductGroupId = $variant->groupId;
+                    $this->assertNotContains($currentProductGroupId, $previousGroupIds);
+                    $previousGroupIds[] = $currentProductGroupId;
+                }
+                $this->assertSame(
+                    $currentProductGroupId,
+                    $variant->groupId,
+                    sprintf(
+                        'All variants of product %s (%s) should have the same groupId',
+                        $product->productId,
+                        $product->sku
+                    )
+                );
+
+                $this->assertInternalType('integer', $variant->price);
+                $this->assertGreaterThanOrEqual(0, $variant->price);
+
+                if ($variant->discountedPrice !== null) {
+                    $this->assertInternalType('integer', $variant->discountedPrice);
+                    $this->assertGreaterThanOrEqual(0, $variant->discountedPrice);
+                    $this->assertLessThanOrEqual($variant->price, $variant->discountedPrice);
+                }
+
+                $this->assertInternalType('array', $variant->discounts);
+
+                $this->assertNotEmptyString($variant->currency);
+
+                $this->assertInternalType('array', $variant->attributes);
+
+                $this->assertInternalType('array', $variant->images);
+                foreach ($variant->images as $image) {
+                    $this->assertNotEmptyString($image);
+                }
+
+                $this->assertInternalType('boolean', $variant->isOnStock);
+
+                $this->assertNull($variant->dangerousInnerVariant);
+            }
+
+            $this->assertNull($product->dangerousInnerProduct);
+        }
     }
 }
