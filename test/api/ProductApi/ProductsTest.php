@@ -339,8 +339,15 @@ class ProductsTest extends FrontasticApiTestCase
     public function testQueryProductByCategoryReturnsProduct(Project $project, string $language): void
     {
         $allProducts = $this->queryProducts($project, $language);
-        $categoryId = $allProducts->items[0]->categories[0];
-        $this->assertNotEmptyString($categoryId);
+
+        $categoryId = null;
+        foreach ($allProducts->items as $product) {
+            if (count($product->categories) > 0) {
+                $categoryId = reset($product->categories);
+                break;
+            }
+        }
+        $this->assertNotEmptyString($categoryId, 'At least one product needs a category.');
 
         $productsByCategory = $this->queryProducts($project, $language, ['category' => $categoryId]);
         $this->assertLessThanOrEqual($allProducts->total, $productsByCategory->total);
