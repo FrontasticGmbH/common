@@ -73,7 +73,7 @@ class ProductsTest extends FrontasticApiTestCase
 
         $productBySku = $this->getProductApiForProject($project)
             ->getProduct(
-                new ProductQuery(array_merge($this->buildQueryParameters($language), ['sku' => $sku])),
+                ProductApi\Query\SingleProductQuery::bySkuWithLocale($sku, $language),
                 ProductApi::QUERY_SYNC
             );
 
@@ -86,9 +86,7 @@ class ProductsTest extends FrontasticApiTestCase
      */
     public function testGetProductSyncByNonExistingSkuReturnsNull(Project $project, string $language): void
     {
-        $query = new ProductQuery(
-            array_merge($this->buildQueryParameters($language), ['sku' => self::NON_EXISTING_SKU])
-        );
+        $query = ProductApi\Query\SingleProductQuery::bySkuWithLocale(self::NON_EXISTING_SKU, $language);
 
         $this->expectException(ProductApi\ProductNotFoundException::class);
         $this->getProductApiForProject($project)->getProduct($query, ProductApi::QUERY_SYNC);
@@ -105,7 +103,7 @@ class ProductsTest extends FrontasticApiTestCase
 
         $promise = $this->getProductApiForProject($project)
             ->getProduct(
-                new ProductQuery(array_merge($this->buildQueryParameters($language), ['sku' => $sku])),
+                ProductApi\Query\SingleProductQuery::bySkuWithLocale($sku, $language),
                 ProductApi::QUERY_ASYNC
             );
 
@@ -124,9 +122,7 @@ class ProductsTest extends FrontasticApiTestCase
     {
         $promise = $this->getProductApiForProject($project)
             ->getProduct(
-                new ProductQuery(
-                    array_merge($this->buildQueryParameters($language), ['sku' => self::NON_EXISTING_SKU])
-                ),
+                ProductApi\Query\SingleProductQuery::bySkuWithLocale(self::NON_EXISTING_SKU, $language),
                 ProductApi::QUERY_ASYNC
             );
 
@@ -147,7 +143,7 @@ class ProductsTest extends FrontasticApiTestCase
 
         $productById = $this->getProductApiForProject($project)
             ->getProduct(
-                new ProductQuery(array_merge($this->buildQueryParameters($language), ['productId' => $productId])),
+                ProductApi\Query\SingleProductQuery::byProductIdWithLocale($productId, $language),
                 ProductApi::QUERY_SYNC
             );
 
@@ -160,12 +156,12 @@ class ProductsTest extends FrontasticApiTestCase
      */
     public function testGetProductSyncByNonExistingIdThrowsException(Project $project, string $language): void
     {
-        $query = new ProductQuery(
-            array_merge($this->buildQueryParameters($language), ['productId' => self::NON_EXISTING_PRODUCT_ID])
-        );
+        $query = ProductApi\Query\SingleProductQuery::byProductIdWithLocale(self::NON_EXISTING_PRODUCT_ID, $language);
+
+        $productApi = $this->getProductApiForProject($project);
 
         $this->expectException(ProductApi\ProductNotFoundException::class);
-        $this->getProductApiForProject($project)->getProduct($query, ProductApi::QUERY_SYNC);
+        $productApi->getProduct($query, ProductApi::QUERY_SYNC);
     }
 
     /**
@@ -179,7 +175,7 @@ class ProductsTest extends FrontasticApiTestCase
 
         $promise = $this->getProductApiForProject($project)
             ->getProduct(
-                new ProductQuery(array_merge($this->buildQueryParameters($language), ['productId' => $productId])),
+                ProductApi\Query\SingleProductQuery::byProductIdWithLocale($productId, $language),
                 ProductApi::QUERY_ASYNC
             );
 
@@ -198,9 +194,7 @@ class ProductsTest extends FrontasticApiTestCase
     {
         $promise = $this->getProductApiForProject($project)
             ->getProduct(
-                new ProductQuery(
-                    array_merge($this->buildQueryParameters($language), ['productId' => self::NON_EXISTING_PRODUCT_ID])
-                ),
+                ProductApi\Query\SingleProductQuery::byProductIdWithLocale(self::NON_EXISTING_PRODUCT_ID, $language),
                 ProductApi::QUERY_ASYNC
             );
 
@@ -208,6 +202,58 @@ class ProductsTest extends FrontasticApiTestCase
 
         $this->expectException(ProductApi\ProductNotFoundException::class);
         $promise->wait();
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testGetProductAsyncValidatesQuerySynchronously(Project $project, string $language): void
+    {
+        $query = ProductApi\Query\SingleProductQuery::bySkuWithLocale(self::NON_EXISTING_SKU, $language);
+        $query->productId = self::NON_EXISTING_PRODUCT_ID;
+
+        $productApi = $this->getProductApiForProject($project);
+
+        $this->expectException(ProductApi\Exception\InvalidQueryException::class);
+        $productApi->getProduct($query, ProductApi::QUERY_ASYNC);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testGetProductSyncBySkuWithProductQueryReturnsProduct(Project $project, string $language): void
+    {
+        $product = $this->getAProduct($project, $language);
+        $sku = $product->variants[0]->sku;
+        $this->assertNotEmptyString($sku);
+
+        $productBySku = $this->getProductApiForProject($project)
+            ->getProduct(
+                new ProductQuery(array_merge($this->buildQueryParameters($language), ['sku' => $sku])),
+                ProductApi::QUERY_SYNC
+            );
+
+        $this->assertProductsAreWellFormed($project, $language, [$productBySku]);
+        $this->assertSameProduct($product, $productBySku);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testGetProductSyncByIdWithProductQueryReturnsProduct(Project $project, string $language): void
+    {
+        $product = $this->getAProduct($project, $language);
+        $productId = $product->productId;
+        $this->assertNotEmptyString($productId);
+
+        $productById = $this->getProductApiForProject($project)
+            ->getProduct(
+                new ProductQuery(array_merge($this->buildQueryParameters($language), ['productId' => $productId])),
+                ProductApi::QUERY_SYNC
+            );
+
+        $this->assertProductsAreWellFormed($project, $language, [$productById]);
+        $this->assertSameProduct($product, $productById);
     }
 
     /**

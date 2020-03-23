@@ -65,11 +65,7 @@ class LifecycleEventDecorator implements ProductApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    /**
-     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery $query
-     * @return \Frontastic\Common\ProductApiBundle\Domain\Product|null
-     */
-    public function getProduct(ProductQuery $query, string $mode = self::QUERY_SYNC): ?object
+    public function getProduct($query, string $mode = self::QUERY_SYNC): ?object
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }

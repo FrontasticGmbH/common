@@ -168,11 +168,21 @@ class Commercetools implements ProductApi
         );
     }
 
-    public function getProduct(ProductQuery $query, string $mode = self::QUERY_SYNC): ?object
+    public function getProduct($originalQuery, string $mode = self::QUERY_SYNC): ?object
     {
+        $query = ProductApi\Query\SingleProductQuery::fromLegacyQuery($originalQuery);
+        $query->validate();
+
         if ($query->sku) {
             $promise = $this
-                ->query($query, self::QUERY_ASYNC)
+                ->query(
+                    new ProductQuery([
+                        'skus' => [$query->sku],
+                        'locale' => $query->locale,
+                        'loadDangerousInnerData' => $query->loadDangerousInnerData,
+                    ]),
+                    self::QUERY_ASYNC
+                )
                 ->then(
                     function (Result $productQueryResult) use ($query) {
                         if (count($productQueryResult->items) === 0) {
