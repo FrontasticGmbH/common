@@ -38,7 +38,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductType;
 abstract class BaseImplementation
 {
     /*** getCategories() **********************************************************************************************/
-    public function beforeGetCategories(ProductApi $productApi, CategoryQuery $query): void
+    public function beforeGetCategories(ProductApi $productApi, CategoryQuery $query): ?array
     {
     }
 
@@ -53,7 +53,7 @@ abstract class BaseImplementation
     }
 
     /*** getProductTypes() ********************************************************************************************/
-    public function beforeGetProductTypes(ProductApi $productApi, ProductTypeQuery $query): void
+    public function beforeGetProductTypes(ProductApi $productApi, ProductTypeQuery $query): ?array
     {
     }
 
@@ -72,7 +72,7 @@ abstract class BaseImplementation
         ProductApi $productApi,
         ProductQuery $query,
         string $mode = ProductApi::QUERY_SYNC
-    ): void {
+    ): ?array {
     }
 
     public function afterGetProduct(ProductApi $productApi, ?Product $product): ?Product
@@ -85,7 +85,7 @@ abstract class BaseImplementation
         ProductApi $productApi,
         ProductQuery $query,
         string $mode = ProductApi::QUERY_SYNC
-    ): void {
+    ): ?array {
     }
 
     public function afterQuery(ProductApi $productApi, ?Result $result): ?Result
