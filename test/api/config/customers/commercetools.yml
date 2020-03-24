@@ -1,8 +1,6 @@
 ---
 name: "commercetools"
 secret: "secret"
-edition: "micro"
-features:
 configuration:
     commercetools:
         projectKey: frontastic-1

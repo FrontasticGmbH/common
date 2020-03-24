@@ -6,7 +6,7 @@ use Kore\DataObject\DataObject;
 class Variant extends DataObject
 {
     /**
-     * @var integer
+     * @var string
      */
     public $id;
 

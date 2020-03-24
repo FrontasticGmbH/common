@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\InvalidQueryException;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\PaginatedQuery;
 
 class ProductQuery extends PaginatedQuery
@@ -10,46 +11,41 @@ class ProductQuery extends PaginatedQuery
     public const SORT_ORDER_DESCENDING = 'descending';
 
     /**
-     * @var string
+     * @var string|null
      */
     public $category;
 
     /**
-     * @var string
+     * @deprecated use `skus` instead
+     * @var string|null
      */
     public $sku;
 
     /**
-     * @var array
+     * @var string[]|null
      */
     public $skus;
 
     /**
-     * @var string
+     * @deprecated use `productIds` instead
+     * @var string|null
      */
     public $productId;
 
     /**
-     * @var array
+     * @var string[]|null
      */
     public $productIds;
 
     /**
-     * @var string
+     * @var string|null
      */
     public $productType;
 
     /**
-     * @TODO: Currency should only be stored in context. Property should be removed.
-     *
-     * @var string
-     */
-    public $currency;
-
-    /**
      * This is a full text search on the API
      *
-     * @var string
+     * @var string|null
      */
     public $query;
 
@@ -62,14 +58,14 @@ class ProductQuery extends PaginatedQuery
     public $filter = [];
 
     /**
-     * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\Facet[]
+     * @var Facet[]
      */
     public $facets = [];
 
     /**
      * Map of sort attributes => sort order
      *
-     * @var mixed
+     * @var array<string, string>
      */
     public $sortAttributes = [];
 
@@ -79,8 +75,7 @@ class ProductQuery extends PaginatedQuery
     public $fuzzy = false;
 
     /**
-     * @return void
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\InvalidQueryException
+     * @throws InvalidQueryException
      */
     public function validate(): void
     {

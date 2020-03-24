@@ -51,6 +51,10 @@ class FrontasticApiTestCase extends KernelTestCase
 
         $projects = [];
         foreach ($customerService->getCustomers() as $customer) {
+            if ($customer->configuration['test']->disabled ?? false === true) {
+                continue;
+            }
+
             foreach ($customer->projects as $project) {
                 $description = sprintf(
                     'customer: %s, project: %s (ID %s)',
@@ -100,10 +104,10 @@ class FrontasticApiTestCase extends KernelTestCase
         }
     }
 
-    protected function assertNotEmptyString($actual): void
+    protected function assertNotEmptyString($actual, string $message = ''): void
     {
-        $this->assertInternalType('string', $actual);
-        $this->assertNotEmpty($actual);
+        $this->assertInternalType('string', $actual, $message);
+        $this->assertNotEmpty($actual, $message);
     }
 
     protected function assertIsValidTranslatedLabel(Project $project, $label): void

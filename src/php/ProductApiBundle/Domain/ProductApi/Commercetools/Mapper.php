@@ -16,7 +16,7 @@ use Frontastic\Common\ProductApiBundle\Domain\Variant;
  */
 class Mapper
 {
-    public function dataToProduct(array $productData, ProductQuery $query, CommercetoolsLocale $locale): Product
+    public function dataToProduct(array $productData, Query $query, CommercetoolsLocale $locale): Product
     {
         $version = (string)$productData['version'] ?? '0';
 
@@ -52,7 +52,7 @@ class Mapper
         ]);
     }
 
-    public function dataToVariants(array $productData, ProductQuery $query, CommercetoolsLocale $locale): array
+    public function dataToVariants(array $productData, Query $query, CommercetoolsLocale $locale): array
     {
         $variants = [$this->dataToVariant($productData['masterVariant'], $query, $locale)];
         foreach ($productData['variants'] as $variantData) {
