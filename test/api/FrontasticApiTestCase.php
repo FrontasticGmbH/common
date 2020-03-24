@@ -21,7 +21,7 @@ class FrontasticApiTestCase extends KernelTestCase
 {
     const NON_EXISTING_SLUG = 'THIS_SLUG_SHOULD_NEVER_EXIST_IN_ANY_DATA_SET';
 
-    const URI_PATH_SEGMENT_REGEX = '/^[0-9a-zA-Z_.~-]+$/';
+    const URI_PATH_SEGMENT_REGEX = '/^([0-9a-zA-Z_.~-]|%[0-9A-F]{2})+$/';
 
     /**
      * @var array<string, ProductApi>
