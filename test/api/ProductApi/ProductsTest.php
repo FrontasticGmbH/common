@@ -531,7 +531,16 @@ class ProductsTest extends FrontasticApiTestCase
             $this->assertNotEmptyString($product->name);
 
             $this->assertNotEmptyString($product->slug);
-            $this->assertRegExp(self::URI_PATH_SEGMENT_REGEX, $product->slug);
+            $this->assertRegExp(
+                self::URI_PATH_SEGMENT_REGEX,
+                $product->slug,
+                sprintf(
+                    'Product %s (SKU %s) has an invalid slug: %s',
+                    $product->productId,
+                    $product->sku,
+                    $product->slug
+                )
+            );
 
             $this->assertInternalType('string', $product->description);
 
