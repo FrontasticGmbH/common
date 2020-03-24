@@ -336,31 +336,22 @@ class ProductsTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
-    public function testQueryProductByCategoryReturnsProduct(Project $project, string $language): void
+    public function testQueryProductByCategoryReturnsWellFormedProducts(Project $project, string $language): void
     {
         $allProducts = $this->queryProducts($project, $language);
 
-        $categoryId = null;
-        foreach ($allProducts->items as $product) {
-            if (count($product->categories) > 0) {
-                $categoryId = reset($product->categories);
-                break;
-            }
-        }
-        $this->assertNotEmptyString($categoryId, 'At least one product needs a category.');
+        $categories = $this
+            ->getProductApiForProject($project)
+            ->getCategories(new ProductApi\Query\CategoryQuery([
+                'locale' => $language,
+                'limit' => 3 // don't query too much categories so this test will not get too slow
+            ]));
+        foreach ($categories as $category) {
+            $categoryId = $category->categoryId;
 
-        $productsByCategory = $this->queryProducts($project, $language, ['category' => $categoryId]);
-        $this->assertLessThanOrEqual($allProducts->total, $productsByCategory->total);
-
-        $descendantCategories = [];
-        foreach ($this->fetchAllCategories($project, $language) as $category) {
-            if (in_array($categoryId, $category->getPathAsArray())) {
-                $descendantCategories[] = $category->categoryId;
-            }
-        }
-
-        foreach ($productsByCategory->items as $product) {
-            $this->assertNotEmpty(array_intersect($descendantCategories, $product->categories));
+            $productsByCategory = $this->queryProducts($project, $language, ['category' => $categoryId]);
+            $this->assertLessThanOrEqual($allProducts->total, $productsByCategory->total);
+            $this->assertProductsAreWellFormed($project, $language, $productsByCategory->items);
         }
     }
 
