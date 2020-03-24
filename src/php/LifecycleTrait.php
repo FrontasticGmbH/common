@@ -55,7 +55,10 @@ trait LifecycleTrait
         $beforeEvent = 'before' . ucfirst($method);
         foreach ($this->listeners as $listener) {
             if (is_callable([$listener, $beforeEvent])) {
-                $newArguments = call_user_func_array([$listener, $beforeEvent], array_merge([$this->getAggregate()], $arguments));
+                $newArguments = call_user_func_array(
+                    [$listener, $beforeEvent],
+                    array_merge([$this->getAggregate()], $arguments)
+                );
 
                 if (is_array($newArguments)) {
                     $arguments = $newArguments;
