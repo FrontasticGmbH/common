@@ -115,8 +115,6 @@ class Client implements ClientInterface
             $response->status ?? 503
         );
 
-        print_r($errorData);
-
         if (isset($errorData->errors)) {
             $errorData->errors = array_reverse($errorData->errors);
             foreach ($errorData->errors as $error) {
@@ -125,14 +123,6 @@ class Client implements ClientInterface
                     $response->status ?? 503,
                     $exception
                 );
-
-//                $exception->setTranslationData(
-//                    $error->code ?? 'Unknown',
-//                    array_diff_key(
-//                        (array)$error,
-//                        ['action' => true, 'message' => true, 'code' => true]
-//                    )
-//                );
             }
         }
 
