@@ -1,0 +1,16 @@
+---
+name: "shopware"
+secret: "secret"
+configuration:
+  shopware:
+    apiKey: SWSCZUM3CTRIYLP1S2JYBGJ6OA
+    endpoint: http://host.docker.internal:8000/sales-channel-api/v1
+  product:
+    engine: shopware
+  whislist:
+    engine: shopware
+projects:
+  - projectId: test
+    name: Shopware Test Catwalk
+    languages: ["en_GB@GBP", "de_DE@EUR", "fr_FR@EUR"]
+    defaultLanguage: en_GB@GBP
