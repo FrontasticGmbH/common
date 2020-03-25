@@ -519,7 +519,10 @@ class ProductsTest extends FrontasticApiTestCase
                 $this->assertNotEmptyString($product->version);
             }
 
-            $this->assertNotEmptyString($product->name);
+            $this->assertNotEmptyString(
+                $product->name,
+                sprintf('Product %s (SKU %s) has an invalid name', $product->productId, $product->sku)
+            );
 
             $this->assertNotEmptyString($product->slug);
             $this->assertRegExp(
