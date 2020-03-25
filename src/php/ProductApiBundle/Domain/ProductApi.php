@@ -5,6 +5,7 @@ namespace Frontastic\Common\ProductApiBundle\Domain;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\SingleProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use GuzzleHttp\Promise\PromiseInterface;
 
@@ -30,11 +31,11 @@ interface ProductApi
     public function getProductTypes(ProductTypeQuery $query): array;
 
     /**
-     * @param ProductQuery $query
+     * @param SingleProductQuery $query This might also be a `ProductQuery` for backwards compatibility reasons.
      * @param string $mode One of the QUERY_* connstants. Execute the query synchronously or asynchronously?
      * @return Product|PromiseInterface|null A product or null when the mode is sync and a promise if the mode is async.
      */
-    public function getProduct(ProductQuery $query, string $mode = self::QUERY_SYNC): ?object;
+    public function getProduct($query, string $mode = self::QUERY_SYNC): ?object;
 
     /**
      * @param ProductQuery $query

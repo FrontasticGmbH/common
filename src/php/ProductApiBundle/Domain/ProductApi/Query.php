@@ -40,6 +40,6 @@ class Query extends DataObject
         if (gettype($value) === $expectedType) {
             return;
         }
-        throw new InvalidQueryException($this, $propertyName, $expectedType, gettype($value));
+        throw InvalidQueryException::invalidPropertyType($this, $propertyName, $expectedType, gettype($value));
     }
 }
