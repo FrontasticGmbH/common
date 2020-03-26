@@ -7,11 +7,6 @@
     <services>
         <defaults public="true"/>
 
-        <prototype namespace="Frontastic\Common\ShopwareBundle\Domain\"
-                   resource="../../Domain"
-                   exclude="../../Domain/{Search}"
-                   autoconfigure="true"/>
-
         <instanceof id="Frontastic\Common\ShopwareBundle\Domain\DataMapperInterface" autowire="true" public="false">
             <tag name="shopware.data_mapper"/>
         </instanceof>
@@ -23,9 +18,8 @@
         </service>
 
         <service id="Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory">
-            <argument type="service">
-                <service class="Doctrine\Common\Cache\ApcuCache"/>
-            </argument>
+            <argument type="service" id="Frontastic\Common\ProjectApiBundle\Domain\ProjectApiFactory"/>
+            <argument type="service" id="Frontastic\Catwalk\ApiCoreBundle\Domain\Context"/>
             <tag name="frontastic.common.api_integration.factory" key="shopware.locale_creator_factory"/>
         </service>
 

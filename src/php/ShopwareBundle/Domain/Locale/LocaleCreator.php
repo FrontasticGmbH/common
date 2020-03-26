@@ -3,7 +3,7 @@
 namespace Frontastic\Common\ShopwareBundle\Domain\Locale;
 
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
-use Frontastic\Common\ProjectApiBundle\Domain\ProjectConfigApi;
+use Frontastic\Common\ProjectApiBundle\Domain\ProjectApi;
 
 class LocaleCreator
 {
@@ -12,13 +12,16 @@ class LocaleCreator
     ];
 
     /**
-     * @var \Frontastic\Common\ProjectApiBundle\Domain\ProjectConfigApi
+     * @var \Frontastic\Common\ProjectApiBundle\Domain\ProjectApi|\Frontastic\Common\ProjectApiBundle\Domain\ProjectConfigApi
      */
     private $projectConfigApi;
 
     private $projectConfigFetched = false;
 
-    public function __construct(ProjectConfigApi $projectConfigApi)
+    /**
+     * @param \Frontastic\Common\ProjectApiBundle\Domain\ProjectApi|\Frontastic\Common\ProjectApiBundle\Domain\ProjectConfigApi $projectConfigApi
+     */
+    public function __construct(ProjectApi $projectConfigApi)
     {
         $this->projectConfigApi = $projectConfigApi;
     }
@@ -43,7 +46,7 @@ class LocaleCreator
 
     private function fetchProjectConfig(): void
     {
-        if ($this->projectConfigFetched === false) {
+        if ($this->projectConfigFetched === true) {
             return;
         }
 
