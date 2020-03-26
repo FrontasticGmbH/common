@@ -2,22 +2,18 @@
 
 namespace Frontastic\Common\ProductApiBundle\Domain;
 
+use Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\ShopwareProductApi;
-use Symfony\Component\DependencyInjection\ServiceLocator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DefaultProductApiFactory implements ProductApiFactory
 {
-    private const SERVICE_ID_TEMPLATE_CLIENT_FACTORY = '%s.client_factory';
-    private const SERVICE_ID_TEMPLATE_DATA_MAPPER = '%s.data_mapper';
-    private const SERVICE_ID_TEMPLATE_LOCALE_CREATOR_FACTORY = '%s.locale_creator_factory';
-
     /**
-     * @var \Symfony\Component\DependencyInjection\ServiceLocator
+     * @var \Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator
      */
     private $serviceLocator;
 
@@ -27,7 +23,7 @@ class DefaultProductApiFactory implements ProductApiFactory
     private $decorators;
 
     public function __construct(
-        ServiceLocator $serviceLocator,
+        FactoryServiceLocator $serviceLocator,
         iterable $decorators = []
     ) {
         $this->decorators = $decorators;
@@ -45,9 +41,9 @@ class DefaultProductApiFactory implements ProductApiFactory
                  * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\DefaultCommercetoolsLocaleCreatorFactory $localeCreatorFactory
                  * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper $dataMapper
                  */
-                $clientFactory = $this->resolveClientFactory($productConfig->engine);
-                $dataMapper = $this->resolveDataMapper($productConfig->engine);
-                $localeCreatorFactory = $this->resolveLocaleCreatorFactory($productConfig->engine);
+                $clientFactory = $this->serviceLocator->resolveClientFactory($productConfig->engine);
+                $dataMapper = $this->serviceLocator->resolveDataMapper($productConfig->engine);
+                $localeCreatorFactory = $this->serviceLocator->resolveLocaleCreatorFactory($productConfig->engine);
 
                 $client = $clientFactory->factorForProjectAndType($project, 'product');
 
@@ -64,9 +60,9 @@ class DefaultProductApiFactory implements ProductApiFactory
                  * @var \Frontastic\Common\ShopwareBundle\Domain\DataMapperResolver $dataMapper
                  * @var \Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory $localeCreatorFactory
                  */
-                $clientFactory = $this->resolveClientFactory($productConfig->engine);
-                $dataMapper = $this->resolveDataMapper($productConfig->engine);
-                $localeCreatorFactory = $this->resolveLocaleCreatorFactory($productConfig->engine);
+                $clientFactory = $this->serviceLocator->resolveClientFactory($productConfig->engine);
+                $dataMapper = $this->serviceLocator->resolveDataMapper($productConfig->engine);
+                $localeCreatorFactory = $this->serviceLocator->resolveLocaleCreatorFactory($productConfig->engine);
 
                 $client = $clientFactory->factor($project);
 
@@ -84,41 +80,5 @@ class DefaultProductApiFactory implements ProductApiFactory
         }
 
         return new ProductApi\LifecycleEventDecorator($productApi, $this->decorators);
-    }
-
-    private function resolveClientFactory(string $engine)
-    {
-        $service = $this->buildClientFactoryServiceId($engine);
-
-        return $this->serviceLocator->get($service);
-    }
-
-    private function buildClientFactoryServiceId(string $engine): string
-    {
-        return sprintf(self::SERVICE_ID_TEMPLATE_CLIENT_FACTORY, $engine);
-    }
-
-    private function resolveDataMapper(string $engine)
-    {
-        $service = $this->buildDataMapperServiceId($engine);
-
-        return $this->serviceLocator->get($service);
-    }
-
-    private function buildDataMapperServiceId(string $engine): string
-    {
-        return sprintf(self::SERVICE_ID_TEMPLATE_DATA_MAPPER, $engine);
-    }
-
-    private function resolveLocaleCreatorFactory(string $engine)
-    {
-        $service = $this->buildLocaleCreatorFactoryServiceId($engine);
-
-        return $this->serviceLocator->get($service);
-    }
-
-    private function buildLocaleCreatorFactoryServiceId(string $engine): string
-    {
-        return sprintf(self::SERVICE_ID_TEMPLATE_LOCALE_CREATOR_FACTORY, $engine);
     }
 }
