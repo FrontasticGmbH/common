@@ -2,30 +2,30 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain\Locale;
 
-use Doctrine\Common\Cache\Cache;
-use Frontastic\Common\ReplicatorBundle\Domain\Project;
-use Frontastic\Common\ShopwareBundle\Domain\Client;
-use Frontastic\Common\ShopwareBundle\Domain\ProjectApi\ShopwareProjectApi;
+use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
+use Frontastic\Common\ProjectApiBundle\Domain\DefaultProjectApiFactory;
 
 class LocaleCreatorFactory
 {
     /**
-     * @var \Doctrine\Common\Cache\Cache
+     * @var \Frontastic\Common\ProjectApiBundle\Domain\DefaultProjectApiFactory
      */
-    private $cache;
+    private $projectApiFactory;
+    /**
+     * @var \Frontastic\Catwalk\ApiCoreBundle\Domain\Context
+     */
+    private $context;
 
-    public function __construct(Cache $cache)
+    public function __construct(DefaultProjectApiFactory $projectApiFactory, Context $context)
     {
-        $this->cache = $cache;
+        $this->projectApiFactory = $projectApiFactory;
+        $this->context = $context;
     }
 
-    public function factor(Project $project, Client $client): LocaleCreator
+    public function factor(): LocaleCreator
     {
         return new LocaleCreator(
-            new ShopwareProjectApi(
-                $client,
-                $this->cache
-            )
+            $this->projectApiFactory->factor($this->context->project)
         );
     }
 }
