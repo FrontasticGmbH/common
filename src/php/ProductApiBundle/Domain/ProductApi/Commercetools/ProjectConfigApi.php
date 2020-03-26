@@ -3,8 +3,9 @@
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
 
 use Doctrine\Common\Cache\Cache;
+use Frontastic\Common\ProjectApiBundle\Domain\ProjectConfigApi as ProjectConfigApiInterface;
 
-class ProjectConfigApi
+class ProjectConfigApi implements ProjectConfigApiInterface
 {
     /**
      * @var Client

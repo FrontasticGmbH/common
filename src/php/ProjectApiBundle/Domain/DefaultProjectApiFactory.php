@@ -2,28 +2,28 @@
 
 namespace Frontastic\Common\ProjectApiBundle\Domain;
 
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory;
+use Doctrine\Common\Cache\Cache;
+use Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
+use Frontastic\Common\ShopwareBundle\Domain\ProjectApi\CachedShopwareProjectApi;
+use Frontastic\Common\ShopwareBundle\Domain\ProjectApi\ShopwareProjectApi;
 
 class DefaultProjectApiFactory implements ProjectApiFactory
 {
     /**
-     * @var ClientFactory
+     * @var \Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator
      */
-    private $commercetoolsClientFactory;
+    private $serviceLocator;
 
     /**
-     * @var CommercetoolsLocaleCreatorFactory
+     * @var \Doctrine\Common\Cache\Cache
      */
-    private $localeCreatorFactory;
+    private $cache;
 
-    public function __construct(
-        ClientFactory $commercetoolsClientFactory,
-        CommercetoolsLocaleCreatorFactory $localeCreatorFactory
-    ) {
-        $this->commercetoolsClientFactory = $commercetoolsClientFactory;
-        $this->localeCreatorFactory = $localeCreatorFactory;
+    public function __construct(FactoryServiceLocator $serviceLocator, Cache $cache)
+    {
+        $this->serviceLocator = $serviceLocator;
+        $this->cache = $cache;
     }
 
     public function factor(Project $project): ProjectApi
@@ -32,17 +32,35 @@ class DefaultProjectApiFactory implements ProjectApiFactory
 
         switch ($productConfig->engine) {
             case 'commercetools':
-                $client = $this->commercetoolsClientFactory->factorForProjectAndType($project, 'product');
+                /**
+                 * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory $clientFactory
+                 * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\DefaultCommercetoolsLocaleCreatorFactory $localeCreatorFactory
+                 */
+                $clientFactory = $this->serviceLocator->resolveClientFactory($productConfig->engine);
+                $localeCreatorFactory = $this->serviceLocator->resolveLocaleCreatorFactory($productConfig->engine);
+
+                $client = $clientFactory->factorForProjectAndType($project, 'product');
+
                 return new ProjectApi\Commercetools(
                     $client,
-                    $this->localeCreatorFactory->factor($project, $client),
+                    $localeCreatorFactory->factor($project, $client),
                     $project->languages
                 );
-        }
+            case 'shopware':
+                /**
+                 * @var \Frontastic\Common\ShopwareBundle\Domain\ClientFactory $clientFactory
+                 */
+                $clientFactory = $this->serviceLocator->resolveClientFactory($productConfig->engine);
 
-        throw new \OutOfBoundsException(
-            "No product API configured for project {$project->name}. " .
-            "Check the provisioned customer configuration in app/config/customers/."
-        );
+                return new CachedShopwareProjectApi(
+                    new ShopwareProjectApi($clientFactory->factor($project)),
+                    $this->cache
+                );
+            default:
+                throw new \OutOfBoundsException(
+                    "No product API configured for project {$project->name}. " .
+                    "Check the provisioned customer configuration in app/config/customers/."
+                );
+        }
     }
 }
