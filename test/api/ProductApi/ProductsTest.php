@@ -467,9 +467,21 @@ class ProductsTest extends FrontasticApiTestCase
         // the information from the search index might be outdated.
 
         $this->assertSame($expected->productId, $actual->productId);
-        $this->assertSame($expected->name, $actual->name);
-        $this->assertSame($expected->slug, $actual->slug);
-        $this->assertSame($expected->description, $actual->description);
+        $this->assertSame(
+            $expected->name,
+            $actual->name,
+            sprintf('Product %s (SKU %s) has different names', $expected->productId, $expected->sku)
+        );
+        $this->assertSame(
+            $expected->slug,
+            $actual->slug,
+            sprintf('Product %s (SKU %s) has different slugs', $expected->productId, $expected->sku)
+        );
+        $this->assertSame(
+            $expected->description,
+            $actual->description,
+            sprintf('Product %s (SKU %s) has different descriptions', $expected->productId, $expected->sku)
+        );
 
         $this->assertSameSize($expected->variants, $actual->variants);
         for ($variantIndex = 0; $variantIndex < count($expected->variants); ++$variantIndex) {
