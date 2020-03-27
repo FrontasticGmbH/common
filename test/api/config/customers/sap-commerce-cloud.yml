@@ -11,6 +11,8 @@ configuration:
         engine: sap-commerce-cloud
     product:
         engine: sap-commerce-cloud
+    wishlist:
+        engine: no-wishlist
 projects:
     -   projectId: electronics
         name: SAP Commerce Cloud electronics Catwalk
