@@ -74,8 +74,6 @@ class AnonymousCartTest extends FrontasticApiTestCase
         $cartApi->addToCart($originalCart, $this->lineItemForProduct($product), $language);
         $updatedCart = $cartApi->commit($language);
 
-        $this->assertGreaterThan($originalCart->cartVersion, $updatedCart->cartVersion);
-
         $this->assertCount(1, $updatedCart->lineItems);
         foreach ($updatedCart->lineItems as $lineItem) {
             $this->assertInstanceOf(LineItem::class, $lineItem);
@@ -100,7 +98,6 @@ class AnonymousCartTest extends FrontasticApiTestCase
         $cartApi->setShippingAddress($originalCart, self::FRONTASTIC_ADDRESS, $language);
         $updatedCart = $cartApi->commit($language);
 
-        $this->assertGreaterThan($originalCart->cartVersion, $updatedCart->cartVersion);
         $this->assertFrontasticAddress($updatedCart->shippingAddress);
     }
 
