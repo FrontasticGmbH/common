@@ -42,15 +42,17 @@ class SapDataMapper
                     'groupId' => $code,
                     'price' => $this->mapDataToPriceValue($data['price']),
                     'currency' => $data['price']['currencyIso'],
-                    'images' => array_map(
-                        function (array $image): string {
-                            return $this->client->getHostUrl() . $image['url'];
-                        },
-                        array_filter(
-                            $data['images'] ?? [],
-                            function (array $image): bool {
-                                return $image['format'] !== 'thumbnail';
-                            }
+                    'images' => array_values(
+                        array_map(
+                            function (array $image): string {
+                                return $this->client->getHostUrl() . $image['url'];
+                            },
+                            array_filter(
+                                $data['images'] ?? [],
+                                function (array $image): bool {
+                                    return $image['format'] !== 'thumbnail';
+                                }
+                            )
                         )
                     ),
                 ]),
