@@ -90,6 +90,7 @@ class AnonymousCartTest extends FrontasticApiTestCase
      */
     public function testSettingTheShippingAddressOfACart(Project $project, string $language): void
     {
+        $this->requireAnonymousCheckout($project);
         $originalCart = $this->getAnonymousCart($project, $language);
 
         $cartApi = $this->getCartApiForProject($project);
@@ -106,6 +107,7 @@ class AnonymousCartTest extends FrontasticApiTestCase
      */
     public function testOrderSingleProduct(Project $project, string $language): void
     {
+        $this->requireAnonymousCheckout($project);
         $cart = $this->getAnonymousCart($project, $language);
         $cartApi = $this->getCartApiForProject($project);
 
@@ -176,5 +178,10 @@ class AnonymousCartTest extends FrontasticApiTestCase
 
         $this->assertFalse($address->isDefaultBillingAddress);
         $this->assertFalse($address->isDefaultShippingAddress);
+    }
+
+    private function requireAnonymousCheckout(Project $project): void
+    {
+        $this->requireProjectFeature($project, 'anonymousCheckout');
     }
 }
