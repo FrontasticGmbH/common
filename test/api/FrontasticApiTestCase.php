@@ -107,7 +107,7 @@ class FrontasticApiTestCase extends KernelTestCase
     protected function assertNotEmptyString($actual, string $message = ''): void
     {
         $this->assertInternalType('string', $actual, $message);
-        $this->assertNotEmpty($actual, $message);
+        $this->assertNotEquals('', $actual, $message);
     }
 
     protected function assertIsValidTranslatedLabel(Project $project, $label): void
