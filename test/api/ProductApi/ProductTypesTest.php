@@ -52,14 +52,10 @@ class ProductTypesTest extends FrontasticApiTestCase
     /**
      * @return ProductType[]
      */
-    private function fetchProductTypes(
-        Project $project,
-        string $language,
-        ?int $limit = null,
-        ?int $offset = null
-    ): array {
+    private function fetchProductTypes(Project $project, string $language): array
+    {
         return $this
             ->getProductApiForProject($project)
-            ->getProductTypes(new ProductTypeQuery($this->buildQueryParameters($language, $limit, $offset)));
+            ->getProductTypes(new ProductTypeQuery($this->buildQueryParameters($language)));
     }
 }

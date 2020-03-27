@@ -2,6 +2,8 @@
 name: "commercetools"
 secret: "secret"
 configuration:
+    test:
+        disabled: false
     commercetools:
         projectKey: frontastic-1
         clientId: xQIEJY3is0ETFY-7lSf-fAUc
