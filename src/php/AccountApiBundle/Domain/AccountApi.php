@@ -12,8 +12,6 @@ interface AccountApi
 
     public function create(Account $account, ?Cart $cart = null): Account;
 
-    public function verifyEmail(string $token): Account;
-
     public function update(Account $account): Account;
 
     public function updatePassword(string $accountId, string $oldPassword, string $newPassword): Account;

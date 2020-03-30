@@ -52,11 +52,6 @@ class LifecycleEventDecorator implements AccountApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function verifyEmail(string $token): Account
-    {
-        return $this->dispatch(__FUNCTION__, func_get_args());
-    }
-
     public function update(Account $account): Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());

@@ -128,22 +128,6 @@ class Commercetools implements AccountApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function verifyEmail(string $token): Account
-    {
-        return $this->mapAccount($this->client->post(
-            '/customers/email/confirm',
-            [],
-            [],
-            json_encode([
-                'token' => $token,
-            ])
-        ));
-    }
-
-    /**
-     * @throws RequestException
-     * @todo Should we catch the RequestException here?
-     */
     public function update(Account $account): Account
     {
         $accountVersion = $this->client->get('/customers/' . $account->accountId);
