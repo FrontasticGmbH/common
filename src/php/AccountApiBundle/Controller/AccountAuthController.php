@@ -12,7 +12,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 use QafooLabs\MVC\RedirectRoute;
 
-use Frontastic\Common\AccountApiBundle\Security\Authenticator;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\AccountApiBundle\Domain\Session;
@@ -20,6 +19,7 @@ use Frontastic\Common\AccountApiBundle\Domain\AuthentificationInformation;
 
 use Frontastic\Common\CoreBundle\Domain\ErrorResult;
 use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
+use Frontastic\Catwalk\FrontendBundle\Security\Authenticator;
 
 class AccountAuthController extends Controller
 {

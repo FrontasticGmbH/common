@@ -21,24 +21,5 @@
             </factory>
             <argument type="expression">service('Frontastic\\Catwalk\\ApiCoreBundle\\Domain\\Context').customer</argument>
         </service>
-
-        <service id="Frontastic\Common\AccountApiBundle\Security\AccountProvider">
-            <argument type="service" id="Frontastic\Common\AccountApiBundle\Domain\AccountService" />
-        </service>
-
-        <service id="Frontastic\Common\AccountApiBundle\Security\Authenticator">
-            <argument type="service" id="Frontastic\Common\AccountApiBundle\Domain\AccountService" />
-            <argument type="service" id="frontastic.catwalk.cart_api" />
-            <argument type="service" id="Frontastic\Catwalk\ApiCoreBundle\Domain\ContextService" />
-        </service>
-
-        <service id="Frontastic\Common\AccountApiBundle\Security\LogoutSuccessHandler" />
-
-        <service id="Frontastic\Common\AccountApiBundle\Domain\AccountService">
-            <argument type="service" id="Frontastic\Common\AccountApiBundle\Domain\AccountApi" />
-            <argument type="service" id="Frontastic\Common\CoreBundle\Domain\Mailer" />
-        </service>
-
-        <service id="frontastic.user.guard_handler" alias="Symfony\Component\Security\Guard\GuardAuthenticatorHandler" />
     </services>
 </container>
