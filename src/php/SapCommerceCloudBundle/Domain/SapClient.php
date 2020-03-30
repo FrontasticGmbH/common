@@ -26,6 +26,12 @@ class SapClient
     /** @var array<string, string> */
     private $urlReplacements;
 
+    /** @var HttpClient\Options */
+    private $readClientOptions;
+
+    /** @var HttpClient\Options */
+    private $writeClientOptions;
+
     public function __construct(
         HttpClient $httpClient,
         string $hostUrl,
@@ -44,6 +50,14 @@ class SapClient
             '{catalogId}' => $catalogId,
             '{catalogVersionId}' => $catalogVersionId,
         ];
+
+        $defaultTimeout = (int)getenv('http_client_timeout');
+        $this->readClientOptions = new HttpClient\Options([
+            'timeout' => max(2, $defaultTimeout),
+        ]);
+        $this->writeClientOptions = new HttpClient\Options([
+            'timeout' => max(10, $defaultTimeout),
+        ]);
     }
 
     /**
@@ -62,7 +76,7 @@ class SapClient
     public function get(string $urlTemplate, array $parameters = []): PromiseInterface
     {
         return $this->httpClient
-            ->getAsync($this->buildUrl($urlTemplate, $parameters))
+            ->getAsync($this->buildUrl($urlTemplate, $parameters), '', [], $this->readClientOptions)
             ->then(function (HttpClient\Response $response): array {
                 return $this->parseResponse($response);
             });
@@ -81,7 +95,8 @@ class SapClient
                 $body,
                 [
                     'Content-Type: application/json',
-                ]
+                ],
+                $this->writeClientOptions
             )
             ->then(function (HttpClient\Response $response): array {
                 return $this->parseResponse($response);
