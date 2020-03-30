@@ -2,6 +2,8 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain;
 
+use Frontastic\Common\AccountApiBundle\Domain\Address;
+
 interface CartApi
 {
     public function getForUser(string $userId, string $locale): Cart;
@@ -45,9 +47,9 @@ interface CartApi
 
     public function setCustomField(Cart $cart, array $fields, string $locale = null): Cart;
 
-    public function setShippingAddress(Cart $cart, array $address, string $locale = null): Cart;
+    public function setShippingAddress(Cart $cart, Address $address, string $locale = null): Cart;
 
-    public function setBillingAddress(Cart $cart, array $address, string $locale = null): Cart;
+    public function setBillingAddress(Cart $cart, Address $address, string $locale = null): Cart;
 
     public function addPayment(Cart $cart, Payment $payment, ?array $custom = null, string $locale = null): Cart;
 

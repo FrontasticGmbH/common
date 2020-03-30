@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\SapCommerceCloudBundle\Domain;
 
+use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
@@ -144,14 +145,14 @@ class SapCartApi implements CartApi
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function setShippingAddress(Cart $cart, array $address, string $locale = null): Cart
+    public function setShippingAddress(Cart $cart, Address $address, string $locale = null): Cart
     {
         list($userId, $sapCartId) = $this->splitCartId($cart->cartId);
 
         $this->client
             ->post(
                 '/rest/v2/{siteId}/users/' . $userId . '/carts/' . $sapCartId . '/addresses/delivery',
-                $address,
+                (array)$address,
                 $this->createLocaleFromString($locale)->toQueryParameters()
             )
             ->then(function (array $data): void {
@@ -164,7 +165,7 @@ class SapCartApi implements CartApi
         return $cart;
     }
 
-    public function setBillingAddress(Cart $cart, array $address, string $locale = null): Cart
+    public function setBillingAddress(Cart $cart, Address $address, string $locale = null): Cart
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }

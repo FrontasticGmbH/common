@@ -13,15 +13,6 @@ use Frontastic\Common\ReplicatorBundle\Domain\Project;
 
 class AnonymousCartTest extends FrontasticApiTestCase
 {
-    const FRONTASTIC_ADDRESS = [
-        'lastName' => 'FRONTASTIC GmbH',
-        'streetName' => 'Hafenweg',
-        'streetNumber' => '16',
-        'postalCode' => '48155',
-        'city' => 'Münster',
-        'country' => 'DE',
-    ];
-
     /**
      * @dataProvider projectAndLanguage
      */
@@ -96,10 +87,11 @@ class AnonymousCartTest extends FrontasticApiTestCase
         $cartApi = $this->getCartApiForProject($project);
 
         $cartApi->startTransaction($originalCart);
-        $cartApi->setShippingAddress($originalCart, self::FRONTASTIC_ADDRESS, $language);
+        $cartApi->setShippingAddress($originalCart, $this->getFrontasticAddress(), $language);
         $updatedCart = $cartApi->commit($language);
 
-        $this->assertFrontasticAddress($updatedCart->shippingAddress);
+        $this->assertInstanceOf(Address::class, $updatedCart->shippingAddress);
+        $this->assertEquals($this->getFrontasticAddress(), $updatedCart->shippingAddress);
     }
 
     /**
@@ -113,11 +105,7 @@ class AnonymousCartTest extends FrontasticApiTestCase
 
         $cartApi->startTransaction($cart);
         $cartApi->addToCart($cart, $this->lineItemForProduct($this->getAProduct($project, $language)), $language);
-        $cartApi->setShippingAddress(
-            $cart,
-            self::FRONTASTIC_ADDRESS,
-            $language
-        );
+        $cartApi->setShippingAddress($cart, $this->getFrontasticAddress(), $language);
         $cart = $cartApi->commit($language);
 
         $order = $cartApi->order($cart);
@@ -158,26 +146,16 @@ class AnonymousCartTest extends FrontasticApiTestCase
         ]);
     }
 
-    private function assertFrontasticAddress(?Address $address): void
+    private function getFrontasticAddress(): Address
     {
-        $this->assertInstanceOf(Address::class, $address);
-
-        $this->assertSame(self::FRONTASTIC_ADDRESS['lastName'], $address->lastName);
-        $this->assertSame(self::FRONTASTIC_ADDRESS['streetName'], $address->streetName);
-        $this->assertSame(self::FRONTASTIC_ADDRESS['streetNumber'], $address->streetNumber);
-        $this->assertSame(self::FRONTASTIC_ADDRESS['postalCode'], $address->postalCode);
-        $this->assertSame(self::FRONTASTIC_ADDRESS['city'], $address->city);
-        $this->assertSame(self::FRONTASTIC_ADDRESS['country'], $address->country);
-
-        $this->assertNull($address->addressId);
-        $this->assertNull($address->salutation);
-        $this->assertNull($address->firstName);
-        $this->assertNull($address->additionalStreetInfo);
-        $this->assertNull($address->additionalAddressInfo);
-        $this->assertNull($address->phone);
-
-        $this->assertFalse($address->isDefaultBillingAddress);
-        $this->assertFalse($address->isDefaultShippingAddress);
+        return new Address([
+            'lastName' => 'FRONTASTIC GmbH',
+            'streetName' => 'Hafenweg',
+            'streetNumber' => '16',
+            'postalCode' => '48155',
+            'city' => 'Münster',
+            'country' => 'DE',
+        ]);
     }
 
     private function requireAnonymousCheckout(Project $project): void
