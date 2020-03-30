@@ -165,7 +165,7 @@ class AccountAuthController extends Controller
         return $this->get('frontastic.user.guard_handler')->authenticateUserAndHandleSuccess(
             $account,
             $request,
-            $this->get(Authenticator::class),
+            $this->get('Frontastic\Catwalk\FrontendBundle\Security\Authenticator'),
             'api'
         );
     }
