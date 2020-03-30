@@ -2,12 +2,8 @@
 
 namespace Frontastic\Common\AccountApiBundle\Domain;
 
-use Symfony\Component\HttpFoundation\Request;
-use QafooLabs\MVC\Exception\UnauthenticatedAccountException;
-
-use Frontastic\Common\CoreBundle\Domain\Mailer;
-
 use Frontastic\Common\CartApiBundle\Domain\Cart;
+use Frontastic\Common\CoreBundle\Domain\Mailer;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Central API entry point is OK to have many public methods.
@@ -17,12 +13,12 @@ class AccountService
     /**
      * Account gateway
      *
-     * @var AccountGateway
+     * @var AccountApi|null
      */
     private $accountApi;
 
     /**
-     * @var Mailer
+     * @var Mailer|null
      */
     private $mailer;
 
@@ -35,7 +31,7 @@ class AccountService
     public function getSessionFor(Account $account = null)
     {
         return new Session([
-            'loggedIn' => (bool) $account,
+            'loggedIn' => (bool)$account,
             'account' => $account,
         ]);
     }
