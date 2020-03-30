@@ -2,24 +2,16 @@
 
 namespace Frontastic\Common\AccountApiBundle\Controller;
 
+use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
+use Frontastic\Common\AccountApiBundle\Domain\Account;
+use Frontastic\Common\CoreBundle\Domain\ErrorResult;
+use QafooLabs\MVC\RedirectRoute;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
-
-use QafooLabs\MVC\RedirectRoute;
-
-use Frontastic\Common\AccountApiBundle\Domain\Account;
-use Frontastic\Common\AccountApiBundle\Domain\Address;
-use Frontastic\Common\AccountApiBundle\Domain\Session;
-use Frontastic\Common\AccountApiBundle\Domain\AuthentificationInformation;
-
-use Frontastic\Common\CoreBundle\Domain\ErrorResult;
-use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
-use Frontastic\Catwalk\FrontendBundle\Security\Authenticator;
 
 class AccountAuthController extends Controller
 {
@@ -42,7 +34,7 @@ class AccountAuthController extends Controller
             'birthday' => isset($body['birthdayYear']) ?
                 new \DateTimeImmutable(
                     $body['birthdayYear'] .
-                    '-' . ($body['birthdayMonth'] ?? 1 ) .
+                    '-' . ($body['birthdayMonth'] ?? 1) .
                     '-' . ($body['birthdayDay'] ?? 1) .
                     'T12:00'
                 ) : null,
