@@ -5,7 +5,6 @@ namespace Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
-use Frontastic\Common\AccountApiBundle\Domain\Payment;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
@@ -17,7 +16,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class Commercetools implements AccountApi
 {
     /**
-     * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client
+     * @var Client
      */
     private $client;
 
@@ -28,20 +27,13 @@ class Commercetools implements AccountApi
 
     const TYPE_NAME = 'frontastic-customer-type';
 
-    /**
-     * Commercetools constructor.
-     *
-     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client $client
-     */
     public function __construct(Client $client)
     {
         $this->client = $client;
     }
 
     /**
-     * @param string $email
-     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
     public function get(string $email): Account
@@ -62,10 +54,6 @@ class Commercetools implements AccountApi
         }
     }
 
-    /**
-     * @param string $token
-     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
-     */
     public function confirmEmail(string $token): Account
     {
         try {
@@ -137,9 +125,7 @@ class Commercetools implements AccountApi
     }
 
     /**
-     * @param string $token
-     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
     public function verifyEmail(string $token): Account
@@ -155,9 +141,7 @@ class Commercetools implements AccountApi
     }
 
     /**
-     * @param \Frontastic\Common\AccountApiBundle\Domain\Account $account
-     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
     public function update(Account $account): Account
@@ -197,11 +181,7 @@ class Commercetools implements AccountApi
     }
 
     /**
-     * @param string $accountId
-     * @param string $oldPassword
-     * @param string $newPassword
-     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
     public function updatePassword(string $accountId, string $oldPassword, string $newPassword): Account
@@ -221,9 +201,7 @@ class Commercetools implements AccountApi
     }
 
     /**
-     * @param \Frontastic\Common\AccountApiBundle\Domain\Account $account
-     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
     public function generatePasswordResetToken(Account $account): Account
@@ -245,10 +223,7 @@ class Commercetools implements AccountApi
     }
 
     /**
-     * @param string $token
-     * @param string $newPassword
-     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
     public function resetPassword(string $token, string $newPassword): Account
@@ -299,9 +274,8 @@ class Commercetools implements AccountApi
     }
 
     /**
-     * @param string $accountId
-     * @return \Frontastic\Common\AccountApiBundle\Domain\Account[]
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @return Account[]
+     * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
     public function getAddresses(string $accountId): array
@@ -310,10 +284,7 @@ class Commercetools implements AccountApi
     }
 
     /**
-     * @param string $accountId
-     * @param \Frontastic\Common\AccountApiBundle\Domain\Address $address
-     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
     public function addAddress(string $accountId, Address $address): Account
@@ -347,10 +318,7 @@ class Commercetools implements AccountApi
     }
 
     /**
-     * @param string $accountId
-     * @param \Frontastic\Common\AccountApiBundle\Domain\Address $address
-     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
     public function updateAddress(string $accountId, Address $address): Account
@@ -385,10 +353,7 @@ class Commercetools implements AccountApi
     }
 
     /**
-     * @param string $accountId
-     * @param string $addressId
-     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
     public function removeAddress(string $accountId, string $addressId): Account
@@ -411,10 +376,7 @@ class Commercetools implements AccountApi
     }
 
     /**
-     * @param string $accountId
-     * @param string $addressId
-     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
     public function setDefaultBillingAddress(string $accountId, string $addressId): Account
@@ -437,10 +399,7 @@ class Commercetools implements AccountApi
     }
 
     /**
-     * @param string $accountId
-     * @param string $addressId
-     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
     public function setDefaultShippingAddress(string $accountId, string $addressId): Account
@@ -480,8 +439,7 @@ class Commercetools implements AccountApi
     }
 
     /**
-     * @param array $account
-     * @return \Frontastic\Common\AccountApiBundle\Domain\Address[]
+     * @return Address[]
      */
     private function mapAddresses(array $account): array
     {
@@ -529,7 +487,7 @@ class Commercetools implements AccountApi
      * Use this with care for features necessary in your customer and talk with
      * Frontastic about provising an abstraction.
      *
-     * @return \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client
+     * @return Client
      */
     public function getDangerousInnerClient()
     {
@@ -537,8 +495,7 @@ class Commercetools implements AccountApi
     }
 
     /**
-     * @return array
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      */
     public function getCustomerType(): array
     {
@@ -556,8 +513,7 @@ class Commercetools implements AccountApi
     }
 
     /**
-     * @return array
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      */
     private function createCustomerType(): array
     {
