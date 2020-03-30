@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Frontastic\Common\ShopwareBundle\Domain\Search\Filter;
+namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Filter;
 
 use InvalidArgumentException;
 
@@ -10,11 +10,6 @@ use InvalidArgumentException;
  */
 class Equals extends AbstractFilter
 {
-    public function getType(): string
-    {
-        return 'equals';
-    }
-
     protected function assertFilter(): void
     {
         if ($this->value !== null && !is_string($this->value) && !is_numeric($this->value) && !is_bool($this->value)) {
@@ -22,5 +17,10 @@ class Equals extends AbstractFilter
                 sprintf('Value must be string or number, %s given', gettype($this->value))
             );
         }
+    }
+
+    protected function getType(): string
+    {
+        return 'equals';
     }
 }

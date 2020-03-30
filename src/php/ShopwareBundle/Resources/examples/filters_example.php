@@ -1,11 +1,11 @@
 <?php
 
-use Frontastic\Common\ShopwareBundle\Domain\Search\Filter\Contains;
-use Frontastic\Common\ShopwareBundle\Domain\Search\Filter\Equals;
-use Frontastic\Common\ShopwareBundle\Domain\Search\Filter\EqualsAny;
-use Frontastic\Common\ShopwareBundle\Domain\Search\Filter\Multi;
-use Frontastic\Common\ShopwareBundle\Domain\Search\Filter\Not;
-use Frontastic\Common\ShopwareBundle\Domain\Search\Filter\Range;
+use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Filter\Contains;
+use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Filter\Equals;
+use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Filter\EqualsAny;
+use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Filter\Multi;
+use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Filter\Not;
+use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Filter\Range;
 
 # Filters example
 

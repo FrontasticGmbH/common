@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Frontastic\Common\ShopwareBundle\Domain\Search\Filter;
+namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Filter;
 
 /**
  * @see https://docs.shopware.com/en/shopware-platform-dev-en/api/filter-search-limit#range
@@ -14,11 +14,6 @@ class Range extends AbstractFilter
         'lt',
         'lte'
     ];
-
-    public function getType(): string
-    {
-        return 'range';
-    }
 
     public function jsonSerialize(): array
     {
@@ -44,5 +39,10 @@ class Range extends AbstractFilter
                 )
             );
         }
+    }
+
+    protected function getType(): string
+    {
+        return 'range';
     }
 }
