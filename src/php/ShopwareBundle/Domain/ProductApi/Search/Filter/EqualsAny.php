@@ -2,8 +2,7 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Filter;
 
-use Frontastic\Common\ShopwareBundle\Domain\Search\SearchFilterInterface;
-use Kore\DataObject\DataObject;
+use InvalidArgumentException;
 
 /**
  * @see https://docs.shopware.com/en/shopware-platform-dev-en/api/filter-search-limit#equalsAny
@@ -14,7 +13,7 @@ class EqualsAny extends AbstractFilter
     protected function assertFilter(): void
     {
         if (!is_array($this->value)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf('Value must be array, %s given', gettype($this->value))
             );
         }
