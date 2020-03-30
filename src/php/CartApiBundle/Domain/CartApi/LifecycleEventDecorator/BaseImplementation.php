@@ -136,8 +136,12 @@ abstract class BaseImplementation
     }
 
     /*** setShippingAddress() *****************************************************************************************/
-    public function beforeSetShippingAddress(CartApi $cartApi, Cart $cart, Address $address, string $locale = null): void
-    {
+    public function beforeSetShippingAddress(
+        CartApi $cartApi,
+        Cart $cart,
+        Address $address,
+        string $locale = null
+    ): void {
     }
 
     public function afterSetShippingAddress(CartApi $cartApi, Cart $cart): ?Cart
