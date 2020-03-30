@@ -377,7 +377,7 @@ class ProductsTest extends FrontasticApiTestCase
         $sku = $product->variants[0]->sku;
         $this->assertNotEmptyString($sku);
 
-        $productsBySku = $this->queryProducts($project, $language, ['skus' => [$sku, self::NON_EXISTING_SKU]]);
+        $productsBySku = $this->queryProducts($project, $language, ['skus' => [$sku]]);
         $this->assertSingleProductResult($product, $productsBySku);
     }
 
@@ -391,7 +391,7 @@ class ProductsTest extends FrontasticApiTestCase
         $this->assertNotEmptyString($productId);
 
         $productsByProductId =
-            $this->queryProducts($project, $language, ['productIds' => [$productId, self::NON_EXISTING_PRODUCT_ID]]);
+            $this->queryProducts($project, $language, ['productIds' => [$productId]]);
         $this->assertSingleProductResult($product, $productsByProductId);
     }
 

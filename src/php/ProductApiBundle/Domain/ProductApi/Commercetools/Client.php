@@ -10,7 +10,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client\Re
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
 use League\OAuth2\Client\Grant\ClientCredentials;
-use League\OAuth2\Client\Token\AccessToken;
+use League\OAuth2\Client\Token\AccessTokenInterface;
 
 class Client
 {
@@ -25,6 +25,7 @@ class Client
     private $cache;
 
     private $accessToken;
+
     /**
      * @var string
      */
@@ -78,10 +79,7 @@ class Client
     }
 
     /**
-     * @param string $uri
-     * @param array $parameters
-     * @return \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client\ResultSet
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      * @deprecated Use `fetchAsync()->wait()` instead
      */
     public function fetch(string $uri, array $parameters = []): ResultSet
@@ -90,8 +88,6 @@ class Client
     }
 
     /**
-     * @param string $uri
-     * @param array $parameters
      * @return PromiseInterface Containing a {@link ResultSet}
      */
     public function fetchAsync(string $uri, array $parameters = []): PromiseInterface
@@ -103,11 +99,7 @@ class Client
     }
 
     /**
-     * @param string $uri
-     * @param string $id
-     * @param array $parameters
-     * @return array
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      * @deprecated Use `fetchAsyncById()->wait()` instead
      */
     public function fetchById(string $uri, string $id, array $parameters = []): array
@@ -121,11 +113,7 @@ class Client
     }
 
     /**
-     * @param string $uri
-     * @param array $parameters
-     * @param array $headers
-     * @return array
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      */
     public function get(string $uri, array $parameters = [], array $headers = []): array
     {
@@ -133,12 +121,7 @@ class Client
     }
 
     /**
-     * @param string $uri
-     * @param array $parameters
-     * @param array $headers
-     * @param string $body
-     * @return array
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      */
     public function post(string $uri, array $parameters = [], array $headers = [], string $body = ''): array
     {
@@ -146,27 +129,13 @@ class Client
     }
 
     /**
-     * @param string $uri
-     * @param array $parameters
-     * @param array $headers
-     * @param string $body
-     * @return array
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      */
     public function delete(string $uri, array $parameters = [], array $headers = [], string $body = ''): array
     {
         return $this->request('DELETE', $uri, $parameters, $headers, $body)->wait();
     }
 
-    /**
-     * @param string $method
-     * @param string $uri
-     * @param array $parameters
-     * @param array $headers
-     * @param string $body
-     * @return array
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
-     */
     public function request(
         string $method,
         string $uri,
@@ -278,7 +247,7 @@ class Client
         return ($this->accessToken = (string)$accessToken);
     }
 
-    private function obtainAccessToken(): AccessToken
+    private function obtainAccessToken(): AccessTokenInterface
     {
         // Scopes: "view_products" or "manage_project"
 

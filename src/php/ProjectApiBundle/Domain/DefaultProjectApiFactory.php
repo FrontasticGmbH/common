@@ -5,6 +5,9 @@ namespace Frontastic\Common\ProjectApiBundle\Domain;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFactory;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\SapProjectApi;
 
 class DefaultProjectApiFactory implements ProjectApiFactory
 {
@@ -16,14 +19,28 @@ class DefaultProjectApiFactory implements ProjectApiFactory
     /**
      * @var CommercetoolsLocaleCreatorFactory
      */
-    private $localeCreatorFactory;
+    private $commercetoolsLocaleCreatorFactory;
+
+    /**
+     * @var SapClientFactory
+     */
+    private $sapClientFactory;
+
+    /**
+     * @var SapLocaleCreatorFactory
+     */
+    private $sapLocaleCreatorFactory;
 
     public function __construct(
         ClientFactory $commercetoolsClientFactory,
-        CommercetoolsLocaleCreatorFactory $localeCreatorFactory
+        CommercetoolsLocaleCreatorFactory $commercetoolsLocaleCreatorFactory,
+        SapClientFactory $sapClientFactory,
+        SapLocaleCreatorFactory $sapLocaleCreatorFactory
     ) {
         $this->commercetoolsClientFactory = $commercetoolsClientFactory;
-        $this->localeCreatorFactory = $localeCreatorFactory;
+        $this->commercetoolsLocaleCreatorFactory = $commercetoolsLocaleCreatorFactory;
+        $this->sapClientFactory = $sapClientFactory;
+        $this->sapLocaleCreatorFactory = $sapLocaleCreatorFactory;
     }
 
     public function factor(Project $project): ProjectApi
@@ -35,7 +52,14 @@ class DefaultProjectApiFactory implements ProjectApiFactory
                 $client = $this->commercetoolsClientFactory->factorForProjectAndType($project, 'product');
                 return new ProjectApi\Commercetools(
                     $client,
-                    $this->localeCreatorFactory->factor($project, $client),
+                    $this->commercetoolsLocaleCreatorFactory->factor($project, $client),
+                    $project->languages
+                );
+            case 'sap-commerce-cloud':
+                $client = $this->sapClientFactory->factorForProjectAndType($project, 'product');
+                return new SapProjectApi(
+                    $client,
+                    $this->sapLocaleCreatorFactory->factor($project, $client),
                     $project->languages
                 );
         }

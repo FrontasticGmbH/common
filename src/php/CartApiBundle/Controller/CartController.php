@@ -2,15 +2,15 @@
 
 namespace Frontastic\Common\CartApiBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-
+use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
+use Frontastic\Common\AccountApiBundle\Domain\Address;
+use Frontastic\Common\CartApiBundle\Domain\Cart;
+use Frontastic\Common\CartApiBundle\Domain\CartApi;
+use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CoreBundle\Controller\CrudController;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
-use Frontastic\Common\CartApiBundle\Domain\CartApi;
-use Frontastic\Common\CartApiBundle\Domain\Cart;
-use Frontastic\Common\CartApiBundle\Domain\LineItem;
-use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class CartController extends CrudController
 {
@@ -51,7 +51,7 @@ class CartController extends CrudController
                     'attributes' => $payload['variant']['attributes'],
                 ]),
                 'custom' => $payload['option'] ?: [],
-                'count' => $payload['count']
+                'count' => $payload['count'],
             ]),
             $context->locale
         );
@@ -208,15 +208,13 @@ class CartController extends CrudController
         if (!empty($payload['shipping']) || !empty($payload['billing'])) {
             $cart = $cartApi->setShippingAddress(
                 $cart,
-                $payload['shipping'] ?: $payload['billing'],
+                new Address($payload['shipping'] ?: $payload['billing']),
                 $context->locale
             );
-        }
 
-        if (!empty($payload['billing']) || !empty($payload['shipping'])) {
             $cart = $cartApi->setBillingAddress(
                 $cart,
-                $payload['billing'] ?: $payload['shipping'],
+                new Address($payload['billing'] ?: $payload['shipping']),
                 $context->locale
             );
         }
