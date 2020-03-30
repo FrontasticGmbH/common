@@ -7,6 +7,8 @@ configuration:
         anonymousCheckout: false
     sap-commerce-cloud:
         hostUrl: https://gdm-sap-io-1.demo.hybris.com
+    account:
+        engine: sap-commerce-cloud
     cart:
         engine: sap-commerce-cloud
     product:

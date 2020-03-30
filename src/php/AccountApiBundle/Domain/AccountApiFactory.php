@@ -2,9 +2,12 @@
 
 namespace Frontastic\Common\AccountApiBundle\Domain;
 
-use Doctrine\Common\Cache\Cache;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFactory;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\SapAccountApi;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\SapDataMapper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class AccountApiFactory
@@ -31,6 +34,20 @@ class AccountApiFactory
                     ->factorForProjectAndType($project, 'account');
 
                 $accountApi = new AccountApi\Commercetools($client);
+                break;
+
+            case 'sap-commerce-cloud':
+                $client = $this->container
+                    ->get(SapClientFactory::class)
+                    ->factorForProjectAndType($project, 'account');
+
+                $accountApi = new SapAccountApi(
+                    $client,
+                    $this->container
+                        ->get(SapLocaleCreatorFactory::class)
+                        ->factor($project, $client),
+                    new SapDataMapper($client)
+                );
                 break;
 
             default:
