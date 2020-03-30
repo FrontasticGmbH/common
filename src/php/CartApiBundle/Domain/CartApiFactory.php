@@ -6,6 +6,10 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFac
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFactory;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\SapCartApi;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\SapDataMapper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Factory
@@ -20,7 +24,17 @@ class CartApiFactory
     /**
      * @var CommercetoolsLocaleCreatorFactory
      */
-    private $localeCreatorFactory;
+    private $commercetoolsLocaleCreatorFactory;
+
+    /**
+     * @var SapClientFactory
+     */
+    private $sapClientFactory;
+
+    /**
+     * @var SapLocaleCreatorFactory
+     */
+    private $sapLocaleCreatorFactory;
 
     /**
      * @var OrderIdGenerator
@@ -34,12 +48,16 @@ class CartApiFactory
 
     public function __construct(
         ClientFactory $commercetoolsClientFactory,
-        CommercetoolsLocaleCreatorFactory $localeCreatorFactory,
+        CommercetoolsLocaleCreatorFactory $commercetoolsLocaleCreatorFactory,
+        SapClientFactory $sapClientFactory,
+        SapLocaleCreatorFactory $sapLocaleCreatorFactory,
         OrderIdGenerator $orderIdGenerator,
         iterable $decorators
     ) {
         $this->commercetoolsClientFactory = $commercetoolsClientFactory;
-        $this->localeCreatorFactory = $localeCreatorFactory;
+        $this->commercetoolsLocaleCreatorFactory = $commercetoolsLocaleCreatorFactory;
+        $this->sapClientFactory = $sapClientFactory;
+        $this->sapLocaleCreatorFactory = $sapLocaleCreatorFactory;
         $this->orderIdGenerator = $orderIdGenerator;
         $this->decorators = $decorators;
     }
@@ -54,7 +72,17 @@ class CartApiFactory
                 $cartApi = new CartApi\Commercetools(
                     $client,
                     new Mapper(),
-                    $this->localeCreatorFactory->factor($project, $client),
+                    $this->commercetoolsLocaleCreatorFactory->factor($project, $client),
+                    $this->orderIdGenerator
+                );
+                break;
+
+            case 'sap-commerce-cloud':
+                $client = $this->sapClientFactory->factorForProjectAndType($project, 'product');
+                $cartApi = new SapCartApi(
+                    $client,
+                    $this->sapLocaleCreatorFactory->factor($project, $client),
+                    new SapDataMapper($client),
                     $this->orderIdGenerator
                 );
                 break;

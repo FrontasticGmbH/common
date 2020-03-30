@@ -2,17 +2,30 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper;
 
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\QueryAwareDataMapperInterface;
-use Frontastic\Common\ShopwareBundle\Domain\QueryAwareDataMapperTrait;
 
 abstract class AbstractDataMapper implements DataMapperInterface
 {
-    private const DATA_KEY = 'data';
+    private const KEY_DATA = 'data';
+    private const KEY_AGGREGATIONS = 'aggregations';
 
-    protected function extractData(array $resource): array
+    protected function extractData(array $resource, array $fallback = []): array
     {
-        return $resource[self::DATA_KEY] ?? [];
+        return $resource[self::KEY_DATA] ?? $fallback;
+    }
+
+    protected function extractAggregations(array $resource): array
+    {
+        return $resource[self::KEY_AGGREGATIONS] ?? [];
+    }
+
+    protected function mapDangerousInnerData(array $innerData): ?array
+    {
+        if (!$this instanceof QueryAwareDataMapperInterface || $this->getQuery()->loadDangerousInnerData) {
+            return null;
+        }
+
+        return $innerData;
     }
 }

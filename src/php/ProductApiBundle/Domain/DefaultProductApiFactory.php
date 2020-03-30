@@ -5,6 +5,10 @@ namespace Frontastic\Common\ProductApiBundle\Domain;
 use Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFactory;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\SapDataMapper;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\SapProductApi;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\ShopwareProductApi;
 
 /**
@@ -16,6 +20,22 @@ class DefaultProductApiFactory implements ProductApiFactory
      * @var \Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator
      */
     private $serviceLocator;
+    private $commercetoolsClientFactory;
+
+    /**
+     * @var Commercetools\Locale\CommercetoolsLocaleCreatorFactory
+     */
+    private $commercetoolsLocaleCreatorFactory;
+
+    /**
+     * @var SapClientFactory
+     */
+    private $sapClientFactory;
+
+    /**
+     * @var SapLocaleCreatorFactory
+     */
+    private $sapLocaleCreatorFactory;
 
     /**
      * @var array
@@ -52,6 +72,14 @@ class DefaultProductApiFactory implements ProductApiFactory
                     $dataMapper,
                     $localeCreatorFactory->factor($project, $client),
                     $project->defaultLanguage
+                );
+                break;
+            case 'sap-commerce-cloud':
+                $client = $this->sapClientFactory->factorForProjectAndType($project, 'product');
+                $productApi = new SapProductApi(
+                    $client,
+                    $this->sapLocaleCreatorFactory->factor($project, $client),
+                    new SapDataMapper($client)
                 );
                 break;
             case 'shopware':

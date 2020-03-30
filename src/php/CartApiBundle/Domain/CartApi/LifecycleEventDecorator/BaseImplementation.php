@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain\CartApi\LifecycleEventDecorator;
 
+use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
@@ -135,8 +136,12 @@ abstract class BaseImplementation
     }
 
     /*** setShippingAddress() *****************************************************************************************/
-    public function beforeSetShippingAddress(CartApi $cartApi, Cart $cart, array $address, string $locale = null): void
-    {
+    public function beforeSetShippingAddress(
+        CartApi $cartApi,
+        Cart $cart,
+        Address $address,
+        string $locale = null
+    ): void {
     }
 
     public function afterSetShippingAddress(CartApi $cartApi, Cart $cart): ?Cart
@@ -145,7 +150,7 @@ abstract class BaseImplementation
     }
 
     /*** setBillingAddress() ******************************************************************************************/
-    public function beforeSetBillingAddress(CartApi $cartApi, Cart $cart, array $address, string $locale = null): void
+    public function beforeSetBillingAddress(CartApi $cartApi, Cart $cart, Address $address, string $locale = null): void
     {
     }
 

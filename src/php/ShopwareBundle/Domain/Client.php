@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain;
 
+use Exception;
 use Frontastic\Common\HttpClient;
 use Frontastic\Common\HttpClient\Response;
 use Frontastic\Common\ShopwareBundle\Domain\Exception\RequestException;
@@ -87,7 +88,7 @@ class Client implements ClientInterface
                 (string)$body,
                 $headers,
                 new HttpClient\Options([
-                    'timeout' => ($method === self::METHOD_POST ? max(10, $defaultTimeout) : max(2, $defaultTimeout)),
+                    'timeout' => ($method === self::METHOD_POST ? max(10, $defaultTimeout) : max(5, $defaultTimeout)),
                 ])
             )
             ->then(function (Response $response) {
@@ -107,7 +108,7 @@ class Client implements ClientInterface
             });
     }
 
-    protected function prepareException(Response $response): \Exception
+    protected function prepareException(Response $response): Exception
     {
         $errorData = json_decode($response->body);
         $exception = new RequestException(
@@ -116,11 +117,10 @@ class Client implements ClientInterface
         );
 
         if (isset($errorData->errors)) {
-            $errorData->errors = array_reverse($errorData->errors);
             foreach ($errorData->errors as $error) {
                 $exception = new RequestException(
-                    $error->message ?? 'Unknown error',
-                    $response->status ?? 503,
+                    $error->title ?? 'Unknown error',
+                    $error->status ?? 503,
                     $exception
                 );
             }
