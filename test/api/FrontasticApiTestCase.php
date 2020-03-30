@@ -2,6 +2,8 @@
 
 namespace Frontastic\Common\ApiTests;
 
+use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
+use Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\CartApiFactory;
 use Frontastic\Common\EnvironmentResolver;
@@ -203,6 +205,13 @@ class FrontasticApiTestCase extends KernelTestCase
     {
         return self::$container
             ->get(CartApiFactory::class)
+            ->factor($project);
+    }
+
+    protected function getAccountApiForProject(Project $project): AccountApi
+    {
+        return self::$container
+            ->get(AccountApiFactory::class)
             ->factor($project);
     }
 

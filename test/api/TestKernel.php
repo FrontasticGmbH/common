@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\ApiTests;
 
+use Frontastic\Common\AccountApiBundle\FrontasticCommonAccountApiBundle;
 use Frontastic\Common\CartApiBundle\FrontasticCommonCartApiBundle;
 use Frontastic\Common\CoreBundle\FrontasticCommonCoreBundle;
 use Frontastic\Common\Kernel;
@@ -27,9 +28,10 @@ class TestKernel extends Kernel
             new SwiftmailerBundle(),
 
             new FrontasticCommonCoreBundle(),
+            new FrontasticCommonAccountApiBundle(),
+            new FrontasticCommonCartApiBundle(),
             new FrontasticCommonProductApiBundle(),
             new FrontasticCommonProjectApiBundle(),
-            new FrontasticCommonCartApiBundle(),
             new FrontasticCommonSapCommerceCloudBundle(),
         ];
     }
