@@ -11,6 +11,11 @@
             <tag name="shopware.data_mapper"/>
         </instanceof>
 
+        <prototype namespace="Frontastic\Common\ShopwareBundle\Domain\"
+                   resource="../../Domain"
+                   exclude="../../Domain/{Search}"
+                   autoconfigure="true"/>
+
         <service id="Frontastic\Common\ShopwareBundle\Domain\ClientFactory">
             <argument type="service" id="Frontastic\Common\HttpClient"/>
 
@@ -19,7 +24,6 @@
 
         <service id="Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory">
             <argument type="service" id="Frontastic\Common\ProjectApiBundle\Domain\ProjectApiFactory"/>
-            <argument type="service" id="Frontastic\Catwalk\ApiCoreBundle\Domain\Context"/>
             <tag name="frontastic.common.api_integration.factory" key="shopware.locale_creator_factory"/>
         </service>
 
