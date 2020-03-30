@@ -5,6 +5,7 @@ namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper;
 use Frontastic\Common\ProductApiBundle\Domain\Category;
 use Frontastic\Common\ShopwareBundle\Domain\QueryAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\QueryAwareDataMapperTrait;
+use Frontastic\Common\ShopwareBundle\Domain\Slugger;
 
 class CategoryMapper extends AbstractDataMapper implements QueryAwareDataMapperInterface
 {
@@ -23,26 +24,8 @@ class CategoryMapper extends AbstractDataMapper implements QueryAwareDataMapperI
     public function map(array $resource)
     {
         $result = [];
-//        $sortMapByDepth = [];
         foreach ($this->extractData($resource) as $categoryData) {
             $category = $this->mapDataToCategory($categoryData);
-
-//            if (!isset($sortMapByDepth[$category->depth])) {
-//                $sortMapByDepth[$category->depth] = [];
-//            }
-//
-//            $refByDepth =& $sortMapByDepth[$category->depth];
-//
-//            if (!empty($categoryData['afterCategoryId'])) {
-//                $refByDepth[] = $category->categoryId;
-//            } else {
-//                array_splice(
-//                    $refByDepth,
-//                    array_search($categoryData['afterCategoryId'], $refByDepth, true),
-//                    0,
-//                    $category['afterCategoryId']
-//                );
-//            }
 
             if ($this->getQuery()->loadDangerousInnerData) {
                 $category->dangerousInnerCategory = $categoryData;
@@ -56,13 +39,14 @@ class CategoryMapper extends AbstractDataMapper implements QueryAwareDataMapperI
 
     private function mapDataToCategory(array $categoryData): Category
     {
+        $name = $categoryData['translated']['name'] ?? $categoryData['name'];
+
         return new Category([
             'categoryId' => $categoryData['id'],
-            'name' => $categoryData['translated']['name'] ?? $categoryData['name'],
-
-            //@TODO: shopware API appears not to return slugs
-            'slug' => '',
-            'depth' => $categoryData['level'],
+            'name' => $name,
+            'slug' => Slugger::slugify($name),
+            // Subtracting 1 because Shopware starts level with 1, while Frontastic with 0
+            'depth' => $categoryData['level'] - 1,
             'path' => $this->resolveCategoryPath($categoryData),
         ]);
     }
@@ -71,16 +55,19 @@ class CategoryMapper extends AbstractDataMapper implements QueryAwareDataMapperI
     {
         // Case for root category
         if ($categoryData['path'] === null) {
-            return $categoryData['id'];
+            return self::PATH_SEPARATOR_FRONTASTIC . $categoryData['id'];
         }
 
         // Path just includes parent path
         $path = trim($categoryData['path'], self::PATH_SEPARATOR_SHOPWARE);
 
-        $pathParts = array_merge(explode(self::PATH_SEPARATOR_SHOPWARE, $path), [
-            $categoryData['id'],
-        ]);
+        $pathParts = array_merge(
+            explode(self::PATH_SEPARATOR_SHOPWARE, $path),
+            [
+                $categoryData['id'],
+            ]
+        );
 
-        return implode(self::PATH_SEPARATOR_FRONTASTIC, $pathParts);
+        return self::PATH_SEPARATOR_FRONTASTIC . implode(self::PATH_SEPARATOR_FRONTASTIC, $pathParts);
     }
 }
