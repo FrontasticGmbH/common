@@ -254,8 +254,10 @@ class CartController extends CrudController
     {
         $payload = $this->getJsonContent($request);
         return [
-            'cart' => $this->getCartApi($context)->removeDiscountCode($this->getCart($context, $request),
-                $payload['discountId']),
+            'cart' => $this->getCartApi($context)->removeDiscountCode(
+                $this->getCart($context, $request),
+                $payload['discountId']
+            ),
         ];
     }
 
