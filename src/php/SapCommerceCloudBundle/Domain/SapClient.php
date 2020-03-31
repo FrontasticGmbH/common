@@ -75,30 +75,41 @@ class SapClient
 
     public function get(string $urlTemplate, array $parameters = []): PromiseInterface
     {
-        return $this->httpClient
-            ->getAsync($this->buildUrl($urlTemplate, $parameters), '', [], $this->readClientOptions)
-            ->then(function (HttpClient\Response $response): array {
-                return $this->parseResponse($response);
-            });
+        return $this->request('GET', $urlTemplate, null, $parameters);
+    }
+
+    public function delete(string $urlTemplate, array $parameters = []): PromiseInterface
+    {
+        return $this->request('DELETE', $urlTemplate, null, $parameters);
     }
 
     public function post(string $urlTemplate, array $payload, array $parameters = []): PromiseInterface
     {
-        $body = json_encode($payload);
-        if ($body === false) {
-            throw new \RuntimeException('Invalid JSON payload');
+        return $this->request('POST', $urlTemplate, $payload, $parameters);
+    }
+
+    private function request(string $method, string $urlTemplate, ?array $payload, array $parameters): PromiseInterface
+    {
+        $body = '';
+        $headers = [];
+
+        if ($payload !== null) {
+            $body = json_encode($payload);
+            if ($body === false) {
+                throw new \RuntimeException('Invalid JSON payload');
+            }
+            $headers[] = 'Content-Type: application/json';
         }
 
         return $this->httpClient
-            ->postAsync(
+            ->requestAsync(
+                $method,
                 $this->buildUrl($urlTemplate, $parameters),
                 $body,
-                [
-                    'Content-Type: application/json',
-                ],
-                $this->writeClientOptions
+                $headers,
+                $method === 'GET' ? $this->readClientOptions : $this->writeClientOptions
             )
-            ->then(function (HttpClient\Response $response): array {
+            ->then(function (HttpClient\Response $response): ?array {
                 return $this->parseResponse($response);
             });
     }
@@ -119,7 +130,7 @@ class SapClient
         return $url;
     }
 
-    private function parseResponse(HttpClient\Response $response): array
+    private function parseResponse(HttpClient\Response $response): ?array
     {
         $status = $response->status ?? 503;
         if ($status < 200 || $status >= 300) {
@@ -128,6 +139,10 @@ class SapClient
                 $errorData['errors'][0]['message'] ?? 'Internal Server Error',
                 $status
             );
+        }
+
+        if ($response->body === '') {
+            return null;
         }
 
         $data = json_decode($response->body, true);

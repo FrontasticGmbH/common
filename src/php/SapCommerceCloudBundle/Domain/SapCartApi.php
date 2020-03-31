@@ -127,7 +127,15 @@ class SapCartApi implements CartApi
 
     public function removeLineItem(Cart $cart, LineItem $lineItem, string $locale = null): Cart
     {
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        list($userId, $sapCartId) = $this->splitCartId($cart->cartId);
+
+        $this->client
+            ->delete(
+                '/rest/v2/{siteId}/users/' . $userId . '/carts/' . $sapCartId . '/entries/' . $lineItem->lineItemId
+            )
+            ->wait();
+
+        return $cart;
     }
 
     public function setEmail(Cart $cart, string $email, string $locale = null): Cart

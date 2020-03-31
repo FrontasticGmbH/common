@@ -54,7 +54,7 @@ class AnonymousCartTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
-    public function testAddSingleProductToCart(Project $project, string $language): void
+    public function testAddAndRemoveSingleProductToCart(Project $project, string $language): void
     {
         $originalCart = $this->getAnonymousCart($project, $language);
         $product = $this->getAProduct($project, $language);
@@ -65,6 +65,7 @@ class AnonymousCartTest extends FrontasticApiTestCase
         $cartApi->addToCart($originalCart, $this->lineItemForProduct($product), $language);
         $updatedCart = $cartApi->commit($language);
 
+        $this->assertInternalType('array', $updatedCart->lineItems);
         $this->assertCount(1, $updatedCart->lineItems);
         foreach ($updatedCart->lineItems as $lineItem) {
             $this->assertInstanceOf(LineItem::class, $lineItem);
@@ -74,6 +75,13 @@ class AnonymousCartTest extends FrontasticApiTestCase
             $this->assertNotEmptyString($lineItem->type);
             $this->assertSame(1, $lineItem->count);
         }
+
+        $cartApi->startTransaction($updatedCart);
+        $cartApi->removeLineItem($updatedCart, $updatedCart->lineItems[0], $language);
+        $updatedCart = $cartApi->commit($language);
+
+        $this->assertInternalType('array', $updatedCart->lineItems);
+        $this->assertEmpty($updatedCart->lineItems);
     }
 
     /**
