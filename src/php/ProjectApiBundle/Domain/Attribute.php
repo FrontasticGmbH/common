@@ -34,13 +34,17 @@ class Attribute extends DataObject
     public $attributeId;
 
     /**
-     * @var string TYPE_*
+     * TYPE_*
+     *
+     * @var string
      */
     public $type;
 
     /**
-     * @var array<string, string>|null The labels with the locale as key and the actual label as value. `null` if the
-     *     label is unknown
+     * The labels with the locale as key and the actual label as value. `null`
+     * if the label is unknown
+     *
+     * @var [string, string]|null
      */
     public $label;
 

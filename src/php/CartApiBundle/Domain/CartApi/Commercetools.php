@@ -52,7 +52,7 @@ class Commercetools implements CartApi
     private $orderIdGenerator;
 
     /**
-     * @var Cart?
+     * @var ?Cart
      */
     private $inTransaction = null;
 

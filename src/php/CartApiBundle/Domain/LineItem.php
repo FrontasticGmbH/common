@@ -42,7 +42,9 @@ class LineItem extends DataObject
     public $discountedPrice;
 
     /**
-     * @var array Translatable discount texts, if any are applied
+     * Translatable discount texts, if any are applied
+     *
+     * @var array
      */
     public $discountTexts = [];
 

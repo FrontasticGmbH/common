@@ -50,10 +50,13 @@ class ProductQuery extends PaginatedQuery
     public $query;
 
     /**
+     * Filters that will be applied *before* the actual facets.  CommerceTools
+     * allowed a list of filter strings, too, but this is deprecated in
+     * commercetools.
+     *
      * @stability experimental This field might change to a more sophisticate structure
      *
-     * @var Filter[] filters that will be applied *before* the actual facets.
-     *               CommerceTools allowed a list of filter strings, too, but this is deprecated in commercetools.
+     * @var Filter[]
      */
     public $filter = [];
 
@@ -65,7 +68,7 @@ class ProductQuery extends PaginatedQuery
     /**
      * Map of sort attributes => sort order
      *
-     * @var array<string, string>
+     * @var string[]
      */
     public $sortAttributes = [];
 
