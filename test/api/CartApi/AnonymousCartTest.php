@@ -54,7 +54,7 @@ class AnonymousCartTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
-    public function testAddAndRemoveSingleProductToCart(Project $project, string $language): void
+    public function testAddUpdateAndRemoveSingleProductToCart(Project $project, string $language): void
     {
         $originalCart = $this->getAnonymousCart($project, $language);
         $product = $this->getAProduct($project, $language);
@@ -63,25 +63,38 @@ class AnonymousCartTest extends FrontasticApiTestCase
 
         $cartApi->startTransaction($originalCart);
         $cartApi->addToCart($originalCart, $this->lineItemForProduct($product), $language);
-        $updatedCart = $cartApi->commit($language);
+        $cartWithProductAdded = $cartApi->commit($language);
 
-        $this->assertInternalType('array', $updatedCart->lineItems);
-        $this->assertCount(1, $updatedCart->lineItems);
-        foreach ($updatedCart->lineItems as $lineItem) {
-            $this->assertInstanceOf(LineItem::class, $lineItem);
+        $this->assertInternalType('array', $cartWithProductAdded->lineItems);
+        $this->assertCount(1, $cartWithProductAdded->lineItems);
 
-            $this->assertNotEmptyString($lineItem->lineItemId);
-            $this->assertSame($product->name, $lineItem->name);
-            $this->assertNotEmptyString($lineItem->type);
-            $this->assertSame(1, $lineItem->count);
-        }
+        $addedLineItem = $cartWithProductAdded->lineItems[0];
+        $this->assertInstanceOf(LineItem::class, $addedLineItem);
+        $this->assertNotEmptyString($addedLineItem->lineItemId);
+        $this->assertSame($product->name, $addedLineItem->name);
+        $this->assertNotEmptyString($addedLineItem->type);
+        $this->assertSame(1, $addedLineItem->count);
 
-        $cartApi->startTransaction($updatedCart);
-        $cartApi->removeLineItem($updatedCart, $updatedCart->lineItems[0], $language);
-        $updatedCart = $cartApi->commit($language);
+        $cartApi->startTransaction($cartWithProductAdded);
+        $cartApi->updateLineItem($cartWithProductAdded, $addedLineItem, 3, null, $language);
+        $cartWithProductCountModified = $cartApi->commit($language);
 
-        $this->assertInternalType('array', $updatedCart->lineItems);
-        $this->assertEmpty($updatedCart->lineItems);
+        $this->assertInternalType('array', $cartWithProductCountModified->lineItems);
+        $this->assertCount(1, $cartWithProductCountModified->lineItems);
+
+        $lineItemWithModifiedCount = $cartWithProductCountModified->lineItems[0];
+        $this->assertInstanceOf(LineItem::class, $lineItemWithModifiedCount);
+        $this->assertSame($addedLineItem->lineItemId, $lineItemWithModifiedCount->lineItemId);
+        $this->assertSame($addedLineItem->name, $lineItemWithModifiedCount->name);
+        $this->assertSame($addedLineItem->type, $lineItemWithModifiedCount->type);
+        $this->assertSame(3, $lineItemWithModifiedCount->count);
+
+        $cartApi->startTransaction($cartWithProductCountModified);
+        $cartApi->removeLineItem($cartWithProductCountModified, $lineItemWithModifiedCount, $language);
+        $cartWithProductRemoved = $cartApi->commit($language);
+
+        $this->assertInternalType('array', $cartWithProductRemoved->lineItems);
+        $this->assertEmpty($cartWithProductRemoved->lineItems);
     }
 
     /**

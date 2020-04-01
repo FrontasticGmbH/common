@@ -122,7 +122,24 @@ class SapCartApi implements CartApi
         ?array $custom = null,
         string $locale = null
     ): Cart {
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        list($userId, $sapCartId) = $this->splitCartId($cart->cartId);
+
+        $this->client
+            ->put(
+                '/rest/v2/{siteId}/users/' . $userId . '/carts/' . $sapCartId . '/entries/' . $lineItem->lineItemId,
+                [
+                    'quantity' => $count,
+                ],
+                $this->createLocaleFromString($locale)->toQueryParameters()
+            )
+            ->then(function (array $data): void {
+                if ($data['statusCode'] !== 'success') {
+                    throw new CartApi\Exception\RequestException('Error adding item to cart');
+                }
+            })
+            ->wait();
+
+        return $cart;
     }
 
     public function removeLineItem(Cart $cart, LineItem $lineItem, string $locale = null): Cart

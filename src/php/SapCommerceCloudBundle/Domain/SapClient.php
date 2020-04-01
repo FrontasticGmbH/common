@@ -88,6 +88,11 @@ class SapClient
         return $this->request('POST', $urlTemplate, $payload, $parameters);
     }
 
+    public function put(string $urlTemplate, array $payload, array $parameters = []): PromiseInterface
+    {
+        return $this->request('PUT', $urlTemplate, $payload, $parameters);
+    }
+
     private function request(string $method, string $urlTemplate, ?array $payload, array $parameters): PromiseInterface
     {
         $body = '';
