@@ -33,7 +33,13 @@ class CommercetoolsTest extends TestCase
     {
         $this->clientMock = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->getMock();
         $this->localCreatorMock = $this->createMock(CommercetoolsLocaleCreator::class);
-        $this->api = new Commercetools($this->clientMock, new Mapper(), $this->localCreatorMock, 'en_GB');
+        $this->api = new Commercetools(
+            $this->clientMock,
+            new Mapper(),
+            $this->localCreatorMock,
+            new EmptyEnabledFacetService(),
+            'en_GB'
+        );
     }
 
     public function testQueryWithFacets()
