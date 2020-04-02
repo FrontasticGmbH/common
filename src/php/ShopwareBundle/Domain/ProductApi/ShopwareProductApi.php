@@ -12,44 +12,12 @@ use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper\CategoryMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper\ProductMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper\ProductResultMapper;
+use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Query\QueryOptionExpander;
+use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchCriteriaBuilder;
 use Frontastic\Common\ShopwareBundle\Domain\QueryAwareDataMapperInterface;
-use Frontastic\Common\ShopwareBundle\Domain\Search\Filter\Contains;
-use Frontastic\Common\ShopwareBundle\Domain\Search\Filter\Equals;
-use Frontastic\Common\ShopwareBundle\Domain\Search\Filter\EqualsAny;
 
 class ShopwareProductApi implements ProductApi
 {
-    private const PRODUCT_SOURCE_FIELDS = [
-        'id',
-        'productNumber',
-        'manufacturerNumber',
-        'versionId',
-        'name',
-        'description',
-        'categoryTree',
-        'translations',
-        'properties.id',
-        'properties.groupId',
-        'properties.name',
-        'properties.translation',
-        'tax',
-        'stock',
-        'children.id',
-        'children.productNumber',
-        'children.properties',
-        'availableStock',
-        'prices.quantityStart',
-        'prices.price.gross',
-        'manufacturer.id',
-        'manufacturer.name',
-        'manufacturer.translated',
-        'cover.media.url',
-    ];
-
-    private const FIELDS_WITH_NAT_SORTING_ENABLED = [
-        'productNumber',
-    ];
-
     /**
      * @var \Frontastic\Common\ShopwareBundle\Domain\Client
      */
@@ -65,24 +33,37 @@ class ShopwareProductApi implements ProductApi
      */
     private $mapperResolver;
 
+    /**
+     * @var \Frontastic\Common\ShopwareBundle\Domain\ProductApi\Options
+     */
+    private $options;
+
     public function __construct(Client $client, DataMapperResolver $mapperResolver, LocaleCreator $localeCreator)
     {
         $this->client = $client;
         $this->mapperResolver = $mapperResolver;
         $this->localeCreator = $localeCreator;
+        $this->options = new Options();
+    }
+
+    /**
+     * Overwrite default Shopware options.
+     *
+     * Explicitly NOT part of the ProductApi interface because Shopware specific and only to be used during
+     * factoring!
+     */
+    public function overwriteOptions(array $newOptions): void
+    {
+        $this->options = new Options($newOptions);
     }
 
     public function getCategories(CategoryQuery $query): array
     {
         $locale = $this->localeCreator->createLocaleFromString($query->locale);
 
-        $parameters = [
-            'offset' => $query->offset ?: 0,
-            'limit' => 500, //$query->limit,
-            'locale' => $locale->language,
-        ];
+        $criteria = SearchCriteriaBuilder::buildFromCategoryQuery($query);
 
-        return $this->client->get('/category', $parameters)
+        return $this->client->post('/category', [], [], $criteria)
             ->then(function ($response) use ($query) {
                 return $this->mapResponse($response, $query, CategoryMapper::MAPPER_NAME);
             })
@@ -96,6 +77,9 @@ class ShopwareProductApi implements ProductApi
 
     public function getProduct($query, string $mode = self::QUERY_SYNC): ?object
     {
+        $query = ProductApi\Query\SingleProductQuery::fromLegacyQuery($query);
+        $query->validate();
+
         $identifier = $query->sku;
         $parameters = [];
 
@@ -105,6 +89,8 @@ class ShopwareProductApi implements ProductApi
                 'useNumberAsId' => true
             ];
         }
+
+        // @TODO: build locale and pass it to request
 
         $promise = $this->client
             ->get("/product/{$identifier}", $parameters)
@@ -121,74 +107,11 @@ class ShopwareProductApi implements ProductApi
 
     public function query(ProductQuery $query, string $mode = self::QUERY_SYNC): object
     {
-        $body = [
-            'offset' => $query->offset,
-            'limit' => 10, //$query->limit,
-            'filter' => [
-                new Equals([
-                    'field' => 'parentId',
-                    'value' => null
-                ])
-            ],
-            'associations' => [
-                'children' => [
-                    'associations' => [
-                        'properties' => [],
-                    ]
-                ],
-                'options' => [],
-//                'categories' => [],
-                'properties' => [],
-                'manufacturer' => [],
-            ],
-            'source' => self::PRODUCT_SOURCE_FIELDS,
-        ];
-
-        $query->category = '44a73d002efb4ae1869959d862098b58';
-
-        if (!empty($query->query)) {
-            $body['term'] = $query->query;
-        }
-
-        if (!empty($query->productIds)) {
-            $body['ids'] = $query->productIds;
-        }
-
-        if (!empty($query->skus)) {
-            $body['filter'][] = new EqualsAny([
-                'field' => 'categoryTree',
-                'value' => $query->skus,
-            ]);
-        }
-
-        if (!empty($query->category)) {
-            $body['filter'][] = new Contains([
-                'field' => 'categoryTree',
-                'value' => $query->category,
-            ]);
-        }
-
-        if ($query->sortAttributes) {
-            $body['sort'] = array_map(
-                static function (string $field, string $direction): array {
-                    $result = [
-                        'field' => $field,
-                        'order' => ($direction === ProductQuery::SORT_ORDER_ASCENDING ? 'asc' : 'desc'),
-                    ];
-
-                    if (in_array($field, self::FIELDS_WITH_NAT_SORTING_ENABLED, true)) {
-                        $result['naturalSorting'] = true;
-                    }
-
-                    return $result;
-                },
-                array_keys($query->sortAttributes),
-                array_values($query->sortAttributes)
-            );
-        }
+        $query = QueryOptionExpander::expandQueryWithOptions($query, $this->options);
+        $criteria = SearchCriteriaBuilder::buildFromProductQuery($query);
 
         $promise = $this->client
-            ->post('/product', [], [], $body)
+            ->post('/product', [], [], $criteria)
             ->then(function ($response) use ($query) {
                 return $this->mapResponse($response, $query, ProductResultMapper::MAPPER_NAME);
             });
