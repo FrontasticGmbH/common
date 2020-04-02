@@ -71,13 +71,6 @@ class Commercetools implements CartApi
      */
     private $taxCategory = null;
 
-    /**
-     * Commercetools constructor.
-     *
-     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client $client
-     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper $mapper
-     * @param \Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator $orderIdGenerator
-     */
     public function __construct(
         Client $client,
         Mapper $mapper,
@@ -91,10 +84,7 @@ class Commercetools implements CartApi
     }
 
     /**
-     * @param string $userId
-     * @param string $localeString
-     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
     public function getForUser(string $userId, string $localeString): Cart
@@ -231,10 +221,7 @@ class Commercetools implements CartApi
     }
 
     /**
-     * @param string $anonymousId
-     * @param string $localeString
-     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
     public function getAnonymous(string $anonymousId, string $localeString): Cart
@@ -275,8 +262,6 @@ class Commercetools implements CartApi
     }
 
     /**
-     * @param string $cartId
-     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      * @throws \RuntimeException if cart with $cartId was not found
      */
     public function getById(string $cartId, string $localeString = null): Cart
@@ -289,11 +274,6 @@ class Commercetools implements CartApi
         );
     }
 
-    /**
-     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
-     * @param \Frontastic\Common\CartApiBundle\Domain\LineItem $lineItem
-     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
-     */
     public function addToCart(Cart $cart, LineItem $lineItem, string $localeString = null): Cart
     {
         $locale = $this->parseLocaleString($localeString);
@@ -305,11 +285,6 @@ class Commercetools implements CartApi
         return $this->addCustomToCart($cart, $lineItem, $locale);
     }
 
-    /**
-     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
-     * @param \Frontastic\Common\CartApiBundle\Domain\LineItem\Variant $lineItem
-     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
-     */
     private function addVariantToCart(Cart $cart, LineItem\Variant $lineItem, CommercetoolsLocale $locale): Cart
     {
         return $this->postCartActions(
@@ -329,11 +304,6 @@ class Commercetools implements CartApi
         );
     }
 
-    /**
-     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
-     * @param \Frontastic\Common\CartApiBundle\Domain\LineItem $lineItem
-     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
-     */
     private function addCustomToCart(Cart $cart, LineItem $lineItem, CommercetoolsLocale $locale): Cart
     {
         return $this->postCartActions(
@@ -398,11 +368,6 @@ class Commercetools implements CartApi
         return $this->postCartActions($cart, $actions, $this->parseLocaleString($localeString));
     }
 
-    /**
-     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
-     * @param \Frontastic\Common\CartApiBundle\Domain\LineItem $lineItem
-     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
-     */
     public function removeLineItem(Cart $cart, LineItem $lineItem, string $localeString = null): Cart
     {
         $locale = $this->parseLocaleString($localeString);
@@ -432,11 +397,6 @@ class Commercetools implements CartApi
         }
     }
 
-    /**
-     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
-     * @param string $email
-     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
-     */
     public function setEmail(Cart $cart, string $email, string $localeString = null): Cart
     {
         return $this->postCartActions(
@@ -504,12 +464,7 @@ class Commercetools implements CartApi
         return $this->postCartActions($cart, $actions, $this->parseLocaleString($localeString));
     }
 
-    /**
-     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
-     * @param array $address
-     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
-     */
-    public function setShippingAddress(Cart $cart, array $address, string $localeString = null): Cart
+    public function setShippingAddress(Cart $cart, Address $address, string $localeString = null): Cart
     {
         return $this->postCartActions(
             $cart,
@@ -523,12 +478,7 @@ class Commercetools implements CartApi
         );
     }
 
-    /**
-     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
-     * @param array $address
-     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
-     */
-    public function setBillingAddress(Cart $cart, array $address, string $localeString = null): Cart
+    public function setBillingAddress(Cart $cart, Address $address, string $localeString = null): Cart
     {
         return $this->postCartActions(
             $cart,
@@ -543,10 +493,7 @@ class Commercetools implements CartApi
     }
 
     /**
-     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
-     * @param \Frontastic\Common\CartApiBundle\Domain\Payment $payment
-     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
     public function addPayment(Cart $cart, Payment $payment, ?array $custom = null, string $localeString = null): Cart
@@ -621,9 +568,7 @@ class Commercetools implements CartApi
     }
 
     /**
-     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
-     * @return \Frontastic\Common\CartApiBundle\Domain\Order
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
     public function order(Cart $cart): Order
@@ -649,9 +594,7 @@ class Commercetools implements CartApi
     }
 
     /**
-     * @param string $orderId
-     * @return \Frontastic\Common\CartApiBundle\Domain\Order
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
     public function getOrder(string $orderId): Order
@@ -663,9 +606,8 @@ class Commercetools implements CartApi
     }
 
     /**
-     * @param string $accountId
-     * @return \Frontastic\Common\CartApiBundle\Domain\Order[]
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @return Order[]
+     * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
     public function getOrders(string $accountId): array
@@ -686,10 +628,6 @@ class Commercetools implements CartApi
         );
     }
 
-    /**
-     * @param array $cart
-     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
-     */
     private function mapCart(array $cart, CommercetoolsLocale $locale): Cart
     {
         /**
@@ -721,10 +659,6 @@ class Commercetools implements CartApi
         ]);
     }
 
-    /**
-     * @param array $order
-     * @return \Frontastic\Common\CartApiBundle\Domain\Order
-     */
     private function mapOrder(array $order, CommercetoolsLocale $locale = null): Order
     {
         if ($locale === null) {
@@ -788,21 +722,21 @@ class Commercetools implements CartApi
         ]);
     }
 
-    private function reverseMapAddress(array $address): array
+    private function reverseMapAddress(Address $address): array
     {
         return [
-            'id' => $address['addressId'] ?? null,
-            'salutation' => $address['salutation'] ?? null,
-            'firstName' => $address['firstName'] ?? null,
-            'lastName' => $address['lastName'] ?? null,
-            'streetName' => $address['streetName'] ?? null,
-            'streetNumber' => $address['streetNumber'] ?? null,
-            'additionalStreetInfo' => $address['additionalStreetInfo'] ?? null,
-            'additionalAddressInfo' => $address['additionalAddressInfo'] ?? null,
-            'postalCode' => $address['postalCode'] ?? null,
-            'city' => $address['city'] ?? null,
-            'country' => $address['country'] ?? null,
-            'phone' => $address['phone'] ?? null,
+            'id' => $address->addressId,
+            'salutation' => $address->salutation,
+            'firstName' => $address->firstName,
+            'lastName' => $address->lastName,
+            'streetName' => $address->streetName,
+            'streetNumber' => $address->streetNumber,
+            'additionalStreetInfo' => $address->additionalStreetInfo,
+            'additionalAddressInfo' => $address->additionalAddressInfo,
+            'postalCode' => $address->postalCode,
+            'city' => $address->city,
+            'country' => $address->country,
+            'phone' => $address->phone,
         ];
     }
 
@@ -819,8 +753,7 @@ class Commercetools implements CartApi
     }
 
     /**
-     * @param array $cart
-     * @return \Frontastic\Common\CartApiBundle\Domain\LineItem[]
+     * @return LineItem[]
      */
     private function mapLineItems(array $cart, CommercetoolsLocale $locale): array
     {
@@ -959,12 +892,9 @@ class Commercetools implements CartApi
     }
 
     /**
-     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
-     * @param array $actions
-     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      */
-    protected function postCartActions(Cart $cart, array $actions, CommercetoolsLocale $locale)
+    protected function postCartActions(Cart $cart, array $actions, CommercetoolsLocale $locale): Cart
     {
         if ($cart === $this->inTransaction) {
             $this->actions = array_merge(
@@ -993,17 +923,13 @@ class Commercetools implements CartApi
         );
     }
 
-    /**
-     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
-     */
     public function startTransaction(Cart $cart): void
     {
         $this->inTransaction = $cart;
     }
 
     /**
-     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
-     * @throws \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException
+     * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
     public function commit(string $localeString = null): Cart
@@ -1036,17 +962,11 @@ class Commercetools implements CartApi
         return $this->client;
     }
 
-    /**
-     * @param array $lineItemType
-     */
     public function setCustomLineItemType(array $lineItemType): void
     {
         $this->lineItemType = $lineItemType;
     }
 
-    /**
-     * @return array
-     */
     public function getCustomLineItemType(): array
     {
         if (!$this->lineItemType) {
@@ -1061,17 +981,11 @@ class Commercetools implements CartApi
         return $this->lineItemType;
     }
 
-    /**
-     * @param array $taxCategory
-     */
     public function setTaxCategory(array $taxCategory): void
     {
         $this->taxCategory = $taxCategory;
     }
 
-    /**
-     * @return array
-     */
     public function getTaxCategory(): array
     {
         if (!$this->taxCategory) {
@@ -1140,10 +1054,6 @@ class Commercetools implements CartApi
         );
     }
 
-    /**
-     * @param string $localeString
-     * @return CommercetoolsLocale
-     */
     private function parseLocaleString(?string $localeString): CommercetoolsLocale
     {
         if ($localeString !== null) {

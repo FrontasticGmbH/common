@@ -2,15 +2,15 @@
 
 namespace Frontastic\Common\CartApiBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-
+use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
+use Frontastic\Common\AccountApiBundle\Domain\Address;
+use Frontastic\Common\CartApiBundle\Domain\Cart;
+use Frontastic\Common\CartApiBundle\Domain\CartApi;
+use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CoreBundle\Controller\CrudController;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
-use Frontastic\Common\CartApiBundle\Domain\CartApi;
-use Frontastic\Common\CartApiBundle\Domain\Cart;
-use Frontastic\Common\CartApiBundle\Domain\LineItem;
-use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class CartController extends CrudController
 {
@@ -19,10 +19,10 @@ class CartController extends CrudController
      */
     protected $cartApi;
 
-    public function getAction(Context $context): array
+    public function getAction(Context $context, Request $request): array
     {
         return [
-            'cart' => $this->getCart($context),
+            'cart' => $this->getCart($context, $request),
         ];
     }
 
@@ -39,7 +39,7 @@ class CartController extends CrudController
         $payload = $this->getJsonContent($request);
         $cartApi = $this->getCartApi($context);
 
-        $cart = $this->getCart($context);
+        $cart = $this->getCart($context, $request);
         $beforeItemIds = $this->getLineItemIds($cart);
 
         $cartApi->startTransaction($cart);
@@ -51,7 +51,7 @@ class CartController extends CrudController
                     'attributes' => $payload['variant']['attributes'],
                 ]),
                 'custom' => $payload['option'] ?: [],
-                'count' => $payload['count']
+                'count' => $payload['count'],
             ]),
             $context->locale
         );
@@ -79,7 +79,7 @@ class CartController extends CrudController
 
         $cartApi = $this->getCartApi($context);
 
-        $cart = $this->getCart($context);
+        $cart = $this->getCart($context, $request);
         $beforeItemIds = $this->getLineItemIds($cart);
 
         $cartApi->startTransaction($cart);
@@ -116,7 +116,7 @@ class CartController extends CrudController
         $payload = $this->getJsonContent($request);
         $cartApi = $this->getCartApi($context);
 
-        $cart = $this->getCart($context);
+        $cart = $this->getCart($context, $request);
         $cartApi->startTransaction($cart);
         $cartApi->updateLineItem(
             $cart,
@@ -137,7 +137,7 @@ class CartController extends CrudController
         $payload = $this->getJsonContent($request);
         $cartApi = $this->getCartApi($context);
 
-        $cart = $this->getCart($context);
+        $cart = $this->getCart($context, $request);
 
         $cartApi->startTransaction($cart);
         $cartApi->removeLineItem(
@@ -190,7 +190,7 @@ class CartController extends CrudController
         $payload = $this->getJsonContent($request);
         $cartApi = $this->getCartApi($context);
 
-        $cart = $this->getCart($context);
+        $cart = $this->getCart($context, $request);
         $cartApi->startTransaction($cart);
 
         if (!empty($payload['account'])) {
@@ -208,15 +208,13 @@ class CartController extends CrudController
         if (!empty($payload['shipping']) || !empty($payload['billing'])) {
             $cart = $cartApi->setShippingAddress(
                 $cart,
-                $payload['shipping'] ?: $payload['billing'],
+                new Address($payload['shipping'] ?: $payload['billing']),
                 $context->locale
             );
-        }
 
-        if (!empty($payload['billing']) || !empty($payload['shipping'])) {
             $cart = $cartApi->setBillingAddress(
                 $cart,
-                $payload['billing'] ?: $payload['shipping'],
+                new Address($payload['billing'] ?: $payload['shipping']),
                 $context->locale
             );
         }
@@ -227,7 +225,7 @@ class CartController extends CrudController
     public function checkoutAction(Context $context, Request $request): array
     {
         $cartApi = $this->getCartApi($context);
-        $cart = $this->getCart($context);
+        $cart = $this->getCart($context, $request);
 
         if (!$cart->isComplete()) {
             throw new \DomainException('Cart not complete yet.');
@@ -244,11 +242,11 @@ class CartController extends CrudController
         ];
     }
 
-    public function redeemDiscountAction(Context $context, string $code): array
+    public function redeemDiscountAction(Context $context, Request $request, string $code): array
     {
         $cartApi = $this->getCartApi($context);
         return [
-            'cart' => $cartApi->redeemDiscountCode($this->getCart($context), $code, $context->locale),
+            'cart' => $cartApi->redeemDiscountCode($this->getCart($context, $request), $code, $context->locale),
         ];
     }
 
@@ -256,7 +254,10 @@ class CartController extends CrudController
     {
         $payload = $this->getJsonContent($request);
         return [
-            'cart' => $this->getCartApi($context)->removeDiscountCode($this->getCart($context), $payload['discountId']),
+            'cart' => $this->getCartApi($context)->removeDiscountCode(
+                $this->getCart($context, $request),
+                $payload['discountId']
+            ),
         ];
     }
 
@@ -271,13 +272,35 @@ class CartController extends CrudController
         return $this->cartApi = $cartApiFactory->factor($context->project);
     }
 
-    protected function getCart(Context $context): Cart
+    protected function getCart(Context $context, Request $request): Cart
     {
         $cartApi = $this->getCartApi($context);
+
         if ($context->session->loggedIn) {
             return $cartApi->getForUser($context->session->account->accountId, $context->locale);
         } else {
-            return $cartApi->getAnonymous(session_id(), $context->locale);
+            $symfonySession = $request->hasSession() ? $request->getSession() : null;
+            if ($symfonySession !== null && $symfonySession->has('cart_id')) {
+                $cartId = $symfonySession->get('cart_id');
+                try {
+                    return $cartApi->getById($cartId, $context->locale);
+                } catch (\RuntimeException $exception) {
+                    $this->get('logger')
+                        ->info(
+                            'Error fetching anonymous cart {cartId}, creating new one',
+                            [
+                                'cartId' => $cartId,
+                                'exception' => $exception,
+                            ]
+                        );
+                }
+            }
+
+            $cart = $cartApi->getAnonymous(session_id(), $context->locale);
+            if ($symfonySession !== null) {
+                $symfonySession->set('cart_id', $cart->cartId);
+            }
+            return $cart;
         }
     }
 

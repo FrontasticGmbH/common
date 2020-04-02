@@ -70,7 +70,7 @@ abstract class BaseImplementation
     /*** getProduct() *************************************************************************************************/
     public function beforeGetProduct(
         ProductApi $productApi,
-        ProductQuery $query,
+        $query,
         string $mode = ProductApi::QUERY_SYNC
     ): ?array {
     }

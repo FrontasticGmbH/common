@@ -63,16 +63,6 @@ abstract class BaseImplementation
         return null;
     }
 
-    /*** verifyEmail() ************************************************************************************************/
-    public function beforeVerifyEmail(AccountApi $accountApi, string $token): void
-    {
-    }
-
-    public function afterVerifyEmail(AccountApi $accountApi, Account $account): ?Account
-    {
-        return null;
-    }
-
     /*** update() *****************************************************************************************************/
     public function beforeUpdate(AccountApi $accountApi, Account $account): void
     {

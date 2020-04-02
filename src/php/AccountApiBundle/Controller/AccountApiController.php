@@ -2,15 +2,12 @@
 
 namespace Frontastic\Common\AccountApiBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-
-use Frontastic\Common\AccountApiBundle\Domain\Account;
-use Frontastic\Common\AccountApiBundle\Domain\Address;
-
 use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
+use Frontastic\Common\AccountApiBundle\Domain\Address;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class AccountApiController extends Controller
 {
@@ -22,7 +19,7 @@ class AccountApiController extends Controller
 
         $accountApi = $this->get(
             'Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory'
-        )->factor($context->customer);
+        )->factor($context->project);
         $address = new Address($this->getJsonBody($request));
         $address = $accountApi->addAddress($context->session->account->accountId, $address);
 
@@ -37,7 +34,7 @@ class AccountApiController extends Controller
 
         $accountApi = $this->get(
             'Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory'
-        )->factor($context->customer);
+        )->factor($context->project);
         $address = new Address(array_diff_key($this->getJsonBody($request), array_flip(['_type'])));
         $address = $accountApi->updateAddress($context->session->account->accountId, $address);
 
@@ -52,7 +49,7 @@ class AccountApiController extends Controller
 
         $accountApi = $this->get(
             'Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory'
-        )->factor($context->customer);
+        )->factor($context->project);
         $address = new Address(array_diff_key($this->getJsonBody($request), array_flip(['_type'])));
         $accountApi->removeAddress($context->session->account->accountId, $address->addressId);
 
@@ -67,7 +64,7 @@ class AccountApiController extends Controller
 
         $accountApi = $this->get(
             'Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory'
-        )->factor($context->customer);
+        )->factor($context->project);
         $address = new Address(array_diff_key($this->getJsonBody($request), array_flip(['_type'])));
         $address = $accountApi->setDefaultBillingAddress($context->session->account->accountId, $address->addressId);
 
@@ -82,7 +79,7 @@ class AccountApiController extends Controller
 
         $accountApi = $this->get(
             'Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory'
-        )->factor($context->customer);
+        )->factor($context->project);
         $address = new Address(array_diff_key($this->getJsonBody($request), array_flip(['_type'])));
         $address = $accountApi->setDefaultShippingAddress($context->session->account->accountId, $address->addressId);
 

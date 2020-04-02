@@ -71,21 +71,30 @@ class CategoriesTest extends FrontasticApiTestCase
     {
         $categories = $this->fetchAllCategories($project, $language);
 
-        $pathByCategoryId = [];
+        $pathsByCategoryId = [];
         foreach ($categories as $category) {
-            $pathByCategoryId[$category->categoryId] = $category->path;
+            if (!array_key_exists($category->categoryId, $pathsByCategoryId)) {
+                $pathsByCategoryId[$category->categoryId] = [];
+            }
+
+            $pathsByCategoryId[$category->categoryId][] = $category->path;
         }
 
         foreach ($categories as $category) {
             $parentCategoryId = $category->getParentCategoryId();
 
-            $parentPath = '';
-            if ($parentCategoryId !== null) {
-                $this->assertArrayHasKey($parentCategoryId, $pathByCategoryId);
-                $parentPath = $pathByCategoryId[$parentCategoryId];
+            if ($parentCategoryId === null) {
+                $expectedPaths = ['/' . $category->categoryId];
+            } else {
+                $this->assertArrayHasKey($parentCategoryId, $pathsByCategoryId);
+
+                $expectedPaths = [];
+                foreach ($pathsByCategoryId[$parentCategoryId] as $parentPath) {
+                    $expectedPaths[] = $parentPath . '/' . $category->categoryId;
+                }
             }
 
-            $this->assertEquals($parentPath . '/' . $category->categoryId, $category->path);
+            $this->assertContains($category->path, $expectedPaths);
         }
     }
 
@@ -128,16 +137,16 @@ class CategoriesTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
-    public function testFetchingAllCategoriesReturnsDistinctIds(Project $project, string $language): void
+    public function testFetchingAllCategoriesReturnsDistinctPaths(Project $project, string $language): void
     {
         $categories = $this->fetchAllCategories($project, $language);
-        $categoryIds = array_map(
+        $categoryPaths = array_map(
             function (Category $category): string {
-                return $category->categoryId;
+                return $category->path;
             },
             $categories
         );
-        $this->assertArrayHasDistinctValues($categoryIds);
+        $this->assertArrayHasDistinctValues($categoryPaths);
     }
 
     /**

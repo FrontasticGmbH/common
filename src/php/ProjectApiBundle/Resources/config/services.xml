@@ -15,6 +15,10 @@
                       id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory" />
             <argument type="service"
                       id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory" />
+            <argument type="service"
+                      id="Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory" />
+            <argument type="service"
+                      id="Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFactory" />
         </service>
     </services>
 </container>

@@ -336,31 +336,22 @@ class ProductsTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
-    public function testQueryProductByCategoryReturnsProduct(Project $project, string $language): void
+    public function testQueryProductByCategoryReturnsWellFormedProducts(Project $project, string $language): void
     {
         $allProducts = $this->queryProducts($project, $language);
 
-        $categoryId = null;
-        foreach ($allProducts->items as $product) {
-            if (count($product->categories) > 0) {
-                $categoryId = reset($product->categories);
-                break;
-            }
-        }
-        $this->assertNotEmptyString($categoryId, 'At least one product needs a category.');
+        $categories = $this
+            ->getProductApiForProject($project)
+            ->getCategories(new ProductApi\Query\CategoryQuery([
+                'locale' => $language,
+                'limit' => 3 // don't query too much categories so this test will not get too slow
+            ]));
+        foreach ($categories as $category) {
+            $categoryId = $category->categoryId;
 
-        $productsByCategory = $this->queryProducts($project, $language, ['category' => $categoryId]);
-        $this->assertLessThanOrEqual($allProducts->total, $productsByCategory->total);
-
-        $descendantCategories = [];
-        foreach ($this->fetchAllCategories($project, $language) as $category) {
-            if (in_array($categoryId, $category->getPathAsArray())) {
-                $descendantCategories[] = $category->categoryId;
-            }
-        }
-
-        foreach ($productsByCategory->items as $product) {
-            $this->assertNotEmpty(array_intersect($descendantCategories, $product->categories));
+            $productsByCategory = $this->queryProducts($project, $language, ['category' => $categoryId]);
+            $this->assertLessThanOrEqual($allProducts->total, $productsByCategory->total);
+            $this->assertProductsAreWellFormed($project, $language, $productsByCategory->items);
         }
     }
 
@@ -386,7 +377,7 @@ class ProductsTest extends FrontasticApiTestCase
         $sku = $product->variants[0]->sku;
         $this->assertNotEmptyString($sku);
 
-        $productsBySku = $this->queryProducts($project, $language, ['skus' => [$sku, self::NON_EXISTING_SKU]]);
+        $productsBySku = $this->queryProducts($project, $language, ['skus' => [$sku]]);
         $this->assertSingleProductResult($product, $productsBySku);
     }
 
@@ -400,7 +391,7 @@ class ProductsTest extends FrontasticApiTestCase
         $this->assertNotEmptyString($productId);
 
         $productsByProductId =
-            $this->queryProducts($project, $language, ['productIds' => [$productId, self::NON_EXISTING_PRODUCT_ID]]);
+            $this->queryProducts($project, $language, ['productIds' => [$productId]]);
         $this->assertSingleProductResult($product, $productsByProductId);
     }
 
@@ -476,9 +467,21 @@ class ProductsTest extends FrontasticApiTestCase
         // the information from the search index might be outdated.
 
         $this->assertSame($expected->productId, $actual->productId);
-        $this->assertSame($expected->name, $actual->name);
-        $this->assertSame($expected->slug, $actual->slug);
-        $this->assertSame($expected->description, $actual->description);
+        $this->assertSame(
+            $expected->name,
+            $actual->name,
+            sprintf('Product %s (SKU %s) has different names', $expected->productId, $expected->sku)
+        );
+        $this->assertSame(
+            $expected->slug,
+            $actual->slug,
+            sprintf('Product %s (SKU %s) has different slugs', $expected->productId, $expected->sku)
+        );
+        $this->assertSame(
+            $expected->description,
+            $actual->description,
+            sprintf('Product %s (SKU %s) has different descriptions', $expected->productId, $expected->sku)
+        );
 
         $this->assertSameSize($expected->variants, $actual->variants);
         for ($variantIndex = 0; $variantIndex < count($expected->variants); ++$variantIndex) {
@@ -528,10 +531,22 @@ class ProductsTest extends FrontasticApiTestCase
                 $this->assertNotEmptyString($product->version);
             }
 
-            $this->assertNotEmptyString($product->name);
+            $this->assertNotEmptyString(
+                $product->name,
+                sprintf('Product %s (SKU %s) has an invalid name', $product->productId, $product->sku)
+            );
 
             $this->assertNotEmptyString($product->slug);
-            $this->assertRegExp(self::URI_PATH_SEGMENT_REGEX, $product->slug);
+            $this->assertRegExp(
+                self::URI_PATH_SEGMENT_REGEX,
+                $product->slug,
+                sprintf(
+                    'Product %s (SKU %s) has an invalid slug: %s',
+                    $product->productId,
+                    $product->sku,
+                    $product->slug
+                )
+            );
 
             $this->assertInternalType('string', $product->description);
 

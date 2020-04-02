@@ -2,11 +2,13 @@
 
 namespace Frontastic\Common\ApiTests;
 
+use Frontastic\Common\AccountApiBundle\FrontasticCommonAccountApiBundle;
 use Frontastic\Common\CartApiBundle\FrontasticCommonCartApiBundle;
 use Frontastic\Common\CoreBundle\FrontasticCommonCoreBundle;
 use Frontastic\Common\Kernel;
 use Frontastic\Common\ProductApiBundle\FrontasticCommonProductApiBundle;
 use Frontastic\Common\ProjectApiBundle\FrontasticCommonProjectApiBundle;
+use Frontastic\Common\SapCommerceCloudBundle\FrontasticCommonSapCommerceCloudBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
@@ -26,9 +28,11 @@ class TestKernel extends Kernel
             new SwiftmailerBundle(),
 
             new FrontasticCommonCoreBundle(),
+            new FrontasticCommonAccountApiBundle(),
+            new FrontasticCommonCartApiBundle(),
             new FrontasticCommonProductApiBundle(),
             new FrontasticCommonProjectApiBundle(),
-            new FrontasticCommonCartApiBundle(),
+            new FrontasticCommonSapCommerceCloudBundle(),
         ];
     }
 }
