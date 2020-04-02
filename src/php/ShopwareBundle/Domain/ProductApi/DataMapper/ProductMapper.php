@@ -2,11 +2,30 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper;
 
+use DateTimeImmutable;
+use DateTimeInterface;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
+use Frontastic\Common\ProductApiBundle\Domain\Variant;
+use Frontastic\Common\ShopwareBundle\Domain\QueryAwareDataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\QueryAwareDataMapperTrait;
+use Frontastic\Common\ShopwareBundle\Domain\Slugger;
+use RuntimeException;
 
-class ProductMapper extends AbstractDataMapper
+class ProductMapper extends AbstractDataMapper implements QueryAwareDataMapperInterface
 {
+    use QueryAwareDataMapperTrait;
+
     public const MAPPER_NAME = 'product';
+
+    /**
+     * @var \Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper\ProductVariantMapper
+     */
+    private $variantMapper;
+
+    public function __construct(ProductVariantMapper $variantMapper)
+    {
+        $this->variantMapper = $variantMapper;
+    }
 
     public function getName(): string
     {
@@ -15,11 +34,63 @@ class ProductMapper extends AbstractDataMapper
 
     public function map(array $resource)
     {
-        $productData = $this->extractData($resource);
+        $productData = $this->extractData($resource, $resource);
 
+        $lastModified = $productData['updatedAt'] ?? null;
 
-        return new Product();
+        return new Product([
+            'productId' => (string)$productData['id'],
+            'changed' => ($lastModified !== null) ? $this->parseDate($lastModified) : null,
+            'version' => (string)$productData['versionId'],
+            'name' => $productData['translated']['name'] ?? $productData['name'],
+            'slug' => Slugger::slugify($productData['name']),
+            'description' => $productData['translated']['description'] ?? $productData['description'],
+            'categories' => $productData['categoryTree'],
+            'variants' => $this->mapDataToVariants($productData),
+            'dangerousInnerProduct' => $this->mapDangerousInnerData($productData),
+        ]);
     }
 
+    /**
+     * @param array $productData
+     *
+     * @return \Frontastic\Common\ProductApiBundle\Domain\Variant[]
+     */
+    public function mapDataToVariants(array $productData): array
+    {
+        if ($productData['children'] === null) {
+            return [$this->mapDataToVariant($productData)];
+        }
 
+        $variants = [];
+        foreach ($productData['children'] as $variantData) {
+            $variants[] = $this->mapDataToVariant($variantData);
+        }
+        return $variants;
+    }
+
+    private function mapDataToVariant(array $variantData): Variant
+    {
+        return $this->variantMapper
+            ->setQuery($this->getQuery())
+            ->map($variantData);
+    }
+
+    private function parseDate(string $string): DateTimeImmutable
+    {
+        $formats = [
+            'Y-m-d\TH:i:s.uP',
+            DateTimeInterface::RFC3339,
+            DateTimeInterface::RFC3339_EXTENDED,
+        ];
+
+        foreach ($formats as $format) {
+            $date = DateTimeImmutable::createFromFormat($format, $string);
+            if ($date !== false) {
+                return $date;
+            }
+        }
+
+        throw new RuntimeException('Invalid date: ' . $string);
+    }
 }

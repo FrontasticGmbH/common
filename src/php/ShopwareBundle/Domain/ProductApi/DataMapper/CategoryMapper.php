@@ -25,13 +25,7 @@ class CategoryMapper extends AbstractDataMapper implements QueryAwareDataMapperI
     {
         $result = [];
         foreach ($this->extractData($resource) as $categoryData) {
-            $category = $this->mapDataToCategory($categoryData);
-
-            if ($this->getQuery()->loadDangerousInnerData) {
-                $category->dangerousInnerCategory = $categoryData;
-            }
-
-            $result[] = $category;
+            $result[] = $this->mapDataToCategory($categoryData);
         }
 
         return $result;
@@ -48,6 +42,7 @@ class CategoryMapper extends AbstractDataMapper implements QueryAwareDataMapperI
             // Subtracting 1 because Shopware starts level with 1, while Frontastic with 0
             'depth' => $categoryData['level'] - 1,
             'path' => $this->resolveCategoryPath($categoryData),
+            'dangerousInnerCategory' => $this->mapDangerousInnerData($categoryData)
         ]);
     }
 
