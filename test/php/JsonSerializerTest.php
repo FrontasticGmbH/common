@@ -62,4 +62,59 @@ class JsonSerializerTest extends \PHPUnit\Framework\TestCase
         ], $actualData);
 
     }
+
+    public function testStripTraceParameters()
+    {
+        $serializer = new JsonSerializer();
+
+        $exception = unserialize(file_get_contents(
+            __DIR__. '/_fixture/testStripTraceParameters.exception.ser'
+        ));
+
+        $actualData = $serializer->serialize((object)[
+            'nested' => (object)[
+                'trace' => $exception->getTrace(),
+            ],
+        ]);
+
+        $this->assertNotNull($actualData['nested']);
+        $this->assertNotNull($actualData['nested']['trace']);
+
+        foreach ($actualData['nested']['trace'] as $traceIndex => $traceLevel) {
+            if (!isset($traceLevel['args'])) {
+                continue;
+            }
+
+            foreach ($traceLevel['args'] as $argumentIndex => $argument) {
+                $readableIndex = sprintf('[%s][%s]', $traceIndex, $argumentIndex);
+
+                $this->assertFalse(is_object($argument), 'Object argument not stripped ' . $readableIndex);
+                $this->assertFalse(is_array($argument), 'Array argument not stripped ' . $readableIndex);
+            }
+        }
+
+        return $actualData['nested']['trace'];
+    }
+
+    /**
+     * @depends testStripTraceParameters
+     */
+    public function testStripObjectInTraceToClassName (array $trace)
+    {
+        $this->assertEquals(
+            'Frontastic\Common\JsonSerializerTest',
+            $trace[1]['args'][0]
+        );
+    }
+
+    /**
+     * @depends testStripTraceParameters
+     */
+    public function testStripArrayInTraceToTypeName (array $trace)
+    {
+        $this->assertEquals(
+            'array',
+            $trace[8]['args'][0]
+        );
+    }
 }
