@@ -10,7 +10,7 @@ abstract class AbstractBucketAggregation extends AbstractAggregation
     private const AGG_KEY_AGGREGATION = 'aggregation';
 
     /**
-     * @var \Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchAggregationInterface
+     * @var \Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchAggregationInterface|null
      */
     public $aggregation;
 
@@ -18,7 +18,7 @@ abstract class AbstractBucketAggregation extends AbstractAggregation
     {
         $result = parent::jsonSerialize();
 
-        if ($this->aggregation) {
+        if (!empty($this->aggregation)) {
             $result[self::AGG_KEY_AGGREGATION] = $this->aggregation;
         }
 
@@ -27,7 +27,11 @@ abstract class AbstractBucketAggregation extends AbstractAggregation
 
     protected function assertAggregation(): void
     {
-        if (!empty($this->aggregation) && !($this->aggregation instanceof SearchAggregationInterface)) {
+        if (empty($this->aggregation)) {
+            return;
+        }
+
+        if (!($this->aggregation instanceof SearchAggregationInterface)) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Nested aggregation must be instance of `%s`, `%s` given',

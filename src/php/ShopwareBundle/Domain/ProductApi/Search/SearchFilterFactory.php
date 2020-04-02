@@ -14,7 +14,9 @@ class SearchFilterFactory
 
         switch ($queryFilter->attributeType) {
             case 'money':
-                $filter = static::buildSearchRangeFilter($queryFilter->handle, $queryFilter->min, $queryFilter->max);
+                if ($queryFilter instanceof Query\RangeFilter) {
+                    $filter = static::buildSearchRangeFilter($queryFilter);
+                }
                 break;
             case 'enum':
             case 'localizedEnum':
@@ -25,56 +27,55 @@ class SearchFilterFactory
             case 'reference':
             default:
                 if ($queryFilter instanceof Query\TermFilter) {
-                    $filter = static::buildSearchFilterFromTerms($queryFilter->handle, $queryFilter->terms);
+                    $filter = static::buildSearchFilterFromTerms($queryFilter);
                 } elseif ($queryFilter instanceof Query\RangeFilter) {
-                    $filter = static::buildSearchRangeFilter($queryFilter->handle, $queryFilter->min,
-                        $queryFilter->max);
+                    $filter = static::buildSearchRangeFilter($queryFilter);
                 }
 
                 break;
         }
 
         if (!$filter instanceof SearchFilterInterface) {
-            throw new RuntimeException('Can not create filter');
+            throw new RuntimeException(
+                sprintf(
+                    'Can not create search filter for query filter %s with attribute type `%s`',
+                    get_class($queryFilter),
+                    $queryFilter->attributeType
+                )
+            );
         }
 
         return $filter;
     }
 
-    public static function buildSearchRangeFilter(string $field, ?int $min, ?int $max): Filter\Range
+    public static function buildSearchRangeFilter(Query\RangeFilter $queryFilter): Filter\Range
     {
         $range = [];
 
-        if ($min > 0) {
-            $range[Filter\Range::RANGE_PARAM_GTE] = $min;
+        if ($queryFilter->min > 0) {
+            $range[Filter\Range::RANGE_PARAM_GTE] = $queryFilter->min;
         }
 
-        if ($max > 0 && $max !== PHP_INT_MAX) {
-            $range[Filter\Range::RANGE_PARAM_LTE] = $max;
+        if ($queryFilter->max > 0 && $queryFilter->max !== PHP_INT_MAX) {
+            $range[Filter\Range::RANGE_PARAM_LTE] = $queryFilter->max;
         }
 
-        $filter = new Filter\Range();
-        $filter->field = $field;
-        $filter->value = $range;
+        $searchFilter = new Filter\Range();
+        $searchFilter->field = $queryFilter->handle;
+        $searchFilter->value = $range;
 
-        return $filter;
+        return $searchFilter;
     }
 
-    /**
-     * @param string $field
-     * @param string[] $terms
-     *
-     * @return \Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Filter\Equals|\Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Filter\EqualsAny
-     */
-    public static function buildSearchFilterFromTerms(string $field, array $terms)
+    public static function buildSearchFilterFromTerms(Query\TermFilter $queryFilter): SearchFilterInterface
     {
-        $filter = count($terms) === 1
+        $searchFilter = count($queryFilter->terms) === 1
             ? new Filter\Equals()
             : new Filter\EqualsAny();
 
-        $filter->field = $field;
-        $filter->value = $terms;
+        $searchFilter->field = $queryFilter->handle;
+        $searchFilter->value = $queryFilter->terms;
 
-        return $filter;
+        return $searchFilter;
     }
 }
