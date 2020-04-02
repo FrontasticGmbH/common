@@ -2,59 +2,59 @@
 
 namespace Frontastic\Common\CoreBundle\Domain\Api;
 
+use Psr\Container\ContainerInterface;
 use Symfony\Component\DependencyInjection\ServiceLocator;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
-class FactoryServiceLocator
+class FactoryServiceLocator implements ContainerInterface, ServiceSubscriberInterface
 {
-    private const SERVICE_ID_TEMPLATE_CLIENT_FACTORY = '%s.client_factory';
-    private const SERVICE_ID_TEMPLATE_DATA_MAPPER = '%s.data_mapper';
-    private const SERVICE_ID_TEMPLATE_LOCALE_CREATOR_FACTORY = '%s.locale_creator_factory';
+    /**
+     * @var \Psr\Container\ContainerInterface
+     */
+    private $container;
 
     /**
      * @var \Symfony\Component\DependencyInjection\ServiceLocator
      */
-    private $serviceLocator;
+    private $taggedServiceContainer;
 
-    public function __construct(ServiceLocator $serviceLocator)
+    /**
+     * @var string[]
+     */
+    private static $subscribedServices = [];
+
+    public function __construct(ContainerInterface $container, ServiceLocator $taggedServiceContainer)
     {
-        $this->serviceLocator = $serviceLocator;
+        $this->container = $container;
+        $this->taggedServiceContainer = $taggedServiceContainer;
     }
 
-    public function resolveClientFactory(string $engine): object
+    public function has($id): bool
     {
-        $service = $this->buildClientFactoryServiceId($engine);
-
-        return $this->serviceLocator->get($service);
+        return $this->taggedServiceContainer->has($id);
     }
 
-    public function resolveDataMapper(string $engine): object
+    /**
+     * @param string $id
+     *
+     * @return mixed
+     */
+    public function get($id)
     {
-        $service = $this->buildDataMapperServiceId($engine);
+        if ($this->taggedServiceContainer->has($id)) {
+            return $this->taggedServiceContainer->get($id);
+        }
 
-        return $this->serviceLocator->get($service);
+        return $this->container->get($id);
     }
 
-    public function resolveLocaleCreatorFactory(string $engine): object
+    public static function addSubscribedService(string $serviceId): void
     {
-        $service = $this->buildLocaleCreatorFactoryServiceId($engine);
-
-        return $this->serviceLocator->get($service);
+        self::$subscribedServices[] = $serviceId;
     }
 
-    private function buildClientFactoryServiceId(string $engine): string
+    public static function getSubscribedServices(): array
     {
-        return sprintf(self::SERVICE_ID_TEMPLATE_CLIENT_FACTORY, $engine);
+        return self::$subscribedServices;
     }
-
-    private function buildDataMapperServiceId(string $engine): string
-    {
-        return sprintf(self::SERVICE_ID_TEMPLATE_DATA_MAPPER, $engine);
-    }
-
-    private function buildLocaleCreatorFactoryServiceId(string $engine): string
-    {
-        return sprintf(self::SERVICE_ID_TEMPLATE_LOCALE_CREATOR_FACTORY, $engine);
-    }
-
-
 }
