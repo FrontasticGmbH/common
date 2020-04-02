@@ -110,7 +110,7 @@ class JsonSerializer
         return $result;
     }
 
-    private function stripDownTrace (array $trace): array
+    private function stripDownTrace(array $trace): array
     {
         foreach ($trace as $levelIndex => $traceLevel) {
             if (!isset($traceLevel['args']) || !is_array($traceLevel['args'])) {
