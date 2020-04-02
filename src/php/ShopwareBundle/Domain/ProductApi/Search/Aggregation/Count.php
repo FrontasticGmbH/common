@@ -8,8 +8,10 @@ namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Aggregation;
  */
 class Count extends AbstractMetricAggregation
 {
+    public const TYPE = 'count';
+
     protected function getType(): string
     {
-        return 'count';
+        return self::TYPE;
     }
 }

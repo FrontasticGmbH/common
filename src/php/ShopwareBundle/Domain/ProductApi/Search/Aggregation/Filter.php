@@ -6,11 +6,13 @@ use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchFilterInterf
 use InvalidArgumentException;
 
 /**
- * @see https://docs.shopware.com/en/shopware-platform-dev-en/api/filter-search-limit#stats-aggregation
+ * @see https://docs.shopware.com/en/shopware-platform-dev-en/api/filter-search-limit#filter-aggregation
  * @example paas/libraries/common/src/php/ShopwareBundle/Resources/examples/aggregations_example.php
  */
 class Filter extends AbstractBucketAggregation
 {
+    public const TYPE = 'filter';
+
     private const AGG_KEY_FILTER = 'filter';
 
     /**
@@ -30,7 +32,7 @@ class Filter extends AbstractBucketAggregation
 
     protected function getType(): string
     {
-        return 'stats';
+        return self::TYPE;
     }
 
     protected function assertAggregation(): void

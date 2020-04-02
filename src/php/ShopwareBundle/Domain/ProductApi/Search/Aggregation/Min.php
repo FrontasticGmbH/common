@@ -8,8 +8,10 @@ namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Aggregation;
  */
 class Min extends AbstractMetricAggregation
 {
+    public const TYPE = 'min';
+
     protected function getType(): string
     {
-        return 'min';
+        return self::TYPE;
     }
 }

@@ -8,8 +8,10 @@ namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Aggregation;
  */
 class Avg extends AbstractMetricAggregation
 {
+    public const TYPE = 'avg';
+
     protected function getType(): string
     {
-        return 'avg';
+        return self::TYPE;
     }
 }

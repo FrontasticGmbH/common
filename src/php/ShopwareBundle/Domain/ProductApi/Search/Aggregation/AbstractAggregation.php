@@ -12,6 +12,8 @@ abstract class AbstractAggregation extends DataObject implements SearchAggregati
     protected const AGG_KEY_TYPE = 'type';
     protected const AGG_KEY_FIELD = 'field';
 
+    protected const AGG_RESULT_KEY = '';
+
     /**
      * @var string
      */
@@ -22,15 +24,10 @@ abstract class AbstractAggregation extends DataObject implements SearchAggregati
      */
     public $name;
 
-    abstract protected function getType(): string;
-
     /**
-     * @override
+     * @var array
      */
-    protected function assertAggregation(): void
-    {
-
-    }
+    protected $resultData;
 
     public function jsonSerialize(): array
     {
@@ -39,10 +36,30 @@ abstract class AbstractAggregation extends DataObject implements SearchAggregati
         $this->assertName();
 
         return [
-            self::AGG_KEY_NAME => $this->name,
+            self::AGG_KEY_NAME => sprintf('%s#%s', $this->getType(), $this->name),
             self::AGG_KEY_TYPE => $this->getType(),
             self::AGG_KEY_FIELD => $this->field,
         ];
+    }
+
+    public function setResultData(array $resultData): void
+    {
+        $this->resultData = $resultData[static::AGG_RESULT_KEY] ?? $resultData;
+    }
+
+    public function getResultData(): array
+    {
+        return $this->resultData;
+    }
+
+    abstract protected function getType(): string;
+
+    /**
+     * @override
+     */
+    protected function assertAggregation(): void
+    {
+
     }
 
     protected function assertName(): void

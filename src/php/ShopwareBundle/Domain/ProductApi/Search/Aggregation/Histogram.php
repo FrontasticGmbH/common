@@ -10,6 +10,10 @@ use InvalidArgumentException;
  */
 class Histogram extends AbstractBucketAggregation
 {
+    public const TYPE = 'histogram';
+
+    protected const AGG_RESULT_KEY = 'buckets';
+
     private const AGG_KEY_INTERVAL = 'interval';
 
     private const ALLOWED_INTERVALS = [
@@ -53,6 +57,6 @@ class Histogram extends AbstractBucketAggregation
 
     protected function getType(): string
     {
-        return 'histogram';
+        return self::TYPE;
     }
 }
