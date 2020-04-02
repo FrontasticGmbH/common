@@ -23,7 +23,7 @@ interface ContentApi
      * Fetch content with $contentId in $locale. If $locale is null, project default locale is used.
      *
      * @param string $contentId
-     * @param string|null $locale
+     * @param ?string $locale
      * @param string $mode One of the QUERY_* connstants. Execute the query synchronously or asynchronously?
      * @return Content|PromiseInterface|null A product or null when the mode is sync and a promise if the mode is async.
      */
@@ -35,7 +35,7 @@ interface ContentApi
      * project default locale is used.
      *
      * @param Query $query
-     * @param string|null $locale
+     * @param ?string $locale
      * @param string $mode One of the QUERY_* connstants. Execute the query synchronously or asynchronously?
      * @return Result|PromiseInterface|null A product or null when the mode is sync and a promise if the mode is async.
      */

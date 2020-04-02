@@ -11,13 +11,13 @@ class ProductQuery extends PaginatedQuery
     public const SORT_ORDER_DESCENDING = 'descending';
 
     /**
-     * @var string|null
+     * @var ?string
      */
     public $category;
 
     /**
      * @deprecated use `skus` instead
-     * @var string|null
+     * @var ?string
      */
     public $sku;
 
@@ -28,7 +28,7 @@ class ProductQuery extends PaginatedQuery
 
     /**
      * @deprecated use `productIds` instead
-     * @var string|null
+     * @var ?string
      */
     public $productId;
 
@@ -38,14 +38,14 @@ class ProductQuery extends PaginatedQuery
     public $productIds;
 
     /**
-     * @var string|null
+     * @var ?string
      */
     public $productType;
 
     /**
      * This is a full text search on the API
      *
-     * @var string|null
+     * @var ?string
      */
     public $query;
 

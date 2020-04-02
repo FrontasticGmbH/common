@@ -24,12 +24,12 @@ class Product extends DataObject
      * The date and time when this product was last changed or `null` if the
      * date is unknown.
      *
-     * @var \DateTimeImmutable|null
+     * @var ?\DateTimeImmutable
      */
     public $changed;
 
     /**
-     * @var string|null
+     * @var ?string
      */
     public $version;
 

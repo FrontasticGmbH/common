@@ -19,7 +19,7 @@ class Tideways extends HttpClient
     private $logger;
 
     /**
-     * @var string|null
+     * @var ?string
      */
     private $clientIdentifier;
 

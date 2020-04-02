@@ -30,7 +30,7 @@ class Variant extends DataObject
     /**
      * If a discount is applied to the product, this contains the reduced value.
      *
-     * @var integer|null
+     * @var ?integer
      */
     public $discountedPrice;
 

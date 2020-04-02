@@ -49,7 +49,7 @@ class Attribute extends DataObject
     public $label;
 
     /**
-     * @var array|null
+     * @var ?array
      */
     public $values;
 }
