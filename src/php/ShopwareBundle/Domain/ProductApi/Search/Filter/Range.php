@@ -10,11 +10,16 @@ use InvalidArgumentException;
  */
 class Range extends AbstractFilter
 {
+    public const RANGE_PARAM_GT = 'gt';
+    public const RANGE_PARAM_GTE = 'gte';
+    public const RANGE_PARAM_LT = 'lt';
+    public const RANGE_PARAM_LTE = 'lte';
+
     private const ALLOWED_PARAMETERS = [
-        'gt',
-        'gte',
-        'lt',
-        'lte'
+        self::RANGE_PARAM_GT,
+        self::RANGE_PARAM_GTE,
+        self::RANGE_PARAM_LT,
+        self::RANGE_PARAM_LTE,
     ];
     private const FILTER_KEY_PARAMETERS = 'parameters';
 
@@ -31,9 +36,9 @@ class Range extends AbstractFilter
 
     protected function assertFilter(): void
     {
-        $diff = array_diff_key(array_keys($this->value), self::ALLOWED_PARAMETERS);
+        $diff = array_diff(array_keys($this->value), self::ALLOWED_PARAMETERS);
 
-        if (empty($diff)) {
+        if (!empty($diff)) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Unknown range parameters detected: `%s`. Allowed `%s`',
