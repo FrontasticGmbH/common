@@ -15,9 +15,8 @@
         <!-- For BC reasons -->
         <service id="Frontastic\Common\HttpClient\Stream" alias="Frontastic\Common\HttpClient" />
 
-        <service id="Frontastic\Common\HttpClient\Factory">
-            <argument type="service" id="logger"/>
-            <argument type="service" id="Frontastic\Common\HttpClient\Options"/>
+        <service id="Frontastic\Common\HttpClient\Factory" autowire="true">
+            <tag name="monolog.logger" channel="httpClient"/>
         </service>
 
         <service id="Frontastic\Common\HttpClient\Options">
