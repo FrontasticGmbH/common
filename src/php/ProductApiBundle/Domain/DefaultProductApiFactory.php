@@ -5,8 +5,6 @@ namespace Frontastic\Common\ProductApiBundle\Domain;
 use Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
-use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFactory;
-use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapDataMapper;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapProductApi;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\ShopwareProductApi;
@@ -20,22 +18,6 @@ class DefaultProductApiFactory implements ProductApiFactory
      * @var \Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator
      */
     private $serviceLocator;
-    private $commercetoolsClientFactory;
-
-    /**
-     * @var Commercetools\Locale\CommercetoolsLocaleCreatorFactory
-     */
-    private $commercetoolsLocaleCreatorFactory;
-
-    /**
-     * @var SapClientFactory
-     */
-    private $sapClientFactory;
-
-    /**
-     * @var SapLocaleCreatorFactory
-     */
-    private $sapLocaleCreatorFactory;
 
     /**
      * @var array
@@ -46,8 +28,8 @@ class DefaultProductApiFactory implements ProductApiFactory
         FactoryServiceLocator $serviceLocator,
         iterable $decorators = []
     ) {
-        $this->decorators = $decorators;
         $this->serviceLocator = $serviceLocator;
+        $this->decorators = $decorators;
     }
 
     public function factor(Project $project): ProductApi
@@ -75,10 +57,17 @@ class DefaultProductApiFactory implements ProductApiFactory
                 );
                 break;
             case 'sap-commerce-cloud':
-                $client = $this->sapClientFactory->factorForProjectAndType($project, 'product');
+                /**
+                 * @var \Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory $clientFactory
+                 * @var \Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFactory $localeCreatorFactory
+                 */
+                $clientFactory = $this->serviceLocator->resolveClientFactory($productConfig->engine);
+                $localeCreatorFactory = $this->serviceLocator->resolveLocaleCreatorFactory($productConfig->engine);
+
+                $client = $clientFactory->factorForProjectAndType($project, 'product');
                 $productApi = new SapProductApi(
                     $client,
-                    $this->sapLocaleCreatorFactory->factor($project, $client),
+                    $localeCreatorFactory->factor($project, $client),
                     new SapDataMapper($client)
                 );
                 break;
@@ -97,7 +86,7 @@ class DefaultProductApiFactory implements ProductApiFactory
                 $productApi = new ShopwareProductApi(
                     $client,
                     $dataMapper,
-                    $localeCreatorFactory->factor($project, $client)
+                    $localeCreatorFactory->factor($project)
                 );
                 break;
             default:

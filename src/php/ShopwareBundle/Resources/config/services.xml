@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <defaults public="true"/>
+        <defaults public="false"/>
 
         <instanceof id="Frontastic\Common\ShopwareBundle\Domain\DataMapperInterface" autowire="true" public="false">
             <tag name="shopware.data_mapper"/>
@@ -19,17 +19,17 @@
         <service id="Frontastic\Common\ShopwareBundle\Domain\ClientFactory">
             <argument type="service" id="Frontastic\Common\HttpClient"/>
 
-            <tag name="frontastic.common.api_integration.factory" key="shopware.client_factory"/>
+            <tag name="frontastic.common.api_integration" key="shopware.client_factory"/>
         </service>
 
         <service id="Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory">
             <argument type="service" id="Frontastic\Common\ProjectApiBundle\Domain\ProjectApiFactory"/>
-            <tag name="frontastic.common.api_integration.factory" key="shopware.locale_creator_factory"/>
+            <tag name="frontastic.common.api_integration" key="shopware.locale_creator_factory"/>
         </service>
 
         <service id="Frontastic\Common\ShopwareBundle\Domain\DataMapperResolver">
             <argument type="tagged_iterator" tag="shopware.data_mapper"/>
-            <tag name="frontastic.common.api_integration.factory" key="shopware.data_mapper"/>
+            <tag name="frontastic.common.api_integration" key="shopware.data_mapper"/>
         </service>
     </services>
 </container>
