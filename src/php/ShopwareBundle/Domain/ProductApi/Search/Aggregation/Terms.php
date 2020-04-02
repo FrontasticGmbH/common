@@ -8,8 +8,12 @@ namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Aggregation;
  */
 class Terms extends AbstractBucketAggregation
 {
+    public const TYPE = 'terms';
+
+    protected const AGG_RESULT_KEY = 'buckets';
+
     protected function getType(): string
     {
-        return 'terms';
+        return self::TYPE;
     }
 }

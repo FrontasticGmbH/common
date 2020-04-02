@@ -8,8 +8,10 @@ namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Aggregation;
  */
 class Sum extends AbstractMetricAggregation
 {
+    public const TYPE = 'sum';
+
     protected function getType(): string
     {
-        return 'sum';
+        return self::TYPE;
     }
 }

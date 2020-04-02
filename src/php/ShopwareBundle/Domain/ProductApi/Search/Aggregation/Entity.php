@@ -10,8 +10,17 @@ use InvalidArgumentException;
  */
 class Entity extends AbstractBucketAggregation
 {
+    public const TYPE = 'entity';
+
+    protected const AGG_RESULT_KEY = 'entities';
+
     private const AGG_KEY_DEFINITION = 'definition';
 
+    /**
+     * Definition name (const ENTITY_NAME) taken from target Shopware entity definition
+     *
+     * @var string
+     */
     public $definition;
 
     public function jsonSerialize(): array
@@ -34,6 +43,6 @@ class Entity extends AbstractBucketAggregation
 
     protected function getType(): string
     {
-        return 'entity';
+        return self::TYPE;
     }
 }

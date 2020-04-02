@@ -10,6 +10,9 @@ class ClientFactory
 {
     private const MAIN_CONFIGURATION_SECTION = 'shopware';
 
+    /**
+     * @var string[]
+     */
     private $requiredConfigOptions = [
         'apiKey',
         'endpoint',
@@ -25,30 +28,58 @@ class ClientFactory
         $this->httpClient = $httpClient;
     }
 
-    public function factor(Project $project): Client
+    public function factorForProjectAndType(Project $project, string $typeName): Client
     {
-        $configuration = $project->getConfigurationSection(self::MAIN_CONFIGURATION_SECTION);
+        $typeSpecificConfiguration = $project->getConfigurationSection($typeName);
+        $genericConfiguration = $project->getConfigurationSection(self::MAIN_CONFIGURATION_SECTION);
 
-        $this->assertConfiguration($configuration);
+        $config = $this->resolveConfiguration($typeSpecificConfiguration, $genericConfiguration);
 
         return new Client(
             $this->httpClient,
-            $configuration->apiKey,
-            $configuration->endpoint
+            $config['apiKey'],
+            $config['endpoint']
         );
     }
 
-    private function assertConfiguration(object $configuration): void
+    private function resolveConfiguration(object $typeSpecificConfiguration, object $genericConfiguration): array
     {
+        $resolved = [];
         foreach ($this->requiredConfigOptions as $option) {
-            if (!isset($configuration->$option) || empty($configuration->$option)) {
-                throw new RuntimeException(
-                    sprintf(
-                        'Failed to create client. Required config option `%s` for engine `shopware` is not defined or is empty',
-                        $option
-                    )
-                );
-            }
+            $value = $typeSpecificConfiguration->$option ?? $genericConfiguration->$option ?? null;
+
+            $this->assertConfigurationValue($option, $value);
+
+            $resolved[$option] = $value;
+        }
+
+        return $resolved;
+    }
+
+    /**
+     * @param string $option
+     * @param mixed $value
+     *
+     * @return void
+     */
+    private function assertConfigurationValue(string $option, $value): void
+    {
+        if ($value === null) {
+            throw new RuntimeException(
+                sprintf('Failed to create client. Shopware config option `%s` is not set', $option)
+            );
+        }
+
+        if (!is_string($value)) {
+            throw new RuntimeException(
+                sprintf('Failed to create client. Shopware config option `%s` is not a string', $option)
+            );
+        }
+
+        if ($value === '') {
+            throw new RuntimeException(
+                sprintf('Failed to create client. Shopware config option `%s` is empty', $option)
+            );
         }
     }
 }

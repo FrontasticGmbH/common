@@ -8,8 +8,10 @@ namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Aggregation;
  */
 class Max extends AbstractMetricAggregation
 {
+    public const TYPE = 'max';
+
     protected function getType(): string
     {
-        return 'max';
+        return self::TYPE;
     }
 }
