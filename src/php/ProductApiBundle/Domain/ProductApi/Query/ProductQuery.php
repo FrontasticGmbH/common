@@ -22,7 +22,7 @@ class ProductQuery extends PaginatedQuery
     public $sku;
 
     /**
-     * @var string[]|null
+     * @var ?string[]
      */
     public $skus;
 
@@ -33,7 +33,7 @@ class ProductQuery extends PaginatedQuery
     public $productId;
 
     /**
-     * @var string[]|null
+     * @var ?string[]
      */
     public $productIds;
 
