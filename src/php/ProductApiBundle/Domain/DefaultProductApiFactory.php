@@ -3,10 +3,11 @@
 namespace Frontastic\Common\ProductApiBundle\Domain;
 
 use Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools as CommercetoolsProductApi;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory as CommercetoolsClientFactory;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper as CommercetoolsDataMapper;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
@@ -30,15 +31,22 @@ class DefaultProductApiFactory implements ProductApiFactory
     private $serviceLocator;
 
     /**
+     * @var EnabledFacetService
+     */
+    private $enabledFacetService;
+
+    /**
      * @var array
      */
     private $decorators;
 
     public function __construct(
         FactoryServiceLocator $serviceLocator,
+        EnabledFacetService $enabledFacetService,
         iterable $decorators = []
     ) {
         $this->serviceLocator = $serviceLocator;
+        $this->enabledFacetService = $enabledFacetService;
         $this->decorators = $decorators;
     }
 
@@ -54,10 +62,11 @@ class DefaultProductApiFactory implements ProductApiFactory
 
                 $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
 
-                $productApi = new Commercetools(
+                $productApi = new CommercetoolsProductApi(
                     $client,
                     $dataMapper,
                     $localeCreatorFactory->factor($project, $client),
+                    $this->enabledFacetService,
                     $project->defaultLanguage
                 );
                 break;

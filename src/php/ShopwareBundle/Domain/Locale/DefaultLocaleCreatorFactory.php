@@ -6,7 +6,7 @@ use Frontastic\Common\ReplicatorBundle\Domain\Project;
 
 class DefaultLocaleCreatorFactory extends LocaleCreatorFactory
 {
-    public function factor(Project $project): DefaultLocaleCreator
+    public function factor(Project $project): LocaleCreator
     {
         return new DefaultLocaleCreator();
     }

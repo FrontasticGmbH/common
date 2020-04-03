@@ -1,6 +1,6 @@
 <?php
 
-namespace Frontastic\CartApiBundle\Domain;
+namespace Frontastic\Common\CartApiBundle\Domain;
 
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools;

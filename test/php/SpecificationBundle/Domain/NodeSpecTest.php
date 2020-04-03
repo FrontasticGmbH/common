@@ -13,6 +13,7 @@ class NodeSpecTest extends TestCase
      */
     public function testSchemaParsesCorrectly($schemaFile)
     {
+        $actualSchema = null;
         $specParser = new NodeSpecParser();
 
         try {

@@ -1,5 +1,8 @@
 <?php
 
+namespace Frontastic\Common\ApiTests\AccountApi;
+
+use DateTimeImmutable;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\ApiTests\FrontasticApiTestCase;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;

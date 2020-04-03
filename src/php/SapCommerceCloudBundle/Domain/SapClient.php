@@ -26,6 +26,12 @@ class SapClient
     /** @var array<string, string> */
     private $urlReplacements;
 
+    /** @var HttpClient\Options */
+    private $readClientOptions;
+
+    /** @var HttpClient\Options */
+    private $writeClientOptions;
+
     public function __construct(
         HttpClient $httpClient,
         string $hostUrl,
@@ -44,6 +50,14 @@ class SapClient
             '{catalogId}' => $catalogId,
             '{catalogVersionId}' => $catalogVersionId,
         ];
+
+        $defaultTimeout = (int)getenv('http_client_timeout');
+        $this->readClientOptions = new HttpClient\Options([
+            'timeout' => max(2, $defaultTimeout),
+        ]);
+        $this->writeClientOptions = new HttpClient\Options([
+            'timeout' => max(10, $defaultTimeout),
+        ]);
     }
 
     /**
@@ -61,29 +75,46 @@ class SapClient
 
     public function get(string $urlTemplate, array $parameters = []): PromiseInterface
     {
-        return $this->httpClient
-            ->getAsync($this->buildUrl($urlTemplate, $parameters))
-            ->then(function (HttpClient\Response $response): array {
-                return $this->parseResponse($response);
-            });
+        return $this->request('GET', $urlTemplate, null, $parameters);
+    }
+
+    public function delete(string $urlTemplate, array $parameters = []): PromiseInterface
+    {
+        return $this->request('DELETE', $urlTemplate, null, $parameters);
     }
 
     public function post(string $urlTemplate, array $payload, array $parameters = []): PromiseInterface
     {
-        $body = json_encode($payload);
-        if ($body === false) {
-            throw new \RuntimeException('Invalid JSON payload');
+        return $this->request('POST', $urlTemplate, $payload, $parameters);
+    }
+
+    public function put(string $urlTemplate, array $payload, array $parameters = []): PromiseInterface
+    {
+        return $this->request('PUT', $urlTemplate, $payload, $parameters);
+    }
+
+    private function request(string $method, string $urlTemplate, ?array $payload, array $parameters): PromiseInterface
+    {
+        $body = '';
+        $headers = [];
+
+        if ($payload !== null) {
+            $body = json_encode($payload);
+            if ($body === false) {
+                throw new \RuntimeException('Invalid JSON payload');
+            }
+            $headers[] = 'Content-Type: application/json';
         }
 
         return $this->httpClient
-            ->postAsync(
+            ->requestAsync(
+                $method,
                 $this->buildUrl($urlTemplate, $parameters),
                 $body,
-                [
-                    'Content-Type: application/json',
-                ]
+                $headers,
+                $method === 'GET' ? $this->readClientOptions : $this->writeClientOptions
             )
-            ->then(function (HttpClient\Response $response): array {
+            ->then(function (HttpClient\Response $response): ?array {
                 return $this->parseResponse($response);
             });
     }
@@ -104,7 +135,7 @@ class SapClient
         return $url;
     }
 
-    private function parseResponse(HttpClient\Response $response): array
+    private function parseResponse(HttpClient\Response $response): ?array
     {
         $status = $response->status ?? 503;
         if ($status < 200 || $status >= 300) {
@@ -113,6 +144,10 @@ class SapClient
                 $errorData['errors'][0]['message'] ?? 'Internal Server Error',
                 $status
             );
+        }
+
+        if ($response->body === '') {
+            return null;
         }
 
         $data = json_decode($response->body, true);

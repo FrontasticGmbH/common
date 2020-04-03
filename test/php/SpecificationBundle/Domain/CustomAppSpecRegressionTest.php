@@ -13,6 +13,7 @@ class CustomAppSpecRegressionTest extends TestCase
      */
     public function testSchemasStillParseCorrectly($schemaFile)
     {
+        $actualSchema = null;
         $specParser = new CustomAppSpecParser();
 
         try {
