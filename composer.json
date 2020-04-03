@@ -63,7 +63,7 @@
     },
     "scripts": {
         "phpstan": [
-            "vendor/bin/phpstan analyze --level=4 --memory-limit=-1 -c phpstan.neon src/php/"
+            "vendor/bin/phpstan analyze --ansi -c phpstan.neon src/php/"
         ],
         "api-tests": [
             "phpunit --configuration phpunit.api.xml --colors=always"

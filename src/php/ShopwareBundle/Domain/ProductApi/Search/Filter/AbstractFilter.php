@@ -23,7 +23,6 @@ abstract class AbstractFilter extends DataObject implements SearchFilterInterfac
      */
     protected function assertFilter(): void
     {
-
     }
 
     public function jsonSerialize(): array

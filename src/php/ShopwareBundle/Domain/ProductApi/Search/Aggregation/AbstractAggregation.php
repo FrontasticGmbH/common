@@ -59,7 +59,6 @@ abstract class AbstractAggregation extends DataObject implements SearchAggregati
      */
     protected function assertAggregation(): void
     {
-
     }
 
     protected function assertName(): void
