@@ -13,7 +13,7 @@ class InvalidQueryException extends Exception
         string $expectedType,
         string $actualType
     ): InvalidQueryException {
-        return new static(sprintf(
+        return new self(sprintf(
             'Query property %s::$%s must be of type %s, got %s.',
             get_class($query),
             $property,
@@ -24,6 +24,6 @@ class InvalidQueryException extends Exception
 
     public static function emptyLocale(): InvalidQueryException
     {
-        return new static('Query locale must not be empty.');
+        return new self('Query locale must not be empty.');
     }
 }
