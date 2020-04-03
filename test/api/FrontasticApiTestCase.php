@@ -156,6 +156,7 @@ class FrontasticApiTestCase extends KernelTestCase
             ->wait();
 
         $this->assertEquals($query, $result->query);
+        $this->assertNotSame($query, $result->query);
 
         return $result;
     }

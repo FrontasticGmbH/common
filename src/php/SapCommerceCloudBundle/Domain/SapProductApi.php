@@ -182,7 +182,7 @@ class SapProductApi implements ProductApi
                     'total' => $result['pagination']['totalResults'],
                     'count' => count($products),
                     'items' => $products,
-                    'query' => $query,
+                    'query' => clone $query,
                 ]);
             });
 
