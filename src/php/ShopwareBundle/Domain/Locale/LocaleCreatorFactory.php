@@ -4,10 +4,7 @@ namespace Frontastic\Common\ShopwareBundle\Domain\Locale;
 
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 
-class LocaleCreatorFactory
+abstract class LocaleCreatorFactory
 {
-    public function factor(Project $project): LocaleCreator
-    {
-        return new LocaleCreator();
-    }
+    abstract public function factor(Project $project): DefaultLocaleCreator;
 }
