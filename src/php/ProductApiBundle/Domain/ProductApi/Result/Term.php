@@ -6,11 +6,15 @@ use Kore\DataObject\DataObject;
 class Term extends DataObject
 {
     /**
+     * Internal identifier. Depending on the backend it maybe equal to $name.
+     *
      * @var string
      */
     public $handle;
 
     /**
+     * Human readable name
+     *
      * @var string
      */
     public $name;
