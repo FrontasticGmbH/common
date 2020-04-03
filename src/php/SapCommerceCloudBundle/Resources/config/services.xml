@@ -9,14 +9,14 @@
 
         <service id="Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory">
             <argument type="service" id="Frontastic\Common\HttpClient" />
-            <tag name="frontastic.common.api_integration" key="sap-commerce-cloud.client_factory"/>
+            <tag name="frontastic.common.api_integration"/>
         </service>
 
         <service id="Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\DefaultSapLocaleCreatorFactory">
             <argument type="service">
                 <service class="Doctrine\Common\Cache\ApcuCache" />
             </argument>
-            <tag name="frontastic.common.api_integration" key="sap-commerce-cloud.locale_creator_factory"/>
+            <tag name="frontastic.common.api_integration"/>
         </service>
 
         <service

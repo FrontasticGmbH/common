@@ -12,12 +12,11 @@
                 <service class="Doctrine\Common\Cache\ApcuCache"/>
             </argument>
             <argument type="service" id="Frontastic\Common\HttpClient"/>
-
-            <tag name="frontastic.common.api_integration" key="commercetools.client_factory"/>
+            <tag name="frontastic.common.api_integration"/>
         </service>
 
         <service id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper">
-            <tag name="frontastic.common.api_integration" key="commercetools.data_mapper"/>
+            <tag name="frontastic.common.api_integration"/>
         </service>
 
         <service
@@ -25,8 +24,7 @@
             <argument type="service">
                 <service class="Doctrine\Common\Cache\ApcuCache"/>
             </argument>
-
-            <tag name="frontastic.common.api_integration" key="commercetools.locale_creator_factory"/>
+            <tag name="frontastic.common.api_integration"/>
         </service>
 
         <service
