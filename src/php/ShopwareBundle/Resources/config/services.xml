@@ -16,16 +16,19 @@
 
         <service id="Frontastic\Common\ShopwareBundle\Domain\ClientFactory">
             <argument type="service" id="Frontastic\Common\HttpClient"/>
-            <tag name="frontastic.common.api_integration.factory"/>
-        </service>
-
-        <service id="Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory">
-            <tag name="frontastic.common.api_integration.factory"/>
+            <tag name="frontastic.common.api_integration"/>
         </service>
 
         <service id="Frontastic\Common\ShopwareBundle\Domain\DataMapperResolver">
             <argument type="tagged_iterator" tag="frontastic.common.shopware.data_mapper"/>
-            <tag name="frontastic.common.api_integration.factory"/>
+            <tag name="frontastic.common.api_integration"/>
         </service>
+
+        <service id="Frontastic\Common\ShopwareBundle\Domain\Locale\DefaultLocaleCreatorFactory">
+            <tag name="frontastic.common.api_integration"/>
+        </service>
+
+        <service id="Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory"
+                 alias="Frontastic\Common\ShopwareBundle\Domain\Locale\DefaultLocaleCreatorFactory"/>
     </services>
 </container>
