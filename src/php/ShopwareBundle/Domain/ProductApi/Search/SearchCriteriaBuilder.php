@@ -53,7 +53,8 @@ class SearchCriteriaBuilder
         'manufacturer.id',
         'manufacturer.name',
         'manufacturer.translated',
-        'media',
+        'media.url',
+        'coverId',
         'cover.media.url',
     ];
 
@@ -63,11 +64,6 @@ class SearchCriteriaBuilder
 
     public static function buildFromProductQuery(Query\ProductQuery $query): array
     {
-        // @TODO: temp, remove
-        if ($query->limit == 24) {
-            $query->limit = 25;
-        }
-
         $criteria = [
             'page' => self::calculatePage($query),
             'limit' => $query->limit,
@@ -83,12 +79,14 @@ class SearchCriteriaBuilder
             'associations' => [
                 'children' => [
                     'associations' => [
-                        'properties' => [
+                        'cover' => [],
+                        'media' => [],
+                        'options' => [
                             'associations' => [
                                 'group' => [],
                             ],
                         ],
-                        'options' => [
+                        'properties' => [
                             'associations' => [
                                 'group' => [],
                             ],
@@ -96,8 +94,11 @@ class SearchCriteriaBuilder
                     ]
                 ],
                 'media' => [],
-                'options' => [],
-//                'categories' => [],
+                'options' => [
+                    'associations' => [
+                        'group' => [],
+                    ],
+                ],
                 'properties' => [
                     'associations' => [
                         'group' => [],
@@ -162,11 +163,6 @@ class SearchCriteriaBuilder
 
     public static function buildFromCategoryQuery(Query\CategoryQuery $query): array
     {
-        // @TODO: temp, remove
-        if ($query->limit == 24) {
-            $query->limit = 25;
-        }
-
         return [
             'page' => self::calculatePage($query),
             'limit' => $query->limit,
@@ -210,7 +206,7 @@ class SearchCriteriaBuilder
 //            ];
 
             if (!empty($facet->terms)) {
-                $filter = SearchFilterFactory::buildSearchFilterFromTerms($field, $facet->terms);
+                $filter = SearchFilterFactory::buildSearchFilterFromTerms($facet);
             }
         } elseif ($facet instanceof Query\RangeFacet) {
             $aggregations[] = [
@@ -221,7 +217,7 @@ class SearchCriteriaBuilder
             ];
 
             if ($facet->min !== 0 || $facet->max !== PHP_INT_MAX) {
-                $filter = SearchFilterFactory::buildSearchRangeFilter($facet->handle, $facet->min, $facet->max);
+                $filter = SearchFilterFactory::buildSearchRangeFilter($facet);
             }
         }
 

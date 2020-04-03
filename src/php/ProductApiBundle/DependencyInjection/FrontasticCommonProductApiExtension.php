@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-class FrontasticCommonProductApiExtension extends \Symfony\Component\DependencyInjection\Extension\Extension
+class FrontasticCommonProductApiExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {

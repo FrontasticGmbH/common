@@ -12,6 +12,16 @@ class ProductVariantMapper extends AbstractDataMapper implements QueryAwareDataM
 
     public const MAPPER_NAME = 'product-variant';
 
+    /**
+     * Contains a collection of root attributes in variant data that should be mapped to attributes
+     * in a similar way as properties are mapped
+     *
+     * @const string[]
+     */
+    private const ROOT_ATTRIBUTES_AS_PROPERTIES = [
+        'ean',
+    ];
+
     public function getName(): string
     {
         return static::MAPPER_NAME;
@@ -28,20 +38,6 @@ class ProductVariantMapper extends AbstractDataMapper implements QueryAwareDataM
             'price' => $this->extractPriceData($variantData),
             'attributes' => $this->mapDataToAttributes($variantData),
             'images' => $this->mapDataToImages($variantData),
-//            array_merge(
-//                array_map(
-//                    function (array $asset): string {
-//                        return $asset['sources'][0]['uri'];
-//                    },
-//                    $variantData['assets']
-//                ),
-//                array_map(
-//                    function (array $image): string {
-//                        return $image['url'];
-//                    },
-//                    $variantData['images']
-//                )
-//            ),
             'isOnStock' => $variantData['available'] && $variantData['availableStock'] > 0,
             'dangerousInnerVariant' => $this->mapDangerousInnerData($variantData),
         ]);
@@ -52,16 +48,27 @@ class ProductVariantMapper extends AbstractDataMapper implements QueryAwareDataM
         return $variantData['price'][0]['gross'] * 100;
     }
 
-    private function mapDataToAttributes(array $variantData)
+    private function mapDataToAttributes(array $variantData): array
     {
-        $this->mapPropertiesToAttributes($variantData['properties'] ?? []);
+        return array_merge(
+            $this->mapRootAttributesToAttributes($variantData),
+            $this->mapPropertiesToAttributes($variantData['properties'] ?? [])
+        );
     }
 
     private function mapDataToImages(array $variantData): array
     {
-        $result = [];
+        $coverId = $variantData['coverId'];
+        $coverImage = $variantData['cover'] ?? null;
+        $allImages = $variantData['media'] ?? [];
+        $imagesWithoutCover = array_filter($allImages,
+            static function (array $imageData) use ($coverId) {
+                return $coverId !== null && $imageData['id'] !== $coverId;
+            });
 
-        return $result;
+        return array_map(static function ($image) {
+            return $image['media']['url'];
+        }, array_filter(array_merge([$coverImage], $imagesWithoutCover)));
     }
 
     private function mapPropertiesToAttributes(array $properties): array
@@ -81,13 +88,18 @@ class ProductVariantMapper extends AbstractDataMapper implements QueryAwareDataM
             } else {
                 $attribute['value'] = [
                     'key' => key($group['properties']),
-                    'value' => current($group['properties']),
+                    'label' => current($group['properties']),
                 ];
             }
 
             $result[$group['name']] = $attribute;
         }
         return $result;
+    }
+
+    private function mapRootAttributesToAttributes(array $variantData): array
+    {
+        return array_intersect_key($variantData, array_flip(self::ROOT_ATTRIBUTES_AS_PROPERTIES));
     }
 
     private function groupProperties(array $properties): array
