@@ -19,9 +19,9 @@ class Factory
      */
     private $defaultOptions;
 
-    public function __construct(LoggerInterface $logger, Options $defaultOptions = null)
+    public function __construct(LoggerInterface $httpClientLogger, Options $defaultOptions = null)
     {
-        $this->logger = $logger;
+        $this->logger = $httpClientLogger;
 
         if ($defaultOptions === null) {
             $defaultOptions = new Options();
@@ -48,7 +48,7 @@ class Factory
         }
 
         if ($configuration->collectStats) {
-            $httpClient = new Logstash($httpClient);
+            $httpClient = new Logger($httpClient, $this->logger);
         }
 
         return $httpClient;
