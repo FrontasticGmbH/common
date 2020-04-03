@@ -55,7 +55,7 @@ class Logger extends HttpClient
                         $time * 1000
                     ),
                     [
-                        'request' => [
+                        'outgoingRequest' => [
                             'host' => $host,
                             'path' => parse_url($url, PHP_URL_PATH),
                             'method' => $method,
