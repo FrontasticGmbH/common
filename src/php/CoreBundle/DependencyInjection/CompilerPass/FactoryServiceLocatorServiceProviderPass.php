@@ -20,7 +20,7 @@ class FactoryServiceLocatorServiceProviderPass implements CompilerPassInterface
         $aliasedServices = $this->getFrontasticAliases($container);
 
         foreach ($taggedServiceIds as $serviceId => $tags) {
-            foreach($aliasedServices as $aliasId => $alias) {
+            foreach ($aliasedServices as $aliasId => $alias) {
                 if ((string)$alias === $serviceId) {
                     FactoryServiceLocator::addSubscribedService($aliasId);
                     $factoryServiceLocatorDef->addTag(self::SERVICE_SUBSCRIBER_TAG, ['id' => $aliasId]);
@@ -34,8 +34,12 @@ class FactoryServiceLocatorServiceProviderPass implements CompilerPassInterface
      */
     private function getFrontasticAliases(ContainerBuilder $container): array
     {
-        return array_filter($container->getAliases(), static function(string $key) {
-            return strpos($key, self::FRONTASTIC_NAMESPACE) !== false;
-        }, ARRAY_FILTER_USE_KEY);
+        return array_filter(
+            $container->getAliases(),
+            static function (string $key) {
+                return strpos($key, self::FRONTASTIC_NAMESPACE) !== false;
+            },
+            ARRAY_FILTER_USE_KEY
+        );
     }
 }

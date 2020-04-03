@@ -6,7 +6,7 @@ class ProductNotFoundException extends Exception
 {
     public static function byProperty(string $propertyName, string $value): ProductNotFoundException
     {
-        return new static(sprintf('Product with %s "%s" not found', $propertyName, $value));
+        return new self(sprintf('Product with %s "%s" not found', $propertyName, $value));
     }
 
     public static function byProductId(string $productId): ProductNotFoundException

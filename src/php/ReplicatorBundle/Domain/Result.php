@@ -38,7 +38,7 @@ class Result extends DataObject
 
     public static function fromThrowable(\Throwable $e)
     {
-        $result = new static([
+        $result = new self([
             'ok' => false,
             'message' => $e->getMessage(),
         ]);
