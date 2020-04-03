@@ -4,6 +4,7 @@ namespace Frontastic\Common\ProductApiBundle\Domain;
 
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
@@ -36,6 +37,11 @@ class DefaultProductApiFactory implements ProductApiFactory
     private $sapLocaleCreatorFactory;
 
     /**
+     * @var EnabledFacetService
+     */
+    private $enabledFacetService;
+
+    /**
      * @var array
      */
     private $decorators;
@@ -45,12 +51,14 @@ class DefaultProductApiFactory implements ProductApiFactory
         Commercetools\Locale\CommercetoolsLocaleCreatorFactory $commercetoolsLocaleCreatorFactory,
         SapClientFactory $sapClientFactory,
         SapLocaleCreatorFactory $sapLocaleCreatorFactory,
+        EnabledFacetService $enabledFacetService,
         iterable $decorators = []
     ) {
         $this->commercetoolsClientFactory = $commercetoolsClientFactory;
         $this->commercetoolsLocaleCreatorFactory = $commercetoolsLocaleCreatorFactory;
         $this->sapClientFactory = $sapClientFactory;
         $this->sapLocaleCreatorFactory = $sapLocaleCreatorFactory;
+        $this->enabledFacetService = $enabledFacetService;
         $this->decorators = $decorators;
     }
 
@@ -65,6 +73,7 @@ class DefaultProductApiFactory implements ProductApiFactory
                     $client,
                     new Commercetools\Mapper(),
                     $this->commercetoolsLocaleCreatorFactory->factor($project, $client),
+                    $this->enabledFacetService,
                     $project->defaultLanguage
                 );
                 break;
