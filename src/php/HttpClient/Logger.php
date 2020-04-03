@@ -38,8 +38,7 @@ class Logger extends HttpClient
         string $body = '',
         array $headers = [],
         Options $options = null
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $start = microtime(true);
 
         return $this->aggregate
