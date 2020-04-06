@@ -11,10 +11,9 @@ use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFacto
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapProjectApi;
 use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFactory;
-use Frontastic\Common\ShopwareBundle\Domain\ProjectApi\CachedShopwareProjectApi;
-use Frontastic\Common\ShopwareBundle\Domain\ProjectApi\ShopwareProjectConfigApi;
+use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory as ShopwareLocaleCreatorFactory;
+use Frontastic\Common\ShopwareBundle\Domain\ProjectApi\ShopwareProjectApi;
 use OutOfBoundsException;
-use Psr\SimpleCache\CacheInterface;
 
 class DefaultProjectApiFactory implements ProjectApiFactory
 {
@@ -23,15 +22,9 @@ class DefaultProjectApiFactory implements ProjectApiFactory
      */
     private $serviceLocator;
 
-    /**
-     * @var \Psr\SimpleCache\CacheInterface
-     */
-    private $cache;
-
-    public function __construct(FactoryServiceLocator $serviceLocator, CacheInterface $cache)
+    public function __construct(FactoryServiceLocator $serviceLocator)
     {
         $this->serviceLocator = $serviceLocator;
-        $this->cache = $cache;
     }
 
     public function factor(Project $project): ProjectApi
@@ -61,8 +54,14 @@ class DefaultProjectApiFactory implements ProjectApiFactory
                 );
             case 'shopware':
                 $clientFactory = $this->serviceLocator->get(ShopwareClientFactory::class);
+                $localeCreatorFactory = $this->serviceLocator->get(ShopwareLocaleCreatorFactory::class);
 
-                return new ShopwareProjectApi($clientFactory->factor($project));
+                $client = $clientFactory->factorForProjectAndType($project, 'product');
+                return new ShopwareProjectApi(
+                    $client,
+                    $localeCreatorFactory->factor($project),
+                    $project->languages
+                );
             default:
                 throw new OutOfBoundsException(
                     "No product API configured for project {$project->name}. " .

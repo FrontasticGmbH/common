@@ -1,18 +1,18 @@
 <?php declare(strict_types = 1);
 
-namespace Frontastic\Common\ShopwareBundle\Domain\ProjectApi;
+namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi;
 
 use Doctrine\Common\Cache\Cache;
 use Frontastic\Common\ProjectApiBundle\Domain\Attribute;
 use Frontastic\Common\ProjectApiBundle\Domain\ProjectApi;
 use Frontastic\Common\ProjectApiBundle\Domain\ProjectConfigApi;
 
-class CachedShopwareProjectApi implements ProjectApi, ProjectConfigApi
+class CachedShopwareProjectConfigApi implements ProjectConfigApi
 {
     private const DEFAULT_CACHE_TTL = 600;
 
     /**
-     * @var \Frontastic\Common\ProjectApiBundle\Domain\ProjectConfigApi|\Frontastic\Common\ProjectApiBundle\Domain\ProjectConfigApi
+     * @var \Frontastic\Common\ProjectApiBundle\Domain\ProjectConfigApi
      */
     private $aggregate;
 
@@ -43,24 +43,6 @@ class CachedShopwareProjectApi implements ProjectApi, ProjectConfigApi
         }
 
         $result = $this->aggregate->getProjectConfig();
-        $this->cache->save($cacheKey, $result, $this->cacheTtl);
-
-        return $result;
-    }
-
-    /**
-     * @return Attribute[] Attributes mapped by ID
-     */
-    public function getSearchableAttributes(): array
-    {
-        $cacheKey = $this->buildCacheKey(__METHOD__);
-
-        $result = $this->cache->fetch($cacheKey);
-        if ($result !== false) {
-            return $result;
-        }
-
-        $result = $this->aggregate->getSearchableAttributes();
         $this->cache->save($cacheKey, $result, $this->cacheTtl);
 
         return $result;
