@@ -2,11 +2,19 @@
 
 namespace Frontastic\Common\ProjectApiBundle\Domain;
 
-use Doctrine\Common\Cache\Cache;
 use Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory as CommercetoolsClientFactory;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory;
+use Frontastic\Common\ProjectApiBundle\Domain\ProjectApi\Commercetools as CommercetoolsProjcetApi;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFactory;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\SapProjectApi;
+use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectApi\CachedShopwareProjectApi;
-use Frontastic\Common\ShopwareBundle\Domain\ProjectApi\ShopwareProjectApi;
+use Frontastic\Common\ShopwareBundle\Domain\ProjectApi\ShopwareProjectConfigApi;
+use OutOfBoundsException;
+use Psr\SimpleCache\CacheInterface;
 
 class DefaultProjectApiFactory implements ProjectApiFactory
 {
@@ -16,11 +24,11 @@ class DefaultProjectApiFactory implements ProjectApiFactory
     private $serviceLocator;
 
     /**
-     * @var \Doctrine\Common\Cache\Cache
+     * @var \Psr\SimpleCache\CacheInterface
      */
     private $cache;
 
-    public function __construct(FactoryServiceLocator $serviceLocator, Cache $cache)
+    public function __construct(FactoryServiceLocator $serviceLocator, CacheInterface $cache)
     {
         $this->serviceLocator = $serviceLocator;
         $this->cache = $cache;
@@ -32,35 +40,35 @@ class DefaultProjectApiFactory implements ProjectApiFactory
 
         switch ($productConfig->engine) {
             case 'commercetools':
-                /**
-                 * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory $clientFactory
-                 * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\DefaultCommercetoolsLocaleCreatorFactory $localeCreatorFactory
-                 */
-                $clientFactory = $this->serviceLocator->resolveClientFactory($productConfig->engine);
-                $localeCreatorFactory = $this->serviceLocator->resolveLocaleCreatorFactory($productConfig->engine);
+                $clientFactory = $this->serviceLocator->get(CommercetoolsClientFactory::class);
+                $localeCreatorFactory = $this->serviceLocator->get(CommercetoolsLocaleCreatorFactory::class);
 
                 $client = $clientFactory->factorForProjectAndType($project, 'product');
+                return new CommercetoolsProjcetApi(
+                    $client,
+                    $localeCreatorFactory->factor($project, $client),
+                    $project->languages
+                );
+            case 'sap-commerce-cloud':
+                $clientFactory = $this->serviceLocator->get(SapClientFactory::class);
+                $localeCreatorFactory = $this->serviceLocator->get(SapLocaleCreatorFactory::class);
 
-                return new ProjectApi\Commercetools(
+                $client = $clientFactory->factorForProjectAndType($project, 'product');
+                return new SapProjectApi(
                     $client,
                     $localeCreatorFactory->factor($project, $client),
                     $project->languages
                 );
             case 'shopware':
-                /**
-                 * @var \Frontastic\Common\ShopwareBundle\Domain\ClientFactory $clientFactory
-                 */
-                $clientFactory = $this->serviceLocator->resolveClientFactory($productConfig->engine);
+                $clientFactory = $this->serviceLocator->get(ShopwareClientFactory::class);
 
-                return new CachedShopwareProjectApi(
-                    new ShopwareProjectApi($clientFactory->factor($project)),
-                    $this->cache
-                );
+                return new ShopwareProjectApi($clientFactory->factor($project));
             default:
-                throw new \OutOfBoundsException(
+                throw new OutOfBoundsException(
                     "No product API configured for project {$project->name}. " .
                     "Check the provisioned customer configuration in app/config/customers/."
                 );
         }
     }
 }
+

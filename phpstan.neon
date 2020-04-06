@@ -1,7 +1,9 @@
 parameters:
     level: 1
     paths:
-        - src/
+        - src/php
+        - test/api
+        - test/php
     inferPrivatePropertyTypeFromConstructor: true
     ignoreErrors:
         - '#Tideways\\Profiler#'

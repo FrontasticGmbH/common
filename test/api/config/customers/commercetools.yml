@@ -2,10 +2,12 @@
 name: "commercetools"
 secret: "secret"
 configuration:
+    test:
+        disabled: false
     commercetools:
         projectKey: frontastic-1
-        clientId: xQIEJY3is0ETFY-7lSf-fAUc
-        clientSecret: YjGgixzob0YJ6_H98Az9sqkhWp0bzZ-3
+        clientId: nJIPfHoT9_GlC29EfL75zdkg
+        clientSecret: tUrh_yyjWn7RcVY0MRXMbe6h7S9MPiz0
 projects:
     - projectId: test
       name: Commercetools Test Catwalk

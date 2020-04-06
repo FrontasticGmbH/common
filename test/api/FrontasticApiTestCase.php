@@ -2,6 +2,8 @@
 
 namespace Frontastic\Common\ApiTests;
 
+use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
+use Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\CartApiFactory;
 use Frontastic\Common\EnvironmentResolver;
@@ -107,7 +109,7 @@ class FrontasticApiTestCase extends KernelTestCase
     protected function assertNotEmptyString($actual, string $message = ''): void
     {
         $this->assertInternalType('string', $actual, $message);
-        $this->assertNotEmpty($actual, $message);
+        $this->assertNotEquals('', $actual, $message);
     }
 
     protected function assertIsValidTranslatedLabel(Project $project, $label): void
@@ -154,6 +156,7 @@ class FrontasticApiTestCase extends KernelTestCase
             ->wait();
 
         $this->assertEquals($query, $result->query);
+        $this->assertNotSame($query, $result->query);
 
         return $result;
     }
@@ -206,6 +209,13 @@ class FrontasticApiTestCase extends KernelTestCase
             ->factor($project);
     }
 
+    protected function getAccountApiForProject(Project $project): AccountApi
+    {
+        return self::$container
+            ->get(AccountApiFactory::class)
+            ->factor($project);
+    }
+
     protected function buildQueryParameters(string $language, ?int $limit = null, ?int $offset = null)
     {
         $parameters = [
@@ -222,4 +232,10 @@ class FrontasticApiTestCase extends KernelTestCase
         return $parameters;
     }
 
+    protected function requireProjectFeature(Project $project, string $featureName): void
+    {
+        if (!($project->configuration['test']->{$featureName} ?? true)) {
+            $this->markTestSkipped($featureName . ' is required for this test');
+        }
+    }
 }

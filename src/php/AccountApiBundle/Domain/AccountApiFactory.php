@@ -2,43 +2,57 @@
 
 namespace Frontastic\Common\AccountApiBundle\Domain;
 
-use Doctrine\Common\Cache\Cache;
-use Frontastic\Common\HttpClient;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
-use Frontastic\Common\ReplicatorBundle\Domain\Customer;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory;
+use Frontastic\Common\ReplicatorBundle\Domain\Project;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFactory;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\SapAccountApi;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\SapDataMapper;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class AccountApiFactory
 {
+    /** @var ContainerInterface */
     private $container;
-    private $cache;
+
     private $decorators = [];
 
-    public function __construct($container, Cache $cache, iterable $decorators)
+    public function __construct(ContainerInterface $container, iterable $decorators)
     {
         $this->container = $container;
-        $this->cache = $cache;
         $this->decorators = $decorators;
     }
 
-    public function factor(Customer $customer): AccountApi
+    public function factor(Project $project): AccountApi
     {
-        switch ($customer->configuration['account']->engine) {
+        $accountConfig = $project->getConfigurationSection('account');
+
+        switch ($accountConfig->engine) {
             case 'commercetools':
-                $accountApi = new AccountApi\Commercetools(
-                    new Client(
-                        $customer->configuration['account']->clientId,
-                        $customer->configuration['account']->clientSecret,
-                        $customer->configuration['account']->projectKey,
-                        $customer->configuration['account']->hostUrl ?? 'https://api.sphere.io',
-                        $this->container->get(HttpClient::class),
-                        $this->cache
-                    )
+                $client = $this->container
+                    ->get(ClientFactory::class)
+                    ->factorForProjectAndType($project, 'account');
+
+                $accountApi = new AccountApi\Commercetools($client);
+                break;
+
+            case 'sap-commerce-cloud':
+                $client = $this->container
+                    ->get(SapClientFactory::class)
+                    ->factorForProjectAndType($project, 'account');
+
+                $accountApi = new SapAccountApi(
+                    $client,
+                    $this->container
+                        ->get(SapLocaleCreatorFactory::class)
+                        ->factor($project, $client),
+                    new SapDataMapper($client)
                 );
                 break;
 
             default:
                 throw new \OutOfBoundsException(
-                    "No account API configured for customer {$customer->name}. " .
+                    "No account API configured for project {$project->name}. " .
                     "Check the provisioned customer configuration in app/config/customers/."
                 );
         }

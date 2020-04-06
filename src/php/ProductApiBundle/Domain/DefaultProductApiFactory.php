@@ -4,7 +4,12 @@ namespace Frontastic\Common\ProductApiBundle\Domain;
 
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFactory;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\SapDataMapper;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\SapProductApi;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -19,7 +24,22 @@ class DefaultProductApiFactory implements ProductApiFactory
     /**
      * @var Commercetools\Locale\CommercetoolsLocaleCreatorFactory
      */
-    private $localeCreatorFactory;
+    private $commercetoolsLocaleCreatorFactory;
+
+    /**
+     * @var SapClientFactory
+     */
+    private $sapClientFactory;
+
+    /**
+     * @var SapLocaleCreatorFactory
+     */
+    private $sapLocaleCreatorFactory;
+
+    /**
+     * @var EnabledFacetService
+     */
+    private $enabledFacetService;
 
     /**
      * @var array
@@ -28,11 +48,17 @@ class DefaultProductApiFactory implements ProductApiFactory
 
     public function __construct(
         ClientFactory $commercetoolsClientFactory,
-        Commercetools\Locale\CommercetoolsLocaleCreatorFactory $localeCreatorFactory,
+        Commercetools\Locale\CommercetoolsLocaleCreatorFactory $commercetoolsLocaleCreatorFactory,
+        SapClientFactory $sapClientFactory,
+        SapLocaleCreatorFactory $sapLocaleCreatorFactory,
+        EnabledFacetService $enabledFacetService,
         iterable $decorators = []
     ) {
         $this->commercetoolsClientFactory = $commercetoolsClientFactory;
-        $this->localeCreatorFactory = $localeCreatorFactory;
+        $this->commercetoolsLocaleCreatorFactory = $commercetoolsLocaleCreatorFactory;
+        $this->sapClientFactory = $sapClientFactory;
+        $this->sapLocaleCreatorFactory = $sapLocaleCreatorFactory;
+        $this->enabledFacetService = $enabledFacetService;
         $this->decorators = $decorators;
     }
 
@@ -46,8 +72,18 @@ class DefaultProductApiFactory implements ProductApiFactory
                 $productApi = new Commercetools(
                     $client,
                     new Commercetools\Mapper(),
-                    $this->localeCreatorFactory->factor($project, $client),
+                    $this->commercetoolsLocaleCreatorFactory->factor($project, $client),
+                    $this->enabledFacetService,
                     $project->defaultLanguage
+                );
+                break;
+
+            case 'sap-commerce-cloud':
+                $client = $this->sapClientFactory->factorForProjectAndType($project, 'product');
+                $productApi = new SapProductApi(
+                    $client,
+                    $this->sapLocaleCreatorFactory->factor($project, $client),
+                    new SapDataMapper($client)
                 );
                 break;
 

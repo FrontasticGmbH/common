@@ -1,26 +1,20 @@
 <?php
 
-use Frontastic\Common\ShopwareBundle\Domain\Search\Filter\Contains;
-use Frontastic\Common\ShopwareBundle\Domain\Search\Filter\Equals;
-use Frontastic\Common\ShopwareBundle\Domain\Search\Filter\EqualsAny;
-use Frontastic\Common\ShopwareBundle\Domain\Search\Filter\Multi;
-use Frontastic\Common\ShopwareBundle\Domain\Search\Filter\Not;
-use Frontastic\Common\ShopwareBundle\Domain\Search\Filter\Range;
+use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Filter;
 
 # Filters example
 
-# Contains filter
-$contains = new Contains([
+$contains = new Filter\Contains([
     'field' => 'name',
     'value' => 'Lightweight'
 ]);
 
-$equals = new Equals([
+$equals = new Filter\Equals([
     'field' => 'stock',
     'value' => 1,
 ]);
 
-$equalsAny = new EqualsAny([
+$equalsAny = new Filter\EqualsAny([
     'field' => 'productNumber',
     'value' => [
         '3fed029475fa4d4585f3a119886e0eb1',
@@ -28,34 +22,35 @@ $equalsAny = new EqualsAny([
     ],
 ]);
 
-$multi = new Multi([
+$multi = new Filter\Multi([
+    'operator' => Filter\Multi::CONNECTION_AND,
     'value' => [
-        new Equals([
+        new Filter\Equals([
             'field' => 'stock',
             'value' => 1,
         ]),
-        new Equals([
+        new Filter\Equals([
             'field' => 'active',
             'value' => true,
         ]),
     ],
 ]);
 
-$not = new Not([
-    'operator' => 'or',
+$not = new Filter\Not([
+    'operator' => Filter\Not::CONNECTION_OR,
     'value' => [
-        new Equals([
+        new Filter\Equals([
             'field' => 'stock',
             'value' => 1,
         ]),
-        new Equals([
+        new Filter\Equals([
             'field' => 'availableStock',
             'value' => 1,
         ]),
     ],
 ]);
 
-$range = new Range([
+$range = new Filter\Range([
     'field' => 'stock',
     'value' => [
         'gte' => 20,

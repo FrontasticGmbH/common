@@ -17,7 +17,6 @@ class ProductTypeController extends Controller
 
         $query = new ProductTypeQuery([
             'locale' => $context->locale,
-            'limit' => 250,
         ]);
 
         return [

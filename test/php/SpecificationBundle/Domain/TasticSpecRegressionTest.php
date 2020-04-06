@@ -13,6 +13,7 @@ class TasticSpecRegressionTest extends TestCase
      */
     public function testSchemasStillParseCorrectly($schemaFile)
     {
+        $actualSchema = null;
         $specParser = new TasticSpecParser();
 
         try {

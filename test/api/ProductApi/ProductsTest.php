@@ -377,7 +377,7 @@ class ProductsTest extends FrontasticApiTestCase
         $sku = $product->variants[0]->sku;
         $this->assertNotEmptyString($sku);
 
-        $productsBySku = $this->queryProducts($project, $language, ['skus' => [$sku, self::NON_EXISTING_SKU]]);
+        $productsBySku = $this->queryProducts($project, $language, ['skus' => [$sku]]);
         $this->assertSingleProductResult($product, $productsBySku);
     }
 
@@ -391,7 +391,7 @@ class ProductsTest extends FrontasticApiTestCase
         $this->assertNotEmptyString($productId);
 
         $productsByProductId =
-            $this->queryProducts($project, $language, ['productIds' => [$productId, self::NON_EXISTING_PRODUCT_ID]]);
+            $this->queryProducts($project, $language, ['productIds' => [$productId]]);
         $this->assertSingleProductResult($product, $productsByProductId);
     }
 
@@ -467,9 +467,21 @@ class ProductsTest extends FrontasticApiTestCase
         // the information from the search index might be outdated.
 
         $this->assertSame($expected->productId, $actual->productId);
-        $this->assertSame($expected->name, $actual->name);
-        $this->assertSame($expected->slug, $actual->slug);
-        $this->assertSame($expected->description, $actual->description);
+        $this->assertSame(
+            $expected->name,
+            $actual->name,
+            sprintf('Product %s (SKU %s) has different names', $expected->productId, $expected->sku)
+        );
+        $this->assertSame(
+            $expected->slug,
+            $actual->slug,
+            sprintf('Product %s (SKU %s) has different slugs', $expected->productId, $expected->sku)
+        );
+        $this->assertSame(
+            $expected->description,
+            $actual->description,
+            sprintf('Product %s (SKU %s) has different descriptions', $expected->productId, $expected->sku)
+        );
 
         $this->assertSameSize($expected->variants, $actual->variants);
         for ($variantIndex = 0; $variantIndex < count($expected->variants); ++$variantIndex) {
@@ -519,7 +531,10 @@ class ProductsTest extends FrontasticApiTestCase
                 $this->assertNotEmptyString($product->version);
             }
 
-            $this->assertNotEmptyString($product->name);
+            $this->assertNotEmptyString(
+                $product->name,
+                sprintf('Product %s (SKU %s) has an invalid name', $product->productId, $product->sku)
+            );
 
             $this->assertNotEmptyString($product->slug);
             $this->assertRegExp(

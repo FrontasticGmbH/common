@@ -11,9 +11,11 @@ trait QueryAwareDataMapperTrait
      */
     private $query;
 
-    public function setQuery(Query $query): void
+    public function setQuery(Query $query): self
     {
         $this->query = $query;
+
+        return $this;
     }
 
     public function getQuery(): Query

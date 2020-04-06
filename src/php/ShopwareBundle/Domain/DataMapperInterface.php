@@ -6,5 +6,10 @@ interface DataMapperInterface
 {
     public function getName(): string;
 
+    /**
+     * @param array $resource
+     *
+     * @return mixed
+     */
     public function map(array $resource);
 }
