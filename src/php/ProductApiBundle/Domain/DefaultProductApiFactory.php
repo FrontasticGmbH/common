@@ -2,39 +2,33 @@
 
 namespace Frontastic\Common\ProductApiBundle\Domain;
 
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory;
+use Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools as CommercetoolsProductApi;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory as CommercetoolsClientFactory;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper as CommercetoolsDataMapper;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapDataMapper;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapProductApi;
+use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFactory;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapperResolver as ShopwareDataMapperResolver;
+use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory as ShopwareLocaleCreatorFactory;
+use Frontastic\Common\ShopwareBundle\Domain\ProductApi\ShopwareProductApi;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DefaultProductApiFactory implements ProductApiFactory
 {
-    /**
-     * @var ClientFactory
-     */
-    private $commercetoolsClientFactory;
+    private const CONFIGURATION_TYPE_NAME = 'product';
 
     /**
-     * @var Commercetools\Locale\CommercetoolsLocaleCreatorFactory
+     * @var \Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator
      */
-    private $commercetoolsLocaleCreatorFactory;
-
-    /**
-     * @var SapClientFactory
-     */
-    private $sapClientFactory;
-
-    /**
-     * @var SapLocaleCreatorFactory
-     */
-    private $sapLocaleCreatorFactory;
+    private $serviceLocator;
 
     /**
      * @var EnabledFacetService
@@ -47,17 +41,11 @@ class DefaultProductApiFactory implements ProductApiFactory
     private $decorators;
 
     public function __construct(
-        ClientFactory $commercetoolsClientFactory,
-        Commercetools\Locale\CommercetoolsLocaleCreatorFactory $commercetoolsLocaleCreatorFactory,
-        SapClientFactory $sapClientFactory,
-        SapLocaleCreatorFactory $sapLocaleCreatorFactory,
+        FactoryServiceLocator $serviceLocator,
         EnabledFacetService $enabledFacetService,
         iterable $decorators = []
     ) {
-        $this->commercetoolsClientFactory = $commercetoolsClientFactory;
-        $this->commercetoolsLocaleCreatorFactory = $commercetoolsLocaleCreatorFactory;
-        $this->sapClientFactory = $sapClientFactory;
-        $this->sapLocaleCreatorFactory = $sapLocaleCreatorFactory;
+        $this->serviceLocator = $serviceLocator;
         $this->enabledFacetService = $enabledFacetService;
         $this->decorators = $decorators;
     }
@@ -68,25 +56,44 @@ class DefaultProductApiFactory implements ProductApiFactory
 
         switch ($productConfig->engine) {
             case 'commercetools':
-                $client = $this->commercetoolsClientFactory->factorForProjectAndType($project, 'product');
-                $productApi = new Commercetools(
+                $clientFactory = $this->serviceLocator->get(CommercetoolsClientFactory::class);
+                $dataMapper = $this->serviceLocator->get(CommercetoolsDataMapper::class);
+                $localeCreatorFactory = $this->serviceLocator->get(CommercetoolsLocaleCreatorFactory::class);
+
+                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+
+                $productApi = new CommercetoolsProductApi(
                     $client,
-                    new Commercetools\Mapper(),
-                    $this->commercetoolsLocaleCreatorFactory->factor($project, $client),
+                    $dataMapper,
+                    $localeCreatorFactory->factor($project, $client),
                     $this->enabledFacetService,
                     $project->defaultLanguage
                 );
                 break;
-
             case 'sap-commerce-cloud':
-                $client = $this->sapClientFactory->factorForProjectAndType($project, 'product');
+                $clientFactory = $this->serviceLocator->get(SapClientFactory::class);
+                $localeCreatorFactory = $this->serviceLocator->get(SapLocaleCreatorFactory::class);
+
+                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
                 $productApi = new SapProductApi(
                     $client,
-                    $this->sapLocaleCreatorFactory->factor($project, $client),
+                    $localeCreatorFactory->factor($project, $client),
                     new SapDataMapper($client)
                 );
                 break;
+            case 'shopware':
+                $clientFactory = $this->serviceLocator->get(ShopwareClientFactory::class);
+                $dataMapper = $this->serviceLocator->get(ShopwareDataMapperResolver::class);
+                $localeCreatorFactory = $this->serviceLocator->get(ShopwareLocaleCreatorFactory::class);
 
+                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+
+                $productApi = new ShopwareProductApi(
+                    $client,
+                    $dataMapper,
+                    $localeCreatorFactory->factor($project)
+                );
+                break;
             default:
                 throw new \OutOfBoundsException(
                     "No product API configured for project {$project->name}. " .

@@ -22,7 +22,7 @@ abstract class AbstractDataMapper implements DataMapperInterface
 
     protected function mapDangerousInnerData(array $innerData): ?array
     {
-        if (!$this instanceof QueryAwareDataMapperInterface || $this->getQuery()->loadDangerousInnerData) {
+        if (!($this instanceof QueryAwareDataMapperInterface) || $this->getQuery()->loadDangerousInnerData === false) {
             return null;
         }
 

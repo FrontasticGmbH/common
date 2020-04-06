@@ -2,6 +2,9 @@
 name: "shopware"
 secret: "secret"
 configuration:
+  test:
+    disabled: false
+    canQueryCategoriesBySlug: false
   shopware:
     apiKey: SWSCZUM3CTRIYLP1S2JYBGJ6OA
     endpoint: http://host.docker.internal:8000/sales-channel-api/v1

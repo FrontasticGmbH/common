@@ -167,6 +167,8 @@ class CategoriesTest extends FrontasticApiTestCase
      */
     public function testFetchCategoryBySlugReturnsResult(Project $project, string $language): void
     {
+        $this->requireCategoryEndpointToSupportSlugs($project);
+
         $categories = $this->fetchCategories($project, $language);
         $this->assertNotEmpty($categories);
 
@@ -187,6 +189,8 @@ class CategoriesTest extends FrontasticApiTestCase
      */
     public function testFetchCategoryByNotExistingSlugReturnsEmptyResult(Project $project, string $language): void
     {
+        $this->requireCategoryEndpointToSupportSlugs($project);
+
         $categories = $this->fetchCategoriesBySlug($project, $language, self::NON_EXISTING_SLUG);
         $this->assertEmpty($categories);
     }
@@ -234,5 +238,10 @@ class CategoriesTest extends FrontasticApiTestCase
         usort($actual, $compareCategoryIds);
 
         $this->assertEquals($expected, $actual);
+    }
+
+    private function requireCategoryEndpointToSupportSlugs(Project $project): void
+    {
+        $this->requireProjectFeature($project, 'canQueryCategoriesBySlug');
     }
 }
