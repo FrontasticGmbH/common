@@ -2,6 +2,8 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain;
 
+use RuntimeException;
+
 class DataMapperResolver
 {
     /**
@@ -22,7 +24,7 @@ class DataMapperResolver
     public function getMapper(string $name): DataMapperInterface
     {
         if (!isset($this->mappers[$name])) {
-            throw new \RuntimeException(sprintf('Mapper not found by name: %s', $name));
+            throw new RuntimeException(sprintf('Mapper not found by name: %s', $name));
         }
 
         return $this->mappers[$name];

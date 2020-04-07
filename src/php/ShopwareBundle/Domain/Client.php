@@ -27,11 +27,29 @@ class Client implements ClientInterface
      */
     private $baseUri;
 
+    private $defaultHeaders = [
+        'Accept' => '*/*',
+        'Content-Type' => 'application/json',
+        'sw-access-key' => ['getApiKey'],
+    ];
+
     public function __construct(HttpClient $httpClient, string $apiKey, string $baseUri)
     {
         $this->httpClient = $httpClient;
         $this->apiKey = $apiKey;
         $this->baseUri = $baseUri;
+    }
+
+    public function forLanguage(string $languageId): ClientInterface
+    {
+        $this->defaultHeaders['sw-language-id'] = $languageId;
+        return $this;
+    }
+
+    public function forCurrency(string $currencyId): ClientInterface
+    {
+        $this->defaultHeaders['sw-currency-id'] = $currencyId;
+        return $this;
     }
 
     public function get(string $uri, array $parameters = [], array $headers = []): PromiseInterface
@@ -59,7 +77,7 @@ class Client implements ClientInterface
         return $this->request(self::METHOD_DELETE, $uri, $parameters, $headers);
     }
 
-    public function request(
+    private function request(
         string $method,
         string $uriComponent,
         array $parameters,
@@ -70,10 +88,6 @@ class Client implements ClientInterface
             new Uri($this->baseUri . $uriComponent),
             $parameters
         );
-
-        $headers[] = 'Accept: */*';
-        $headers[] = 'Content-Type: application/json';
-        $headers[] = sprintf('sw-access-key: %s', $this->apiKey);
 
         $defaultTimeout = (int)getenv('http_client_timeout');
 
@@ -86,7 +100,7 @@ class Client implements ClientInterface
                 $method,
                 (string)$uri,
                 (string)$body,
-                $headers,
+                $this->buildRequestHeaders($headers),
                 new HttpClient\Options([
                     'timeout' => ($method === self::METHOD_POST ? max(10, $defaultTimeout) : max(5, $defaultTimeout)),
                 ])
@@ -108,6 +122,11 @@ class Client implements ClientInterface
             });
     }
 
+    protected function getApiKey(): string
+    {
+        return $this->apiKey;
+    }
+
     protected function prepareException(Response $response): Exception
     {
         $errorData = json_decode($response->body);
@@ -127,6 +146,24 @@ class Client implements ClientInterface
         }
 
         return $exception;
+    }
+
+    /**
+     * @param string[] $additionalHeaders
+     *
+     * @return string[]
+     */
+    private function buildRequestHeaders(array $additionalHeaders): array
+    {
+        $headers = [];
+        foreach ($this->defaultHeaders as $header => $value) {
+            if (is_array($value) && is_callable([$this, $value[0]])) {
+                $value = $this->{$value[0]}();
+            }
+            $headers[] = sprintf('%s: %s', $header, $value);
+        }
+
+        return array_merge($headers, $additionalHeaders);
     }
 
     private function buildWithQueryString(UriInterface $uri, array $parameters): UriInterface

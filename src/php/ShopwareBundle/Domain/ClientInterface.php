@@ -12,6 +12,10 @@ interface ClientInterface
     public const METHOD_PUT = 'PUT';
     public const METHOD_PATCH = 'PATCH';
 
+    public function forLanguage(string $languageId): ClientInterface;
+
+    public function forCurrency(string $currencyId): ClientInterface;
+
     public function get(string $uri, array $parameters = [], array $headers = []): PromiseInterface;
 
     public function patch(string $uri, array $parameters = [], array $headers = [], $body = null): PromiseInterface;
