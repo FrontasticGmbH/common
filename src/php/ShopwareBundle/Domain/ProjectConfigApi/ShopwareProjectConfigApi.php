@@ -1,45 +1,63 @@
 <?php declare(strict_types = 1);
 
-namespace Frontastic\Common\ShopwareBundle\Domain\ProjectApi;
+namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi;
 
-use Frontastic\Common\ShopwareBundle\Domain\Client;
-use Frontastic\Common\ShopwareBundle\Domain\Exception\RequestException;
+use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapperResolver;
 use GuzzleHttp\Promise\PromiseInterface;
+use RuntimeException;
 use function GuzzleHttp\Promise\settle;
 
-class ShopwareProjectConfigApi
+class ShopwareProjectConfigApi implements ShopwareProjectConfigApiInterface
 {
     /**
-     * @var \Frontastic\Common\ShopwareBundle\Domain\Client
+     * @var \Frontastic\Common\ShopwareBundle\Domain\ClientInterface
      */
     private $client;
 
-    public function __construct(Client $client)
+    /**
+     * @var \Frontastic\Common\ShopwareBundle\Domain\DataMapperResolver
+     */
+    private $mapperResolver;
+
+    public function __construct(ClientInterface $client, DataMapperResolver $mapperResolver)
     {
         $this->client = $client;
+        $this->mapperResolver = $mapperResolver;
     }
 
     public function getProjectConfig(): array
     {
         $contextPromises = [
-            'currencies' => $this->client->get('/currency'),
-            'countries' => $this->client->get('/country'),
-            'languages' => $this->client->get('/language?associations[locale][]'),
-            'salutations' => $this->client->get('/salutation'),
-            'payment-methods' => $this->client->get('/payment-method'),
-            'shipping-methods' => $this->client->get('/shipping-method'),
+            self::RESOURCE_COUNTRIES => $this->client->get('/country'),
+            self::RESOURCE_CURRENCIES => $this->client->get('/currency'),
+            self::RESOURCE_LANGUAGES => $this->client->get('/language?associations[locale][]'),
+            self::RESOURCE_PAYMENT_METHODS => $this->client->get('/payment-method?associations[media][]'),
+            self::RESOURCE_SALUTATIONS => $this->client->get('/salutation'),
+            self::RESOURCE_SHIPPING_METHODS => $this->client->get('/shipping-method?associations[media][]'),
         ];
 
         $result = [];
         foreach (settle($contextPromises)->wait() as $resource => $response) {
             if ($response['state'] === PromiseInterface::FULFILLED) {
-                // @TODO: map to some DataObjects
-                $result[$resource] = $response['value']['data'];
+                $result[$resource] = $this->mapResource($response['value']['data'], $resource);
             } else {
-                throw new RequestException($response['error']);
+                throw $response['reason'];
             }
         }
 
         return $result;
+    }
+
+    private function mapResource($data, $mapperName)
+    {
+        try {
+            $mapper = $this->mapperResolver->getMapper($mapperName);
+
+            return $mapper->map($data);
+        } catch (RuntimeException $exception) {
+            // If no mapper is defined just return raw data
+            return $data;
+        }
     }
 }
