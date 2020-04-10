@@ -37,14 +37,12 @@ class AggregationMapper extends AbstractDataMapper implements QueryAwareDataMapp
         $facetsByHandle = $this->getFacetsByHandle($this->getQuery()->facets);
 
         $result = [];
-        foreach ($aggregationData as $aggregationName => $aggregation) {
+        foreach ($aggregationData as $aggregationName => $aggregationResult) {
             [$aggregationType, $handle] = explode(self::AGGREGATION_NAME_SEPARATOR, $aggregationName, 2);
 
-            $aggregation = $this->aggregationFactory->createFromType(
-                $aggregationType, [
-                'field' => $handle,
-
-            ], $aggregation);
+            $aggregation = $this->aggregationFactory->createFromType($aggregationType);
+            $aggregation->field = $handle;
+            $aggregation->setResultData($aggregationResult);
 
             $queryFacet = $facetsByHandle[$handle] ?? null;
 

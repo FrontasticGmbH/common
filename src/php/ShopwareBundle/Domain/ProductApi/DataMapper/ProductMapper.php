@@ -61,7 +61,7 @@ class ProductMapper extends AbstractDataMapper implements QueryAwareDataMapperIn
      */
     public function mapDataToVariants(array $productData): array
     {
-        if ($productData['children'] === null) {
+        if (empty($productData['children'])) {
             return [$this->mapDataToVariant($productData)];
         }
 
