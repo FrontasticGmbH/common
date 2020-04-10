@@ -14,7 +14,7 @@ use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapDataMapper;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapProductApi;
 use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFactory;
-use Frontastic\Common\ShopwareBundle\Domain\DataMapperResolver as ShopwareDataMapperResolver;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver as ShopwareDataMapperResolver;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory as ShopwareLocaleCreatorFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\ShopwareProductApi;
 
@@ -91,7 +91,7 @@ class DefaultProductApiFactory implements ProductApiFactory
                 $productApi = new ShopwareProductApi(
                     $client,
                     $dataMapper,
-                    $localeCreatorFactory->factor($project)
+                    $localeCreatorFactory->factor($project, $client)
                 );
                 break;
             default:
