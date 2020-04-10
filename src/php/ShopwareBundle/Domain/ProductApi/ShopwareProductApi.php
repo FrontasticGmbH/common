@@ -6,20 +6,19 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
-use Frontastic\Common\ShopwareBundle\Domain\Client;
-use Frontastic\Common\ShopwareBundle\Domain\DataMapperResolver;
+use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper\CategoryMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper\ProductMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper\ProductResultMapper;
-use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Query\QueryOptionExpander;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchCriteriaBuilder;
-use Frontastic\Common\ShopwareBundle\Domain\QueryAwareDataMapperInterface;
 
 class ShopwareProductApi implements ProductApi
 {
     /**
-     * @var \Frontastic\Common\ShopwareBundle\Domain\Client
+     * @var \Frontastic\Common\ShopwareBundle\Domain\ClientInterface
      */
     private $client;
 
@@ -29,41 +28,29 @@ class ShopwareProductApi implements ProductApi
     private $localeCreator;
 
     /**
-     * @var \Frontastic\Common\ShopwareBundle\Domain\DataMapperResolver
+     * @var \Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver
      */
     private $mapperResolver;
 
-    /**
-     * @var \Frontastic\Common\ShopwareBundle\Domain\ProductApi\Options
-     */
-    private $options;
-
-    public function __construct(Client $client, DataMapperResolver $mapperResolver, LocaleCreator $localeCreator)
-    {
+    public function __construct(
+        ClientInterface $client,
+        DataMapperResolver $mapperResolver,
+        LocaleCreator $localeCreator
+    ) {
         $this->client = $client;
         $this->mapperResolver = $mapperResolver;
         $this->localeCreator = $localeCreator;
-        $this->options = new Options();
-    }
-
-    /**
-     * Overwrite default Shopware options.
-     *
-     * Explicitly NOT part of the ProductApi interface because Shopware specific and only to be used during
-     * factoring!
-     */
-    public function overwriteOptions(array $newOptions): void
-    {
-        $this->options = new Options($newOptions);
     }
 
     public function getCategories(CategoryQuery $query): array
     {
-        $locale = $this->localeCreator->createLocaleFromString($query->locale);
-
         $criteria = SearchCriteriaBuilder::buildFromCategoryQuery($query);
 
-        return $this->client->post('/category', [], [], $criteria)
+        $locale = $this->localeCreator->createLocaleFromString($query->locale);
+
+        return $this->client
+//            ->forLanguage($locale->languageId)
+            ->post('/category', [], $criteria)
             ->then(function ($response) use ($query) {
                 return $this->mapResponse($response, $query, CategoryMapper::MAPPER_NAME);
             })
@@ -80,6 +67,8 @@ class ShopwareProductApi implements ProductApi
         $query = ProductApi\Query\SingleProductQuery::fromLegacyQuery($query);
         $query->validate();
 
+        $locale = $this->localeCreator->createLocaleFromString($query->locale);
+
         $identifier = $query->sku;
         $parameters = [];
 
@@ -90,9 +79,9 @@ class ShopwareProductApi implements ProductApi
             ];
         }
 
-        // @TODO: build locale and pass it to request
-
         $promise = $this->client
+//            ->forLanguage($locale->languageId)
+//            ->forCurrency($locale->currencyId)
             ->get("/product/{$identifier}", $parameters)
             ->then(function ($response) use ($query) {
                 return $this->mapResponse($response, $query, ProductMapper::MAPPER_NAME);
@@ -107,11 +96,14 @@ class ShopwareProductApi implements ProductApi
 
     public function query(ProductQuery $query, string $mode = self::QUERY_SYNC): object
     {
-        $query = QueryOptionExpander::expandQueryWithOptions($query, $this->options);
         $criteria = SearchCriteriaBuilder::buildFromProductQuery($query);
 
+        $locale = $this->localeCreator->createLocaleFromString($query->locale);
+
         $promise = $this->client
-            ->post('/product', [], [], $criteria)
+//            ->forLanguage($locale->languageId)
+//            ->forCurrency($locale->currencyId)
+            ->post('/product', [], $criteria)
             ->then(function ($response) use ($query) {
                 return $this->mapResponse($response, $query, ProductResultMapper::MAPPER_NAME);
             });
@@ -123,7 +115,7 @@ class ShopwareProductApi implements ProductApi
         return $promise;
     }
 
-    public function getDangerousInnerClient(): Client
+    public function getDangerousInnerClient(): ClientInterface
     {
         return $this->client;
     }

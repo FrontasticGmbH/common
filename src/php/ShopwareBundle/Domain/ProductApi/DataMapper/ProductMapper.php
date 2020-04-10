@@ -6,8 +6,9 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
-use Frontastic\Common\ShopwareBundle\Domain\QueryAwareDataMapperInterface;
-use Frontastic\Common\ShopwareBundle\Domain\QueryAwareDataMapperTrait;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperTrait;
 use Frontastic\Common\ShopwareBundle\Domain\Slugger;
 use RuntimeException;
 
@@ -38,12 +39,14 @@ class ProductMapper extends AbstractDataMapper implements QueryAwareDataMapperIn
 
         $lastModified = $productData['updatedAt'] ?? null;
 
+        $name = $productData['translated']['name'] ?? $productData['name'];
+
         return new Product([
             'productId' => (string)$productData['id'],
             'changed' => ($lastModified !== null) ? $this->parseDate($lastModified) : null,
             'version' => (string)$productData['versionId'],
-            'name' => $productData['translated']['name'] ?? $productData['name'],
-            'slug' => Slugger::slugify($productData['name']),
+            'name' => $name,
+            'slug' => Slugger::slugify($name),
             'description' => $productData['translated']['description'] ?? $productData['description'],
             'categories' => $productData['categoryTree'],
             'variants' => $this->mapDataToVariants($productData),
