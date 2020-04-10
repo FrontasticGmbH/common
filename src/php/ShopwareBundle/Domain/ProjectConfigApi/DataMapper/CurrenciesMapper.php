@@ -2,7 +2,7 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper;
 
-use Frontastic\Common\ShopwareBundle\Domain\DataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareCurrency;
 
 class CurrenciesMapper implements DataMapperInterface

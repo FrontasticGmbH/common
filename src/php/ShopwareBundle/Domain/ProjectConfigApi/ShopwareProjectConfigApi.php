@@ -3,9 +3,9 @@
 namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi;
 
 use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
-use Frontastic\Common\ShopwareBundle\Domain\DataMapperResolver;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
+use Frontastic\Common\ShopwareBundle\Domain\Exception\MapperNotFoundException;
 use GuzzleHttp\Promise\PromiseInterface;
-use RuntimeException;
 use function GuzzleHttp\Promise\settle;
 
 class ShopwareProjectConfigApi implements ShopwareProjectConfigApiInterface
@@ -16,7 +16,7 @@ class ShopwareProjectConfigApi implements ShopwareProjectConfigApiInterface
     private $client;
 
     /**
-     * @var \Frontastic\Common\ShopwareBundle\Domain\DataMapperResolver
+     * @var \Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver
      */
     private $mapperResolver;
 
@@ -55,7 +55,7 @@ class ShopwareProjectConfigApi implements ShopwareProjectConfigApiInterface
             $mapper = $this->mapperResolver->getMapper($mapperName);
 
             return $mapper->map($data);
-        } catch (RuntimeException $exception) {
+        } catch (MapperNotFoundException $exception) {
             // If no mapper is defined just return raw data
             return $data;
         }
