@@ -11,12 +11,15 @@ use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFacto
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapProjectApi;
 use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFactory;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory as ShopwareLocaleCreatorFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectApi\ShopwareProjectApi;
 use OutOfBoundsException;
 
 class DefaultProjectApiFactory implements ProjectApiFactory
 {
+    private const CONFIGURATION_TYPE_NAME = 'product';
+
     /**
      * @var \Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator
      */
@@ -36,7 +39,7 @@ class DefaultProjectApiFactory implements ProjectApiFactory
                 $clientFactory = $this->serviceLocator->get(CommercetoolsClientFactory::class);
                 $localeCreatorFactory = $this->serviceLocator->get(CommercetoolsLocaleCreatorFactory::class);
 
-                $client = $clientFactory->factorForProjectAndType($project, 'product');
+                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
                 return new CommercetoolsProjcetApi(
                     $client,
                     $localeCreatorFactory->factor($project, $client),
@@ -46,7 +49,7 @@ class DefaultProjectApiFactory implements ProjectApiFactory
                 $clientFactory = $this->serviceLocator->get(SapClientFactory::class);
                 $localeCreatorFactory = $this->serviceLocator->get(SapLocaleCreatorFactory::class);
 
-                $client = $clientFactory->factorForProjectAndType($project, 'product');
+                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
                 return new SapProjectApi(
                     $client,
                     $localeCreatorFactory->factor($project, $client),
@@ -54,12 +57,14 @@ class DefaultProjectApiFactory implements ProjectApiFactory
                 );
             case 'shopware':
                 $clientFactory = $this->serviceLocator->get(ShopwareClientFactory::class);
+                $dataMapper = $this->serviceLocator->get(DataMapperResolver::class);
                 $localeCreatorFactory = $this->serviceLocator->get(ShopwareLocaleCreatorFactory::class);
 
-                $client = $clientFactory->factorForProjectAndType($project, 'product');
+                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
                 return new ShopwareProjectApi(
                     $client,
-                    $localeCreatorFactory->factor($project),
+                    $dataMapper,
+                    $localeCreatorFactory->factor($project, $client),
                     $project->languages
                 );
             default:
