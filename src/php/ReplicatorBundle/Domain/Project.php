@@ -67,7 +67,7 @@ class Project extends DataObject
     public $languages = [];
 
     /**
-     * @var string[]
+     * @var string
      */
     public $defaultLanguage;
 
