@@ -3,6 +3,7 @@
 namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi;
 
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
@@ -13,6 +14,7 @@ use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper\CategoryMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper\ProductMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper\ProductResultMapper;
+use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Query\QueryFacetExpander;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchCriteriaBuilder;
 
 class ShopwareProductApi implements ProductApi
@@ -32,14 +34,21 @@ class ShopwareProductApi implements ProductApi
      */
     private $mapperResolver;
 
+    /**
+     * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService
+     */
+    private $enabledFacetService;
+
     public function __construct(
         ClientInterface $client,
+        LocaleCreator $localeCreator,
         DataMapperResolver $mapperResolver,
-        LocaleCreator $localeCreator
+        EnabledFacetService $enabledFacetService
     ) {
         $this->client = $client;
         $this->mapperResolver = $mapperResolver;
         $this->localeCreator = $localeCreator;
+        $this->enabledFacetService = $enabledFacetService;
     }
 
     public function getCategories(CategoryQuery $query): array
@@ -96,6 +105,10 @@ class ShopwareProductApi implements ProductApi
 
     public function query(ProductQuery $query, string $mode = self::QUERY_SYNC): object
     {
+        $query = QueryFacetExpander::expandQueryEnabledFacets(
+            $query,
+            $this->enabledFacetService->getEnabledFacetDefinitions()
+        );
         $criteria = SearchCriteriaBuilder::buildFromProductQuery($query);
 
         $locale = $this->localeCreator->createLocaleFromString($query->locale);

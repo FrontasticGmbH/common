@@ -31,7 +31,7 @@ class DefaultProductApiFactory implements ProductApiFactory
     private $serviceLocator;
 
     /**
-     * @var EnabledFacetService
+     * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService
      */
     private $enabledFacetService;
 
@@ -90,8 +90,9 @@ class DefaultProductApiFactory implements ProductApiFactory
 
                 $productApi = new ShopwareProductApi(
                     $client,
+                    $localeCreatorFactory->factor($project),
                     $dataMapper,
-                    $localeCreatorFactory->factor($project, $client)
+                    $this->enabledFacetService
                 );
                 break;
             default:
