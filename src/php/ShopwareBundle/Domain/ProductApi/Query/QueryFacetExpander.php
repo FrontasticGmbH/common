@@ -5,17 +5,22 @@ namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\Query;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\RangeFacet;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\TermFacet;
-use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Options;
 
-class QueryOptionExpander
+class QueryFacetExpander
 {
-    public static function expandQueryWithOptions(ProductQuery $query, Options $options): ProductQuery
+    /**
+     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery $query
+     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\FacetDefinition[] $facetDefinitions
+     *
+     * @return \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery
+     */
+    public static function expandQueryEnabledFacets(ProductQuery $query, array $facetDefinitions): ProductQuery
     {
-        foreach ($options->facetsToQuery as $facetDefinition) {
-            switch ($facetDefinition['attributeType']) {
+        foreach ($facetDefinitions as $facetDefinition) {
+            switch ($facetDefinition->attributeType) {
                 case 'money':
                     $facet = new RangeFacet([
-                        'handle' => $facetDefinition['attributeId']
+                        'handle' => $facetDefinition->attributeId
                     ]);
                     break;
                 case 'number':
@@ -27,7 +32,7 @@ class QueryOptionExpander
                 case 'reference':
                 default:
                     $facet = new TermFacet([
-                        'handle' => $facetDefinition['attributeId']
+                        'handle' => $facetDefinition->attributeId
                     ]);
                     break;
             }

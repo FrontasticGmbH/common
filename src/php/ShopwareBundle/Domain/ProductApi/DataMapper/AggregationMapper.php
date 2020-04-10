@@ -4,10 +4,11 @@ namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper;
 
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperTrait;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchAggregationFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchAggregationInterface;
-use Frontastic\Common\ShopwareBundle\Domain\QueryAwareDataMapperInterface;
-use Frontastic\Common\ShopwareBundle\Domain\QueryAwareDataMapperTrait;
 
 class AggregationMapper extends AbstractDataMapper implements QueryAwareDataMapperInterface
 {
@@ -36,14 +37,12 @@ class AggregationMapper extends AbstractDataMapper implements QueryAwareDataMapp
         $facetsByHandle = $this->getFacetsByHandle($this->getQuery()->facets);
 
         $result = [];
-        foreach ($aggregationData as $aggregationName => $aggregation) {
+        foreach ($aggregationData as $aggregationName => $aggregationResult) {
             [$aggregationType, $handle] = explode(self::AGGREGATION_NAME_SEPARATOR, $aggregationName, 2);
 
-            $aggregation = $this->aggregationFactory->createFromType(
-                $aggregationType, [
-                'field' => $handle,
-
-            ], $aggregation);
+            $aggregation = $this->aggregationFactory->createFromType($aggregationType);
+            $aggregation->field = $handle;
+            $aggregation->setResultData($aggregationResult);
 
             $queryFacet = $facetsByHandle[$handle] ?? null;
 

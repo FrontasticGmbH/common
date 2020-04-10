@@ -26,11 +26,7 @@ class SearchAggregationFactory
         Aggregation\Terms::TYPE => Aggregation\Terms::class,
     ];
 
-    public function createFromType(
-        string $aggregationType,
-        array $aggregationConfig,
-        array $aggregationResultData = []
-    ): SearchAggregationInterface {
+    public function createFromType(string $aggregationType): SearchAggregationInterface {
         $aggregationClass = self::$aggregationTypeMap[$aggregationType] ?? null;
 
         if ($aggregationClass === null) {
@@ -43,17 +39,11 @@ class SearchAggregationFactory
             );
         }
 
-        $aggregation = $this->getAggregationInstance($aggregationClass, $aggregationConfig);
-
-        if (!empty($aggregationResultData)) {
-            $aggregation->setResultData($aggregationResultData);
-        }
-
-        return $aggregation;
+        return $this->getAggregationInstance($aggregationClass);
     }
 
-    private function getAggregationInstance(string $class, array $config): SearchAggregationInterface
+    private function getAggregationInstance(string $class): SearchAggregationInterface
     {
-        return new $class($config);
+        return new $class();
     }
 }

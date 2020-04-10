@@ -27,6 +27,12 @@ class Client implements ClientInterface
      */
     private $baseUri;
 
+    private $defaultHeaders = [
+        'Accept' => '*/*',
+        'Content-Type' => 'application/json',
+        'sw-access-key' => ['getApiKey'],
+    ];
+
     public function __construct(HttpClient $httpClient, string $apiKey, string $baseUri)
     {
         $this->httpClient = $httpClient;
@@ -34,32 +40,44 @@ class Client implements ClientInterface
         $this->baseUri = $baseUri;
     }
 
+    public function forLanguage(string $languageId): ClientInterface
+    {
+        $this->defaultHeaders['sw-language-id'] = $languageId;
+        return $this;
+    }
+
+    public function forCurrency(string $currencyId): ClientInterface
+    {
+        $this->defaultHeaders['sw-currency-id'] = $currencyId;
+        return $this;
+    }
+
     public function get(string $uri, array $parameters = [], array $headers = []): PromiseInterface
     {
         return $this->request(self::METHOD_GET, $uri, $parameters, $headers);
     }
 
-    public function patch(string $uri, array $parameters = [], array $headers = [], $body = null): PromiseInterface
+    public function patch(string $uri, array $headers = [], $body = null): PromiseInterface
     {
-        return $this->request(self::METHOD_PATCH, $uri, $parameters, $headers, $body);
+        return $this->request(self::METHOD_PATCH, $uri, [], $headers, $body);
     }
 
-    public function post(string $uri, array $parameters = [], array $headers = [], $body = null): PromiseInterface
+    public function post(string $uri, array $headers = [], $body = null): PromiseInterface
     {
-        return $this->request(self::METHOD_POST, $uri, $parameters, $headers, $body);
+        return $this->request(self::METHOD_POST, $uri, [], $headers, $body);
     }
 
-    public function put(string $uri, array $parameters = [], array $headers = [], $body = null): PromiseInterface
+    public function put(string $uri, array $headers = [], $body = null): PromiseInterface
     {
-        return $this->request(self::METHOD_PUT, $uri, $parameters, $headers, $body);
+        return $this->request(self::METHOD_PUT, $uri, [], $headers, $body);
     }
 
-    public function delete(string $uri, array $parameters = [], array $headers = []): PromiseInterface
+    public function delete(string $uri, array $headers = []): PromiseInterface
     {
-        return $this->request(self::METHOD_DELETE, $uri, $parameters, $headers);
+        return $this->request(self::METHOD_DELETE, $uri, [], $headers);
     }
 
-    public function request(
+    private function request(
         string $method,
         string $uriComponent,
         array $parameters,
@@ -70,10 +88,6 @@ class Client implements ClientInterface
             new Uri($this->baseUri . $uriComponent),
             $parameters
         );
-
-        $headers[] = 'Accept: */*';
-        $headers[] = 'Content-Type: application/json';
-        $headers[] = sprintf('sw-access-key: %s', $this->apiKey);
 
         $defaultTimeout = (int)getenv('http_client_timeout');
 
@@ -86,7 +100,7 @@ class Client implements ClientInterface
                 $method,
                 (string)$uri,
                 (string)$body,
-                $headers,
+                $this->buildRequestHeaders($headers),
                 new HttpClient\Options([
                     'timeout' => ($method === self::METHOD_POST ? max(10, $defaultTimeout) : max(5, $defaultTimeout)),
                 ])
@@ -108,6 +122,11 @@ class Client implements ClientInterface
             });
     }
 
+    protected function getApiKey(): string
+    {
+        return $this->apiKey;
+    }
+
     protected function prepareException(Response $response): Exception
     {
         $errorData = json_decode($response->body);
@@ -127,6 +146,24 @@ class Client implements ClientInterface
         }
 
         return $exception;
+    }
+
+    /**
+     * @param string[] $additionalHeaders
+     *
+     * @return string[]
+     */
+    private function buildRequestHeaders(array $additionalHeaders): array
+    {
+        $headers = [];
+        foreach ($this->defaultHeaders as $header => $value) {
+            if (is_array($value) && is_callable([$this, $value[0]])) {
+                $value = $this->{$value[0]}();
+            }
+            $headers[] = sprintf('%s: %s', $header, $value);
+        }
+
+        return array_merge($headers, $additionalHeaders);
     }
 
     private function buildWithQueryString(UriInterface $uri, array $parameters): UriInterface

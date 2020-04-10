@@ -12,13 +12,17 @@ interface ClientInterface
     public const METHOD_PUT = 'PUT';
     public const METHOD_PATCH = 'PATCH';
 
+    public function forLanguage(string $languageId): ClientInterface;
+
+    public function forCurrency(string $currencyId): ClientInterface;
+
     public function get(string $uri, array $parameters = [], array $headers = []): PromiseInterface;
 
-    public function patch(string $uri, array $parameters = [], array $headers = [], $body = null): PromiseInterface;
+    public function patch(string $uri, array $headers = [], $body = null): PromiseInterface;
 
-    public function post(string $uri, array $parameters = [], array $headers = [], $body = null): PromiseInterface;
+    public function post(string $uri, array $headers = [], $body = null): PromiseInterface;
 
-    public function put(string $uri, array $parameters = [], array $headers = [], $body = null): PromiseInterface;
+    public function put(string $uri, array $headers = [], $body = null): PromiseInterface;
 
-    public function delete(string $uri, array $parameters = [], array $headers = []): PromiseInterface;
+    public function delete(string $uri, array $headers = []): PromiseInterface;
 }

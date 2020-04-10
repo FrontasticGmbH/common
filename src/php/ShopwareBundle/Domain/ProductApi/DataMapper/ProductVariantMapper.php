@@ -3,8 +3,9 @@
 namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper;
 
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
-use Frontastic\Common\ShopwareBundle\Domain\QueryAwareDataMapperInterface;
-use Frontastic\Common\ShopwareBundle\Domain\QueryAwareDataMapperTrait;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperTrait;
 
 class ProductVariantMapper extends AbstractDataMapper implements QueryAwareDataMapperInterface
 {

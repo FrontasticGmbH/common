@@ -1,9 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper;
-
-use Frontastic\Common\ShopwareBundle\Domain\DataMapperInterface;
-use Frontastic\Common\ShopwareBundle\Domain\QueryAwareDataMapperInterface;
+namespace Frontastic\Common\ShopwareBundle\Domain\DataMapper;
 
 abstract class AbstractDataMapper implements DataMapperInterface
 {

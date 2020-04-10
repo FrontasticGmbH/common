@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Frontastic\Common\ShopwareBundle\Domain;
+namespace Frontastic\Common\ShopwareBundle\Domain\DataMapper;
 
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 
