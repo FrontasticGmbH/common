@@ -57,24 +57,24 @@ class Client implements ClientInterface
         return $this->request(self::METHOD_GET, $uri, $parameters, $headers);
     }
 
-    public function patch(string $uri, array $parameters = [], array $headers = [], $body = null): PromiseInterface
+    public function patch(string $uri, array $headers = [], $body = null): PromiseInterface
     {
-        return $this->request(self::METHOD_PATCH, $uri, $parameters, $headers, $body);
+        return $this->request(self::METHOD_PATCH, $uri, [], $headers, $body);
     }
 
-    public function post(string $uri, array $parameters = [], array $headers = [], $body = null): PromiseInterface
+    public function post(string $uri, array $headers = [], $body = null): PromiseInterface
     {
-        return $this->request(self::METHOD_POST, $uri, $parameters, $headers, $body);
+        return $this->request(self::METHOD_POST, $uri, [], $headers, $body);
     }
 
-    public function put(string $uri, array $parameters = [], array $headers = [], $body = null): PromiseInterface
+    public function put(string $uri, array $headers = [], $body = null): PromiseInterface
     {
-        return $this->request(self::METHOD_PUT, $uri, $parameters, $headers, $body);
+        return $this->request(self::METHOD_PUT, $uri, [], $headers, $body);
     }
 
-    public function delete(string $uri, array $parameters = [], array $headers = []): PromiseInterface
+    public function delete(string $uri, array $headers = []): PromiseInterface
     {
-        return $this->request(self::METHOD_DELETE, $uri, $parameters, $headers);
+        return $this->request(self::METHOD_DELETE, $uri, [], $headers);
     }
 
     private function request(

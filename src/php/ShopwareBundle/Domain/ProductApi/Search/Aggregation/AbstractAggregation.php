@@ -36,7 +36,7 @@ abstract class AbstractAggregation extends DataObject implements SearchAggregati
         $this->assertName();
 
         return [
-            self::AGG_KEY_NAME => sprintf('%s#%s', $this->getType(), $this->name),
+            self::AGG_KEY_NAME => $this->getFullName(),
             self::AGG_KEY_TYPE => $this->getType(),
             self::AGG_KEY_FIELD => $this->field,
         ];
@@ -45,6 +45,11 @@ abstract class AbstractAggregation extends DataObject implements SearchAggregati
     public function setResultData(array $resultData): void
     {
         $this->resultData = $resultData[static::AGG_RESULT_KEY] ?? $resultData;
+    }
+
+    public function getFullName(): string
+    {
+        return sprintf('%s#%s', $this->getType(), $this->name);
     }
 
     public function getResultData(): array

@@ -1,18 +1,20 @@
 <?php declare(strict_types = 1);
 
-namespace Frontastic\Common\ShopwareBundle\Domain;
+namespace Frontastic\Common\ShopwareBundle\Domain\DataMapper;
+
+use Frontastic\Common\ShopwareBundle\Domain\Exception\MapperNotFoundException;
 
 use RuntimeException;
 
 class DataMapperResolver
 {
     /**
-     * @var \Frontastic\Common\ShopwareBundle\Domain\DataMapperInterface[]
+     * @var \Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface[]
      */
     private $mappers;
 
     /**
-     * @param \Frontastic\Common\ShopwareBundle\Domain\DataMapperInterface[] $mappers
+     * @param \Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface[] $mappers
      */
     public function __construct(iterable $mappers)
     {
@@ -24,7 +26,7 @@ class DataMapperResolver
     public function getMapper(string $name): DataMapperInterface
     {
         if (!isset($this->mappers[$name])) {
-            throw new RuntimeException(sprintf('Mapper not found by name: %s', $name));
+            throw new MapperNotFoundException($name);
         }
 
         return $this->mappers[$name];

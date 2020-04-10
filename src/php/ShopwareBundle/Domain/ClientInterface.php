@@ -18,11 +18,11 @@ interface ClientInterface
 
     public function get(string $uri, array $parameters = [], array $headers = []): PromiseInterface;
 
-    public function patch(string $uri, array $parameters = [], array $headers = [], $body = null): PromiseInterface;
+    public function patch(string $uri, array $headers = [], $body = null): PromiseInterface;
 
-    public function post(string $uri, array $parameters = [], array $headers = [], $body = null): PromiseInterface;
+    public function post(string $uri, array $headers = [], $body = null): PromiseInterface;
 
-    public function put(string $uri, array $parameters = [], array $headers = [], $body = null): PromiseInterface;
+    public function put(string $uri, array $headers = [], $body = null): PromiseInterface;
 
-    public function delete(string $uri, array $parameters = [], array $headers = []): PromiseInterface;
+    public function delete(string $uri, array $headers = []): PromiseInterface;
 }

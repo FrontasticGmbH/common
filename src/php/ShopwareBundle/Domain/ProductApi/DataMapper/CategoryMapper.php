@@ -3,8 +3,9 @@
 namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper;
 
 use Frontastic\Common\ProductApiBundle\Domain\Category;
-use Frontastic\Common\ShopwareBundle\Domain\QueryAwareDataMapperInterface;
-use Frontastic\Common\ShopwareBundle\Domain\QueryAwareDataMapperTrait;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperTrait;
 use Frontastic\Common\ShopwareBundle\Domain\Slugger;
 
 class CategoryMapper extends AbstractDataMapper implements QueryAwareDataMapperInterface
