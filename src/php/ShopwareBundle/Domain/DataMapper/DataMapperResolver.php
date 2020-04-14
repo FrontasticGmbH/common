@@ -4,8 +4,6 @@ namespace Frontastic\Common\ShopwareBundle\Domain\DataMapper;
 
 use Frontastic\Common\ShopwareBundle\Domain\Exception\MapperNotFoundException;
 
-use RuntimeException;
-
 class DataMapperResolver
 {
     /**

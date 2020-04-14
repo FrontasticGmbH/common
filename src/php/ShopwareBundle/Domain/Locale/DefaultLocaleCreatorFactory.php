@@ -4,7 +4,7 @@ namespace Frontastic\Common\ShopwareBundle\Domain\Locale;
 
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
-use Frontastic\Common\ShopwareBundle\Domain\DataMapperResolver;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\CachedShopwareProjectConfigApi;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApi;
 use Psr\SimpleCache\CacheInterface;
@@ -17,9 +17,10 @@ class DefaultLocaleCreatorFactory extends LocaleCreatorFactory
     private $cache;
 
     /**
-     * @var \Frontastic\Common\ShopwareBundle\Domain\DataMapperResolver
+     * @var \Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver
      */
     private $dataMapperResolver;
+
     /**
      * @var bool
      */
