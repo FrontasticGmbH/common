@@ -75,4 +75,3 @@ class DefaultProjectApiFactory implements ProjectApiFactory
         }
     }
 }
-
