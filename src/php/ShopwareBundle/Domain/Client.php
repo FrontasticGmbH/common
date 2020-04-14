@@ -12,6 +12,10 @@ use Psr\Http\Message\UriInterface;
 
 class Client implements ClientInterface
 {
+    private const SHOPWARE_LANGUAGE_HEADER = 'sw-language-id';
+    private const SHOPWARE_CURRENCY_HEADER = 'sw-currency-id';
+    private const SHOPWARE_CONTEXT_TOKEN_HEADER = 'sw-context-token';
+
     /**
      * @var \Frontastic\Common\HttpClient
      */
@@ -42,13 +46,19 @@ class Client implements ClientInterface
 
     public function forLanguage(string $languageId): ClientInterface
     {
-        $this->defaultHeaders['sw-language-id'] = $languageId;
+        $this->defaultHeaders[self::SHOPWARE_LANGUAGE_HEADER] = $languageId;
         return $this;
     }
 
     public function forCurrency(string $currencyId): ClientInterface
     {
-        $this->defaultHeaders['sw-currency-id'] = $currencyId;
+        $this->defaultHeaders[self::SHOPWARE_CURRENCY_HEADER] = $currencyId;
+        return $this;
+    }
+
+    public function withContextToken(string $token): ClientInterface
+    {
+        $this->defaultHeaders[self::SHOPWARE_CONTEXT_TOKEN_HEADER] = $token;
         return $this;
     }
 
@@ -131,15 +141,15 @@ class Client implements ClientInterface
     {
         $errorData = json_decode($response->body);
         $exception = new RequestException(
-            ($errorData->message ?? $response->body) ?: 'Internal Server Error',
-            $response->status ?? 503
+            $errorData->message ?? $response->body ?? 'Internal Server Error',
+            (int)($response->status ?? 503)
         );
 
         if (isset($errorData->errors)) {
             foreach ($errorData->errors as $error) {
                 $exception = new RequestException(
                     $error->title ?? 'Unknown error',
-                    $error->status ?? 503,
+                    (int)($error->status ?? 503),
                     $exception
                 );
             }

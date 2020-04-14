@@ -16,6 +16,8 @@ interface ClientInterface
 
     public function forCurrency(string $currencyId): ClientInterface;
 
+    public function withContextToken(string $token): ClientInterface;
+
     public function get(string $uri, array $parameters = [], array $headers = []): PromiseInterface;
 
     public function patch(string $uri, array $headers = [], $body = null): PromiseInterface;
