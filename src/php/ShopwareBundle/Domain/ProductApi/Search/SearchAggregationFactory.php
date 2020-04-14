@@ -26,7 +26,8 @@ class SearchAggregationFactory
         Aggregation\Terms::TYPE => Aggregation\Terms::class,
     ];
 
-    public function createFromType(string $aggregationType): SearchAggregationInterface {
+    public function createFromType(string $aggregationType): SearchAggregationInterface
+    {
         $aggregationClass = self::$aggregationTypeMap[$aggregationType] ?? null;
 
         if ($aggregationClass === null) {
