@@ -44,5 +44,4 @@ class Mapper
             'price' => $shipping['price']['centAmount'] ?? null,
         ]);
     }
-
 }
