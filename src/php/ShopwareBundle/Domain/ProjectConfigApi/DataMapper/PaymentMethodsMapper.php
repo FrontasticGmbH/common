@@ -2,10 +2,10 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper;
 
-use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwarePaymentMethod;
 
-class PaymentMethodsMapper implements DataMapperInterface
+class PaymentMethodsMapper extends AbstractDataMapper
 {
     public const MAPPER_NAME = 'payment-methods';
 
@@ -16,8 +16,10 @@ class PaymentMethodsMapper implements DataMapperInterface
 
     public function map(array $resource)
     {
+        $paymentMethodsData = $this->extractData($resource);
+
         $result = [];
-        foreach ($resource as $paymentMethodData) {
+        foreach ($paymentMethodsData as $paymentMethodData) {
             $result[] = $this->mapDataToShopwarePaymentMethod($paymentMethodData);
         }
 
@@ -27,8 +29,8 @@ class PaymentMethodsMapper implements DataMapperInterface
     private function mapDataToShopwarePaymentMethod(array $paymentMethodData): ShopwarePaymentMethod
     {
         $paymentMethod = new ShopwarePaymentMethod($paymentMethodData, true);
-        $paymentMethod->name = $paymentMethodData['translated']['name'] ?? $paymentMethodData['name'];
-        $paymentMethod->description = $paymentMethodData['translated']['description'] ?? $paymentMethodData['description'];
+        $paymentMethod->name = $this->resolveTranslatedValue($paymentMethodData, 'name');
+        $paymentMethod->description = $this->resolveTranslatedValue($paymentMethodData, 'description');
 
         return $paymentMethod;
     }

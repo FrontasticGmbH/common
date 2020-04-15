@@ -39,7 +39,7 @@ class ProductMapper extends AbstractDataMapper implements QueryAwareDataMapperIn
 
         $lastModified = $productData['updatedAt'] ?? null;
 
-        $name = $productData['translated']['name'] ?? $productData['name'];
+        $name = $this->resolveTranslatedValue($productData, 'name');
 
         return new Product([
             'productId' => (string)$productData['id'],
@@ -47,7 +47,7 @@ class ProductMapper extends AbstractDataMapper implements QueryAwareDataMapperIn
             'version' => (string)$productData['versionId'],
             'name' => $name,
             'slug' => Slugger::slugify($name),
-            'description' => $productData['translated']['description'] ?? $productData['description'],
+            'description' => $this->resolveTranslatedValue($productData, 'description'),
             'categories' => $productData['categoryTree'],
             'variants' => $this->mapDataToVariants($productData),
             'dangerousInnerProduct' => $this->mapDangerousInnerData($productData),

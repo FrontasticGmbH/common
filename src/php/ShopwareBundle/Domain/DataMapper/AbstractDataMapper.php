@@ -25,4 +25,9 @@ abstract class AbstractDataMapper implements DataMapperInterface
 
         return $innerData;
     }
+
+    protected function resolveTranslatedValue(array $data, string $key)
+    {
+        return $data['translated'][$key] ?? $data[$key];
+    }
 }

@@ -34,7 +34,7 @@ class CategoryMapper extends AbstractDataMapper implements QueryAwareDataMapperI
 
     private function mapDataToCategory(array $categoryData): Category
     {
-        $name = $categoryData['translated']['name'] ?? $categoryData['name'];
+        $name = $this->resolveTranslatedValue($categoryData, 'name');
 
         return new Category([
             'categoryId' => $categoryData['id'],
