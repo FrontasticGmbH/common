@@ -120,6 +120,10 @@ class Client implements ClientInterface
                     throw $this->prepareException($response);
                 }
 
+                if ($response->status === 204) {
+                    return $response;
+                }
+
                 $data = json_decode($response->body, true);
                 if (JSON_ERROR_NONE === json_last_error()) {
                     return $data;
@@ -148,7 +152,7 @@ class Client implements ClientInterface
         if (isset($errorData->errors)) {
             foreach ($errorData->errors as $error) {
                 $exception = new RequestException(
-                    $error->title ?? 'Unknown error',
+                    $error->detail ?? $error->title ?? 'Unknown error',
                     (int)($error->status ?? 503),
                     $exception
                 );
