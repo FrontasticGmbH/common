@@ -46,7 +46,7 @@ class SapAccountApi implements AccountApi
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function updatePassword(string $accountId, string $oldPassword, string $newPassword): Account
+    public function updatePassword(Account $account, string $oldPassword, string $newPassword): Account
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
@@ -66,32 +66,32 @@ class SapAccountApi implements AccountApi
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function getAddresses(string $accountId): array
+    public function getAddresses(Account $account): array
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function addAddress(string $accountId, Address $address): Account
+    public function addAddress(Account $account, Address $address): Account
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function updateAddress(string $accountId, Address $address): Account
+    public function updateAddress(Account $account, Address $address): Account
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function removeAddress(string $accountId, string $addressId): Account
+    public function removeAddress(Account $account, string $addressId): Account
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function setDefaultBillingAddress(string $accountId, string $addressId): Account
+    public function setDefaultBillingAddress(Account $account, string $addressId): Account
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function setDefaultShippingAddress(string $accountId, string $addressId): Account
+    public function setDefaultShippingAddress(Account $account, string $addressId): Account
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }

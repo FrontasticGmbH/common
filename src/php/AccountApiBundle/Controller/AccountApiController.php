@@ -21,9 +21,9 @@ class AccountApiController extends Controller
             'Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory'
         )->factor($context->project);
         $address = new Address($this->getJsonBody($request));
-        $address = $accountApi->addAddress($context->session->account->accountId, $address);
+        $account = $accountApi->addAddress($context->session->account, $address);
 
-        return new JsonResponse($address, 200);
+        return new JsonResponse($account, 200);
     }
 
     public function updateAddressAction(Request $request, Context $context): JsonResponse
@@ -36,9 +36,9 @@ class AccountApiController extends Controller
             'Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory'
         )->factor($context->project);
         $address = new Address(array_diff_key($this->getJsonBody($request), array_flip(['_type'])));
-        $address = $accountApi->updateAddress($context->session->account->accountId, $address);
+        $account = $accountApi->updateAddress($context->session->account, $address);
 
-        return new JsonResponse($address, 200);
+        return new JsonResponse($account, 200);
     }
 
     public function removeAddressAction(Request $request, Context $context): JsonResponse
@@ -51,7 +51,7 @@ class AccountApiController extends Controller
             'Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory'
         )->factor($context->project);
         $address = new Address(array_diff_key($this->getJsonBody($request), array_flip(['_type'])));
-        $accountApi->removeAddress($context->session->account->accountId, $address->addressId);
+        $accountApi->removeAddress($context->session->account, $address->addressId);
 
         return new JsonResponse([], 200);
     }
@@ -66,9 +66,9 @@ class AccountApiController extends Controller
             'Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory'
         )->factor($context->project);
         $address = new Address(array_diff_key($this->getJsonBody($request), array_flip(['_type'])));
-        $address = $accountApi->setDefaultBillingAddress($context->session->account->accountId, $address->addressId);
+        $account = $accountApi->setDefaultBillingAddress($context->session->account, $address->addressId);
 
-        return new JsonResponse($address, 200);
+        return new JsonResponse($account, 200);
     }
 
     public function setDefaultShippingAddressAction(Request $request, Context $context): JsonResponse
@@ -81,9 +81,9 @@ class AccountApiController extends Controller
             'Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory'
         )->factor($context->project);
         $address = new Address(array_diff_key($this->getJsonBody($request), array_flip(['_type'])));
-        $address = $accountApi->setDefaultShippingAddress($context->session->account->accountId, $address->addressId);
+        $account = $accountApi->setDefaultShippingAddress($context->session->account, $address->addressId);
 
-        return new JsonResponse($address, 200);
+        return new JsonResponse($account, 200);
     }
 
     private function getJsonBody(Request $request): array
