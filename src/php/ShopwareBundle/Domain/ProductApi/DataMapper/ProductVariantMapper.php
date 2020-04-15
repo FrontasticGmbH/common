@@ -62,14 +62,19 @@ class ProductVariantMapper extends AbstractDataMapper implements QueryAwareDataM
         $coverId = $variantData['coverId'];
         $coverImage = $variantData['cover'] ?? null;
         $allImages = $variantData['media'] ?? [];
-        $imagesWithoutCover = array_filter($allImages,
+        $imagesWithoutCover = array_filter(
+            $allImages,
             static function (array $imageData) use ($coverId) {
                 return $coverId !== null && $imageData['id'] !== $coverId;
-            });
+            }
+        );
 
-        return array_map(static function ($image) {
-            return $image['media']['url'];
-        }, array_filter(array_merge([$coverImage], $imagesWithoutCover)));
+        return array_map(
+            static function ($image) {
+                return $image['media']['url'];
+            },
+            array_filter(array_merge([$coverImage], $imagesWithoutCover))
+        );
     }
 
     private function mapPropertiesToAttributes(array $properties): array

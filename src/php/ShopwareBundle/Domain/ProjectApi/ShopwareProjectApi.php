@@ -147,8 +147,12 @@ class ShopwareProjectApi implements ProjectApi
             $groupedAggregations = $this->fetchProductAggregations($languageId);
 
             foreach ($groupedAggregations as $aggregationGroup => $groupAggregations) {
-                $this->mapAggregationGroupToAttributes($localizedAttributes, $aggregationGroup, $groupAggregations,
-                    $language);
+                $this->mapAggregationGroupToAttributes(
+                    $localizedAttributes,
+                    $aggregationGroup,
+                    $groupAggregations,
+                    $language
+                );
             }
         }
         return $localizedAttributes;
