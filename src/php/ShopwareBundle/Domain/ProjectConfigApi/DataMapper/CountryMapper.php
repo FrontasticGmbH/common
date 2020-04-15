@@ -19,7 +19,7 @@ class CountryMapper extends AbstractDataMapper
         $countryData = $this->extractData($resource, $resource);
 
         $country = new ShopwareCountry($countryData, true);
-        $country->name = $countryData['translated']['name'] ?? $countryData['name'];
+        $country->name = $this->resolveTranslatedValue($countryData, 'name');
 
         return $country;
     }

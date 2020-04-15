@@ -3,7 +3,6 @@
 namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper;
 
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
-use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareLanguage;
 
 class LanguagesMapper extends AbstractDataMapper
@@ -30,10 +29,10 @@ class LanguagesMapper extends AbstractDataMapper
     private function mapDataToShopwareLanguage(array $languageData): ShopwareLanguage
     {
         $language = new ShopwareLanguage($languageData, true);
-        $language->name = $languageData['translated']['name'] ?? $languageData['name'];
+        $language->name = $this->resolveTranslatedValue($languageData, 'name');
         $language->localeCode = $languageData['locale']['code'];
-        $language->localeName = $languageData['locale']['translated']['name'] ?? $languageData['locale']['name'];
-        $language->localeTerritory = $languageData['locale']['translated']['territory'] ?? $languageData['locale']['territory'];
+        $language->localeName = $this->resolveTranslatedValue($languageData['locale'], 'name');
+        $language->localeTerritory = $this->resolveTranslatedValue($languageData['locale'], 'territory');
 
         return $language;
     }

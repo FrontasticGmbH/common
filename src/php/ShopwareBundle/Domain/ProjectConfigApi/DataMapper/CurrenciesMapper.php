@@ -3,7 +3,6 @@
 namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper;
 
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
-use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareCurrency;
 
 class CurrenciesMapper extends AbstractDataMapper
@@ -30,8 +29,8 @@ class CurrenciesMapper extends AbstractDataMapper
     private function mapDataToShopwareCurrency(array $currencyData): ShopwareCurrency
     {
         $currency = new ShopwareCurrency($currencyData, true);
-        $currency->name = $currencyData['translated']['name'] ?? $currencyData['name'];
-        $currency->shortName = $currencyData['translated']['shortName'] ?? $currencyData['shortName'];
+        $currency->name = $this->resolveTranslatedValue($currencyData, 'name');
+        $currency->shortName = $this->resolveTranslatedValue($currencyData, 'shortName');
 
         return $currency;
     }

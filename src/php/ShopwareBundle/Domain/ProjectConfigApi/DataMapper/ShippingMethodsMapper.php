@@ -31,7 +31,7 @@ class ShippingMethodsMapper extends AbstractDataMapper
     private function mapDataToShopwareShippingMethod(array $shippingMethodData): ShopwareShippingMethod
     {
         $shippingMethod = new ShopwareShippingMethod($shippingMethodData, true);
-        $shippingMethod->name = $shippingMethodData['translated']['name'] ?? $shippingMethodData['name'];
+        $shippingMethod->name = $this->resolveTranslatedValue($shippingMethodData, 'name');
         $shippingMethod->deliveryTime = new ShopwareShippingMethodDeliveryTime(
             $shippingMethodData['deliveryTime'],
             true

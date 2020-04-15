@@ -30,8 +30,8 @@ class SalutationsMapper extends AbstractDataMapper
     private function mapDataToShopwareSalutation(array $salutationData): ShopwareSalutation
     {
         $salutation = new ShopwareSalutation($salutationData, true);
-        $salutation->displayName = $salutationData['translated']['displayName'] ?? $salutationData['displayName'];
-        $salutation->letterName = $salutationData['translated']['letterName'] ?? $salutationData['letterName'];
+        $salutation->displayName = $this->resolveTranslatedValue($salutationData, 'displayName');
+        $salutation->letterName = $this->resolveTranslatedValue($salutationData, 'letterName');
 
         return $salutation;
     }

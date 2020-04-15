@@ -116,12 +116,12 @@ class ProductVariantMapper extends AbstractDataMapper implements QueryAwareDataM
             $groupId = $group['id'];
             if (!isset($result[$groupId])) {
                 $result[$groupId] = [
-                    'name' => $group['translated']['name'] ?? $group['name'],
+                    'name' => $this->resolveTranslatedValue($group, 'name'),
                     'properties' => [],
                 ];
             }
 
-            $result[$groupId]['properties'][$property['id']] = $property['translated']['name'] ?? $property['name'];
+            $result[$groupId]['properties'][$property['id']] = $this->resolveTranslatedValue($property, 'name');
         }
         return $result;
     }
