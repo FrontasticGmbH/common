@@ -5,6 +5,7 @@ namespace Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
+use Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools\Mapper as CartMapper;
 use Frontastic\Common\CartApiBundle\Domain\Category;
 use Frontastic\Common\CartApiBundle\Domain\Discount;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
@@ -15,7 +16,7 @@ use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreator;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper as ProductMapper;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 
@@ -37,9 +38,14 @@ class Commercetools implements CartApi
     private $client;
 
     /**
-     * @var Mapper
+     * @var ProductMapper
      */
-    private $mapper;
+    private $productMapper;
+
+    /**
+     * @var CartMapper
+     */
+    private $cartMapper;
 
     /**
      * @var CommercetoolsLocaleCreator
@@ -73,12 +79,14 @@ class Commercetools implements CartApi
 
     public function __construct(
         Client $client,
-        Mapper $mapper,
+        ProductMapper $productMapper,
+        CartMapper $cartMapper,
         CommercetoolsLocaleCreator $localeCreator,
         OrderIdGenerator $orderIdGenerator
     ) {
         $this->client = $client;
-        $this->mapper = $mapper;
+        $this->productMapper = $productMapper;
+        $this->cartMapper = $cartMapper;
         $this->localeCreator = $localeCreator;
         $this->orderIdGenerator = $orderIdGenerator;
     }
@@ -648,7 +656,7 @@ class Commercetools implements CartApi
             'birthday' => isset($cart['custom']['fields']['birthday']) ?
                 new \DateTimeImmutable($cart['custom']['fields']['birthday']) :
                 null,
-            'shippingMethod' => $this->mapShippingMethod($cart['shippingInfo'] ?? []),
+            'shippingMethod' => $this->cartMapper->dataToShippingMethod($cart['shippingInfo'] ?? []),
             'shippingAddress' => $this->mapAddress($cart['shippingAddress'] ?? []),
             'billingAddress' => $this->mapAddress($cart['billingAddress'] ?? []),
             'sum' => $cart['totalPrice']['centAmount'],
@@ -687,7 +695,7 @@ class Commercetools implements CartApi
             'birthday' => isset($order['custom']['fields']['birthday']) ?
                 new \DateTimeImmutable($order['custom']['fields']['birthday']) :
                 null,
-            'shippingMethod' => $this->mapShippingMethod($order['shippingInfo'] ?? []),
+            'shippingMethod' => $this->cartMapper->dataToShippingMethod($order['shippingInfo'] ?? []),
             'shippingAddress' => $this->mapAddress($order['shippingAddress'] ?? []),
             'billingAddress' => $this->mapAddress($order['billingAddress'] ?? []),
             'sum' => $order['totalPrice']['centAmount'],
@@ -740,18 +748,6 @@ class Commercetools implements CartApi
         ];
     }
 
-    private function mapShippingMethod(array $shipping): ?ShippingMethod
-    {
-        if (!count($shipping)) {
-            return null;
-        }
-
-        return new ShippingMethod([
-            'name' => $shipping['shippingMethodName'] ?? null,
-            'price' => $shipping['price']['centAmount'] ?? null,
-        ]);
-    }
-
     /**
      * @return LineItem[]
      */
@@ -760,12 +756,12 @@ class Commercetools implements CartApi
         $lineItems = array_merge(
             array_map(
                 function (array $lineItem) use ($locale): LineItem {
-                    list($price, $currency, $discountedPrice) = $this->mapper->dataToPrice($lineItem);
+                    list($price, $currency, $discountedPrice) = $this->productMapper->dataToPrice($lineItem);
                     return new LineItem\Variant([
                         'lineItemId' => $lineItem['id'],
-                        'name' => $this->mapper->getLocalizedValue($locale, $lineItem['name']),
+                        'name' => $this->productMapper->getLocalizedValue($locale, $lineItem['name']),
                         'type' => 'variant',
-                        'variant' => $this->mapper->dataToVariant(
+                        'variant' => $this->productMapper->dataToVariant(
                             $lineItem['variant'],
                             new Query(),
                             $locale
@@ -795,7 +791,7 @@ class Commercetools implements CartApi
                 function (array $lineItem) use ($locale): LineItem {
                     return new LineItem([
                         'lineItemId' => $lineItem['id'],
-                        'name' => $this->mapper->getLocalizedValue($locale, $lineItem['name']),
+                        'name' => $this->productMapper->getLocalizedValue($locale, $lineItem['name']),
                         'type' => $lineItem['custom']['type'] ?? $lineItem['slug'],
                         'custom' => $lineItem['custom']['fields'] ?? [],
                         'count' => $lineItem['quantity'],

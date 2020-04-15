@@ -2,9 +2,10 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain;
 
+use Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools\Mapper as CartMapper;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper as ProductMapper;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapCartApi;
@@ -71,7 +72,8 @@ class CartApiFactory
                 $client = $this->commercetoolsClientFactory->factorForProjectAndType($project, 'cart');
                 $cartApi = new CartApi\Commercetools(
                     $client,
-                    new Mapper(),
+                    new ProductMapper(),
+                    new CartMapper(),
                     $this->commercetoolsLocaleCreatorFactory->factor($project, $client),
                     $this->orderIdGenerator
                 );
