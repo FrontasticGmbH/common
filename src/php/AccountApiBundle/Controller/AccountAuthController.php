@@ -4,6 +4,7 @@ namespace Frontastic\Common\AccountApiBundle\Controller;
 
 use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
+use Frontastic\Common\AccountApiBundle\Domain\AccountService;
 use Frontastic\Common\CoreBundle\Domain\ErrorResult;
 use QafooLabs\MVC\RedirectRoute;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -17,14 +18,11 @@ class AccountAuthController extends Controller
 {
     public function indexAction(Request $request, UserInterface $account = null): JsonResponse
     {
-        $accountService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
-        return new JsonResponse($accountService->getSessionFor($account));
+        return new JsonResponse($this->getAccountService()->getSessionFor($account));
     }
 
     public function registerAction(Request $request, Context $context): JsonResponse
     {
-        $accountService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
-
         $body = $this->getJsonBody($request);
         $account = new Account([
             'email' => $body['email'],
@@ -45,70 +43,60 @@ class AccountAuthController extends Controller
         ]);
         $account->setPassword($body['password']);
 
-        if ($accountService->exists($account->email)) {
+        if ($this->getAccountService()->exists($account->email)) {
             return new JsonResponse(new ErrorResult(['message' => "Die E-Mail-Adresse wird bereits verwendet."]), 409);
         }
 
-        $account = $accountService->create(
+        $account = $this->getAccountService()->create(
             $account,
             $this->get('frontastic.catwalk.cart_api')->getAnonymous(session_id(), $context->locale)
         );
-        $accountService->sendConfirmationMail($account);
+
+        $this->getAccountService()->sendConfirmationMail($account);
 
         return $this->loginAccount($account, $request);
     }
 
     public function confirmAction(Request $request, string $token): JsonResponse
     {
-        $accountService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
-        $account = $accountService->confirmEmail($token);
+        $account = $this->getAccountService()->confirmEmail($token);
 
         return $this->loginAccount($account, $request);
     }
 
     public function requestResetAction(Request $request): RedirectRoute
     {
-        $accountService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
-
         $body = $this->getJsonBody($request);
-        $account = $accountService->get($body['email']);
-        $accountService->sendPasswordResetMail($account);
+        $account = $this->getAccountService()->get($body['email']);
+        $this->getAccountService()->sendPasswordResetMail($account);
 
         return new RedirectRoute('Frontastic.AccountBundle.Account.logout');
     }
 
     public function resetAction(Request $request, string $token): JsonResponse
     {
-        $accountService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
-
         $body = $this->getJsonBody($request);
-        $account = $accountService->resetPassword($token, $body['newPassword']);
+        $account = $this->getAccountService()->resetPassword($token, $body['newPassword']);
 
         return $this->loginAccount($account, $request);
     }
 
     public function changePasswordAction(Request $request, Context $context): JsonResponse
     {
-        if (!$context->session->loggedIn) {
-            throw new AuthenticationException('Not logged in.');
-        }
+        $this->assertIsAuthenticated($context);
 
-        $accountService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
-        $account = $accountService->get($context->session->account->email);
+        $account = $this->getAccountService()->get($context->session->account->email);
 
         $body = $this->getJsonBody($request);
-        $account = $accountService->updatePassword($account, $body['oldPassword'], $body['newPassword']);
+        $account = $this->getAccountService()->updatePassword($account, $body['oldPassword'], $body['newPassword']);
         return new JsonResponse($account, 201);
     }
 
     public function updateAction(Request $request, Context $context): JsonResponse
     {
-        if (!$context->session->loggedIn) {
-            throw new AuthenticationException('Not logged in.');
-        }
+        $this->assertIsAuthenticated($context);
 
-        $accountService = $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
-        $account = $accountService->get($context->session->account->email);
+        $account = $this->getAccountService()->get($context->session->account->email);
 
         $body = $this->getJsonBody($request);
         $account->salutation = $body['salutation'];
@@ -122,38 +110,41 @@ class AccountAuthController extends Controller
             'phonePrefix' => $body['phonePrefix'],
             'phone' => $body['phone'],
         ];
-        $account = $accountService->update($account);
+        $account = $this->getAccountService()->update($account);
 
         return new JsonResponse($account, 200);
     }
 
-    private function getJsonBody(Request $request): array
+    /**
+     * @param \Frontastic\Catwalk\ApiCoreBundle\Domain\Context $context
+     */
+    protected function assertIsAuthenticated(Context $context): void
+    {
+        if (!$context->session->loggedIn) {
+            throw new AuthenticationException('Not logged in.');
+        }
+    }
+
+    /**
+     * @return \Frontastic\Common\AccountApiBundle\Domain\AccountApi
+     */
+    protected function getAccountService(): AccountService
+    {
+        return $this->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
+    }
+
+    protected function getJsonBody(Request $request): array
     {
         if (!$request->getContent() ||
             !($body = json_decode($request->getContent(), true))) {
-            throw new \InvalidArgumentException("Invalid data passed: " . $request->getContent());
+            throw new \InvalidArgumentException('Invalid data passed: ' . $request->getContent());
         }
 
         return $body;
     }
 
-    private function cloneRequest(Request $request, $newBody): Request
+    protected function loginAccount(Account $account, Request $request): Response
     {
-        // Dirty hack to override the body
-        return Request::create(
-            $request->getUri(),
-            $request->getMethod(),
-            $request->request->all(),
-            $request->cookies->all(),
-            $request->files->all(),
-            $request->server->all(),
-            json_encode($newBody)
-        );
-    }
-
-    private function loginAccount(Account $account, Request $request): Response
-    {
-        /** @var Response $loginResponse */
         return $this->get('frontastic.user.guard_handler')->authenticateUserAndHandleSuccess(
             $account,
             $request,

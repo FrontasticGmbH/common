@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\AccountApiBundle\Domain;
 
+use InvalidArgumentException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\Collection;
 
@@ -65,6 +66,11 @@ class Account extends DataObject implements UserInterface, \Serializable
     public $confirmed = false;
 
     /**
+     * @var bool
+     */
+    public $isGuest = false;
+
+    /**
      * @var \DateTime
      */
     public $tokenValidUntil;
@@ -73,6 +79,11 @@ class Account extends DataObject implements UserInterface, \Serializable
      * @var \Frontastic\Common\AccountApiBundle\Domain\Address[]
      */
     public $addresses = [];
+
+    /**
+     * @var array
+     */
+    private $authTokens = [];
 
     /**
      * Access original object from backend
@@ -189,5 +200,26 @@ class Account extends DataObject implements UserInterface, \Serializable
         foreach (\unserialize($serialized) as $key => $value) {
             $this->$key = $value;
         }
+    }
+
+    public function resetToken(string $type): void
+    {
+        if (isset($this->authTokens[$type])) {
+            $this->authTokens[$type] = null;
+        }
+    }
+
+    public function setToken(string $type, string $token): void
+    {
+        $this->authTokens[$type] = $token;
+    }
+
+    public function getToken(string $type): string
+    {
+        if (!isset($this->authTokens[$type])) {
+            throw new InvalidArgumentException(sprintf('No auth token found by type: %s', $type));
+        }
+
+        return $this->authTokens[$type];
     }
 }

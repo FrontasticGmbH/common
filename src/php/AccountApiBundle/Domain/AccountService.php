@@ -79,6 +79,11 @@ class AccountService
         return $this->accountApi->login($account, $cart);
     }
 
+    public function logout(Account $account): bool
+    {
+        return $this->accountApi->logout($account);
+    }
+
     public function create(Account $account, ?Cart $cart = null): Account
     {
         return $this->accountApi->create($account, $cart);
@@ -91,7 +96,7 @@ class AccountService
 
     public function updatePassword(Account $account, string $oldPassword, string $newPassword): Account
     {
-        return $this->accountApi->updatePassword($account->accountId, $oldPassword, $newPassword);
+        return $this->accountApi->updatePassword($account, $oldPassword, $newPassword);
     }
 
     public function resetPassword(string $token, string $newPassword): Account

@@ -57,7 +57,7 @@ class LifecycleEventDecorator implements AccountApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function updatePassword(string $accountId, string $oldPassword, string $newPassword): Account
+    public function updatePassword(Account $account, string $oldPassword, string $newPassword): Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
@@ -80,32 +80,32 @@ class LifecycleEventDecorator implements AccountApi
     /**
      * @return Account[]
      */
-    public function getAddresses(string $accountId): array
+    public function getAddresses(Account $account): array
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function addAddress(string $accountId, Address $address): Account
+    public function addAddress(Account $account, Address $address): Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function updateAddress(string $accountId, Address $address): Account
+    public function updateAddress(Account $account, Address $address): Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function removeAddress(string $accountId, string $addressId): Account
+    public function removeAddress(Account $account, string $addressId): Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function setDefaultBillingAddress(string $accountId, string $addressId): Account
+    public function setDefaultBillingAddress(Account $account, string $addressId): Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function setDefaultShippingAddress(string $accountId, string $addressId): Account
+    public function setDefaultShippingAddress(Account $account, string $addressId): Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }

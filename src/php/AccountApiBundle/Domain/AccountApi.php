@@ -14,7 +14,7 @@ interface AccountApi
 
     public function update(Account $account): Account;
 
-    public function updatePassword(string $accountId, string $oldPassword, string $newPassword): Account;
+    public function updatePassword(Account $account, string $oldPassword, string $newPassword): Account;
 
     public function generatePasswordResetToken(Account $account): Account;
 
@@ -25,17 +25,17 @@ interface AccountApi
     /**
      * @return Address[]
      */
-    public function getAddresses(string $accountId): array;
+    public function getAddresses(Account $account): array;
 
-    public function addAddress(string $accountId, Address $address): Account;
+    public function addAddress(Account $account, Address $address): Account;
 
-    public function updateAddress(string $accountId, Address $address): Account;
+    public function updateAddress(Account $account, Address $address): Account;
 
-    public function removeAddress(string $accountId, string $addressId): Account;
+    public function removeAddress(Account $account, string $addressId): Account;
 
-    public function setDefaultBillingAddress(string $accountId, string $addressId): Account;
+    public function setDefaultBillingAddress(Account $account, string $addressId): Account;
 
-    public function setDefaultShippingAddress(string $accountId, string $addressId): Account;
+    public function setDefaultShippingAddress(Account $account, string $addressId): Account;
 
     /**
      * Get *dangerous* inner client
