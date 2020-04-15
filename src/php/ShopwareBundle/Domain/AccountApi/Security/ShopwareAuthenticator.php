@@ -22,7 +22,7 @@ class ShopwareAuthenticator extends AbstractGuardAuthenticator
     /**
      * @param \Frontastic\Catwalk\FrontendBundle\Security\Authenticator $originalAuthenticator
      */
-    public function __construct(Authenticator $originalAuthenticator)
+    public function __construct($originalAuthenticator)
     {
         $this->originalAuthenticator = $originalAuthenticator;
     }

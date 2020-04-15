@@ -28,9 +28,16 @@ class AddressMapper extends AbstractDataMapper
             'postalCode' => $addressData['zipcode'] ?? null,
             'city' => $addressData['city'] ?? null,
             // @TODO: resolve country name by id
-            'country' => $addressData['country']['translated']['name'] ?? $addressData['country']['name'] ?? $addressData['countryId'] ?? null,
+            'country' => $this->resolveCountry($addressData),
             'phone' => $addressData['phoneNumber'] ?? null,
             'dangerousInnerAddress' => $addressData,
         ]);
+    }
+
+    private function resolveCountry(array $addressData): ?string
+    {
+        $resolveTranslatedName = $this->resolveTranslatedValue($addressData['country'], 'name');
+
+        return $resolveTranslatedName ?? $addressData['countryId'] ?? null;
     }
 }
