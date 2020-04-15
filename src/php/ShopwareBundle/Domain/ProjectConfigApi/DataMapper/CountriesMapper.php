@@ -2,12 +2,21 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper;
 
-use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
-use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareCountry;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
 
-class CountriesMapper implements DataMapperInterface
+class CountriesMapper extends AbstractDataMapper
 {
     public const MAPPER_NAME = 'countries';
+
+    /**
+     * @var \Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper\CountryMapper
+     */
+    private $countryMapper;
+
+    public function __construct(CountryMapper $countryMapper)
+    {
+        $this->countryMapper = $countryMapper;
+    }
 
     public function getName(): string
     {
@@ -16,19 +25,13 @@ class CountriesMapper implements DataMapperInterface
 
     public function map(array $resource)
     {
+        $countriesData = $this->extractData($resource);
+
         $result = [];
-        foreach ($resource as $countryData) {
-            $result[] = $this->mapDataToShopwareCountry($countryData);
+        foreach ($countriesData as $countryData) {
+            $result[] = $this->countryMapper->map($countryData);
         }
 
         return $result;
-    }
-
-    private function mapDataToShopwareCountry(array $countryData): ShopwareCountry
-    {
-        $country = new ShopwareCountry($countryData, true);
-        $country->name = $countryData['translated']['name'] ?? $countryData['name'];
-
-        return $country;
     }
 }

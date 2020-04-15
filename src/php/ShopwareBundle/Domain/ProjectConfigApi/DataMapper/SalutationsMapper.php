@@ -2,10 +2,11 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper;
 
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareSalutation;
 
-class SalutationsMapper implements DataMapperInterface
+class SalutationsMapper extends AbstractDataMapper
 {
     public const MAPPER_NAME = 'salutations';
 
@@ -16,8 +17,10 @@ class SalutationsMapper implements DataMapperInterface
 
     public function map(array $resource)
     {
+        $salutationsData = $this->extractData($resource);
+
         $result = [];
-        foreach ($resource as $salutationData) {
+        foreach ($salutationsData as $salutationData) {
             $result[] = $this->mapDataToShopwareSalutation($salutationData);
         }
 

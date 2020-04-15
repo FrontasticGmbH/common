@@ -2,10 +2,11 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper;
 
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwarePaymentMethod;
 
-class PaymentMethodsMapper implements DataMapperInterface
+class PaymentMethodsMapper extends AbstractDataMapper
 {
     public const MAPPER_NAME = 'payment-methods';
 
@@ -16,8 +17,10 @@ class PaymentMethodsMapper implements DataMapperInterface
 
     public function map(array $resource)
     {
+        $paymentMethodsData = $this->extractData($resource);
+
         $result = [];
-        foreach ($resource as $paymentMethodData) {
+        foreach ($paymentMethodsData as $paymentMethodData) {
             $result[] = $this->mapDataToShopwarePaymentMethod($paymentMethodData);
         }
 

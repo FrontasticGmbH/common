@@ -2,11 +2,12 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper;
 
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareShippingMethod;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareShippingMethodDeliveryTime;
 
-class ShippingMethodsMapper implements DataMapperInterface
+class ShippingMethodsMapper extends AbstractDataMapper
 {
     public const MAPPER_NAME = 'shipping-methods';
 
@@ -17,8 +18,10 @@ class ShippingMethodsMapper implements DataMapperInterface
 
     public function map(array $resource)
     {
+        $shippingMethodsData = $this->extractData($resource);
+
         $result = [];
-        foreach ($resource as $shippingMethodData) {
+        foreach ($shippingMethodsData as $shippingMethodData) {
             $result[] = $this->mapDataToShopwareShippingMethod($shippingMethodData);
         }
 

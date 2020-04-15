@@ -2,10 +2,11 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper;
 
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareCurrency;
 
-class CurrenciesMapper implements DataMapperInterface
+class CurrenciesMapper extends AbstractDataMapper
 {
     public const MAPPER_NAME = 'currencies';
 
@@ -16,8 +17,10 @@ class CurrenciesMapper implements DataMapperInterface
 
     public function map(array $resource)
     {
+        $currenciesData = $this->extractData($resource);
+
         $result = [];
-        foreach ($resource as $currencyData) {
+        foreach ($currenciesData as $currencyData) {
             $result[] = $this->mapDataToShopwareCurrency($currencyData);
         }
 

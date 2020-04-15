@@ -2,10 +2,11 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper;
 
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareLanguage;
 
-class LanguagesMapper implements DataMapperInterface
+class LanguagesMapper extends AbstractDataMapper
 {
     public const MAPPER_NAME = 'languages';
 
@@ -16,8 +17,10 @@ class LanguagesMapper implements DataMapperInterface
 
     public function map(array $resource)
     {
+        $languagesData = $this->extractData($resource);
+
         $result = [];
-        foreach ($resource as $languageData) {
+        foreach ($languagesData as $languageData) {
             $result[] = $this->mapDataToShopwareLanguage($languageData);
         }
 
