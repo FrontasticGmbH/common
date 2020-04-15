@@ -17,18 +17,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class ShopwareAccountAuthController extends AccountAuthController
 {
-    public function indexAction(Request $request, UserInterface $account = null): JsonResponse
-    {
-        $r = $this->get('frontastic.catwalk.account_api')->getAddresses($account);
-//        $r = this->getAccountService()->getSessionFor($account)
-        return new JsonResponse($r);
-    }
-
-    public function testAction(Request $request, UserInterface $account = null)
-    {
-        $result = $this->get('frontastic.catwalk.account_api')->getAddresses($account);
-    }
-
     public function loginAction(Request $request, UserInterface $account = null): JsonResponse
     {
         if ($account === null) {
