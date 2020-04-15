@@ -3,16 +3,14 @@
 namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi;
 
 use Doctrine\Common\Cache\Cache;
-use Frontastic\Common\ProjectApiBundle\Domain\Attribute;
-use Frontastic\Common\ProjectApiBundle\Domain\ProjectApi;
-use Frontastic\Common\ProjectApiBundle\Domain\ProjectConfigApi;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ProjectConfigApi;
 
-class CachedShopwareProjectConfigApi implements ProjectConfigApi
+class CachedShopwareProjectConfigApi
 {
     private const DEFAULT_CACHE_TTL = 600;
 
     /**
-     * @var \Frontastic\Common\ProjectApiBundle\Domain\ProjectConfigApi
+     * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ProjectConfigApi
      */
     private $aggregate;
 
@@ -26,7 +24,7 @@ class CachedShopwareProjectConfigApi implements ProjectConfigApi
      */
     private $cacheTtl;
 
-    public function __construct(ProjectApi $aggregate, Cache $cache, int $cacheTtl = self::DEFAULT_CACHE_TTL)
+    public function __construct(ProjectConfigApi $aggregate, Cache $cache, int $cacheTtl = self::DEFAULT_CACHE_TTL)
     {
         $this->aggregate = $aggregate;
         $this->cache = $cache;

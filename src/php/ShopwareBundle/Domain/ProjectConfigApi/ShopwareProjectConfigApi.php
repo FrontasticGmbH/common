@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Frontastic\Common\ShopwareBundle\Domain\ProjectApi;
+namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi;
 
 use Frontastic\Common\ShopwareBundle\Domain\Client;
 use Frontastic\Common\ShopwareBundle\Domain\Exception\RequestException;
