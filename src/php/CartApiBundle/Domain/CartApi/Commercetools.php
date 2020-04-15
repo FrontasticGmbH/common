@@ -662,7 +662,7 @@ class Commercetools implements CartApi
             'sum' => $cart['totalPrice']['centAmount'],
             'currency' => $cart['totalPrice']['currencyCode'],
             'payments' => $this->mapPayments($cart),
-            'discountCodes' => $this->mapDiscounts($cart),
+            'discountCodes' => $this->cartMapper->dataToDiscounts($cart),
             'dangerousInnerCart' => $cart,
         ]);
     }
@@ -700,7 +700,7 @@ class Commercetools implements CartApi
             'billingAddress' => $this->mapAddress($order['billingAddress'] ?? []),
             'sum' => $order['totalPrice']['centAmount'],
             'payments' => $this->mapPayments($order),
-            'discountCodes' => $this->mapDiscounts($order),
+            'discountCodes' => $this->cartMapper->dataToDiscounts($order),
             'dangerousInnerCart' => $order,
             'dangerousInnerOrder' => $order,
             'currency' => $order['totalPrice']['currencyCode'],
@@ -859,32 +859,6 @@ class Commercetools implements CartApi
                 'version' => $payment['version'] ?? 0,
             ]
         );
-    }
-
-    private function mapDiscounts(array $cart): array
-    {
-        if (empty($cart['discountCodes'])) {
-            return [];
-        }
-
-        $discounts = [];
-        foreach ($cart['discountCodes'] as $discount) {
-            // Get the state from the $discount and save it in $discountCodeState variable
-            // before assigning $discount['discountCode'] to $discount.
-            $discountCodeState = $discount['state'] ?? null;
-            $discount = $discount['discountCode'] ?? [];
-            $discount = isset($discount['obj']) ? $discount['obj'] : $discount;
-            $discounts[] = new Discount([
-                'discountId' => $discount['id'] ?? 'undefined',
-                'name' => $discount['name'] ?? null,
-                'code' => $discount['code'] ?? null,
-                'description' => $discount['description'] ?? null,
-                'state' => $discountCodeState,
-                'dangerousInnerDiscount' => $discount,
-            ]);
-        }
-
-        return $discounts;
     }
 
     /**
