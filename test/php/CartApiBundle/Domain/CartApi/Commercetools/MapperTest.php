@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools;
 
+use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Discount;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 
@@ -15,6 +16,52 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->mapper = new Mapper();
+    }
+
+    /**
+     * @dataProvider provideMapDataToAddressExamples
+     */
+    public function testMapDataToAddress($addressFixture, $expectedAddress)
+    {
+        $actualAddress = $this->mapper->mapDataToAddress($addressFixture);
+
+        $this->assertEquals($expectedAddress, $actualAddress);
+    }
+
+    public function provideMapDataToAddressExamples()
+    {
+        return [
+            'Empty address' => [
+                [],
+                null,
+            ],
+            'New address' => [
+                [
+                    'id' => 'vSO4VhF-',
+                    'salutation' => 'Herr',
+                    'firstName' => 'Max',
+                    'lastName' => 'Mustermann',
+                    'streetName' => 'Musterstrasse',
+                    'streetNumber' => '23',
+                    'additionalStreetInfo' => '',
+                    'postalCode' => '12345',
+                    'city' => 'Musterstadt',
+                    'country' => 'DE',
+                ],
+                new Address([
+                    'addressId' => 'vSO4VhF-',
+                    'salutation' => 'Herr',
+                    'firstName' => 'Max',
+                    'lastName' => 'Mustermann',
+                    'streetName' => 'Musterstrasse',
+                    'streetNumber' => '23',
+                    'additionalStreetInfo' => '',
+                    'postalCode' => '12345',
+                    'city' => 'Musterstadt',
+                    'country' => 'DE',
+                ]),
+            ],
+        ];
     }
 
     /**
@@ -150,10 +197,10 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                         'centAmount' => 0,
                     ],
                 ],
-                    new ShippingMethod([
-                        'name' => 'Versand an Lieferadresse',
-                        'price' => 0,
-                    ]),
+                new ShippingMethod([
+                    'name' => 'Versand an Lieferadresse',
+                    'price' => 0,
+                ]),
             ],
         ];
     }

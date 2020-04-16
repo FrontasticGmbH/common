@@ -657,8 +657,8 @@ class Commercetools implements CartApi
                 new \DateTimeImmutable($cart['custom']['fields']['birthday']) :
                 null,
             'shippingMethod' => $this->cartMapper->mapDataToShippingMethod($cart['shippingInfo'] ?? []),
-            'shippingAddress' => $this->mapAddress($cart['shippingAddress'] ?? []),
-            'billingAddress' => $this->mapAddress($cart['billingAddress'] ?? []),
+            'shippingAddress' => $this->cartMapper->mapDataToAddress($cart['shippingAddress'] ?? []),
+            'billingAddress' => $this->cartMapper->mapDataToAddress($cart['billingAddress'] ?? []),
             'sum' => $cart['totalPrice']['centAmount'],
             'currency' => $cart['totalPrice']['currencyCode'],
             'payments' => $this->mapPayments($cart),
@@ -696,8 +696,8 @@ class Commercetools implements CartApi
                 new \DateTimeImmutable($order['custom']['fields']['birthday']) :
                 null,
             'shippingMethod' => $this->cartMapper->mapDataToShippingMethod($order['shippingInfo'] ?? []),
-            'shippingAddress' => $this->mapAddress($order['shippingAddress'] ?? []),
-            'billingAddress' => $this->mapAddress($order['billingAddress'] ?? []),
+            'shippingAddress' => $this->cartMapper->mapDataToAddress($order['shippingAddress'] ?? []),
+            'billingAddress' => $this->cartMapper->mapDataToAddress($order['billingAddress'] ?? []),
             'sum' => $order['totalPrice']['centAmount'],
             'payments' => $this->mapPayments($order),
             'discountCodes' => $this->cartMapper->mapDataToDiscounts($order),
@@ -706,28 +706,6 @@ class Commercetools implements CartApi
             'currency' => $order['totalPrice']['currencyCode'],
         ]);
         return $order;
-    }
-
-    private function mapAddress(array $address): ?Address
-    {
-        if (!count($address)) {
-            return null;
-        }
-
-        return new Address([
-            'addressId' => $address['id'] ?? null,
-            'salutation' => $address['salutation'] ?? null,
-            'firstName' => $address['firstName'] ?? null,
-            'lastName' => $address['lastName'] ?? null,
-            'streetName' => $address['streetName'] ?? null,
-            'streetNumber' => $address['streetNumber'] ?? null,
-            'additionalStreetInfo' => $address['additionalStreetInfo'] ?? null,
-            'additionalAddressInfo' => $address['additionalAddressInfo'] ?? null,
-            'postalCode' => $address['postalCode'] ?? null,
-            'city' => $address['city'] ?? null,
-            'country' => $address['country'] ?? null,
-            'phone' => $address['phone'] ?? null,
-        ]);
     }
 
     private function reverseMapAddress(Address $address): array

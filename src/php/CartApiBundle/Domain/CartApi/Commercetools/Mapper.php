@@ -2,11 +2,34 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools;
 
+use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Discount;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 
 class Mapper
 {
+    public function mapDataToAddress(array $address): ?Address
+    {
+        if (!count($address)) {
+            return null;
+        }
+
+        return new Address([
+            'addressId' => $address['id'] ?? null,
+            'salutation' => $address['salutation'] ?? null,
+            'firstName' => $address['firstName'] ?? null,
+            'lastName' => $address['lastName'] ?? null,
+            'streetName' => $address['streetName'] ?? null,
+            'streetNumber' => $address['streetNumber'] ?? null,
+            'additionalStreetInfo' => $address['additionalStreetInfo'] ?? null,
+            'additionalAddressInfo' => $address['additionalAddressInfo'] ?? null,
+            'postalCode' => $address['postalCode'] ?? null,
+            'city' => $address['city'] ?? null,
+            'country' => $address['country'] ?? null,
+            'phone' => $address['phone'] ?? null,
+        ]);
+    }
+
     public function mapDataToDiscounts(array $cart): array
     {
         if (empty($cart['discountCodes'])) {
