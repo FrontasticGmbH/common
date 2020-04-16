@@ -5,6 +5,7 @@ namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi;
 use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
 use Frontastic\Common\ShopwareBundle\Domain\Exception\MapperNotFoundException;
+use Frontastic\Common\ShopwareBundle\Domain\Exception\ResourceNotFoundException;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper\CountryMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper\PaymentMethodsMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper\SalutationsMapper;
@@ -32,26 +33,32 @@ class ShopwareProjectConfigApi implements ShopwareProjectConfigApiInterface
     /**
      * @inheritDoc
      */
-    public function getCountryByCriteria(string $criteria): ShopwareCountry
+    public function getCountryByCriteria(string $criteria): ?ShopwareCountry
     {
         $parameters = [];
         if (preg_match('/^([A-Z]{2})$/', $criteria, $matches)) {
             $parameters['filter[iso]'] = $matches[0];
         } elseif (preg_match('/^([A-Z]{3})$/', $criteria, $matches)) {
             $parameters['filter[iso3]'] = $matches[0];
+        } elseif (preg_match('/^([a-z0-9]{32})$/', $criteria, $matches)) {
+            $parameters['filter[id]'] = $matches[0];
         } else {
             $parameters['filter[name]'] = $criteria;
         }
 
-        return $this->client
-            ->get('/country', $parameters)
-            ->then(function ($response) {
-                return $this->mapResource($response, CountryMapper::MAPPER_NAME);
-            })->wait();
+        try {
+            return $this->client
+                ->get('/country', $parameters)
+                ->then(function ($response) {
+                    return $this->mapResource($response, CountryMapper::MAPPER_NAME);
+                })->wait();
+        } catch (ResourceNotFoundException $exception) {
+            return null;
+        }
     }
 
     /**
-     * @return \Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwarePaymentMethod[]
+     * @inheritDoc
      */
     public function getPaymentMethods(): array
     {
@@ -62,6 +69,9 @@ class ShopwareProjectConfigApi implements ShopwareProjectConfigApiInterface
             })->wait();
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getProjectConfig(): array
     {
         $contextResources = [
@@ -91,20 +101,31 @@ class ShopwareProjectConfigApi implements ShopwareProjectConfigApiInterface
         return $result;
     }
 
-    public function getSalutation(string $salutationKey): ?ShopwareSalutation
+    /**
+     * @inheritDoc
+     */
+    public function getSalutation(string $criteria): ?ShopwareSalutation
     {
-        return $this->getSalutations($salutationKey)[0] ?? null;
+        try {
+            return $this->getSalutations($criteria)[0] ?? null;
+        } catch (ResourceNotFoundException $exception) {
+            return null;
+        }
     }
 
     /**
-     * @return \Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareSalutation[]
+     * @inheritDoc
      */
-    public function getSalutations(?string $salutationKey = null): array
+    public function getSalutations(?string $criteria = null): array
     {
         $parameters = [];
 
-        if ($salutationKey !== null) {
-            $parameters['filter[salutationKey]'] = $salutationKey;
+        if ($criteria !== null) {
+            if (preg_match('/^([a-z0-9]{32})$/', $criteria, $matches)) {
+                $parameters['filter[id]'] = $matches[0];
+            } else {
+                $parameters['filter[salutationKey]'] = $criteria;
+            }
         }
 
         return $this->client
@@ -115,7 +136,7 @@ class ShopwareProjectConfigApi implements ShopwareProjectConfigApiInterface
     }
 
     /**
-     * @return \Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareShippingMethod[]
+     * @inheritDoc
      */
     public function getShippingMethods(): array
     {
