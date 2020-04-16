@@ -3,7 +3,9 @@ name: "commercetools"
 secret: "secret"
 configuration:
     test:
+        bundle: ~
         disabled: false
+        canAuthenticateWithToken: false
     commercetools:
         projectKey: frontastic-1
         clientId: nJIPfHoT9_GlC29EfL75zdkg

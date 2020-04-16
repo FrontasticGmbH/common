@@ -3,15 +3,23 @@ name: "shopware"
 secret: "secret"
 configuration:
   test:
+    authTokenType: shopware
+    bundle: Frontastic\Common\ShopwareBundle\FrontasticCommonShopwareBundle
     disabled: false
     canQueryCategoriesBySlug: false
+    canConfirmAccountWithConfirmationToken: false
+    canAuthenticateWithToken: true
   shopware:
-    apiKey: SWSCZUM3CTRIYLP1S2JYBGJ6OA
-    endpoint: http://host.docker.internal:8000/sales-channel-api/v1
+    apiKey: SWSCZZQYYVDMQ1NUZJQXBGXSWQ
+    endpoint: https://nxs-frontastic-demo.shopwaredemo.store/sales-channel-api/v1
+  account:
+    engine: shopware
+  cart:
+    engine: shopware
   product:
     engine: shopware
   whislist:
-    engine: shopware
+    engine: no-wishlist
 projects:
   - projectId: test
     name: Shopware Test Catwalk

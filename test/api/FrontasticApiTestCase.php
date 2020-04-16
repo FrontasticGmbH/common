@@ -44,7 +44,20 @@ class FrontasticApiTestCase extends KernelTestCase
             ]
         );
 
+        /** @var Project|null $providedData */
+        $providedData = $this->getProvidedData()[0] ?? null;
+        if ($providedData && $providedData->configuration['test']->bundle !== null) {
+            TestKernel::$integrationBundle = $providedData->configuration['test']->bundle;
+        }
+
         self::bootKernel();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        TestKernel::$integrationBundle = null;
     }
 
     public function customerAndProject(): array
@@ -230,6 +243,11 @@ class FrontasticApiTestCase extends KernelTestCase
         }
 
         return $parameters;
+    }
+
+    protected function hasProjectFeature(Project $project, string $featureName): bool
+    {
+        return $project->configuration['test']->{$featureName} ?? true;
     }
 
     protected function requireProjectFeature(Project $project, string $featureName): void
