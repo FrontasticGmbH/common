@@ -25,7 +25,7 @@ class AggregationMapper extends AbstractDataMapper
         return static::MAPPER_NAME;
     }
 
-    public function map(array $resource)
+    public function map($resource)
     {
         $aggregationData = $this->extractAggregations($resource);
 

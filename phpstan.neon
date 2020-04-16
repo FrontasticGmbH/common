@@ -4,6 +4,8 @@ parameters:
         - src/php
         - test/api
         - test/php
+    excludes_analyse:
+        - test/api/var/*
     inferPrivatePropertyTypeFromConstructor: true
     ignoreErrors:
         - '#Tideways\\Profiler#'

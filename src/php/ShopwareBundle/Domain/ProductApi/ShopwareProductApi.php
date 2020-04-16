@@ -58,7 +58,7 @@ class ShopwareProductApi implements ProductApi
         $locale = $this->localeCreator->createLocaleFromString($query->locale);
 
         return $this->client
-//            ->forLanguage($locale->languageId)
+            ->forLanguage($locale->languageId)
             ->post('/category', [], $criteria)
             ->then(function ($response) use ($query) {
                 return $this->mapResponse($response, $query, CategoryMapper::MAPPER_NAME);
@@ -89,8 +89,8 @@ class ShopwareProductApi implements ProductApi
         }
 
         $promise = $this->client
-//            ->forLanguage($locale->languageId)
-//            ->forCurrency($locale->currencyId)
+            ->forLanguage($locale->languageId)
+            ->forCurrency($locale->currencyId)
             ->get("/product/{$identifier}", $parameters)
             ->then(function ($response) use ($query) {
                 return $this->mapResponse($response, $query, ProductMapper::MAPPER_NAME);
@@ -114,8 +114,8 @@ class ShopwareProductApi implements ProductApi
         $locale = $this->localeCreator->createLocaleFromString($query->locale);
 
         $promise = $this->client
-//            ->forLanguage($locale->languageId)
-//            ->forCurrency($locale->currencyId)
+            ->forLanguage($locale->languageId)
+            ->forCurrency($locale->currencyId)
             ->post('/product', [], $criteria)
             ->then(function ($response) use ($query) {
                 return $this->mapResponse($response, $query, ProductResultMapper::MAPPER_NAME);

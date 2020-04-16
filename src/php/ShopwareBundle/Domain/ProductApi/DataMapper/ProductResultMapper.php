@@ -37,7 +37,7 @@ class ProductResultMapper extends AbstractDataMapper implements QueryAwareDataMa
         return static::MAPPER_NAME;
     }
 
-    public function map(array $resource)
+    public function map($resource)
     {
         $result = new Result();
 

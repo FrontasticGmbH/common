@@ -33,13 +33,15 @@ class ProductMapper extends AbstractDataMapper implements QueryAwareDataMapperIn
         return static::MAPPER_NAME;
     }
 
-    public function map(array $resource)
+    public function map($resource)
     {
+        // Support for list with single resources as well as direct single resource
         $productData = $this->extractData($resource, $resource);
+        $productData = $productData[0] ?? $productData;
 
         $lastModified = $productData['updatedAt'] ?? null;
 
-        $name = $productData['translated']['name'] ?? $productData['name'];
+        $name = $this->resolveTranslatedValue($productData, 'name');
 
         return new Product([
             'productId' => (string)$productData['id'],
@@ -47,7 +49,7 @@ class ProductMapper extends AbstractDataMapper implements QueryAwareDataMapperIn
             'version' => (string)$productData['versionId'],
             'name' => $name,
             'slug' => Slugger::slugify($name),
-            'description' => $productData['translated']['description'] ?? $productData['description'],
+            'description' => $this->resolveTranslatedValue($productData, 'description'),
             'categories' => $productData['categoryTree'],
             'variants' => $this->mapDataToVariants($productData),
             'dangerousInnerProduct' => $this->mapDangerousInnerData($productData),

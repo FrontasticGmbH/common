@@ -2,20 +2,19 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi;
 
-use Doctrine\Common\Cache\Cache;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ProjectConfigApi;
+use Psr\SimpleCache\CacheInterface;
 
-class CachedShopwareProjectConfigApi
+class CachedShopwareProjectConfigApi implements ShopwareProjectConfigApiInterface
 {
     private const DEFAULT_CACHE_TTL = 600;
 
     /**
-     * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ProjectConfigApi
+     * @var \Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiInterface
      */
     private $aggregate;
 
     /**
-     * @var \Doctrine\Common\Cache\Cache
+     * @var \Psr\SimpleCache\CacheInterface
      */
     private $cache;
 
@@ -24,34 +23,98 @@ class CachedShopwareProjectConfigApi
      */
     private $cacheTtl;
 
-    public function __construct(ProjectConfigApi $aggregate, Cache $cache, int $cacheTtl = self::DEFAULT_CACHE_TTL)
-    {
+    /**
+     * @var bool
+     */
+    private $debug;
+
+    public function __construct(
+        ShopwareProjectConfigApiInterface $aggregate,
+        CacheInterface $cache,
+        bool $debug = false,
+        int $cacheTtl = self::DEFAULT_CACHE_TTL
+    ) {
         $this->aggregate = $aggregate;
         $this->cache = $cache;
+        $this->debug = $debug;
         $this->cacheTtl = $cacheTtl;
     }
 
-    public function getProjectConfig(): array
+    public function getCountryByCriteria(string $criteria): ShopwareCountry
     {
-        $cacheKey = $this->buildCacheKey(__METHOD__);
+        $cacheKey = $this->buildCacheKey(__FUNCTION__, $criteria);
 
-        $result = $this->cache->fetch($cacheKey);
-        if ($result !== false) {
-            return $result;
+        if ($this->debug || false === ($result = $this->cache->get($cacheKey, false))) {
+            $result = $this->aggregate->getCountryByCriteria($criteria);
+            $this->cache->set($cacheKey, $result, $this->cacheTtl);
         }
-
-        $result = $this->aggregate->getProjectConfig();
-        $this->cache->save($cacheKey, $result, $this->cacheTtl);
 
         return $result;
     }
 
-    private function buildCacheKey(string $resource): string
+    public function getPaymentMethods(): array
     {
-        return sprintf(
-            'frontastic.shopware.%s.%s',
-            __CLASS__,
-            $resource
-        );
+        $cacheKey = $this->buildCacheKey(__FUNCTION__);
+
+        if ($this->debug || false === ($result = $this->cache->get($cacheKey, false))) {
+            $result = $this->aggregate->getPaymentMethods();
+            $this->cache->set($cacheKey, $result, $this->cacheTtl);
+        }
+
+        return $result;
+    }
+
+    public function getProjectConfig(): array
+    {
+        $cacheKey = $this->buildCacheKey(__FUNCTION__);
+
+        if ($this->debug || false === ($result = $this->cache->get($cacheKey, false))) {
+            $result = $this->aggregate->getProjectConfig();
+            $this->cache->set($cacheKey, $result, $this->cacheTtl);
+        }
+
+        return $result;
+    }
+
+    public function getSalutation(string $salutationKey): ?ShopwareSalutation
+    {
+        $cacheKey = $this->buildCacheKey(__FUNCTION__, $salutationKey ?? '_empty_');
+
+        if ($this->debug || false === ($result = $this->cache->get($cacheKey, false))) {
+            $result = $this->aggregate->getSalutation($salutationKey);
+            $this->cache->set($cacheKey, $result, $this->cacheTtl);
+        }
+
+        return $result;
+    }
+
+    public function getSalutations(string $salutationKey = null): array
+    {
+        $cacheKey = $this->buildCacheKey(__FUNCTION__, $salutationKey ?? '_empty_');
+
+        if ($this->debug || false === ($result = $this->cache->get($cacheKey, false))) {
+            $result = $this->aggregate->getSalutations($salutationKey);
+            $this->cache->set($cacheKey, $result, $this->cacheTtl);
+        }
+
+        return $result;
+    }
+
+    public function getShippingMethods(): array
+    {
+        $cacheKey = $this->buildCacheKey(__FUNCTION__);
+
+        if ($this->debug || false === ($result = $this->cache->get($cacheKey, false))) {
+            $result = $this->aggregate->getShippingMethods();
+            $this->cache->set($cacheKey, $result, $this->cacheTtl);
+        }
+
+        return $result;
+    }
+
+    private function buildCacheKey(string ...$parts): string
+    {
+        $suffix = implode('.', $parts);
+        return sprintf('frontastic.common.shopware.project-config-api.%s', $suffix);
     }
 }
