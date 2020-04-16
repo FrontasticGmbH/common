@@ -76,22 +76,14 @@ class ShopwareProductApi implements ProductApi
         $query = ProductApi\Query\SingleProductQuery::fromLegacyQuery($query);
         $query->validate();
 
+        $criteria = SearchCriteriaBuilder::buildFromSimpleProductQuery($query);
+
         $locale = $this->localeCreator->createLocaleFromString($query->locale);
-
-        $identifier = $query->sku;
-        $parameters = [];
-
-        if ($identifier === null) {
-            $identifier = $query->productId;
-            $parameters = [
-                'useNumberAsId' => true
-            ];
-        }
 
         $promise = $this->client
             ->forLanguage($locale->languageId)
             ->forCurrency($locale->currencyId)
-            ->get("/product/{$identifier}", $parameters)
+            ->post('/product', [], $criteria)
             ->then(function ($response) use ($query) {
                 return $this->mapResponse($response, $query, ProductMapper::MAPPER_NAME);
             });
