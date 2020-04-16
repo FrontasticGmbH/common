@@ -37,30 +37,8 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 null,
             ],
             'Full address' => [
-                [
-                    'id' => 'vSO4VhF-',
-                    'salutation' => 'Herr',
-                    'firstName' => 'Max',
-                    'lastName' => 'Mustermann',
-                    'streetName' => 'Musterstrasse',
-                    'streetNumber' => '23',
-                    'additionalStreetInfo' => '',
-                    'postalCode' => '12345',
-                    'city' => 'Musterstadt',
-                    'country' => 'DE',
-                ],
-                new Address([
-                    'addressId' => 'vSO4VhF-',
-                    'salutation' => 'Herr',
-                    'firstName' => 'Max',
-                    'lastName' => 'Mustermann',
-                    'streetName' => 'Musterstrasse',
-                    'streetNumber' => '23',
-                    'additionalStreetInfo' => '',
-                    'postalCode' => '12345',
-                    'city' => 'Musterstadt',
-                    'country' => 'DE',
-                ]),
+                $this->getAddressFixture(),
+                $this->getAddress(),
             ],
         ];
     }
@@ -96,32 +74,8 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
             'Full address' => [
-                new Address([
-                    'addressId' => 'vSO4VhF-',
-                    'salutation' => 'Herr',
-                    'firstName' => 'Max',
-                    'lastName' => 'Mustermann',
-                    'streetName' => 'Musterstrasse',
-                    'streetNumber' => '23',
-                    'additionalStreetInfo' => '',
-                    'postalCode' => '12345',
-                    'city' => 'Musterstadt',
-                    'country' => 'DE',
-                ]),
-                [
-                    'id' => 'vSO4VhF-',
-                    'salutation' => 'Herr',
-                    'firstName' => 'Max',
-                    'lastName' => 'Mustermann',
-                    'streetName' => 'Musterstrasse',
-                    'streetNumber' => '23',
-                    'additionalStreetInfo' => '',
-                    'additionalAddressInfo' => '',
-                    'postalCode' => '12345',
-                    'city' => 'Musterstadt',
-                    'country' => 'DE',
-                    'phone' => '',
-                ],
+                $this->getAddress(),
+                $this->getAddressFixture(),
             ],
         ];
     }
@@ -356,9 +310,38 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
+    private function getAddressFixture(): array
+    {
+        return $this->loadFixture('addressFixture.json');
+    }
+
+    /**
+     * @return Address
+     */
+    private function getAddress(): Address
+    {
+        return new Address([
+            'addressId' => 'vSO4VhF-',
+            'salutation' => 'Herr',
+            'firstName' => 'Max',
+            'lastName' => 'Mustermann',
+            'streetName' => 'Musterstrasse',
+            'streetNumber' => '23',
+            'additionalStreetInfo' => '',
+            'additionalAddressInfo' => '',
+            'postalCode' => '12345',
+            'city' => 'Musterstadt',
+            'country' => 'DE',
+            'phone' => '',
+        ]);
+    }
+
+    /**
+     * @return array
+     */
     private function getPaymentFixture(): array
     {
-        return $this->loadFixture('paymentFixtures.json');
+        return $this->loadFixture('paymentFixture.json');
     }
 
     /**
