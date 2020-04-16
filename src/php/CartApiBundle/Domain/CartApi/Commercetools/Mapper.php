@@ -75,6 +75,20 @@ class Mapper
         return $discounts;
     }
 
+    public function mapDataToPayments(array $cart): array
+    {
+        if (empty($cart['paymentInfo']['payments'])) {
+            return [];
+        }
+
+        $payments = [];
+        foreach ($cart['paymentInfo']['payments'] as $payment) {
+            $payments[] = $this->mapDataToPayment($payment);
+        }
+
+        return $payments;
+    }
+
     public function mapDataToPayment(array $payment): Payment
     {
         $payment = isset($payment['obj']) ? $payment['obj'] : $payment;

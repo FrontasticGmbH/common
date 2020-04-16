@@ -661,7 +661,7 @@ class Commercetools implements CartApi
             'billingAddress' => $this->cartMapper->mapDataToAddress($cart['billingAddress'] ?? []),
             'sum' => $cart['totalPrice']['centAmount'],
             'currency' => $cart['totalPrice']['currencyCode'],
-            'payments' => $this->mapPayments($cart),
+            'payments' => $this->cartMapper->mapDataToPayments($cart),
             'discountCodes' => $this->cartMapper->mapDataToDiscounts($cart),
             'dangerousInnerCart' => $cart,
         ]);
@@ -699,7 +699,7 @@ class Commercetools implements CartApi
             'shippingAddress' => $this->cartMapper->mapDataToAddress($order['shippingAddress'] ?? []),
             'billingAddress' => $this->cartMapper->mapDataToAddress($order['billingAddress'] ?? []),
             'sum' => $order['totalPrice']['centAmount'],
-            'payments' => $this->mapPayments($order),
+            'payments' => $this->cartMapper->mapDataToPayments($order),
             'discountCodes' => $this->cartMapper->mapDataToDiscounts($order),
             'dangerousInnerCart' => $order,
             'dangerousInnerOrder' => $order,
@@ -786,20 +786,6 @@ class Commercetools implements CartApi
         );
 
         return $lineItems;
-    }
-
-    private function mapPayments(array $cart): array
-    {
-        if (empty($cart['paymentInfo']['payments'])) {
-            return [];
-        }
-
-        $payments = [];
-        foreach ($cart['paymentInfo']['payments'] as $payment) {
-            $payments[] = $this->cartMapper->mapDataToPayment($payment);
-        }
-
-        return $payments;
     }
 
     /**

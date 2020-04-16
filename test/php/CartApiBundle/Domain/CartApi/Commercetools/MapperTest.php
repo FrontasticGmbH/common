@@ -218,6 +218,65 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @dataProvider provideMapDataToPaymentsExamples
+     */
+    public function testMapDataToPayments($paymentsFixture, $expectedPayments, $sizeExpected)
+    {
+        $actualPayments = $this->mapper->mapDataToPayments($paymentsFixture);
+
+        $this->assertEquals($expectedPayments, $actualPayments);
+        $this->assertEquals($sizeExpected, count($actualPayments));
+    }
+
+    public function provideMapDataToPaymentsExamples()
+    {
+        return [
+            'Empty payment info' => [
+                [],
+                [],
+                0,
+            ],
+            'Empty payments' => [
+                [
+                    'paymentInfo' => [
+                        'payments' => [],
+                    ],
+                ],
+                [],
+                0,
+            ],
+            'Single payment' => [
+                [
+                    'paymentInfo' => [
+                        'payments' => [
+                            $this->getPaymentFixture(),
+                        ],
+                    ],
+                ],
+                [
+                    $this->getPayment(),
+                ],
+                1,
+            ],
+            'Multiple payment' => [
+                [
+                    'paymentInfo' => [
+                        'payments' => [
+                            $this->getPaymentFixture(),
+                            $this->getPaymentFixture(),
+                        ],
+                    ],
+                ],
+                [
+                    $this->getPayment(),
+                    $this->getPayment(),
+                ],
+                2,
+            ],
+        ];
+    }
+
+    /**
      * @dataProvider provideMapDataToPaymentExamples
      */
     public function testMapDataToPayment($paymentFixture, $expectedPayment)
@@ -238,48 +297,8 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 ]),
             ],
             'Full payment' => [
-                [
-                    'key' => '111',
-                    'interfaceId' => '7ba6efec-da46-4b06-98c0-412feb9180dd',
-                    'paymentMethodInfo' => [
-                        'paymentInterface' => 'paypal',
-                        'method' => 'paypal',
-                    ],
-                    'amountPlanned' => [
-                        'centAmount' => 10000,
-                        'currencyCode' => 'EUR',
-                    ],
-                    'paymentStatus' => [
-                        'interfaceCode' => 'paid',
-                    ],
-                    'version' => 1,
-                ],
-                new Payment([
-                    'id' => '111',
-                    'paymentId' => '7ba6efec-da46-4b06-98c0-412feb9180dd',
-                    'paymentProvider' => 'paypal',
-                    'paymentMethod' => 'paypal',
-                    'amount' => 10000,
-                    'currency' => 'EUR',
-                    'debug' => json_encode([
-                        'key' => '111',
-                        'interfaceId' => '7ba6efec-da46-4b06-98c0-412feb9180dd',
-                        'paymentMethodInfo' => [
-                            'paymentInterface' => 'paypal',
-                            'method' => 'paypal',
-                        ],
-                        'amountPlanned' => [
-                            'centAmount' => 10000,
-                            'currencyCode' => 'EUR',
-                        ],
-                        'paymentStatus' => [
-                            'interfaceCode' => 'paid',
-                        ],
-                        'version' => 1,
-                    ]),
-                    'paymentStatus' => 'paid',
-                    'version' => 1,
-                ]),
+                $this->getPaymentFixture(),
+                $this->getPayment(),
             ]
         ];
     }
@@ -332,5 +351,46 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 ]),
             ],
         ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getPaymentFixture(): array
+    {
+        return [
+            'key' => '111',
+            'interfaceId' => '7ba6efec-da46-4b06-98c0-412feb9180dd',
+            'paymentMethodInfo' => [
+                'paymentInterface' => 'paypal',
+                'method' => 'paypal',
+            ],
+            'amountPlanned' => [
+                'centAmount' => 10000,
+                'currencyCode' => 'EUR',
+            ],
+            'paymentStatus' => [
+                'interfaceCode' => 'paid',
+            ],
+            'version' => 1,
+        ];
+    }
+
+    /**
+     * @return Payment
+     */
+    private function getPayment(): Payment
+    {
+        return new Payment([
+            'id' => '111',
+            'paymentId' => '7ba6efec-da46-4b06-98c0-412feb9180dd',
+            'paymentProvider' => 'paypal',
+            'paymentMethod' => 'paypal',
+            'amount' => 10000,
+            'currency' => 'EUR',
+            'debug' => json_encode($this->getPaymentFixture()),
+            'paymentStatus' => 'paid',
+            'version' => 1,
+        ]);
     }
 }
