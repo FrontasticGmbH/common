@@ -358,22 +358,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
      */
     private function getPaymentFixture(): array
     {
-        return [
-            'key' => '111',
-            'interfaceId' => '7ba6efec-da46-4b06-98c0-412feb9180dd',
-            'paymentMethodInfo' => [
-                'paymentInterface' => 'paypal',
-                'method' => 'paypal',
-            ],
-            'amountPlanned' => [
-                'centAmount' => 10000,
-                'currencyCode' => 'EUR',
-            ],
-            'paymentStatus' => [
-                'interfaceCode' => 'paid',
-            ],
-            'version' => 1,
-        ];
+        return $this->loadFixture('paymentFixtures.json');
     }
 
     /**
@@ -392,5 +377,13 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             'paymentStatus' => 'paid',
             'version' => 1,
         ]);
+    }
+
+    /**
+     * @return mixed
+     */
+    private function loadFixture(string $fileName)
+    {
+        return json_decode(file_get_contents(__DIR__ . '/_fixtures/' . $fileName), true);
     }
 }
