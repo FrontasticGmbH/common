@@ -7,15 +7,20 @@ use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\AccountMapper;
+use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\AddressCreateRequestDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\AddressesMapper;
+use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\CustomerCreateRequestDataMapper;
+use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\CustomerPatchRequestDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\Exception\RequestException;
+use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
 use RuntimeException;
 
 class ShopwareAccountApi implements AccountApi
 {
-    private const TOKEN_TYPE = 'shopware';
+    public const TOKEN_TYPE = 'shopware';
 
     /**
      * @var \Frontastic\Common\ShopwareBundle\Domain\ClientInterface
@@ -27,12 +32,20 @@ class ShopwareAccountApi implements AccountApi
      */
     private $mapperResolver;
 
+    /**
+     * @var \Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiInterface
+     */
+    private $projectConfigApi;
+
     public function __construct(
         ClientInterface $client,
-        DataMapperResolver $mapperResolver
+        DataMapperResolver $mapperResolver,
+        ShopwareProjectConfigApiFactory $projectConfigApiFactory
     ) {
         $this->client = $client;
         $this->mapperResolver = $mapperResolver;
+
+        $this->projectConfigApi = $projectConfigApiFactory->factor($this->client);
     }
 
     public function get(string $token): Account
@@ -54,21 +67,25 @@ class ShopwareAccountApi implements AccountApi
 
     public function confirmEmail(string $token): Account
     {
-        // Shopware does not have an endpoint to handle this
+        // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
         throw new RuntimeException('Not implemented');
     }
 
     public function create(Account $account, ?Cart $cart = null): Account
     {
-        $requestData = $this->mapCustomerCreateRequestData($account);
+        $requestData = $this->mapRequestData($account, CustomerCreateRequestDataMapper::MAPPER_NAME);
 
         return $this->client
             ->post('/customer', [], $requestData)
-            ->then(static function ($response) use ($account, $requestData) {
+            ->then(static function ($response) use ($account) {
                 $account->accountId = $response['data'];
 
-                // @TODO: remove
-                $account->email = $requestData['email'];
+                // Mark billing address as default, Shopware marks it as default when creating the account
+                $account->addresses[0]->isDefaultBillingAddress = true;
+
+                // Shipping address can be located at index 1 if it's custom, or 0 if it's same as billing
+                $shippingAddressIndex = (int)isset($account->addresses[1]);
+                $account->addresses[$shippingAddressIndex]->isDefaultShippingAddress = true;
 
                 return $account;
             })
@@ -77,7 +94,7 @@ class ShopwareAccountApi implements AccountApi
 
     public function update(Account $account): Account
     {
-        $requestData = $this->mapCustomerPatchRequestData($account);
+        $requestData = $this->mapRequestData($account, CustomerPatchRequestDataMapper::MAPPER_NAME);
 
         $this->client
             ->withContextToken($account->getToken(self::TOKEN_TYPE))
@@ -105,13 +122,13 @@ class ShopwareAccountApi implements AccountApi
 
     public function generatePasswordResetToken(Account $account): Account
     {
-        // Shopware does not have an endpoint to handle this
+        // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
         throw new RuntimeException('Not implemented');
     }
 
     public function resetPassword(string $token, string $newPassword): Account
     {
-        // Shopware does not have an endpoint to handle this
+        // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
         throw new RuntimeException('Not implemented');
     }
 
@@ -126,7 +143,7 @@ class ShopwareAccountApi implements AccountApi
                     $account->setToken(self::TOKEN_TYPE, $response['sw-context-token']);
 
                     return true;
-                }, static function () use ($account) {
+                }, static function ($reason) use ($account) {
                     $account->resetToken(self::TOKEN_TYPE);
 
                     return false;
@@ -168,7 +185,7 @@ class ShopwareAccountApi implements AccountApi
 
     public function addAddress(Account $account, Address $address): Account
     {
-        $requestData = $this->mapAddressCreateRequestData($address);
+        $requestData = $this->mapRequestData($address, AddressCreateRequestDataMapper::MAPPER_NAME);
 
         return $this->client
             ->withContextToken($account->getToken(self::TOKEN_TYPE))
@@ -195,14 +212,36 @@ class ShopwareAccountApi implements AccountApi
 
     public function updateAddress(Account $account, Address $address): Account
     {
-        // TODO: Implement updateAddress() method.
+        $requestData = $this->mapRequestData($address, AddressCreateRequestDataMapper::MAPPER_NAME);
+
+        return $this->client
+            ->withContextToken($account->getToken(self::TOKEN_TYPE))
+            ->patch('/customer/address', [], $requestData)
+            ->then(static function ($response) use ($account, $address) {
+                $account->addresses[] = $address;
+                $address->addressId = $response['data'];
+
+                return $address;
+            })
+            ->then(function (Address $address) use ($account) {
+                if ($address->isDefaultBillingAddress === true) {
+                    return $this->setDefaultBillingAddress($account, $address->addressId);
+                }
+
+                if ($address->isDefaultShippingAddress === true) {
+                    return $this->setDefaultShippingAddress($account, $address->addressId);
+                }
+
+                return $account;
+            })
+            ->wait();
     }
 
     public function removeAddress(Account $account, string $addressId): Account
     {
         return $this->client
             ->withContextToken($account->getToken(self::TOKEN_TYPE))
-            ->delete(sprintf('/customer/address/%s', $addressId))
+            ->delete("/customer/address/{$addressId}")
             ->then(static function ($response) use ($account) {
                 $deletedAddressId = $response['data'];
 
@@ -225,7 +264,7 @@ class ShopwareAccountApi implements AccountApi
     {
         return $this->client
             ->withContextToken($account->getToken(self::TOKEN_TYPE))
-            ->patch(sprintf('/customer/address/%s/default-billing', $addressId))
+            ->patch("/customer/address/{$addressId}/default-billing")
             ->then(static function ($response) use ($account) {
                 $updatedBillingAddressId = $response['data'];
 
@@ -242,7 +281,7 @@ class ShopwareAccountApi implements AccountApi
     {
         return $this->client
             ->withContextToken($account->getToken(self::TOKEN_TYPE))
-            ->patch(sprintf('/customer/address/%s/default-shipping', $addressId))
+            ->patch("/customer/address/{$addressId}/default-shipping")
             ->then(static function ($response) use ($account) {
                 $updatedShippingAddressId = $response['data'];
 
@@ -263,78 +302,36 @@ class ShopwareAccountApi implements AccountApi
         return $this->client;
     }
 
-    private function mapAddressCreateRequestData(Address $address): array
+    /**
+     * @param mixed $requestData
+     * @param string $mapperName
+     *
+     * @return mixed
+     */
+    private function mapRequestData($requestData, string $mapperName)
     {
-        return [
-            'id' => $address->addressId ?? null,
-            'salutationId' => $address->salutation, // @TODO: resolve salutation id?
-            'title' => null, // Not part of Frontastic Address,
-            'firstName' => $address->firstName,
-            'lastName' => $address->lastName,
-            'company' => null, // Not part of Frontastic Address
-            'department' => null, // Not part of Frontastic Address
-            'vatId' => null, // Not part of Frontastic Address
-            'street' => trim(sprintf('%s %s', $address->streetName, $address->streetNumber)),
-            'additionalAddressLine1' => $address->additionalAddressInfo ?? '',
-            'additionalAddressLine2' => $address->additionalStreetInfo ?? '',
-            'zipcode' => $address->postalCode,
-            'city' => $address->city,
-            'countryId' => $address->country, // TODO: map to country ID
-            'countryStateId' => null, // Not part of address
-            'phoneNumber' => $address->phone,
-        ];
-    }
+        $mapper = $this->mapperResolver->getMapper($mapperName);
 
-    private function mapCustomerCreateRequestData(Account $account): array
-    {
-        $requestData = [
-            'salutationId' => $account->salutation, // @TODO: resolve salutation id?
-            'firstName' => $account->firstName,
-            'lastName' => $account->lastName,
-            'guest' => $account->isGuest,
-            'email' => str_replace('DYNAMIC', time(), $account->email),
-            'password' => $account->getPassword(),
-            'birthdayDay' => $account->birthday ? $account->birthday->format('d') : null,
-            'birthdayMonth' => $account->birthday ? $account->birthday->format('m') : null,
-            'birthdayYear' => $account->birthday ? $account->birthday->format('Y') : null,
-            'billingAddress' => [
-                'company' => $account->data['billingAddress']['company'] ?? '',
-                'department' => $account->data['billingAddress']['department'] ?? '',
-                'vatId' => $account->data['billingAddress']['vatId'] ?? '',
-                'street' => $account->data['billingAddress']['street'],
-                'additionalAddressLine1' => $account->data['billingAddress']['additionalAddressLine1'] ?? '',
-                'additionalAddressLine2' => $account->data['billingAddress']['additionalAddressLine2'] ?? '',
-                'zipcode' => $account->data['billingAddress']['zipCode'],
-                'city' => $account->data['billingAddress']['city'],
-                'countryId' => $account->data['billingAddress']['country'],
-                // @TODO: resolve country id?
-                'countryStateId' => $account->data['billingAddress']['countryState'] ?? '',
-                'phoneNumber' => $account->data['billingAddress']['phoneNumber'] ?? '',
-            ]
-        ];
-
-        if (!empty($account->data['shippingAddress'])) {
-            // @TODO: map shipping address
+        if ($mapper instanceof ProjectConfigApiAwareDataMapperInterface) {
+            $mapper->setProjectConfigApi($this->projectConfigApi);
         }
 
-        return $requestData;
+        return $mapper->map($requestData);
     }
 
-    private function mapCustomerPatchRequestData(Account $account): array
-    {
-        return [
-            'salutationId' => $account->salutation, // @TODO: resolve salutation id?
-            'firstName' => $account->firstName,
-            'lastName' => $account->lastName,
-            'birthdayDay' => $account->birthday ? $account->birthday->format('d') : null,
-            'birthdayMonth' => $account->birthday ? $account->birthday->format('m') : null,
-            'birthdayYear' => $account->birthday ? $account->birthday->format('Y') : null,
-        ];
-    }
-
+    /**
+     * @param array $response
+     * @param string $mapperName
+     *
+     * @return mixed
+     */
     private function mapResponse(array $response, string $mapperName)
     {
         $mapper = $this->mapperResolver->getMapper($mapperName);
+
+        if ($mapper instanceof ProjectConfigApiAwareDataMapperInterface) {
+            $mapper->setProjectConfigApi($this->projectConfigApi);
+        }
 
         return $mapper->map($response);
     }

@@ -3,9 +3,13 @@
 namespace Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper;
 
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperTrait;
 
-class AccountAddressesMapper extends AbstractDataMapper
+class AccountAddressesMapper extends AbstractDataMapper implements ProjectConfigApiAwareDataMapperInterface
 {
+    use ProjectConfigApiAwareDataMapperTrait;
+
     public const MAPPER_NAME = 'account-addresses';
 
     /**
@@ -23,17 +27,17 @@ class AccountAddressesMapper extends AbstractDataMapper
         return static::MAPPER_NAME;
     }
 
-    public function map(array $resource)
+    public function map($resource)
     {
         $accountData = $this->extractData($resource, $resource);
 
-        $billingAddress = $this->addressMapper->map($accountData['defaultBillingAddress']);
+        $billingAddress = $this->getAddressMapper()->map($accountData['defaultBillingAddress']);
         $billingAddress->isDefaultBillingAddress = true;
 
         $addresses[$billingAddress->addressId] = $billingAddress;
 
         if (!array_key_exists($accountData['defaultShippingAddress']['id'], $addresses)) {
-            $shippingAddress = $this->addressMapper->map($accountData['defaultShippingAddress']);
+            $shippingAddress = $this->getAddressMapper()->map($accountData['defaultShippingAddress']);
             $shippingAddress->isDefaultShippingAddress = true;
 
             $addresses[$shippingAddress->addressId] = $shippingAddress;
@@ -42,5 +46,10 @@ class AccountAddressesMapper extends AbstractDataMapper
         }
 
         return array_values($addresses);
+    }
+
+    private function getAddressMapper(): AddressMapper
+    {
+        return $this->addressMapper->setProjectConfigApi($this->getProjectConfigApi());
     }
 }

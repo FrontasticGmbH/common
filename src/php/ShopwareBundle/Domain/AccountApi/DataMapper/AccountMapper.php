@@ -4,10 +4,15 @@ namespace Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper;
 
 use DateTimeImmutable;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
+use Frontastic\Common\ShopwareBundle\Domain\AccountApi\SalutationHelper;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperTrait;
 
-class AccountMapper extends AbstractDataMapper
+class AccountMapper extends AbstractDataMapper implements ProjectConfigApiAwareDataMapperInterface
 {
+    use ProjectConfigApiAwareDataMapperTrait;
+
     public const MAPPER_NAME = 'account';
 
     /**
@@ -25,21 +30,26 @@ class AccountMapper extends AbstractDataMapper
         return static::MAPPER_NAME;
     }
 
-    public function map(array $resource)
+    public function map($resource)
     {
         $accountData = $this->extractData($resource);
 
         return new Account([
             'accountId' => $accountData['id'],
             'email' => $accountData['email'],
-            'salutation' => $accountData['salutationId'] ?? null, // @TODO: map to frontastic salutation
+            'salutation' => $this->resolveSalutation($accountData), // @TODO: map to frontastic salutation
             'firstName' => $accountData['firstName'] ?? null,
             'lastName' => $accountData['lastName'] ?? null,
             'birthday' => isset($accountData['birthday']) ? new DateTimeImmutable($accountData['birthday']) : null,
             'confirmed' => $this->resolveConfirmation($accountData),
-            'addresses' => $this->accountAddressesMapper->map($accountData),
+            'addresses' => $this->getAccountAddressesMapper()->map($accountData),
             'dangerousInnerAccount' => $accountData,
         ]);
+    }
+
+    private function getAccountAddressesMapper(): AccountAddressesMapper
+    {
+        return $this->accountAddressesMapper->setProjectConfigApi($this->getProjectConfigApi());
     }
 
     private function resolveConfirmation(array $accountData): bool
@@ -49,5 +59,15 @@ class AccountMapper extends AbstractDataMapper
         }
 
         return $accountData['active'];
+    }
+
+    private function resolveSalutation(array $accountData): string
+    {
+        $shopwareSalutation = null;
+        if (isset($accountData['salutationId'])) {
+            $shopwareSalutation = $this->getProjectConfigApi()->getSalutation($accountData['salutationId']);
+        }
+
+        return SalutationHelper::resolveFrontasticSalutation($shopwareSalutation);
     }
 }

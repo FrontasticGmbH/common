@@ -2,11 +2,14 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper;
 
-use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperTrait;
 
-class AddressesMapper extends AbstractDataMapper
+class AddressesMapper extends AbstractDataMapper implements ProjectConfigApiAwareDataMapperInterface
 {
+    use ProjectConfigApiAwareDataMapperTrait;
+
     public const MAPPER_NAME = 'addresses';
 
     /**
@@ -24,15 +27,20 @@ class AddressesMapper extends AbstractDataMapper
         return static::MAPPER_NAME;
     }
 
-    public function map(array $resource)
+    public function map($resource)
     {
         $addressData = $this->extractData($resource);
 
         $result = [];
         foreach ($addressData as $item) {
-            $result[] = $this->addressMapper->map($item);
+            $result[] = $this->getAddressMapper()->map($item);
         }
 
         return $result;
+    }
+
+    private function getAddressMapper(): AddressMapper
+    {
+        return $this->addressMapper->setProjectConfigApi($this->getProjectConfigApi());
     }
 }

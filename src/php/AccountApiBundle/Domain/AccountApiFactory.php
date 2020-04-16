@@ -11,6 +11,7 @@ use Frontastic\Common\SapCommerceCloudBundle\Domain\SapDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\ShopwareAccountApi;
 use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFactory;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
+use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
 use Psr\Container\ContainerInterface;
 
 class AccountApiFactory
@@ -62,7 +63,8 @@ class AccountApiFactory
 
                 $accountApi = new ShopwareAccountApi(
                     $client,
-                    $this->container->get(DataMapperResolver::class)
+                    $this->container->get(DataMapperResolver::class),
+                    $this->container->get(ShopwareProjectConfigApiFactory::class)
                 );
 
                 break;
