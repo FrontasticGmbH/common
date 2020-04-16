@@ -83,11 +83,12 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideMapDataToDiscountsExamples
      */
-    public function testMapDataToDiscounts($discountsFixture, $expectedDiscounts)
+    public function testMapDataToDiscounts($discountsFixture, $expectedDiscounts, $expectedSize)
     {
         $actualDiscounts = $this->mapper->mapDataToDiscounts($discountsFixture);
 
         $this->assertEquals($expectedDiscounts, $actualDiscounts);
+        $this->assertEquals($expectedSize, count($actualDiscounts));
     }
 
     public function provideMapDataToDiscountsExamples()
@@ -96,12 +97,14 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             'Empty cart' => [
                 [],
                 [],
+                0,
             ],
             'Empty discount codes' => [
                 [
                     'discountCodes' => [],
                 ],
                 [],
+                0,
             ],
             'Empty discount code' => [
                 [
@@ -117,16 +120,13 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                         'dangerousInnerDiscount' => [],
                     ])
                 ],
+                1,
             ],
             'Single discount' => [
                 [
                     'discountCodes' => [
                         [
-                            'discountCode' => [
-                                'id' => '111',
-                                'name' => 'Discount name',
-                                'code' => '123',
-                            ],
+                            'discountCode' => $this->getDiscountFixture(),
                         ],
                     ],
                 ],
@@ -135,38 +135,37 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                         'discountId' => '111',
                         'name' => 'Discount name',
                         'code' => '123',
-                        'dangerousInnerDiscount' => [
-                             'id' => '111',
-                             'name' => 'Discount name',
-                             'code' => '123',
-                        ],
+                        'dangerousInnerDiscount' => $this->getDiscountFixture(),
                     ]),
                 ],
+                1,
             ],
             'Multiple discounts' => [
                 [
                     'discountCodes' => [
                         [
-                            'discountCode' => [
-                                'id' => '222',
-                                'name' => 'Discount name',
-                                'code' => '456',
-                            ],
+                            'discountCode' => $this->getDiscountFixture(),
+                        ],
+                        [
+                            'discountCode' => $this->getDiscountFixture(),
                         ],
                     ],
                 ],
                 [
                     new Discount([
-                        'discountId' => '222',
+                        'discountId' => '111',
                         'name' => 'Discount name',
-                        'code' => '456',
-                        'dangerousInnerDiscount' => [
-                            'id' => '222',
-                            'name' => 'Discount name',
-                            'code' => '456',
-                        ],
+                        'code' => '123',
+                        'dangerousInnerDiscount' => $this->getDiscountFixture(),
+                    ]),
+                    new Discount([
+                        'discountId' => '111',
+                        'name' => 'Discount name',
+                        'code' => '123',
+                        'dangerousInnerDiscount' => $this->getDiscountFixture(),
                     ]),
                 ],
+                2,
             ],
         ];
     }
@@ -174,12 +173,12 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideMapDataToPaymentsExamples
      */
-    public function testMapDataToPayments($paymentsFixture, $expectedPayments, $sizeExpected)
+    public function testMapDataToPayments($paymentsFixture, $expectedPayments, $expectedSize)
     {
         $actualPayments = $this->mapper->mapDataToPayments($paymentsFixture);
 
         $this->assertEquals($expectedPayments, $actualPayments);
-        $this->assertEquals($sizeExpected, count($actualPayments));
+        $this->assertEquals($expectedSize, count($actualPayments));
     }
 
     public function provideMapDataToPaymentsExamples()
@@ -307,13 +306,6 @@ class MapperTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getAddressFixture(): array
-    {
-        return $this->loadFixture('addressFixture.json');
-    }
 
     /**
      * @return Address
@@ -337,14 +329,6 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
-     */
-    private function getPaymentFixture(): array
-    {
-        return $this->loadFixture('paymentFixture.json');
-    }
-
-    /**
      * @return Payment
      */
     private function getPayment(): Payment
@@ -360,6 +344,30 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             'paymentStatus' => 'paid',
             'version' => 1,
         ]);
+    }
+
+    /**
+     * @return array
+     */
+    private function getDiscountFixture(): array
+    {
+        return $this->loadFixture('discountFixture.json');
+    }
+
+    /**
+     * @return array
+     */
+    private function getAddressFixture(): array
+    {
+        return $this->loadFixture('addressFixture.json');
+    }
+
+    /**
+     * @return array
+     */
+    private function getPaymentFixture(): array
+    {
+        return $this->loadFixture('paymentFixture.json');
     }
 
     /**
