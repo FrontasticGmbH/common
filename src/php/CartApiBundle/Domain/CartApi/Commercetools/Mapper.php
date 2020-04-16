@@ -30,6 +30,24 @@ class Mapper
         ]);
     }
 
+    public function mapAddressToData(Address $address): array
+    {
+        return [
+            'id' => $address->addressId,
+            'salutation' => $address->salutation,
+            'firstName' => $address->firstName,
+            'lastName' => $address->lastName,
+            'streetName' => $address->streetName,
+            'streetNumber' => $address->streetNumber,
+            'additionalStreetInfo' => $address->additionalStreetInfo,
+            'additionalAddressInfo' => $address->additionalAddressInfo,
+            'postalCode' => $address->postalCode,
+            'city' => $address->city,
+            'country' => $address->country,
+            'phone' => $address->phone,
+        ];
+    }
+
     public function mapDataToDiscounts(array $cart): array
     {
         if (empty($cart['discountCodes'])) {

@@ -479,7 +479,7 @@ class Commercetools implements CartApi
             [
                 [
                     'action' => 'setShippingAddress',
-                    'address' => $this->reverseMapAddress($address),
+                    'address' => $this->cartMapper->mapAddressToData($address),
                 ],
             ],
             $this->parseLocaleString($localeString)
@@ -493,7 +493,7 @@ class Commercetools implements CartApi
             [
                 [
                     'action' => 'setBillingAddress',
-                    'address' => $this->reverseMapAddress($address),
+                    'address' => $this->cartMapper->mapAddressToData($address),
                 ],
             ],
             $this->parseLocaleString($localeString)
@@ -706,24 +706,6 @@ class Commercetools implements CartApi
             'currency' => $order['totalPrice']['currencyCode'],
         ]);
         return $order;
-    }
-
-    private function reverseMapAddress(Address $address): array
-    {
-        return [
-            'id' => $address->addressId,
-            'salutation' => $address->salutation,
-            'firstName' => $address->firstName,
-            'lastName' => $address->lastName,
-            'streetName' => $address->streetName,
-            'streetNumber' => $address->streetNumber,
-            'additionalStreetInfo' => $address->additionalStreetInfo,
-            'additionalAddressInfo' => $address->additionalAddressInfo,
-            'postalCode' => $address->postalCode,
-            'city' => $address->city,
-            'country' => $address->country,
-            'phone' => $address->phone,
-        ];
     }
 
     /**

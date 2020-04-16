@@ -35,7 +35,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 [],
                 null,
             ],
-            'New address' => [
+            'Full address' => [
                 [
                     'id' => 'vSO4VhF-',
                     'salutation' => 'Herr',
@@ -60,6 +60,67 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     'city' => 'Musterstadt',
                     'country' => 'DE',
                 ]),
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provideMapAddressToDataExamples
+     */
+    public function testMapAddressToData($addressFixture, $expectedAddress)
+    {
+        $actualAddress = $this->mapper->mapAddressToData($addressFixture);
+
+        $this->assertEquals($expectedAddress, $actualAddress);
+    }
+
+    public function provideMapAddressToDataExamples()
+    {
+        return [
+            'Empty address' => [
+                new Address(),
+                [
+                    'id' => null,
+                    'salutation' => null,
+                    'firstName' => null,
+                    'lastName' => null,
+                    'streetName' => null,
+                    'streetNumber' => null,
+                    'additionalStreetInfo' => null,
+                    'additionalAddressInfo' => null,
+                    'postalCode' => null,
+                    'city' => null,
+                    'country' => null,
+                    'phone' => null,
+                ],
+            ],
+            'Full address' => [
+                new Address([
+                    'addressId' => 'vSO4VhF-',
+                    'salutation' => 'Herr',
+                    'firstName' => 'Max',
+                    'lastName' => 'Mustermann',
+                    'streetName' => 'Musterstrasse',
+                    'streetNumber' => '23',
+                    'additionalStreetInfo' => '',
+                    'postalCode' => '12345',
+                    'city' => 'Musterstadt',
+                    'country' => 'DE',
+                ]),
+                [
+                    'id' => 'vSO4VhF-',
+                    'salutation' => 'Herr',
+                    'firstName' => 'Max',
+                    'lastName' => 'Mustermann',
+                    'streetName' => 'Musterstrasse',
+                    'streetNumber' => '23',
+                    'additionalStreetInfo' => '',
+                    'additionalAddressInfo' => '',
+                    'postalCode' => '12345',
+                    'city' => 'Musterstadt',
+                    'country' => 'DE',
+                    'phone' => '',
+                ],
             ],
         ];
     }
