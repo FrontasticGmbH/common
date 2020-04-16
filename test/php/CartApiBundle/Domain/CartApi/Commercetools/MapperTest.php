@@ -4,6 +4,7 @@ namespace Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools;
 
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Discount;
+use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 
 class MapperTest extends \PHPUnit\Framework\TestCase
@@ -213,6 +214,73 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     ]),
                 ],
             ],
+        ];
+    }
+
+    /**
+     * @dataProvider provideMapDataToPaymentExamples
+     */
+    public function testMapDataToPayment($paymentFixture, $expectedPayment)
+    {
+        $actualPayment = $this->mapper->mapDataToPayment($paymentFixture);
+
+        $this->assertEquals($expectedPayment, $actualPayment);
+    }
+
+    public function provideMapDataToPaymentExamples()
+    {
+        return [
+            'Empty payment' => [
+                [],
+                new Payment([
+                    'debug' => json_encode([]),
+                    'version' => 0,
+                ]),
+            ],
+            'Full payment' => [
+                [
+                    'key' => '111',
+                    'interfaceId' => '7ba6efec-da46-4b06-98c0-412feb9180dd',
+                    'paymentMethodInfo' => [
+                        'paymentInterface' => 'paypal',
+                        'method' => 'paypal',
+                    ],
+                    'amountPlanned' => [
+                        'centAmount' => 10000,
+                        'currencyCode' => 'EUR',
+                    ],
+                    'paymentStatus' => [
+                        'interfaceCode' => 'paid',
+                    ],
+                    'version' => 1,
+                ],
+                new Payment([
+                    'id' => '111',
+                    'paymentId' => '7ba6efec-da46-4b06-98c0-412feb9180dd',
+                    'paymentProvider' => 'paypal',
+                    'paymentMethod' => 'paypal',
+                    'amount' => 10000,
+                    'currency' => 'EUR',
+                    'debug' => json_encode([
+                        'key' => '111',
+                        'interfaceId' => '7ba6efec-da46-4b06-98c0-412feb9180dd',
+                        'paymentMethodInfo' => [
+                            'paymentInterface' => 'paypal',
+                            'method' => 'paypal',
+                        ],
+                        'amountPlanned' => [
+                            'centAmount' => 10000,
+                            'currencyCode' => 'EUR',
+                        ],
+                        'paymentStatus' => [
+                            'interfaceCode' => 'paid',
+                        ],
+                        'version' => 1,
+                    ]),
+                    'paymentStatus' => 'paid',
+                    'version' => 1,
+                ]),
+            ]
         ];
     }
 

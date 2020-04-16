@@ -796,29 +796,10 @@ class Commercetools implements CartApi
 
         $payments = [];
         foreach ($cart['paymentInfo']['payments'] as $payment) {
-            $payments[] = $this->mapPayment($payment);
+            $payments[] = $this->cartMapper->mapDataToPayment($payment);
         }
 
         return $payments;
-    }
-
-    private function mapPayment(array $payment): Payment
-    {
-        $payment = isset($payment['obj']) ? $payment['obj'] : $payment;
-
-        return new Payment(
-            [
-                'id' => $payment['key'] ?? null,
-                'paymentId' => $payment['interfaceId'] ?? null,
-                'paymentProvider' => $payment['paymentMethodInfo']['paymentInterface'] ?? null,
-                'paymentMethod' => $payment['paymentMethodInfo']['method'] ?? null,
-                'amount' => $payment['amountPlanned']['centAmount'] ?? null,
-                'currency' => $payment['amountPlanned']['currencyCode'] ?? null,
-                'debug' => json_encode($payment),
-                'paymentStatus' => $payment['paymentStatus']['interfaceCode'] ?? null,
-                'version' => $payment['version'] ?? 0,
-            ]
-        );
     }
 
     /**
@@ -961,7 +942,7 @@ class Commercetools implements CartApi
             return null;
         }
 
-        return $this->mapPayment($payment);
+        return $this->cartMapper->mapDataToPayment($payment);
     }
 
     public function updatePaymentInterfaceId(Payment $payment): void

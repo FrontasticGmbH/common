@@ -4,6 +4,7 @@ namespace Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools;
 
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Discount;
+use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 
 class Mapper
@@ -72,6 +73,25 @@ class Mapper
         }
 
         return $discounts;
+    }
+
+    public function mapDataToPayment(array $payment): Payment
+    {
+        $payment = isset($payment['obj']) ? $payment['obj'] : $payment;
+
+        return new Payment(
+            [
+                'id' => $payment['key'] ?? null,
+                'paymentId' => $payment['interfaceId'] ?? null,
+                'paymentProvider' => $payment['paymentMethodInfo']['paymentInterface'] ?? null,
+                'paymentMethod' => $payment['paymentMethodInfo']['method'] ?? null,
+                'amount' => $payment['amountPlanned']['centAmount'] ?? null,
+                'currency' => $payment['amountPlanned']['currencyCode'] ?? null,
+                'debug' => json_encode($payment),
+                'paymentStatus' => $payment['paymentStatus']['interfaceCode'] ?? null,
+                'version' => $payment['version'] ?? 0,
+            ]
+        );
     }
 
     public function mapDataToShippingMethod(array $shipping): ?ShippingMethod
