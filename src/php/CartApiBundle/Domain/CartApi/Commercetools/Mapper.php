@@ -7,7 +7,7 @@ use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 
 class Mapper
 {
-    public function dataToDiscounts(array $cart): array
+    public function mapDataToDiscounts(array $cart): array
     {
         if (empty($cart['discountCodes'])) {
             return [];
@@ -33,7 +33,7 @@ class Mapper
         return $discounts;
     }
 
-    public function dataToShippingMethod(array $shipping): ?ShippingMethod
+    public function mapDataToShippingMethod(array $shipping): ?ShippingMethod
     {
         if (!count($shipping)) {
             return null;

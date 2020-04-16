@@ -18,16 +18,16 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider provideDataToDiscountsExamples
+     * @dataProvider provideMapDataToDiscountsExamples
      */
-    public function testDataToDiscounts($discountsFixture, $expectedDiscounts)
+    public function testMapDataToDiscounts($discountsFixture, $expectedDiscounts)
     {
-        $actualDiscounts = $this->mapper->dataToDiscounts($discountsFixture);
+        $actualDiscounts = $this->mapper->mapDataToDiscounts($discountsFixture);
 
         $this->assertEquals($expectedDiscounts, $actualDiscounts);
     }
 
-    public function provideDataToDiscountsExamples()
+    public function provideMapDataToDiscountsExamples()
     {
         return [
             'Empty cart' => [
@@ -109,16 +109,16 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider provideDataToShippingExamples
+     * @dataProvider provideMapDataToShippingExamples
      */
-    public function testDataToShippingMethod($shippingFixture, $expectedShippingMethod)
+    public function testMapDataToShippingMethod($shippingFixture, $expectedShippingMethod)
     {
-        $actualShippingMethod = $this->mapper->dataToShippingMethod($shippingFixture);
+        $actualShippingMethod = $this->mapper->mapDataToShippingMethod($shippingFixture);
 
         $this->assertEquals($expectedShippingMethod, $actualShippingMethod);
     }
 
-    public function provideDataToShippingExamples()
+    public function provideMapDataToShippingExamples()
     {
         return [
             'Empty shipping method' => [

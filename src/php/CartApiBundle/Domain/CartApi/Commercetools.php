@@ -656,13 +656,13 @@ class Commercetools implements CartApi
             'birthday' => isset($cart['custom']['fields']['birthday']) ?
                 new \DateTimeImmutable($cart['custom']['fields']['birthday']) :
                 null,
-            'shippingMethod' => $this->cartMapper->dataToShippingMethod($cart['shippingInfo'] ?? []),
+            'shippingMethod' => $this->cartMapper->mapDataToShippingMethod($cart['shippingInfo'] ?? []),
             'shippingAddress' => $this->mapAddress($cart['shippingAddress'] ?? []),
             'billingAddress' => $this->mapAddress($cart['billingAddress'] ?? []),
             'sum' => $cart['totalPrice']['centAmount'],
             'currency' => $cart['totalPrice']['currencyCode'],
             'payments' => $this->mapPayments($cart),
-            'discountCodes' => $this->cartMapper->dataToDiscounts($cart),
+            'discountCodes' => $this->cartMapper->mapDataToDiscounts($cart),
             'dangerousInnerCart' => $cart,
         ]);
     }
@@ -695,12 +695,12 @@ class Commercetools implements CartApi
             'birthday' => isset($order['custom']['fields']['birthday']) ?
                 new \DateTimeImmutable($order['custom']['fields']['birthday']) :
                 null,
-            'shippingMethod' => $this->cartMapper->dataToShippingMethod($order['shippingInfo'] ?? []),
+            'shippingMethod' => $this->cartMapper->mapDataToShippingMethod($order['shippingInfo'] ?? []),
             'shippingAddress' => $this->mapAddress($order['shippingAddress'] ?? []),
             'billingAddress' => $this->mapAddress($order['billingAddress'] ?? []),
             'sum' => $order['totalPrice']['centAmount'],
             'payments' => $this->mapPayments($order),
-            'discountCodes' => $this->cartMapper->dataToDiscounts($order),
+            'discountCodes' => $this->cartMapper->mapDataToDiscounts($order),
             'dangerousInnerCart' => $order,
             'dangerousInnerOrder' => $order,
             'currency' => $order['totalPrice']['currencyCode'],
