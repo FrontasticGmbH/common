@@ -19,7 +19,7 @@ class PropertiesGroupAggregationMapper implements LanguageAwareDataMapperInterfa
         return static::MAPPER_NAME;
     }
 
-    public function map(array $aggregationData)
+    public function map($aggregationData)
     {
         [$groupAggregation, $propertiesAggregation] = $aggregationData;
 

@@ -22,7 +22,7 @@ class CategoryMapper extends AbstractDataMapper implements QueryAwareDataMapperI
         return static::MAPPER_NAME;
     }
 
-    public function map(array $resource)
+    public function map($resource)
     {
         $result = [];
         foreach ($this->extractData($resource) as $categoryData) {

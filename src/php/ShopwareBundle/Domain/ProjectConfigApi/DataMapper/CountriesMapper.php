@@ -23,7 +23,7 @@ class CountriesMapper extends AbstractDataMapper
         return static::MAPPER_NAME;
     }
 
-    public function map(array $resource)
+    public function map($resource)
     {
         $countriesData = $this->extractData($resource);
 

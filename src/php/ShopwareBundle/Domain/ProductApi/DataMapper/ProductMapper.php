@@ -33,9 +33,11 @@ class ProductMapper extends AbstractDataMapper implements QueryAwareDataMapperIn
         return static::MAPPER_NAME;
     }
 
-    public function map(array $resource)
+    public function map($resource)
     {
+        // Support for list with single resources as well as direct single resource
         $productData = $this->extractData($resource, $resource);
+        $productData = $productData[0] ?? $productData;
 
         $lastModified = $productData['updatedAt'] ?? null;
 
