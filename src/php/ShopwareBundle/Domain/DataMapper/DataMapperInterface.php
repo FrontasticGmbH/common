@@ -11,5 +11,5 @@ interface DataMapperInterface
      *
      * @return mixed
      */
-    public function map(array $resource);
+    public function map($resource);
 }

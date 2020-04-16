@@ -32,7 +32,7 @@ class AggregationMapper extends AbstractDataMapper implements QueryAwareDataMapp
         return static::MAPPER_NAME;
     }
 
-    public function map(array $aggregationData)
+    public function map($aggregationData)
     {
         $facetsByHandle = $this->getFacetsByHandle($this->getQuery()->facets);
 

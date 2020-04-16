@@ -14,9 +14,11 @@ class CountryMapper extends AbstractDataMapper
         return static::MAPPER_NAME;
     }
 
-    public function map(array $resource)
+    public function map($resource)
     {
+        // Support for list with single resources as well as direct single resource
         $countryData = $this->extractData($resource, $resource);
+        $countryData = $countryData[0] ?? $countryData;
 
         $country = new ShopwareCountry($countryData, true);
         $country->name = $this->resolveTranslatedValue($countryData, 'name');

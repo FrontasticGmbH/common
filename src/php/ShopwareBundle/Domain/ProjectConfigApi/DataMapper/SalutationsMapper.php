@@ -15,7 +15,7 @@ class SalutationsMapper extends AbstractDataMapper
         return static::MAPPER_NAME;
     }
 
-    public function map(array $resource)
+    public function map($resource)
     {
         $salutationsData = $this->extractData($resource);
 

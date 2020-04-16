@@ -18,7 +18,7 @@ class GenericGroupAggregationMapper implements LanguageAwareDataMapperInterface
         return static::MAPPER_NAME;
     }
 
-    public function map(array $aggregationData)
+    public function map($aggregationData)
     {
         /** @var \Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Aggregation\AbstractAggregation $aggregation */
         $aggregation = $aggregationData[0];

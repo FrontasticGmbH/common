@@ -28,7 +28,7 @@ class ProductVariantMapper extends AbstractDataMapper implements QueryAwareDataM
         return static::MAPPER_NAME;
     }
 
-    public function map(array $resource)
+    public function map($resource)
     {
         $variantData = $this->extractData($resource, $resource);
 
@@ -46,7 +46,7 @@ class ProductVariantMapper extends AbstractDataMapper implements QueryAwareDataM
 
     private function extractPriceData(array $variantData): int
     {
-        return $variantData['price'][0]['gross'] * 100;
+        return (int)bcmul((string)$variantData['price'][0]['gross'], '100');
     }
 
     private function mapDataToAttributes(array $variantData): array
@@ -105,7 +105,7 @@ class ProductVariantMapper extends AbstractDataMapper implements QueryAwareDataM
 
     private function mapRootAttributesToAttributes(array $variantData): array
     {
-        return array_intersect_key($variantData, array_flip(self::ROOT_ATTRIBUTES_AS_PROPERTIES));
+        return array_filter(array_intersect_key($variantData, array_flip(self::ROOT_ATTRIBUTES_AS_PROPERTIES)));
     }
 
     private function groupProperties(array $properties): array
