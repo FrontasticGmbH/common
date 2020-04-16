@@ -37,7 +37,7 @@ class AccountMapper extends AbstractDataMapper implements ProjectConfigApiAwareD
         return new Account([
             'accountId' => $accountData['id'],
             'email' => $accountData['email'],
-            'salutation' => $this->resolveSalutation($accountData), // @TODO: map to frontastic salutation
+            'salutation' => $this->resolveSalutation($accountData),
             'firstName' => $accountData['firstName'] ?? null,
             'lastName' => $accountData['lastName'] ?? null,
             'birthday' => isset($accountData['birthday']) ? new DateTimeImmutable($accountData['birthday']) : null,
