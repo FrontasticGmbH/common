@@ -9,25 +9,25 @@ use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 
 class Mapper
 {
-    public function mapDataToAddress(array $address): ?Address
+    public function mapDataToAddress(array $addressData): ?Address
     {
-        if (!count($address)) {
+        if (!count($addressData)) {
             return null;
         }
 
         return new Address([
-            'addressId' => $address['id'] ?? null,
-            'salutation' => $address['salutation'] ?? null,
-            'firstName' => $address['firstName'] ?? null,
-            'lastName' => $address['lastName'] ?? null,
-            'streetName' => $address['streetName'] ?? null,
-            'streetNumber' => $address['streetNumber'] ?? null,
-            'additionalStreetInfo' => $address['additionalStreetInfo'] ?? null,
-            'additionalAddressInfo' => $address['additionalAddressInfo'] ?? null,
-            'postalCode' => $address['postalCode'] ?? null,
-            'city' => $address['city'] ?? null,
-            'country' => $address['country'] ?? null,
-            'phone' => $address['phone'] ?? null,
+            'addressId' => $addressData['id'] ?? null,
+            'salutation' => $addressData['salutation'] ?? null,
+            'firstName' => $addressData['firstName'] ?? null,
+            'lastName' => $addressData['lastName'] ?? null,
+            'streetName' => $addressData['streetName'] ?? null,
+            'streetNumber' => $addressData['streetNumber'] ?? null,
+            'additionalStreetInfo' => $addressData['additionalStreetInfo'] ?? null,
+            'additionalAddressInfo' => $addressData['additionalAddressInfo'] ?? null,
+            'postalCode' => $addressData['postalCode'] ?? null,
+            'city' => $addressData['city'] ?? null,
+            'country' => $addressData['country'] ?? null,
+            'phone' => $addressData['phone'] ?? null,
         ]);
     }
 
@@ -49,14 +49,14 @@ class Mapper
         ];
     }
 
-    public function mapDataToDiscounts(array $cart): array
+    public function mapDataToDiscounts(array $cartData): array
     {
-        if (empty($cart['discountCodes'])) {
+        if (empty($cartData['discountCodes'])) {
             return [];
         }
 
         $discounts = [];
-        foreach ($cart['discountCodes'] as $discount) {
+        foreach ($cartData['discountCodes'] as $discount) {
             // Get the state from the $discount and save it in $discountCodeState variable
             // before assigning $discount['discountCode'] to $discount.
             $discountCodeState = $discount['state'] ?? null;
@@ -75,48 +75,48 @@ class Mapper
         return $discounts;
     }
 
-    public function mapDataToPayments(array $cart): array
+    public function mapDataToPayments(array $cartData): array
     {
-        if (empty($cart['paymentInfo']['payments'])) {
+        if (empty($cartData['paymentInfo']['payments'])) {
             return [];
         }
 
         $payments = [];
-        foreach ($cart['paymentInfo']['payments'] as $payment) {
+        foreach ($cartData['paymentInfo']['payments'] as $payment) {
             $payments[] = $this->mapDataToPayment($payment);
         }
 
         return $payments;
     }
 
-    public function mapDataToPayment(array $payment): Payment
+    public function mapDataToPayment(array $paymentData): Payment
     {
-        $payment = isset($payment['obj']) ? $payment['obj'] : $payment;
+        $paymentData = isset($paymentData['obj']) ? $paymentData['obj'] : $paymentData;
 
         return new Payment(
             [
-                'id' => $payment['key'] ?? null,
-                'paymentId' => $payment['interfaceId'] ?? null,
-                'paymentProvider' => $payment['paymentMethodInfo']['paymentInterface'] ?? null,
-                'paymentMethod' => $payment['paymentMethodInfo']['method'] ?? null,
-                'amount' => $payment['amountPlanned']['centAmount'] ?? null,
-                'currency' => $payment['amountPlanned']['currencyCode'] ?? null,
-                'debug' => json_encode($payment),
-                'paymentStatus' => $payment['paymentStatus']['interfaceCode'] ?? null,
-                'version' => $payment['version'] ?? 0,
+                'id' => $paymentData['key'] ?? null,
+                'paymentId' => $paymentData['interfaceId'] ?? null,
+                'paymentProvider' => $paymentData['paymentMethodInfo']['paymentInterface'] ?? null,
+                'paymentMethod' => $paymentData['paymentMethodInfo']['method'] ?? null,
+                'amount' => $paymentData['amountPlanned']['centAmount'] ?? null,
+                'currency' => $paymentData['amountPlanned']['currencyCode'] ?? null,
+                'debug' => json_encode($paymentData),
+                'paymentStatus' => $paymentData['paymentStatus']['interfaceCode'] ?? null,
+                'version' => $paymentData['version'] ?? 0,
             ]
         );
     }
 
-    public function mapDataToShippingMethod(array $shipping): ?ShippingMethod
+    public function mapDataToShippingMethod(array $shippingData): ?ShippingMethod
     {
-        if (!count($shipping)) {
+        if (!count($shippingData)) {
             return null;
         }
 
         return new ShippingMethod([
-            'name' => $shipping['shippingMethodName'] ?? null,
-            'price' => $shipping['price']['centAmount'] ?? null,
+            'name' => $shippingData['shippingMethodName'] ?? null,
+            'price' => $shippingData['price']['centAmount'] ?? null,
         ]);
     }
 }
