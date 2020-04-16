@@ -25,10 +25,14 @@
         </service>
 
         <service id="Frontastic\Common\ShopwareBundle\Domain\Locale\DefaultLocaleCreatorFactory">
+            <argument type="service" id="cache.app.simple"/>
+            <argument type="service" id="Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver"/>
+            <argument>%kernel.debug%</argument>
             <tag name="frontastic.common.api_integration"/>
         </service>
 
         <service id="Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory"
-                 alias="Frontastic\Common\ShopwareBundle\Domain\Locale\DefaultLocaleCreatorFactory"/>
+                 alias="Frontastic\Common\ShopwareBundle\Domain\Locale\DefaultLocaleCreatorFactory"
+                 public="true"/>
     </services>
 </container>

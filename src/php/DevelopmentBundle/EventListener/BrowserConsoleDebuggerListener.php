@@ -37,6 +37,13 @@ class BrowserConsoleDebuggerListener
             $response->setContent(json_encode($content));
         }
 
-        // TODO: What about HTML? Should we add a <script>-tag to output log messages?
+        if (($headers->has('Content-Type') && preg_match('(html)', $headers->get('Content-Type')))) {
+            $content = $response->getContent();
+            $debugProp = 'data-debug="' . htmlentities(json_encode(
+                $this->serializer->serialize(Debugger::getMessages())
+            )) . '"';
+            $content = preg_replace('(<\s*div\s*id="appData")i', '\\0 ' . $debugProp, $content);
+            $response->setContent($content);
+        }
     }
 }

@@ -1,38 +1,38 @@
 <?php declare(strict_types = 1);
 
-namespace Frontastic\Common\ShopwareBundle\Domain\Locale;
+namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi;
 
 use Kore\DataObject\DataObject;
 
-class ShopwareLocale extends DataObject
+class ShopwareLanguage extends DataObject
 {
     /**
      * @var string
      */
-    public $country;
+    public $id;
 
     /**
      * @var string
      */
-    public $countryId;
+    public $name;
 
     /**
      * @var string
      */
-    public $currency;
+    public $localeId;
 
     /**
      * @var string
      */
-    public $currencyId;
+    public $localeCode;
 
     /**
      * @var string
      */
-    public $language;
+    public $localeName;
 
     /**
      * @var string
      */
-    public $languageId;
+    public $localeTerritory;
 }

@@ -48,6 +48,11 @@ class FactoryServiceLocator implements ContainerInterface, ServiceSubscriberInte
         return $this->container->get($id);
     }
 
+    public static function hasSubscribedService(string $serviceId): bool
+    {
+        return in_array($serviceId, self::$subscribedServices, true);
+    }
+
     public static function addSubscribedService(string $serviceId): void
     {
         self::$subscribedServices[] = $serviceId;

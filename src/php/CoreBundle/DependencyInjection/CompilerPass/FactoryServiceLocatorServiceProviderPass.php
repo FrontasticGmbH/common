@@ -21,7 +21,7 @@ class FactoryServiceLocatorServiceProviderPass implements CompilerPassInterface
 
         foreach ($taggedServiceIds as $serviceId => $tags) {
             foreach ($aliasedServices as $aliasId => $alias) {
-                if ((string)$alias === $serviceId) {
+                if ((string)$alias === $serviceId && !FactoryServiceLocator::hasSubscribedService($aliasId)) {
                     FactoryServiceLocator::addSubscribedService($aliasId);
                     $factoryServiceLocatorDef->addTag(self::SERVICE_SUBSCRIBER_TAG, ['id' => $aliasId]);
                 }

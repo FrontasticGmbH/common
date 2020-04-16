@@ -32,7 +32,7 @@ class AggregationMapper extends AbstractDataMapper implements QueryAwareDataMapp
         return static::MAPPER_NAME;
     }
 
-    public function map(array $aggregationData)
+    public function map($aggregationData)
     {
         $facetsByHandle = $this->getFacetsByHandle($this->getQuery()->facets);
 
@@ -105,7 +105,7 @@ class AggregationMapper extends AbstractDataMapper implements QueryAwareDataMapp
 
         $terms = [];
         foreach ($aggregation->getResultData() as $item) {
-            $value = $item['translated']['name'] ?? $item['name'];
+            $value = $this->resolveTranslatedValue($item, 'name');
 
             $term = new Result\Term([
                 'name' => $value,

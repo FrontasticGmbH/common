@@ -90,7 +90,7 @@ class DefaultProductApiFactory implements ProductApiFactory
 
                 $productApi = new ShopwareProductApi(
                     $client,
-                    $localeCreatorFactory->factor($project),
+                    $localeCreatorFactory->factor($project, $client),
                     $dataMapper,
                     $this->enabledFacetService
                 );
