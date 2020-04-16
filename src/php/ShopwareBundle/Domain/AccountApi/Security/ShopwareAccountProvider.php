@@ -3,6 +3,8 @@
 namespace Frontastic\Common\ShopwareBundle\Domain\AccountApi\Security;
 
 use Frontastic\Common\AccountApiBundle\Domain\Account;
+use Frontastic\Common\AccountApiBundle\Domain\AccountService;
+use Frontastic\Common\ShopwareBundle\Domain\AccountApi\ShopwareAccountApi;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -10,38 +12,35 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class ShopwareAccountProvider implements UserProviderInterface
 {
-    private const TOKEN_TYPE = 'shopware';
+    /**
+     * @var \Frontastic\Common\AccountApiBundle\Domain\AccountService
+     */
+    private $accountService;
 
     /**
-     * @var \Symfony\Component\Security\Core\User\UserProviderInterface
+     * @param \Frontastic\Common\AccountApiBundle\Domain\AccountService $accountService
      */
-    private $originalUserProvider;
-
-    /**
-     * @param \Symfony\Component\Security\Core\User\UserProviderInterface $originalUserProvider
-     */
-    public function __construct(UserProviderInterface $originalUserProvider)
+    public function __construct(AccountService $accountService)
     {
-        $this->originalUserProvider = $originalUserProvider;
+        $this->accountService = $accountService;
     }
 
     /**
-     * @param string $username The username
-     *
-     * @return UserInterface
-     *
-     * @throws UsernameNotFoundException if the user is not found
+     * @inheritDoc
      */
     public function loadUserByUsername($username)
     {
-        return $this->originalUserProvider->loadUserByUsername($username);
+        try {
+            return $this->accountService->get($username);
+        } catch (\OutOfBoundsException $e) {
+            throw new UsernameNotFoundException(
+                sprintf('Username "%s" does not exist.', $username)
+            );
+        }
     }
 
     /**
-     * @return UserInterface
-     *
-     * @throws UnsupportedUserException  if the user is not supported
-     * @throws UsernameNotFoundException if the user is not found
+     * @inheritDoc
      */
     public function refreshUser(UserInterface $user)
     {
@@ -51,16 +50,14 @@ class ShopwareAccountProvider implements UserProviderInterface
             );
         }
 
-        return $this->loadUserByUsername($user->getToken(self::TOKEN_TYPE));
+        return $this->loadUserByUsername($user->getToken(ShopwareAccountApi::TOKEN_TYPE));
     }
 
     /**
-     * @param string $class
-     *
-     * @return bool
+     * @inheritDoc
      */
     public function supportsClass($class)
     {
-        return $this->originalUserProvider->supportsClass($class);
+        return $class === Account::class;
     }
 }
