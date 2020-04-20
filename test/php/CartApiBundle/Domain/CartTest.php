@@ -2,10 +2,8 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain;
 
-use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools;
 use Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools\Mapper as CartMapper;
-use Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreator;
@@ -29,12 +27,9 @@ class CartTest extends \PHPUnit\Framework\TestCase
 
     private function getCart(): Cart
     {
-        $productMapper = new ProductMapper();
-
         $cartApi = new Commercetools(
             $this->createMock(Client::class),
-            $productMapper,
-            new CartMapper($productMapper),
+            new CartMapper(new ProductMapper()),
             $this->createMock(CommercetoolsLocaleCreator::class),
             $this->createMock(OrderIdGenerator::class)
         );

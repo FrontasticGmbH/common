@@ -70,12 +70,10 @@ class CartApiFactory
         switch ($cartConfig->engine) {
             case 'commercetools':
                 $client = $this->commercetoolsClientFactory->factorForProjectAndType($project, 'cart');
-                $productMapper = new ProductMapper();
 
                 $cartApi = new CartApi\Commercetools(
                     $client,
-                    $productMapper,
-                    new CartMapper($productMapper),
+                    new CartMapper(new ProductMapper()),
                     $this->commercetoolsLocaleCreatorFactory->factor($project, $client),
                     $this->orderIdGenerator
                 );

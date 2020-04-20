@@ -14,7 +14,6 @@ use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreator;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper as ProductMapper;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 
 /**
@@ -33,11 +32,6 @@ class Commercetools implements CartApi
      * @var Client
      */
     private $client;
-
-    /**
-     * @var ProductMapper
-     */
-    private $productMapper;
 
     /**
      * @var CartMapper
@@ -76,13 +70,11 @@ class Commercetools implements CartApi
 
     public function __construct(
         Client $client,
-        ProductMapper $productMapper,
         CartMapper $cartMapper,
         CommercetoolsLocaleCreator $localeCreator,
         OrderIdGenerator $orderIdGenerator
     ) {
         $this->client = $client;
-        $this->productMapper = $productMapper;
         $this->cartMapper = $cartMapper;
         $this->localeCreator = $localeCreator;
         $this->orderIdGenerator = $orderIdGenerator;
