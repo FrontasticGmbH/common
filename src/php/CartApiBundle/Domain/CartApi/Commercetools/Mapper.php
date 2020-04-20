@@ -4,11 +4,23 @@ namespace Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools;
 
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Discount;
+use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper as ProductMapper;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 
 class Mapper
 {
+    /** @var ProductMapper */
+    private $productMapper;
+
+    public function __construct(ProductMapper $productMapper)
+    {
+        $this->productMapper = $productMapper;
+    }
+
     public function mapDataToAddress(array $addressData): ?Address
     {
         if (!count($addressData)) {
@@ -73,6 +85,86 @@ class Mapper
         }
 
         return $discounts;
+    }
+
+    /**
+     * @return LineItem[]
+     */
+    public function mapDataToLineItems(array $cart, CommercetoolsLocale $locale): array
+    {
+        $lineItems = array_merge(
+            array_map(
+                function (array $lineItem) use ($locale): LineItem {
+                    list($price, $currency, $discountedPrice) = $this->productMapper->dataToPrice($lineItem);
+                    return new LineItem\Variant([
+                        'lineItemId' => $lineItem['id'],
+                        'name' => $this->productMapper->getLocalizedValue($locale, $lineItem['name']),
+                        'type' => 'variant',
+                        'variant' => $this->productMapper->dataToVariant(
+                            $lineItem['variant'],
+                            new Query(),
+                            $locale
+                        ),
+                        'custom' => $lineItem['custom']['fields'] ?? [],
+                        'count' => $lineItem['quantity'],
+                        'price' => $price,
+                        'discountedPrice' => $discountedPrice,
+                        'discountTexts' => array_map(
+                            function ($discount): array {
+                                return $discount['discount']['obj']['name'] ?? [];
+                            },
+                            (isset($lineItem['discountedPrice']['includedDiscounts'])
+                                ? $lineItem['discountedPrice']['includedDiscounts']
+                                : []
+                            )
+                        ),
+                        'totalPrice' => $lineItem['totalPrice']['centAmount'],
+                        'currency' => $currency,
+                        'isGift' => ($lineItem['lineItemMode'] === 'GiftLineItem'),
+                        'dangerousInnerItem' => $lineItem,
+                    ]);
+                },
+                $cart['lineItems']
+            ),
+            array_map(
+                function (array $lineItem) use ($locale): LineItem {
+                    return new LineItem([
+                        'lineItemId' => $lineItem['id'],
+                        'name' => $this->productMapper->getLocalizedValue($locale, $lineItem['name']),
+                        'type' => $lineItem['custom']['type'] ?? $lineItem['slug'],
+                        'custom' => $lineItem['custom']['fields'] ?? [],
+                        'count' => $lineItem['quantity'],
+                        'price' => $lineItem['money']['centAmount'],
+                        'discountedPrice' => (isset($lineItem['discountedPrice'])
+                            ? $lineItem['totalPrice']['centAmount']
+                            : null
+                        ),
+                        'discountTexts' => array_map(
+                            function ($discount): array {
+                                return $discount['discount']['obj']['name'] ?? [];
+                            },
+                            (isset($lineItem['discountedPrice']['includedDiscounts'])
+                                ? $lineItem['discountedPrice']['includedDiscounts']
+                                : []
+                            )
+                        ),
+                        'totalPrice' => $lineItem['totalPrice']['centAmount'],
+                        'dangerousInnerItem' => $lineItem,
+                    ]);
+                },
+                $cart['customLineItems']
+            )
+        );
+
+        usort(
+            $lineItems,
+            function (LineItem $a, LineItem $b): int {
+                return ($a->custom['bundleNumber'] ?? $a->name) <=>
+                    ($b->custom['bundleNumber'] ?? $b->name);
+            }
+        );
+
+        return $lineItems;
     }
 
     public function mapDataToPayments(array $cartData): array

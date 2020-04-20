@@ -16,7 +16,6 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\Co
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreator;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper as ProductMapper;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to implementation of CartApi
@@ -649,7 +648,7 @@ class Commercetools implements CartApi
             'cartId' => $cart['id'],
             'cartVersion' => (string)$cart['version'],
             'custom' => $cart['custom']['fields'] ?? [],
-            'lineItems' => $this->mapLineItems($cart, $locale),
+            'lineItems' => $this->cartMapper->mapDataToLineItems($cart, $locale),
             'email' => $cart['customerEmail'] ?? null,
             'birthday' => isset($cart['custom']['fields']['birthday']) ?
                 new \DateTimeImmutable($cart['custom']['fields']['birthday']) :
@@ -688,7 +687,7 @@ class Commercetools implements CartApi
             'createdAt' => new \DateTimeImmutable($order['createdAt']),
             'orderId' => $order['orderNumber'],
             'orderVersion' => $order['version'],
-            'lineItems' => $this->mapLineItems($order, $locale),
+            'lineItems' => $this->cartMapper->mapDataToLineItems($order, $locale),
             'email' => $order['customerEmail'] ?? null,
             'birthday' => isset($order['custom']['fields']['birthday']) ?
                 new \DateTimeImmutable($order['custom']['fields']['birthday']) :
@@ -704,86 +703,6 @@ class Commercetools implements CartApi
             'currency' => $order['totalPrice']['currencyCode'],
         ]);
         return $order;
-    }
-
-    /**
-     * @return LineItem[]
-     */
-    private function mapLineItems(array $cart, CommercetoolsLocale $locale): array
-    {
-        $lineItems = array_merge(
-            array_map(
-                function (array $lineItem) use ($locale): LineItem {
-                    list($price, $currency, $discountedPrice) = $this->productMapper->dataToPrice($lineItem);
-                    return new LineItem\Variant([
-                        'lineItemId' => $lineItem['id'],
-                        'name' => $this->productMapper->getLocalizedValue($locale, $lineItem['name']),
-                        'type' => 'variant',
-                        'variant' => $this->productMapper->dataToVariant(
-                            $lineItem['variant'],
-                            new Query(),
-                            $locale
-                        ),
-                        'custom' => $lineItem['custom']['fields'] ?? [],
-                        'count' => $lineItem['quantity'],
-                        'price' => $price,
-                        'discountedPrice' => $discountedPrice,
-                        'discountTexts' => array_map(
-                            function ($discount): array {
-                                return $discount['discount']['obj']['name'] ?? [];
-                            },
-                            (isset($lineItem['discountedPrice']['includedDiscounts'])
-                                ? $lineItem['discountedPrice']['includedDiscounts']
-                                : []
-                            )
-                        ),
-                        'totalPrice' => $lineItem['totalPrice']['centAmount'],
-                        'currency' => $currency,
-                        'isGift' => ($lineItem['lineItemMode'] === 'GiftLineItem'),
-                        'dangerousInnerItem' => $lineItem,
-                    ]);
-                },
-                $cart['lineItems']
-            ),
-            array_map(
-                function (array $lineItem) use ($locale): LineItem {
-                    return new LineItem([
-                        'lineItemId' => $lineItem['id'],
-                        'name' => $this->productMapper->getLocalizedValue($locale, $lineItem['name']),
-                        'type' => $lineItem['custom']['type'] ?? $lineItem['slug'],
-                        'custom' => $lineItem['custom']['fields'] ?? [],
-                        'count' => $lineItem['quantity'],
-                        'price' => $lineItem['money']['centAmount'],
-                        'discountedPrice' => (isset($lineItem['discountedPrice'])
-                            ? $lineItem['totalPrice']['centAmount']
-                            : null
-                        ),
-                        'discountTexts' => array_map(
-                            function ($discount): array {
-                                return $discount['discount']['obj']['name'] ?? [];
-                            },
-                            (isset($lineItem['discountedPrice']['includedDiscounts'])
-                                ? $lineItem['discountedPrice']['includedDiscounts']
-                                : []
-                            )
-                        ),
-                        'totalPrice' => $lineItem['totalPrice']['centAmount'],
-                        'dangerousInnerItem' => $lineItem,
-                    ]);
-                },
-                $cart['customLineItems']
-            )
-        );
-
-        usort(
-            $lineItems,
-            function (LineItem $a, LineItem $b): int {
-                return ($a->custom['bundleNumber'] ?? $a->name) <=>
-                    ($b->custom['bundleNumber'] ?? $b->name);
-            }
-        );
-
-        return $lineItems;
     }
 
     /**

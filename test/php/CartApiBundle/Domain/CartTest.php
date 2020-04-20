@@ -29,10 +29,12 @@ class CartTest extends \PHPUnit\Framework\TestCase
 
     private function getCart(): Cart
     {
+        $productMapper = new ProductMapper();
+
         $cartApi = new Commercetools(
             $this->createMock(Client::class),
-            new ProductMapper(),
-            new CartMapper(),
+            $productMapper,
+            new CartMapper($productMapper),
             $this->createMock(CommercetoolsLocaleCreator::class),
             $this->createMock(OrderIdGenerator::class)
         );

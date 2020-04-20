@@ -4,8 +4,11 @@ namespace Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools;
 
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Discount;
+use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper as ProductMapper;
 
 class MapperTest extends \PHPUnit\Framework\TestCase
 {
@@ -14,9 +17,15 @@ class MapperTest extends \PHPUnit\Framework\TestCase
      */
     private $mapper;
 
+    /**
+     * @var ProductMapper
+     */
+    private $productMapperMock;
+
     public function setUp()
     {
-        $this->mapper = new Mapper();
+        $this->productMapperMock = $this->createMock(ProductMapper::class);
+        $this->mapper = new Mapper($this->productMapperMock);
     }
 
     /**
@@ -164,6 +173,91 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                         'code' => '123',
                         'dangerousInnerDiscount' => $this->getDiscountFixture(),
                     ]),
+                ],
+                2,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provideMapDataToLineItemsExamples
+     */
+    public function testMapDataToLineItems($lineItemsFixture, $expectedLineItems, $expectedSize)
+    {
+        $this->productMapperMock
+            ->expects($this->any())
+            ->method('dataToPrice')
+            ->willReturn([null, null, null]);
+
+        $this->productMapperMock
+            ->expects($this->any())
+            ->method('getLocalizedValue');
+
+        $actualLineItems = $this->mapper->mapDataToLineItems(
+            $lineItemsFixture,
+            new CommercetoolsLocale([
+                'language' => 'de',
+                'country' => 'DE',
+                'currency' => 'EUR',
+            ])
+        );
+
+        foreach ($expectedLineItems as $key => $expectedLineItem) {
+            $this->assertInstanceOf($expectedLineItem, $actualLineItems[$key]);
+        }
+
+        $this->assertEquals($expectedSize, count($actualLineItems));
+    }
+
+    public function provideMapDataToLineItemsExamples()
+    {
+        $cartFixtures = $this->getCartFixture();
+
+        return [
+            'Empty line items' => [
+                [
+                    'lineItems' => [],
+                    'customLineItems' => [],
+                ],
+                [],
+                0,
+            ],
+            'Single line item' => [
+                [
+                    'lineItems' => [
+                        $cartFixtures['lineItems'][0],
+                    ],
+                    'customLineItems' => [],
+                ],
+                [
+                    LineItem\Variant::class,
+                ],
+                1,
+            ],
+            'Single custom line item' => [
+                [
+                    'lineItems' => [],
+                    'customLineItems' => [
+                        $cartFixtures['customLineItems'][0],
+                    ],
+                ],
+                [
+                    LineItem::class,
+                ],
+                1,
+            ],
+            'Multiple line item' => [
+                [
+                    'lineItems' => [
+                        $cartFixtures['lineItems'][0],
+                    ],
+                    'customLineItems' => [
+                        $cartFixtures['customLineItems'][0],
+                    ],
+                ],
+                [
+                    LineItem\Variant::class,
+                    LineItem::class,
                 ],
                 2,
             ],
@@ -344,6 +438,14 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             'paymentStatus' => 'paid',
             'version' => 1,
         ]);
+    }
+
+    /**
+     * @return array
+     */
+    private function getCartFixture(): array
+    {
+        return json_decode(file_get_contents( __DIR__  . '/../../cartFixture.json'), true);
     }
 
     /**
