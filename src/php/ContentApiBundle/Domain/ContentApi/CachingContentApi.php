@@ -26,11 +26,11 @@ class CachingContentApi implements ContentApi
      */
     private $cacheTtl;
 
-    public function __construct(ContentApi $aggregate, CacheInterface $cache)
+    public function __construct(ContentApi $aggregate, CacheInterface $cache, int $cacheTtlSec = 600)
     {
         $this->aggregate = $aggregate;
         $this->cache = $cache;
-        $this->cacheTtl = 600;
+        $this->cacheTtl = $cacheTtlSec;
     }
 
     public function getContentTypes(): array
