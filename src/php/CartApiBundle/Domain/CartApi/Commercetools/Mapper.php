@@ -5,6 +5,7 @@ namespace Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Discount;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
+use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
@@ -165,6 +166,42 @@ class Mapper
         );
 
         return $lineItems;
+    }
+
+    public function mapDataToOrder(array $orderData, CommercetoolsLocale $locale): Order
+    {
+        /**
+         * @TODO:
+         *
+         * [ ] Map delivery costs / properties
+         * [ ] Map product discounts
+         * [ ] Map discount codes
+         * [ ] Map tax information
+         * [ ] Map delivery status
+         * [ ] Map order status
+         */
+        return new Order([
+            'cartId' => $orderData['id'],
+            'custom' => $orderData['custom']['fields'] ?? [],
+            'orderState' => $orderData['orderState'],
+            'createdAt' => new \DateTimeImmutable($orderData['createdAt']),
+            'orderId' => $orderData['orderNumber'],
+            'orderVersion' => $orderData['version'],
+            'lineItems' => $this->mapDataToLineItems($orderData, $locale),
+            'email' => $orderData['customerEmail'] ?? null,
+            'birthday' => isset($orderData['custom']['fields']['birthday']) ?
+                new \DateTimeImmutable($orderData['custom']['fields']['birthday']) :
+                null,
+            'shippingMethod' => $this->mapDataToShippingMethod($orderData['shippingInfo'] ?? []),
+            'shippingAddress' => $this->mapDataToAddress($orderData['shippingAddress'] ?? []),
+            'billingAddress' => $this->mapDataToAddress($orderData['billingAddress'] ?? []),
+            'sum' => $orderData['totalPrice']['centAmount'],
+            'payments' => $this->mapDataToPayments($orderData),
+            'discountCodes' => $this->mapDataToDiscounts($orderData),
+            'dangerousInnerCart' => $orderData,
+            'dangerousInnerOrder' => $orderData,
+            'currency' => $orderData['totalPrice']['currencyCode'],
+        ]);
     }
 
     public function mapDataToPayments(array $cartData): array

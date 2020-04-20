@@ -578,16 +578,19 @@ class Commercetools implements CartApi
      */
     public function order(Cart $cart): Order
     {
-        $order = $this->mapOrder($this->client->post(
-            '/orders',
-            ['expand' => self::EXPAND],
-            [],
-            json_encode([
-                'id' => $cart->cartId,
-                'version' => (int)$cart->cartVersion,
-                'orderNumber' => $this->orderIdGenerator->getOrderId($cart),
-            ])
-        ));
+        $order = $this->cartMapper->mapDataToOrder(
+            $this->client->post(
+                '/orders',
+                ['expand' => self::EXPAND],
+                [],
+                json_encode([
+                    'id' => $cart->cartId,
+                    'version' => (int)$cart->cartVersion,
+                    'orderNumber' => $this->orderIdGenerator->getOrderId($cart),
+                ])
+            ),
+            $this->parseLocaleString()
+        );
 
         $cart = $this->getById($cart->cartId);
         $this->client->delete(
@@ -604,10 +607,13 @@ class Commercetools implements CartApi
      */
     public function getOrder(string $orderId): Order
     {
-        return $this->mapOrder($this->client->get(
-            '/orders/order-number=' . $orderId,
-            ['expand' => self::EXPAND]
-        ));
+        return $this->cartMapper->mapDataToOrder(
+            $this->client->get(
+                '/orders/order-number=' . $orderId,
+                ['expand' => self::EXPAND]
+            ),
+            $this->parseLocaleString()
+        );
     }
 
     /**
@@ -627,10 +633,12 @@ class Commercetools implements CartApi
             )
             ->wait();
 
-        return array_map(
-            [$this, 'mapOrder'],
-            $result->results
-        );
+        $orders = [];
+        foreach ($result->results as $order) {
+            $orders[] = $this->cartMapper->mapDataToOrder($order, $this->parseLocaleString());
+        }
+
+        return $orders;
     }
 
     private function mapCart(array $cart, CommercetoolsLocale $locale): Cart
@@ -662,47 +670,6 @@ class Commercetools implements CartApi
             'discountCodes' => $this->cartMapper->mapDataToDiscounts($cart),
             'dangerousInnerCart' => $cart,
         ]);
-    }
-
-    private function mapOrder(array $order, CommercetoolsLocale $locale = null): Order
-    {
-        if ($locale === null) {
-            $locale = $this->parseLocaleString(null);
-        }
-
-        /**
-         * @TODO:
-         *
-         * [ ] Map delivery costs / properties
-         * [ ] Map product discounts
-         * [ ] Map discount codes
-         * [ ] Map tax information
-         * [ ] Map delivery status
-         * [ ] Map order status
-         */
-        $order = new Order([
-            'cartId' => $order['id'],
-            'custom' => $order['custom']['fields'] ?? [],
-            'orderState' => $order['orderState'],
-            'createdAt' => new \DateTimeImmutable($order['createdAt']),
-            'orderId' => $order['orderNumber'],
-            'orderVersion' => $order['version'],
-            'lineItems' => $this->cartMapper->mapDataToLineItems($order, $locale),
-            'email' => $order['customerEmail'] ?? null,
-            'birthday' => isset($order['custom']['fields']['birthday']) ?
-                new \DateTimeImmutable($order['custom']['fields']['birthday']) :
-                null,
-            'shippingMethod' => $this->cartMapper->mapDataToShippingMethod($order['shippingInfo'] ?? []),
-            'shippingAddress' => $this->cartMapper->mapDataToAddress($order['shippingAddress'] ?? []),
-            'billingAddress' => $this->cartMapper->mapDataToAddress($order['billingAddress'] ?? []),
-            'sum' => $order['totalPrice']['centAmount'],
-            'payments' => $this->cartMapper->mapDataToPayments($order),
-            'discountCodes' => $this->cartMapper->mapDataToDiscounts($order),
-            'dangerousInnerCart' => $order,
-            'dangerousInnerOrder' => $order,
-            'currency' => $order['totalPrice']['currencyCode'],
-        ]);
-        return $order;
     }
 
     /**
@@ -868,7 +835,7 @@ class Commercetools implements CartApi
         );
     }
 
-    private function parseLocaleString(?string $localeString): CommercetoolsLocale
+    private function parseLocaleString(?string $localeString = null): CommercetoolsLocale
     {
         if ($localeString !== null) {
             return $this->localeCreator->createLocaleFromString($localeString);

@@ -5,6 +5,7 @@ namespace Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Discount;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
+use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
@@ -265,6 +266,45 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @dataProvider provideMapDataToOrderExamples
+     */
+    public function testMapDataToOrder($orderFixture, $expectedOrder)
+    {
+        $this->productMapperMock
+            ->expects($this->any())
+            ->method('dataToPrice')
+            ->willReturn([null, null, null]);
+
+        $this->productMapperMock
+            ->expects($this->any())
+            ->method('getLocalizedValue');
+
+        $actualOrder = $this->mapper->mapDataToOrder(
+            $orderFixture,
+            new CommercetoolsLocale([
+                'language' => 'de',
+                'country' => 'DE',
+                'currency' => 'EUR',
+                ]
+            )
+        );
+
+        $this->assertInstanceOf($expectedOrder, $actualOrder);
+    }
+
+    public function provideMapDataToOrderExamples()
+    {
+        $cartFixtures = $this->getCartFixture();
+
+        return [
+            'Simple order' => [
+                $cartFixtures,
+                Order::class,
+            ],
+        ];
+    }
+
+    /**
      * @dataProvider provideMapDataToPaymentsExamples
      */
     public function testMapDataToPayments($paymentsFixture, $expectedPayments, $expectedSize)
@@ -399,7 +439,6 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             ],
         ];
     }
-
 
     /**
      * @return Address
