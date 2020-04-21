@@ -501,7 +501,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
      */
     private function getCartFixture(): array
     {
-        return json_decode(file_get_contents( __DIR__  . '/../../cartFixture.json'), true);
+        return json_decode(file_get_contents( __DIR__  . '/../_fixtures/cartFixture.json'), true);
     }
 
     /**
