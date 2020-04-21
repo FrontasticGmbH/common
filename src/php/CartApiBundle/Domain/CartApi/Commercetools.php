@@ -89,7 +89,7 @@ class Commercetools implements CartApi
         $locale = $this->localeCreator->createLocaleFromString($localeString);
 
         try {
-            $cart = $this->mapCart(
+            $cart = $this->cartMapper->mapDataToCart(
                 $this->client->get(
                     '/carts',
                     [
@@ -102,7 +102,7 @@ class Commercetools implements CartApi
 
             return $this->assertCorrectLocale($cart, $locale);
         } catch (RequestException $e) {
-            return $this->mapCart(
+            return $this->cartMapper->mapDataToCart(
                 $this->client->post(
                     '/carts',
                     ['expand' => self::EXPAND],
@@ -178,7 +178,7 @@ class Commercetools implements CartApi
         $dangerousInnerCart['locale'] = $locale->language;
         $dangerousInnerCart['currency'] = $locale->currency;
 
-        $cart = $this->mapCart(
+        $cart = $this->cartMapper->mapDataToCart(
             $this->client->post(
                 '/carts',
                 ['expand' => self::EXPAND],
@@ -237,10 +237,10 @@ class Commercetools implements CartApi
             ->wait();
 
         if ($result->count >= 1) {
-            return $this->assertCorrectLocale($this->mapCart($result->results[0], $locale), $locale);
+            return $this->assertCorrectLocale($this->cartMapper->mapDataToCart($result->results[0], $locale), $locale);
         }
 
-        return $this->mapCart(
+        return $this->cartMapper->mapDataToCart(
             $this->client->post(
                 '/carts',
                 ['expand' => self::EXPAND],
@@ -263,7 +263,7 @@ class Commercetools implements CartApi
      */
     public function getById(string $cartId, string $localeString = null): Cart
     {
-        return $this->mapCart(
+        return $this->cartMapper->mapDataToCart(
             $this->client->get(
                 '/carts/' . urlencode($cartId)
             ),
@@ -633,37 +633,6 @@ class Commercetools implements CartApi
         return $orders;
     }
 
-    private function mapCart(array $cart, CommercetoolsLocale $locale): Cart
-    {
-        /**
-         * @TODO:
-         *
-         * [ ] Map delivery costs / properties
-         * [ ] Map product discounts
-         * [ ] Map discount codes
-         * [ ] Map tax information
-         * [ ] Map discount text locales to our scheme
-         */
-        return new Cart([
-            'cartId' => $cart['id'],
-            'cartVersion' => (string)$cart['version'],
-            'custom' => $cart['custom']['fields'] ?? [],
-            'lineItems' => $this->cartMapper->mapDataToLineItems($cart, $locale),
-            'email' => $cart['customerEmail'] ?? null,
-            'birthday' => isset($cart['custom']['fields']['birthday']) ?
-                new \DateTimeImmutable($cart['custom']['fields']['birthday']) :
-                null,
-            'shippingMethod' => $this->cartMapper->mapDataToShippingMethod($cart['shippingInfo'] ?? []),
-            'shippingAddress' => $this->cartMapper->mapDataToAddress($cart['shippingAddress'] ?? []),
-            'billingAddress' => $this->cartMapper->mapDataToAddress($cart['billingAddress'] ?? []),
-            'sum' => $cart['totalPrice']['centAmount'],
-            'currency' => $cart['totalPrice']['currencyCode'],
-            'payments' => $this->cartMapper->mapDataToPayments($cart),
-            'discountCodes' => $this->cartMapper->mapDataToDiscounts($cart),
-            'dangerousInnerCart' => $cart,
-        ]);
-    }
-
     /**
      * @throws RequestException
      */
@@ -682,7 +651,7 @@ class Commercetools implements CartApi
         // seem to be instant, so that we stll run into version conflicts here…
         // $currentCart = $this->client->get('/carts/' . $cart->cartId);
 
-        return $this->mapCart(
+        return $this->cartMapper->mapDataToCart(
             $this->client->post(
                 '/carts/' . $cart->cartId,
                 ['expand' => self::EXPAND],

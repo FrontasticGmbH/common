@@ -3,6 +3,7 @@
 namespace Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools;
 
 use Frontastic\Common\AccountApiBundle\Domain\Address;
+use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\Discount;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
@@ -62,6 +63,37 @@ class Mapper
         ];
     }
 
+    public function mapDataToCart(array $cartData, CommercetoolsLocale $locale): Cart
+    {
+        /**
+         * @TODO:
+         *
+         * [ ] Map delivery costs / properties
+         * [ ] Map product discounts
+         * [ ] Map discount codes
+         * [ ] Map tax information
+         * [ ] Map discount text locales to our scheme
+         */
+        return new Cart([
+            'cartId' => $cartData['id'],
+            'cartVersion' => (string)$cartData['version'],
+            'custom' => $cartData['custom']['fields'] ?? [],
+            'lineItems' => $this->mapDataToLineItems($cartData, $locale),
+            'email' => $cartData['customerEmail'] ?? null,
+            'birthday' => isset($cartData['custom']['fields']['birthday']) ?
+                new \DateTimeImmutable($cartData['custom']['fields']['birthday']) :
+                null,
+            'shippingMethod' => $this->mapDataToShippingMethod($cartData['shippingInfo'] ?? []),
+            'shippingAddress' => $this->mapDataToAddress($cartData['shippingAddress'] ?? []),
+            'billingAddress' => $this->mapDataToAddress($cartData['billingAddress'] ?? []),
+            'sum' => $cartData['totalPrice']['centAmount'],
+            'currency' => $cartData['totalPrice']['currencyCode'],
+            'payments' => $this->mapDataToPayments($cartData),
+            'discountCodes' => $this->mapDataToDiscounts($cartData),
+            'dangerousInnerCart' => $cartData,
+        ]);
+    }
+
     public function mapDataToDiscounts(array $cartData): array
     {
         if (empty($cartData['discountCodes'])) {
@@ -91,7 +123,7 @@ class Mapper
     /**
      * @return LineItem[]
      */
-    public function mapDataToLineItems(array $cart, CommercetoolsLocale $locale): array
+    public function mapDataToLineItems(array $cartData, CommercetoolsLocale $locale): array
     {
         $lineItems = array_merge(
             array_map(
@@ -125,7 +157,7 @@ class Mapper
                         'dangerousInnerItem' => $lineItem,
                     ]);
                 },
-                $cart['lineItems']
+                $cartData['lineItems']
             ),
             array_map(
                 function (array $lineItem) use ($locale): LineItem {
@@ -153,7 +185,7 @@ class Mapper
                         'dangerousInnerItem' => $lineItem,
                     ]);
                 },
-                $cart['customLineItems']
+                $cartData['customLineItems']
             )
         );
 

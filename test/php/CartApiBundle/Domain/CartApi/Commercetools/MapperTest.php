@@ -3,6 +3,7 @@
 namespace Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools;
 
 use Frontastic\Common\AccountApiBundle\Domain\Address;
+use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\Discount;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
@@ -88,6 +89,22 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 $this->getAddressFixture(),
             ],
         ];
+    }
+
+    public function testVerifyCartIsComplete()
+    {
+        $cart = $this->getCart();
+
+        $this->assertInstanceOf(Cart::class, $cart);
+        $this->assertTrue($cart->isComplete());
+    }
+
+    public function testVerifyCartIsNotCompleteWithoutFullPayment()
+    {
+        $cart = $this->getCart();
+        unset($cart->payments[1]);
+
+        $this->assertFalse($cart->isComplete());
     }
 
     /**
@@ -517,5 +534,27 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     private function loadFixture(string $fileName)
     {
         return json_decode(file_get_contents(__DIR__ . '/_fixtures/' . $fileName), true);
+    }
+
+    private function getCart(): Cart
+    {
+        $this->productMapperMock
+            ->expects($this->any())
+            ->method('dataToPrice')
+            ->willReturn([null, null, null]);
+
+        $this->productMapperMock
+            ->expects($this->any())
+            ->method('getLocalizedValue');
+
+        return $this->mapper->mapDataToCart(
+            $this->getCartFixture(),
+            new CommercetoolsLocale([
+                    'language' => 'de',
+                    'country' => 'DE',
+                    'currency' => 'EUR',
+                ]
+            )
+        );
     }
 }
