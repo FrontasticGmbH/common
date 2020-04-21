@@ -91,7 +91,7 @@ class AccountService
 
     public function updatePassword(Account $account, string $oldPassword, string $newPassword): Account
     {
-        return $this->accountApi->updatePassword($account->accountId, $oldPassword, $newPassword);
+        return $this->accountApi->updatePassword($account, $oldPassword, $newPassword);
     }
 
     public function resetPassword(string $token, string $newPassword): Account
