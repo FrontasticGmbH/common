@@ -21,10 +21,13 @@ class SapRequestException extends \RuntimeException
             }
         }
 
-        return new SapRequestException(sprintf(
-            'An SAP request failed with status code %s: %s',
-            $status,
-            implode('; ', $errorMessages)
-        ));
+        return new SapRequestException(
+            sprintf(
+                'An SAP request failed with status code %s: %s',
+                $status,
+                implode('; ', $errorMessages)
+            ),
+            $response->status ?? 0
+        );
     }
 }
