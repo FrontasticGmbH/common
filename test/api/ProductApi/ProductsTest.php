@@ -535,6 +535,7 @@ class ProductsTest extends FrontasticApiTestCase
                 $product->name,
                 sprintf('Product %s (SKU %s) has an invalid name', $product->productId, $product->sku)
             );
+            $this->assertContainsNoHtml($product->name);
 
             $this->assertNotEmptyString($product->slug);
             $this->assertRegExp(
@@ -549,6 +550,7 @@ class ProductsTest extends FrontasticApiTestCase
             );
 
             $this->assertInternalType('string', $product->description);
+            $this->assertContainsNoHtml($product->description);
 
             $this->assertInternalType('array', $product->categories);
             foreach ($product->categories as $category) {
@@ -609,5 +611,10 @@ class ProductsTest extends FrontasticApiTestCase
 
             $this->assertNull($product->dangerousInnerProduct);
         }
+    }
+
+    private function assertContainsNoHtml(string $actual, string $message = null): void
+    {
+        $this->assertEquals($actual, strip_tags($actual), $message ?? 'The string may not contain HTML tags.');
     }
 }

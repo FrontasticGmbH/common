@@ -26,9 +26,9 @@ class SapDataMapper
 
         return new Product([
             'productId' => $code,
-            'name' => $data['name'] ?? $code,
+            'name' => $this->stripHtml($data['name'] ?? $code),
             'slug' => rawurlencode($code),
-            'description' => $data['description'] ?? '',
+            'description' => $this->stripHtml($data['description'] ?? ''),
             'categories' => array_map(
                 function (array $category): string {
                     return $category['code'];
@@ -123,5 +123,16 @@ class SapDataMapper
     private function mapDataToPriceValue(array $data): int
     {
         return (int)round($data['value'] * 100);
+    }
+
+    private function stripHtml(string $input): string
+    {
+        return strip_tags(
+            preg_replace(
+                '{<br\s*/?>}i',
+                "\n",
+                $input
+            )
+        );
     }
 }
