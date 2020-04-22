@@ -6,6 +6,7 @@ import httpBuildQuery from './httpBuildQuery'
 import httpParseQuery from './httpParseQuery'
 import registerServiceWorker from './registerServiceWorker'
 import VisibilityChange from './visibilityChange'
+import cellDimensions from './domain/cellDimensions'
 import Cell from './domain/cell'
 import Page from './domain/page'
 import Region from './domain/region'
@@ -24,6 +25,7 @@ export {
     shouldFieldBeTranslated,
     registerServiceWorker,
     VisibilityChange,
+    cellDimensions,
     Cell,
     Page,
     Region,
