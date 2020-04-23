@@ -59,7 +59,7 @@ class AccountApiFactory
             case 'shopware':
                 $client = $this->container
                     ->get(ShopwareClientFactory::class)
-                    ->factorForProjectAndType($project, 'account');
+                    ->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
 
                 $accountApi = new ShopwareAccountApi(
                     $client,
