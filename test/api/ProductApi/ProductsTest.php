@@ -565,10 +565,8 @@ class ProductsTest extends FrontasticApiTestCase
 
             $currentProductGroupId = null;
             foreach ($product->variants as $variant) {
-                $this->assertNotEmptyString($variant->id);
-                $this->assertNotEmptyString($variant->sku);
+                $this->assertProductVariantIsWellFormed($variant);
 
-                $this->assertNotEmptyString($variant->groupId);
                 if ($currentProductGroupId === null) {
                     $currentProductGroupId = $variant->groupId;
                     $this->assertNotContains($currentProductGroupId, $previousGroupIds);
@@ -583,30 +581,6 @@ class ProductsTest extends FrontasticApiTestCase
                         $product->sku
                     )
                 );
-
-                $this->assertInternalType('integer', $variant->price);
-                $this->assertGreaterThanOrEqual(0, $variant->price);
-
-                if ($variant->discountedPrice !== null) {
-                    $this->assertInternalType('integer', $variant->discountedPrice);
-                    $this->assertGreaterThanOrEqual(0, $variant->discountedPrice);
-                    $this->assertLessThanOrEqual($variant->price, $variant->discountedPrice);
-                }
-
-                $this->assertInternalType('array', $variant->discounts);
-
-                $this->assertNotEmptyString($variant->currency);
-
-                $this->assertInternalType('array', $variant->attributes);
-
-                $this->assertInternalType('array', $variant->images);
-                foreach ($variant->images as $image) {
-                    $this->assertNotEmptyString($image);
-                }
-
-                $this->assertInternalType('boolean', $variant->isOnStock);
-
-                $this->assertNull($variant->dangerousInnerVariant);
             }
 
             $this->assertNull($product->dangerousInnerProduct);
