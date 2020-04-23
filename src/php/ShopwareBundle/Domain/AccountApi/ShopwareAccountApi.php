@@ -6,32 +6,22 @@ use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
+use Frontastic\Common\ShopwareBundle\Domain\AbstractShopwareApi;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\AccountMapper;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\AddressCreateRequestDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\AddressesMapper;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\CustomerCreateRequestDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\CustomerPatchRequestDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\Exception\RequestException;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
 use RuntimeException;
 
-class ShopwareAccountApi implements AccountApi
+class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
 {
-    public const TOKEN_TYPE = 'shopware';
-
-    /**
-     * @var \Frontastic\Common\ShopwareBundle\Domain\ClientInterface
-     */
-    private $client;
-
-    /**
-     * @var \Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver
-     */
-    private $mapperResolver;
-
     /**
      * @var \Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiInterface
      */
@@ -42,8 +32,7 @@ class ShopwareAccountApi implements AccountApi
         DataMapperResolver $mapperResolver,
         ShopwareProjectConfigApiFactory $projectConfigApiFactory
     ) {
-        $this->client = $client;
-        $this->mapperResolver = $mapperResolver;
+        parent::__construct($client, $mapperResolver);
 
         $this->projectConfigApi = $projectConfigApiFactory->factor($this->client);
     }
@@ -56,7 +45,7 @@ class ShopwareAccountApi implements AccountApi
             ->then(function ($response) {
                 return $this->mapResponse($response, AccountMapper::MAPPER_NAME);
             })
-            ->then(function (Account $account) use ($token) {
+            ->then(static function (Account $account) use ($token) {
                 // Lets not loose the token
                 $account->setToken(self::TOKEN_TYPE, $token);
 
@@ -135,12 +124,15 @@ class ShopwareAccountApi implements AccountApi
     public function login(Account $account, ?Cart $cart = null): bool
     {
         try {
+            $requestData = [
+                'username' => $account->getUsername(),
+                'password' => $account->getPassword(),
+            ];
+
             return $this->client
-                ->post('/customer/login', [], [
-                    'username' => $account->getUsername(),
-                    'password' => $account->getPassword(),
-                ])->then(static function ($response) use (&$account) {
-                    $account->setToken(self::TOKEN_TYPE, $response['sw-context-token']);
+                ->post('/customer/login', [], $requestData)
+                ->then(static function ($response) use (&$account) {
+                    $account->setToken(self::TOKEN_TYPE, $response[self::KEY_CONTEXT_TOKEN]);
 
                     return true;
                 }, static function ($reason) use ($account) {
@@ -302,37 +294,10 @@ class ShopwareAccountApi implements AccountApi
         return $this->client;
     }
 
-    /**
-     * @param mixed $requestData
-     * @param string $mapperName
-     *
-     * @return mixed
-     */
-    private function mapRequestData($requestData, string $mapperName)
+    protected function configureMapper(DataMapperInterface $mapper): void
     {
-        $mapper = $this->mapperResolver->getMapper($mapperName);
-
         if ($mapper instanceof ProjectConfigApiAwareDataMapperInterface) {
             $mapper->setProjectConfigApi($this->projectConfigApi);
         }
-
-        return $mapper->map($requestData);
-    }
-
-    /**
-     * @param array $response
-     * @param string $mapperName
-     *
-     * @return mixed
-     */
-    private function mapResponse(array $response, string $mapperName)
-    {
-        $mapper = $this->mapperResolver->getMapper($mapperName);
-
-        if ($mapper instanceof ProjectConfigApiAwareDataMapperInterface) {
-            $mapper->setProjectConfigApi($this->projectConfigApi);
-        }
-
-        return $mapper->map($response);
     }
 }

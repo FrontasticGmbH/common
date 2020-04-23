@@ -35,7 +35,7 @@ class AccountMapper extends AbstractDataMapper implements ProjectConfigApiAwareD
         $accountData = $this->extractData($resource);
 
         return new Account([
-            'accountId' => $accountData['id'],
+            'accountId' => (string)$accountData['id'],
             'email' => $accountData['email'],
             'salutation' => $this->resolveSalutation($accountData),
             'firstName' => $accountData['firstName'] ?? null,

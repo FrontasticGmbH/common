@@ -22,7 +22,7 @@ class AddressMapper extends AbstractDataMapper implements ProjectConfigApiAwareD
     public function map($addressData)
     {
         return new Address([
-            'addressId' => $addressData['id'] ?? null,
+            'addressId' => $addressData['id'] ? (string)$addressData['id'] : null,
             'salutation' => $this->resolveSalutation($addressData),
             'firstName' => $addressData['firstName'] ?? null,
             'lastName' => $addressData['lastName'] ?? null,
@@ -44,7 +44,7 @@ class AddressMapper extends AbstractDataMapper implements ProjectConfigApiAwareD
         if ($resolveTranslatedName === null && isset($addressData['countryId'])) {
             $shopwareCountry = $this->getProjectConfigApi()->getCountryByCriteria($addressData['countryId']);
 
-            return $shopwareCountry->name;
+            return $shopwareCountry ? $shopwareCountry->name : null;
         }
 
         return $resolveTranslatedName;

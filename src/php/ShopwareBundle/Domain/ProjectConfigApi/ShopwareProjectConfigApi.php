@@ -2,8 +2,7 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi;
 
-use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
-use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
+use Frontastic\Common\ShopwareBundle\Domain\AbstractShopwareApi;
 use Frontastic\Common\ShopwareBundle\Domain\Exception\MapperNotFoundException;
 use Frontastic\Common\ShopwareBundle\Domain\Exception\ResourceNotFoundException;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper\CountryMapper;
@@ -12,24 +11,8 @@ use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper\Salutati
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper\ShippingMethodsMapper;
 use GuzzleHttp\Promise\EachPromise;
 
-class ShopwareProjectConfigApi implements ShopwareProjectConfigApiInterface
+class ShopwareProjectConfigApi extends AbstractShopwareApi implements ShopwareProjectConfigApiInterface
 {
-    /**
-     * @var \Frontastic\Common\ShopwareBundle\Domain\ClientInterface
-     */
-    private $client;
-
-    /**
-     * @var \Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver
-     */
-    private $mapperResolver;
-
-    public function __construct(ClientInterface $client, DataMapperResolver $mapperResolver)
-    {
-        $this->client = $client;
-        $this->mapperResolver = $mapperResolver;
-    }
-
     /**
      * @inheritDoc
      */
@@ -50,7 +33,7 @@ class ShopwareProjectConfigApi implements ShopwareProjectConfigApiInterface
             return $this->client
                 ->get('/country', $parameters)
                 ->then(function ($response) {
-                    return $this->mapResource($response, CountryMapper::MAPPER_NAME);
+                    return $this->mapResponse($response, CountryMapper::MAPPER_NAME);
                 })->wait();
         } catch (ResourceNotFoundException $exception) {
             return null;
@@ -65,7 +48,7 @@ class ShopwareProjectConfigApi implements ShopwareProjectConfigApiInterface
         return $this->client
             ->get('/payment-method?associations[media][]')
             ->then(function ($response) {
-                return $this->mapResource($response, PaymentMethodsMapper::MAPPER_NAME);
+                return $this->mapResponse($response, PaymentMethodsMapper::MAPPER_NAME);
             })->wait();
     }
 
@@ -91,7 +74,7 @@ class ShopwareProjectConfigApi implements ShopwareProjectConfigApiInterface
         (new EachPromise($contextPromises, [
             'concurrency' => 3,
             'fulfilled' => function ($resource, $resourceName) use (&$result) {
-                $result[$resourceName] = $this->mapResource($resource, $resourceName);
+                $result[$resourceName] = $this->mapResponse($resource, $resourceName);
             },
             'rejected' => static function ($reason) {
                 throw $reason;
@@ -131,7 +114,7 @@ class ShopwareProjectConfigApi implements ShopwareProjectConfigApiInterface
         return $this->client
             ->get('/salutation', $parameters)
             ->then(function ($response) {
-                return $this->mapResource($response, SalutationsMapper::MAPPER_NAME);
+                return $this->mapResponse($response, SalutationsMapper::MAPPER_NAME);
             })->wait();
     }
 
@@ -143,19 +126,17 @@ class ShopwareProjectConfigApi implements ShopwareProjectConfigApiInterface
         return $this->client
             ->get('/shipping-method?associations[media][]')
             ->then(function ($response) {
-                return $this->mapResource($response, ShippingMethodsMapper::MAPPER_NAME);
+                return $this->mapResponse($response, ShippingMethodsMapper::MAPPER_NAME);
             })->wait();
     }
 
-    private function mapResource($data, $mapperName)
+    protected function mapResponse($response, string $mapperName)
     {
         try {
-            $mapper = $this->mapperResolver->getMapper($mapperName);
-
-            return $mapper->map($data);
+            return parent::mapResponse($response, $mapperName);
         } catch (MapperNotFoundException $exception) {
             // If no mapper is defined just return raw data
-            return $data;
+            return $response;
         }
     }
 }

@@ -5,6 +5,7 @@ namespace Frontastic\Common\ShopwareBundle\Domain\ProjectApi;
 use ArrayObject;
 use Frontastic\Common\ProjectApiBundle\Domain\Attribute;
 use Frontastic\Common\ProjectApiBundle\Domain\ProjectApi;
+use Frontastic\Common\ShopwareBundle\Domain\AbstractShopwareApi;
 use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
@@ -14,23 +15,8 @@ use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Aggregation;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectApi\DataMapper\GenericGroupAggregationMapper;
 
-class ShopwareProjectApi implements ProjectApi
+class ShopwareProjectApi extends AbstractShopwareApi implements ProjectApi
 {
-    /**
-     * @var \Frontastic\Common\ShopwareBundle\Domain\Client
-     */
-    private $client;
-
-    /**
-     * @var \Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver
-     */
-    private $mapperResolver;
-
-    /**
-     * @var \Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator
-     */
-    private $localeCreator;
-
     /**
      * @var string[]
      */
@@ -38,13 +24,12 @@ class ShopwareProjectApi implements ProjectApi
 
     public function __construct(
         ClientInterface $client,
-        DataMapperResolver $mapperResolver,
         LocaleCreator $localeCreator,
+        DataMapperResolver $mapperResolver,
         array $projectLanguages
     ) {
-        $this->client = $client;
-        $this->mapperResolver = $mapperResolver;
-        $this->localeCreator = $localeCreator;
+        parent::__construct($client, $localeCreator, $mapperResolver);
+
         $this->projectLanguages = $projectLanguages;
     }
 
@@ -89,23 +74,7 @@ class ShopwareProjectApi implements ProjectApi
      */
     private function fetchProductAggregations(string $languageId): array
     {
-        $criteriaAggregations = [
-            new Aggregation\Entity([
-                'name' => 'property_groups',
-                'field' => 'properties.group.id',
-                'definition' => 'property_group',
-            ]),
-            new Aggregation\Entity([
-                'name' => 'properties',
-                'field' => 'properties.id',
-                'definition' => 'property_group_option',
-            ]),
-            new Aggregation\Entity([
-                'name' => 'manufacturers',
-                'field' => 'manufacturerId',
-                'definition' => 'product_manufacturer',
-            ]),
-        ];
+        $criteriaAggregations = $this->getDefaultCriteriaAggregations();
 
         $criteria = [
             'page' => 1,
@@ -224,5 +193,29 @@ class ShopwareProjectApi implements ProjectApi
         }
 
         return $languagesToFetch;
+    }
+
+    /**
+     * @return \Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchAggregationInterface[]
+     */
+    private function getDefaultCriteriaAggregations(): array
+    {
+        return [
+            new Aggregation\Entity([
+                'name' => 'property_groups',
+                'field' => 'properties.group.id',
+                'definition' => 'property_group',
+            ]),
+            new Aggregation\Entity([
+                'name' => 'properties',
+                'field' => 'properties.id',
+                'definition' => 'property_group_option',
+            ]),
+            new Aggregation\Entity([
+                'name' => 'manufacturers',
+                'field' => 'manufacturerId',
+                'definition' => 'product_manufacturer',
+            ]),
+        ];
     }
 }

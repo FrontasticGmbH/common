@@ -19,7 +19,7 @@ class ProductVariantMapper extends AbstractDataMapper implements QueryAwareDataM
      *
      * @const string[]
      */
-    private const ROOT_ATTRIBUTES_AS_PROPERTIES = [
+    protected const ROOT_ATTRIBUTES_AS_PROPERTIES = [
         'ean',
     ];
 
@@ -34,19 +34,15 @@ class ProductVariantMapper extends AbstractDataMapper implements QueryAwareDataM
 
         return new Variant([
             'id' => (string)$variantData['id'],
-            'sku' => $variantData['productNumber'],
+            // Shopware operates on product IDs.
+            'sku' => $variantData['id'], // $variantData['productNumber'],
             'groupId' => $variantData['parentId'],
-            'price' => $this->extractPriceData($variantData),
+            'price' => $this->convertPriceToCent($variantData['price'][0]['gross']),
             'attributes' => $this->mapDataToAttributes($variantData),
             'images' => $this->mapDataToImages($variantData),
             'isOnStock' => $variantData['available'] && $variantData['availableStock'] > 0,
             'dangerousInnerVariant' => $this->mapDangerousInnerData($variantData),
         ]);
-    }
-
-    private function extractPriceData(array $variantData): int
-    {
-        return (int)bcmul((string)$variantData['price'][0]['gross'], '100');
     }
 
     private function mapDataToAttributes(array $variantData): array
@@ -105,7 +101,7 @@ class ProductVariantMapper extends AbstractDataMapper implements QueryAwareDataM
 
     private function mapRootAttributesToAttributes(array $variantData): array
     {
-        return array_filter(array_intersect_key($variantData, array_flip(self::ROOT_ATTRIBUTES_AS_PROPERTIES)));
+        return array_filter(array_intersect_key($variantData, array_flip(static::ROOT_ATTRIBUTES_AS_PROPERTIES)));
     }
 
     private function groupProperties(array $properties): array
