@@ -139,11 +139,7 @@ class SapClient
     {
         $status = $response->status ?? 503;
         if ($status < 200 || $status >= 300) {
-            $errorData = json_decode($response->body, true);
-            throw new RequestException(
-                $errorData['errors'][0]['message'] ?? 'Internal Server Error',
-                $status
-            );
+            throw SapRequestException::fromResponse($response);
         }
 
         if ($response->body === '') {

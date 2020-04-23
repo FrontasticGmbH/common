@@ -57,7 +57,7 @@ class Address extends DataObject
     public $city;
 
     /**
-     * @var string
+     * @var string 2 letter ISO code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
      */
     public $country;
     /**
