@@ -2,15 +2,9 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain;
 
-use Frontastic\Common\HttpClient;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService;
-use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
-use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
-use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
-use RuntimeException;
 
 abstract class AbstractShopwareApi
 {
@@ -44,7 +38,6 @@ abstract class AbstractShopwareApi
 
     protected function configureMapper(DataMapperInterface $mapper): void
     {
-
     }
 
     protected function mapResponse($response, string $mapperName)

@@ -54,7 +54,7 @@ class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
             ->forLanguage($locale->languageId)
             ->post('/category', [], $criteria)
             ->then(function ($response) {
-                return $this->mapResponse($response,CategoryMapper::MAPPER_NAME);
+                return $this->mapResponse($response, CategoryMapper::MAPPER_NAME);
             })
             ->wait();
     }
