@@ -3,7 +3,6 @@ name: "commercetools"
 secret: "secret"
 configuration:
     test:
-        bundle: ~
         disabled: false
         canAuthenticateWithToken: false
     commercetools:

@@ -3,7 +3,6 @@ name: "SAP commerce cloud"
 secret: "secret"
 configuration:
     test:
-        bundle: Frontastic\Common\SapCommerceCloudBundle\FrontasticCommonSapCommerceCloudBundle
         disabled: false
         anonymousCheckout: false
         canAuthenticateWithToken: false

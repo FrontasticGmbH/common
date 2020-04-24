@@ -4,7 +4,6 @@ secret: "secret"
 configuration:
   test:
     authTokenType: shopware
-    bundle: Frontastic\Common\ShopwareBundle\FrontasticCommonShopwareBundle
     disabled: false
     canQueryCategoriesBySlug: false
     canConfirmAccountWithConfirmationToken: false
