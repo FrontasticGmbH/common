@@ -272,7 +272,7 @@ class FrontasticApiTestCase extends KernelTestCase
 
     protected function requireProjectFeature(Project $project, string $featureName): void
     {
-        if (!($project->configuration['test']->{$featureName} ?? true)) {
+        if (!$this->hasProjectFeature($project, $featureName)) {
             $this->markTestSkipped($featureName . ' is required for this test');
         }
     }
