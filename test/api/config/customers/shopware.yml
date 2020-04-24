@@ -9,8 +9,8 @@ configuration:
     canConfirmAccountWithConfirmationToken: false
     canAuthenticateWithToken: true
   shopware:
-    apiKey: SWSCZZQYYVDMQ1NUZJQXBGXSWQ
-    endpoint: https://nxs-frontastic-demo.shopwaredemo.store/sales-channel-api/v1
+    apiKey: SWSCBHFSNTVMAWNZDNFKSHLAYW
+    endpoint: https://frontastic-test.shopwaredemo.store/sales-channel-api/v1
   account:
     engine: shopware
   cart:
