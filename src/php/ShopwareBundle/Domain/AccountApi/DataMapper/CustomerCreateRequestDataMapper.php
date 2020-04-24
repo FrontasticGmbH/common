@@ -39,7 +39,7 @@ class CustomerCreateRequestDataMapper extends AbstractDataMapper implements Proj
             'salutationId' => $this->resolveSalutationId($account->salutation),
             'firstName' => $account->firstName,
             'lastName' => $account->lastName,
-            'guest' => $account->isGuest,
+            'guest' => false,
             'email' => $account->email,
             'password' => $account->getPassword(),
             'birthdayDay' => $account->birthday ? $account->birthday->format('d') : null,

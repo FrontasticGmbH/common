@@ -66,11 +66,6 @@ class Account extends DataObject implements UserInterface, \Serializable
     public $confirmed = false;
 
     /**
-     * @var bool
-     */
-    public $isGuest = false;
-
-    /**
      * @var \DateTime
      */
     public $tokenValidUntil;
