@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="Frontastic.AccountApi.Api.login" path="/login" methods="POST">
+        <default key="_controller">
+            Frontastic\Common\ShopwareBundle\Controller\ShopwareAccountAuthController::loginAction
+        </default>
+    </route>
+
+    <route id="Frontastic.AccountApi.Api.requestReset" path="/request" methods="POST">
+        <default key="_controller">
+            Frontastic\Common\ShopwareBundle\Controller\ShopwareAccountAuthController::requestResetAction
+        </default>
+    </route>
+
+    <route id="Frontastic.AccountApi.Api.register" path="/register" methods="POST">
+        <default key="_controller">
+            Frontastic\Common\ShopwareBundle\Controller\ShopwareAccountAuthController::registerAction
+        </default>
+    </route>
+
+    <route id="Frontastic.AccountApi.Api.changePassword" path="/password" methods="POST">
+        <default key="_controller">
+            Frontastic\Common\ShopwareBundle\Controller\ShopwareAccountAuthController::changePasswordAction
+        </default>
+    </route>
+
+    <route id="Frontastic.AccountApi.Api.update" path="/update" methods="POST">
+        <default key="_controller">
+            Frontastic\Common\ShopwareBundle\Controller\ShopwareAccountAuthController::updateAction
+        </default>
+    </route>
+</routes>

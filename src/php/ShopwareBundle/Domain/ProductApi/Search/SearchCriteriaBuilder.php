@@ -62,6 +62,20 @@ class SearchCriteriaBuilder
         'productNumber',
     ];
 
+    public static function buildFromCategoryQuery(Query\CategoryQuery $query): array
+    {
+        return [
+            'page' => self::calculatePage($query),
+            'limit' => $query->limit,
+            'filter' => [
+                new Filter\Equals([
+                    'field' => 'active',
+                    'value' => 1,
+                ]),
+            ],
+        ];
+    }
+
     public static function buildFromProductQuery(Query\ProductQuery $query): array
     {
         $criteria = [
@@ -161,18 +175,28 @@ class SearchCriteriaBuilder
         return $criteria;
     }
 
-    public static function buildFromCategoryQuery(Query\CategoryQuery $query): array
+    public static function buildFromSimpleProductQuery(Query\SingleProductQuery $query): array
     {
-        return [
-            'page' => self::calculatePage($query),
-            'limit' => $query->limit,
-            'filter' => [
-                new Filter\Equals([
-                    'field' => 'active',
-                    'value' => 1,
-                ]),
-            ],
+        $criteria = [
+            'page' => 1,
+            'limit' => 1,
+            'filter' => [],
+//            'source' => self::PRODUCT_SOURCE_FIELDS,
         ];
+
+        if ($query->productId !== null) {
+            $criteria['filter'][] = new Filter\Equals([
+                'field' => 'id',
+                'value' => $query->productId,
+            ]);
+        } elseif ($query->sku !== null) {
+            $criteria['filter'][] = new Filter\Equals([
+                'field' => 'productNumber',
+                'value' => $query->sku,
+            ]);
+        }
+
+        return $criteria;
     }
 
     private static function addAggregationToCriteria(array &$criteria, Query\Facet $facet): void
@@ -237,6 +261,10 @@ class SearchCriteriaBuilder
 
     private static function calculatePage(PaginatedQuery $query): int
     {
+        if ($query->limit === 24) {
+            $query->limit = 25;
+        }
+
         return (int)ceil($query->offset / $query->limit) + 1;
     }
 }

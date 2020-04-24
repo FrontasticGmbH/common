@@ -4,43 +4,24 @@ namespace Frontastic\Common\ShopwareBundle\Domain\Locale;
 
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
-use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
-use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\CachedShopwareProjectConfigApi;
-use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApi;
-use Psr\SimpleCache\CacheInterface;
+use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
 
 class DefaultLocaleCreatorFactory extends LocaleCreatorFactory
 {
     /**
-     * @var \Psr\SimpleCache\CacheInterface
+     * @var \Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory
      */
-    private $cache;
+    private $projectConfigApiFactory;
 
-    /**
-     * @var \Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver
-     */
-    private $dataMapperResolver;
-
-    /**
-     * @var bool
-     */
-    private $debug;
-
-    public function __construct(CacheInterface $cache, DataMapperResolver $dataMapperResolver, bool $debug)
+    public function __construct(ShopwareProjectConfigApiFactory $projectConfigApiFactory)
     {
-        $this->cache = $cache;
-        $this->dataMapperResolver = $dataMapperResolver;
-        $this->debug = $debug;
+        $this->projectConfigApiFactory = $projectConfigApiFactory;
     }
 
     public function factor(Project $project, ClientInterface $client): LocaleCreator
     {
         return new DefaultLocaleCreator(
-            new CachedShopwareProjectConfigApi(
-                new ShopwareProjectConfigApi($client, $this->dataMapperResolver),
-                $this->cache,
-                $this->debug
-            )
+            $this->projectConfigApiFactory->factor($client)
         );
     }
 }

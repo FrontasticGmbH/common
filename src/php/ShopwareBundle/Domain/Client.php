@@ -6,6 +6,7 @@ use Exception;
 use Frontastic\Common\HttpClient;
 use Frontastic\Common\HttpClient\Response;
 use Frontastic\Common\ShopwareBundle\Domain\Exception\RequestException;
+use Frontastic\Common\ShopwareBundle\Domain\Exception\ResourceNotFoundException;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\UriInterface;
@@ -116,8 +117,16 @@ class Client implements ClientInterface
                 ])
             )
             ->then(function (Response $response) {
+                if ($response->status === 404) {
+                    throw new ResourceNotFoundException('Resource not found');
+                }
+
                 if ($response->status >= 400) {
                     throw $this->prepareException($response);
+                }
+
+                if ($response->status === 204) {
+                    return $response;
                 }
 
                 $data = json_decode($response->body, true);
@@ -148,7 +157,7 @@ class Client implements ClientInterface
         if (isset($errorData->errors)) {
             foreach ($errorData->errors as $error) {
                 $exception = new RequestException(
-                    $error->title ?? 'Unknown error',
+                    $error->detail ?? $error->title ?? 'Unknown error',
                     (int)($error->status ?? 503),
                     $exception
                 );

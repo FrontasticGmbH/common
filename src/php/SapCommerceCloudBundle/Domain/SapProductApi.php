@@ -113,7 +113,7 @@ class SapProductApi implements ProductApi
                 return $this->dataMapper->mapDataToProduct($data);
             })
             ->otherwise(function (\Throwable $exception) use ($query) {
-                if ($exception instanceof RequestException && $exception->getCode() === 400) {
+                if ($exception instanceof SapRequestException && $exception->getCode() === 400) {
                     if ($query->sku !== null) {
                         throw ProductApi\ProductNotFoundException::bySku($query->sku);
                     }

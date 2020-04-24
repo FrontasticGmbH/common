@@ -26,6 +26,12 @@ return [
 
 ```
 
+Add following line to your catwalk `customer_routing.yml`
+```yaml
+_shopware_bundle:
+    resource: "@FrontasticCommonShopwareBundle/Resources/config/routing.xml"
+```
+
 In `project.yml` set `API_KEY` to API access key taken from Shopware6 Admin SalesChannel configuration, set engine to `showpare` and you're good to go
 ```yaml
 configuration:

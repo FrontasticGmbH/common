@@ -63,8 +63,8 @@ class DefaultProjectApiFactory implements ProjectApiFactory
                 $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
                 return new ShopwareProjectApi(
                     $client,
-                    $dataMapper,
                     $localeCreatorFactory->factor($project, $client),
+                    $dataMapper,
                     $project->languages
                 );
             default:

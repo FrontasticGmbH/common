@@ -2,10 +2,10 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain;
 
-use Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools\Mapper as CartMapper;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory;
+use Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools\Mapper as CommercetoolsCartMapper;
+use Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory as CommercetoolsClientFactoryAlias;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper as ProductMapper;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapCartApi;
@@ -18,24 +18,9 @@ use Frontastic\Common\SapCommerceCloudBundle\Domain\SapDataMapper;
 class CartApiFactory
 {
     /**
-     * @var ClientFactory
+     * @var \Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator
      */
-    private $commercetoolsClientFactory;
-
-    /**
-     * @var CommercetoolsLocaleCreatorFactory
-     */
-    private $commercetoolsLocaleCreatorFactory;
-
-    /**
-     * @var SapClientFactory
-     */
-    private $sapClientFactory;
-
-    /**
-     * @var SapLocaleCreatorFactory
-     */
-    private $sapLocaleCreatorFactory;
+    private $factoryServiceLocator;
 
     /**
      * @var OrderIdGenerator
@@ -48,17 +33,11 @@ class CartApiFactory
     private $decorators = [];
 
     public function __construct(
-        ClientFactory $commercetoolsClientFactory,
-        CommercetoolsLocaleCreatorFactory $commercetoolsLocaleCreatorFactory,
-        SapClientFactory $sapClientFactory,
-        SapLocaleCreatorFactory $sapLocaleCreatorFactory,
+        FactoryServiceLocator $factoryServiceLocator,
         OrderIdGenerator $orderIdGenerator,
         iterable $decorators
     ) {
-        $this->commercetoolsClientFactory = $commercetoolsClientFactory;
-        $this->commercetoolsLocaleCreatorFactory = $commercetoolsLocaleCreatorFactory;
-        $this->sapClientFactory = $sapClientFactory;
-        $this->sapLocaleCreatorFactory = $sapLocaleCreatorFactory;
+        $this->factoryServiceLocator = $factoryServiceLocator;
         $this->orderIdGenerator = $orderIdGenerator;
         $this->decorators = $decorators;
     }
@@ -69,21 +48,26 @@ class CartApiFactory
 
         switch ($cartConfig->engine) {
             case 'commercetools':
-                $client = $this->commercetoolsClientFactory->factorForProjectAndType($project, 'cart');
+                $clientFactory = $this->factoryServiceLocator->get(CommercetoolsClientFactoryAlias::class);
+                $localeCreatorFactory = $this->factoryServiceLocator->get(CommercetoolsLocaleCreatorFactory::class);
 
+                $client = $clientFactory->factorForProjectAndType($project, 'cart');
                 $cartApi = new CartApi\Commercetools(
                     $client,
-                    new CartMapper(new ProductMapper()),
-                    $this->commercetoolsLocaleCreatorFactory->factor($project, $client),
+                    $this->factoryServiceLocator->get(CommercetoolsCartMapper::class),
+                    $localeCreatorFactory->factor($project, $client),
                     $this->orderIdGenerator
                 );
                 break;
 
             case 'sap-commerce-cloud':
-                $client = $this->sapClientFactory->factorForProjectAndType($project, 'product');
+                $clientFactory = $this->factoryServiceLocator->get(SapClientFactory::class);
+                $localeCreatorFactory = $this->factoryServiceLocator->get(SapLocaleCreatorFactory::class);
+
+                $client = $clientFactory->factorForProjectAndType($project, 'product');
                 $cartApi = new SapCartApi(
                     $client,
-                    $this->sapLocaleCreatorFactory->factor($project, $client),
+                    $localeCreatorFactory->factor($project, $client),
                     new SapDataMapper($client),
                     $this->orderIdGenerator
                 );

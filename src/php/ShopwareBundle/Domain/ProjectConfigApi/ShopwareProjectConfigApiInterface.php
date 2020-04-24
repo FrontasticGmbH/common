@@ -14,9 +14,9 @@ interface ShopwareProjectConfigApiInterface
     /**
      * @param string $criteria - can be ISO2 country code, ISO3 country code, or country name
      *
-     * @return \Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareCountry
+     * @return \Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareCountry|null
      */
-    public function getCountryByCriteria(string $criteria): ShopwareCountry;
+    public function getCountryByCriteria(string $criteria): ?ShopwareCountry;
 
     /**
      * @return \Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwarePaymentMethod[]
@@ -25,12 +25,12 @@ interface ShopwareProjectConfigApiInterface
 
     public function getProjectConfig(): array;
 
-    public function getSalutation(string $salutationKey): ?ShopwareSalutation;
+    public function getSalutation(string $criteria): ?ShopwareSalutation;
 
     /**
      * @return \Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareSalutation
      */
-    public function getSalutations(?string $salutationKey = null): array;
+    public function getSalutations(?string $criteria = null): array;
 
     /**
      * @return \Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareShippingMethod[]

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <import resource="routing_account.xml" prefix="/api/account"/>
+
+    <!--
+       <route id="Frontastic.CartApi.Cart.checkout" path="/api/cart/cart/checkout" methods="POST">
+           <default key="_controller">Frontastic\Common\AccountApiBundle\Controller\SprykerCartController::checkoutAction</default>
+       </route>
+   -->
+</routes>

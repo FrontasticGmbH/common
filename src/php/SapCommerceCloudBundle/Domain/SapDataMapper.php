@@ -26,9 +26,9 @@ class SapDataMapper
 
         return new Product([
             'productId' => $code,
-            'name' => $data['name'] ?? $code,
+            'name' => $this->stripHtml($data['name'] ?? $code),
             'slug' => rawurlencode($code),
-            'description' => $data['description'] ?? '',
+            'description' => $this->stripHtml($data['description'] ?? ''),
             'categories' => array_map(
                 function (array $category): string {
                     return $category['code'];
@@ -42,19 +42,7 @@ class SapDataMapper
                     'groupId' => $code,
                     'price' => $this->mapDataToPriceValue($data['price']),
                     'currency' => $data['price']['currencyIso'],
-                    'images' => array_values(
-                        array_map(
-                            function (array $image): string {
-                                return $this->client->getHostUrl() . $image['url'];
-                            },
-                            array_filter(
-                                $data['images'] ?? [],
-                                function (array $image): bool {
-                                    return $image['format'] !== 'thumbnail';
-                                }
-                            )
-                        )
-                    ),
+                    'images' => $this->mapDataToImages($data['images']  ?? []),
                 ]),
             ],
         ]);
@@ -105,14 +93,23 @@ class SapDataMapper
             'lineItems' => array_map(
                 function (array $lineItemData): LineItem {
                     $product = $lineItemData['product'];
+                    $code = $product['code'];
 
                     return new LineItem\Variant([
                         'lineItemId' => (string)$lineItemData['entryNumber'],
-                        'name' => $product['name'] ?? $product['code'],
+                        'name' => $product['name'] ?? $code,
                         'count' => $lineItemData['quantity'],
                         'price' => $this->mapDataToPriceValue($lineItemData['basePrice']),
                         'totalPrice' => $this->mapDataToPriceValue($lineItemData['totalPrice']),
                         'currency' => $lineItemData['totalPrice']['currencyIso'],
+                        'variant' => new Variant([
+                            'id' => $code,
+                            'sku' => $code, /// @FIXME get the real SKU
+                            'groupId' => $code,
+                            'price' => $this->mapDataToPriceValue($lineItemData['basePrice']),
+                            'currency' => $lineItemData['basePrice']['currencyIso'],
+                            'images' => $this->mapDataToImages($product['images']  ?? []),
+                        ]),
                     ]);
                 },
                 $data['entries'] ?? []
@@ -123,5 +120,36 @@ class SapDataMapper
     private function mapDataToPriceValue(array $data): int
     {
         return (int)round($data['value'] * 100);
+    }
+
+    private function stripHtml(string $input): string
+    {
+        return strip_tags(
+            preg_replace(
+                '{<br\s*/?>}i',
+                "\n",
+                $input
+            )
+        );
+    }
+
+    /**
+     * @return string[]
+     */
+    private function mapDataToImages(array $images): array
+    {
+        return array_values(
+            array_map(
+                function (array $image): string {
+                    return $this->client->getHostUrl() . $image['url'];
+                },
+                array_filter(
+                    $images,
+                    function (array $image): bool {
+                        return $image['format'] !== 'thumbnail';
+                    }
+                )
+            )
+        );
     }
 }
