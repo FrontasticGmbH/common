@@ -16,9 +16,6 @@ use Symfony\Bundle\TwigBundle\TwigBundle;
 
 class TestKernel extends Kernel
 {
-    /** @var string */
-    public static $integrationBundle;
-
     public static function getBaseDir(): string
     {
         return __DIR__;
