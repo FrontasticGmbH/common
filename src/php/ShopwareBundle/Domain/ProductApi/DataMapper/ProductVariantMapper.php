@@ -45,6 +45,11 @@ class ProductVariantMapper extends AbstractDataMapper implements QueryAwareDataM
         ]);
     }
 
+    private function convertPriceToCent($price): int
+    {
+        return (int)bcmul((string)$price, '100');
+    }
+
     private function mapDataToAttributes(array $variantData): array
     {
         return array_merge(
