@@ -79,11 +79,6 @@ class AccountService
         return $this->accountApi->login($account, $cart);
     }
 
-    public function logout(Account $account): bool
-    {
-        return $this->accountApi->logout($account);
-    }
-
     public function create(Account $account, ?Cart $cart = null): Account
     {
         return $this->accountApi->create($account, $cart);

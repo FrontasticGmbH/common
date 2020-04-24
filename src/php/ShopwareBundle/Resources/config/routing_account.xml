@@ -10,12 +10,6 @@
         </default>
     </route>
 
-    <route id="Frontastic.AccountApi.Api.logout" path="/logout" methods="POST">
-        <default key="_controller">
-            Frontastic\Common\ShopwareBundle\Controller\ShopwareAccountAuthController::logoutAction
-        </default>
-    </route>
-
     <route id="Frontastic.AccountApi.Api.requestReset" path="/request" methods="POST">
         <default key="_controller">
             Frontastic\Common\ShopwareBundle\Controller\ShopwareAccountAuthController::requestResetAction

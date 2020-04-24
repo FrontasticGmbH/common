@@ -28,17 +28,6 @@ class ShopwareAccountAuthController extends AccountAuthController
         return new JsonResponse($this->getAccountService()->getSessionFor($account));
     }
 
-    public function logoutAction(Request $request, UserInterface $account = null): JsonResponse
-    {
-        if ($account === null) {
-            throw new BadRequestHttpException('Can\'t proceed with logout, user missing');
-        }
-
-        $this->getAccountService()->logout($account);
-
-        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
-    }
-
     public function registerAction(Request $request, Context $context): JsonResponse
     {
         $body = $this->getJsonBody($request);

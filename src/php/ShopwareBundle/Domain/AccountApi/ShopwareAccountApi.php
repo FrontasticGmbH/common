@@ -148,19 +148,6 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         }
     }
 
-    public function logout(Account $account): bool
-    {
-        $this->client
-            ->withContextToken($account->getToken(self::TOKEN_TYPE))
-            ->post('/customer/logout')
-            ->then(static function () use ($account) {
-                $account->resetToken(self::TOKEN_TYPE);
-            })
-            ->wait();
-
-        return true;
-    }
-
     /**
      * @inheritDoc
      */
