@@ -55,7 +55,7 @@ class ProductsTest extends FrontasticApiTestCase
 
         $this->assertGreaterThanOrEqual(50, $result->total);
 
-        $this->assertSame(ProductApi\PaginatedQuery::DEFAULT_LIMIT, $result->count);
+        $this->assertGreaterThanOrEqual(ProductApi\PaginatedQuery::DEFAULT_LIMIT, $result->count);
         $this->assertCount($result->count, $result->items);
 
         $this->assertInternalType('array', $result->items);
