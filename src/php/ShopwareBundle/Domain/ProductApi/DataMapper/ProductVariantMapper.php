@@ -34,8 +34,7 @@ class ProductVariantMapper extends AbstractDataMapper implements QueryAwareDataM
 
         return new Variant([
             'id' => (string)$variantData['id'],
-            // Shopware operates on product IDs.
-            'sku' => $variantData['id'], // $variantData['productNumber'],
+            'sku' => $variantData['productNumber'],
             'groupId' => $variantData['parentId'],
             'price' => $this->convertPriceToCent($variantData['price'][0]['gross']),
             'attributes' => $this->mapDataToAttributes($variantData),
