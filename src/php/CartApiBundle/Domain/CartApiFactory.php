@@ -11,12 +11,18 @@ use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFacto
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapCartApi;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapDataMapper;
+use Frontastic\Common\ShopwareBundle\Domain\CartApi\ShopwareCartApi;
+use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFactory;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
+use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory as ShopwareLocaleCreatorFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Factory
  */
 class CartApiFactory
 {
+    private const CONFIGURATION_TYPE_NAME = 'cart';
+
     /**
      * @var \Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator
      */
@@ -44,14 +50,14 @@ class CartApiFactory
 
     public function factor(Project $project): CartApi
     {
-        $cartConfig = $project->getConfigurationSection('cart');
+        $cartConfig = $project->getConfigurationSection(self::CONFIGURATION_TYPE_NAME);
 
         switch ($cartConfig->engine) {
             case 'commercetools':
                 $clientFactory = $this->factoryServiceLocator->get(CommercetoolsClientFactoryAlias::class);
                 $localeCreatorFactory = $this->factoryServiceLocator->get(CommercetoolsLocaleCreatorFactory::class);
 
-                $client = $clientFactory->factorForProjectAndType($project, 'cart');
+                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
                 $cartApi = new CartApi\Commercetools(
                     $client,
                     $this->factoryServiceLocator->get(CommercetoolsDataMapper::class),
@@ -64,12 +70,24 @@ class CartApiFactory
                 $clientFactory = $this->factoryServiceLocator->get(SapClientFactory::class);
                 $localeCreatorFactory = $this->factoryServiceLocator->get(SapLocaleCreatorFactory::class);
 
-                $client = $clientFactory->factorForProjectAndType($project, 'product');
+                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
                 $cartApi = new SapCartApi(
                     $client,
-                    $localeCreatorFactory->factor($project, $client),
                     new SapDataMapper($client),
+                    $localeCreatorFactory->factor($project, $client),
                     $this->orderIdGenerator
+                );
+                break;
+
+            case 'shopware':
+                $clientFactory = $this->factoryServiceLocator->get(ShopwareClientFactory::class);
+                $localeCreatorFactory = $this->factoryServiceLocator->get(ShopwareLocaleCreatorFactory::class);
+
+                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+                $cartApi = new ShopwareCartApi(
+                    $client,
+                    $this->factoryServiceLocator->get(DataMapperResolver::class),
+                    $localeCreatorFactory->factor($project, $client)
                 );
                 break;
 
