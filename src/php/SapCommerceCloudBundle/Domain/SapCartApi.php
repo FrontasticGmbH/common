@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\SapCommerceCloudBundle\Domain;
 
+use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
@@ -31,8 +32,8 @@ class SapCartApi implements CartApi
 
     public function __construct(
         SapClient $client,
-        SapLocaleCreator $localeCreator,
         SapDataMapper $dataMapper,
+        SapLocaleCreator $localeCreator,
         OrderIdGenerator $orderIdGenerator
     ) {
         $this->client = $client;
@@ -41,7 +42,7 @@ class SapCartApi implements CartApi
         $this->orderIdGenerator = $orderIdGenerator;
     }
 
-    public function getForUser(string $userId, string $locale): Cart
+    public function getForUser(Account $account, string $locale): Cart
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
@@ -220,7 +221,7 @@ class SapCartApi implements CartApi
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function getOrders(string $accountId): array
+    public function getOrders(Account $account, array $parameters = []): array
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
