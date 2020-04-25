@@ -7,6 +7,11 @@ abstract class AbstractDataMapper implements DataMapperInterface
     private const KEY_DATA = 'data';
     private const KEY_AGGREGATIONS = 'aggregations';
 
+    protected function convertPriceToCent($price): int
+    {
+        return (int)bcmul((string)$price, '100');
+    }
+
     protected function extractData(array $resource, array $fallback = []): array
     {
         return $resource[self::KEY_DATA] ?? $fallback;
