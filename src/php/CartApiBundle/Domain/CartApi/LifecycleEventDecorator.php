@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain\CartApi;
 
+use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
@@ -47,7 +48,7 @@ class LifecycleEventDecorator implements CartApi
         return $this->aggregate;
     }
 
-    public function getForUser(string $userId, string $locale): Cart
+    public function getForUser(Account $account, string $locale): Cart
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
@@ -155,7 +156,7 @@ class LifecycleEventDecorator implements CartApi
     /**
      * @return Order[]
      */
-    public function getOrders(string $accountId): array
+    public function getOrders(Account $account, array $parameters = []): array
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
