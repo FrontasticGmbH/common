@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\SapCommerceCloudBundle\Domain;
 
+use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\ProductApiBundle\Domain\Category;
@@ -114,6 +115,17 @@ class SapDataMapper
                 },
                 $data['entries'] ?? []
             ),
+        ]);
+    }
+
+    public function mapDataToAccount(array $data): Account
+    {
+        return new Account([
+            'accountId' => $data['uid'],
+            'email' => $data['displayUid'],
+            'salutation' => $data['title'],
+            'firstName' => $data['firstName'],
+            'lastName' => $data['lastName'],
         ]);
     }
 
