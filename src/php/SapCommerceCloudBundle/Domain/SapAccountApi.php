@@ -45,7 +45,7 @@ class SapAccountApi implements AccountApi
                     'uid' => $account->email,
                     'titleCode' => 'mrs',
                     'firstName' => $account->firstName,
-                    'lastName' => $account->firstName,
+                    'lastName' => $account->lastName,
                     'password' => $account->getPassword(),
                 ],
                 [
