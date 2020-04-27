@@ -42,7 +42,7 @@ class SapDataMapper
                     'groupId' => $code,
                     'price' => $this->mapDataToPriceValue($data['price']),
                     'currency' => $data['price']['currencyIso'],
-                    'images' => $this->mapDataToImages($data['images']  ?? []),
+                    'images' => $this->mapDataToImages($data['images'] ?? []),
                 ]),
             ],
         ]);
@@ -108,7 +108,7 @@ class SapDataMapper
                             'groupId' => $code,
                             'price' => $this->mapDataToPriceValue($lineItemData['basePrice']),
                             'currency' => $lineItemData['basePrice']['currencyIso'],
-                            'images' => $this->mapDataToImages($product['images']  ?? []),
+                            'images' => $this->mapDataToImages($product['images'] ?? []),
                         ]),
                     ]);
                 },
