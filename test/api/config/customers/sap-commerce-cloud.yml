@@ -24,6 +24,8 @@ projects:
         configuration:
             sap-commerce-cloud:
                 siteId: electronics
+                clientId: frontastic
+                clientSecret: frontastic
                 catalogId: electronicsProductCatalog
                 catalogVersionId: Online
     -   projectId: apparel-uk
@@ -33,5 +35,7 @@ projects:
         configuration:
             sap-commerce-cloud:
                 siteId: apparel-uk
+                clientId: frontastic
+                clientSecret: frontastic
                 catalogId: apparelProductCatalog
                 catalogVersionId: Online

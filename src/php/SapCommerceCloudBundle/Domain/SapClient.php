@@ -5,17 +5,30 @@ namespace Frontastic\Common\SapCommerceCloudBundle\Domain;
 use Frontastic\Common\HttpClient;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
+use League\OAuth2\Client\Grant\ClientCredentials;
+use League\OAuth2\Client\Provider\GenericProvider;
+use League\OAuth2\Client\Token\AccessTokenInterface;
+use Psr\SimpleCache\CacheInterface;
 
 class SapClient
 {
     /** @var HttpClient */
     private $httpClient;
 
+    /** @var CacheInterface */
+    private $cache;
+
     /** @var string */
     private $hostUrl;
 
     /** @var string */
     private $siteId;
+
+    /** @var string */
+    private $clientId;
+
+    /** @var string */
+    private $clientSecret;
 
     /** @var string */
     private $catalogId;
@@ -32,16 +45,25 @@ class SapClient
     /** @var HttpClient\Options */
     private $writeClientOptions;
 
+    /** @var string|null */
+    private $accessToken = null;
+
     public function __construct(
         HttpClient $httpClient,
+        CacheInterface $cache,
         string $hostUrl,
         string $siteId,
+        string $clientId,
+        string $clientSecret,
         string $catalogId,
         string $catalogVersionId
     ) {
         $this->httpClient = $httpClient;
+        $this->cache = $cache;
         $this->hostUrl = $hostUrl;
         $this->siteId = $siteId;
+        $this->clientId = $clientId;
+        $this->clientSecret = $clientSecret;
         $this->catalogId = $catalogId;
         $this->catalogVersionId = $catalogVersionId;
 
@@ -106,14 +128,24 @@ class SapClient
             $headers[] = 'Content-Type: application/json';
         }
 
+        $options = $method === 'GET' ? $this->readClientOptions : $this->writeClientOptions;
+        $url = $this->buildUrl($urlTemplate, $parameters);
+
         return $this->httpClient
-            ->requestAsync(
-                $method,
-                $this->buildUrl($urlTemplate, $parameters),
-                $body,
-                $headers,
-                $method === 'GET' ? $this->readClientOptions : $this->writeClientOptions
-            )
+            ->requestAsync($method, $url, $body, array_merge($headers, [$this->getAuthorizationHeader()]), $options)
+            ->then(function (HttpClient\Response $response) use ($method, $url, $body, $headers, $options) {
+                if ($response->status === 401) {
+                    $this->invalidateAccessToken();
+                    return $this->httpClient->requestAsync(
+                        $method,
+                        $url,
+                        $body,
+                        array_merge($headers, [$this->getAuthorizationHeader()]),
+                        $options
+                    );
+                }
+                return $response;
+            })
             ->then(function (HttpClient\Response $response): ?array {
                 return $this->parseResponse($response);
             });
@@ -155,5 +187,69 @@ class SapClient
         }
 
         return $data;
+    }
+
+    private function getAuthorizationHeader(): string
+    {
+        return 'Authorization: Bearer ' . $this->getAccessToken();
+    }
+
+    private function getAccessToken(): string
+    {
+        if ($this->accessToken !== null) {
+            return $this->accessToken;
+        }
+
+        $accessTokenCacheKey = $this->getAccessTokenCacheKey();
+
+        /** @var AccessTokenInterface|null $accessToken */
+        $accessToken = $this->cache->get($accessTokenCacheKey);
+        if ($accessToken !== null && !$accessToken->hasExpired()) {
+            $this->accessToken = $accessToken->getToken();
+            return $this->accessToken;
+        }
+
+        $accessToken = $this->obtainAccessToken();
+        $this->cache->set($accessTokenCacheKey, $accessToken);
+
+        $this->accessToken = $accessToken->getToken();
+        return $this->accessToken;
+    }
+
+    private function invalidateAccessToken(): void
+    {
+        $this->accessToken = null;
+        $this->cache->delete($this->getAccessTokenCacheKey());
+    }
+
+    private function getAccessTokenCacheKey(): string
+    {
+        return sprintf(
+            'frontastic.sapCommerceCloud.%s.accessToken.%s',
+            $this->getInstanceId(),
+            md5(sprintf('%s:%s', $this->clientId, $this->clientSecret))
+        );
+    }
+
+    private function obtainAccessToken(): AccessTokenInterface
+    {
+        try {
+            $tokenUrl = $this->hostUrl . '/authorizationserver/oauth/token';
+            $provider = new GenericProvider([
+                'urlAuthorize' => $tokenUrl,
+                'urlAccessToken' => $tokenUrl,
+                'urlResourceOwnerDetails' => null,
+                'clientId' => $this->clientId,
+                'clientSecret' => $this->clientSecret,
+            ]);
+
+            return $provider->getAccessToken(new ClientCredentials());
+        } catch (\Exception $exception) {
+            throw new \RuntimeException(
+                'Error obtaining SAP Commerce Cloud addess token',
+                0,
+                $exception
+            );
+        }
     }
 }
