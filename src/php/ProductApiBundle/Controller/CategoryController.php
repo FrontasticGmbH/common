@@ -5,10 +5,11 @@ namespace Frontastic\Common\ProductApiBundle\Controller;
 use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class CategoryController extends Controller
 {
-    public function listAction(Context $context): array
+    public function listAction(Request $request, Context $context): array
     {
         /** @var \Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory $productApiFactory */
         $productApiFactory = $this->get('Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory');
@@ -17,7 +18,8 @@ class CategoryController extends Controller
 
         $query = new CategoryQuery([
             'locale' => $context->locale,
-            'limit' => 250
+            'limit' => $request->query->getInt('limit', 250),
+            'offset' => $request->query->getInt('offset', 0),
         ]);
 
         return [
