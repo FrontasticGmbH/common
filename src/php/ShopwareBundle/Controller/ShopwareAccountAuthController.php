@@ -63,6 +63,10 @@ class ShopwareAccountAuthController extends AccountAuthController
 
         $account = $this->getAccountService()->create($account, $cart);
 
+        if ($account->confirmationToken !== null) {
+            $this->getAccountService()->sendConfirmationMail($account);
+        }
+
         return $this->loginAccount($account, $request, $cart);
     }
 

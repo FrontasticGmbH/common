@@ -26,7 +26,7 @@ class AccountCreationTest extends FrontasticApiTestCase
         $this->assertSameAccountData($accountData, $createdAccount);
         $this->assertFalse($createdAccount->confirmed);
 
-        if ($this->hasProjectFeature($project, 'canConfirmAccountWithConfirmationToken')) {
+        if ($createdAccount->confirmationToken !== null) {
             $this->assertNotEmptyString($createdAccount->confirmationToken);
             $this->assertNotNull($createdAccount->tokenValidUntil);
             $this->assertGreaterThan(new DateTimeImmutable('+10 minutes'), $createdAccount->tokenValidUntil);
@@ -43,7 +43,7 @@ class AccountCreationTest extends FrontasticApiTestCase
         $this->assertSame($createdAccount->accountId, $fetchedAccount->accountId);
         $this->assertSameAccountData($accountData, $fetchedAccount);
 
-        if ($this->hasProjectFeature($project, 'canConfirmAccountWithConfirmationToken')) {
+        if ($createdAccount->confirmationToken !== null) {
             $this->assertFalse($fetchedAccount->confirmed);
             // confirm the email address
             $confirmedAccount = $accountApi->confirmEmail($createdAccount->confirmationToken);

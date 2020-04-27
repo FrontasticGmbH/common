@@ -6,7 +6,6 @@ configuration:
     authTokenType: shopware
     disabled: false
     canQueryCategoriesBySlug: false
-    canConfirmAccountWithConfirmationToken: false
     canAuthenticateWithToken: true
   shopware:
     apiKey: SWSCBHFSNTVMAWNZDNFKSHLAYW
