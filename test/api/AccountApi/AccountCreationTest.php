@@ -78,9 +78,9 @@ class AccountCreationTest extends FrontasticApiTestCase
                     'postalCode' => '123456',
                     'city' => 'Berlin',
                     'country' => 'Germany',
-                    'phone' => '+49 12 1234 12234'
-                ])
-            ]
+                    'phone' => '+49 12 1234 12234',
+                ]),
+            ],
         ]);
         $account->setPassword('cHAaL4Pd4yCcwLR');
         return $account;
@@ -106,8 +106,8 @@ class AccountCreationTest extends FrontasticApiTestCase
         $this->assertSame($expected->salutation, $actual->salutation);
         $this->assertSame($expected->firstName, $actual->firstName);
         $this->assertSame($expected->lastName, $actual->lastName);
-//        $this->assertSame($expected->streetName, $actual->streetName);
-//        $this->assertSame($expected->streetNumber, $actual->streetNumber);
+        //$this->assertSame($expected->streetName, $actual->streetName);
+        //$this->assertSame($expected->streetNumber, $actual->streetNumber);
         $this->assertSame($expected->city, $actual->city);
         $this->assertSame($expected->postalCode, $actual->postalCode);
         $this->assertSame($expected->phone, $actual->phone);
