@@ -82,7 +82,7 @@ class AccountCreationTest extends FrontasticApiTestCase
                 ]),
             ],
         ]);
-        $account->setPassword('cHAaL4Pd4yCcwLR');
+        $account->setPassword('cHAaL4Pd.4yCcwLR');
         return $account;
     }
 
