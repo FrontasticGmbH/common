@@ -62,7 +62,7 @@ class AccountCreationTest extends FrontasticApiTestCase
     private function getTestAccountData(): Account
     {
         $account = new Account([
-            'email' => 'integration-tests-not-exists+account-' . uniqid('', true) . '@frontastic.cloud',
+            'email' => 'integration-tests-not-exists+account-' . uniqid('', true) . '@frontastic.com',
             'salutation' => 'Frau',
             'firstName' => 'Ashley',
             'lastName' => 'Stoltenberg',
