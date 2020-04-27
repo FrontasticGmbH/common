@@ -26,6 +26,9 @@ class CachingContentApi implements ContentApi
      */
     private $cacheTtl;
 
+    /**
+     * Warning - configuring the cacheTtl is considered experimental and subject to change.
+     */
     public function __construct(ContentApi $aggregate, CacheInterface $cache, int $cacheTtlSec = 600)
     {
         $this->aggregate = $aggregate;
