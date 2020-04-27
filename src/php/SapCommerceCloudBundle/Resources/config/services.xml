@@ -13,9 +13,7 @@
         </service>
 
         <service id="Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\DefaultSapLocaleCreatorFactory">
-            <argument type="service">
-                <service class="Doctrine\Common\Cache\ApcuCache" />
-            </argument>
+            <argument type="service" id="cache.app.simple" />
             <tag name="frontastic.common.api_integration"/>
         </service>
 
