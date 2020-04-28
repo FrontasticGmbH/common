@@ -1633,7 +1633,42 @@
       "lineItemMode": "Standard"
     }
   ],
-  "customLineItems": [],
+  "customLineItems": [
+      {
+          "id": "de74bc5c-9995-4a95-99d0-b6ba01769d85",
+          "name": {
+              "de": "ray-ban sonnenbrillen herren"
+          },
+          "custom": {
+              "type": {
+                  "typeId": "type",
+                  "id": "a44b7319-1423-41fd-a16b-17d5bdd842f5"
+              },
+              "fields": {
+                  "sonnewow": true,
+                  "iwearwow": false,
+                  "bundleNumber": 2,
+                  "sunglasses_50_campaign": false,
+                  "sunglasses_campaign": false,
+                  "processingType": "HW",
+                  "backendOrderId": 1
+              }
+          },
+          "quantity": 1,
+          "money": {
+              "type": "centPrecision",
+              "currencyCode": "EUR",
+              "centAmount": 5000,
+              "fractionDigits": 2
+          },
+          "totalPrice": {
+              "type": "centPrecision",
+              "currencyCode": "EUR",
+              "centAmount": 22000,
+              "fractionDigits": 2
+          }
+      }
+  ],
   "transactionFee": true,
   "discountCodes": [],
   "cart": {
