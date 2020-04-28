@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\SapCommerceCloudBundle\Domain;
 
+use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\ProductApiBundle\Domain\Category;
@@ -42,7 +43,7 @@ class SapDataMapper
                     'groupId' => $code,
                     'price' => $this->mapDataToPriceValue($data['price']),
                     'currency' => $data['price']['currencyIso'],
-                    'images' => $this->mapDataToImages($data['images']  ?? []),
+                    'images' => $this->mapDataToImages($data['images'] ?? []),
                 ]),
             ],
         ]);
@@ -108,12 +109,23 @@ class SapDataMapper
                             'groupId' => $code,
                             'price' => $this->mapDataToPriceValue($lineItemData['basePrice']),
                             'currency' => $lineItemData['basePrice']['currencyIso'],
-                            'images' => $this->mapDataToImages($product['images']  ?? []),
+                            'images' => $this->mapDataToImages($product['images'] ?? []),
                         ]),
                     ]);
                 },
                 $data['entries'] ?? []
             ),
+        ]);
+    }
+
+    public function mapDataToAccount(array $data): Account
+    {
+        return new Account([
+            'accountId' => $data['uid'],
+            'email' => $data['displayUid'],
+            'salutation' => $data['title'],
+            'firstName' => $data['firstName'],
+            'lastName' => $data['lastName'],
         ]);
     }
 

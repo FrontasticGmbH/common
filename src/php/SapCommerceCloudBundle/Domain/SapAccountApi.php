@@ -38,7 +38,24 @@ class SapAccountApi implements AccountApi
 
     public function create(Account $account, ?Cart $cart = null): Account
     {
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        return $this->client
+            ->post(
+                '/rest/v2/{siteId}/users',
+                [
+                    'uid' => $account->email,
+                    'titleCode' => 'mrs',
+                    'firstName' => $account->firstName,
+                    'lastName' => $account->lastName,
+                    'password' => $account->getPassword(),
+                ],
+                [
+                    'fields' => 'FULL',
+                ]
+            )
+            ->then(function (array $accountData): Account {
+                return $this->dataMapper->mapDataToAccount($accountData);
+            })
+            ->wait();
     }
 
     public function update(Account $account): Account

@@ -52,7 +52,9 @@ class AccountAuthController extends Controller
             $this->get('frontastic.catwalk.cart_api')->getAnonymous(session_id(), $context->locale)
         );
 
-        $this->getAccountService()->sendConfirmationMail($account);
+        if ($account->confirmationToken !== null) {
+            $this->getAccountService()->sendConfirmationMail($account);
+        }
 
         return $this->loginAccount($account, $request);
     }

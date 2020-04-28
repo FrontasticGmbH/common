@@ -26,7 +26,7 @@ class AccountCreationTest extends FrontasticApiTestCase
         $this->assertSameAccountData($accountData, $createdAccount);
         $this->assertFalse($createdAccount->confirmed);
 
-        if ($this->hasProjectFeature($project, 'canConfirmAccountWithConfirmationToken')) {
+        if ($createdAccount->confirmationToken !== null) {
             $this->assertNotEmptyString($createdAccount->confirmationToken);
             $this->assertNotNull($createdAccount->tokenValidUntil);
             $this->assertGreaterThan(new DateTimeImmutable('+10 minutes'), $createdAccount->tokenValidUntil);
@@ -43,7 +43,7 @@ class AccountCreationTest extends FrontasticApiTestCase
         $this->assertSame($createdAccount->accountId, $fetchedAccount->accountId);
         $this->assertSameAccountData($accountData, $fetchedAccount);
 
-        if ($this->hasProjectFeature($project, 'canConfirmAccountWithConfirmationToken')) {
+        if ($createdAccount->confirmationToken !== null) {
             $this->assertFalse($fetchedAccount->confirmed);
             // confirm the email address
             $confirmedAccount = $accountApi->confirmEmail($createdAccount->confirmationToken);
@@ -62,7 +62,7 @@ class AccountCreationTest extends FrontasticApiTestCase
     private function getTestAccountData(): Account
     {
         $account = new Account([
-            'email' => 'integration-tests-not-exists+account-' . uniqid('', true) . '@frontastic.cloud',
+            'email' => 'integration-tests-not-exists+account-' . uniqid('', true) . '@frontastic.com',
             'salutation' => 'Frau',
             'firstName' => 'Ashley',
             'lastName' => 'Stoltenberg',
@@ -78,11 +78,11 @@ class AccountCreationTest extends FrontasticApiTestCase
                     'postalCode' => '123456',
                     'city' => 'Berlin',
                     'country' => 'Germany',
-                    'phone' => '+49 12 1234 12234'
-                ])
-            ]
+                    'phone' => '+49 12 1234 12234',
+                ]),
+            ],
         ]);
-        $account->setPassword('cHAaL4Pd4yCcwLR');
+        $account->setPassword('cHAaL4Pd.4yCcwLR');
         return $account;
     }
 
@@ -106,8 +106,8 @@ class AccountCreationTest extends FrontasticApiTestCase
         $this->assertSame($expected->salutation, $actual->salutation);
         $this->assertSame($expected->firstName, $actual->firstName);
         $this->assertSame($expected->lastName, $actual->lastName);
-//        $this->assertSame($expected->streetName, $actual->streetName);
-//        $this->assertSame($expected->streetNumber, $actual->streetNumber);
+        //$this->assertSame($expected->streetName, $actual->streetName);
+        //$this->assertSame($expected->streetNumber, $actual->streetNumber);
         $this->assertSame($expected->city, $actual->city);
         $this->assertSame($expected->postalCode, $actual->postalCode);
         $this->assertSame($expected->phone, $actual->phone);
