@@ -56,8 +56,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
 
     public function confirmEmail(string $token): Account
     {
-        // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
-        throw new RuntimeException('Not implemented');
+        throw new RuntimeException('Email confirmation is not supported by the Shopware account API.');
     }
 
     public function create(Account $account, ?Cart $cart = null): Account

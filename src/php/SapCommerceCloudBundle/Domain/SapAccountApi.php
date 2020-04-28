@@ -43,7 +43,7 @@ class SapAccountApi implements AccountApi
 
     public function confirmEmail(string $token): Account
     {
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        throw new \RuntimeException('Email confirmation is not supported by the SAP commerce cloud account API.');
     }
 
     public function create(Account $account, ?Cart $cart = null): Account
