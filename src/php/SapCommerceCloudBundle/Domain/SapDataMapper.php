@@ -126,6 +126,7 @@ class SapDataMapper
             'salutation' => $data['title'],
             'firstName' => $data['firstName'],
             'lastName' => $data['lastName'],
+            'confirmed' => true,
         ]);
     }
 

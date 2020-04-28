@@ -2,7 +2,6 @@
 
 namespace Frontastic\Common\ApiTests\AccountApi;
 
-use DateTimeImmutable;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\ApiTests\FrontasticApiTestCase;
@@ -23,14 +22,24 @@ class AccountCreationTest extends FrontasticApiTestCase
 
         $this->assertNotEmptyString($createdAccount->accountId);
         $this->assertSameAccountData($accountData, $createdAccount);
-        $this->assertFalse($createdAccount->confirmed);
 
+        // confirm account
         if ($createdAccount->confirmationToken !== null) {
             $this->assertNotEmptyString($createdAccount->confirmationToken);
-            $this->assertNotNull($createdAccount->tokenValidUntil);
-            $this->assertGreaterThan(new DateTimeImmutable('+10 minutes'), $createdAccount->tokenValidUntil);
+            $this->assertInstanceOf(\DateTimeInterface::class, $createdAccount->tokenValidUntil);
+            $this->assertGreaterThan(new \DateTimeImmutable('+10 minutes'), $createdAccount->tokenValidUntil);
+            $this->assertFalse($createdAccount->confirmed);
+
+            // confirm the email address
+            $confirmedAccount = $accountApi->confirmEmail($createdAccount->confirmationToken);
+            $this->assertSame($createdAccount->accountId, $confirmedAccount->accountId);
+            $this->assertSameAccountData($accountData, $confirmedAccount);
+            $this->assertTrue($confirmedAccount->confirmed);
+        } else {
+            $this->assertTrue($createdAccount->confirmed);
         }
 
+        // fetch the just created and confirmed account
         if ($this->hasProjectFeature($project, 'canAuthenticateWithToken')) {
             $this->assertTrue($accountApi->login($accountData));
             $fetchedAccount = $accountApi->get($accountData->getToken($project->configuration['test']->authTokenType));
@@ -38,24 +47,9 @@ class AccountCreationTest extends FrontasticApiTestCase
             $fetchedAccount = $accountApi->get($accountData->email);
         }
 
-        // fetch the just created account
         $this->assertSame($createdAccount->accountId, $fetchedAccount->accountId);
         $this->assertSameAccountData($accountData, $fetchedAccount);
-
-        if ($createdAccount->confirmationToken !== null) {
-            $this->assertFalse($fetchedAccount->confirmed);
-            // confirm the email address
-            $confirmedAccount = $accountApi->confirmEmail($createdAccount->confirmationToken);
-            $this->assertSame($createdAccount->accountId, $confirmedAccount->accountId);
-            $this->assertSameAccountData($accountData, $confirmedAccount);
-            $this->assertTrue($confirmedAccount->confirmed);
-
-            // fetch the confirmed account
-            $fetchedVerifiedAccount = $accountApi->get($accountData->email);
-            $this->assertSame($createdAccount->accountId, $fetchedVerifiedAccount->accountId);
-            $this->assertSameAccountData($accountData, $fetchedVerifiedAccount);
-            $this->assertTrue($fetchedVerifiedAccount->confirmed);
-        }
+        $this->assertTrue($fetchedAccount->confirmed);
     }
 
     private function getTestAccountData(): Account
@@ -65,7 +59,7 @@ class AccountCreationTest extends FrontasticApiTestCase
             'salutation' => 'Frau',
             'firstName' => 'Ashley',
             'lastName' => 'Stoltenberg',
-            'birthday' => new DateTimeImmutable('1961-11-6'),
+            'birthday' => new \DateTimeImmutable('1961-11-6'),
             'confirmed' => false,
             'addresses' => [
                 new Address([
