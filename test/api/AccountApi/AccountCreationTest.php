@@ -3,7 +3,6 @@
 namespace Frontastic\Common\ApiTests\AccountApi;
 
 use DateTimeImmutable;
-use DateTimeZone;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\ApiTests\FrontasticApiTestCase;
@@ -66,7 +65,7 @@ class AccountCreationTest extends FrontasticApiTestCase
             'salutation' => 'Frau',
             'firstName' => 'Ashley',
             'lastName' => 'Stoltenberg',
-            'birthday' => new DateTimeImmutable('1961-11-6', new DateTimeZone('UTC')),
+            'birthday' => new DateTimeImmutable('1961-11-6'),
             'confirmed' => false,
             'addresses' => [
                 new Address([
@@ -93,7 +92,7 @@ class AccountCreationTest extends FrontasticApiTestCase
         $this->assertSame($expected->salutation, $actual->salutation);
         $this->assertSame($expected->firstName, $actual->firstName);
         $this->assertSame($expected->lastName, $actual->lastName);
-        $this->assertEquals($expected->birthday, $actual->birthday);
+        $this->assertSameDate($expected->birthday, $actual->birthday);
         $this->assertEquals($expected->data, $actual->data);
         $this->assertEquals($expected->groups, $actual->groups);
 
@@ -112,5 +111,12 @@ class AccountCreationTest extends FrontasticApiTestCase
         $this->assertSame($expected->postalCode, $actual->postalCode);
         $this->assertSame($expected->phone, $actual->phone);
         $this->assertSame($expected->country, $actual->country);
+    }
+
+    private function assertSameDate(\DateTimeInterface $expected, $actual): void
+    {
+        $this->assertInstanceOf(\DateTimeInterface::class, $actual);
+        $formatString = 'Y-m-d';
+        $this->assertSame($expected->format($formatString), $actual->format($formatString));
     }
 }
