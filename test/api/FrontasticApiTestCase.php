@@ -120,15 +120,24 @@ class FrontasticApiTestCase extends KernelTestCase
         $this->assertEquals($project->languages, array_keys($label));
     }
 
-    protected function assertProductVariantIsWellFormed(Variant $variant): void
+    protected function assertProductVariantIsWellFormed(Variant $variant, bool $priceIsRequired = true): void
     {
         $this->assertNotEmptyString($variant->id);
         $this->assertNotEmptyString($variant->sku);
 
         $this->assertNotEmptyString($variant->groupId);
 
-        $this->assertInternalType('integer', $variant->price);
-        $this->assertGreaterThanOrEqual(0, $variant->price);
+        if ($priceIsRequired) {
+            $this->assertNotNull($variant->price);
+        }
+        if ($variant->price !== null) {
+            $this->assertInternalType('integer', $variant->price);
+            $this->assertGreaterThanOrEqual(0, $variant->price);
+            $this->assertNotEmptyString($variant->currency);
+        } else {
+            $this->assertNull($variant->discountedPrice);
+            $this->assertNull($variant->currency);
+        }
 
         if ($variant->discountedPrice !== null) {
             $this->assertInternalType('integer', $variant->discountedPrice);
@@ -137,8 +146,6 @@ class FrontasticApiTestCase extends KernelTestCase
         }
 
         $this->assertInternalType('array', $variant->discounts);
-
-        $this->assertNotEmptyString($variant->currency);
 
         $this->assertInternalType('array', $variant->attributes);
 
