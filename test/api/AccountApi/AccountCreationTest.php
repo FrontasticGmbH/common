@@ -96,12 +96,15 @@ class AccountCreationTest extends FrontasticApiTestCase
         $this->assertEquals($expected->data, $actual->data);
         $this->assertEquals($expected->groups, $actual->groups);
 
-        $this->assertSameAccountAddressData($expected->addresses[0], $expected->addresses[0]);
+        if (count($actual->addresses) > 0) {
+            $this->assertCount(count($expected->addresses), $actual->addresses);
+            $this->assertSameAccountAddressData($expected->addresses[0], $expected->addresses[0]);
+        }
     }
 
     private function assertSameAccountAddressData(Address $expected, Address $actual): void
     {
-        $this->assertNotEmpty($actual->addressId);
+        $this->assertNotEmptyString($actual->addressId);
         $this->assertSame($expected->salutation, $actual->salutation);
         $this->assertSame($expected->firstName, $actual->firstName);
         $this->assertSame($expected->lastName, $actual->lastName);
