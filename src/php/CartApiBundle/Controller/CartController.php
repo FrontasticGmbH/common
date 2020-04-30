@@ -89,7 +89,8 @@ class CartController extends CrudController
                 $cart,
                 new LineItem\Variant([
                     'variant' => new Variant([
-                        'sku' => $lineItemData['variant']['sku'],
+                        'id' => $lineItemData['variant']['id'] ?? null,
+                        'sku' => $lineItemData['variant']['sku'] ?? null,
                         'attributes' => $lineItemData['variant']['attributes'],
                     ]),
                     'custom' => $lineItemData['option'] ?? [],
