@@ -18,6 +18,8 @@ interface ShopwareProjectConfigApiInterface
      */
     public function getCountryByCriteria(string $criteria): ?ShopwareCountry;
 
+    public function getCurrency(string $currencyId): ?ShopwareCurrency;
+
     /**
      * @return \Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwarePaymentMethod[]
      */

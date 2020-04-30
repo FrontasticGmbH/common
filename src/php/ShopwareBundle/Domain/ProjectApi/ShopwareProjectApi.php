@@ -24,11 +24,11 @@ class ShopwareProjectApi extends AbstractShopwareApi implements ProjectApi
 
     public function __construct(
         ClientInterface $client,
-        LocaleCreator $localeCreator,
         DataMapperResolver $mapperResolver,
+        LocaleCreator $localeCreator,
         array $projectLanguages
     ) {
-        parent::__construct($client, $localeCreator, $mapperResolver);
+        parent::__construct($client, $mapperResolver, $localeCreator);
 
         $this->projectLanguages = $projectLanguages;
     }
@@ -187,7 +187,7 @@ class ShopwareProjectApi extends AbstractShopwareApi implements ProjectApi
     {
         $languagesToFetch = [];
         foreach ($this->projectLanguages as $language) {
-            $locale = $this->localeCreator->createLocaleFromString($language);
+            $locale = $this->parseLocaleString($language);
 
             $languagesToFetch[$locale->languageId] = $language;
         }

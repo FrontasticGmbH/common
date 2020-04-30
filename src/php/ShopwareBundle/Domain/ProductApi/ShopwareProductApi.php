@@ -33,8 +33,8 @@ class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
 
     public function __construct(
         ClientInterface $client,
-        LocaleCreator $localeCreator,
         DataMapperResolver $mapperResolver,
+        LocaleCreator $localeCreator,
         EnabledFacetService $enabledFacetService
     ) {
         parent::__construct($client, $mapperResolver, $localeCreator);
@@ -48,7 +48,7 @@ class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
 
         $criteria = SearchCriteriaBuilder::buildFromCategoryQuery($query);
 
-        $locale = $this->localeCreator->createLocaleFromString($query->locale);
+        $locale = $this->parseLocaleString($query->locale);
 
         return $this->client
             ->forLanguage($locale->languageId)
@@ -73,7 +73,7 @@ class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
 
         $criteria = SearchCriteriaBuilder::buildFromSimpleProductQuery($query);
 
-        $locale = $this->localeCreator->createLocaleFromString($query->locale);
+        $locale = $this->parseLocaleString($query->locale);
 
         $promise = $this->client
             ->forCurrency($locale->currencyId)
@@ -101,7 +101,7 @@ class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
 
         $criteria = SearchCriteriaBuilder::buildFromProductQuery($query);
 
-        $locale = $this->localeCreator->createLocaleFromString($query->locale);
+        $locale = $this->parseLocaleString($query->locale);
 
         $promise = $this->client
             ->forCurrency($locale->currencyId)

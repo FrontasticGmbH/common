@@ -5,6 +5,7 @@ namespace Frontastic\Common\ShopwareBundle\Domain;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
+use Frontastic\Common\ShopwareBundle\Domain\Locale\ShopwareLocale;
 
 abstract class AbstractShopwareApi
 {
@@ -26,14 +27,29 @@ abstract class AbstractShopwareApi
      */
     protected $mapperResolver;
 
+    /**
+     * @var \Frontastic\Common\ShopwareBundle\Domain\Locale\ShopwareLocale
+     */
+    protected $locale;
+
+    /**
+     * @var string
+     */
+    private $defaultLanguage;
+
     public function __construct(
         ClientInterface $client,
         DataMapperResolver $mapperResolver,
-        LocaleCreator $localeCreator = null
+        ?LocaleCreator $localeCreator = null
     ) {
         $this->client = $client;
         $this->mapperResolver = $mapperResolver;
         $this->localeCreator = $localeCreator;
+    }
+
+    public function setDefaultLanguage(string $defaultLanguage): void
+    {
+        $this->defaultLanguage = $defaultLanguage;
     }
 
     protected function configureMapper(DataMapperInterface $mapper): void
@@ -56,5 +72,14 @@ abstract class AbstractShopwareApi
         $this->configureMapper($mapper);
 
         return $mapper->map($requestData);
+    }
+
+    protected function parseLocaleString(?string $localeString): ShopwareLocale
+    {
+        $localeString = $localeString ?? $this->defaultLanguage;
+
+        $this->locale = $this->localeCreator->createLocaleFromString($localeString);
+
+        return $this->locale;
     }
 }

@@ -90,8 +90,8 @@ class DefaultProductApiFactory implements ProductApiFactory
 
                 $productApi = new ShopwareProductApi(
                     $client,
-                    $localeCreatorFactory->factor($project, $client),
                     $dataMapper,
+                    $localeCreatorFactory->factor($project, $client),
                     $this->enabledFacetService
                 );
                 break;
@@ -100,6 +100,10 @@ class DefaultProductApiFactory implements ProductApiFactory
                     "No product API configured for project {$project->name}. " .
                     "Check the provisioned customer configuration in app/config/customers/."
                 );
+        }
+
+        if (method_exists($productApi, 'setDefaultLanguage')) {
+            $productApi->setDefaultLanguage($project->defaultLanguage);
         }
 
         return new ProductApi\LifecycleEventDecorator($productApi, $this->decorators);

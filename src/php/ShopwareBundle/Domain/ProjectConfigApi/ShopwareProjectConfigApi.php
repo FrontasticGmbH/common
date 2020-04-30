@@ -6,6 +6,7 @@ use Frontastic\Common\ShopwareBundle\Domain\AbstractShopwareApi;
 use Frontastic\Common\ShopwareBundle\Domain\Exception\MapperNotFoundException;
 use Frontastic\Common\ShopwareBundle\Domain\Exception\ResourceNotFoundException;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper\CountryMapper;
+use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper\CurrenciesMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper\PaymentMethodsMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper\SalutationsMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper\ShippingMethodsMapper;
@@ -38,6 +39,22 @@ class ShopwareProjectConfigApi extends AbstractShopwareApi implements ShopwarePr
         } catch (ResourceNotFoundException $exception) {
             return null;
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCurrency(string $currencyId): ?ShopwareCurrency
+    {
+        $parameters = [
+            'filter[id]' => $currencyId,
+        ];
+
+        return $this->client
+            ->get('/currency', $parameters)
+            ->then(function ($response) {
+                return $this->mapResponse($response, CurrenciesMapper::MAPPER_NAME)[0] ?? null;
+            })->wait();
     }
 
     /**

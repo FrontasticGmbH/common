@@ -59,6 +59,21 @@ class CachedShopwareProjectConfigApi implements ShopwareProjectConfigApiInterfac
     /**
      * @inheritDoc
      */
+    public function getCurrency(string $currencyId): ?ShopwareCurrency
+    {
+        $cacheKey = $this->buildCacheKey(__FUNCTION__, $currencyId ?? '_empty_');
+
+        if ($this->debug || false === ($result = $this->cache->get($cacheKey, false))) {
+            $result = $this->aggregate->getCurrency($currencyId);
+            $this->cache->set($cacheKey, $result, $this->cacheTtl);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getPaymentMethods(): array
     {
         $cacheKey = $this->buildCacheKey(__FUNCTION__);
