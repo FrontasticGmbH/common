@@ -4,7 +4,7 @@ namespace Frontastic\Common\ShopwareBundle\Controller;
 
 use DateTimeImmutable;
 use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
-use Frontastic\Common\AccountApiBundle\Controller\AccountAuthController;
+use Frontastic\Common\AccountApiBundle\Controller\AccountAuthController as FrontasticAccountAuthController;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class ShopwareAccountAuthController extends AccountAuthController
+class AccountAuthController extends FrontasticAccountAuthController
 {
     public function loginAction(Request $request, UserInterface $account = null): JsonResponse
     {

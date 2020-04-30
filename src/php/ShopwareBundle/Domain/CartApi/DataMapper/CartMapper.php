@@ -7,10 +7,18 @@ use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\AddressMapper;
+use Frontastic\Common\ShopwareBundle\Domain\CartApi\ShopwareCartApi;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperTrait;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperTrait;
 
-class CartMapper extends AbstractDataMapper
+class CartMapper extends AbstractDataMapper implements LocaleAwareDataMapperInterface, ProjectConfigApiAwareDataMapperInterface
 {
+    use LocaleAwareDataMapperTrait;
+    use ProjectConfigApiAwareDataMapperTrait;
+
     public const MAPPER_NAME = 'cart';
 
     /**
@@ -39,8 +47,7 @@ class CartMapper extends AbstractDataMapper
             'cartId' => (string)$cartData['token'],
             'cartVersion' => (string)$cartData['name'],
             'sum' => $this->convertPriceToCent($cartData['price']['totalPrice']),
-            // @TODO: pass ShopwareLocale and take currencyId and resolve it to Frontastic currency
-            'currency' => null,// $cartData['totalPrice']['currencyIso'],
+            'currency' => $this->resolveCurrencyCodeFromLocale(),
             'lineItems' => $this->mapDataToLineItems($cartData['lineItems'] ?? []),
             'shippingAddress' => empty($locationData) ? null : $this->addressMapper->map($locationData),
             'shippingMethod' => empty($shippingMethodData) ? null : $this->mapDataToShippingMethod($shippingMethodData)
@@ -57,25 +64,43 @@ class CartMapper extends AbstractDataMapper
     {
         $result = [];
         foreach ($lineItemData as $lineItem) {
-            $result[] = new LineItem\Variant([
-                'lineItemId' => (string)$lineItem['id'],
-                'name' => $lineItem['label'],
-                'count' => $lineItem['quantity'],
-                'price' => $this->convertPriceToCent($lineItem['price']['unitPrice']),
-                'totalPrice' => $this->convertPriceToCent($lineItem['price']['totalPrice']),
-                'variant' => new Variant([
-                    'id' => $lineItem['referencedId'],
-                    'sku' => $lineItem['referencedId'],
-                    'images' => [
-                        $lineItem['cover']['url'],
-                    ],
-                    'attributes' => array_map(static function ($option) {
-                        return [$option['group'] => $option['option']];
-                    }, $lineItem['payload']['options'])
-                ]),
-                // @TODO: pass ShopwareLocale and take currencyId and resolve it to Frontastic currency
-                'currency' => null,
-            ]);
+            switch ($lineItem['type']) {
+                case ShopwareCartApi::LINE_ITEM_TYPE_PRODUCT:
+                    $lineItem = new LineItem\Variant([
+                        'lineItemId' => (string)$lineItem['id'],
+                        'name' => $lineItem['label'],
+                        'count' => $lineItem['quantity'],
+                        'price' => $this->convertPriceToCent($lineItem['price']['unitPrice']),
+                        'totalPrice' => $this->convertPriceToCent($lineItem['price']['totalPrice']),
+                        'variant' => new Variant([
+                            'id' => $lineItem['referencedId'],
+                            'sku' => $lineItem['referencedId'],
+                            'images' => [
+                                $lineItem['cover']['url'],
+                            ],
+                            'attributes' => array_map(static function ($option) {
+                                return [$option['group'] => $option['option']];
+                            }, $lineItem['payload']['options'])
+                        ]),
+                    ]);
+                    break;
+                case ShopwareCartApi::LINE_ITEM_TYPE_PROMOTION:
+                default:
+                    $lineItem = new LineItem([
+                        'lineItemId' => (string)$lineItem['id'],
+                        'type' => $lineItem['type'],
+                        'name' => $lineItem['label'],
+                        'count' => $lineItem['quantity'],
+                        'price' => $this->convertPriceToCent($lineItem['price']['unitPrice']),
+                        'totalPrice' => $this->convertPriceToCent($lineItem['price']['totalPrice']),
+                    ]);
+                    break;
+            }
+
+            $lineItem->currency = $this->resolveCurrencyCodeFromLocale();
+            $lineItem->dangerousInnerItem = $lineItem;
+
+            $result[] = $lineItem;
         }
 
         return $result;
@@ -96,5 +121,12 @@ class CartMapper extends AbstractDataMapper
             'name' => $shippingMethodData['name'] ?? null,
             'price' => $this->convertPriceToCent($shippingMethodData['prices'][0]['price'] ?? 0),
         ]);
+    }
+
+    private function resolveCurrencyCodeFromLocale(): ?string
+    {
+        $shopwareCurrency = $this->projectConfigApi->getCurrency($this->getLocale()->currencyId);
+
+        return $shopwareCurrency ? $shopwareCurrency->isoCode : null;
     }
 }

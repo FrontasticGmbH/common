@@ -12,14 +12,23 @@ use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\ShopwareBundle\Domain\AbstractShopwareApi;
 use Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper\CartItemRequestDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper\CartMapper;
+use Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper\OrderMapper;
 use Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper\OrdersMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
+use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
+use function GuzzleHttp\Promise\promise_for;
 
 class ShopwareCartApi extends AbstractShopwareApi implements CartApi
 {
     public const LINE_ITEM_TYPE_CREDIT = 'credit';
     public const LINE_ITEM_TYPE_CUSTOM = 'custom';
     public const LINE_ITEM_TYPE_PRODUCT = 'product';
+    public const LINE_ITEM_TYPE_PROMOTION = 'promotion';
 
     private const CART_NAME_GUEST = 'frontastic-guest';
     private const CART_NAME_DEFAULT = 'frontastic-default';
@@ -32,6 +41,22 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
      */
     private $currentTransaction;
 
+    /**
+     * @var \Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiInterface
+     */
+    private $projectConfigApi;
+
+    public function __construct(
+        ClientInterface $client,
+        DataMapperResolver $mapperResolver,
+        LocaleCreator $localeCreator,
+        ShopwareProjectConfigApiFactory $projectConfigApiFactory
+    ) {
+        parent::__construct($client, $mapperResolver, $localeCreator);
+
+        $this->projectConfigApi = $projectConfigApiFactory->factor($client);
+    }
+
     public function getForUser(Account $account, string $locale): Cart
     {
         // When user is authenticated, his cart can be retrieved by using his context token
@@ -40,7 +65,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
 
     public function getAnonymous(string $anonymousId, string $locale): Cart
     {
-        $shopwareLocale = $this->localeCreator->createLocaleFromString($locale);
+        $shopwareLocale = $this->parseLocaleString($locale);
 
         $requestData = [
             'name' => self::CART_NAME_GUEST,
@@ -55,14 +80,14 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
             ->then(static function ($response) {
                 return $response[self::KEY_CONTEXT_TOKEN];
             })->then(function ($token) use ($locale) {
-                $this->getById($token, $locale);
+                return $this->getById($token, $locale);
             })
             ->wait();
     }
 
     public function getById(string $token, string $locale = null): Cart
     {
-        $shopwareLocale = $this->localeCreator->createLocaleFromString($locale);
+        $shopwareLocale = $this->parseLocaleString($locale);
 
         return $this->client
             ->forCurrency($shopwareLocale->currencyId)
@@ -101,7 +126,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
 
     public function addToCart(Cart $cart, LineItem $lineItem, string $locale = null): Cart
     {
-        $shopwareLocale = $this->localeCreator->createLocaleFromString($locale);
+        $shopwareLocale = $this->parseLocaleString($locale);
 
         $requestData = $this->mapRequestData($lineItem, CartItemRequestDataMapper::MAPPER_NAME);
         $id = $requestData['referencedId'];
@@ -128,7 +153,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
         ?array $custom = null,
         string $locale = null
     ): Cart {
-        $shopwareLocale = $this->localeCreator->createLocaleFromString($locale);
+        $shopwareLocale = $this->parseLocaleString($locale);
 
         $requestData = $this->mapRequestData($lineItem, CartItemRequestDataMapper::MAPPER_NAME);
         $id = $requestData['referencedId'];
@@ -150,7 +175,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
 
     public function removeLineItem(Cart $cart, LineItem $lineItem, string $locale = null): Cart
     {
-        $shopwareLocale = $this->localeCreator->createLocaleFromString($locale);
+        $shopwareLocale = $this->parseLocaleString($locale);
 
         return $this->client
             ->forCurrency($shopwareLocale->currencyId)
@@ -165,6 +190,11 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
                 return $this->mapResponse($response, CartMapper::MAPPER_NAME);
             })
             ->wait();
+    }
+
+    public function setAccount(Cart $cart, Account $account): Cart
+    {
+        return $cart;
     }
 
     public function setEmail(Cart $cart, string $email, string $locale = null): Cart
@@ -184,11 +214,13 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
 
     public function setShippingAddress(Cart $cart, Address $address, string $locale = null): Cart
     {
+        // @TODO: call setDefaultShippingAddress from account api?
         return $cart;
     }
 
     public function setBillingAddress(Cart $cart, Address $address, string $locale = null): Cart
     {
+        // @TODO: call setDefaultBillingAddress from account api?
         return $cart;
     }
 
@@ -199,22 +231,72 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
 
     public function redeemDiscountCode(Cart $cart, string $code, string $locale = null): Cart
     {
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        $shopwareLocale = $this->parseLocaleString($locale);
+
+        return $this->client
+            ->forCurrency($shopwareLocale->currencyId)
+            ->forLanguage($shopwareLocale->languageId)
+            ->withContextToken($cart->cartId)
+            ->post("/checkout/cart/code/{$code}")
+            ->then(function ($response) {
+                if (isset($response['data']['errors']) && !empty($response['data']['errors'])) {
+                    $this->respondWithError($response['data']['errors']);
+                }
+
+                return $this->mapResponse($response, CartMapper::MAPPER_NAME);
+            })
+            ->wait();
     }
 
-    public function removeDiscountCode(Cart $cart, string $discountId, string $locale = null): Cart
+    public function removeDiscountCode(Cart $cart, LineItem $discountLineItem, string $locale = null): Cart
     {
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        return $this->removeLineItem($cart, $discountLineItem, $locale);
     }
 
-    public function order(Cart $cart): Order
+    public function order(Cart $cart, string $locale = null): Order
     {
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        $shopwareLocale = $this->parseLocaleString($locale);
+
+        return $this->client
+            ->forCurrency($shopwareLocale->currencyId)
+            ->forLanguage($shopwareLocale->languageId)
+            ->withContextToken($cart->cartId)
+            ->post('/checkout/order')
+            ->then(function ($orderResponse) {
+                return $this->mapResponse($orderResponse, OrderMapper::MAPPER_NAME);
+            })
+            // Make the payment, this is a separate request in Shopware6
+            ->then(function (Order $order) use ($shopwareLocale) {
+                $paymentResponse = $this->client
+                    ->forCurrency($shopwareLocale->currencyId)
+                    ->forLanguage($shopwareLocale->languageId)
+                    ->withContextToken($order->cartId)
+                    ->post("/checkout/order/{$order->cartId}/pay")
+                    ->wait();
+
+                return [$order, $paymentResponse];
+            })
+            ->then(function ($response) use ($cart) {
+                [$order, $paymentResponse] = $response;
+
+                // Fetch order again with latest data
+                return $this->getOrder($order->cartId, [
+                    'token' => $cart->cartId
+                ]);
+            })
+            ->wait();
     }
 
-    public function getOrder(string $orderId): Order
+    public function getOrder(string $orderId, array $parameters = []): Order
     {
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        if (!isset($parameters['token'])) {
+            throw new \RuntimeException(__METHOD__ . ' can not be used without token');
+        }
+
+        return $this->getOrders(
+            new Account(['authTokens' => [self::TOKEN_TYPE => $parameters['token']]]), [
+            'orderId' => $orderId
+        ])[0];
     }
 
     public function getOrders(Account $account, array $parameters = []): array
@@ -224,9 +306,13 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
             'page' => $parameters['page'] ?? self::DEFAULT_ORDER_PAGE,
         ];
 
+        if (isset($parameters['orderId'])) {
+            $parameters['filter[id]'] = $parameters['orderId'];
+        }
+
         return $this->client
             ->withContextToken($account->getToken(self::TOKEN_TYPE))
-            ->get('/customer/order', $requestParameters)
+            ->get('/customer/order?associations[lineItems][]', $requestParameters)
             ->then(function ($response) {
                 return $this->mapResponse($response, OrdersMapper::MAPPER_NAME);
             })
@@ -240,7 +326,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
 
     public function commit(string $locale = null): Cart
     {
-        if (null !== $token = $this->currentTransaction) {
+        if (null === $token = $this->currentTransaction) {
             throw new \RuntimeException('No transaction currently in progress');
         }
 
@@ -252,6 +338,17 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
     public function getDangerousInnerClient(): ClientInterface
     {
         return $this->client;
+    }
+
+    protected function configureMapper(DataMapperInterface $mapper): void
+    {
+        if ($mapper instanceof ProjectConfigApiAwareDataMapperInterface) {
+            $mapper->setProjectConfigApi($this->projectConfigApi);
+        }
+
+        if ($mapper instanceof LocaleAwareDataMapperInterface) {
+            $mapper->setLocale($this->locale);
+        }
     }
 
     private function respondWithError(array $errors)

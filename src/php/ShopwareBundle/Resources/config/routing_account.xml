@@ -6,31 +6,31 @@
 
     <route id="Frontastic.AccountApi.Api.login" path="/login" methods="POST">
         <default key="_controller">
-            Frontastic\Common\ShopwareBundle\Controller\ShopwareAccountAuthController::loginAction
+            Frontastic\Common\ShopwareBundle\Controller\AccountAuthController::loginAction
         </default>
     </route>
 
     <route id="Frontastic.AccountApi.Api.requestReset" path="/request" methods="POST">
         <default key="_controller">
-            Frontastic\Common\ShopwareBundle\Controller\ShopwareAccountAuthController::requestResetAction
+            Frontastic\Common\ShopwareBundle\Controller\AccountAuthController::requestResetAction
         </default>
     </route>
 
     <route id="Frontastic.AccountApi.Api.register" path="/register" methods="POST">
         <default key="_controller">
-            Frontastic\Common\ShopwareBundle\Controller\ShopwareAccountAuthController::registerAction
+            Frontastic\Common\ShopwareBundle\Controller\AccountAuthController::registerAction
         </default>
     </route>
 
     <route id="Frontastic.AccountApi.Api.changePassword" path="/password" methods="POST">
         <default key="_controller">
-            Frontastic\Common\ShopwareBundle\Controller\ShopwareAccountAuthController::changePasswordAction
+            Frontastic\Common\ShopwareBundle\Controller\AccountAuthController::changePasswordAction
         </default>
     </route>
 
     <route id="Frontastic.AccountApi.Api.update" path="/update" methods="POST">
         <default key="_controller">
-            Frontastic\Common\ShopwareBundle\Controller\ShopwareAccountAuthController::updateAction
+            Frontastic\Common\ShopwareBundle\Controller\AccountAuthController::updateAction
         </default>
     </route>
 </routes>

@@ -4,7 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <import resource="routing_account.xml" prefix="/api/account"/>
-
-    <import resource="routing_cart.xml" prefix="/api/cart"/>
+    <route id="Frontastic.CartApi.Cart.checkout" path="/cart/checkout" methods="POST">
+        <default key="_controller">Frontastic\Common\ShopwareBundle\Controller\CartController::checkoutAction</default>
+    </route>
 </routes>
