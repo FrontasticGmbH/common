@@ -56,8 +56,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
 
     public function confirmEmail(string $token): Account
     {
-        // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
-        throw new RuntimeException('Not implemented');
+        throw new RuntimeException('Email confirmation is not supported by the Shopware account API.');
     }
 
     public function create(Account $account, ?Cart $cart = null): Account
@@ -98,7 +97,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         $requestData = [
             'password' => $oldPassword,
             'newPassword' => $newPassword,
-            'newPasswordConfirm' => $newPassword
+            'newPasswordConfirm' => $newPassword,
         ];
 
         $this->client
@@ -131,15 +130,18 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
 
             return $this->client
                 ->post('/customer/login', [], $requestData)
-                ->then(static function ($response) use (&$account) {
-                    $account->setToken(self::TOKEN_TYPE, $response[self::KEY_CONTEXT_TOKEN]);
+                ->then(
+                    static function ($response) use (&$account) {
+                        $account->setToken(self::TOKEN_TYPE, $response[self::KEY_CONTEXT_TOKEN]);
 
-                    return true;
-                }, static function ($reason) use ($account) {
-                    $account->resetToken(self::TOKEN_TYPE);
+                        return true;
+                    },
+                    static function ($reason) use ($account) {
+                        $account->resetToken(self::TOKEN_TYPE);
 
-                    return false;
-                })
+                        return false;
+                    }
+                )
                 ->wait();
         } catch (RequestException $exception) {
             $account->resetToken(self::TOKEN_TYPE);

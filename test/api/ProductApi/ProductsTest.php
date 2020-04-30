@@ -550,7 +550,10 @@ class ProductsTest extends FrontasticApiTestCase
             );
 
             $this->assertInternalType('string', $product->description);
-            $this->assertContainsNoHtml($product->description);
+            $this->assertContainsNoHtml(
+                $product->description,
+                sprintf('Description of product %s (SKU %s) contains HTML', $product->productId, $product->sku)
+            );
 
             $this->assertInternalType('array', $product->categories);
             foreach ($product->categories as $category) {

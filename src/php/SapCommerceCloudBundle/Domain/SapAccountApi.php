@@ -28,12 +28,22 @@ class SapAccountApi implements AccountApi
 
     public function get(string $email): Account
     {
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        return $this->client
+            ->get(
+                '/rest/v2/{siteId}/users/' . $email,
+                [
+                    'fields' => 'FULL',
+                ]
+            )
+            ->then(function (array $accountData): Account {
+                return $this->dataMapper->mapDataToAccount($accountData);
+            })
+            ->wait();
     }
 
     public function confirmEmail(string $token): Account
     {
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        throw new \RuntimeException('Email confirmation is not supported by the SAP commerce cloud account API.');
     }
 
     public function create(Account $account, ?Cart $cart = null): Account
