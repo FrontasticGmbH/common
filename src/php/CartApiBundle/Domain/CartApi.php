@@ -62,7 +62,7 @@ interface CartApi
 
     public function redeemDiscountCode(Cart $cart, string $code, string $locale = null): Cart;
 
-    public function removeDiscountCode(Cart $cart, string $discountId, string $locale = null): Cart;
+    public function removeDiscountCode(Cart $cart, LineItem $discountLineItem, string $locale = null): Cart;
 
     public function order(Cart $cart): Order;
 

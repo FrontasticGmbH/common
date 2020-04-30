@@ -138,7 +138,7 @@ class LifecycleEventDecorator implements CartApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function removeDiscountCode(Cart $cart, string $discountId, string $locale = null): Cart
+    public function removeDiscountCode(Cart $cart, LineItem $discountLineItem, string $locale = null): Cart
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
