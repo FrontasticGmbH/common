@@ -3,9 +3,7 @@
 namespace Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper;
 
 use Frontastic\Common\CartApiBundle\Domain\Cart;
-use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
-use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\AddressMapper;
 use Frontastic\Common\ShopwareBundle\Domain\CartApi\ShopwareCartApi;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
@@ -14,7 +12,8 @@ use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperTrai
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperTrait;
 
-class CartMapper extends AbstractDataMapper implements LocaleAwareDataMapperInterface, ProjectConfigApiAwareDataMapperInterface
+class CartMapper extends AbstractDataMapper
+    implements LocaleAwareDataMapperInterface, ProjectConfigApiAwareDataMapperInterface
 {
     use LocaleAwareDataMapperTrait;
     use ProjectConfigApiAwareDataMapperTrait;
@@ -26,9 +25,15 @@ class CartMapper extends AbstractDataMapper implements LocaleAwareDataMapperInte
      */
     private $addressMapper;
 
-    public function __construct(AddressMapper $addressMapper)
+    /**
+     * @var \Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper\LineItemsMapper
+     */
+    private $lineItemsMapper;
+
+    public function __construct(AddressMapper $addressMapper, LineItemsMapper $lineItemsMapper)
     {
         $this->addressMapper = $addressMapper;
+        $this->lineItemsMapper = $lineItemsMapper;
     }
 
     public function getName(): string
@@ -43,72 +48,56 @@ class CartMapper extends AbstractDataMapper implements LocaleAwareDataMapperInte
         $locationData = $this->extractFromDeliveries($cartData, 'location')['address'] ?? null;
         $shippingMethodData = $this->extractFromDeliveries($cartData, 'shippingMethod');
 
+        $lineItems = $this->mapDataToLineItems($cartData['lineItems'] ?? []);
+
         return new Cart([
             'cartId' => (string)$cartData['token'],
             'cartVersion' => (string)$cartData['name'],
             'sum' => $this->convertPriceToCent($cartData['price']['totalPrice']),
             'currency' => $this->resolveCurrencyCodeFromLocale(),
-            'lineItems' => $this->mapDataToLineItems($cartData['lineItems'] ?? []),
+            'lineItems' => $lineItems,
             'shippingAddress' => empty($locationData) ? null : $this->addressMapper->map($locationData),
-            'shippingMethod' => empty($shippingMethodData) ? null : $this->mapDataToShippingMethod($shippingMethodData)
+            'shippingMethod' => empty($shippingMethodData) ? null : $this->mapDataToShippingMethod($shippingMethodData),
+            'discountCodes' => $this->extractDiscountCodesFromLineItems($lineItems),
             // @TODO: resolve billing address?
         ]);
-    }
-
-    /**
-     * @param array $lineItemData
-     *
-     * @return \Frontastic\Common\CartApiBundle\Domain\LineItem[]
-     */
-    private function mapDataToLineItems(array $lineItemData): array
-    {
-        $result = [];
-        foreach ($lineItemData as $lineItem) {
-            switch ($lineItem['type']) {
-                case ShopwareCartApi::LINE_ITEM_TYPE_PRODUCT:
-                    $lineItem = new LineItem\Variant([
-                        'lineItemId' => (string)$lineItem['id'],
-                        'name' => $lineItem['label'],
-                        'count' => $lineItem['quantity'],
-                        'price' => $this->convertPriceToCent($lineItem['price']['unitPrice']),
-                        'totalPrice' => $this->convertPriceToCent($lineItem['price']['totalPrice']),
-                        'variant' => new Variant([
-                            'id' => $lineItem['referencedId'],
-                            'sku' => $lineItem['referencedId'],
-                            'images' => [
-                                $lineItem['cover']['url'],
-                            ],
-                            'attributes' => array_map(static function ($option) {
-                                return [$option['group'] => $option['option']];
-                            }, $lineItem['payload']['options'])
-                        ]),
-                    ]);
-                    break;
-                case ShopwareCartApi::LINE_ITEM_TYPE_PROMOTION:
-                default:
-                    $lineItem = new LineItem([
-                        'lineItemId' => (string)$lineItem['id'],
-                        'type' => $lineItem['type'],
-                        'name' => $lineItem['label'],
-                        'count' => $lineItem['quantity'],
-                        'price' => $this->convertPriceToCent($lineItem['price']['unitPrice']),
-                        'totalPrice' => $this->convertPriceToCent($lineItem['price']['totalPrice']),
-                    ]);
-                    break;
-            }
-
-            $lineItem->currency = $this->resolveCurrencyCodeFromLocale();
-            $lineItem->dangerousInnerItem = $lineItem;
-
-            $result[] = $lineItem;
-        }
-
-        return $result;
     }
 
     private function extractFromDeliveries(array $cartData, string $deliveryItemKey): array
     {
         return $cartData['deliveries'][0][$deliveryItemKey] ?? [];
+    }
+
+    /**
+     * @param \Frontastic\Common\CartApiBundle\Domain\LineItem[] $lineItems
+     *
+     * @return string[]
+     */
+    private function extractDiscountCodesFromLineItems(array $lineItems): array
+    {
+        $result = [];
+        foreach ($lineItems as $lineItem) {
+            if ($lineItem->type === ShopwareCartApi::LINE_ITEM_TYPE_PROMOTION) {
+                $result[] = $lineItem->name;
+            }
+        }
+
+        return $result;
+    }
+
+    private function getLineItemsMapper(): LineItemsMapper
+    {
+        return $this->lineItemsMapper->setLocale($this->getLocale());
+    }
+
+    /**
+     * @param array $lineItemsData
+     *
+     * @return \Frontastic\Common\CartApiBundle\Domain\LineItem[]
+     */
+    private function mapDataToLineItems(array $lineItemsData): array
+    {
+        return $this->getLineItemsMapper()->map($lineItemsData);
     }
 
     private function mapDataToShippingMethod(array $shippingMethodData): ?ShippingMethod
