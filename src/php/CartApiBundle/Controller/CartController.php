@@ -257,7 +257,7 @@ class CartController extends CrudController
         return [
             'cart' => $this->getCartApi($context)->removeDiscountCode(
                 $this->getCart($context, $request),
-                $payload['discountId']
+                new LineItem(['lineItemId' => $payload['discountId']])
             ),
         ];
     }

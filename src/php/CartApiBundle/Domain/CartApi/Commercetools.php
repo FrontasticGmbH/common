@@ -551,7 +551,7 @@ class Commercetools implements CartApi
         );
     }
 
-    public function removeDiscountCode(Cart $cart, string $discountId, string $localeString = null): Cart
+    public function removeDiscountCode(Cart $cart, LineItem $discountLineItem, string $localeString = null): Cart
     {
         return $this->postCartActions(
             $cart,
@@ -560,7 +560,7 @@ class Commercetools implements CartApi
                     'action' => 'removeDiscountCode',
                     'discountCode' => [
                         'typeId' => 'discount-code',
-                        'id' => $discountId,
+                        'id' => $discountLineItem->lineItemId,
                     ],
                 ],
             ],

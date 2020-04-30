@@ -206,7 +206,7 @@ class SapCartApi implements CartApi
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function removeDiscountCode(Cart $cart, string $discountId, string $locale = null): Cart
+    public function removeDiscountCode(Cart $cart, LineItem $discountLineItem, string $locale = null): Cart
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }

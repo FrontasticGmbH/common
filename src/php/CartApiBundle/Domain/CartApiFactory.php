@@ -15,6 +15,7 @@ use Frontastic\Common\ShopwareBundle\Domain\CartApi\ShopwareCartApi;
 use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFactory;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory as ShopwareLocaleCreatorFactory;
+use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Factory
@@ -87,7 +88,8 @@ class CartApiFactory
                 $cartApi = new ShopwareCartApi(
                     $client,
                     $this->factoryServiceLocator->get(DataMapperResolver::class),
-                    $localeCreatorFactory->factor($project, $client)
+                    $localeCreatorFactory->factor($project, $client),
+                    $this->factoryServiceLocator->get(ShopwareProjectConfigApiFactory::class)
                 );
                 break;
 
@@ -96,6 +98,10 @@ class CartApiFactory
                     "No cart API configured for project {$project->name}. " .
                     "Check the provisioned customer configuration in app/config/customers/."
                 );
+        }
+
+        if (method_exists($cartApi, 'setDefaultLanguage')) {
+            $cartApi->setDefaultLanguage($project->defaultLanguage);
         }
 
         return new CartApi\LifecycleEventDecorator($cartApi, $this->decorators);
