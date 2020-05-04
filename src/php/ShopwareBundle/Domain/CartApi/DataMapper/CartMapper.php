@@ -12,8 +12,9 @@ use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperTrai
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperTrait;
 
-class CartMapper extends AbstractDataMapper
-    implements LocaleAwareDataMapperInterface, ProjectConfigApiAwareDataMapperInterface
+class CartMapper extends AbstractDataMapper implements
+    LocaleAwareDataMapperInterface,
+    ProjectConfigApiAwareDataMapperInterface
 {
     use LocaleAwareDataMapperTrait;
     use ProjectConfigApiAwareDataMapperTrait;
@@ -87,7 +88,9 @@ class CartMapper extends AbstractDataMapper
 
     private function getLineItemsMapper(): LineItemsMapper
     {
-        return $this->lineItemsMapper->setLocale($this->getLocale());
+        return $this->lineItemsMapper
+            ->setProjectConfigApi($this->getProjectConfigApi())
+            ->setLocale($this->getLocale());
     }
 
     /**

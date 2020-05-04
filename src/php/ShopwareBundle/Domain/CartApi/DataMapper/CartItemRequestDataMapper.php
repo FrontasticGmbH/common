@@ -2,11 +2,8 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper;
 
-use Frontastic\Common\ShopwareBundle\Domain\AccountApi\SalutationHelper;
 use Frontastic\Common\ShopwareBundle\Domain\CartApi\ShopwareCartApi;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
-use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
-use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperTrait;
 
 class CartItemRequestDataMapper extends AbstractDataMapper
 {
@@ -33,18 +30,5 @@ class CartItemRequestDataMapper extends AbstractDataMapper
             'coverId' => null,
             'referencedId' => $lineItem->variant->id ?? $lineItem->lineItemId,
         ];
-    }
-
-    private function resolveSalutationId(?string $frontasticSalutation): ?string
-    {
-        if ($frontasticSalutation === null) {
-            return null;
-        }
-
-        $shopwareSalutation = $this->getProjectConfigApi()->getSalutation(
-            SalutationHelper::resolveShopwareSalutation($frontasticSalutation)
-        );
-
-        return $shopwareSalutation ? $shopwareSalutation->id : null;
     }
 }

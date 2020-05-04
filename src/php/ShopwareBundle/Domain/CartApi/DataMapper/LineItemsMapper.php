@@ -11,8 +11,9 @@ use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperTrai
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperTrait;
 
-class LineItemsMapper extends AbstractDataMapper
-    implements LocaleAwareDataMapperInterface, ProjectConfigApiAwareDataMapperInterface
+class LineItemsMapper extends AbstractDataMapper implements
+    LocaleAwareDataMapperInterface,
+    ProjectConfigApiAwareDataMapperInterface
 {
     use LocaleAwareDataMapperTrait;
     use ProjectConfigApiAwareDataMapperTrait;
