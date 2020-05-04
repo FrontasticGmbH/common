@@ -12,8 +12,9 @@ use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperTrai
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperTrait;
 
-class OrderMapper extends AbstractDataMapper
-    implements LocaleAwareDataMapperInterface, ProjectConfigApiAwareDataMapperInterface
+class OrderMapper extends AbstractDataMapper implements
+    LocaleAwareDataMapperInterface,
+    ProjectConfigApiAwareDataMapperInterface
 {
     use LocaleAwareDataMapperTrait,
         ProjectConfigApiAwareDataMapperTrait;
@@ -57,13 +58,12 @@ class OrderMapper extends AbstractDataMapper
             'email' => $orderData['orderCustomer']['email'] ?? null,
 // @TODO: no data
 //            'shippingMethod' => $this->mapShippingMethod($orderData['shippingInfo'] ?? []),
-// @TODO: no data?
-//            'shippingAddress' => $this->mapAddress($orderData['shippingAddress'] ?? []),
+            'shippingAddress' => $this->mapShippingAddress($orderData['addresses'], $orderData['billingAddressId']),
             'billingAddress' => $this->mapBillingAddress($orderData['addresses'], $orderData['billingAddressId']),
             'sum' => $this->convertPriceToCent($orderData['price']['totalPrice']),
 // @TODO: no data yet
 //            'payments' => $this->mapPayments($order),
-// @TODO: no data
+// @TODO: no data, lineItems are not returned together with other order information
 //            'discountCodes' => $this->mapDiscounts($order),
             'dangerousInnerOrder' => $orderData,
         ]);
@@ -102,6 +102,25 @@ class OrderMapper extends AbstractDataMapper
         }
 
         return null;
+    }
+
+    private function mapShippingAddress(array $addresses, string $billingAddressId): ?Address
+    {
+        $shippingAddressData = $addresses[0] ?? null;
+
+        if (count($addresses) > 1) {
+            foreach ($addresses as $addressData) {
+                if ($addressData['id'] !== $billingAddressId) {
+                    $shippingAddressData = $addressData;
+                }
+            }
+        }
+
+        if ($shippingAddressData === null) {
+            return null;
+        }
+
+        return $this->getAddressMapper()->map($shippingAddressData);
     }
 
     private function resolveCurrencyCode(string $currencyId): ?string
