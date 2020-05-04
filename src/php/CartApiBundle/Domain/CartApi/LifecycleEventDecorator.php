@@ -143,12 +143,12 @@ class LifecycleEventDecorator implements CartApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function order(Cart $cart): Order
+    public function order(Cart $cart, string $locale = null): Order
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function getOrder(string $orderId): Order
+    public function getOrder(Account $account, string $orderId, string $locale = null): Order
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
@@ -156,7 +156,7 @@ class LifecycleEventDecorator implements CartApi
     /**
      * @return Order[]
      */
-    public function getOrders(Account $account, array $parameters = []): array
+    public function getOrders(Account $account, array $parameters = [], string $locale = null): array
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }

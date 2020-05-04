@@ -4,9 +4,8 @@ namespace Frontastic\Common\ShopwareBundle\Controller;
 
 use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
+use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Controller\CartController as CommonCartController;
-use Frontastic\Common\CartApiBundle\Domain\Cart;
-use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Symfony\Component\HttpFoundation\Request;
 
 class CartController extends CommonCartController
@@ -22,41 +21,15 @@ class CartController extends CommonCartController
         $cartApi = $this->getCartApi($context);
         $cart = $this->getCart($context, $request);
 
-        $payload = $this->getJsonContent($request);
-
-        if ($context->session->loggedIn) {
-            $account = $context->session->account;
-        } else {
-            $account = $this->createAccount($payload);
+        if (!$context->session->loggedIn) {
+            $payload = $this->getJsonContent($request);
+            $account = $this->createAccountModel($payload);
         }
 
-//        $cart = $cartApi->setAccount(
-//            $cart,
-//            $account
-//        );
-//
-//        $cart = $cartApi->setShippingAddress(
-//            $cart,
-//            $payload['shipping']
-//        );
-//
-//        $cart = $cartApi->setBillingAddress(
-//            $cart,
-//            $payload['billing'] ?: $payload['shipping']
-//        );
-//
-//        $cart = $cartApi->addPayment(
-//            $cart,
-//            $this->createPayment($cart, $payload, $context),
-//            $this->createPaymentCustomOptions($payload)
-//        );
-//
-//        $cart = $cartApi->setShippingMethod(
-//            $cart,
-//            $payload['shipmentMethod']['id']
-//        );
+        // @TODO: pass account model create guest order endpoint
+        $order = $cartApi->order($cart, $context->locale);
 
-        $order = $cartApi->order($cart);
+        session_regenerate_id();
 
         return [
             'order' => $order,
@@ -68,38 +41,23 @@ class CartController extends CommonCartController
      *
      * @return \Frontastic\Common\AccountApiBundle\Domain\Account
      */
-    protected function createAccount(array $payload): Account
+    protected function createAccountModel(array $payload): Account
     {
-        return new Account([
-            'email' => $payload['account']['email'] ?? $payload['user']['email'],
-            'salutation' => $payload['account']['salutation'] ?? $payload['user']['salutation'],
-        ]);
-    }
+        $accountData = [
+            'email' => $payload['email'],
+            'salutation' => $payload['salutation'],
+            'firstName' => $payload['firstName'],
+            'lastName' => $payload['lastName'],
+            'data' => [
+                'phonePrefix' => $payload['phonePrefix'] ?? null,
+                'phone' => $payload['phone'] ?? null,
+            ],
+            // Billing address must be defined when creating new account
+            'addresses' => [
+                new Address($payload['billingAddress']),
+            ]
+        ];
 
-    /**
-     * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
-     * @param array $payload
-     * @param \Frontastic\Catwalk\ApiCoreBundle\Domain\Context $context
-     *
-     * @return \Frontastic\Common\CartApiBundle\Domain\Payment
-     */
-    protected function createPayment(Cart $cart, array $payload, Context $context): Payment
-    {
-        return new Payment([
-            'paymentProvider' => $payload['payment']['provider'],
-            'paymentId' => $payload['payment']['id'],
-            'amount' => $cart->sum,
-            'currency' => $context->currency
-        ]);
-    }
-
-    /**
-     * @param array $payload
-     *
-     * @return array|null
-     */
-    protected function createPaymentCustomOptions(array $payload): ?array
-    {
-        return null;
+        return new Account($accountData);
     }
 }
