@@ -21,7 +21,7 @@ use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperInte
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
-use function GuzzleHttp\Promise\promise_for;
+use RuntimeException;
 
 class ShopwareCartApi extends AbstractShopwareApi implements CartApi
 {
@@ -103,7 +103,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
     public function setCustomLineItemType(array $lineItemType): void
     {
         // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        throw new RuntimeException(__METHOD__ . ' not implemented');
     }
 
     public function getCustomLineItemType(): array
@@ -115,7 +115,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
     public function setTaxCategory(array $taxCategory): void
     {
         // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        throw new RuntimeException(__METHOD__ . ' not implemented');
     }
 
     public function getTaxCategory(): array
@@ -192,41 +192,42 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
             ->wait();
     }
 
-    public function setAccount(Cart $cart, Account $account): Cart
-    {
-        return $cart;
-    }
-
     public function setEmail(Cart $cart, string $email, string $locale = null): Cart
     {
-        return $cart;
+        // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
+        throw new RuntimeException(__METHOD__ . ' not implemented');
     }
 
     public function setShippingMethod(Cart $cart, string $shippingMethod, string $locale = null): Cart
     {
-        return $cart;
+        // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
+        throw new RuntimeException(__METHOD__ . ' not implemented');
     }
 
     public function setCustomField(Cart $cart, array $fields, string $locale = null): Cart
     {
-        return $cart;
+        // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
+        throw new RuntimeException(__METHOD__ . ' not implemented');
     }
 
     public function setShippingAddress(Cart $cart, Address $address, string $locale = null): Cart
     {
-        // @TODO: call setDefaultShippingAddress from account api?
-        return $cart;
+        // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
+        // but it could be set by calling set ShopwareAccountApi::setDefaultShippingAddress
+        throw new RuntimeException(__METHOD__ . ' not implemented');
     }
 
     public function setBillingAddress(Cart $cart, Address $address, string $locale = null): Cart
     {
-        // @TODO: call setDefaultBillingAddress from account api?
-        return $cart;
+        // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
+        // but it could be set by calling set ShopwareAccountApi::setDefaultBillingAddress
+        throw new RuntimeException(__METHOD__ . ' not implemented');
     }
 
     public function addPayment(Cart $cart, Payment $payment, ?array $custom = null, string $locale = null): Cart
     {
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
+        throw new RuntimeException(__METHOD__ . ' not implemented');
     }
 
     public function redeemDiscountCode(Cart $cart, string $code, string $locale = null): Cart
@@ -265,58 +266,29 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
             ->then(function ($orderResponse) {
                 return $this->mapResponse($orderResponse, OrderMapper::MAPPER_NAME);
             })
-            // Make the payment, this is a separate request in Shopware6
-            ->then(function (Order $order) use ($shopwareLocale) {
-                $paymentResponse = $this->client
-                    ->forCurrency($shopwareLocale->currencyId)
-                    ->forLanguage($shopwareLocale->languageId)
-                    ->withContextToken($order->cartId)
-                    ->post("/checkout/order/{$order->cartId}/pay")
-                    ->wait();
-
-                return [$order, $paymentResponse];
-            })
-            ->then(function ($response) use ($cart) {
-                [$order, $paymentResponse] = $response;
-
-                // Fetch order again with latest data
-                return $this->getOrder($order->cartId, [
-                    'token' => $cart->cartId
-                ]);
-            })
             ->wait();
     }
 
-    public function getOrder(string $orderId, array $parameters = []): Order
+    public function getOrder(Account $account, string $orderId, string $locale = null): Order
     {
-        if (!isset($parameters['token'])) {
-            throw new \RuntimeException(__METHOD__ . ' can not be used without token');
-        }
+        $result = $this->getOrdersBy(
+            $account->getToken(self::TOKEN_TYPE),
+            [
+                'orderId' => $orderId
+            ],
+            $locale
+        );
 
-        return $this->getOrders(
-            new Account(['authTokens' => [self::TOKEN_TYPE => $parameters['token']]]), [
-            'orderId' => $orderId
-        ])[0];
+        return $result[0];
     }
 
-    public function getOrders(Account $account, array $parameters = []): array
+    public function getOrders(Account $account, array $parameters = [], string $locale = null): array
     {
-        $requestParameters = [
-            'limit' => $parameters['limit'] ?? self::DEFAULT_ORDER_LIMIT,
-            'page' => $parameters['page'] ?? self::DEFAULT_ORDER_PAGE,
-        ];
-
-        if (isset($parameters['orderId'])) {
-            $parameters['filter[id]'] = $parameters['orderId'];
-        }
-
-        return $this->client
-            ->withContextToken($account->getToken(self::TOKEN_TYPE))
-            ->get('/customer/order?associations[lineItems][]', $requestParameters)
-            ->then(function ($response) {
-                return $this->mapResponse($response, OrdersMapper::MAPPER_NAME);
-            })
-            ->wait();
+        return $this->getOrdersBy(
+            $account->getToken(self::TOKEN_TYPE),
+            $parameters,
+            $locale
+        );
     }
 
     public function startTransaction(Cart $cart): void
@@ -327,7 +299,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
     public function commit(string $locale = null): Cart
     {
         if (null === $token = $this->currentTransaction) {
-            throw new \RuntimeException('No transaction currently in progress');
+            throw new RuntimeException('No transaction currently in progress');
         }
 
         $this->currentTransaction = null;
@@ -349,6 +321,37 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
         if ($mapper instanceof LocaleAwareDataMapperInterface) {
             $mapper->setLocale($this->locale);
         }
+    }
+
+    /**
+     * @param string $token
+     * @param array $parameters
+     * @param string|null $locale
+     *
+     * @return \Frontastic\Common\CartApiBundle\Domain\Order[]
+     */
+    private function getOrdersBy(string $token, array $parameters = [], ?string $locale = null): array
+    {
+        $requestParameters = [
+            'limit' => $parameters['limit'] ?? self::DEFAULT_ORDER_LIMIT,
+            'page' => $parameters['page'] ?? self::DEFAULT_ORDER_PAGE,
+        ];
+
+        if (isset($parameters['orderId'])) {
+            $requestParameters['filter[id]'] = $parameters['orderId'];
+        }
+
+        $shopwareLocale = $this->parseLocaleString($locale);
+
+        return $this->client
+            ->forCurrency($shopwareLocale->currencyId)
+            ->forLanguage($shopwareLocale->languageId)
+            ->withContextToken($token)
+            ->get('/customer/order?associations[lineItems][]', $requestParameters)
+            ->then(function ($response) {
+                return $this->mapResponse($response, OrdersMapper::MAPPER_NAME);
+            })
+            ->wait();
     }
 
     private function respondWithError(array $errors)
