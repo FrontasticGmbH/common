@@ -569,7 +569,7 @@ class Commercetools implements CartApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function order(Cart $cart): Order
+    public function order(Cart $cart, string $locale = null): Order
     {
         $order = $this->cartMapper->mapDataToOrder(
             $this->client->post(
@@ -582,7 +582,7 @@ class Commercetools implements CartApi
                     'orderNumber' => $this->orderIdGenerator->getOrderId($cart),
                 ])
             ),
-            $this->parseLocaleString()
+            $this->parseLocaleString($locale)
         );
 
         $cart = $this->getById($cart->cartId);
@@ -598,14 +598,14 @@ class Commercetools implements CartApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function getOrder(string $orderId): Order
+    public function getOrder(Account $account, string $orderId, string $locale = null): Order
     {
         return $this->cartMapper->mapDataToOrder(
             $this->client->get(
                 '/orders/order-number=' . $orderId,
                 ['expand' => self::EXPAND]
             ),
-            $this->parseLocaleString()
+            $this->parseLocaleString($locale)
         );
     }
 
@@ -614,7 +614,7 @@ class Commercetools implements CartApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function getOrders(Account $account, array $parameters = []): array
+    public function getOrders(Account $account, string $locale = null): array
     {
         $result = $this->client
             ->fetchAsync(
@@ -628,7 +628,7 @@ class Commercetools implements CartApi
 
         $orders = [];
         foreach ($result->results as $order) {
-            $orders[] = $this->cartMapper->mapDataToOrder($order, $this->parseLocaleString());
+            $orders[] = $this->cartMapper->mapDataToOrder($order, $this->parseLocaleString($locale));
         }
 
         return $orders;

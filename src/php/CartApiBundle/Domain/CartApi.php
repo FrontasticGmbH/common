@@ -64,14 +64,14 @@ interface CartApi
 
     public function removeDiscountCode(Cart $cart, LineItem $discountLineItem, string $locale = null): Cart;
 
-    public function order(Cart $cart): Order;
+    public function order(Cart $cart, string $locale = null): Order;
 
-    public function getOrder(string $orderId): Order;
+    public function getOrder(Account $account, string $orderId, string $locale = null): Order;
 
     /**
-     * @return Order[]
+     * @return \Frontastic\Common\CartApiBundle\Domain\Order[]
      */
-    public function getOrders(Account $account, array $parameters = []): array;
+    public function getOrders(Account $account, string $locale = null): array;
 
     public function startTransaction(Cart $cart): void;
 

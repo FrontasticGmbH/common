@@ -30,7 +30,11 @@ class CartController extends CrudController
     {
         $cartApi = $this->getCartApi($context);
         return [
-            'order' => $cartApi->getOrder($order),
+            'order' => $cartApi->getOrder(
+                $context->session->account,
+                $order,
+                $context->locale
+            ),
         ];
     }
 
@@ -232,7 +236,7 @@ class CartController extends CrudController
             throw new \DomainException('Cart not complete yet.');
         }
 
-        $order = $cartApi->order($cart);
+        $order = $cartApi->order($cart, $context->locale);
 
         // @TODO: Remove old cart instead (also for logged in users)
         // @HACK: Regenerate session ID to get a "new" cart:
@@ -307,6 +311,7 @@ class CartController extends CrudController
 
     /**
      * @param Request $request
+     *
      * @return array|mixed
      */
     protected function getJsonContent(Request $request)
