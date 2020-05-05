@@ -40,12 +40,13 @@ abstract class BaseImplementation
     /*** getCategories() **********************************************************************************************/
     public function beforeGetCategories(ProductApi $productApi, CategoryQuery $query): ?array
     {
+        return null;
     }
 
     /**
      * @param ProductApi $productApi
      * @param Category[] $categories
-     * @return Category[]|null
+     * @return ?Category[]
      */
     public function afterGetCategories(ProductApi $productApi, array $categories): ?array
     {
@@ -55,12 +56,13 @@ abstract class BaseImplementation
     /*** getProductTypes() ********************************************************************************************/
     public function beforeGetProductTypes(ProductApi $productApi, ProductTypeQuery $query): ?array
     {
+        return null;
     }
 
     /**
      * @param ProductApi $productApi
      * @param ProductType[] $productTypes
-     * @return ProductType[]|null
+     * @return ?ProductType[]
      */
     public function afterGetProductTypes(ProductApi $productApi, array $productTypes): ?array
     {
@@ -73,6 +75,7 @@ abstract class BaseImplementation
         $query,
         string $mode = ProductApi::QUERY_SYNC
     ): ?array {
+        return null;
     }
 
     public function afterGetProduct(ProductApi $productApi, ?Product $product): ?Product
@@ -86,6 +89,7 @@ abstract class BaseImplementation
         ProductQuery $query,
         string $mode = ProductApi::QUERY_SYNC
     ): ?array {
+        return null;
     }
 
     public function afterQuery(ProductApi $productApi, ?Result $result): ?Result
