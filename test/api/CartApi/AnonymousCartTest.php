@@ -69,11 +69,13 @@ class AnonymousCartTest extends FrontasticApiTestCase
         $this->assertCount(1, $cartWithProductAdded->lineItems);
 
         $addedLineItem = $cartWithProductAdded->lineItems[0];
-        $this->assertInstanceOf(LineItem::class, $addedLineItem);
+        $this->assertInstanceOf(LineItem\Variant::class, $addedLineItem);
         $this->assertNotEmptyString($addedLineItem->lineItemId);
         $this->assertSame($product->name, $addedLineItem->name);
         $this->assertNotEmptyString($addedLineItem->type);
         $this->assertSame(1, $addedLineItem->count);
+        $this->assertInstanceOf(Variant::class, $addedLineItem->variant);
+        $this->assertProductVariantIsWellFormed($addedLineItem->variant, false);
 
         $cartApi->startTransaction($cartWithProductAdded);
         $cartApi->updateLineItem($cartWithProductAdded, $addedLineItem, 3, null, $language);

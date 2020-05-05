@@ -51,12 +51,19 @@ class FactoryTest extends TestCase
 
     private function getClient(array $aggregates, string $class): HttpClient
     {
+        $result = null;
         foreach ($aggregates as $aggregate) {
             if ($aggregate['class'] === $class) {
-                return $aggregate['instance'];
+                $result = $aggregate['instance'];
+                break;
             }
         }
-        $this->fail('Aggregate client of class "' . $class . '" not found.');
+
+        if ($result === null) {
+            $this->fail('Aggregate client of class "' . $class . '" not found.');
+        }
+
+        return $result;
     }
 
     private function unrollAggregates(HttpClient $client)

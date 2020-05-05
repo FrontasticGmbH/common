@@ -37,6 +37,8 @@ class JsonSerializer
     }
 
     /**
+     * Prepares an object for json serialization. Does *not* actually encode it as JSON.
+     *
      * Is there a sensible refactoring to reduce this methods compleixty?
      * Otherwise we consider it fine, since its tested anyways:
      *
@@ -58,6 +60,10 @@ class JsonSerializer
             foreach ($item as $key => $value) {
                 if (strpos($key, 'dangerousInner') === 0) {
                     continue;
+                }
+
+                if ($key === 'trace') {
+                    $value = $this->stripDownTrace($value);
                 }
 
                 if (in_array($key, $this->propertyExcludeList, true)) {
@@ -83,6 +89,10 @@ class JsonSerializer
                 continue;
             }
 
+            if ($key === 'trace') {
+                $value = $this->stripDownTrace($value);
+            }
+
             if (in_array($key, $this->propertyExcludeList)) {
                 $result[$key] = '_FILTERED_';
             } else {
@@ -100,6 +110,25 @@ class JsonSerializer
         }
 
         return $result;
+    }
+
+    private function stripDownTrace(array $trace): array
+    {
+        foreach ($trace as $levelIndex => $traceLevel) {
+            if (!isset($traceLevel['args']) || !is_array($traceLevel['args'])) {
+                continue;
+            }
+
+            foreach ($traceLevel['args'] as $argumentIndex => $argument) {
+                if (is_object($argument)) {
+                    $trace[$levelIndex]['args'][$argumentIndex] = get_class($argument);
+                }
+                if (is_array($argument)) {
+                    $trace[$levelIndex]['args'][$argumentIndex] = 'array';
+                }
+            }
+        }
+        return $trace;
     }
 
     private function enhanceSerialization(object $object): array

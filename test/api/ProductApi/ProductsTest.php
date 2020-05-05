@@ -55,7 +55,7 @@ class ProductsTest extends FrontasticApiTestCase
 
         $this->assertGreaterThanOrEqual(50, $result->total);
 
-        $this->assertSame(ProductApi\PaginatedQuery::DEFAULT_LIMIT, $result->count);
+        $this->assertGreaterThanOrEqual(ProductApi\PaginatedQuery::DEFAULT_LIMIT, $result->count);
         $this->assertCount($result->count, $result->items);
 
         $this->assertInternalType('array', $result->items);
@@ -535,6 +535,7 @@ class ProductsTest extends FrontasticApiTestCase
                 $product->name,
                 sprintf('Product %s (SKU %s) has an invalid name', $product->productId, $product->sku)
             );
+            $this->assertContainsNoHtml($product->name);
 
             $this->assertNotEmptyString($product->slug);
             $this->assertRegExp(
@@ -549,6 +550,10 @@ class ProductsTest extends FrontasticApiTestCase
             );
 
             $this->assertInternalType('string', $product->description);
+            $this->assertContainsNoHtml(
+                $product->description,
+                sprintf('Description of product %s (SKU %s) contains HTML', $product->productId, $product->sku)
+            );
 
             $this->assertInternalType('array', $product->categories);
             foreach ($product->categories as $category) {
@@ -563,10 +568,8 @@ class ProductsTest extends FrontasticApiTestCase
 
             $currentProductGroupId = null;
             foreach ($product->variants as $variant) {
-                $this->assertNotEmptyString($variant->id);
-                $this->assertNotEmptyString($variant->sku);
+                $this->assertProductVariantIsWellFormed($variant);
 
-                $this->assertNotEmptyString($variant->groupId);
                 if ($currentProductGroupId === null) {
                     $currentProductGroupId = $variant->groupId;
                     $this->assertNotContains($currentProductGroupId, $previousGroupIds);
@@ -581,33 +584,14 @@ class ProductsTest extends FrontasticApiTestCase
                         $product->sku
                     )
                 );
-
-                $this->assertInternalType('integer', $variant->price);
-                $this->assertGreaterThanOrEqual(0, $variant->price);
-
-                if ($variant->discountedPrice !== null) {
-                    $this->assertInternalType('integer', $variant->discountedPrice);
-                    $this->assertGreaterThanOrEqual(0, $variant->discountedPrice);
-                    $this->assertLessThanOrEqual($variant->price, $variant->discountedPrice);
-                }
-
-                $this->assertInternalType('array', $variant->discounts);
-
-                $this->assertNotEmptyString($variant->currency);
-
-                $this->assertInternalType('array', $variant->attributes);
-
-                $this->assertInternalType('array', $variant->images);
-                foreach ($variant->images as $image) {
-                    $this->assertNotEmptyString($image);
-                }
-
-                $this->assertInternalType('boolean', $variant->isOnStock);
-
-                $this->assertNull($variant->dangerousInnerVariant);
             }
 
             $this->assertNull($product->dangerousInnerProduct);
         }
+    }
+
+    private function assertContainsNoHtml(string $actual, string $message = null): void
+    {
+        $this->assertEquals($actual, strip_tags($actual), $message ?? 'The string may not contain HTML tags.');
     }
 }

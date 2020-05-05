@@ -2,19 +2,19 @@
 
 namespace Frontastic\Common\SapCommerceCloudBundle\Domain\Locale;
 
-use Doctrine\Common\Cache\Cache;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClient;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapProjectConfigApi;
+use Psr\SimpleCache\CacheInterface;
 
 class DefaultSapLocaleCreatorFactory extends SapLocaleCreatorFactory
 {
     /**
-     * @var Cache
+     * @var CacheInterface
      */
     private $cache;
 
-    public function __construct(Cache $cache)
+    public function __construct(CacheInterface $cache)
     {
         $this->cache = $cache;
     }

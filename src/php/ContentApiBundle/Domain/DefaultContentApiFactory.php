@@ -102,7 +102,8 @@ class DefaultContentApiFactory implements ContentApiFactory
 
         return new CachingContentApi(
             new ContentApi\LifecycleEventDecorator($api, $this->decorators),
-            $this->psrCache
+            $this->psrCache,
+            $contentConfiguration->cacheTtlSec ?? 600
         );
     }
 }

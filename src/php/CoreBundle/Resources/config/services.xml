@@ -1,23 +1,28 @@
 <?xml version="1.0" ?>
 
 <container xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <defaults public="true" />
+        <defaults public="true"/>
+
+        <service id="Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator">
+            <argument type="service" id="Psr\Container\ContainerInterface"/>
+            <argument type="tagged_locator" tag="frontastic.common.api_integration" index-by="id"/>
+        </service>
+
         <service id="Frontastic\Common\HttpClient">
-            <factory service="Frontastic\Common\HttpClient\Factory" method="create" />
+            <factory service="Frontastic\Common\HttpClient\Factory" method="create"/>
 
             <argument>default_http_client</argument>
         </service>
 
         <!-- For BC reasons -->
-        <service id="Frontastic\Common\HttpClient\Stream" alias="Frontastic\Common\HttpClient" />
+        <service id="Frontastic\Common\HttpClient\Stream" alias="Frontastic\Common\HttpClient"/>
 
-        <service id="Frontastic\Common\HttpClient\Factory">
-            <argument type="service" id="logger"/>
-            <argument type="service" id="Frontastic\Common\HttpClient\Options"/>
+        <service id="Frontastic\Common\HttpClient\Factory" autowire="true">
+            <tag name="monolog.logger" channel="httpClient"/>
         </service>
 
         <service id="Frontastic\Common\HttpClient\Options">
@@ -29,24 +34,24 @@
         <service id="Frontastic\Common\CoreBundle\EventListener\JsonExceptionListener">
             <argument>%kernel.debug%</argument>
 
-            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" priority="0" />
+            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" priority="0"/>
         </service>
 
         <service id="Frontastic\Common\CoreBundle\EventListener\JsonViewListener">
-            <argument type="service" id="Frontastic\Common\JsonSerializer" />
+            <argument type="service" id="Frontastic\Common\JsonSerializer"/>
 
-            <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="50" />
+            <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="50"/>
         </service>
 
-        <service id="Frontastic\Common\CoreBundle\Domain\Mailer" class="Frontastic\Common\CoreBundle\Domain\Mailer\SwiftMail">
-            <argument type="service" id="mailer" />
-            <argument type="service" id="templating" />
+        <service id="Frontastic\Common\CoreBundle\Domain\Mailer"
+                 class="Frontastic\Common\CoreBundle\Domain\Mailer\SwiftMail">
+            <argument type="service" id="mailer"/>
+            <argument type="service" id="templating"/>
             <argument>%env(smtp_sender)%</argument>
         </service>
 
         <service id="Frontastic\Common\JsonSerializer">
             <argument type="collection">
-                <argument>trace</argument>
                 <argument>accessToken</argument>
                 <argument>apiKey</argument>
                 <argument>apiSecret</argument>
@@ -61,7 +66,7 @@
                 <argument>token</argument>
                 <argument>metaData</argument>
             </argument>
-            <argument type="tagged" tag="frontastic.json_serializer.enhancer" />
+            <argument type="tagged" tag="frontastic.json_serializer.enhancer"/>
         </service>
 
         <service id="Domnikl\Statsd\Client">

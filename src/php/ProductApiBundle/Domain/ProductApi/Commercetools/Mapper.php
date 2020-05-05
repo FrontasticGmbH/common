@@ -354,8 +354,9 @@ class Mapper
     }
 
     /**
-     * Converts the facets defined in {@see $this->options} to queryable format.
+     * Converts the facets to queryable format.
      *
+     * @param ProductApi\FacetDefinition[]
      * @return string[]
      */
     public function facetsToRequest(array $facetDefinitions, CommercetoolsLocale $locale): array
@@ -363,36 +364,36 @@ class Mapper
         $facets = [];
         foreach ($facetDefinitions as $facetDefinition) {
             $facet = '';
-            switch ($facetDefinition['attributeType']) {
+            switch ($facetDefinition->attributeType) {
                 case 'number':
-                    $facet = sprintf('%s', $facetDefinition['attributeId']);
+                    $facet = sprintf('%s', $facetDefinition->attributeId);
                     break;
 
                 case 'money':
-                    $facet = sprintf('%s.centAmount:range (0 to *)', $facetDefinition['attributeId']);
+                    $facet = sprintf('%s.centAmount:range (0 to *)', $facetDefinition->attributeId);
                     break;
 
                 case 'enum':
-                    $facet = sprintf('%s.label', $facetDefinition['attributeId']);
+                    $facet = sprintf('%s.label', $facetDefinition->attributeId);
                     break;
 
                 case 'localizedEnum':
-                    $facet = sprintf('%s.label.%s', $facetDefinition['attributeId'], $locale->language);
+                    $facet = sprintf('%s.label.%s', $facetDefinition->attributeId, $locale->language);
                     break;
 
                 case 'localizedText':
-                    $facet = sprintf('%s.%s', $facetDefinition['attributeId'], $locale->language);
+                    $facet = sprintf('%s.%s', $facetDefinition->attributeId, $locale->language);
                     break;
 
                 case 'boolean':
                 case 'text':
                 case 'reference':
                 default:
-                    $facet = $facetDefinition['attributeId'];
+                    $facet = $facetDefinition->attributeId;
                     break;
             }
             // Alias to identifier used by us
-            $facets[] = sprintf('%s as %s', $facet, $facetDefinition['attributeId']);
+            $facets[] = sprintf('%s as %s', $facet, $facetDefinition->attributeId);
         }
 
         return array_values(array_unique($facets));
@@ -400,6 +401,7 @@ class Mapper
 
     /**
      * @param ProductApi\Query\Facet[] $facets
+     * @param ProductApi\FacetDefinition[] $facetDefinitions
      * @return string[]
      */
     public function facetsToFilter(array $facets, array $facetDefinitions, CommercetoolsLocale $locale): array
@@ -550,11 +552,15 @@ class Mapper
         );
     }
 
+    /**
+     * @param ProductApi\FacetDefinition[] $facetDefinitions
+     * @return array<string, string>
+     */
     private function attributeTypeLookup(array $facetDefinitions): array
     {
         $lookup = [];
         foreach ($facetDefinitions as $facetDefinition) {
-            $lookup[$facetDefinition['attributeId']] = $facetDefinition['attributeType'];
+            $lookup[$facetDefinition->attributeId] = $facetDefinition->attributeType;
         }
         return $lookup;
     }

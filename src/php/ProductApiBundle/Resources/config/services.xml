@@ -1,48 +1,54 @@
 <?xml version="1.0" ?>
 
 <container xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <defaults public="true" />
+        <defaults public="true"/>
 
         <service id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory">
             <argument type="service">
-                <service class="Doctrine\Common\Cache\ApcuCache" />
+                <service class="Doctrine\Common\Cache\ApcuCache"/>
             </argument>
-            <argument type="service" id="Frontastic\Common\HttpClient" />
+            <argument type="service" id="Frontastic\Common\HttpClient"/>
+            <tag name="frontastic.common.api_integration"/>
+        </service>
+
+        <service id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper">
+            <tag name="frontastic.common.api_integration"/>
         </service>
 
         <service
-            id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\DefaultCommercetoolsLocaleCreatorFactory">
+                id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\DefaultCommercetoolsLocaleCreatorFactory">
             <argument type="service">
-                <service class="Doctrine\Common\Cache\ApcuCache" />
+                <service class="Doctrine\Common\Cache\ApcuCache"/>
             </argument>
+            <tag name="frontastic.common.api_integration"/>
         </service>
 
         <service
-            id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory"
-            alias="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\DefaultCommercetoolsLocaleCreatorFactory"
+                id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory"
+                alias="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\DefaultCommercetoolsLocaleCreatorFactory"
+        />
+
+        <service id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\EmptyEnabledFacetService"/>
+
+        <service id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService"
+                 alias="Frontastic\Common\ProductApiBundle\Domain\ProductApi\EmptyEnabledFacetService"/>
+
+        <service
+                id="Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory"
+                alias="Frontastic\Common\ProductApiBundle\Domain\DefaultProductApiFactory"
         />
 
         <service
-            id="Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory"
-            alias="Frontastic\Common\ProductApiBundle\Domain\DefaultProductApiFactory"
-        />
-
-        <service
-            id="Frontastic\Common\ProductApiBundle\Domain\DefaultProductApiFactory"
-            class="Frontastic\Common\ProductApiBundle\Domain\DefaultProductApiFactory">
+                id="Frontastic\Common\ProductApiBundle\Domain\DefaultProductApiFactory"
+                class="Frontastic\Common\ProductApiBundle\Domain\DefaultProductApiFactory">
+            <argument type="service" id="Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator"/>
             <argument type="service"
-                      id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory" />
-            <argument type="service"
-                      id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory" />
-            <argument type="service"
-                      id="Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory" />
-            <argument type="service"
-                      id="Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFactory" />
-            <argument type="tagged" tag="productApi.lifecycleEventListener" />
+                      id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService"/>
+            <argument type="tagged" tag="productApi.lifecycleEventListener"/>
         </service>
     </services>
 </container>

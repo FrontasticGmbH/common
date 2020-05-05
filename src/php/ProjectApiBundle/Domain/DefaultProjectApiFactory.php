@@ -2,45 +2,32 @@
 
 namespace Frontastic\Common\ProjectApiBundle\Domain;
 
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory;
+use Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory as CommercetoolsClientFactory;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory;
+use Frontastic\Common\ProjectApiBundle\Domain\ProjectApi\Commercetools as CommercetoolsProjcetApi;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapProjectApi;
+use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFactory;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
+use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory as ShopwareLocaleCreatorFactory;
+use Frontastic\Common\ShopwareBundle\Domain\ProjectApi\ShopwareProjectApi;
+use OutOfBoundsException;
 
 class DefaultProjectApiFactory implements ProjectApiFactory
 {
-    /**
-     * @var ClientFactory
-     */
-    private $commercetoolsClientFactory;
+    private const CONFIGURATION_TYPE_NAME = 'product';
 
     /**
-     * @var CommercetoolsLocaleCreatorFactory
+     * @var \Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator
      */
-    private $commercetoolsLocaleCreatorFactory;
+    private $serviceLocator;
 
-    /**
-     * @var SapClientFactory
-     */
-    private $sapClientFactory;
-
-    /**
-     * @var SapLocaleCreatorFactory
-     */
-    private $sapLocaleCreatorFactory;
-
-    public function __construct(
-        ClientFactory $commercetoolsClientFactory,
-        CommercetoolsLocaleCreatorFactory $commercetoolsLocaleCreatorFactory,
-        SapClientFactory $sapClientFactory,
-        SapLocaleCreatorFactory $sapLocaleCreatorFactory
-    ) {
-        $this->commercetoolsClientFactory = $commercetoolsClientFactory;
-        $this->commercetoolsLocaleCreatorFactory = $commercetoolsLocaleCreatorFactory;
-        $this->sapClientFactory = $sapClientFactory;
-        $this->sapLocaleCreatorFactory = $sapLocaleCreatorFactory;
+    public function __construct(FactoryServiceLocator $serviceLocator)
+    {
+        $this->serviceLocator = $serviceLocator;
     }
 
     public function factor(Project $project): ProjectApi
@@ -49,24 +36,42 @@ class DefaultProjectApiFactory implements ProjectApiFactory
 
         switch ($productConfig->engine) {
             case 'commercetools':
-                $client = $this->commercetoolsClientFactory->factorForProjectAndType($project, 'product');
-                return new ProjectApi\Commercetools(
+                $clientFactory = $this->serviceLocator->get(CommercetoolsClientFactory::class);
+                $localeCreatorFactory = $this->serviceLocator->get(CommercetoolsLocaleCreatorFactory::class);
+
+                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+                return new CommercetoolsProjcetApi(
                     $client,
-                    $this->commercetoolsLocaleCreatorFactory->factor($project, $client),
+                    $localeCreatorFactory->factor($project, $client),
                     $project->languages
                 );
             case 'sap-commerce-cloud':
-                $client = $this->sapClientFactory->factorForProjectAndType($project, 'product');
+                $clientFactory = $this->serviceLocator->get(SapClientFactory::class);
+                $localeCreatorFactory = $this->serviceLocator->get(SapLocaleCreatorFactory::class);
+
+                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
                 return new SapProjectApi(
                     $client,
-                    $this->sapLocaleCreatorFactory->factor($project, $client),
+                    $localeCreatorFactory->factor($project, $client),
                     $project->languages
                 );
-        }
+            case 'shopware':
+                $clientFactory = $this->serviceLocator->get(ShopwareClientFactory::class);
+                $dataMapper = $this->serviceLocator->get(DataMapperResolver::class);
+                $localeCreatorFactory = $this->serviceLocator->get(ShopwareLocaleCreatorFactory::class);
 
-        throw new \OutOfBoundsException(
-            "No product API configured for project {$project->name}. " .
-            "Check the provisioned customer configuration in app/config/customers/."
-        );
+                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+                return new ShopwareProjectApi(
+                    $client,
+                    $localeCreatorFactory->factor($project, $client),
+                    $dataMapper,
+                    $project->languages
+                );
+            default:
+                throw new OutOfBoundsException(
+                    "No product API configured for project {$project->name}. " .
+                    "Check the provisioned customer configuration in app/config/customers/."
+                );
+        }
     }
 }

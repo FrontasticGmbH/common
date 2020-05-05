@@ -84,7 +84,7 @@ class SingleProductQuery extends Query
 
     private static function fromValues(array $values): SingleProductQuery
     {
-        $query = new static($values);
+        $query = new self($values);
         $query->validate();
         return $query;
     }

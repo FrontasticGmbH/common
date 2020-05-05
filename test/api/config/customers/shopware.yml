@@ -1,0 +1,25 @@
+---
+name: "shopware"
+secret: "secret"
+configuration:
+  test:
+    authTokenType: shopware
+    disabled: false
+    canQueryCategoriesBySlug: false
+    canAuthenticateWithToken: true
+  shopware:
+    apiKey: SWSCBHFSNTVMAWNZDNFKSHLAYW
+    endpoint: https://frontastic-test.shopwaredemo.store/sales-channel-api/v1
+  account:
+    engine: shopware
+  cart:
+    engine: shopware
+  product:
+    engine: shopware
+  whislist:
+    engine: no-wishlist
+projects:
+  - projectId: test
+    name: Shopware Test Catwalk
+    languages: ["en_GB@GBP", "de_DE@EUR"]
+    defaultLanguage: en_GB@GBP

@@ -4,3 +4,5 @@ vendor/
 node_modules/
 yarn.lock
 composer.lock
+
+test/api/var

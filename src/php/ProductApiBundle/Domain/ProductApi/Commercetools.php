@@ -33,14 +33,14 @@ class Commercetools implements ProductApi
     private $mapper;
 
     /**
-     * @var ProductApi\Commercetools\Options
-     */
-    private $options;
-
-    /**
      * @var Commercetools\Locale\CommercetoolsLocaleCreator
      */
     private $localeCreator;
+
+    /**
+     * @var EnabledFacetService
+     */
+    private $enabledFacetService;
 
     /**
      * @var string
@@ -51,24 +51,14 @@ class Commercetools implements ProductApi
         Client $client,
         Mapper $mapper,
         Commercetools\Locale\CommercetoolsLocaleCreator $localeCreator,
+        EnabledFacetService $enabledFacetService,
         string $defaultLocale
     ) {
         $this->client = $client;
         $this->mapper = $mapper;
         $this->localeCreator = $localeCreator;
         $this->defaultLocale = $defaultLocale;
-        $this->options = new ProductApi\Commercetools\Options();
-    }
-
-    /**
-     * Overwrite default commerecetools options.
-     *
-     * Explicitly NOT part of the ProductApi interface because Commercetools specific and only to be used during
-     * factoring!
-     */
-    public function setOptions(ProductApi\Commercetools\Options $options): void
-    {
-        $this->options = $options;
+        $this->enabledFacetService = $enabledFacetService;
     }
 
     /**
@@ -231,7 +221,10 @@ class Commercetools implements ProductApi
             'filter' => [],
             'filter.query' => [],
             'filter.facets' => [],
-            'facet' => $this->mapper->facetsToRequest($this->options->facetsToQuery, $locale),
+            'facet' => $this->mapper->facetsToRequest(
+                $this->enabledFacetService->getEnabledFacetDefinitions(),
+                $locale
+            ),
             'priceCurrency' => $locale->currency,
             'priceCountry' => $locale->country,
             'fuzzy' => $query->fuzzy ? 'true' : 'false',
@@ -271,7 +264,7 @@ class Commercetools implements ProductApi
         }
         $facetsToFilter = $this->mapper->facetsToFilter(
             $query->facets,
-            $this->options->facetsToQuery,
+            $this->enabledFacetService->getEnabledFacetDefinitions(),
             $locale
         );
         $parameters['filter'] = $facetsToFilter;

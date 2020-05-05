@@ -76,7 +76,7 @@ abstract class BaseImplementation
     /*** updatePassword() *********************************************************************************************/
     public function beforeUpdatePassword(
         AccountApi $accountApi,
-        string $accountId,
+        Account $account,
         string $oldPassword,
         string $newPassword
     ): void {
@@ -118,7 +118,7 @@ abstract class BaseImplementation
     }
 
     /*** getAddresses() ***********************************************************************************************/
-    public function beforeGetAddresses(AccountApi $accountApi, string $accountId): void
+    public function beforeGetAddresses(AccountApi $accountApi, Account $account): void
     {
     }
 
@@ -133,7 +133,7 @@ abstract class BaseImplementation
     }
 
     /*** addAddress() *************************************************************************************************/
-    public function beforeAddAddress(AccountApi $accountApi, string $accountId, Address $address): void
+    public function beforeAddAddress(AccountApi $accountApi, Account $account, Address $address): void
     {
     }
 
@@ -143,7 +143,7 @@ abstract class BaseImplementation
     }
 
     /*** updateAddress() **********************************************************************************************/
-    public function beforeUpdateAddress(AccountApi $accountApi, string $accountId, Address $address): void
+    public function beforeUpdateAddress(AccountApi $accountApi, Account $account, Address $address): void
     {
     }
 
@@ -153,7 +153,7 @@ abstract class BaseImplementation
     }
 
     /*** removeAddress() **********************************************************************************************/
-    public function beforeRemoveAddress(AccountApi $accountApi, string $accountId, string $addressId): void
+    public function beforeRemoveAddress(AccountApi $accountApi, Account $account, string $addressId): void
     {
     }
 
@@ -163,7 +163,7 @@ abstract class BaseImplementation
     }
 
     /*** setDefaultBillingAddress() ***********************************************************************************/
-    public function beforeSetDefaultBillingAddress(AccountApi $accountApi, string $accountId, string $addressId): void
+    public function beforeSetDefaultBillingAddress(AccountApi $accountApi, Account $account, string $addressId): void
     {
     }
 
@@ -173,7 +173,7 @@ abstract class BaseImplementation
     }
 
     /*** setDefaultShippingAddress() **********************************************************************************/
-    public function beforeSetDefaultShippingAddress(AccountApi $accountApi, string $accountId, string $addressId): void
+    public function beforeSetDefaultShippingAddress(AccountApi $accountApi, Account $account, string $addressId): void
     {
     }
 

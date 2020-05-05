@@ -2,22 +2,20 @@
 
 namespace Frontastic\Common\SapCommerceCloudBundle\Domain;
 
-use Doctrine\Common\Cache\Cache;
+use Psr\SimpleCache\CacheInterface;
 
 class SapProjectConfigApi
 {
     /** @var SapClient */
     private $client;
 
-    /** @var Cache */
+    /** @var CacheInterface */
     private $cache;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $cacheTtl;
 
-    public function __construct(SapClient $client, Cache $cache)
+    public function __construct(SapClient $client, CacheInterface $cache)
     {
         $this->client = $client;
         $this->cache = $cache;
@@ -44,8 +42,8 @@ class SapProjectConfigApi
     {
         $cacheKey = sprintf('frontastic.sapCommerceCloud.%sCodes.%s', $configName, $this->client->getInstanceId());
 
-        $result = $this->cache->fetch($cacheKey);
-        if ($result !== false) {
+        $result = $this->cache->get($cacheKey);
+        if ($result !== null) {
             return $result;
         }
 
@@ -56,7 +54,7 @@ class SapProjectConfigApi
             },
             $languages[$configName]
         );
-        $this->cache->save($cacheKey, $result, $this->cacheTtl);
+        $this->cache->set($cacheKey, $result, $this->cacheTtl);
         return $result;
     }
 }

@@ -5,6 +5,7 @@ configuration:
     test:
         disabled: false
         anonymousCheckout: false
+        canAuthenticateWithToken: false
     sap-commerce-cloud:
         hostUrl: https://gdm-sap-io-1.demo.hybris.com
     account:
@@ -23,6 +24,8 @@ projects:
         configuration:
             sap-commerce-cloud:
                 siteId: electronics
+                clientId: frontastic
+                clientSecret: frontastic
                 catalogId: electronicsProductCatalog
                 catalogVersionId: Online
     -   projectId: apparel-uk
@@ -32,5 +35,7 @@ projects:
         configuration:
             sap-commerce-cloud:
                 siteId: apparel-uk
+                clientId: frontastic
+                clientSecret: frontastic
                 catalogId: apparelProductCatalog
                 catalogVersionId: Online

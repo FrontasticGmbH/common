@@ -14,6 +14,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory;
+use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ProjectApiBundle\Domain\ProjectApiFactory;
 use Frontastic\Common\ReplicatorBundle\Domain\CustomerService;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
@@ -117,6 +118,45 @@ class FrontasticApiTestCase extends KernelTestCase
         $this->assertInternalType('array', $label);
         $this->assertContainsOnly('string', $label);
         $this->assertEquals($project->languages, array_keys($label));
+    }
+
+    protected function assertProductVariantIsWellFormed(Variant $variant, bool $priceIsRequired = true): void
+    {
+        $this->assertNotEmptyString($variant->id);
+        $this->assertNotEmptyString($variant->sku);
+
+        $this->assertNotEmptyString($variant->groupId);
+
+        if ($priceIsRequired) {
+            $this->assertNotNull($variant->price);
+        }
+        if ($variant->price !== null) {
+            $this->assertInternalType('integer', $variant->price);
+            $this->assertGreaterThanOrEqual(0, $variant->price);
+            $this->assertNotEmptyString($variant->currency);
+        } else {
+            $this->assertNull($variant->discountedPrice);
+            $this->assertNull($variant->currency);
+        }
+
+        if ($variant->discountedPrice !== null) {
+            $this->assertInternalType('integer', $variant->discountedPrice);
+            $this->assertGreaterThanOrEqual(0, $variant->discountedPrice);
+            $this->assertLessThanOrEqual($variant->price, $variant->discountedPrice);
+        }
+
+        $this->assertInternalType('array', $variant->discounts);
+
+        $this->assertInternalType('array', $variant->attributes);
+
+        $this->assertInternalType('array', $variant->images);
+        foreach ($variant->images as $image) {
+            $this->assertNotEmptyString($image);
+        }
+
+        $this->assertInternalType('boolean', $variant->isOnStock);
+
+        $this->assertNull($variant->dangerousInnerVariant);
     }
 
     protected function getSearchableAttributesForProject(Project $project)
@@ -232,9 +272,14 @@ class FrontasticApiTestCase extends KernelTestCase
         return $parameters;
     }
 
+    protected function hasProjectFeature(Project $project, string $featureName): bool
+    {
+        return $project->configuration['test']->{$featureName} ?? true;
+    }
+
     protected function requireProjectFeature(Project $project, string $featureName): void
     {
-        if (!($project->configuration['test']->{$featureName} ?? true)) {
+        if (!$this->hasProjectFeature($project, $featureName)) {
             $this->markTestSkipped($featureName . ' is required for this test');
         }
     }

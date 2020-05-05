@@ -9,6 +9,7 @@ use Frontastic\Common\Kernel;
 use Frontastic\Common\ProductApiBundle\FrontasticCommonProductApiBundle;
 use Frontastic\Common\ProjectApiBundle\FrontasticCommonProjectApiBundle;
 use Frontastic\Common\SapCommerceCloudBundle\FrontasticCommonSapCommerceCloudBundle;
+use Frontastic\Common\ShopwareBundle\FrontasticCommonShopwareBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
@@ -32,6 +33,8 @@ class TestKernel extends Kernel
             new FrontasticCommonCartApiBundle(),
             new FrontasticCommonProductApiBundle(),
             new FrontasticCommonProjectApiBundle(),
+
+            new FrontasticCommonShopwareBundle(),
             new FrontasticCommonSapCommerceCloudBundle(),
         ];
     }

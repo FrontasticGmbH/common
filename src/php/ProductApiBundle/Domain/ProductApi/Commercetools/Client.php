@@ -31,13 +31,21 @@ class Client
      */
     private $hostUrl;
 
+    /** @var float HTTP timeout for read operations (GET and HEAD requests) in seconds */
+    private $readOperationTimeout;
+
+    /** @var float HTTP timeout for write operations in seconds */
+    private $writeOperationTimeout;
+
     public function __construct(
         string $clientId,
         string $sclientSecret,
         string $projectKey,
         string $hostUrl,
         HttpClient $httpClient,
-        Cache $cache
+        Cache $cache,
+        float $readOperationTimeout = null,
+        float $writeOperationTimeout = null
     ) {
         $this->clientId = $clientId;
         $this->clientSecret = $sclientSecret;
@@ -45,6 +53,7 @@ class Client
         $this->httpClient = $httpClient;
         $this->cache = $cache;
         $this->setHostUrl($hostUrl);
+        $this->setTimeouts($readOperationTimeout, $writeOperationTimeout);
     }
 
     private function setHostUrl(string $hostUrl)
@@ -158,7 +167,11 @@ class Client
 
         $headers[] = sprintf('Authorization: Bearer %s', $this->getAccessToken());
 
-        $defaultTimeout = (int)getenv('http_client_timeout');
+        if ($method === 'HEAD' || $method === 'GET') {
+            $timeout = $this->readOperationTimeout;
+        } else {
+            $timeout = $this->writeOperationTimeout;
+        }
 
         return $this->httpClient
             ->requestAsync(
@@ -167,7 +180,7 @@ class Client
                 $body,
                 $headers,
                 new HttpClient\Options([
-                    'timeout' => ($method === 'POST' ? max(10, $defaultTimeout) : max(2, $defaultTimeout)),
+                    'timeout' => $timeout,
                 ])
             )
             ->then(function (Response $response) {
@@ -258,5 +271,22 @@ class Client
         ]);
 
         return $provider->getAccessToken(new ClientCredentials());
+    }
+
+    private function setTimeouts(?float $readOperationTimeout, ?float $writeOperationTimeout): void
+    {
+        if ($readOperationTimeout === null || $writeOperationTimeout === null) {
+            $environmentHttpTimeout = (int)getenv('http_client_timeout');
+            $readOperationTimeout = $readOperationTimeout ?? max($environmentHttpTimeout, 2);
+            $writeOperationTimeout = $writeOperationTimeout ?? max($environmentHttpTimeout, 10);
+        }
+        if ($readOperationTimeout <= 0) {
+            throw new \InvalidArgumentException(sprintf('Invalid read operation timeout: %d', $readOperationTimeout));
+        }
+        if ($writeOperationTimeout <= 0) {
+            throw new \InvalidArgumentException(sprintf('Invalid write operation timeout: %d', $writeOperationTimeout));
+        }
+        $this->readOperationTimeout = $readOperationTimeout;
+        $this->writeOperationTimeout = $writeOperationTimeout;
     }
 }
