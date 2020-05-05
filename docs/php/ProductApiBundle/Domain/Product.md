@@ -7,8 +7,8 @@
 Property|Type|Default|Description
 --------|----|-------|-----------
 `productId`|`string`||
-`changed`|`\Contentful\Core\Api\DateTimeImmutable|null`||
-`version`|`string`||
+`changed`|`?\DateTimeImmutable`||The date and time when this product was last changed or `null` if the date is unknown.
+`version`|`?string`||
 `name`|`string`||
 `slug`|`string`||
 `description`|`string`||

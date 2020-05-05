@@ -39,7 +39,7 @@ need to tag your service based on this class with
 public function beforeGetCategories(
     ProductApi $productApi,
     CategoryQuery $query
-): void
+): ?array
 ```
 
 Argument|Type|Default|Description
@@ -47,7 +47,7 @@ Argument|Type|Default|Description
 `$productApi`|[`ProductApi`](../../ProductApi.md)||
 `$query`|[`CategoryQuery`](../Query/CategoryQuery.md)||
 
-Return Value: `void`
+Return Value: `?array`
 
 ### afterGetCategories()
 
@@ -71,7 +71,7 @@ Return Value: `?array`
 public function beforeGetProductTypes(
     ProductApi $productApi,
     ProductTypeQuery $query
-): void
+): ?array
 ```
 
 Argument|Type|Default|Description
@@ -79,7 +79,7 @@ Argument|Type|Default|Description
 `$productApi`|[`ProductApi`](../../ProductApi.md)||
 `$query`|[`ProductTypeQuery`](../Query/ProductTypeQuery.md)||
 
-Return Value: `void`
+Return Value: `?array`
 
 ### afterGetProductTypes()
 
@@ -102,18 +102,18 @@ Return Value: `?array`
 ```php
 public function beforeGetProduct(
     ProductApi $productApi,
-    ProductQuery $query,
+    mixed $query,
     string $mode = ProductApi::QUERY_SYNC
-): void
+): ?array
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$productApi`|[`ProductApi`](../../ProductApi.md)||
-`$query`|[`ProductQuery`](../Query/ProductQuery.md)||
+`$query`|`mixed`||
 `$mode`|`string`|`ProductApi::QUERY_SYNC`|
 
-Return Value: `void`
+Return Value: `?array`
 
 ### afterGetProduct()
 
@@ -138,7 +138,7 @@ public function beforeQuery(
     ProductApi $productApi,
     ProductQuery $query,
     string $mode = ProductApi::QUERY_SYNC
-): void
+): ?array
 ```
 
 Argument|Type|Default|Description
@@ -147,7 +147,7 @@ Argument|Type|Default|Description
 `$query`|[`ProductQuery`](../Query/ProductQuery.md)||
 `$mode`|`string`|`ProductApi::QUERY_SYNC`|
 
-Return Value: `void`
+Return Value: `?array`
 
 ### afterQuery()
 

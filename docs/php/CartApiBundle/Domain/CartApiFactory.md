@@ -11,8 +11,7 @@
 
 ```php
 public function __construct(
-    ProductApi\Commercetools\ClientFactory $commercetoolsClientFactory,
-    ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory $localeCreatorFactory,
+    \Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator $factoryServiceLocator,
     OrderIdGenerator $orderIdGenerator,
     iterable $decorators
 ): mixed
@@ -20,8 +19,7 @@ public function __construct(
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$commercetoolsClientFactory`|[`ProductApi`](../../ProductApiBundle/Domain/ProductApi.md)\Commercetools\ClientFactory||
-`$localeCreatorFactory`|[`ProductApi`](../../ProductApiBundle/Domain/ProductApi.md)\Commercetools\Locale\CommercetoolsLocaleCreatorFactory||
+`$factoryServiceLocator`|`\Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator`||
 `$orderIdGenerator`|[`OrderIdGenerator`](OrderIdGenerator.md)||
 `$decorators`|`iterable`||
 

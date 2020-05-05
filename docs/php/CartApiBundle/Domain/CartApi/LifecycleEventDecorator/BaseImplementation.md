@@ -388,7 +388,7 @@ Return Value: ?[`Cart`](../../Cart.md)
 public function beforeSetShippingAddress(
     CartApi $cartApi,
     Cart $cart,
-    array $address,
+    Address $address,
     string $locale = null
 ): void
 ```
@@ -397,7 +397,7 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$cartApi`|[`CartApi`](../../CartApi.md)||
 `$cart`|[`Cart`](../../Cart.md)||
-`$address`|`array`||
+`$address`|[`Address`](../../../../AccountApiBundle/Domain/Address.md)||
 `$locale`|`string`|`null`|
 
 Return Value: `void`
@@ -424,7 +424,7 @@ Return Value: ?[`Cart`](../../Cart.md)
 public function beforeSetBillingAddress(
     CartApi $cartApi,
     Cart $cart,
-    array $address,
+    Address $address,
     string $locale = null
 ): void
 ```
@@ -433,7 +433,7 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$cartApi`|[`CartApi`](../../CartApi.md)||
 `$cart`|[`Cart`](../../Cart.md)||
-`$address`|`array`||
+`$address`|[`Address`](../../../../AccountApiBundle/Domain/Address.md)||
 `$locale`|`string`|`null`|
 
 Return Value: `void`

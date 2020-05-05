@@ -13,16 +13,16 @@
 
 ```php
 public function __construct(
-    ProductApi\Commercetools\ClientFactory $commercetoolsClientFactory,
-    ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory $localeCreatorFactory,
+    \Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator $serviceLocator,
+    ProductApi\EnabledFacetService $enabledFacetService,
     iterable $decorators = []
 ): mixed
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$commercetoolsClientFactory`|[`ProductApi`](ProductApi.md)\Commercetools\ClientFactory||
-`$localeCreatorFactory`|[`ProductApi`](ProductApi.md)\Commercetools\Locale\CommercetoolsLocaleCreatorFactory||
+`$serviceLocator`|`\Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator`||
+`$enabledFacetService`|[`ProductApi`](ProductApi.md)\EnabledFacetService||
 `$decorators`|`iterable`|`[]`|
 
 Return Value: `mixed`

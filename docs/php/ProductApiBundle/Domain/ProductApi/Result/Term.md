@@ -6,8 +6,8 @@
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`handle`|`string`||
-`name`|`string`||
+`handle`|`string`||Internal identifier. Depending on the backend it maybe equal to $name.
+`name`|`string`||Human readable name
 `value`|`string`||
 `count`|`int`||
 `selected`|`bool`||

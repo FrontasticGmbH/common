@@ -13,7 +13,7 @@ Property|Type|Default|Description
 `count`|`int`||
 `price`|`int`||
 `discountedPrice`|`int`||
-`discountTexts`|`array`|`[]`|
+`discountTexts`|`array`|`[]`|Translatable discount texts, if any are applied
 `totalPrice`|`int`||
 `currency`|`string`||
 `isGift`|`bool`|`false`|

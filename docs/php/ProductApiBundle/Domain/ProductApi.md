@@ -42,14 +42,14 @@ Return Value: `array`
 
 ```php
 public function getProduct(
-    ProductQuery $query,
+    mixed $query,
     string $mode = self::QUERY_SYNC
 ): ?object
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$query`|[`ProductQuery`](ProductApi/Query/ProductQuery.md)||
+`$query`|`mixed`||This might also be a `ProductQuery` for backwards compatibility reasons.
 `$mode`|`string`|`self::QUERY_SYNC`|One of the QUERY_* connstants. Execute the query synchronously or asynchronously?
 
 Return Value: `?object`

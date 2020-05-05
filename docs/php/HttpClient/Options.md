@@ -6,5 +6,5 @@
 
 Property|Type|Default|Description
 --------|----|-------|-----------
-`timeout`|``|`1`|
+`timeout`|int|float|HttpClient\timeout|HttpClient\for|HttpClient\the|HttpClient\complete|HttpClient\request|HttpClient\in|[`HttpClient`](../HttpClient.md)\seconds|`1`|
 

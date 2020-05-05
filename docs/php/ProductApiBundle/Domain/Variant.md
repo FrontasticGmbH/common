@@ -10,7 +10,7 @@ Property|Type|Default|Description
 `sku`|`string`||
 `groupId`|`string`||
 `price`|`int`||The product price in cent
-`discountedPrice`|`int|null`||If a discount is applied to the product, this contains the reduced value.
+`discountedPrice`|`?int`||If a discount is applied to the product, this contains the reduced value.
 `discounts`|`mixed`|`[]`|Array of discount descriptions
 `currency`|`string`||A three letter currency code in upper case.
 `attributes`|`array`|`[]`|

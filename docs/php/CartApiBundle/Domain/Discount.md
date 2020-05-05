@@ -9,7 +9,7 @@ Property|Type|Default|Description
 `discountId`|`string`||
 `code`|`string`||
 `state`|`string`||
-`name`|`\Frontastic\Common\CartApiBundle\Domain\Translatable`||
-`description`|`\Frontastic\Common\CartApiBundle\Domain\Translatable`||
+`name`|[`Translatable`](../../Translatable.md)||
+`description`|[`Translatable`](../../Translatable.md)||
 `dangerousInnerDiscount`|`mixed`||Access original object from backend
 

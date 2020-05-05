@@ -238,7 +238,7 @@ Return Value: [`Cart`](Cart.md)
 ```php
 public function setShippingAddress(
     Cart $cart,
-    array $address,
+    Address $address,
     string $locale = null
 ): Cart
 ```
@@ -246,7 +246,7 @@ public function setShippingAddress(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$cart`|[`Cart`](Cart.md)||
-`$address`|`array`||
+`$address`|[`Address`](../../AccountApiBundle/Domain/Address.md)||
 `$locale`|`string`|`null`|
 
 Return Value: [`Cart`](Cart.md)
@@ -256,7 +256,7 @@ Return Value: [`Cart`](Cart.md)
 ```php
 public function setBillingAddress(
     Cart $cart,
-    array $address,
+    Address $address,
     string $locale = null
 ): Cart
 ```
@@ -264,7 +264,7 @@ public function setBillingAddress(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$cart`|[`Cart`](Cart.md)||
-`$address`|`array`||
+`$address`|[`Address`](../../AccountApiBundle/Domain/Address.md)||
 `$locale`|`string`|`null`|
 
 Return Value: [`Cart`](Cart.md)
