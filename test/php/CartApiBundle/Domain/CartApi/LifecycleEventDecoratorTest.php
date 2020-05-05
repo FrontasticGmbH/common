@@ -9,7 +9,7 @@ class LifecycleEventDecoratorTest extends \PHPUnit\Framework\TestCase
     public function testCallBeforeFunctionWithArguments()
     {
         $cartApi = $this->getMockBuilder(Domain\CartApi::class)->getMock();
-        $listener = $this->getMockBuilder(\StdClass::class)->setMethods(['beforeAddToCart'])->getMock();
+        $listener = $this->getMockBuilder(\stdClass::class)->setMethods(['beforeAddToCart'])->getMock();
         $listener
             ->expects($this->once())
             ->method('beforeAddToCart')
@@ -34,7 +34,7 @@ class LifecycleEventDecoratorTest extends \PHPUnit\Framework\TestCase
             ->method('addToCart')
             ->willReturn(new Domain\Cart());
 
-        $listener = $this->getMockBuilder(\StdClass::class)->setMethods(['afterAddToCart'])->getMock();
+        $listener = $this->getMockBuilder(\stdClass::class)->setMethods(['afterAddToCart'])->getMock();
         $listener
             ->expects($this->once())
             ->method('afterAddToCart')
@@ -54,7 +54,7 @@ class LifecycleEventDecoratorTest extends \PHPUnit\Framework\TestCase
     {
         $cartApi = $this->getMockBuilder(Domain\CartApi::class)->getMock();
 
-        $decorator = new LifecycleEventDecorator($cartApi, [new \StdClass]);
+        $decorator = new LifecycleEventDecorator($cartApi, [new \stdClass]);
         $decorator->addToCart(
             new Domain\Cart(),
             new Domain\LineItem()
