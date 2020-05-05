@@ -34,6 +34,16 @@ use Frontastic\Common\CartApiBundle\Domain\Cart;
  */
 abstract class BaseImplementation
 {
+    /*** getSalutations() *********************************************************************************************/
+    public function beforeGetSalutations(AccountApi $accountApi, string $locale): void
+    {
+    }
+
+    public function afterGetSalutations(AccountApi $accountApi, ?array $salutations): ?array
+    {
+        return null;
+    }
+
     /*** confirmEmail() ***********************************************************************************************/
     public function beforeConfirmEmail(AccountApi $accountApi, string $token): void
     {

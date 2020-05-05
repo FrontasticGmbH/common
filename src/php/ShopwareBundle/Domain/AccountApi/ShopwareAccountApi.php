@@ -37,6 +37,11 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         $this->projectConfigApi = $projectConfigApiFactory->factor($this->client);
     }
 
+    public function getSalutations(string $locale): ?array
+    {
+        return null;
+    }
+
     public function confirmEmail(string $token): Account
     {
         throw new RuntimeException('Email confirmation is not supported by the Shopware account API.');

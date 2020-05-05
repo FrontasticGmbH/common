@@ -3,6 +3,7 @@
 namespace Frontastic\Common\ApiTests\AccountApi;
 
 use Frontastic\Common\AccountApiBundle\Domain\Account;
+use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\AccountApiBundle\Domain\DuplicateAccountException;
 use Frontastic\Common\ApiTests\FrontasticApiTestCase;
@@ -11,12 +12,29 @@ use Frontastic\Common\ReplicatorBundle\Domain\Project;
 class AccountCreationTest extends FrontasticApiTestCase
 {
     /**
-     * @dataProvider project
+     * @dataProvider projectAndLanguage
      */
-    public function testCreateNewAccountWithoutCart(Project $project): void
+    public function testSalutationsAreNullOrDistinctStrings(Project $project, string $language): void
     {
         $accountApi = $this->getAccountApiForProject($project);
-        $accountData = $this->getTestAccountData();
+
+        $salutations = $accountApi->getSalutations($language);
+        if ($salutations !== null) {
+            $this->assertInternalType('array', $salutations);
+            $this->assertContainsOnly('string', $salutations);
+            $this->assertArrayHasDistinctValues($salutations);
+        } else {
+            $this->assertNull($salutations);
+        }
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testCreateNewAccountWithoutCart(Project $project, string $language): void
+    {
+        $accountApi = $this->getAccountApiForProject($project);
+        $accountData = $this->getTestAccountData($accountApi, $language);
 
         // create the account
         $createdAccount = $accountApi->create($accountData);
@@ -60,12 +78,12 @@ class AccountCreationTest extends FrontasticApiTestCase
     }
 
     /**
-     * @dataProvider project
+     * @dataProvider projectAndLanguage
      */
-    public function testCreateAccountWithExistingMailThrowsException(Project $project): void
+    public function testCreateAccountWithExistingMailThrowsException(Project $project, string $language): void
     {
         $accountApi = $this->getAccountApiForProject($project);
-        $accountData = $this->getTestAccountData();
+        $accountData = $this->getTestAccountData($accountApi, $language);
 
         $accountApi->create($accountData);
 
@@ -73,18 +91,23 @@ class AccountCreationTest extends FrontasticApiTestCase
         $accountApi->create($accountData);
     }
 
-    private function getTestAccountData(): Account
+    private function getTestAccountData(AccountApi $accountApi, string $language): Account
     {
+        $salutation = 'Frau';
+        if (($salutations = $accountApi->getSalutations($language)) !== null) {
+            $salutation = $salutations[array_rand($salutations)];
+        }
+
         $account = new Account([
             'email' => 'integration-tests-not-exists+account-' . uniqid('', true) . '@frontastic.com',
-            'salutation' => 'Frau',
+            'salutation' => $salutation,
             'firstName' => 'Ashley',
             'lastName' => 'Stoltenberg',
             'birthday' => new \DateTimeImmutable('1961-11-6'),
             'confirmed' => false,
             'addresses' => [
                 new Address([
-                    'salutation' => 'Frau',
+                    'salutation' => $salutation,
                     'firstName' => 'Ashley',
                     'lastName' => 'Stoltenberg',
                     'streetName' => 'Test str.',

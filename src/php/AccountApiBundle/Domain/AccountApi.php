@@ -6,6 +6,14 @@ use Frontastic\Common\CartApiBundle\Domain\Cart;
 
 interface AccountApi
 {
+    /**
+     * Get the list of available salutations in the current locale. If `null` is returned the salutation may be an
+     * arbitrary string. Otherwise only the returned values may be used as salutation.
+     *
+     * @return string[]|null
+     */
+    public function getSalutations(string $locale): ?array;
+
     public function confirmEmail(string $token): Account;
 
     public function create(Account $account, ?Cart $cart = null): Account;

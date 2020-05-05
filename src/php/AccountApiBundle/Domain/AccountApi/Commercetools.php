@@ -34,6 +34,11 @@ class Commercetools implements AccountApi
         $this->client = $client;
     }
 
+    public function getSalutations(string $locale): ?array
+    {
+        return null;
+    }
+
     public function confirmEmail(string $token): Account
     {
         try {

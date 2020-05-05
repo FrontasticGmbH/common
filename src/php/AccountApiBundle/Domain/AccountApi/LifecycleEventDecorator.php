@@ -38,6 +38,11 @@ class LifecycleEventDecorator implements AccountApi
         return $this->aggregate;
     }
 
+    public function getSalutations(string $locale): ?array
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
     public function confirmEmail(string $token): Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());

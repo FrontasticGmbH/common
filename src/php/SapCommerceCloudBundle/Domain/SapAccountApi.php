@@ -28,6 +28,12 @@ class SapAccountApi implements AccountApi
         $this->dataMapper = $dataMapper;
     }
 
+    public function getSalutations(string $locale): ?array
+    {
+        /// @FIXME implement
+        return ['Mrs.'];
+    }
+
     public function confirmEmail(string $token): Account
     {
         throw new \RuntimeException('Email confirmation is not supported by the SAP commerce cloud account API.');
