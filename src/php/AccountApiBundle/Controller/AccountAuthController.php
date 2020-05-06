@@ -63,7 +63,8 @@ class AccountAuthController extends Controller
         try {
             $account = $this->getAccountService()->create(
                 $account,
-                $this->get('frontastic.catwalk.cart_api')->getAnonymous(session_id(), $context->locale)
+                $this->get('frontastic.catwalk.cart_api')->getAnonymous(session_id(), $context->locale),
+                $context->locale
             );
         } catch (DuplicateAccountException $exception) {
             return new JsonResponse(new ErrorResult(['message' => "Die E-Mail-Adresse wird bereits verwendet."]), 409);
@@ -76,9 +77,9 @@ class AccountAuthController extends Controller
         return $this->loginAccount($account, $request);
     }
 
-    public function confirmAction(Request $request, string $token): Response
+    public function confirmAction(Request $request, Context $context, string $token): Response
     {
-        $account = $this->getAccountService()->confirmEmail($token);
+        $account = $this->getAccountService()->confirmEmail($token, $context->locale);
 
         return $this->loginAccount($account, $request);
     }
@@ -91,10 +92,10 @@ class AccountAuthController extends Controller
         return new RedirectRoute('Frontastic.AccountBundle.Account.logout');
     }
 
-    public function resetAction(Request $request, string $token): Response
+    public function resetAction(Request $request, Context $context, string $token): Response
     {
         $body = $this->getJsonBody($request);
-        $account = $this->getAccountService()->resetPassword($token, $body['newPassword']);
+        $account = $this->getAccountService()->resetPassword($token, $body['newPassword'], $context->locale);
 
         return $this->loginAccount($account, $request);
     }
@@ -106,7 +107,8 @@ class AccountAuthController extends Controller
         $account = $context->session->account;
 
         $body = $this->getJsonBody($request);
-        $account = $this->getAccountService()->updatePassword($account, $body['oldPassword'], $body['newPassword']);
+        $account = $this->getAccountService()
+            ->updatePassword($account, $body['oldPassword'], $body['newPassword'], $context->locale);
         return new JsonResponse($account, 201);
     }
 
@@ -128,7 +130,7 @@ class AccountAuthController extends Controller
             'phonePrefix' => $body['phonePrefix'],
             'phone' => $body['phone'],
         ];
-        $account = $this->getAccountService()->update($account);
+        $account = $this->getAccountService()->update($account, $context->locale);
 
         return new JsonResponse($account, 200);
     }

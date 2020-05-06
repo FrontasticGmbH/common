@@ -45,7 +45,7 @@ abstract class BaseImplementation
     }
 
     /*** confirmEmail() ***********************************************************************************************/
-    public function beforeConfirmEmail(AccountApi $accountApi, string $token): void
+    public function beforeConfirmEmail(AccountApi $accountApi, string $token, string $locale = null): void
     {
     }
 
@@ -55,8 +55,12 @@ abstract class BaseImplementation
     }
 
     /*** create() *****************************************************************************************************/
-    public function beforeCreate(AccountApi $accountApi, Account $account, ?Cart $cart = null): void
-    {
+    public function beforeCreate(
+        AccountApi $accountApi,
+        Account $account,
+        ?Cart $cart = null,
+        string $locale = null
+    ): void {
     }
 
     public function afterCreate(AccountApi $accountApi, Account $account): ?Account
@@ -65,7 +69,7 @@ abstract class BaseImplementation
     }
 
     /*** update() *****************************************************************************************************/
-    public function beforeUpdate(AccountApi $accountApi, Account $account): void
+    public function beforeUpdate(AccountApi $accountApi, Account $account, string $locale = null): void
     {
     }
 
@@ -79,7 +83,8 @@ abstract class BaseImplementation
         AccountApi $accountApi,
         Account $account,
         string $oldPassword,
-        string $newPassword
+        string $newPassword,
+        string $locale = null
     ): void {
     }
 
@@ -101,8 +106,12 @@ abstract class BaseImplementation
     }
 
     /*** resetPassword() **********************************************************************************************/
-    public function beforeResetPassword(AccountApi $accountApi, string $token, string $newPassword): void
-    {
+    public function beforeResetPassword(
+        AccountApi $accountApi,
+        string $token,
+        string $newPassword,
+        string $locale = null
+    ): void {
     }
 
     public function afterResetPassword(AccountApi $accountApi, Account $account): ?Account
@@ -111,8 +120,12 @@ abstract class BaseImplementation
     }
 
     /*** login() ******************************************************************************************************/
-    public function beforeLogin(AccountApi $accountApi, Account $account, ?Cart $cart = null): void
-    {
+    public function beforeLogin(
+        AccountApi $accountApi,
+        Account $account,
+        ?Cart $cart = null,
+        string $locale = null
+    ): void {
     }
 
     public function afterLogin(AccountApi $accountApi, Account $account): ?Account
@@ -121,7 +134,7 @@ abstract class BaseImplementation
     }
 
     /*** refreshAccount() ******************************************************************************************************/
-    public function beforeRefreshAccount(AccountApi $accountApi, Account $account): void
+    public function beforeRefreshAccount(AccountApi $accountApi, Account $account, string $locale = null): void
     {
     }
 
@@ -131,7 +144,7 @@ abstract class BaseImplementation
     }
 
     /*** getAddresses() ***********************************************************************************************/
-    public function beforeGetAddresses(AccountApi $accountApi, Account $account): void
+    public function beforeGetAddresses(AccountApi $accountApi, Account $account, string $locale = null): void
     {
     }
 
@@ -146,8 +159,12 @@ abstract class BaseImplementation
     }
 
     /*** addAddress() *************************************************************************************************/
-    public function beforeAddAddress(AccountApi $accountApi, Account $account, Address $address): void
-    {
+    public function beforeAddAddress(
+        AccountApi $accountApi,
+        Account $account,
+        Address $address,
+        string $locale = null
+    ): void {
     }
 
     public function afterAddAddress(AccountApi $accountApi, Account $account): ?Account
@@ -156,8 +173,12 @@ abstract class BaseImplementation
     }
 
     /*** updateAddress() **********************************************************************************************/
-    public function beforeUpdateAddress(AccountApi $accountApi, Account $account, Address $address): void
-    {
+    public function beforeUpdateAddress(
+        AccountApi $accountApi,
+        Account $account,
+        Address $address,
+        string $locale = null
+    ): void {
     }
 
     public function afterUpdateAddress(AccountApi $accountApi, Account $account): ?Account
@@ -166,8 +187,12 @@ abstract class BaseImplementation
     }
 
     /*** removeAddress() **********************************************************************************************/
-    public function beforeRemoveAddress(AccountApi $accountApi, Account $account, string $addressId): void
-    {
+    public function beforeRemoveAddress(
+        AccountApi $accountApi,
+        Account $account,
+        string $addressId,
+        string $locale = null
+    ): void {
     }
 
     public function afterRemoveAddress(AccountApi $accountApi, Account $account): ?Account
@@ -176,8 +201,12 @@ abstract class BaseImplementation
     }
 
     /*** setDefaultBillingAddress() ***********************************************************************************/
-    public function beforeSetDefaultBillingAddress(AccountApi $accountApi, Account $account, string $addressId): void
-    {
+    public function beforeSetDefaultBillingAddress(
+        AccountApi $accountApi,
+        Account $account,
+        string $addressId,
+        string $locale = null
+    ): void {
     }
 
     public function afterSetDefaultBillingAddress(AccountApi $accountApi, Account $account): ?Account
@@ -186,8 +215,12 @@ abstract class BaseImplementation
     }
 
     /*** setDefaultShippingAddress() **********************************************************************************/
-    public function beforeSetDefaultShippingAddress(AccountApi $accountApi, Account $account, string $addressId): void
-    {
+    public function beforeSetDefaultShippingAddress(
+        AccountApi $accountApi,
+        Account $account,
+        string $addressId,
+        string $locale = null
+    ): void {
     }
 
     public function afterSetDefaultShippingAddress(AccountApi $accountApi, Account $account): ?Account

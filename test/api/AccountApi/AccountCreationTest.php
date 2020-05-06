@@ -37,7 +37,7 @@ class AccountCreationTest extends FrontasticApiTestCase
         $accountData = $this->getTestAccountData($accountApi, $language);
 
         // create the account
-        $createdAccount = $accountApi->create($accountData);
+        $createdAccount = $accountApi->create($accountData, null, $language);
 
         $this->assertNotEmptyString($createdAccount->accountId);
         $this->assertSameAccountData($accountData, $createdAccount);
@@ -50,7 +50,7 @@ class AccountCreationTest extends FrontasticApiTestCase
             $this->assertFalse($createdAccount->confirmed);
 
             // confirm the email address
-            $confirmedAccount = $accountApi->confirmEmail($createdAccount->confirmationToken);
+            $confirmedAccount = $accountApi->confirmEmail($createdAccount->confirmationToken, $language);
             $this->assertSame($createdAccount->accountId, $confirmedAccount->accountId);
             $this->assertSameAccountData($accountData, $confirmedAccount);
             $this->assertTrue($confirmedAccount->confirmed);
@@ -60,20 +60,20 @@ class AccountCreationTest extends FrontasticApiTestCase
         }
 
         // log in to the just created account
-        $fetchedAccount = $accountApi->login($this->getLoginDataFromAccount($accountData));
+        $fetchedAccount = $accountApi->login($this->getLoginDataFromAccount($accountData), null, $language);
         $this->assertNotNull($fetchedAccount);
         $this->assertSame($createdAccount->accountId, $fetchedAccount->accountId);
         $this->assertSameAccountData($accountData, $fetchedAccount);
         $this->assertTrue($fetchedAccount->confirmed);
 
         // re-fetch the account data
-        $refreshedAccount = $accountApi->refreshAccount($fetchedAccount);
+        $refreshedAccount = $accountApi->refreshAccount($fetchedAccount, $language);
         $this->assertEquals($fetchedAccount, $refreshedAccount);
 
         // log in with wrong password returns null
         $loginDataWithWrongPassword = $this->getLoginDataFromAccount($accountData);
         $loginDataWithWrongPassword->setPassword('This is the wrong password for this account');
-        $accountWithWrongPassword = $accountApi->login($loginDataWithWrongPassword);
+        $accountWithWrongPassword = $accountApi->login($loginDataWithWrongPassword, null, $language);
         $this->assertNull($accountWithWrongPassword);
     }
 
@@ -85,10 +85,10 @@ class AccountCreationTest extends FrontasticApiTestCase
         $accountApi = $this->getAccountApiForProject($project);
         $accountData = $this->getTestAccountData($accountApi, $language);
 
-        $accountApi->create($accountData);
+        $accountApi->create($accountData, null, $language);
 
         $this->expectException(DuplicateAccountException::class);
-        $accountApi->create($accountData);
+        $accountApi->create($accountData, null, $language);
     }
 
     private function getTestAccountData(AccountApi $accountApi, string $language): Account

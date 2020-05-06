@@ -63,38 +63,42 @@ class AccountService
         }
     }
 
-    public function confirmEmail(string $confirmationToken): Account
+    public function confirmEmail(string $confirmationToken, string $locale = null): Account
     {
-        return $this->accountApi->confirmEmail($confirmationToken);
+        return $this->accountApi->confirmEmail($confirmationToken, $locale);
     }
 
-    public function login(Account $account, ?Cart $cart = null): ?Account
+    public function login(Account $account, ?Cart $cart = null, string $locale = null): ?Account
     {
-        return $this->accountApi->login($account, $cart);
+        return $this->accountApi->login($account, $cart, $locale);
     }
 
-    public function refresh(Account $account): Account
+    public function refresh(Account $account, string $locale = null): Account
     {
-        return $this->accountApi->refreshAccount($account);
+        return $this->accountApi->refreshAccount($account, $locale);
     }
 
-    public function create(Account $account, ?Cart $cart = null): Account
+    public function create(Account $account, ?Cart $cart = null, string $locale = null): Account
     {
-        return $this->accountApi->create($account, $cart);
+        return $this->accountApi->create($account, $cart, $locale);
     }
 
-    public function update(Account $account): Account
+    public function update(Account $account, string $locale = null): Account
     {
-        return $this->accountApi->update($account);
+        return $this->accountApi->update($account, $locale);
     }
 
-    public function updatePassword(Account $account, string $oldPassword, string $newPassword): Account
-    {
-        return $this->accountApi->updatePassword($account, $oldPassword, $newPassword);
+    public function updatePassword(
+        Account $account,
+        string $oldPassword,
+        string $newPassword,
+        string $locale = null
+    ): Account {
+        return $this->accountApi->updatePassword($account, $oldPassword, $newPassword, $locale);
     }
 
-    public function resetPassword(string $token, string $newPassword): Account
+    public function resetPassword(string $token, string $newPassword, string $locale = null): Account
     {
-        return $this->accountApi->resetPassword($token, $newPassword);
+        return $this->accountApi->resetPassword($token, $newPassword, $locale);
     }
 }

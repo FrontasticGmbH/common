@@ -14,36 +14,41 @@ interface AccountApi
      */
     public function getSalutations(string $locale): ?array;
 
-    public function confirmEmail(string $token): Account;
+    public function confirmEmail(string $token, string $locale = null): Account;
 
-    public function create(Account $account, ?Cart $cart = null): Account;
+    public function create(Account $account, ?Cart $cart = null, string $locale = null): Account;
 
-    public function update(Account $account): Account;
+    public function update(Account $account, string $locale = null): Account;
 
-    public function updatePassword(Account $account, string $oldPassword, string $newPassword): Account;
+    public function updatePassword(
+        Account $account,
+        string $oldPassword,
+        string $newPassword,
+        string $locale = null
+    ): Account;
 
     public function generatePasswordResetToken(string $email): PasswordResetToken;
 
-    public function resetPassword(string $token, string $newPassword): Account;
+    public function resetPassword(string $token, string $newPassword, string $locale = null): Account;
 
-    public function login(Account $account, ?Cart $cart = null): ?Account;
+    public function login(Account $account, ?Cart $cart = null, string $locale = null): ?Account;
 
-    public function refreshAccount(Account $account): Account;
+    public function refreshAccount(Account $account, string $locale = null): Account;
 
     /**
      * @return Address[]
      */
-    public function getAddresses(Account $account): array;
+    public function getAddresses(Account $account, string $locale = null): array;
 
-    public function addAddress(Account $account, Address $address): Account;
+    public function addAddress(Account $account, Address $address, string $locale = null): Account;
 
-    public function updateAddress(Account $account, Address $address): Account;
+    public function updateAddress(Account $account, Address $address, string $locale = null): Account;
 
-    public function removeAddress(Account $account, string $addressId): Account;
+    public function removeAddress(Account $account, string $addressId, string $locale = null): Account;
 
-    public function setDefaultBillingAddress(Account $account, string $addressId): Account;
+    public function setDefaultBillingAddress(Account $account, string $addressId, string $locale = null): Account;
 
-    public function setDefaultShippingAddress(Account $account, string $addressId): Account;
+    public function setDefaultShippingAddress(Account $account, string $addressId, string $locale = null): Account;
 
     /**
      * Get *dangerous* inner client

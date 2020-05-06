@@ -25,6 +25,7 @@ class CreateAccountCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $accountService = $this->getContainer()->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
+        $project = $this->getContainer()->get('Frontastic\Common\ReplicatorBundle\Domain\Project');
 
         if (!$input->hasArgument('password')) {
             $helper = $this->getHelper('question');
@@ -46,7 +47,7 @@ class CreateAccountCommand extends ContainerAwareCommand
         $account->confirmed = true;
 
         try {
-            $accountService->create($account);
+            $accountService->create($account, null, $project->defaultLanguage);
         } catch (DuplicateAccountException $exception) {
             $output->writeln('<error>This email address already is in use.</error>');
             return;
