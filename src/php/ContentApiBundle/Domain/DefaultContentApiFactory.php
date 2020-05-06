@@ -4,6 +4,7 @@ namespace Frontastic\Common\ContentApiBundle\Domain;
 
 use Contentful\RichText\Renderer;
 use Doctrine\Common\Cache\Cache;
+use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful\ContentfulLocaleMapper;
 use Frontastic\Common\HttpClient;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\CachingContentApi;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful\NoopLocaleMapper;
@@ -72,14 +73,15 @@ class DefaultContentApiFactory implements ContentApiFactory
                 if ($this->container->has($this->contentfulLocaleMapperId)) {
                     $localeMapper = $this->container->get($this->contentfulLocaleMapperId);
                 } else {
-                    $localeMapper = new NoopLocaleMapper();
+                    $localeMapper = new ContentfulLocaleMapper($this->psrCache, $client);
                 }
 
                 $api = new ContentApi\Contentful(
                     $client,
                     $this->richtextRenderer,
                     $localeMapper,
-                    $project->defaultLanguage
+                    $project->defaultLanguage,
+                    $this->cache
                 );
                 break;
             case 'graphcms':

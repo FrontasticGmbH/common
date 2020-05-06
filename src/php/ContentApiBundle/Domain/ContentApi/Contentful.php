@@ -14,6 +14,7 @@ use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful\LocaleMapper
 use Frontastic\Common\ContentApiBundle\Domain\ContentType;
 use Frontastic\Common\ContentApiBundle\Domain\Query;
 use Frontastic\Common\ContentApiBundle\Domain\Result;
+use Doctrine\Common\Cache\Cache;
 use GuzzleHttp\Promise;
 
 /**
@@ -21,6 +22,11 @@ use GuzzleHttp\Promise;
  */
 class Contentful implements ContentApi
 {
+    /**
+     * @var Cache
+     */
+    private $cache;
+
     /**
      * @var Client
      */
@@ -41,17 +47,26 @@ class Contentful implements ContentApi
      */
     private $defaultLocale;
 
+    /**
+     * @var int
+     */
+     private $cacheTtl;
+
 
     public function __construct(
         Client $client,
         Renderer $richTextRenderer,
         LocaleMapper $localeMapper,
-        string $defaultLocale
+        string $defaultLocale,
+        Cache $cache,
+        int $cacheTtlSec = 600
     ) {
         $this->client = $client;
         $this->richTextRenderer = $richTextRenderer;
         $this->localeMapper = $localeMapper;
         $this->defaultLocale = $defaultLocale;
+        $this->cacheTtl = $cacheTtlSec;
+        $this->cache = $cache;
     }
 
     public function getContentTypes(): array
@@ -74,7 +89,7 @@ class Contentful implements ContentApi
         $locale = $locale ?? $this->defaultLocale;
 
         $promise = Promise\promise_for(
-            $this->client->getEntry($contentId, $this->frontasticToContentfulLocale($locale))
+            $this->client->getEntry($contentId, $this->localeMapper->replaceLocale($locale))
         )->then(function ($entry) {
             return $this->createContentFromEntry($entry);
         });
@@ -91,7 +106,7 @@ class Contentful implements ContentApi
         $contentfulQuery = new \Contentful\Delivery\Query();
 
         $locale = $locale ?? $this->defaultLocale;
-        $contentfulQuery->setLocale($this->frontasticToContentfulLocale($locale));
+        $contentfulQuery->setLocale($this->localeMapper->replaceLocale($locale));
         if ($query->contentType) {
             $contentfulQuery->setContentType($query->contentType);
         }
@@ -145,14 +160,15 @@ class Contentful implements ContentApi
             $name = $entry->$displayFieldId;
         }
 
+        $attributes = $this->convertContent($entry, $entry->all());
+
         $content = new Content([
             'contentId' => $entry->getId(),
             'contentTypeId' => $entry->getContentType()->getId(),
             'name' => $name,
+            'slug' => $attributes['slug']['content'] ?? 'cms',
             'dangerousInnerContent' => $entry,
         ]);
-
-        $attributes = $this->convertContent($entry, $entry->all());
 
         $content->attributes = $attributes;
 
@@ -203,14 +219,5 @@ class Contentful implements ContentApi
     public function getDangerousInnerClient()
     {
         return $this->client;
-    }
-
-    private function frontasticToContentfulLocale(string $frontasticLocale): string
-    {
-        return strtr(
-            $this->localeMapper->replaceLocale($frontasticLocale),
-            '_',
-            '-'
-        );
     }
 }
