@@ -44,7 +44,7 @@ class Attribute extends DataObject
      * The labels with the locale as key and the actual label as value. `null`
      * if the label is unknown
      *
-     * @var [string, string]|null
+     * @var ?array<string, string>
      */
     public $label;
 
