@@ -8,6 +8,6 @@ Property|Type|Default|Description
 --------|----|-------|-----------
 `attributeId`|`string`||
 `type`|`string`||TYPE_*
-`label`|``||The labels with the locale as key and the actual label as value. `null` if the label is unknown
+`label`|`array<string, string>|null`||The labels with the locale as key and the actual label as value. `null` if the label is unknown
 `values`|`?array`||
 
