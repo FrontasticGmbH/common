@@ -6,12 +6,10 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\PaginatedQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Filter;
+use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Util\FacetHandleParser;
 
 class SearchCriteriaBuilder
 {
-    private const HANDLE_SEPARATOR = '#';
-    private const DEFAULT_DEFINITION = 'property_group_option';
-
     private const PRODUCT_SOURCE_FIELDS = [
         'id',
         'productNumber',
@@ -61,6 +59,13 @@ class SearchCriteriaBuilder
     private const FIELDS_WITH_NAT_SORTING_ENABLED = [
         'productNumber',
     ];
+
+    /**
+     * Holds array of fields for that were already added to aggregation
+     *
+     * @var string[]
+     */
+    private static $aggregatedFields = [];
 
     public static function buildFromCategoryQuery(Query\CategoryQuery $query): array
     {
@@ -149,6 +154,7 @@ class SearchCriteriaBuilder
             ]);
         }
 
+        self::$aggregatedFields = [];
         foreach ($query->facets as $facet) {
             self::addAggregationToCriteria($criteria, $facet);
         }
@@ -201,56 +207,45 @@ class SearchCriteriaBuilder
 
     private static function addAggregationToCriteria(array &$criteria, Query\Facet $facet): void
     {
-        $aggregations = [];
-        $filter = null;
+        $aggregation = null;
+        $postFilter = null;
 
         if ($facet instanceof Query\TermFacet) {
-            [$field, $definition] = array_pad(explode(self::HANDLE_SEPARATOR, $facet->handle), 2, null);
+            [$field, $definition] = FacetHandleParser::parseFacetHandle($facet->handle);
 
-            $aggregations[] = [
-                new Aggregation\Terms([
-                    'name' => $facet->handle,
+            $aggregationName = sprintf('%s#%s', $field, $definition);
+            $aggregation = new Aggregation\Terms([
+                'name' => $aggregationName,
+                'field' => $field,
+                'aggregation' => new Aggregation\Entity([
+                    'name' => $aggregationName . '.inner',
                     'field' => $field,
-//                    'definition' => $definition ?? self::DEFAULT_DEFINITION,
-                    'aggregation' => new Aggregation\Entity([
-                        'name' => $facet->handle . '.inner',
-                        'field' => 'properties.group',
-                        'definition' => self::DEFAULT_DEFINITION,
-                    ])
+                    'definition' => $definition,
                 ])
-            ];
-
-//  @TODO: entity aggregation defined above will just provide id => value mapping. In order to achieve
-//  id => value (document count) uncomment this aggregation and map its results with entity aggregation
-//            $aggregations[] = [
-//                new Aggregation\Terms([
-//                    'name' => $facet->handle,
-//                    'field' => $facet->handle
-//                ])
-//            ];
+            ]);
 
             if (!empty($facet->terms)) {
-                $filter = SearchFilterFactory::buildSearchFilterFromTerms($facet);
+                $postFilter = SearchFilterFactory::buildSearchFilterFromTerms($facet);
             }
         } elseif ($facet instanceof Query\RangeFacet) {
-            $aggregations[] = [
-                new Aggregation\Stats([
-                    'name' => $facet->handle,
-                    'field' => $facet->handle
-                ])
-            ];
+            $aggregation = new Aggregation\Stats([
+                'name' => $facet->handle,
+                'field' => $facet->handle
+            ]);
 
             if ($facet->min !== 0 || $facet->max !== PHP_INT_MAX) {
-                $filter = SearchFilterFactory::buildSearchRangeFilter($facet);
+                $postFilter = SearchFilterFactory::buildSearchRangeFilter($facet);
             }
         }
 
-        if ($aggregations !== []) {
-            $criteria['aggregations'] = array_merge($criteria['aggregations'], ...$aggregations);
+        if ($aggregation !== null && !in_array($aggregation->field, self::$aggregatedFields, true)) {
+            $criteria['aggregations'][] = $aggregation;
+
+            self::$aggregatedFields[] = $aggregation->field;
         }
 
-        if ($filter !== null) {
-            $criteria['post-filter'][] = $filter;
+        if ($postFilter !== null) {
+            $criteria['post-filter'][] = $postFilter;
         }
     }
 
@@ -261,8 +256,14 @@ class SearchCriteriaBuilder
 
     private static function calculatePage(PaginatedQuery $query): int
     {
+        // For products
         if ($query->limit === 24) {
             $query->limit = 25;
+        }
+
+        // For categories
+        if ($query->limit === 250) {
+            $query->limit = 500;
         }
 
         return (int)ceil($query->offset / $query->limit) + 1;

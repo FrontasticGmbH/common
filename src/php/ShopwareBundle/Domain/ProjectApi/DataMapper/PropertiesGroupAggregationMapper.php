@@ -3,16 +3,19 @@
 namespace Frontastic\Common\ShopwareBundle\Domain\ProjectApi\DataMapper;
 
 use Frontastic\Common\ProjectApiBundle\Domain\Attribute;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LanguageAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LanguageAwareDataMapperTrait;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Aggregation;
 
-class PropertiesGroupAggregationMapper implements LanguageAwareDataMapperInterface
+class PropertiesGroupAggregationMapper extends AbstractDataMapper implements LanguageAwareDataMapperInterface
 {
     use LanguageAwareDataMapperTrait;
 
     public const MAPPER_NAME = 'properties_group_aggregation';
     private const AGGREGATION_NAME_SEPARATOR = '#';
+    private const AGGREGATION_FIELD = 'properties.id';
+    private const AGGREGATION_DEFINITION = 'property_group_option';
 
     public function getName(): string
     {
@@ -37,11 +40,24 @@ class PropertiesGroupAggregationMapper implements LanguageAwareDataMapperInterfa
     {
         $result = [];
         foreach ($aggregation->getResultData() as $group) {
-            $name = $group['translated']['name'] ?? $group['name'];
+            $name = $this->resolveTranslatedValue($group, 'name');
 
             $attribute = new Attribute();
             $attribute->type = Attribute::TYPE_LOCALIZED_ENUM;
-            $attribute->attributeId = sprintf('%s#%s', $name, $group['id']);
+            /**
+             * Even though we are mapping group aggregation, we have to set the field to properties.id rather
+             * than original properties.groupId. This field will be used in the fronted for aggregation building.
+             * In the frontend, the properties must be aggregated by their ID (instead of groupId).
+             *
+             * Same for definition, the value defined in the constant is needed for the frontend to work
+             */
+            $attribute->attributeId = sprintf(
+                '%s#%s#%s#%s',
+                $group['id'],
+                $name,
+                self::AGGREGATION_FIELD,
+                self::AGGREGATION_DEFINITION
+            );
             $attribute->label = [
                 $this->getLanguage() => $name,
             ];
@@ -66,7 +82,7 @@ class PropertiesGroupAggregationMapper implements LanguageAwareDataMapperInterfa
             $attribute->values[$property['id']] = [
                 'key' => $property['id'],
                 'label' => [
-                    $this->getLanguage() => $property['translated']['name'] ?? $property['name'],
+                    $this->getLanguage() => $this->resolveTranslatedValue($property, 'name'),
                 ]
             ];
         }
