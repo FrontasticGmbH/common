@@ -90,9 +90,8 @@ class AggregationMapper extends AbstractDataMapper implements QueryAwareDataMapp
             'key' => $rangeQueryFacet->handle,
             'handle' => $rangeQueryFacet->handle,
             'selected' => $selected,
-            // @TODO: to price multiply by 100
-            'min' => $aggregation->getResultData()['min'],
-            'max' => $aggregation->getResultData()['max'],
+            'min' => $this->convertPriceToCent($aggregation->getResultData()['min']),
+            'max' => $this->convertPriceToCent($aggregation->getResultData()['max']),
             'value' => [
                 'min' => $rangeQueryFacet->min,
                 'max' => $rangeQueryFacet->max,
