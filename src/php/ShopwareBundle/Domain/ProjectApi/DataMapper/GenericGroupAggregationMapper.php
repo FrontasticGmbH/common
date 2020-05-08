@@ -3,10 +3,11 @@
 namespace Frontastic\Common\ShopwareBundle\Domain\ProjectApi\DataMapper;
 
 use Frontastic\Common\ProjectApiBundle\Domain\Attribute;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LanguageAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LanguageAwareDataMapperTrait;
 
-class GenericGroupAggregationMapper implements LanguageAwareDataMapperInterface
+class GenericGroupAggregationMapper extends AbstractDataMapper implements LanguageAwareDataMapperInterface
 {
     use LanguageAwareDataMapperTrait;
 
@@ -24,7 +25,9 @@ class GenericGroupAggregationMapper implements LanguageAwareDataMapperInterface
         $aggregation = $aggregationData[0];
 
         $result = new Attribute();
-        $result->attributeId = $aggregation->field;
+        $result->attributeId = property_exists($aggregation, 'definition')
+            ? sprintf('%s#%s', $aggregation->field, $aggregation->definition)
+            : $aggregation->field;
         $result->type = Attribute::TYPE_LOCALIZED_ENUM;
         $result->label = [
             $this->getLanguage() => $aggregation->field,
@@ -34,7 +37,7 @@ class GenericGroupAggregationMapper implements LanguageAwareDataMapperInterface
             $result->values[$value['id']] = [
                 'key' => $value['id'],
                 'label' => [
-                    $this->getLanguage() => $value['translated']['name'] ?? $value['name'],
+                    $this->getLanguage() => $this->resolveTranslatedValue($value, 'name'),
                 ]
             ];
         }

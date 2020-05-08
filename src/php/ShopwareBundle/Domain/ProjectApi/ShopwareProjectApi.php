@@ -28,7 +28,7 @@ class ShopwareProjectApi extends AbstractShopwareApi implements ProjectApi
         DataMapperResolver $mapperResolver,
         array $projectLanguages
     ) {
-        parent::__construct($client, $localeCreator, $mapperResolver);
+        parent::__construct($client, $mapperResolver, $localeCreator);
 
         $this->projectLanguages = $projectLanguages;
     }
@@ -70,7 +70,7 @@ class ShopwareProjectApi extends AbstractShopwareApi implements ProjectApi
     /**
      * @param string $languageId
      *
-     * @return \Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Aggregation\AbstractAggregation[]
+     * @return \Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Aggregation\AbstractAggregation[][]
      */
     private function fetchProductAggregations(string $languageId): array
     {
@@ -115,6 +115,11 @@ class ShopwareProjectApi extends AbstractShopwareApi implements ProjectApi
         foreach ($this->resolveLanguagesToFetch() as $languageId => $language) {
             $groupedAggregations = $this->fetchProductAggregations($languageId);
 
+            // Aggregations need to be grouped in order to be properly resolved. For example in order to build
+            // facet which represents some Shopware product property, we need to combine result from two separate
+            // aggregations - one being an aggregation for property groups and other - aggregation for actual
+            // properties. Dedicated mapper then will receive that aggregation group and map the result of both
+            // aggregations to Frontastic facet data model
             foreach ($groupedAggregations as $aggregationGroup => $groupAggregations) {
                 $this->mapAggregationGroupToAttributes(
                     $localizedAttributes,
@@ -139,7 +144,9 @@ class ShopwareProjectApi extends AbstractShopwareApi implements ProjectApi
             $mapper->setLanguage($language);
         }
 
-        /** @var \Frontastic\Common\ProjectApiBundle\Domain\Attribute $attribute */
+        /**
+         * @var \Frontastic\Common\ProjectApiBundle\Domain\Attribute $attribute
+         */
         foreach ($mapper->map($aggregations) as $attributeId => $attribute) {
             if ($attributes->offsetExists($attributeId)) {
                 $existingAttribute = $attributes->offsetGet($attributeId);

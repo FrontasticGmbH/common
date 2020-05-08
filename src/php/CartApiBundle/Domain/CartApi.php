@@ -25,8 +25,14 @@ interface CartApi
      */
     public function getCustomLineItemType(): array;
 
+    /**
+     * @fixme Is this a hard CT dependency?
+     */
     public function setTaxCategory(array $taxCategory): void;
 
+    /**
+     * @fixme Is this a hard CT dependency?
+     */
     public function getTaxCategory(): array;
 
     public function addToCart(Cart $cart, LineItem $lineItem, string $locale = null): Cart;
