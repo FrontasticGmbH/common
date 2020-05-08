@@ -15,7 +15,7 @@ class SearchFilterFactory
         switch ($queryFilter->attributeType) {
             case 'money':
                 if ($queryFilter instanceof Query\RangeFilter) {
-                    $filter = static::buildSearchRangeFilter($queryFilter);
+                    $filter = static::buildSearchRangeFilterFromQueryFilter($queryFilter);
                 }
                 break;
             case 'enum':
@@ -27,9 +27,9 @@ class SearchFilterFactory
             case 'reference':
             default:
                 if ($queryFilter instanceof Query\TermFilter) {
-                    $filter = static::buildSearchFilterFromTerms($queryFilter);
+                    $filter = static::buildSearchFilterFromQueryFilter($queryFilter);
                 } elseif ($queryFilter instanceof Query\RangeFilter) {
-                    $filter = static::buildSearchRangeFilter($queryFilter);
+                    $filter = static::buildSearchRangeFilterFromQueryFilter($queryFilter);
                 }
 
                 break;
@@ -48,33 +48,52 @@ class SearchFilterFactory
         return $filter;
     }
 
-    public static function buildSearchRangeFilter(Query\RangeFilter $queryFilter): Filter\Range
+    public static function buildSearchRangeFilterFromQueryFacet(Query\RangeFacet $queryFacet): Filter\Range
     {
-        $range = [];
+        return self::buildSearchRangeFilter($queryFacet->handle, $queryFacet->min, $queryFacet->max);
+    }
 
-        if ($queryFilter->min > 0) {
-            $range[Filter\Range::RANGE_PARAM_GTE] = $queryFilter->min;
-        }
+    public static function buildSearchRangeFilterFromQueryFilter(Query\RangeFilter $queryFilter): Filter\Range
+    {
+        return self::buildSearchRangeFilter($queryFilter->handle, $queryFilter->min, $queryFilter->max);
+    }
 
-        if ($queryFilter->max > 0 && $queryFilter->max !== PHP_INT_MAX) {
-            $range[Filter\Range::RANGE_PARAM_LTE] = $queryFilter->max;
-        }
+    public static function buildSearchFilterFromQueryFacet(Query\TermFacet $queryFacet): SearchFilterInterface
+    {
+        return self::buildSearchFilter($queryFacet->handle, $queryFacet->terms);
+    }
 
-        $searchFilter = new Filter\Range();
-        $searchFilter->field = $queryFilter->handle;
-        $searchFilter->value = $range;
+    public static function buildSearchFilterFromQueryFilter(Query\TermFilter $queryFilter): SearchFilterInterface
+    {
+        return self::buildSearchFilter($queryFilter->handle, $queryFilter->terms);
+    }
+
+    private static function buildSearchFilter(string $handle, array $terms): SearchFilterInterface
+    {
+        $searchFilter = count($terms) === 1
+            ? new Filter\Equals(['value' => $terms[0]])
+            : new Filter\EqualsAny(['value' => $terms]);
+
+        $searchFilter->field = $handle;
 
         return $searchFilter;
     }
 
-    public static function buildSearchFilterFromTerms(Query\TermFilter $queryFilter): SearchFilterInterface
+    private static function buildSearchRangeFilter(string $handle, $min, $max): Filter\Range
     {
-        $searchFilter = count($queryFilter->terms) === 1
-            ? new Filter\Equals()
-            : new Filter\EqualsAny();
+        $range = [];
 
-        $searchFilter->field = $queryFilter->handle;
-        $searchFilter->value = $queryFilter->terms;
+        if ($min > 0) {
+            $range[Filter\Range::RANGE_PARAM_GTE] = $min;
+        }
+
+        if ($max > 0 && $max !== PHP_INT_MAX) {
+            $range[Filter\Range::RANGE_PARAM_LTE] = $max;
+        }
+
+        $searchFilter = new Filter\Range();
+        $searchFilter->field = $handle;
+        $searchFilter->value = $range;
 
         return $searchFilter;
     }
