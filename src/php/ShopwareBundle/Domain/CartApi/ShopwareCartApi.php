@@ -333,6 +333,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
      */
     private function getOrdersBy(string $token, array $parameters = [], ?string $locale = null): array
     {
+        $requestParameters = [];
 //        @TODO: could be uncommented once there will be a way to pass limit and page parameters
 //        $requestParameters = [
 //            'limit' => $parameters['limit'] ?? self::DEFAULT_ORDER_LIMIT,
