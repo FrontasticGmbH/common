@@ -187,6 +187,7 @@ class SearchCriteriaBuilder
             'page' => 1,
             'limit' => 1,
             'filter' => [],
+// @TODO: uncomment if doing response optimizations
 //            'source' => self::PRODUCT_SOURCE_FIELDS,
         ];
 
@@ -207,6 +208,10 @@ class SearchCriteriaBuilder
 
     private static function addAggregationToCriteria(array &$criteria, Query\Facet $facet): void
     {
+        // Due to the fact that we need to modify the handle, a copy is used instead of original
+        // @see paas/libraries/common/src/php/ShopwareBundle/Domain/ProductApi/Search/SearchCriteriaBuilder.php:235
+        $facet = clone $facet;
+
         $aggregation = null;
         $postFilter = null;
 
@@ -225,7 +230,10 @@ class SearchCriteriaBuilder
             ]);
 
             if (!empty($facet->terms)) {
-                $postFilter = SearchFilterFactory::buildSearchFilterFromTerms($facet);
+                // Originally $handle does contain more information than just the field, so we
+                // explicitly set parsed actual field value here
+                $facet->handle = $field;
+                $postFilter = SearchFilterFactory::buildSearchFilterFromQueryFacet($facet);
             }
         } elseif ($facet instanceof Query\RangeFacet) {
             $aggregation = new Aggregation\Stats([
@@ -234,7 +242,7 @@ class SearchCriteriaBuilder
             ]);
 
             if ($facet->min !== 0 || $facet->max !== PHP_INT_MAX) {
-                $postFilter = SearchFilterFactory::buildSearchRangeFilter($facet);
+                $postFilter = SearchFilterFactory::buildSearchRangeFilterFromQueryFacet($facet);
             }
         }
 
@@ -256,6 +264,7 @@ class SearchCriteriaBuilder
 
     private static function calculatePage(PaginatedQuery $query): int
     {
+        // @TODO: temporary fix for allowed_values problem
         // For products
         if ($query->limit === 24) {
             $query->limit = 25;
