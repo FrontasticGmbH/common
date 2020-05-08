@@ -285,6 +285,8 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
 
     protected function configureMapper(DataMapperInterface $mapper): void
     {
+        parent::configureMapper($mapper);
+
         if ($mapper instanceof ProjectConfigApiAwareDataMapperInterface) {
             $mapper->setProjectConfigApi($this->projectConfigApi);
         }

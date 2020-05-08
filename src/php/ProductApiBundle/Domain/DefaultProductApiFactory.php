@@ -17,6 +17,7 @@ use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFacto
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver as ShopwareDataMapperResolver;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory as ShopwareLocaleCreatorFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\ShopwareProductApi;
+use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -93,7 +94,8 @@ class DefaultProductApiFactory implements ProductApiFactory
                     $dataMapper,
                     $localeCreatorFactory->factor($project, $client),
                     $project->defaultLanguage,
-                    $this->enabledFacetService
+                    $this->enabledFacetService,
+                    $this->serviceLocator->get(ShopwareProjectConfigApiFactory::class)
                 );
                 break;
             default:

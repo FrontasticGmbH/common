@@ -4,15 +4,24 @@ namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper;
 
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperTrait;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperTrait;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperTrait;
 use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyPathBuilder;
 
-class ProductVariantMapper extends AbstractDataMapper implements QueryAwareDataMapperInterface
+class ProductVariantMapper extends AbstractDataMapper implements
+    LocaleAwareDataMapperInterface,
+    ProjectConfigApiAwareDataMapperInterface,
+    QueryAwareDataMapperInterface
 {
-    use QueryAwareDataMapperTrait;
+    use LocaleAwareDataMapperTrait,
+        ProjectConfigApiAwareDataMapperTrait,
+        QueryAwareDataMapperTrait;
 
     public const MAPPER_NAME = 'product-variant';
 
@@ -57,6 +66,7 @@ class ProductVariantMapper extends AbstractDataMapper implements QueryAwareDataM
             'sku' => $variantData['productNumber'],
             'groupId' => $variantData['parentId'],
             'price' => $this->convertPriceToCent($variantData['price'][0]['gross']),
+            'currency' => $this->resolveCurrencyCodeFromLocale(),
             'attributes' => $this->mapDataToAttributes($variantData),
             'images' => $this->mapDataToImages($variantData),
             'isOnStock' => $variantData['available'] && $variantData['availableStock'] > 0,
@@ -171,5 +181,12 @@ class ProductVariantMapper extends AbstractDataMapper implements QueryAwareDataM
             $result[$groupId]['properties'][$property['id']] = $this->resolveTranslatedValue($property, 'name');
         }
         return $result;
+    }
+
+    private function resolveCurrencyCodeFromLocale(): ?string
+    {
+        $shopwareCurrency = $this->projectConfigApi->getCurrency($this->getLocale()->currencyId);
+
+        return $shopwareCurrency ? $shopwareCurrency->isoCode : null;
     }
 }
