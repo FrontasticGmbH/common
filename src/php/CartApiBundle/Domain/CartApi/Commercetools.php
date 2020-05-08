@@ -614,7 +614,7 @@ class Commercetools implements CartApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function getOrders(Account $account, array $parameters = [], string $locale = null): array
+    public function getOrders(Account $account, string $locale = null): array
     {
         $result = $this->client
             ->fetchAsync(

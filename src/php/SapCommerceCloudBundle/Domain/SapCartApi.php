@@ -221,7 +221,7 @@ class SapCartApi implements CartApi
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function getOrders(Account $account, array $parameters = [], string $locale = null): array
+    public function getOrders(Account $account, string $locale = null): array
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }

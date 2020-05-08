@@ -282,11 +282,11 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
         return $result[0];
     }
 
-    public function getOrders(Account $account, array $parameters = [], string $locale = null): array
+    public function getOrders(Account $account, string $locale = null): array
     {
         return $this->getOrdersBy(
             $account->getToken(self::TOKEN_TYPE),
-            $parameters,
+            [],
             $locale
         );
     }
@@ -332,10 +332,11 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
      */
     private function getOrdersBy(string $token, array $parameters = [], ?string $locale = null): array
     {
-        $requestParameters = [
-            'limit' => $parameters['limit'] ?? self::DEFAULT_ORDER_LIMIT,
-            'page' => $parameters['page'] ?? self::DEFAULT_ORDER_PAGE,
-        ];
+//        @TODO: could be uncommented once there will be a way to pass limit and page parameters
+//        $requestParameters = [
+//            'limit' => $parameters['limit'] ?? self::DEFAULT_ORDER_LIMIT,
+//            'page' => $parameters['page'] ?? self::DEFAULT_ORDER_PAGE,
+//        ];
 
         if (isset($parameters['orderId'])) {
             $requestParameters['filter[id]'] = $parameters['orderId'];
@@ -347,7 +348,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($token)
-            ->get('/customer/order?associations[lineItems][]', $requestParameters)
+            ->get('/customer/order', $requestParameters)
             ->then(function ($response) {
                 return $this->mapResponse($response, OrdersMapper::MAPPER_NAME);
             })

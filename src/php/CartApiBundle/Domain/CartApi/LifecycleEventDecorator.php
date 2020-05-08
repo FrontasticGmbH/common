@@ -156,7 +156,7 @@ class LifecycleEventDecorator implements CartApi
     /**
      * @return Order[]
      */
-    public function getOrders(Account $account, array $parameters = [], string $locale = null): array
+    public function getOrders(Account $account, string $locale = null): array
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }

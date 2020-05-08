@@ -71,7 +71,7 @@ interface CartApi
     /**
      * @return \Frontastic\Common\CartApiBundle\Domain\Order[]
      */
-    public function getOrders(Account $account, array $parameters = [], string $locale = null): array;
+    public function getOrders(Account $account, string $locale = null): array;
 
     public function startTransaction(Cart $cart): void;
 
