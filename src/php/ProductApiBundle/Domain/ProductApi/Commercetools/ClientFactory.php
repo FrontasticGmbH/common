@@ -37,14 +37,10 @@ class ClientFactory
         $typeSpecificConfiguration = $project->getConfigurationSection($typeName);
         $commercetoolsConfig = $project->getConfigurationSection('commercetools');
 
-        $config = [
-            'clientId' => null,
-            'clientSecret' => null,
-            'projectKey' => null,
-            'hostUrl' => 'https://api.sphere.io', // provide a default value to keep BC
-        ];
-        foreach (array_keys($config) as $option) {
-            $value = $typeSpecificConfiguration->$option ?? $commercetoolsConfig->$option ?? $config[$option];
+        $config = [];
+
+        foreach ($this->getStringConfigOptions() as $option => $defaultValue) {
+            $value = $typeSpecificConfiguration->$option ?? $commercetoolsConfig->$option ?? $defaultValue;
             if ($value === null) {
                 throw new \RuntimeException('Commercetools config option ' . $option . ' is not set');
             }
@@ -58,13 +54,53 @@ class ClientFactory
             $config[$option] = $value;
         }
 
+        foreach ($this->getNumericConfigOptions() as $option => $defaultValue) {
+            $value = $typeSpecificConfiguration->$option ?? $commercetoolsConfig->$option ?? $defaultValue;
+            if ($value === null) {
+                throw new \RuntimeException('Commercetools config option ' . $option . ' is not set');
+            }
+            if (!is_numeric($value)) {
+                throw new \RuntimeException('Commercetools config option ' . $option . ' is not a number');
+            }
+
+            $config[$option] = $value;
+        }
+
         return new Client(
             $config['clientId'],
             $config['clientSecret'],
             $config['projectKey'],
             $config['hostUrl'],
             $this->httpClient,
-            $this->cache
+            $this->cache,
+            (float)$config['readOperationTimeoutSeconds'],
+            (float)$config['writeOperationTimeoutSeconds']
         );
+    }
+
+    /**
+     * @return array<string, string|null>
+     */
+    private function getStringConfigOptions(): array
+    {
+        return [
+            'clientId' => null,
+            'clientSecret' => null,
+            'projectKey' => null,
+            'hostUrl' => 'https://api.sphere.io', // provide a default value to keep BC
+        ];
+    }
+
+    /**
+     * @return array<string, int|null>
+     */
+    private function getNumericConfigOptions(): array
+    {
+        $environmentHttpTimeout = (int)getenv('http_client_timeout');
+
+        return [
+            'readOperationTimeoutSeconds' => max($environmentHttpTimeout, 2),
+            'writeOperationTimeoutSeconds' => max($environmentHttpTimeout, 10),
+        ];
     }
 }

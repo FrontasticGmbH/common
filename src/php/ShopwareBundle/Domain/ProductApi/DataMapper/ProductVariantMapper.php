@@ -6,12 +6,17 @@ use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperTrait;
+use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyPathBuilder;
 
 class ProductVariantMapper extends AbstractDataMapper implements QueryAwareDataMapperInterface
 {
     use QueryAwareDataMapperTrait;
 
     public const MAPPER_NAME = 'product-variant';
+
+    protected const ROOT_ATTRIBUTE_PREFIX = '_';
 
     /**
      * Contains a collection of root attributes in variant data that should be mapped to attributes
@@ -21,7 +26,22 @@ class ProductVariantMapper extends AbstractDataMapper implements QueryAwareDataM
      */
     protected const ROOT_ATTRIBUTES_AS_PROPERTIES = [
         'ean',
+        'manufacturer.name',
+        'manufacturer.link',
     ];
+
+    /**
+     * @var \Symfony\Component\PropertyAccess\PropertyAccessor
+     */
+    private $propAccessor;
+
+    public function __construct()
+    {
+        $this->propAccessor = PropertyAccess::createPropertyAccessorBuilder()
+            ->disableExceptionOnInvalidPropertyPath()
+            ->disableExceptionOnInvalidIndex()
+            ->getPropertyAccessor();
+    }
 
     public function getName(): string
     {
@@ -46,9 +66,19 @@ class ProductVariantMapper extends AbstractDataMapper implements QueryAwareDataM
 
     private function mapDataToAttributes(array $variantData): array
     {
-        return array_merge(
-            $this->mapRootAttributesToAttributes($variantData),
-            $this->mapPropertiesToAttributes($variantData['properties'] ?? [])
+        $properties = $variantData['properties'] ?? [];
+        $options = $variantData['options'] ?? [];
+
+        // Fallback to options if there are no properties
+        if (empty($properties)) {
+            $properties = $options;
+        }
+
+        return array_filter(
+            array_merge(
+                $this->mapRootAttributesToAttributes($variantData),
+                $this->mapPropertiesToAttributes($properties)
+            )
         );
     }
 
@@ -100,7 +130,29 @@ class ProductVariantMapper extends AbstractDataMapper implements QueryAwareDataM
 
     private function mapRootAttributesToAttributes(array $variantData): array
     {
-        return array_filter(array_intersect_key($variantData, array_flip(static::ROOT_ATTRIBUTES_AS_PROPERTIES)));
+        $result = [];
+        foreach (static::ROOT_ATTRIBUTES_AS_PROPERTIES as $propertyPath) {
+            $pathParts = explode('.', $propertyPath);
+            $pathBuilder = new PropertyPathBuilder();
+
+            foreach ($pathParts as $pathPart) {
+                $pathBuilder->appendIndex($pathPart);
+            }
+
+            $attributeKey = sprintf(
+                '%s%s',
+                static::ROOT_ATTRIBUTE_PREFIX,
+                str_replace('.', '_', $propertyPath)
+            );
+
+            try {
+                $result[$attributeKey] = $this->propAccessor->isReadable($variantData, $pathBuilder->getPropertyPath());
+            } catch (UnexpectedTypeException $exception) {
+                $result[$attributeKey] = null;
+            }
+        }
+
+        return $result;
     }
 
     private function groupProperties(array $properties): array

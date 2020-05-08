@@ -14,7 +14,7 @@ class Equals extends AbstractFilter
     {
         if ($this->value !== null && !is_string($this->value) && !is_numeric($this->value) && !is_bool($this->value)) {
             throw new InvalidArgumentException(
-                sprintf('Value must be string or number, %s given', gettype($this->value))
+                sprintf('Value must be bool, null, number or string, %s given', gettype($this->value))
             );
         }
     }

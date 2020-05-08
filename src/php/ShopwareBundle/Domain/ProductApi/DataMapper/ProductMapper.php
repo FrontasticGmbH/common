@@ -49,7 +49,7 @@ class ProductMapper extends AbstractDataMapper implements QueryAwareDataMapperIn
             'version' => (string)$productData['versionId'],
             'name' => $name,
             'slug' => Slugger::slugify($name),
-            'description' => $this->resolveTranslatedValue($productData, 'description'),
+            'description' => strip_tags($this->resolveTranslatedValue($productData, 'description')),
             'categories' => $productData['categoryTree'],
             'variants' => $this->mapDataToVariants($productData),
             'dangerousInnerProduct' => $this->mapDangerousInnerData($productData),

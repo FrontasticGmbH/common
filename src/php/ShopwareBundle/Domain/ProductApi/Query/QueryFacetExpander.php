@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\Query;
 
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\Facet;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\RangeFacet;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\TermFacet;
@@ -14,13 +15,23 @@ class QueryFacetExpander
      *
      * @return \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery
      */
-    public static function expandQueryEnabledFacets(ProductQuery $query, array $facetDefinitions): ProductQuery
+    public static function expandQueryEnabledFacets(ProductQuery $query, array $enabledFacetDefinitions): ProductQuery
     {
-        foreach ($facetDefinitions as $facetDefinition) {
-            switch ($facetDefinition->attributeType) {
+        $enabledFacetHandles = [];
+        $queryFacetsHandles = self::groupQueryFacetsByHandle($query);
+
+        $enabledFacets = [];
+        foreach ($enabledFacetDefinitions as $enabledFacetDefinition) {
+            // The facet is defined in the query and is among enabled facet definitions
+            if (in_array($enabledFacetDefinition->attributeId, $queryFacetsHandles, true)) {
+                $enabledFacetHandles[] = $enabledFacetDefinition->attributeId;
+                continue;
+            }
+
+            switch ($enabledFacetDefinition->attributeType) {
                 case 'money':
                     $facet = new RangeFacet([
-                        'handle' => $facetDefinition->attributeId
+                        'handle' => $enabledFacetDefinition->attributeId
                     ]);
                     break;
                 case 'number':
@@ -32,14 +43,36 @@ class QueryFacetExpander
                 case 'reference':
                 default:
                     $facet = new TermFacet([
-                        'handle' => $facetDefinition->attributeId
+                        'handle' => $enabledFacetDefinition->attributeId
                     ]);
                     break;
             }
 
-            $query->facets[] = $facet;
+            $enabledFacetHandles[] = $facet->handle;
+            $enabledFacets[] = $facet;
         }
 
+        foreach ($queryFacetsHandles as $index => $queryFacetsHandle) {
+            // Remove facet from original query if it's not enabled
+            if (!in_array($queryFacetsHandle, $enabledFacetHandles, true)) {
+                unset($query->facets[$index]);
+            }
+        }
+
+        $query->facets = array_values(array_merge($query->facets, $enabledFacets));
+
         return $query;
+    }
+
+    /**
+     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery $query
+     *
+     * @return \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\Facet[]
+     */
+    private static function groupQueryFacetsByHandle(ProductQuery $query): array
+    {
+        return array_map(static function (Facet $facet) {
+            return $facet->handle;
+        }, $query->facets);
     }
 }
