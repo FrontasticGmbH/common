@@ -89,6 +89,7 @@ class CartApiFactory
                     $client,
                     $this->factoryServiceLocator->get(DataMapperResolver::class),
                     $localeCreatorFactory->factor($project, $client),
+                    $project->defaultLanguage,
                     $this->factoryServiceLocator->get(ShopwareProjectConfigApiFactory::class)
                 );
                 break;
@@ -98,10 +99,6 @@ class CartApiFactory
                     "No cart API configured for project {$project->name}. " .
                     "Check the provisioned customer configuration in app/config/customers/."
                 );
-        }
-
-        if (method_exists($cartApi, 'setDefaultLanguage')) {
-            $cartApi->setDefaultLanguage($project->defaultLanguage);
         }
 
         return new CartApi\LifecycleEventDecorator($cartApi, $this->decorators);

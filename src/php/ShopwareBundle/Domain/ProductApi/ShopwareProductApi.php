@@ -35,9 +35,10 @@ class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
         ClientInterface $client,
         DataMapperResolver $mapperResolver,
         LocaleCreator $localeCreator,
+        string $defaultLanguage,
         EnabledFacetService $enabledFacetService
     ) {
-        parent::__construct($client, $mapperResolver, $localeCreator);
+        parent::__construct($client, $mapperResolver, $localeCreator, $defaultLanguage);
 
         $this->enabledFacetService = $enabledFacetService;
     }

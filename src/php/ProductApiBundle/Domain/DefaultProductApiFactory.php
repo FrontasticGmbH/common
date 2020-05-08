@@ -52,7 +52,7 @@ class DefaultProductApiFactory implements ProductApiFactory
 
     public function factor(Project $project): ProductApi
     {
-        $productConfig = $project->getConfigurationSection('product');
+        $productConfig = $project->getConfigurationSection(self::CONFIGURATION_TYPE_NAME);
 
         switch ($productConfig->engine) {
             case 'commercetools':
@@ -92,6 +92,7 @@ class DefaultProductApiFactory implements ProductApiFactory
                     $client,
                     $dataMapper,
                     $localeCreatorFactory->factor($project, $client),
+                    $project->defaultLanguage,
                     $this->enabledFacetService
                 );
                 break;
@@ -100,10 +101,6 @@ class DefaultProductApiFactory implements ProductApiFactory
                     "No product API configured for project {$project->name}. " .
                     "Check the provisioned customer configuration in app/config/customers/."
                 );
-        }
-
-        if (method_exists($productApi, 'setDefaultLanguage')) {
-            $productApi->setDefaultLanguage($project->defaultLanguage);
         }
 
         return new ProductApi\LifecycleEventDecorator($productApi, $this->decorators);

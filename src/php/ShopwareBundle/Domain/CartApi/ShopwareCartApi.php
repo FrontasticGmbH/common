@@ -50,9 +50,10 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
         ClientInterface $client,
         DataMapperResolver $mapperResolver,
         LocaleCreator $localeCreator,
+        string $defaultLanguage,
         ShopwareProjectConfigApiFactory $projectConfigApiFactory
     ) {
-        parent::__construct($client, $mapperResolver, $localeCreator);
+        parent::__construct($client, $mapperResolver, $localeCreator, $defaultLanguage);
 
         $this->projectConfigApi = $projectConfigApiFactory->factor($client);
     }

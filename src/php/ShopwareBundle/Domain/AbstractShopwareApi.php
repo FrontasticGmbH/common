@@ -40,15 +40,12 @@ abstract class AbstractShopwareApi
     public function __construct(
         ClientInterface $client,
         DataMapperResolver $mapperResolver,
-        ?LocaleCreator $localeCreator = null
+        ?LocaleCreator $localeCreator = null,
+        ?string $defaultLanguage = null
     ) {
         $this->client = $client;
         $this->mapperResolver = $mapperResolver;
         $this->localeCreator = $localeCreator;
-    }
-
-    public function setDefaultLanguage(string $defaultLanguage): void
-    {
         $this->defaultLanguage = $defaultLanguage;
     }
 
