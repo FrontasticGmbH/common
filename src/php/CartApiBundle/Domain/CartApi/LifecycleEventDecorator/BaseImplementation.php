@@ -189,7 +189,7 @@ abstract class BaseImplementation
     public function beforeRemoveDiscountCode(
         CartApi $cartApi,
         Cart $cart,
-        string $discountId,
+        LineItem $discountLineItem,
         string $locale = null
     ): void {
     }
