@@ -6,6 +6,7 @@ use Frontastic\Common\HttpClient;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
 use League\OAuth2\Client\Grant\ClientCredentials;
+use League\OAuth2\Client\Grant\Password;
 use League\OAuth2\Client\Provider\GenericProvider;
 use League\OAuth2\Client\Token\AccessTokenInterface;
 use Psr\SimpleCache\CacheInterface;
@@ -113,6 +114,17 @@ class SapClient
     public function put(string $urlTemplate, array $payload, array $parameters = []): PromiseInterface
     {
         return $this->request('PUT', $urlTemplate, $payload, $parameters);
+    }
+
+    public function checkAccountCredentials(string $username, string $password): bool
+    {
+        try {
+            $this->buildAuthenticationProvider()
+                ->getAccessToken(new Password(), ['username' => $username, 'password' => $password]);
+            return true;
+        } catch (\Exception $exception) {
+        }
+        return false;
     }
 
     private function request(string $method, string $urlTemplate, ?array $payload, array $parameters): PromiseInterface
@@ -234,16 +246,8 @@ class SapClient
     private function obtainAccessToken(): AccessTokenInterface
     {
         try {
-            $tokenUrl = $this->hostUrl . '/authorizationserver/oauth/token';
-            $provider = new GenericProvider([
-                'urlAuthorize' => $tokenUrl,
-                'urlAccessToken' => $tokenUrl,
-                'urlResourceOwnerDetails' => null,
-                'clientId' => $this->clientId,
-                'clientSecret' => $this->clientSecret,
-            ]);
-
-            return $provider->getAccessToken(new ClientCredentials());
+            return $this->buildAuthenticationProvider()
+                ->getAccessToken(new ClientCredentials());
         } catch (\Exception $exception) {
             throw new \RuntimeException(
                 'Error obtaining SAP Commerce Cloud addess token',
@@ -251,5 +255,18 @@ class SapClient
                 $exception
             );
         }
+    }
+
+    private function buildAuthenticationProvider(): GenericProvider
+    {
+        $tokenUrl = $this->hostUrl . '/authorizationserver/oauth/token';
+        $provider = new GenericProvider([
+            'urlAuthorize' => $tokenUrl,
+            'urlAccessToken' => $tokenUrl,
+            'urlResourceOwnerDetails' => null,
+            'clientId' => $this->clientId,
+            'clientSecret' => $this->clientSecret,
+        ]);
+        return $provider;
     }
 }

@@ -14,20 +14,6 @@
                    exclude="../../Domain/{Search}"
                    autoconfigure="true"/>
 
-        <!-- START: Security decorators -->
-        <service id="Frontastic\Common\ShopwareBundle\Domain\AccountApi\Security\ShopwareAuthenticator"
-                 decorates="Frontastic\Catwalk\FrontendBundle\Security\Authenticator"
-                 decoration-on-invalid="ignore">
-            <argument type="service" id="Frontastic\Common\AccountApiBundle\Domain\AccountService"/>
-        </service>
-
-        <service id="Frontastic\Common\ShopwareBundle\Domain\AccountApi\Security\ShopwareAccountProvider"
-                 decorates="Frontastic\Catwalk\FrontendBundle\Security\AccountProvider"
-                 decoration-on-invalid="ignore">
-            <argument type="service" id="Frontastic\Common\AccountApiBundle\Domain\AccountService"/>
-        </service>
-        <!-- END: Security decorators -->
-
         <service id="Frontastic\Common\ShopwareBundle\Domain\ClientFactory">
             <argument type="service" id="Frontastic\Common\HttpClient"/>
             <tag name="frontastic.common.api_integration"/>

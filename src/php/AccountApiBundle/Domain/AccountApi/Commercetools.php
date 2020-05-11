@@ -5,6 +5,8 @@ namespace Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
+use Frontastic\Common\AccountApiBundle\Domain\DuplicateAccountException;
+use Frontastic\Common\AccountApiBundle\Domain\PasswordResetToken;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
@@ -32,29 +34,12 @@ class Commercetools implements AccountApi
         $this->client = $client;
     }
 
-    /**
-     * @throws RequestException
-     * @todo Should we catch the RequestException here?
-     */
-    public function get(string $email): Account
+    public function getSalutations(string $locale): ?array
     {
-        $result = $this->client
-            ->fetchAsync(
-                '/customers',
-                [
-                    'where' => 'email="' . $email . '"',
-                ]
-            )
-            ->wait();
-
-        if ($result->count >= 1) {
-            return $this->mapAccount($result->results[0]);
-        } else {
-            throw new \OutOfBoundsException('Could not find account with email ' . $email);
-        }
+        return null;
     }
 
-    public function confirmEmail(string $token): Account
+    public function confirmEmail(string $token, string $locale = null): Account
     {
         try {
             return $this->mapAccount($this->client->post(
@@ -73,7 +58,7 @@ class Commercetools implements AccountApi
     /**
      * @todo Should we catch the RequestException here?
      */
-    public function create(Account $account, ?Cart $cart = null): Account
+    public function create(Account $account, ?Cart $cart = null, string $locale = null): Account
     {
         try {
             $account = $this->mapAccount($this->client->post(
@@ -108,6 +93,10 @@ class Commercetools implements AccountApi
                 ])
             );
         } catch (RequestException $e) {
+            if ($e->getCode() === 400 && $e->getTranslationCode() === 'commercetools.DuplicateField') {
+                throw new DuplicateAccountException($account->email, 0, $e);
+            }
+
             if ($cart !== null && $e->getCode() === 400) {
                 /*
                  * The cart might already belong to another user so we try to login without the cart.
@@ -128,7 +117,7 @@ class Commercetools implements AccountApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function update(Account $account): Account
+    public function update(Account $account, string $locale = null): Account
     {
         $accountVersion = $this->client->get('/customers/' . $account->accountId);
         return $this->mapAccount($this->client->post(
@@ -168,8 +157,12 @@ class Commercetools implements AccountApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function updatePassword(Account $account, string $oldPassword, string $newPassword): Account
-    {
+    public function updatePassword(
+        Account $account,
+        string $oldPassword,
+        string $newPassword,
+        string $locale = null
+    ): Account {
         $accountData = $this->client->get('/customers/' . $account->accountId);
 
         return $this->mapAccount($this->client->post(
@@ -189,29 +182,30 @@ class Commercetools implements AccountApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function generatePasswordResetToken(Account $account): Account
+    public function generatePasswordResetToken(string $email): PasswordResetToken
     {
         $token = $this->client->post(
             '/customers/password-token',
             [],
             [],
             json_encode([
-                'email' => $account->email,
+                'email' => $email,
                 'ttlMinutes' => 2 * 24 * 60,
             ])
         );
 
-        $account->confirmationToken = $token['value'];
-        $account->tokenValidUntil = new \DateTimeImmutable($token['expiresAt']);
-
-        return $account;
+        return new PasswordResetToken([
+            'email' => $email,
+            'confirmationToken' => $token['value'],
+            'tokenValidUntil' => new \DateTimeImmutable($token['expiresAt']),
+        ]);
     }
 
     /**
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function resetPassword(string $token, string $newPassword): Account
+    public function resetPassword(string $token, string $newPassword, string $locale = null): Account
     {
         return $this->mapAccount($this->client->post(
             '/customers/password/reset',
@@ -224,7 +218,7 @@ class Commercetools implements AccountApi
         ));
     }
 
-    public function login(Account $account, ?Cart $cart = null): bool
+    public function login(Account $account, ?Cart $cart = null, string $locale = null): ?Account
     {
         try {
             $account = $this->mapAccount($this->client->post(
@@ -247,15 +241,33 @@ class Commercetools implements AccountApi
                 return $this->login($account);
             }
 
-            return false;
+            return null;
         } catch (\Exception $e) {
-            return false;
+            return null;
         }
         if (!$account->confirmed) {
             throw new AuthenticationException('Your email address was not yet verified.');
         }
 
-        return $account->confirmed;
+        return $account;
+    }
+
+    public function refreshAccount(Account $account, string $locale = null): Account
+    {
+        $result = $this->client
+            ->fetchAsync(
+                '/customers',
+                [
+                    'where' => 'email="' . $account->email . '"',
+                ]
+            )
+            ->wait();
+
+        if ($result->count >= 1) {
+            return $this->mapAccount($result->results[0]);
+        } else {
+            throw new \OutOfBoundsException('Could not find account with email ' . $account->email);
+        }
     }
 
     /**
@@ -263,7 +275,7 @@ class Commercetools implements AccountApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function getAddresses(Account $account): array
+    public function getAddresses(Account $account, string $locale = null): array
     {
         return $this->mapAddresses($this->client->get('/customers/' . $account->accountId));
     }
@@ -272,7 +284,7 @@ class Commercetools implements AccountApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function addAddress(Account $account, Address $address): Account
+    public function addAddress(Account $account, Address $address, string $locale = null): Account
     {
         $accountData = $this->client->get('/customers/' . $account->accountId);
         return $this->mapAccount($this->client->post(
@@ -306,7 +318,7 @@ class Commercetools implements AccountApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function updateAddress(Account $account, Address $address): Account
+    public function updateAddress(Account $account, Address $address, string $locale = null): Account
     {
         $accountData = $this->client->get('/customers/' . $account->accountId);
         return $this->mapAccount($this->client->post(
@@ -341,7 +353,7 @@ class Commercetools implements AccountApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function removeAddress(Account $account, string $addressId): Account
+    public function removeAddress(Account $account, string $addressId, string $locale = null): Account
     {
         $accountData = $this->client->get('/customers/' . $account->accountId);
         return $this->mapAccount($this->client->post(
@@ -364,7 +376,7 @@ class Commercetools implements AccountApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function setDefaultBillingAddress(Account $account, string $addressId): Account
+    public function setDefaultBillingAddress(Account $account, string $addressId, string $locale = null): Account
     {
         $accountData = $this->client->get('/customers/' . $account->accountId);
         return $this->mapAccount($this->client->post(
@@ -387,7 +399,7 @@ class Commercetools implements AccountApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function setDefaultShippingAddress(Account $account, string $addressId): Account
+    public function setDefaultShippingAddress(Account $account, string $addressId, string $locale = null): Account
     {
         $accountData = $this->client->get('/customers/' . $account->accountId);
         return $this->mapAccount($this->client->post(

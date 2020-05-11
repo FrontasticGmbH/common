@@ -61,7 +61,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
     public function getForUser(Account $account, string $locale): Cart
     {
         // When user is authenticated, his cart can be retrieved by using his context token
-        return $this->getById($account->getToken(self::TOKEN_TYPE), $locale);
+        return $this->getById($account->authToken, $locale);
     }
 
     public function getAnonymous(string $anonymousId, string $locale): Cart
@@ -79,7 +79,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
             ->forLanguage($shopwareLocale->languageId)
             ->post('/checkout/cart', [], $requestData)
             ->then(static function ($response) {
-                return $response[self::KEY_CONTEXT_TOKEN];
+                return $response['sw-context-token'];
             })->then(function ($token) use ($locale) {
                 return $this->getById($token, $locale);
             })
@@ -273,7 +273,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
     public function getOrder(Account $account, string $orderId, string $locale = null): Order
     {
         $result = $this->getOrdersBy(
-            $account->getToken(self::TOKEN_TYPE),
+            $account->authToken,
             [
                 'orderId' => $orderId
             ],
@@ -286,7 +286,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
     public function getOrders(Account $account, string $locale = null): array
     {
         return $this->getOrdersBy(
-            $account->getToken(self::TOKEN_TYPE),
+            $account->authToken,
             [],
             $locale
         );

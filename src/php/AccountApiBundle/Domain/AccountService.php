@@ -47,60 +47,58 @@ class AccountService
         $account->eraseCredentials();
     }
 
-    public function sendPasswordResetMail(Account $account)
+    public function sendPasswordResetMail(string $email)
     {
-        $account = $this->accountApi->generatePasswordResetToken($account);
-        $this->mailer->sendToUser($account, 'reset', 'Ihr neues Passwort', ['token' => $account->confirmationToken]);
-        $account->eraseCredentials();
-    }
+        $token = $this->accountApi->generatePasswordResetToken($email);
 
-    public function get(string $email): Account
-    {
-        return $this->accountApi->get($email);
-    }
-
-    public function exists(string $email): bool
-    {
-        try {
-            $this->accountApi->get($email);
-            return true;
-        } catch (\OutOfBoundsException $e) {
-            return false;
+        if ($token->confirmationToken !== null) {
+            $this->mailer->sendToUser(
+                new Account([
+                    'email' => $token->email,
+                ]),
+                'reset',
+                'Ihr neues Passwort',
+                ['token' => $token->confirmationToken]
+            );
         }
     }
 
-    public function confirmEmail(string $confirmationToken): Account
+    public function confirmEmail(string $confirmationToken, string $locale = null): Account
     {
-        return $this->accountApi->confirmEmail($confirmationToken);
+        return $this->accountApi->confirmEmail($confirmationToken, $locale);
     }
 
-    public function login(Account $account, ?Cart $cart = null): bool
+    public function login(Account $account, ?Cart $cart = null, string $locale = null): ?Account
     {
-        return $this->accountApi->login($account, $cart);
+        return $this->accountApi->login($account, $cart, $locale);
     }
 
-    public function create(Account $account, ?Cart $cart = null): Account
+    public function refresh(Account $account, string $locale = null): Account
     {
-        return $this->accountApi->create($account, $cart);
+        return $this->accountApi->refreshAccount($account, $locale);
     }
 
-    public function update(Account $account): Account
+    public function create(Account $account, ?Cart $cart = null, string $locale = null): Account
     {
-        return $this->accountApi->update($account);
+        return $this->accountApi->create($account, $cart, $locale);
     }
 
-    public function updatePassword(Account $account, string $oldPassword, string $newPassword): Account
+    public function update(Account $account, string $locale = null): Account
     {
-        return $this->accountApi->updatePassword($account, $oldPassword, $newPassword);
+        return $this->accountApi->update($account, $locale);
     }
 
-    public function resetPassword(string $token, string $newPassword): Account
-    {
-        return $this->accountApi->resetPassword($token, $newPassword);
+    public function updatePassword(
+        Account $account,
+        string $oldPassword,
+        string $newPassword,
+        string $locale = null
+    ): Account {
+        return $this->accountApi->updatePassword($account, $oldPassword, $newPassword, $locale);
     }
 
-    public function remove(Account $account)
+    public function resetPassword(string $token, string $newPassword, string $locale = null): Account
     {
-        $this->accountApi->remove($account);
+        return $this->accountApi->resetPassword($token, $newPassword, $locale);
     }
 }

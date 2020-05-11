@@ -5,7 +5,6 @@ configuration:
     test:
         disabled: false
         anonymousCheckout: false
-        canAuthenticateWithToken: false
     sap-commerce-cloud:
         hostUrl: https://gdm-sap-io-1.demo.hybris.com
     account:
