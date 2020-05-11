@@ -233,7 +233,7 @@ class CartController extends CrudController
         $cartApi = $this->getCartApi($context);
         $cart = $this->getCart($context, $request);
 
-        if (!$cart->isComplete()) {
+        if (!$cart->isReadyForCheckout()) {
             throw new \DomainException('Cart not complete yet.');
         }
 
