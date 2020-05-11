@@ -4,6 +4,7 @@ namespace Frontastic\Common\ShopwareBundle\Domain;
 
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\ShopwareLocale;
 
@@ -51,6 +52,9 @@ abstract class AbstractShopwareApi
 
     protected function configureMapper(DataMapperInterface $mapper): void
     {
+        if ($this->locale !== null && $mapper instanceof LocaleAwareDataMapperInterface) {
+            $mapper->setLocale($this->locale);
+        }
     }
 
     protected function mapResponse($response, string $mapperName)

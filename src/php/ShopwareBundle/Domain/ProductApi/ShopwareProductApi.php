@@ -11,6 +11,8 @@ use Frontastic\Common\ShopwareBundle\Domain\AbstractShopwareApi;
 use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper\CategoryMapper;
@@ -18,6 +20,7 @@ use Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper\ProductMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper\ProductResultMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Query\QueryFacetExpander;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchCriteriaBuilder;
+use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
 
 class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
 {
@@ -25,6 +28,11 @@ class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
      * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService
      */
     private $enabledFacetService;
+
+    /**
+     * @var \Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiInterface
+     */
+    private $projectConfigApi;
 
     /**
      * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query
@@ -36,11 +44,13 @@ class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
         DataMapperResolver $mapperResolver,
         LocaleCreator $localeCreator,
         string $defaultLanguage,
-        EnabledFacetService $enabledFacetService
+        EnabledFacetService $enabledFacetService,
+        ShopwareProjectConfigApiFactory $projectConfigApiFactory
     ) {
         parent::__construct($client, $mapperResolver, $localeCreator, $defaultLanguage);
 
         $this->enabledFacetService = $enabledFacetService;
+        $this->projectConfigApi = $projectConfigApiFactory->factor($this->client);
     }
 
     public function getCategories(CategoryQuery $query): array
@@ -126,6 +136,12 @@ class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
 
     protected function configureMapper(DataMapperInterface $mapper): void
     {
+        parent::configureMapper($mapper);
+
+        if ($mapper instanceof ProjectConfigApiAwareDataMapperInterface) {
+            $mapper->setProjectConfigApi($this->projectConfigApi);
+        }
+
         if ($this->query !== null && $mapper instanceof QueryAwareDataMapperInterface) {
             $mapper->setQuery($this->query);
         }

@@ -315,12 +315,10 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
 
     protected function configureMapper(DataMapperInterface $mapper): void
     {
+        parent::configureMapper($mapper);
+
         if ($mapper instanceof ProjectConfigApiAwareDataMapperInterface) {
             $mapper->setProjectConfigApi($this->projectConfigApi);
-        }
-
-        if ($mapper instanceof LocaleAwareDataMapperInterface) {
-            $mapper->setLocale($this->locale);
         }
     }
 

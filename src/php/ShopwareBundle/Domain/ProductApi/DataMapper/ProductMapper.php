@@ -7,14 +7,23 @@ use DateTimeInterface;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperTrait;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperTrait;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperTrait;
 use Frontastic\Common\ShopwareBundle\Domain\Slugger;
 use RuntimeException;
 
-class ProductMapper extends AbstractDataMapper implements QueryAwareDataMapperInterface
+class ProductMapper extends AbstractDataMapper implements
+    LocaleAwareDataMapperInterface,
+    ProjectConfigApiAwareDataMapperInterface,
+    QueryAwareDataMapperInterface
 {
-    use QueryAwareDataMapperTrait;
+    use LocaleAwareDataMapperTrait,
+        ProjectConfigApiAwareDataMapperTrait,
+        QueryAwareDataMapperTrait;
 
     public const MAPPER_NAME = 'product';
 
@@ -77,6 +86,8 @@ class ProductMapper extends AbstractDataMapper implements QueryAwareDataMapperIn
     private function mapDataToVariant(array $variantData): Variant
     {
         return $this->variantMapper
+            ->setLocale($this->getLocale())
+            ->setProjectConfigApi($this->getProjectConfigApi())
             ->setQuery($this->getQuery())
             ->map($variantData);
     }

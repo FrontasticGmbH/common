@@ -5,12 +5,21 @@ namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperTrait;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperTrait;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperTrait;
 
-class ProductResultMapper extends AbstractDataMapper implements QueryAwareDataMapperInterface
+class ProductResultMapper extends AbstractDataMapper implements
+    LocaleAwareDataMapperInterface,
+    ProjectConfigApiAwareDataMapperInterface,
+    QueryAwareDataMapperInterface
 {
-    use QueryAwareDataMapperTrait;
+    use LocaleAwareDataMapperTrait,
+        ProjectConfigApiAwareDataMapperTrait,
+        QueryAwareDataMapperTrait;
 
     public const MAPPER_NAME = 'product-result';
 
@@ -67,6 +76,8 @@ class ProductResultMapper extends AbstractDataMapper implements QueryAwareDataMa
     private function mapDataToProduct(array $productData): Product
     {
         return $this->productMapper
+            ->setLocale($this->getLocale())
+            ->setProjectConfigApi($this->getProjectConfigApi())
             ->setQuery($this->getQuery())
             ->map($productData);
     }
