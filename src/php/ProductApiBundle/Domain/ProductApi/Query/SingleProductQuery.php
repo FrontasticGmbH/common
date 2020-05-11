@@ -12,12 +12,12 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 class SingleProductQuery extends Query
 {
     /**
-     * @var string|null
+     * @var ?string
      */
     public $productId;
 
     /**
-     * @var string|null
+     * @var ?string
      */
     public $sku;
 

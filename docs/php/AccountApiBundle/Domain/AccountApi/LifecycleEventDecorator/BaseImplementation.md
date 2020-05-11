@@ -30,8 +30,6 @@ need to tag your service based on this class with
 * [afterConfirmEmail()](#afterconfirmemail)
 * [beforeCreate()](#beforecreate)
 * [afterCreate()](#aftercreate)
-* [beforeVerifyEmail()](#beforeverifyemail)
-* [afterVerifyEmail()](#afterverifyemail)
 * [beforeUpdate()](#beforeupdate)
 * [afterUpdate()](#afterupdate)
 * [beforeUpdatePassword()](#beforeupdatepassword)
@@ -153,38 +151,6 @@ Argument|Type|Default|Description
 
 Return Value: ?[`Account`](../../Account.md)
 
-### beforeVerifyEmail()
-
-```php
-public function beforeVerifyEmail(
-    AccountApi $accountApi,
-    string $token
-): void
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)||
-`$token`|`string`||
-
-Return Value: `void`
-
-### afterVerifyEmail()
-
-```php
-public function afterVerifyEmail(
-    AccountApi $accountApi,
-    Account $account
-): ?Account
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$accountApi`|[`AccountApi`](../../AccountApi.md)||
-`$account`|[`Account`](../../Account.md)||
-
-Return Value: ?[`Account`](../../Account.md)
-
 ### beforeUpdate()
 
 ```php
@@ -222,7 +188,7 @@ Return Value: ?[`Account`](../../Account.md)
 ```php
 public function beforeUpdatePassword(
     AccountApi $accountApi,
-    string $accountId,
+    Account $account,
     string $oldPassword,
     string $newPassword
 ): void
@@ -231,7 +197,7 @@ public function beforeUpdatePassword(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$accountApi`|[`AccountApi`](../../AccountApi.md)||
-`$accountId`|`string`||
+`$account`|[`Account`](../../Account.md)||
 `$oldPassword`|`string`||
 `$newPassword`|`string`||
 
@@ -358,14 +324,14 @@ Return Value: `?bool`
 ```php
 public function beforeGetAddresses(
     AccountApi $accountApi,
-    string $accountId
+    Account $account
 ): void
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$accountApi`|[`AccountApi`](../../AccountApi.md)||
-`$accountId`|`string`||
+`$account`|[`Account`](../../Account.md)||
 
 Return Value: `void`
 
@@ -390,7 +356,7 @@ Return Value: `?array`
 ```php
 public function beforeAddAddress(
     AccountApi $accountApi,
-    string $accountId,
+    Account $account,
     Address $address
 ): void
 ```
@@ -398,7 +364,7 @@ public function beforeAddAddress(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$accountApi`|[`AccountApi`](../../AccountApi.md)||
-`$accountId`|`string`||
+`$account`|[`Account`](../../Account.md)||
 `$address`|[`Address`](../../Address.md)||
 
 Return Value: `void`
@@ -424,7 +390,7 @@ Return Value: ?[`Account`](../../Account.md)
 ```php
 public function beforeUpdateAddress(
     AccountApi $accountApi,
-    string $accountId,
+    Account $account,
     Address $address
 ): void
 ```
@@ -432,7 +398,7 @@ public function beforeUpdateAddress(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$accountApi`|[`AccountApi`](../../AccountApi.md)||
-`$accountId`|`string`||
+`$account`|[`Account`](../../Account.md)||
 `$address`|[`Address`](../../Address.md)||
 
 Return Value: `void`
@@ -458,7 +424,7 @@ Return Value: ?[`Account`](../../Account.md)
 ```php
 public function beforeRemoveAddress(
     AccountApi $accountApi,
-    string $accountId,
+    Account $account,
     string $addressId
 ): void
 ```
@@ -466,7 +432,7 @@ public function beforeRemoveAddress(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$accountApi`|[`AccountApi`](../../AccountApi.md)||
-`$accountId`|`string`||
+`$account`|[`Account`](../../Account.md)||
 `$addressId`|`string`||
 
 Return Value: `void`
@@ -492,7 +458,7 @@ Return Value: ?[`Account`](../../Account.md)
 ```php
 public function beforeSetDefaultBillingAddress(
     AccountApi $accountApi,
-    string $accountId,
+    Account $account,
     string $addressId
 ): void
 ```
@@ -500,7 +466,7 @@ public function beforeSetDefaultBillingAddress(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$accountApi`|[`AccountApi`](../../AccountApi.md)||
-`$accountId`|`string`||
+`$account`|[`Account`](../../Account.md)||
 `$addressId`|`string`||
 
 Return Value: `void`
@@ -526,7 +492,7 @@ Return Value: ?[`Account`](../../Account.md)
 ```php
 public function beforeSetDefaultShippingAddress(
     AccountApi $accountApi,
-    string $accountId,
+    Account $account,
     string $addressId
 ): void
 ```
@@ -534,7 +500,7 @@ public function beforeSetDefaultShippingAddress(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$accountApi`|[`AccountApi`](../../AccountApi.md)||
-`$accountId`|`string`||
+`$account`|[`Account`](../../Account.md)||
 `$addressId`|`string`||
 
 Return Value: `void`

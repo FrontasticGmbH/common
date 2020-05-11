@@ -8,7 +8,7 @@ Property|Type|Default|Description
 --------|----|-------|-----------
 `options`|[`Options`](Options.md)|`null`|
 `defaultHeaders`|`string[]`|`[]`|List (not hashmap!) of headers
-`signatureSecret`|`string|null`|`null`|
+`signatureSecret`|`?string`|`null`|
 `collectStats`|`bool`|`true`|
 `collectProfiling`|`bool`|`true`|
 

@@ -7,7 +7,7 @@
 Property|Type|Default|Description
 --------|----|-------|-----------
 `attributeId`|`string`||
-`type`|`string`||
-`label`|`array<string,string>|null`||
-`values`|`array|null`||
+`type`|`string`||TYPE_*
+`label`|`array<string, string>|null`||The labels with the locale as key and the actual label as value. `null` if the label is unknown
+`values`|`?array`||
 

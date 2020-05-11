@@ -27,7 +27,7 @@ class SapCartApi implements CartApi
     /** @var OrderIdGenerator */
     private $orderIdGenerator;
 
-    /** @var array|null */
+    /** @var ?array */
     private $currentTransaction = null;
 
     public function __construct(

@@ -9,7 +9,7 @@ Property|Type|Default|Description
 `id`|`string`||
 `paymentProvider`|`string`||
 `paymentId`|`string`||
-`amount`|`int`||
+`amount`|`int`||In cent
 `currency`|`string`||
 `debug`|`string`||
 `paymentStatus`|``||

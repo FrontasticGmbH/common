@@ -21,13 +21,15 @@ class Product extends DataObject
     public $productId;
 
     /**
-     * @var \DateTimeImmutable|null The date and time when this product was last changed or `null` if the date is
-     *     unknown.
+     * The date and time when this product was last changed or `null` if the
+     * date is unknown.
+     *
+     * @var ?\DateTimeImmutable
      */
     public $changed;
 
     /**
-     * @var string|null
+     * @var ?string
      */
     public $version;
 

@@ -13,12 +13,12 @@ class AccountService
     /**
      * Account gateway
      *
-     * @var AccountApi|null
+     * @var ?AccountApi
      */
     private $accountApi;
 
     /**
-     * @var Mailer|null
+     * @var ?Mailer
      */
     private $mailer;
 

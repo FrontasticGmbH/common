@@ -38,14 +38,15 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductType;
 abstract class BaseImplementation
 {
     /*** getCategories() **********************************************************************************************/
-    public function beforeGetCategories(ProductApi $productApi, CategoryQuery $query): void
+    public function beforeGetCategories(ProductApi $productApi, CategoryQuery $query): ?array
     {
+        return null;
     }
 
     /**
      * @param ProductApi $productApi
      * @param Category[] $categories
-     * @return Category[]|null
+     * @return ?Category[]
      */
     public function afterGetCategories(ProductApi $productApi, array $categories): ?array
     {
@@ -53,14 +54,15 @@ abstract class BaseImplementation
     }
 
     /*** getProductTypes() ********************************************************************************************/
-    public function beforeGetProductTypes(ProductApi $productApi, ProductTypeQuery $query): void
+    public function beforeGetProductTypes(ProductApi $productApi, ProductTypeQuery $query): ?array
     {
+        return null;
     }
 
     /**
      * @param ProductApi $productApi
      * @param ProductType[] $productTypes
-     * @return ProductType[]|null
+     * @return ?ProductType[]
      */
     public function afterGetProductTypes(ProductApi $productApi, array $productTypes): ?array
     {
@@ -72,7 +74,8 @@ abstract class BaseImplementation
         ProductApi $productApi,
         $query,
         string $mode = ProductApi::QUERY_SYNC
-    ): void {
+    ): ?array {
+        return null;
     }
 
     public function afterGetProduct(ProductApi $productApi, ?Product $product): ?Product
@@ -85,7 +88,8 @@ abstract class BaseImplementation
         ProductApi $productApi,
         ProductQuery $query,
         string $mode = ProductApi::QUERY_SYNC
-    ): void {
+    ): ?array {
+        return null;
     }
 
     public function afterQuery(ProductApi $productApi, ?Result $result): ?Result

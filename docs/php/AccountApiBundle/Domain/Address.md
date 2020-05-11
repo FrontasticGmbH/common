@@ -16,7 +16,7 @@ Property|Type|Default|Description
 `additionalAddressInfo`|`string`||
 `postalCode`|`string`||
 `city`|`string`||
-`country`|`string`||
+`country`|`string`||2 letter ISO code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
 `phone`|`string`||
 `isDefaultBillingAddress`|`bool`|`false`|
 `isDefaultShippingAddress`|`bool`|`false`|

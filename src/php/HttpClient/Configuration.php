@@ -19,7 +19,7 @@ class Configuration extends DataObject
     public $defaultHeaders = [];
 
     /**
-     * @var string|null
+     * @var ?string
      */
     public $signatureSecret = null;
 

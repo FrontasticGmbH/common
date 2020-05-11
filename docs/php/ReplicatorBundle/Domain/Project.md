@@ -17,7 +17,7 @@ Property|Type|Default|Description
 `configuration`|`array`|`[]`|
 `data`|`array`|`[]`|Additional external project data from sources like tideways. Does not follow any defined schema.
 `languages`|`string[]`|`[]`|
-`defaultLanguage`|`string[]`||
+`defaultLanguage`|`string`||
 `projectSpecific`|`string[]`|`[]`|
 `endpoints`|[`Endpoint`](Endpoint.md)[]|`[]`|
 

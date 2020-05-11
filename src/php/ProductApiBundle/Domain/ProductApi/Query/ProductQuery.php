@@ -11,49 +11,52 @@ class ProductQuery extends PaginatedQuery
     public const SORT_ORDER_DESCENDING = 'descending';
 
     /**
-     * @var string|null
+     * @var ?string
      */
     public $category;
 
     /**
      * @deprecated use `skus` instead
-     * @var string|null
+     * @var ?string
      */
     public $sku;
 
     /**
-     * @var string[]|null
+     * @var ?string[]
      */
     public $skus;
 
     /**
      * @deprecated use `productIds` instead
-     * @var string|null
+     * @var ?string
      */
     public $productId;
 
     /**
-     * @var string[]|null
+     * @var ?string[]
      */
     public $productIds;
 
     /**
-     * @var string|null
+     * @var ?string
      */
     public $productType;
 
     /**
      * This is a full text search on the API
      *
-     * @var string|null
+     * @var ?string
      */
     public $query;
 
     /**
+     * Filters that will be applied *before* the actual facets.  CommerceTools
+     * allowed a list of filter strings, too, but this is deprecated in
+     * commercetools.
+     *
      * @stability experimental This field might change to a more sophisticate structure
      *
-     * @var Filter[] filters that will be applied *before* the actual facets.
-     *               CommerceTools allowed a list of filter strings, too, but this is deprecated in commercetools.
+     * @var Filter[]
      */
     public $filter = [];
 
@@ -65,7 +68,7 @@ class ProductQuery extends PaginatedQuery
     /**
      * Map of sort attributes => sort order
      *
-     * @var array<string, string>
+     * @var string[]
      */
     public $sortAttributes = [];
 

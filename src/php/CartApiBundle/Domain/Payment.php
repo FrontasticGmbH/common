@@ -26,7 +26,9 @@ class Payment extends DataObject
     public $paymentId;
 
     /**
-     * @var int Cent
+     * In cent
+     *
+     * @var int
      */
     public $amount;
 

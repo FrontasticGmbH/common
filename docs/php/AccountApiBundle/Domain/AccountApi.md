@@ -7,7 +7,6 @@
 * [get()](#get)
 * [confirmEmail()](#confirmemail)
 * [create()](#create)
-* [verifyEmail()](#verifyemail)
 * [update()](#update)
 * [updatePassword()](#updatepassword)
 * [generatePasswordResetToken()](#generatepasswordresettoken)
@@ -65,20 +64,6 @@ Argument|Type|Default|Description
 
 Return Value: [`Account`](Account.md)
 
-### verifyEmail()
-
-```php
-public function verifyEmail(
-    string $token
-): Account
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$token`|`string`||
-
-Return Value: [`Account`](Account.md)
-
 ### update()
 
 ```php
@@ -97,7 +82,7 @@ Return Value: [`Account`](Account.md)
 
 ```php
 public function updatePassword(
-    string $accountId,
+    Account $account,
     string $oldPassword,
     string $newPassword
 ): Account
@@ -105,7 +90,7 @@ public function updatePassword(
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountId`|`string`||
+`$account`|[`Account`](Account.md)||
 `$oldPassword`|`string`||
 `$newPassword`|`string`||
 
@@ -161,13 +146,13 @@ Return Value: `bool`
 
 ```php
 public function getAddresses(
-    string $accountId
+    Account $account
 ): array
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountId`|`string`||
+`$account`|[`Account`](Account.md)||
 
 Return Value: `array`
 
@@ -175,14 +160,14 @@ Return Value: `array`
 
 ```php
 public function addAddress(
-    string $accountId,
+    Account $account,
     Address $address
 ): Account
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountId`|`string`||
+`$account`|[`Account`](Account.md)||
 `$address`|[`Address`](Address.md)||
 
 Return Value: [`Account`](Account.md)
@@ -191,14 +176,14 @@ Return Value: [`Account`](Account.md)
 
 ```php
 public function updateAddress(
-    string $accountId,
+    Account $account,
     Address $address
 ): Account
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountId`|`string`||
+`$account`|[`Account`](Account.md)||
 `$address`|[`Address`](Address.md)||
 
 Return Value: [`Account`](Account.md)
@@ -207,14 +192,14 @@ Return Value: [`Account`](Account.md)
 
 ```php
 public function removeAddress(
-    string $accountId,
+    Account $account,
     string $addressId
 ): Account
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountId`|`string`||
+`$account`|[`Account`](Account.md)||
 `$addressId`|`string`||
 
 Return Value: [`Account`](Account.md)
@@ -223,14 +208,14 @@ Return Value: [`Account`](Account.md)
 
 ```php
 public function setDefaultBillingAddress(
-    string $accountId,
+    Account $account,
     string $addressId
 ): Account
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountId`|`string`||
+`$account`|[`Account`](Account.md)||
 `$addressId`|`string`||
 
 Return Value: [`Account`](Account.md)
@@ -239,14 +224,14 @@ Return Value: [`Account`](Account.md)
 
 ```php
 public function setDefaultShippingAddress(
-    string $accountId,
+    Account $account,
     string $addressId
 ): Account
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountId`|`string`||
+`$account`|[`Account`](Account.md)||
 `$addressId`|`string`||
 
 Return Value: [`Account`](Account.md)

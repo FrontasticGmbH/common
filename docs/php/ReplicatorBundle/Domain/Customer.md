@@ -9,6 +9,7 @@ Property|Type|Default|Description
 `name`|`string`||
 `secret`|`string`||
 `edition`|`string`|`'micro'`|
+`hasPaasModifications`|`bool`|`false`|
 `features`|`array`|`[]`|
 `isTransient`|`bool`|`false`|Used to indicate this customer is only "half" configured or similar.
 `configuration`|`array`|`[]`|

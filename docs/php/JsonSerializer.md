@@ -47,8 +47,10 @@ public function serialize(
 ): mixed
 ```
 
-*Is there a sensible refactoring to reduce this methods compleixty?
-Otherwise we consider it fine, since its tested anyways:*
+*Prepares an object for json serialization. Does *not* actually encode it as JSON.*
+
+Is there a sensible refactoring to reduce this methods compleixty?
+Otherwise we consider it fine, since its tested anyways:
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
