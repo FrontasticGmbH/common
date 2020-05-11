@@ -5,6 +5,4 @@
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
     <import resource="routing_account.xml" prefix="/api/account"/>
-
-    <import resource="routing_cart.xml" prefix="/api/cart"/>
 </routes>
