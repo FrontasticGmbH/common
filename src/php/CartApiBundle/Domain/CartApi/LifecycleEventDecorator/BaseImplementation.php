@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain\CartApi\LifecycleEventDecorator;
 
+use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
@@ -36,7 +37,7 @@ use Frontastic\Common\CartApiBundle\Domain\Payment;
 abstract class BaseImplementation
 {
     /*** getForUser() *************************************************************************************************/
-    public function beforeGetForUser(CartApi $cartApi, string $userId, string $locale): void
+    public function beforeGetForUser(CartApi $cartApi, Account $account, string $locale): void
     {
     }
 
@@ -200,7 +201,7 @@ abstract class BaseImplementation
 
 
     /*** order() ******************************************************************************************************/
-    public function beforeOrder(CartApi $cartApi, Cart $cart): void
+    public function beforeOrder(CartApi $cartApi, Cart $cart, string $locale = null): void
     {
     }
 
@@ -210,7 +211,7 @@ abstract class BaseImplementation
     }
 
     /*** getOrder() ***************************************************************************************************/
-    public function beforeGetOrder(CartApi $cartApi, string $orderId): void
+    public function beforeGetOrder(CartApi $cartApi, string $orderId, string $locale = null): void
     {
     }
 
@@ -220,7 +221,7 @@ abstract class BaseImplementation
     }
 
     /*** getOrders() **************************************************************************************************/
-    public function beforeGetOrders(CartApi $cartApi, string $accountId): void
+    public function beforeGetOrders(CartApi $cartApi, Account $account, string $locale = null): void
     {
     }
 

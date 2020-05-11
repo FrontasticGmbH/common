@@ -30,7 +30,11 @@ class CartController extends CrudController
     {
         $cartApi = $this->getCartApi($context);
         return [
-            'order' => $cartApi->getOrder($order),
+            'order' => $cartApi->getOrder(
+                $context->session->account,
+                $order,
+                $context->locale
+            ),
         ];
     }
 
@@ -47,11 +51,12 @@ class CartController extends CrudController
             $cart,
             new LineItem\Variant([
                 'variant' => new Variant([
-                    'sku' => $payload['variant']['sku'],
-                    'attributes' => $payload['variant']['attributes'],
+                    'id' => $payload['variant']['id'] ?? null,
+                    'sku' => $payload['variant']['sku'] ?? null,
+                    'attributes' => $payload['variant']['attributes'] ?? [],
                 ]),
-                'custom' => $payload['option'] ?: [],
-                'count' => $payload['count'],
+                'custom' => $payload['option'] ?? [],
+                'count' => $payload['count'] ?? 1,
             ]),
             $context->locale
         );
@@ -227,11 +232,11 @@ class CartController extends CrudController
         $cartApi = $this->getCartApi($context);
         $cart = $this->getCart($context, $request);
 
-        if (!$cart->isComplete()) {
+        if (!$cart->isReadyForCheckout()) {
             throw new \DomainException('Cart not complete yet.');
         }
 
-        $order = $cartApi->order($cart);
+        $order = $cartApi->order($cart, $context->locale);
 
         // @TODO: Remove old cart instead (also for logged in users)
         // @HACK: Regenerate session ID to get a "new" cart:
@@ -256,7 +261,7 @@ class CartController extends CrudController
         return [
             'cart' => $this->getCartApi($context)->removeDiscountCode(
                 $this->getCart($context, $request),
-                $payload['discountId']
+                new LineItem(['lineItemId' => $payload['discountId']])
             ),
         ];
     }
@@ -277,7 +282,7 @@ class CartController extends CrudController
         $cartApi = $this->getCartApi($context);
 
         if ($context->session->loggedIn) {
-            return $cartApi->getForUser($context->session->account->accountId, $context->locale);
+            return $cartApi->getForUser($context->session->account, $context->locale);
         } else {
             $symfonySession = $request->hasSession() ? $request->getSession() : null;
             if ($symfonySession !== null && $symfonySession->has('cart_id')) {
@@ -306,6 +311,7 @@ class CartController extends CrudController
 
     /**
      * @param Request $request
+     *
      * @return array|mixed
      */
     protected function getJsonContent(Request $request)

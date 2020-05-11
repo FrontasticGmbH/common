@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\SapCommerceCloudBundle\Domain;
 
+use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
@@ -31,8 +32,8 @@ class SapCartApi implements CartApi
 
     public function __construct(
         SapClient $client,
-        SapLocaleCreator $localeCreator,
         SapDataMapper $dataMapper,
+        SapLocaleCreator $localeCreator,
         OrderIdGenerator $orderIdGenerator
     ) {
         $this->client = $client;
@@ -41,7 +42,7 @@ class SapCartApi implements CartApi
         $this->orderIdGenerator = $orderIdGenerator;
     }
 
-    public function getForUser(string $userId, string $locale): Cart
+    public function getForUser(Account $account, string $locale): Cart
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
@@ -205,22 +206,22 @@ class SapCartApi implements CartApi
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function removeDiscountCode(Cart $cart, string $discountId, string $locale = null): Cart
+    public function removeDiscountCode(Cart $cart, LineItem $discountLineItem, string $locale = null): Cart
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function order(Cart $cart): Order
+    public function order(Cart $cart, string $locale = null): Order
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function getOrder(string $orderId): Order
+    public function getOrder(Account $account, string $orderId, string $locale = null): Order
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function getOrders(string $accountId): array
+    public function getOrders(Account $account, string $locale = null): array
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }

@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain\CartApi;
 
+use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
@@ -84,7 +85,7 @@ class Commercetools implements CartApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function getForUser(string $userId, string $localeString): Cart
+    public function getForUser(Account $account, string $localeString): Cart
     {
         $locale = $this->localeCreator->createLocaleFromString($localeString);
 
@@ -93,7 +94,7 @@ class Commercetools implements CartApi
                 $this->client->get(
                     '/carts',
                     [
-                        'customerId' => $userId,
+                        'customerId' => $account->accountId,
                         'expand' => self::EXPAND,
                     ]
                 ),
@@ -111,7 +112,7 @@ class Commercetools implements CartApi
                         'country' => $locale->country,
                         'currency' => $locale->currency,
 
-                        'customerId' => $userId,
+                        'customerId' => $account->accountId,
                         'state' => 'Active',
                         'inventoryMode' => 'ReserveOnOrder',
                     ])
@@ -547,7 +548,7 @@ class Commercetools implements CartApi
         );
     }
 
-    public function removeDiscountCode(Cart $cart, string $discountId, string $localeString = null): Cart
+    public function removeDiscountCode(Cart $cart, LineItem $discountLineItem, string $localeString = null): Cart
     {
         return $this->postCartActions(
             $cart,
@@ -556,7 +557,7 @@ class Commercetools implements CartApi
                     'action' => 'removeDiscountCode',
                     'discountCode' => [
                         'typeId' => 'discount-code',
-                        'id' => $discountId,
+                        'id' => $discountLineItem->lineItemId,
                     ],
                 ],
             ],
@@ -568,7 +569,7 @@ class Commercetools implements CartApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function order(Cart $cart): Order
+    public function order(Cart $cart, string $locale = null): Order
     {
         $order = $this->cartMapper->mapDataToOrder(
             $this->client->post(
@@ -581,7 +582,7 @@ class Commercetools implements CartApi
                     'orderNumber' => $this->orderIdGenerator->getOrderId($cart),
                 ])
             ),
-            $this->parseLocaleString()
+            $this->parseLocaleString($locale)
         );
 
         $cart = $this->getById($cart->cartId);
@@ -597,14 +598,14 @@ class Commercetools implements CartApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function getOrder(string $orderId): Order
+    public function getOrder(Account $account, string $orderId, string $locale = null): Order
     {
         return $this->cartMapper->mapDataToOrder(
             $this->client->get(
                 '/orders/order-number=' . $orderId,
                 ['expand' => self::EXPAND]
             ),
-            $this->parseLocaleString()
+            $this->parseLocaleString($locale)
         );
     }
 
@@ -613,13 +614,13 @@ class Commercetools implements CartApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function getOrders(string $accountId): array
+    public function getOrders(Account $account, string $locale = null): array
     {
         $result = $this->client
             ->fetchAsync(
                 '/orders',
                 [
-                    'where' => 'customerId="' . $accountId . '"',
+                    'where' => 'customerId="' . $account->accountId . '"',
                     'expand' => self::EXPAND,
                 ]
             )
@@ -627,7 +628,7 @@ class Commercetools implements CartApi
 
         $orders = [];
         foreach ($result->results as $order) {
-            $orders[] = $this->cartMapper->mapDataToOrder($order, $this->parseLocaleString());
+            $orders[] = $this->cartMapper->mapDataToOrder($order, $this->parseLocaleString($locale));
         }
 
         return $orders;

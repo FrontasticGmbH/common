@@ -152,6 +152,11 @@ class Cart extends DataObject
         );
     }
 
+    public function isReadyForCheckout(): bool
+    {
+        return $this->hasUser() && $this->hasAddresses();
+    }
+
     public function isComplete(): bool
     {
         return $this->hasUser() && $this->hasAddresses() && $this->hasCompletePayments();

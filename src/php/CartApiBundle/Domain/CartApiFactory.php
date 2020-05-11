@@ -67,8 +67,8 @@ class CartApiFactory
                 $client = $clientFactory->factorForProjectAndType($project, 'product');
                 $cartApi = new SapCartApi(
                     $client,
-                    $localeCreatorFactory->factor($project, $client),
                     new SapDataMapper($client),
+                    $localeCreatorFactory->factor($project, $client),
                     $this->orderIdGenerator
                 );
                 break;

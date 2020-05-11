@@ -2,11 +2,12 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain;
 
+use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 
 interface CartApi
 {
-    public function getForUser(string $userId, string $locale): Cart;
+    public function getForUser(Account $account, string $locale): Cart;
 
     public function getAnonymous(string $anonymousId, string $locale): Cart;
 
@@ -61,16 +62,16 @@ interface CartApi
 
     public function redeemDiscountCode(Cart $cart, string $code, string $locale = null): Cart;
 
-    public function removeDiscountCode(Cart $cart, string $discountId, string $locale = null): Cart;
+    public function removeDiscountCode(Cart $cart, LineItem $discountLineItem, string $locale = null): Cart;
 
-    public function order(Cart $cart): Order;
+    public function order(Cart $cart, string $locale = null): Order;
 
-    public function getOrder(string $orderId): Order;
+    public function getOrder(Account $account, string $orderId, string $locale = null): Order;
 
     /**
-     * @return Order[]
+     * @return \Frontastic\Common\CartApiBundle\Domain\Order[]
      */
-    public function getOrders(string $accountId): array;
+    public function getOrders(Account $account, string $locale = null): array;
 
     public function startTransaction(Cart $cart): void;
 
