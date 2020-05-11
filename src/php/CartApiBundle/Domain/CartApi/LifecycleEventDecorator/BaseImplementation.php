@@ -184,6 +184,21 @@ abstract class BaseImplementation
         return null;
     }
 
+    /*** removeDiscountCode() *****************************************************************************************/
+    public function beforeRemoveDiscountCode(
+        CartApi $cartApi,
+        Cart $cart,
+        string $discountId,
+        string $locale = null
+    ): void {
+    }
+
+    public function afterRemoveDiscountCode(CartApi $cartApi, Cart $cart): ?Cart
+    {
+        return null;
+    }
+
+
     /*** order() ******************************************************************************************************/
     public function beforeOrder(CartApi $cartApi, Cart $cart): void
     {
