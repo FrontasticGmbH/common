@@ -6,8 +6,6 @@ use Frontastic\Common\CartApiBundle\Domain\Cart;
 
 interface AccountApi
 {
-    public function get(string $email): Account;
-
     public function confirmEmail(string $token): Account;
 
     public function create(Account $account, ?Cart $cart = null): Account;
@@ -16,11 +14,13 @@ interface AccountApi
 
     public function updatePassword(Account $account, string $oldPassword, string $newPassword): Account;
 
-    public function generatePasswordResetToken(Account $account): Account;
+    public function generatePasswordResetToken(string $email): PasswordResetToken;
 
     public function resetPassword(string $token, string $newPassword): Account;
 
-    public function login(Account $account, ?Cart $cart = null): bool;
+    public function login(Account $account, ?Cart $cart = null): ?Account;
+
+    public function refreshAccount(Account $account): Account;
 
     /**
      * @return Address[]

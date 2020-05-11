@@ -5,6 +5,7 @@ namespace Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
+use Frontastic\Common\AccountApiBundle\Domain\PasswordResetToken;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\LifecycleTrait;
 
@@ -37,11 +38,6 @@ class LifecycleEventDecorator implements AccountApi
         return $this->aggregate;
     }
 
-    public function get(string $email): Account
-    {
-        return $this->dispatch(__FUNCTION__, func_get_args());
-    }
-
     public function confirmEmail(string $token): Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
@@ -62,7 +58,7 @@ class LifecycleEventDecorator implements AccountApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function generatePasswordResetToken(Account $account): Account
+    public function generatePasswordResetToken(string $email): PasswordResetToken
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
@@ -72,7 +68,12 @@ class LifecycleEventDecorator implements AccountApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function login(Account $account, ?Cart $cart = null): bool
+    public function login(Account $account, ?Cart $cart = null): ?Account
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
+    public function refreshAccount(Account $account): Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }

@@ -2,9 +2,12 @@
 
 namespace Frontastic\Common\AccountApiBundle\Controller;
 
+use Assert\Assertion;
 use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\AccountService;
+use Frontastic\Common\AccountApiBundle\Domain\Address;
+use Frontastic\Common\AccountApiBundle\Domain\DuplicateAccountException;
 use Frontastic\Common\CoreBundle\Domain\ErrorResult;
 use QafooLabs\MVC\RedirectRoute;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -18,10 +21,12 @@ class AccountAuthController extends Controller
 {
     public function indexAction(Request $request, UserInterface $account = null): JsonResponse
     {
+        Assertion::isInstanceOf($account, Account::class);
+
         return new JsonResponse($this->getAccountService()->getSessionFor($account));
     }
 
-    public function registerAction(Request $request, Context $context): JsonResponse
+    public function registerAction(Request $request, Context $context): Response
     {
         $body = $this->getJsonBody($request);
         $account = new Account([
@@ -43,14 +48,26 @@ class AccountAuthController extends Controller
         ]);
         $account->setPassword($body['password']);
 
-        if ($this->getAccountService()->exists($account->email)) {
-            return new JsonResponse(new ErrorResult(['message' => "Die E-Mail-Adresse wird bereits verwendet."]), 409);
+        if (isset($body['billingAddress'])) {
+            $address = new Address($body['billingAddress']);
+            $address->isDefaultBillingAddress = true;
+            $address->isDefaultShippingAddress = !isset($body['shippingAddress']);
+            $account->addresses[] = $address;
+        }
+        if (isset($body['shippingAddress'])) {
+            $address = new Address($body['shippingAddress']);
+            $address->isDefaultShippingAddress = true;
+            $account->addresses[] = $address;
         }
 
-        $account = $this->getAccountService()->create(
-            $account,
-            $this->get('frontastic.catwalk.cart_api')->getAnonymous(session_id(), $context->locale)
-        );
+        try {
+            $account = $this->getAccountService()->create(
+                $account,
+                $this->get('frontastic.catwalk.cart_api')->getAnonymous(session_id(), $context->locale)
+            );
+        } catch (DuplicateAccountException $exception) {
+            return new JsonResponse(new ErrorResult(['message' => "Die E-Mail-Adresse wird bereits verwendet."]), 409);
+        }
 
         if ($account->confirmationToken !== null) {
             $this->getAccountService()->sendConfirmationMail($account);
@@ -59,7 +76,7 @@ class AccountAuthController extends Controller
         return $this->loginAccount($account, $request);
     }
 
-    public function confirmAction(Request $request, string $token): JsonResponse
+    public function confirmAction(Request $request, string $token): Response
     {
         $account = $this->getAccountService()->confirmEmail($token);
 
@@ -69,13 +86,12 @@ class AccountAuthController extends Controller
     public function requestResetAction(Request $request): RedirectRoute
     {
         $body = $this->getJsonBody($request);
-        $account = $this->getAccountService()->get($body['email']);
-        $this->getAccountService()->sendPasswordResetMail($account);
+        $this->getAccountService()->sendPasswordResetMail($body['email']);
 
         return new RedirectRoute('Frontastic.AccountBundle.Account.logout');
     }
 
-    public function resetAction(Request $request, string $token): JsonResponse
+    public function resetAction(Request $request, string $token): Response
     {
         $body = $this->getJsonBody($request);
         $account = $this->getAccountService()->resetPassword($token, $body['newPassword']);
@@ -87,7 +103,7 @@ class AccountAuthController extends Controller
     {
         $this->assertIsAuthenticated($context);
 
-        $account = $this->getAccountService()->get($context->session->account->email);
+        $account = $context->session->account;
 
         $body = $this->getJsonBody($request);
         $account = $this->getAccountService()->updatePassword($account, $body['oldPassword'], $body['newPassword']);
@@ -98,7 +114,7 @@ class AccountAuthController extends Controller
     {
         $this->assertIsAuthenticated($context);
 
-        $account = $this->getAccountService()->get($context->session->account->email);
+        $account = $context->session->account;
 
         $body = $this->getJsonBody($request);
         $account->salutation = $body['salutation'];

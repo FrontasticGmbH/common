@@ -5,6 +5,7 @@ namespace Frontastic\Common\AccountApiBundle\Domain\AccountApi\LifecycleEventDec
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
+use Frontastic\Common\AccountApiBundle\Domain\PasswordResetToken;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 
 /**
@@ -33,16 +34,6 @@ use Frontastic\Common\CartApiBundle\Domain\Cart;
  */
 abstract class BaseImplementation
 {
-    /*** get() ********************************************************************************************************/
-    public function beforeGet(AccountApi $accountApi, string $email): void
-    {
-    }
-
-    public function afterGet(AccountApi $accountApi, Account $account): ?Account
-    {
-        return null;
-    }
-
     /*** confirmEmail() ***********************************************************************************************/
     public function beforeConfirmEmail(AccountApi $accountApi, string $token): void
     {
@@ -88,12 +79,14 @@ abstract class BaseImplementation
     }
 
     /*** generatePasswordResetToken() *********************************************************************************/
-    public function beforeGeneratePasswordResetToken(AccountApi $accountApi, Account $account): void
+    public function beforeGeneratePasswordResetToken(AccountApi $accountApi, string $email): void
     {
     }
 
-    public function afterGeneratePasswordResetToken(AccountApi $accountApi, Account $account): ?Account
-    {
+    public function afterGeneratePasswordResetToken(
+        AccountApi $accountApi,
+        PasswordResetToken $token
+    ): ?PasswordResetToken {
         return null;
     }
 
@@ -112,7 +105,17 @@ abstract class BaseImplementation
     {
     }
 
-    public function afterLogin(AccountApi $accountApi, bool $successful): ?bool
+    public function afterLogin(AccountApi $accountApi, Account $account): ?Account
+    {
+        return null;
+    }
+
+    /*** refreshAccount() ******************************************************************************************************/
+    public function beforeRefreshAccount(AccountApi $accountApi, Account $account): void
+    {
+    }
+
+    public function afterRefreshAccount(AccountApi $accountApi, Account $account): ?Account
     {
         return null;
     }

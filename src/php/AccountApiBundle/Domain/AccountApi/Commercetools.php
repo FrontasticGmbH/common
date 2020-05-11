@@ -5,6 +5,8 @@ namespace Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
+use Frontastic\Common\AccountApiBundle\Domain\DuplicateAccountException;
+use Frontastic\Common\AccountApiBundle\Domain\PasswordResetToken;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
@@ -30,28 +32,6 @@ class Commercetools implements AccountApi
     public function __construct(Client $client)
     {
         $this->client = $client;
-    }
-
-    /**
-     * @throws RequestException
-     * @todo Should we catch the RequestException here?
-     */
-    public function get(string $email): Account
-    {
-        $result = $this->client
-            ->fetchAsync(
-                '/customers',
-                [
-                    'where' => 'email="' . $email . '"',
-                ]
-            )
-            ->wait();
-
-        if ($result->count >= 1) {
-            return $this->mapAccount($result->results[0]);
-        } else {
-            throw new \OutOfBoundsException('Could not find account with email ' . $email);
-        }
     }
 
     public function confirmEmail(string $token): Account
@@ -108,6 +88,10 @@ class Commercetools implements AccountApi
                 ])
             );
         } catch (RequestException $e) {
+            if ($e->getCode() === 400 && $e->getTranslationCode() === 'commercetools.DuplicateField') {
+                throw new DuplicateAccountException($account->email, 0, $e);
+            }
+
             if ($cart !== null && $e->getCode() === 400) {
                 /*
                  * The cart might already belong to another user so we try to login without the cart.
@@ -189,22 +173,23 @@ class Commercetools implements AccountApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function generatePasswordResetToken(Account $account): Account
+    public function generatePasswordResetToken(string $email): PasswordResetToken
     {
         $token = $this->client->post(
             '/customers/password-token',
             [],
             [],
             json_encode([
-                'email' => $account->email,
+                'email' => $email,
                 'ttlMinutes' => 2 * 24 * 60,
             ])
         );
 
-        $account->confirmationToken = $token['value'];
-        $account->tokenValidUntil = new \DateTimeImmutable($token['expiresAt']);
-
-        return $account;
+        return new PasswordResetToken([
+            'email' => $email,
+            'confirmationToken' => $token['value'],
+            'tokenValidUntil' => new \DateTimeImmutable($token['expiresAt']),
+        ]);
     }
 
     /**
@@ -224,7 +209,7 @@ class Commercetools implements AccountApi
         ));
     }
 
-    public function login(Account $account, ?Cart $cart = null): bool
+    public function login(Account $account, ?Cart $cart = null): ?Account
     {
         try {
             $account = $this->mapAccount($this->client->post(
@@ -247,15 +232,33 @@ class Commercetools implements AccountApi
                 return $this->login($account);
             }
 
-            return false;
+            return null;
         } catch (\Exception $e) {
-            return false;
+            return null;
         }
         if (!$account->confirmed) {
             throw new AuthenticationException('Your email address was not yet verified.');
         }
 
-        return $account->confirmed;
+        return $account;
+    }
+
+    public function refreshAccount(Account $account): Account
+    {
+        $result = $this->client
+            ->fetchAsync(
+                '/customers',
+                [
+                    'where' => 'email="' . $account->email . '"',
+                ]
+            )
+            ->wait();
+
+        if ($result->count >= 1) {
+            return $this->mapAccount($result->results[0]);
+        } else {
+            throw new \OutOfBoundsException('Could not find account with email ' . $account->email);
+        }
     }
 
     /**

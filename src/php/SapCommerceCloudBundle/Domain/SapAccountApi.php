@@ -5,6 +5,8 @@ namespace Frontastic\Common\SapCommerceCloudBundle\Domain;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
+use Frontastic\Common\AccountApiBundle\Domain\DuplicateAccountException;
+use Frontastic\Common\AccountApiBundle\Domain\PasswordResetToken;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreator;
 
@@ -24,21 +26,6 @@ class SapAccountApi implements AccountApi
         $this->client = $client;
         $this->localeCreator = $localeCreator;
         $this->dataMapper = $dataMapper;
-    }
-
-    public function get(string $email): Account
-    {
-        return $this->client
-            ->get(
-                '/rest/v2/{siteId}/users/' . $email,
-                [
-                    'fields' => 'FULL',
-                ]
-            )
-            ->then(function (array $accountData): Account {
-                return $this->dataMapper->mapDataToAccount($accountData);
-            })
-            ->wait();
     }
 
     public function confirmEmail(string $token): Account
@@ -65,6 +52,16 @@ class SapAccountApi implements AccountApi
             ->then(function (array $accountData): Account {
                 return $this->dataMapper->mapDataToAccount($accountData);
             })
+            ->otherwise(function (\Throwable $throwable) use ($account): Account {
+                if (!$throwable instanceof SapRequestException) {
+                    throw $throwable;
+                }
+
+                if ($throwable->hasErrorType('DuplicateUidError')) {
+                    throw new DuplicateAccountException($account->email, 0, $throwable);
+                }
+                throw $throwable;
+            })
             ->wait();
     }
 
@@ -78,7 +75,7 @@ class SapAccountApi implements AccountApi
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function generatePasswordResetToken(Account $account): Account
+    public function generatePasswordResetToken(string $email): PasswordResetToken
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
@@ -88,9 +85,28 @@ class SapAccountApi implements AccountApi
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function login(Account $account, ?Cart $cart = null): bool
+    public function login(Account $account, ?Cart $cart = null): ?Account
     {
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        if (!$this->client->checkAccountCredentials($account->email, $account->getPassword())) {
+            return null;
+        }
+
+        return $this->refreshAccount($account);
+    }
+
+    public function refreshAccount(Account $account): Account
+    {
+        return $this->client
+            ->get(
+                '/rest/v2/{siteId}/users/' . $account->email,
+                [
+                    'fields' => 'FULL',
+                ]
+            )
+            ->then(function (array $accountData): Account {
+                return $this->dataMapper->mapDataToAccount($accountData);
+            })
+            ->wait();
     }
 
     public function getAddresses(Account $account): array

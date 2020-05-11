@@ -47,25 +47,19 @@ class AccountService
         $account->eraseCredentials();
     }
 
-    public function sendPasswordResetMail(Account $account)
+    public function sendPasswordResetMail(string $email)
     {
-        $account = $this->accountApi->generatePasswordResetToken($account);
-        $this->mailer->sendToUser($account, 'reset', 'Ihr neues Passwort', ['token' => $account->confirmationToken]);
-        $account->eraseCredentials();
-    }
+        $token = $this->accountApi->generatePasswordResetToken($email);
 
-    public function get(string $email): Account
-    {
-        return $this->accountApi->get($email);
-    }
-
-    public function exists(string $email): bool
-    {
-        try {
-            $this->accountApi->get($email);
-            return true;
-        } catch (\OutOfBoundsException $e) {
-            return false;
+        if ($token->confirmationToken !== null) {
+            $this->mailer->sendToUser(
+                new Account([
+                    'email' => $token->email,
+                ]),
+                'reset',
+                'Ihr neues Passwort',
+                ['token' => $token->confirmationToken]
+            );
         }
     }
 
@@ -74,9 +68,14 @@ class AccountService
         return $this->accountApi->confirmEmail($confirmationToken);
     }
 
-    public function login(Account $account, ?Cart $cart = null): bool
+    public function login(Account $account, ?Cart $cart = null): ?Account
     {
         return $this->accountApi->login($account, $cart);
+    }
+
+    public function refresh(Account $account): Account
+    {
+        return $this->accountApi->refreshAccount($account);
     }
 
     public function create(Account $account, ?Cart $cart = null): Account
@@ -97,10 +96,5 @@ class AccountService
     public function resetPassword(string $token, string $newPassword): Account
     {
         return $this->accountApi->resetPassword($token, $newPassword);
-    }
-
-    public function remove(Account $account)
-    {
-        $this->accountApi->remove($account);
     }
 }

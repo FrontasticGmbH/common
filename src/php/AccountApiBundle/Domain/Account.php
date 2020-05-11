@@ -76,9 +76,9 @@ class Account extends DataObject implements UserInterface, \Serializable
     public $addresses = [];
 
     /**
-     * @var array
+     * @var string|null
      */
-    private $authTokens = [];
+    public $authToken;
 
     /**
      * Access original object from backend
@@ -138,6 +138,7 @@ class Account extends DataObject implements UserInterface, \Serializable
     {
         unset($this->confirmationToken);
         unset($this->passwordHash);
+        unset($this->authToken);
     }
 
     public function assertPermission(string $required)
@@ -195,26 +196,5 @@ class Account extends DataObject implements UserInterface, \Serializable
         foreach (\unserialize($serialized) as $key => $value) {
             $this->$key = $value;
         }
-    }
-
-    public function resetToken(string $type): void
-    {
-        if (isset($this->authTokens[$type])) {
-            $this->authTokens[$type] = null;
-        }
-    }
-
-    public function setToken(string $type, string $token): void
-    {
-        $this->authTokens[$type] = $token;
-    }
-
-    public function getToken(string $type): string
-    {
-        if (!isset($this->authTokens[$type])) {
-            throw new InvalidArgumentException(sprintf('No auth token found by type: %s', $type));
-        }
-
-        return $this->authTokens[$type];
     }
 }

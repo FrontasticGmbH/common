@@ -5,6 +5,7 @@ namespace Frontastic\Common\ShopwareBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
+use Frontastic\Common\AccountApiBundle\Domain\PasswordResetToken;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\ShopwareBundle\Domain\AbstractShopwareApi;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\AccountMapper;
@@ -16,7 +17,6 @@ use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
-use Frontastic\Common\ShopwareBundle\Domain\Exception\RequestException;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
 use RuntimeException;
 
@@ -37,23 +37,6 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         $this->projectConfigApi = $projectConfigApiFactory->factor($this->client);
     }
 
-    public function get(string $token): Account
-    {
-        return $this->client
-            ->withContextToken($token)
-            ->get('/customer')
-            ->then(function ($response) {
-                return $this->mapResponse($response, AccountMapper::MAPPER_NAME);
-            })
-            ->then(static function (Account $account) use ($token) {
-                // Lets not loose the token
-                $account->setToken(self::TOKEN_TYPE, $token);
-
-                return $account;
-            })
-            ->wait();
-    }
-
     public function confirmEmail(string $token): Account
     {
         throw new RuntimeException('Email confirmation is not supported by the Shopware account API.');
@@ -65,17 +48,8 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
 
         return $this->client
             ->post('/customer', [], $requestData)
-            ->then(static function ($response) use ($account) {
-                $account->accountId = $response['data'];
-
-                // Mark billing address as default, Shopware marks it as default when creating the account
-                $account->addresses[0]->isDefaultBillingAddress = true;
-
-                // Shipping address can be located at index 1 if it's custom, or 0 if it's same as billing
-                $shippingAddressIndex = (int)isset($account->addresses[1]);
-                $account->addresses[$shippingAddressIndex]->isDefaultShippingAddress = true;
-
-                return $account;
+            ->then(function ($response) use ($account) {
+                return $this->login($account, null);
             })
             ->wait();
     }
@@ -85,7 +59,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         $requestData = $this->mapRequestData($account, CustomerPatchRequestDataMapper::MAPPER_NAME);
 
         $this->client
-            ->withContextToken($account->getToken(self::TOKEN_TYPE))
+            ->withContextToken($account->authToken)
             ->patch('/customer', [], $requestData)
             ->wait();
 
@@ -101,14 +75,14 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         ];
 
         $this->client
-            ->withContextToken($account->getToken(self::TOKEN_TYPE))
+            ->withContextToken($account->authToken)
             ->patch('/customer/password', [], $requestData)
             ->wait();
 
         return $account;
     }
 
-    public function generatePasswordResetToken(Account $account): Account
+    public function generatePasswordResetToken(string $email): PasswordResetToken
     {
         // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
         throw new RuntimeException('Not implemented');
@@ -120,34 +94,45 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         throw new RuntimeException('Not implemented');
     }
 
-    public function login(Account $account, ?Cart $cart = null): bool
+    public function login(Account $account, ?Cart $cart = null): ?Account
     {
-        try {
-            $requestData = [
-                'username' => $account->getUsername(),
-                'password' => $account->getPassword(),
-            ];
+        $requestData = [
+            'username' => $account->getUsername(),
+            'password' => $account->getPassword(),
+        ];
 
-            return $this->client
-                ->post('/customer/login', [], $requestData)
-                ->then(
-                    static function ($response) use (&$account) {
-                        $account->setToken(self::TOKEN_TYPE, $response[self::KEY_CONTEXT_TOKEN]);
+        return $this->client
+            ->post('/customer/login', [], $requestData)
+            ->then(
+                function ($response) {
+                    $token = $response['sw-context-token'];
+                    return $this->client
+                        ->withContextToken($token)
+                        ->get('/customer')
+                        ->then(function ($response) use ($token): Account {
+                            $account = $this->mapResponse($response, AccountMapper::MAPPER_NAME);
+                            $account->authToken = $token;
+                            return $account;
+                        });
+                },
+                static function () {
+                    return null;
+                }
+            )
+            ->wait();
+    }
 
-                        return true;
-                    },
-                    static function ($reason) use ($account) {
-                        $account->resetToken(self::TOKEN_TYPE);
-
-                        return false;
-                    }
-                )
-                ->wait();
-        } catch (RequestException $exception) {
-            $account->resetToken(self::TOKEN_TYPE);
-
-            return false;
-        }
+    public function refreshAccount(Account $account): Account
+    {
+        return $this->client
+            ->withContextToken($account->authToken)
+            ->get('/customer')
+            ->then(function ($response) use ($account): Account {
+                $fetchedAccount = $this->mapResponse($response, AccountMapper::MAPPER_NAME);
+                $fetchedAccount->authToken = $account->authToken;
+                return $fetchedAccount;
+            })
+            ->wait();
     }
 
     /**
@@ -156,7 +141,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
     public function getAddresses(Account $account): array
     {
         return $this->client
-            ->withContextToken($account->getToken(self::TOKEN_TYPE))
+            ->withContextToken($account->authToken)
             ->get('/customer/address')
             ->then(function ($response) {
                 return $this->mapResponse($response, AddressesMapper::MAPPER_NAME);
@@ -169,7 +154,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         $requestData = $this->mapRequestData($address, AddressCreateRequestDataMapper::MAPPER_NAME);
 
         return $this->client
-            ->withContextToken($account->getToken(self::TOKEN_TYPE))
+            ->withContextToken($account->authToken)
             ->post('/customer/address', [], $requestData)
             ->then(static function ($response) use ($account, $address) {
                 $account->addresses[] = $address;
@@ -196,7 +181,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         $requestData = $this->mapRequestData($address, AddressCreateRequestDataMapper::MAPPER_NAME);
 
         return $this->client
-            ->withContextToken($account->getToken(self::TOKEN_TYPE))
+            ->withContextToken($account->authToken)
             ->patch('/customer/address', [], $requestData)
             ->then(static function ($response) use ($account, $address) {
                 $account->addresses[] = $address;
@@ -221,7 +206,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
     public function removeAddress(Account $account, string $addressId): Account
     {
         return $this->client
-            ->withContextToken($account->getToken(self::TOKEN_TYPE))
+            ->withContextToken($account->authToken)
             ->delete("/customer/address/{$addressId}")
             ->then(static function ($response) use ($account) {
                 $deletedAddressId = $response['data'];
@@ -244,7 +229,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
     public function setDefaultBillingAddress(Account $account, string $addressId): Account
     {
         return $this->client
-            ->withContextToken($account->getToken(self::TOKEN_TYPE))
+            ->withContextToken($account->authToken)
             ->patch("/customer/address/{$addressId}/default-billing")
             ->then(static function ($response) use ($account) {
                 $updatedBillingAddressId = $response['data'];
@@ -261,7 +246,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
     public function setDefaultShippingAddress(Account $account, string $addressId): Account
     {
         return $this->client
-            ->withContextToken($account->getToken(self::TOKEN_TYPE))
+            ->withContextToken($account->authToken)
             ->patch("/customer/address/{$addressId}/default-shipping")
             ->then(static function ($response) use ($account) {
                 $updatedShippingAddressId = $response['data'];

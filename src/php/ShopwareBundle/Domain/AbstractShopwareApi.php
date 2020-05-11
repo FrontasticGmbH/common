@@ -10,9 +10,6 @@ use Frontastic\Common\ShopwareBundle\Domain\Locale\ShopwareLocale;
 
 abstract class AbstractShopwareApi
 {
-    public const TOKEN_TYPE = 'shopware';
-    protected const KEY_CONTEXT_TOKEN = 'sw-context-token';
-
     /**
      * @var \Frontastic\Common\ShopwareBundle\Domain\ClientInterface
      */
