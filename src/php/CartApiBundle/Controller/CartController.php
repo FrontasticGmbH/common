@@ -7,7 +7,6 @@ use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
-use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\CoreBundle\Controller\CrudController;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Symfony\Component\HttpFoundation\Request;
@@ -225,33 +224,6 @@ class CartController extends CrudController
                 $context->locale
             );
         }
-
-        return ['cart' => $cartApi->commit($context->locale)];
-    }
-
-    /**
-     * Untested. @sanja: Please try and remove comment if satisfied.
-     */
-    public function addPaymentByInvoice(Context $context, Request $request): array
-    {
-        $payload = $this->getJsonContent($request);
-
-        $cartApi = $this->getCartApi($context);
-        $cart = $this->getCart($context, $request);
-
-        $cartApi->startTransaction($cart);
-
-        $cartApi->addPayment(
-            $cart,
-            new Payment([
-                'paymentProvider' => 'frontastic',
-                'paymentMethod' => 'invoice',
-                'paymentId' => $payload['paymentId'],
-                'amount' => $payload['sum'] ?? $cart->sum,
-                'currency' => $cart->currency,
-                'paymentStatus' => Payment::PAYMENT_STATUS_PENDING,
-            ])
-        );
 
         return ['cart' => $cartApi->commit($context->locale)];
     }
