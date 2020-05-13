@@ -40,6 +40,10 @@
         <default key="_controller">Frontastic\Common\CartApiBundle\Controller\CartController::updateAction</default>
     </route>
 
+    <route id="Frontastic.CartApi.Cart.checkout" path="/cart/payment/add-invoice" methods="POST">
+        <default key="_controller">Frontastic\Common\CartApiBundle\Controller\CartController::addPaymentByInvoice</default>
+    </route>
+
     <route id="Frontastic.CartApi.Cart.checkout" path="/cart/checkout" methods="POST">
         <default key="_controller">Frontastic\Common\CartApiBundle\Controller\CartController::checkoutAction</default>
     </route>
