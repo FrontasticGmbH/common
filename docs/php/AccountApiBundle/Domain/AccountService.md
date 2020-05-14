@@ -8,29 +8,27 @@
 * [getSessionFor()](#getsessionfor)
 * [sendConfirmationMail()](#sendconfirmationmail)
 * [sendPasswordResetMail()](#sendpasswordresetmail)
-* [get()](#get)
-* [exists()](#exists)
 * [confirmEmail()](#confirmemail)
 * [login()](#login)
+* [refresh()](#refresh)
 * [create()](#create)
 * [update()](#update)
 * [updatePassword()](#updatepassword)
 * [resetPassword()](#resetpassword)
-* [remove()](#remove)
 
 ### __construct()
 
 ```php
 public function __construct(
     AccountApi $accountApi,
-    \Frontastic\Common\CoreBundle\Domain\Mailer $mailer
+    Mailer $mailer
 ): mixed
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$accountApi`|[`AccountApi`](AccountApi.md)||
-`$mailer`|`\Frontastic\Common\CoreBundle\Domain\Mailer`||
+`$mailer`|[`Mailer`](../../CoreBundle/Domain/Mailer.md)||
 
 Return Value: `mixed`
 
@@ -66,55 +64,29 @@ Return Value: `mixed`
 
 ```php
 public function sendPasswordResetMail(
-    Account $account
+    string $email
 ): mixed
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$account`|[`Account`](Account.md)||
+`$email`|`string`||
 
 Return Value: `mixed`
-
-### get()
-
-```php
-public function get(
-    string $email
-): Account
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$email`|`string`||
-
-Return Value: [`Account`](Account.md)
-
-### exists()
-
-```php
-public function exists(
-    string $email
-): bool
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$email`|`string`||
-
-Return Value: `bool`
 
 ### confirmEmail()
 
 ```php
 public function confirmEmail(
-    string $confirmationToken
+    string $confirmationToken,
+    string $locale = null
 ): Account
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$confirmationToken`|`string`||
+`$locale`|`string`|`null`|
 
 Return Value: [`Account`](Account.md)
 
@@ -123,23 +95,42 @@ Return Value: [`Account`](Account.md)
 ```php
 public function login(
     Account $account,
-    ?Cart $cart = null
-): bool
+    ?Cart $cart = null,
+    string $locale = null
+): ?Account
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$account`|[`Account`](Account.md)||
 `$cart`|?[`Cart`](../../CartApiBundle/Domain/Cart.md)|`null`|
+`$locale`|`string`|`null`|
 
-Return Value: `bool`
+Return Value: ?[`Account`](Account.md)
+
+### refresh()
+
+```php
+public function refresh(
+    Account $account,
+    string $locale = null
+): Account
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$account`|[`Account`](Account.md)||
+`$locale`|`string`|`null`|
+
+Return Value: [`Account`](Account.md)
 
 ### create()
 
 ```php
 public function create(
     Account $account,
-    ?Cart $cart = null
+    ?Cart $cart = null,
+    string $locale = null
 ): Account
 ```
 
@@ -147,6 +138,7 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$account`|[`Account`](Account.md)||
 `$cart`|?[`Cart`](../../CartApiBundle/Domain/Cart.md)|`null`|
+`$locale`|`string`|`null`|
 
 Return Value: [`Account`](Account.md)
 
@@ -154,13 +146,15 @@ Return Value: [`Account`](Account.md)
 
 ```php
 public function update(
-    Account $account
+    Account $account,
+    string $locale = null
 ): Account
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$account`|[`Account`](Account.md)||
+`$locale`|`string`|`null`|
 
 Return Value: [`Account`](Account.md)
 
@@ -170,7 +164,8 @@ Return Value: [`Account`](Account.md)
 public function updatePassword(
     Account $account,
     string $oldPassword,
-    string $newPassword
+    string $newPassword,
+    string $locale = null
 ): Account
 ```
 
@@ -179,6 +174,7 @@ Argument|Type|Default|Description
 `$account`|[`Account`](Account.md)||
 `$oldPassword`|`string`||
 `$newPassword`|`string`||
+`$locale`|`string`|`null`|
 
 Return Value: [`Account`](Account.md)
 
@@ -187,7 +183,8 @@ Return Value: [`Account`](Account.md)
 ```php
 public function resetPassword(
     string $token,
-    string $newPassword
+    string $newPassword,
+    string $locale = null
 ): Account
 ```
 
@@ -195,20 +192,7 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$token`|`string`||
 `$newPassword`|`string`||
+`$locale`|`string`|`null`|
 
 Return Value: [`Account`](Account.md)
-
-### remove()
-
-```php
-public function remove(
-    Account $account
-): mixed
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$account`|[`Account`](Account.md)||
-
-Return Value: `mixed`
 

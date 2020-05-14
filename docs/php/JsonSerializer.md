@@ -28,13 +28,13 @@ Return Value: `mixed`
 
 ```php
 public function addEnhancer(
-    JsonSerializer\ObjectEnhancer $enhancer
+    ObjectEnhancer $enhancer
 ): void
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$enhancer`|[`JsonSerializer`](JsonSerializer.md)\ObjectEnhancer||
+`$enhancer`|[`ObjectEnhancer`](JsonSerializer/ObjectEnhancer.md)||
 
 Return Value: `void`
 

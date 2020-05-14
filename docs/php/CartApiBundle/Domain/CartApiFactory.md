@@ -11,7 +11,7 @@
 
 ```php
 public function __construct(
-    \Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator $factoryServiceLocator,
+    FactoryServiceLocator $factoryServiceLocator,
     OrderIdGenerator $orderIdGenerator,
     iterable $decorators
 ): mixed
@@ -19,7 +19,7 @@ public function __construct(
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$factoryServiceLocator`|`\Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator`||
+`$factoryServiceLocator`|[`FactoryServiceLocator`](../../CoreBundle/Domain/Api/FactoryServiceLocator.md)||
 `$orderIdGenerator`|[`OrderIdGenerator`](OrderIdGenerator.md)||
 `$decorators`|`iterable`||
 

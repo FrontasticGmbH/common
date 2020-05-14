@@ -14,13 +14,13 @@
 
 ```php
 public function getCategories(
-    CategoryQuery $query
+    Query\CategoryQuery $query
 ): array
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$query`|[`CategoryQuery`](ProductApi/Query/CategoryQuery.md)||
+`$query`|[`Query`](ProductApi/Query.md)\CategoryQuery||
 
 Return Value: `array`
 
@@ -28,13 +28,13 @@ Return Value: `array`
 
 ```php
 public function getProductTypes(
-    ProductTypeQuery $query
+    Query\ProductTypeQuery $query
 ): array
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$query`|[`ProductTypeQuery`](ProductApi/Query/ProductTypeQuery.md)||
+`$query`|[`Query`](ProductApi/Query.md)\ProductTypeQuery||
 
 Return Value: `array`
 
@@ -58,14 +58,14 @@ Return Value: `?object`
 
 ```php
 public function query(
-    ProductQuery $query,
+    Query\ProductQuery $query,
     string $mode = self::QUERY_SYNC
 ): object
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$query`|[`ProductQuery`](ProductApi/Query/ProductQuery.md)||
+`$query`|[`Query`](ProductApi/Query.md)\ProductQuery||
 `$mode`|`string`|`self::QUERY_SYNC`|One of the QUERY_* connstants. Execute the query synchronously or asynchronously?
 
 Return Value: `object`

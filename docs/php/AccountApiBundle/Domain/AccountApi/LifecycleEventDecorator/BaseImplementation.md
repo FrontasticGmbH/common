@@ -24,8 +24,8 @@ need to tag your service based on this class with
 
 ## Methods
 
-* [beforeGet()](#beforeget)
-* [afterGet()](#afterget)
+* [beforeGetSalutations()](#beforegetsalutations)
+* [afterGetSalutations()](#aftergetsalutations)
 * [beforeConfirmEmail()](#beforeconfirmemail)
 * [afterConfirmEmail()](#afterconfirmemail)
 * [beforeCreate()](#beforecreate)
@@ -40,6 +40,8 @@ need to tag your service based on this class with
 * [afterResetPassword()](#afterresetpassword)
 * [beforeLogin()](#beforelogin)
 * [afterLogin()](#afterlogin)
+* [beforeRefreshAccount()](#beforerefreshaccount)
+* [afterRefreshAccount()](#afterrefreshaccount)
 * [beforeGetAddresses()](#beforegetaddresses)
 * [afterGetAddresses()](#aftergetaddresses)
 * [beforeAddAddress()](#beforeaddaddress)
@@ -53,44 +55,45 @@ need to tag your service based on this class with
 * [beforeSetDefaultShippingAddress()](#beforesetdefaultshippingaddress)
 * [afterSetDefaultShippingAddress()](#aftersetdefaultshippingaddress)
 
-### beforeGet()
+### beforeGetSalutations()
 
 ```php
-public function beforeGet(
+public function beforeGetSalutations(
     AccountApi $accountApi,
-    string $email
+    string $locale
 ): void
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$accountApi`|[`AccountApi`](../../AccountApi.md)||
-`$email`|`string`||
+`$locale`|`string`||
 
 Return Value: `void`
 
-### afterGet()
+### afterGetSalutations()
 
 ```php
-public function afterGet(
+public function afterGetSalutations(
     AccountApi $accountApi,
-    Account $account
-): ?Account
+    ?array $salutations
+): ?array
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$accountApi`|[`AccountApi`](../../AccountApi.md)||
-`$account`|[`Account`](../../Account.md)||
+`$salutations`|`?array`||
 
-Return Value: ?[`Account`](../../Account.md)
+Return Value: `?array`
 
 ### beforeConfirmEmail()
 
 ```php
 public function beforeConfirmEmail(
     AccountApi $accountApi,
-    string $token
+    string $token,
+    string $locale = null
 ): void
 ```
 
@@ -98,6 +101,7 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$accountApi`|[`AccountApi`](../../AccountApi.md)||
 `$token`|`string`||
+`$locale`|`string`|`null`|
 
 Return Value: `void`
 
@@ -123,7 +127,8 @@ Return Value: ?[`Account`](../../Account.md)
 public function beforeCreate(
     AccountApi $accountApi,
     Account $account,
-    ?Cart $cart = null
+    ?Cart $cart = null,
+    string $locale = null
 ): void
 ```
 
@@ -132,6 +137,7 @@ Argument|Type|Default|Description
 `$accountApi`|[`AccountApi`](../../AccountApi.md)||
 `$account`|[`Account`](../../Account.md)||
 `$cart`|?[`Cart`](../../../../CartApiBundle/Domain/Cart.md)|`null`|
+`$locale`|`string`|`null`|
 
 Return Value: `void`
 
@@ -156,7 +162,8 @@ Return Value: ?[`Account`](../../Account.md)
 ```php
 public function beforeUpdate(
     AccountApi $accountApi,
-    Account $account
+    Account $account,
+    string $locale = null
 ): void
 ```
 
@@ -164,6 +171,7 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$accountApi`|[`AccountApi`](../../AccountApi.md)||
 `$account`|[`Account`](../../Account.md)||
+`$locale`|`string`|`null`|
 
 Return Value: `void`
 
@@ -190,7 +198,8 @@ public function beforeUpdatePassword(
     AccountApi $accountApi,
     Account $account,
     string $oldPassword,
-    string $newPassword
+    string $newPassword,
+    string $locale = null
 ): void
 ```
 
@@ -200,6 +209,7 @@ Argument|Type|Default|Description
 `$account`|[`Account`](../../Account.md)||
 `$oldPassword`|`string`||
 `$newPassword`|`string`||
+`$locale`|`string`|`null`|
 
 Return Value: `void`
 
@@ -224,14 +234,14 @@ Return Value: ?[`Account`](../../Account.md)
 ```php
 public function beforeGeneratePasswordResetToken(
     AccountApi $accountApi,
-    Account $account
+    string $email
 ): void
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$accountApi`|[`AccountApi`](../../AccountApi.md)||
-`$account`|[`Account`](../../Account.md)||
+`$email`|`string`||
 
 Return Value: `void`
 
@@ -240,16 +250,16 @@ Return Value: `void`
 ```php
 public function afterGeneratePasswordResetToken(
     AccountApi $accountApi,
-    Account $account
-): ?Account
+    \Frontastic\Common\AccountApiBundle\Domain\PasswordResetToken $token
+): ?\Frontastic\Common\AccountApiBundle\Domain\PasswordResetToken
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$accountApi`|[`AccountApi`](../../AccountApi.md)||
-`$account`|[`Account`](../../Account.md)||
+`$token`|`\Frontastic\Common\AccountApiBundle\Domain\PasswordResetToken`||
 
-Return Value: ?[`Account`](../../Account.md)
+Return Value: `?\Frontastic\Common\AccountApiBundle\Domain\PasswordResetToken`
 
 ### beforeResetPassword()
 
@@ -257,7 +267,8 @@ Return Value: ?[`Account`](../../Account.md)
 public function beforeResetPassword(
     AccountApi $accountApi,
     string $token,
-    string $newPassword
+    string $newPassword,
+    string $locale = null
 ): void
 ```
 
@@ -266,6 +277,7 @@ Argument|Type|Default|Description
 `$accountApi`|[`AccountApi`](../../AccountApi.md)||
 `$token`|`string`||
 `$newPassword`|`string`||
+`$locale`|`string`|`null`|
 
 Return Value: `void`
 
@@ -291,7 +303,8 @@ Return Value: ?[`Account`](../../Account.md)
 public function beforeLogin(
     AccountApi $accountApi,
     Account $account,
-    ?Cart $cart = null
+    ?Cart $cart = null,
+    string $locale = null
 ): void
 ```
 
@@ -300,6 +313,7 @@ Argument|Type|Default|Description
 `$accountApi`|[`AccountApi`](../../AccountApi.md)||
 `$account`|[`Account`](../../Account.md)||
 `$cart`|?[`Cart`](../../../../CartApiBundle/Domain/Cart.md)|`null`|
+`$locale`|`string`|`null`|
 
 Return Value: `void`
 
@@ -308,23 +322,24 @@ Return Value: `void`
 ```php
 public function afterLogin(
     AccountApi $accountApi,
-    bool $successful
-): ?bool
+    Account $account
+): ?Account
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$accountApi`|[`AccountApi`](../../AccountApi.md)||
-`$successful`|`bool`||
+`$account`|[`Account`](../../Account.md)||
 
-Return Value: `?bool`
+Return Value: ?[`Account`](../../Account.md)
 
-### beforeGetAddresses()
+### beforeRefreshAccount()
 
 ```php
-public function beforeGetAddresses(
+public function beforeRefreshAccount(
     AccountApi $accountApi,
-    Account $account
+    Account $account,
+    string $locale = null
 ): void
 ```
 
@@ -332,6 +347,41 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$accountApi`|[`AccountApi`](../../AccountApi.md)||
 `$account`|[`Account`](../../Account.md)||
+`$locale`|`string`|`null`|
+
+Return Value: `void`
+
+### afterRefreshAccount()
+
+```php
+public function afterRefreshAccount(
+    AccountApi $accountApi,
+    Account $account
+): ?Account
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$account`|[`Account`](../../Account.md)||
+
+Return Value: ?[`Account`](../../Account.md)
+
+### beforeGetAddresses()
+
+```php
+public function beforeGetAddresses(
+    AccountApi $accountApi,
+    Account $account,
+    string $locale = null
+): void
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$accountApi`|[`AccountApi`](../../AccountApi.md)||
+`$account`|[`Account`](../../Account.md)||
+`$locale`|`string`|`null`|
 
 Return Value: `void`
 
@@ -357,7 +407,8 @@ Return Value: `?array`
 public function beforeAddAddress(
     AccountApi $accountApi,
     Account $account,
-    Address $address
+    Address $address,
+    string $locale = null
 ): void
 ```
 
@@ -366,6 +417,7 @@ Argument|Type|Default|Description
 `$accountApi`|[`AccountApi`](../../AccountApi.md)||
 `$account`|[`Account`](../../Account.md)||
 `$address`|[`Address`](../../Address.md)||
+`$locale`|`string`|`null`|
 
 Return Value: `void`
 
@@ -391,7 +443,8 @@ Return Value: ?[`Account`](../../Account.md)
 public function beforeUpdateAddress(
     AccountApi $accountApi,
     Account $account,
-    Address $address
+    Address $address,
+    string $locale = null
 ): void
 ```
 
@@ -400,6 +453,7 @@ Argument|Type|Default|Description
 `$accountApi`|[`AccountApi`](../../AccountApi.md)||
 `$account`|[`Account`](../../Account.md)||
 `$address`|[`Address`](../../Address.md)||
+`$locale`|`string`|`null`|
 
 Return Value: `void`
 
@@ -425,7 +479,8 @@ Return Value: ?[`Account`](../../Account.md)
 public function beforeRemoveAddress(
     AccountApi $accountApi,
     Account $account,
-    string $addressId
+    string $addressId,
+    string $locale = null
 ): void
 ```
 
@@ -434,6 +489,7 @@ Argument|Type|Default|Description
 `$accountApi`|[`AccountApi`](../../AccountApi.md)||
 `$account`|[`Account`](../../Account.md)||
 `$addressId`|`string`||
+`$locale`|`string`|`null`|
 
 Return Value: `void`
 
@@ -459,7 +515,8 @@ Return Value: ?[`Account`](../../Account.md)
 public function beforeSetDefaultBillingAddress(
     AccountApi $accountApi,
     Account $account,
-    string $addressId
+    string $addressId,
+    string $locale = null
 ): void
 ```
 
@@ -468,6 +525,7 @@ Argument|Type|Default|Description
 `$accountApi`|[`AccountApi`](../../AccountApi.md)||
 `$account`|[`Account`](../../Account.md)||
 `$addressId`|`string`||
+`$locale`|`string`|`null`|
 
 Return Value: `void`
 
@@ -493,7 +551,8 @@ Return Value: ?[`Account`](../../Account.md)
 public function beforeSetDefaultShippingAddress(
     AccountApi $accountApi,
     Account $account,
-    string $addressId
+    string $addressId,
+    string $locale = null
 ): void
 ```
 
@@ -502,6 +561,7 @@ Argument|Type|Default|Description
 `$accountApi`|[`AccountApi`](../../AccountApi.md)||
 `$account`|[`Account`](../../Account.md)||
 `$addressId`|`string`||
+`$locale`|`string`|`null`|
 
 Return Value: `void`
 

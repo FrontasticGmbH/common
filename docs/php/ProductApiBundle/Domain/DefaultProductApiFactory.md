@@ -13,16 +13,16 @@
 
 ```php
 public function __construct(
-    \Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator $serviceLocator,
-    ProductApi\EnabledFacetService $enabledFacetService,
+    FactoryServiceLocator $serviceLocator,
+    EnabledFacetService $enabledFacetService,
     iterable $decorators = []
 ): mixed
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$serviceLocator`|`\Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator`||
-`$enabledFacetService`|[`ProductApi`](ProductApi.md)\EnabledFacetService||
+`$serviceLocator`|[`FactoryServiceLocator`](../../CoreBundle/Domain/Api/FactoryServiceLocator.md)||
+`$enabledFacetService`|[`EnabledFacetService`](ProductApi/EnabledFacetService.md)||
 `$decorators`|`iterable`|`[]`|
 
 Return Value: `mixed`

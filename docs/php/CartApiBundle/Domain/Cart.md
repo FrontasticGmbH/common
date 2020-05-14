@@ -29,6 +29,7 @@ Property|Type|Default|Description
 * [hasBillingAddress()](#hasbillingaddress)
 * [hasAddresses()](#hasaddresses)
 * [hasCompletePayments()](#hascompletepayments)
+* [isReadyForCheckout()](#isreadyforcheckout)
 * [isComplete()](#iscomplete)
 
 ### getPayedAmount()
@@ -75,6 +76,14 @@ Return Value: `bool`
 
 ```php
 public function hasCompletePayments(): bool
+```
+
+Return Value: `bool`
+
+### isReadyForCheckout()
+
+```php
+public function isReadyForCheckout(): bool
 ```
 
 Return Value: `bool`

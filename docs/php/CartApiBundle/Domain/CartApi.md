@@ -33,14 +33,14 @@
 
 ```php
 public function getForUser(
-    string $userId,
+    Account $account,
     string $locale
 ): Cart
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$userId`|`string`||
+`$account`|[`Account`](../../AccountApiBundle/Domain/Account.md)||
 `$locale`|`string`||
 
 Return Value: [`Cart`](Cart.md)
@@ -312,7 +312,7 @@ Return Value: [`Cart`](Cart.md)
 ```php
 public function removeDiscountCode(
     Cart $cart,
-    string $discountId,
+    LineItem $discountLineItem,
     string $locale = null
 ): Cart
 ```
@@ -320,7 +320,7 @@ public function removeDiscountCode(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$cart`|[`Cart`](Cart.md)||
-`$discountId`|`string`||
+`$discountLineItem`|[`LineItem`](LineItem.md)||
 `$locale`|`string`|`null`|
 
 Return Value: [`Cart`](Cart.md)
@@ -329,13 +329,15 @@ Return Value: [`Cart`](Cart.md)
 
 ```php
 public function order(
-    Cart $cart
+    Cart $cart,
+    string $locale = null
 ): Order
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$cart`|[`Cart`](Cart.md)||
+`$locale`|`string`|`null`|
 
 Return Value: [`Order`](Order.md)
 
@@ -343,13 +345,17 @@ Return Value: [`Order`](Order.md)
 
 ```php
 public function getOrder(
-    string $orderId
+    Account $account,
+    string $orderId,
+    string $locale = null
 ): Order
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
+`$account`|[`Account`](../../AccountApiBundle/Domain/Account.md)||
 `$orderId`|`string`||
+`$locale`|`string`|`null`|
 
 Return Value: [`Order`](Order.md)
 
@@ -357,13 +363,15 @@ Return Value: [`Order`](Order.md)
 
 ```php
 public function getOrders(
-    string $accountId
+    Account $account,
+    string $locale = null
 ): array
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$accountId`|`string`||
+`$account`|[`Account`](../../AccountApiBundle/Domain/Account.md)||
+`$locale`|`string`|`null`|
 
 Return Value: `array`
 

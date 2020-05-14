@@ -12,7 +12,7 @@ Property|Type|Default|Description
 `total`|`int`||
 `count`|`int`||
 `items`|`array`|`[]`|
-`facets`|[`Facet`](Result/Facet.md)[]|`[]`|
+`facets`|[`Result`](Result.md)\Facet[]|`[]`|
 `query`|[`Query`](Query.md)||The query used to generate this result (cloned)
 
 ## Methods
