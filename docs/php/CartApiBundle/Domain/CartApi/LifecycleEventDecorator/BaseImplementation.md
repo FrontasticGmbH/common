@@ -50,6 +50,8 @@ need to tag your service based on this class with
 * [afterAddPayment()](#afteraddpayment)
 * [beforeRedeemDiscountCode()](#beforeredeemdiscountcode)
 * [afterRedeemDiscountCode()](#afterredeemdiscountcode)
+* [beforeRemoveDiscountCode()](#beforeremovediscountcode)
+* [afterRemoveDiscountCode()](#afterremovediscountcode)
 * [beforeOrder()](#beforeorder)
 * [afterOrder()](#afterorder)
 * [beforeGetOrder()](#beforegetorder)
@@ -65,7 +67,7 @@ need to tag your service based on this class with
 ```php
 public function beforeGetForUser(
     CartApi $cartApi,
-    string $userId,
+    Account $account,
     string $locale
 ): void
 ```
@@ -73,7 +75,7 @@ public function beforeGetForUser(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$cartApi`|[`CartApi`](../../CartApi.md)||
-`$userId`|`string`||
+`$account`|[`Account`](../../../../AccountApiBundle/Domain/Account.md)||
 `$locale`|`string`||
 
 Return Value: `void`
@@ -528,12 +530,14 @@ Argument|Type|Default|Description
 
 Return Value: ?[`Cart`](../../Cart.md)
 
-### beforeOrder()
+### beforeRemoveDiscountCode()
 
 ```php
-public function beforeOrder(
+public function beforeRemoveDiscountCode(
     CartApi $cartApi,
-    Cart $cart
+    Cart $cart,
+    LineItem $discountLineItem,
+    string $locale = null
 ): void
 ```
 
@@ -541,6 +545,42 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$cartApi`|[`CartApi`](../../CartApi.md)||
 `$cart`|[`Cart`](../../Cart.md)||
+`$discountLineItem`|[`LineItem`](../../LineItem.md)||
+`$locale`|`string`|`null`|
+
+Return Value: `void`
+
+### afterRemoveDiscountCode()
+
+```php
+public function afterRemoveDiscountCode(
+    CartApi $cartApi,
+    Cart $cart
+): ?Cart
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$cartApi`|[`CartApi`](../../CartApi.md)||
+`$cart`|[`Cart`](../../Cart.md)||
+
+Return Value: ?[`Cart`](../../Cart.md)
+
+### beforeOrder()
+
+```php
+public function beforeOrder(
+    CartApi $cartApi,
+    Cart $cart,
+    string $locale = null
+): void
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$cartApi`|[`CartApi`](../../CartApi.md)||
+`$cart`|[`Cart`](../../Cart.md)||
+`$locale`|`string`|`null`|
 
 Return Value: `void`
 
@@ -565,7 +605,8 @@ Return Value: ?[`Order`](../../Order.md)
 ```php
 public function beforeGetOrder(
     CartApi $cartApi,
-    string $orderId
+    string $orderId,
+    string $locale = null
 ): void
 ```
 
@@ -573,6 +614,7 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$cartApi`|[`CartApi`](../../CartApi.md)||
 `$orderId`|`string`||
+`$locale`|`string`|`null`|
 
 Return Value: `void`
 
@@ -597,14 +639,16 @@ Return Value: ?[`Order`](../../Order.md)
 ```php
 public function beforeGetOrders(
     CartApi $cartApi,
-    string $accountId
+    Account $account,
+    string $locale = null
 ): void
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$cartApi`|[`CartApi`](../../CartApi.md)||
-`$accountId`|`string`||
+`$account`|[`Account`](../../../../AccountApiBundle/Domain/Account.md)||
+`$locale`|`string`|`null`|
 
 Return Value: `void`
 

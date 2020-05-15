@@ -12,7 +12,7 @@
 ```php
 public function __construct(
     ProductApiFactory $productApiFactory,
-    ProductApi\Commercetools\ClientFactory $commercetoolsClientFactory,
+    Commercetools\ClientFactory $commercetoolsClientFactory,
     iterable $decorators
 ): mixed
 ```
@@ -20,7 +20,7 @@ public function __construct(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$productApiFactory`|[`ProductApiFactory`](../../ProductApiBundle/Domain/ProductApiFactory.md)||
-`$commercetoolsClientFactory`|[`ProductApi`](../../ProductApiBundle/Domain/ProductApi.md)\Commercetools\ClientFactory||
+`$commercetoolsClientFactory`|[`Commercetools`](../../ProductApiBundle/Domain/ProductApi/Commercetools.md)\ClientFactory||
 `$decorators`|`iterable`||
 
 Return Value: `mixed`

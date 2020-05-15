@@ -7,11 +7,17 @@ use Kore\DataObject\DataObject;
 class SapLocale extends DataObject
 {
     /**
-     * @var string ISO code
+     * ISO code
+     *
+     * @var string
      */
     public $languageCode;
 
-    /** @var string ISO code */
+    /**
+     * ISO code
+     *
+     * @var string
+     */
     public $currencyCode;
 
     public function toQueryParameters(): array

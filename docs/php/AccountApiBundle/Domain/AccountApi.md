@@ -4,7 +4,7 @@
 
 ## Methods
 
-* [get()](#get)
+* [getSalutations()](#getsalutations)
 * [confirmEmail()](#confirmemail)
 * [create()](#create)
 * [update()](#update)
@@ -12,6 +12,7 @@
 * [generatePasswordResetToken()](#generatepasswordresettoken)
 * [resetPassword()](#resetpassword)
 * [login()](#login)
+* [refreshAccount()](#refreshaccount)
 * [getAddresses()](#getaddresses)
 * [addAddress()](#addaddress)
 * [updateAddress()](#updateaddress)
@@ -20,31 +21,36 @@
 * [setDefaultShippingAddress()](#setdefaultshippingaddress)
 * [getDangerousInnerClient()](#getdangerousinnerclient)
 
-### get()
+### getSalutations()
 
 ```php
-public function get(
-    string $email
-): Account
+public function getSalutations(
+    string $locale
+): ?array
 ```
+
+*Get the list of available salutations in the current locale. If `null` is returned the salutation may be an
+arbitrary string. Otherwise only the returned values may be used as salutation.*
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$email`|`string`||
+`$locale`|`string`||
 
-Return Value: [`Account`](Account.md)
+Return Value: `?array`
 
 ### confirmEmail()
 
 ```php
 public function confirmEmail(
-    string $token
+    string $token,
+    string $locale = null
 ): Account
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$token`|`string`||
+`$locale`|`string`|`null`|
 
 Return Value: [`Account`](Account.md)
 
@@ -53,7 +59,8 @@ Return Value: [`Account`](Account.md)
 ```php
 public function create(
     Account $account,
-    ?Cart $cart = null
+    ?Cart $cart = null,
+    string $locale = null
 ): Account
 ```
 
@@ -61,6 +68,7 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$account`|[`Account`](Account.md)||
 `$cart`|?[`Cart`](../../CartApiBundle/Domain/Cart.md)|`null`|
+`$locale`|`string`|`null`|
 
 Return Value: [`Account`](Account.md)
 
@@ -68,13 +76,15 @@ Return Value: [`Account`](Account.md)
 
 ```php
 public function update(
-    Account $account
+    Account $account,
+    string $locale = null
 ): Account
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$account`|[`Account`](Account.md)||
+`$locale`|`string`|`null`|
 
 Return Value: [`Account`](Account.md)
 
@@ -84,7 +94,8 @@ Return Value: [`Account`](Account.md)
 public function updatePassword(
     Account $account,
     string $oldPassword,
-    string $newPassword
+    string $newPassword,
+    string $locale = null
 ): Account
 ```
 
@@ -93,6 +104,7 @@ Argument|Type|Default|Description
 `$account`|[`Account`](Account.md)||
 `$oldPassword`|`string`||
 `$newPassword`|`string`||
+`$locale`|`string`|`null`|
 
 Return Value: [`Account`](Account.md)
 
@@ -100,22 +112,23 @@ Return Value: [`Account`](Account.md)
 
 ```php
 public function generatePasswordResetToken(
-    Account $account
-): Account
+    string $email
+): PasswordResetToken
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$account`|[`Account`](Account.md)||
+`$email`|`string`||
 
-Return Value: [`Account`](Account.md)
+Return Value: [`PasswordResetToken`](PasswordResetToken.md)
 
 ### resetPassword()
 
 ```php
 public function resetPassword(
     string $token,
-    string $newPassword
+    string $newPassword,
+    string $locale = null
 ): Account
 ```
 
@@ -123,6 +136,7 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$token`|`string`||
 `$newPassword`|`string`||
+`$locale`|`string`|`null`|
 
 Return Value: [`Account`](Account.md)
 
@@ -131,28 +145,48 @@ Return Value: [`Account`](Account.md)
 ```php
 public function login(
     Account $account,
-    ?Cart $cart = null
-): bool
+    ?Cart $cart = null,
+    string $locale = null
+): ?Account
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$account`|[`Account`](Account.md)||
 `$cart`|?[`Cart`](../../CartApiBundle/Domain/Cart.md)|`null`|
+`$locale`|`string`|`null`|
 
-Return Value: `bool`
+Return Value: ?[`Account`](Account.md)
+
+### refreshAccount()
+
+```php
+public function refreshAccount(
+    Account $account,
+    string $locale = null
+): Account
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$account`|[`Account`](Account.md)||
+`$locale`|`string`|`null`|
+
+Return Value: [`Account`](Account.md)
 
 ### getAddresses()
 
 ```php
 public function getAddresses(
-    Account $account
+    Account $account,
+    string $locale = null
 ): array
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$account`|[`Account`](Account.md)||
+`$locale`|`string`|`null`|
 
 Return Value: `array`
 
@@ -161,7 +195,8 @@ Return Value: `array`
 ```php
 public function addAddress(
     Account $account,
-    Address $address
+    Address $address,
+    string $locale = null
 ): Account
 ```
 
@@ -169,6 +204,7 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$account`|[`Account`](Account.md)||
 `$address`|[`Address`](Address.md)||
+`$locale`|`string`|`null`|
 
 Return Value: [`Account`](Account.md)
 
@@ -177,7 +213,8 @@ Return Value: [`Account`](Account.md)
 ```php
 public function updateAddress(
     Account $account,
-    Address $address
+    Address $address,
+    string $locale = null
 ): Account
 ```
 
@@ -185,6 +222,7 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$account`|[`Account`](Account.md)||
 `$address`|[`Address`](Address.md)||
+`$locale`|`string`|`null`|
 
 Return Value: [`Account`](Account.md)
 
@@ -193,7 +231,8 @@ Return Value: [`Account`](Account.md)
 ```php
 public function removeAddress(
     Account $account,
-    string $addressId
+    string $addressId,
+    string $locale = null
 ): Account
 ```
 
@@ -201,6 +240,7 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$account`|[`Account`](Account.md)||
 `$addressId`|`string`||
+`$locale`|`string`|`null`|
 
 Return Value: [`Account`](Account.md)
 
@@ -209,7 +249,8 @@ Return Value: [`Account`](Account.md)
 ```php
 public function setDefaultBillingAddress(
     Account $account,
-    string $addressId
+    string $addressId,
+    string $locale = null
 ): Account
 ```
 
@@ -217,6 +258,7 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$account`|[`Account`](Account.md)||
 `$addressId`|`string`||
+`$locale`|`string`|`null`|
 
 Return Value: [`Account`](Account.md)
 
@@ -225,7 +267,8 @@ Return Value: [`Account`](Account.md)
 ```php
 public function setDefaultShippingAddress(
     Account $account,
-    string $addressId
+    string $addressId,
+    string $locale = null
 ): Account
 ```
 
@@ -233,6 +276,7 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$account`|[`Account`](Account.md)||
 `$addressId`|`string`||
+`$locale`|`string`|`null`|
 
 Return Value: [`Account`](Account.md)
 

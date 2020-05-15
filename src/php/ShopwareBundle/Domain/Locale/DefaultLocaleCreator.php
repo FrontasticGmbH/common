@@ -60,7 +60,7 @@ class DefaultLocaleCreator extends LocaleCreator
      * @param \Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareLanguage[] $projectConfigLanguages
      * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale $frontasticLocale
      *
-     * @return array<?string, ?string>
+     * @return [?string, ?string]
      */
     private function pickLanguageFromProjectConfig(array $projectConfigLanguages, Locale $frontasticLocale): array
     {
@@ -79,7 +79,7 @@ class DefaultLocaleCreator extends LocaleCreator
      * @param \Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareCountry[] $projectConfigCountries
      * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale $frontasticLocale
      *
-     * @return array<?string, ?string>
+     * @return [?string, ?string]
      */
     private function pickCountryFromProjectConfig(array $projectConfigCountries, Locale $frontasticLocale): array
     {
@@ -96,7 +96,7 @@ class DefaultLocaleCreator extends LocaleCreator
      * @param \Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareCurrency[] $projectConfigCurrencies
      * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale $frontasticLocale
      *
-     * @return array<?string, ?string>
+     * @return [?string, ?string]
      */
     private function pickCurrencyFromProjectConfig(array $projectConfigCurrencies, Locale $frontasticLocale): array
     {

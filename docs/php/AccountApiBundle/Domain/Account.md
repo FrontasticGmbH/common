@@ -20,6 +20,7 @@ Property|Type|Default|Description
 `confirmed`|`string`|`false`|
 `tokenValidUntil`|`\DateTime`||
 `addresses`|[`Address`](Address.md)[]|`[]`|
+`authToken`|`string|null`||
 `dangerousInnerAccount`|`mixed`||Access original object from backend
 
 ## Methods
@@ -35,9 +36,6 @@ Property|Type|Default|Description
 * [cleanForSession()](#cleanforsession)
 * [serialize()](#serialize)
 * [unserialize()](#unserialize)
-* [resetToken()](#resettoken)
-* [setToken()](#settoken)
-* [getToken()](#gettoken)
 
 ### setPassword()
 
@@ -150,48 +148,4 @@ Argument|Type|Default|Description
 `$serialized`|`mixed`||
 
 Return Value: `mixed`
-
-### resetToken()
-
-```php
-public function resetToken(
-    string $type
-): void
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$type`|`string`||
-
-Return Value: `void`
-
-### setToken()
-
-```php
-public function setToken(
-    string $type,
-    string $token
-): void
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$type`|`string`||
-`$token`|`string`||
-
-Return Value: `void`
-
-### getToken()
-
-```php
-public function getToken(
-    string $type
-): string
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$type`|`string`||
-
-Return Value: `string`
 
