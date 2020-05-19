@@ -266,7 +266,8 @@ class Commercetools implements CartApi
     {
         return $this->cartMapper->mapDataToCart(
             $this->client->get(
-                '/carts/' . urlencode($cartId)
+                '/carts/' . urlencode($cartId),
+                ['expand' => self::EXPAND]
             ),
             $this->parseLocaleString($localeString)
         );

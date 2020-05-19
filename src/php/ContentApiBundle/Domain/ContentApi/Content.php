@@ -22,6 +22,11 @@ class Content extends DataObject
     public $name;
 
     /**
+     * @var string
+     */
+    public $slug;
+
+    /**
      * @var Attribute[]
      */
     public $attributes = [];

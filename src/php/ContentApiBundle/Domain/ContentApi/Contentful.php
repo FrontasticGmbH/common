@@ -41,7 +41,6 @@ class Contentful implements ContentApi
      */
     private $defaultLocale;
 
-
     public function __construct(
         Client $client,
         Renderer $richTextRenderer,
@@ -74,7 +73,7 @@ class Contentful implements ContentApi
         $locale = $locale ?? $this->defaultLocale;
 
         $promise = Promise\promise_for(
-            $this->client->getEntry($contentId, $this->frontasticToContentfulLocale($locale))
+            $this->client->getEntry($contentId, $this->localeMapper->replaceLocale($locale))
         )->then(function ($entry) {
             return $this->createContentFromEntry($entry);
         });
@@ -91,7 +90,7 @@ class Contentful implements ContentApi
         $contentfulQuery = new \Contentful\Delivery\Query();
 
         $locale = $locale ?? $this->defaultLocale;
-        $contentfulQuery->setLocale($this->frontasticToContentfulLocale($locale));
+        $contentfulQuery->setLocale($this->localeMapper->replaceLocale($locale));
         if ($query->contentType) {
             $contentfulQuery->setContentType($query->contentType);
         }
@@ -145,14 +144,15 @@ class Contentful implements ContentApi
             $name = $entry->$displayFieldId;
         }
 
+        $attributes = $this->convertContent($entry, $entry->all());
+
         $content = new Content([
             'contentId' => $entry->getId(),
             'contentTypeId' => $entry->getContentType()->getId(),
             'name' => $name,
+            'slug' => $attributes['slug']['content'] ?? 'cms',
             'dangerousInnerContent' => $entry,
         ]);
-
-        $attributes = $this->convertContent($entry, $entry->all());
 
         $content->attributes = $attributes;
 
@@ -203,14 +203,5 @@ class Contentful implements ContentApi
     public function getDangerousInnerClient()
     {
         return $this->client;
-    }
-
-    private function frontasticToContentfulLocale(string $frontasticLocale): string
-    {
-        return strtr(
-            $this->localeMapper->replaceLocale($frontasticLocale),
-            '_',
-            '-'
-        );
     }
 }

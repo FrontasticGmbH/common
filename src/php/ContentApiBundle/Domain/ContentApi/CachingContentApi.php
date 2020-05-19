@@ -3,11 +3,9 @@
 namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi;
-use Frontastic\Common\ContentApiBundle\Domain\ContentType;
 use Frontastic\Common\ContentApiBundle\Domain\Query;
-use Frontastic\Common\ContentApiBundle\Domain\Result;
-use Psr\SimpleCache\CacheInterface;
 use GuzzleHttp\Promise;
+use Psr\SimpleCache\CacheInterface;
 
 class CachingContentApi implements ContentApi
 {
@@ -27,13 +25,23 @@ class CachingContentApi implements ContentApi
     private $cacheTtl;
 
     /**
+     * @var bool
+     */
+    private $debug;
+
+    /**
      * Warning - configuring the cacheTtl is considered experimental and subject to change.
      */
-    public function __construct(ContentApi $aggregate, CacheInterface $cache, int $cacheTtlSec = 600)
-    {
+    public function __construct(
+        ContentApi $aggregate,
+        CacheInterface $cache,
+        int $cacheTtlSec = 600,
+        bool $debug = false
+    ) {
         $this->aggregate = $aggregate;
         $this->cache = $cache;
         $this->cacheTtl = $cacheTtlSec;
+        $this->debug = $debug;
     }
 
     public function getContentTypes(): array
@@ -71,7 +79,7 @@ class CachingContentApi implements ContentApi
         $cacheKey = $this->generateCacheForContentKey($contentId, $locale);
         $result = $this->cache->get($cacheKey, false);
 
-        if ($result === false) {
+        if ($this->debug || $result === false) {
             $result = $this->aggregate->getContent($contentId, $locale);
             $result->dangerousInnerContent = null;
             $this->cache->set($cacheKey, $result, $this->cacheTtl);
@@ -85,7 +93,7 @@ class CachingContentApi implements ContentApi
         $cacheKey = $this->generateCacheForContentKey($contentId, $locale);
         $result = $this->cache->get($cacheKey, false);
 
-        if ($result === false) {
+        if ($this->debug || $result === false) {
             return $this->aggregate->getContent($contentId, $locale, self::QUERY_ASYNC)
                 ->then(function ($result) use ($cacheKey) {
                     $result->dangerousInnerContent = null;
@@ -113,7 +121,7 @@ class CachingContentApi implements ContentApi
         $cacheKey = $this->generateCacheKeyForQuery($query, $locale);
 
         $result = $this->cache->get($cacheKey, false);
-        if ($result === false) {
+        if ($this->debug || $result === false) {
             $result = $this->aggregate->query($query, $locale);
 
             /** @var Content $item */
@@ -131,7 +139,7 @@ class CachingContentApi implements ContentApi
         $cacheKey = $this->generateCacheKeyForQuery($query, $locale);
         $result = $this->cache->get($cacheKey, false);
 
-        if ($result === false) {
+        if ($this->debug || $result === false) {
             return $this->aggregate->query($query, $locale, self::QUERY_ASYNC)
                 ->then(function ($result) use ($cacheKey) {
                     /** @var Content $item */

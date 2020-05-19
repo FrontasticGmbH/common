@@ -4,6 +4,7 @@ namespace Frontastic\Common\ContentApiBundle\Domain;
 
 use Contentful\RichText\Renderer;
 use Doctrine\Common\Cache\Cache;
+use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful\ContentfulLocaleMapper;
 use Frontastic\Common\HttpClient;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\CachingContentApi;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful\NoopLocaleMapper;
@@ -43,11 +44,17 @@ class DefaultContentApiFactory implements ContentApiFactory
      */
     private $richtextRenderer;
 
+    /**
+     * @var bool
+     */
+    private $debug;
+
     public function __construct(
         ContainerInterface $container,
         Cache $cache,
         CacheInterface $psrCache,
         Renderer $richtextRenderer,
+        bool $debug,
         iterable $decorators
     ) {
         $this->container = $container;
@@ -55,6 +62,7 @@ class DefaultContentApiFactory implements ContentApiFactory
         $this->cache = $cache;
         $this->psrCache = $psrCache;
         $this->richtextRenderer = $richtextRenderer;
+        $this->debug = $debug;
     }
 
     public function factor(Project $project): ContentApi
@@ -72,7 +80,7 @@ class DefaultContentApiFactory implements ContentApiFactory
                 if ($this->container->has($this->contentfulLocaleMapperId)) {
                     $localeMapper = $this->container->get($this->contentfulLocaleMapperId);
                 } else {
-                    $localeMapper = new NoopLocaleMapper();
+                    $localeMapper = new ContentfulLocaleMapper($this->psrCache, $client);
                 }
 
                 $api = new ContentApi\Contentful(
@@ -103,7 +111,8 @@ class DefaultContentApiFactory implements ContentApiFactory
         return new CachingContentApi(
             new ContentApi\LifecycleEventDecorator($api, $this->decorators),
             $this->psrCache,
-            $contentConfiguration->cacheTtlSec ?? 600
+            $contentConfiguration->cacheTtlSec ?? 600,
+            $this->debug
         );
     }
 }
