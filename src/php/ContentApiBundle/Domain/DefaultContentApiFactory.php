@@ -44,11 +44,17 @@ class DefaultContentApiFactory implements ContentApiFactory
      */
     private $richtextRenderer;
 
+    /**
+     * @var bool
+     */
+    private $debug;
+
     public function __construct(
         ContainerInterface $container,
         Cache $cache,
         CacheInterface $psrCache,
         Renderer $richtextRenderer,
+        bool $debug,
         iterable $decorators
     ) {
         $this->container = $container;
@@ -56,6 +62,7 @@ class DefaultContentApiFactory implements ContentApiFactory
         $this->cache = $cache;
         $this->psrCache = $psrCache;
         $this->richtextRenderer = $richtextRenderer;
+        $this->debug = $debug;
     }
 
     public function factor(Project $project): ContentApi
@@ -104,7 +111,8 @@ class DefaultContentApiFactory implements ContentApiFactory
         return new CachingContentApi(
             new ContentApi\LifecycleEventDecorator($api, $this->decorators),
             $this->psrCache,
-            $contentConfiguration->cacheTtlSec ?? 600
+            $contentConfiguration->cacheTtlSec ?? 600,
+            $this->debug
         );
     }
 }
