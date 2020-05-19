@@ -80,8 +80,7 @@ class DefaultContentApiFactory implements ContentApiFactory
                     $client,
                     $this->richtextRenderer,
                     $localeMapper,
-                    $project->defaultLanguage,
-                    $this->cache
+                    $project->defaultLanguage
                 );
                 break;
             case 'graphcms':

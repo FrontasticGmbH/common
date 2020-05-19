@@ -14,7 +14,6 @@ use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful\LocaleMapper
 use Frontastic\Common\ContentApiBundle\Domain\ContentType;
 use Frontastic\Common\ContentApiBundle\Domain\Query;
 use Frontastic\Common\ContentApiBundle\Domain\Result;
-use Doctrine\Common\Cache\Cache;
 use GuzzleHttp\Promise;
 
 /**
@@ -22,11 +21,6 @@ use GuzzleHttp\Promise;
  */
 class Contentful implements ContentApi
 {
-    /**
-     * @var Cache
-     */
-    private $cache;
-
     /**
      * @var Client
      */
@@ -47,26 +41,16 @@ class Contentful implements ContentApi
      */
     private $defaultLocale;
 
-    /**
-     * @var int
-     */
-     private $cacheTtl;
-
-
     public function __construct(
         Client $client,
         Renderer $richTextRenderer,
         LocaleMapper $localeMapper,
-        string $defaultLocale,
-        Cache $cache,
-        int $cacheTtlSec = 600
+        string $defaultLocale
     ) {
         $this->client = $client;
         $this->richTextRenderer = $richTextRenderer;
         $this->localeMapper = $localeMapper;
         $this->defaultLocale = $defaultLocale;
-        $this->cacheTtl = $cacheTtlSec;
-        $this->cache = $cache;
     }
 
     public function getContentTypes(): array

@@ -5,6 +5,7 @@ namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 
 use Frontastic\Common\ContentApiBundle\Domain;
 use PHPUnit\Framework\MockObject\MockObject;
+use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful\LocaleMapper;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,7 +28,7 @@ class ContentfulTest extends TestCase
 
         $renderer = new \Contentful\RichText\Renderer();
 
-        $localeMapper = new Domain\ContentApi\Contentful\NoopLocaleMapper();
+        $localeMapper = $this->createMock(LocaleMapper::class);
 
         $this->api = new Contentful($client, $renderer, $localeMapper, 'en_US');
     }
