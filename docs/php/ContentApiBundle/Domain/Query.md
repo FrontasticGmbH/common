@@ -4,12 +4,12 @@
 
 **Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`contentType`|`string`||
-`query`|`string`||
-`contentIds`|`array`||
-`attributes`|[`AttributeFilter`](AttributeFilter.md)[]|`[]`|
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`contentType` | `string` |  | - | 
+`query` | `string` |  | - | 
+`contentIds` | `array` |  | - | 
+`attributes` | [`AttributeFilter`](AttributeFilter.md)[] | `[]` | - | 
 
 ## Methods
 
@@ -31,3 +31,4 @@ Argument|Type|Default|Description
 
 Return Value: [`Query`](Query.md)
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

@@ -31,3 +31,4 @@ public function getLanguage(): string
 
 Return Value: `string`
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

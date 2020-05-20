@@ -4,10 +4,11 @@
 
 **Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`command`|`string`||
-`channel`|`string`||
-`customer`|`string`||
-`payload`|`array`|`[]`|
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`command` | `string` |  | - | 
+`channel` | `string` |  | - | 
+`customer` | `string` |  | - | 
+`payload` | `array` | `[]` | - | 
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

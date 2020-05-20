@@ -7,13 +7,13 @@
 language[_territory[.codeset]][@modifier]
 
 - de_DE - en_GB@euro
-Property|Type|Default|Description
---------|----|-------|-----------
-`language`|`string`||A two or three letter identifier for the language, e.g. fr, de, en …
-`territory`|`string`||A two letter identifier for the territory, e.g. CH, DE, FR …
-`country`|`string`||A human readable country identifier.
-`currency`|`string`||A three letter identifier for used currency.
-`original`|`string`||
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`language` | `string` |  | - | A two or three letter identifier for the language, e.g. fr, de, en …
+`territory` | `string` |  | - | A two letter identifier for the territory, e.g. CH, DE, FR …
+`country` | `string` |  | - | A human readable country identifier.
+`currency` | `string` |  | - | A three letter identifier for used currency.
+`original` | `string` |  | - | 
 
 ## Methods
 
@@ -51,3 +51,4 @@ Argument|Type|Default|Description
 
 Return Value: [`Locale`](Locale.md)
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

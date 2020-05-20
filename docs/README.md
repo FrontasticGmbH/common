@@ -297,3 +297,6 @@ Here you find the API documentation for the relevant classes:
       * [WishlistImmutableException](php/WishlistApiBundle/Domain/WishlistApi/WishlistImmutableException.md)
     * [WishlistApiFactory](php/WishlistApiBundle/Domain/WishlistApiFactory.md)
   * [FrontasticCommonWishlistApiBundle](php/WishlistApiBundle/FrontasticCommonWishlistApiBundle.md)
+
+
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

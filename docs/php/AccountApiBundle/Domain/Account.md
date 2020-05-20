@@ -6,22 +6,22 @@
 
 **Implements**: `\Symfony\Component\Security\Core\User\UserInterface`, [`\Serializable`](https://www.php.net/manual/de/class.serializable.php)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`accountId`|`string`||
-`email`|`string`||
-`salutation`|`string`||
-`firstName`|`string`||
-`lastName`|`string`||
-`birthday`|`\DateTime`||
-`data`|`array`|`[]`|
-`groups`|[`Group`](Group.md)[]|`[]`|
-`confirmationToken`|`string`||
-`confirmed`|`string`|`false`|
-`tokenValidUntil`|`\DateTime`||
-`addresses`|[`Address`](Address.md)[]|`[]`|
-`authToken`|`string|null`||
-`dangerousInnerAccount`|`mixed`||Access original object from backend
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`accountId` | `string` |  | - | 
+`email` | `string` |  | - | 
+`salutation` | `string` |  | - | 
+`firstName` | `string` |  | - | 
+`lastName` | `string` |  | - | 
+`birthday` | `\DateTime` |  | - | 
+`data` | `array` | `[]` | - | 
+`groups` | [`Group`](Group.md)[] | `[]` | - | 
+`confirmationToken` | `string` |  | - | 
+`confirmed` | `string` | `false` | - | 
+`tokenValidUntil` | `\DateTime` |  | - | 
+`addresses` | [`Address`](Address.md)[] | `[]` | - | 
+`authToken` | `string|null` |  | - | 
+`dangerousInnerAccount` | `mixed` |  | - | Access original object from backend
 
 ## Methods
 
@@ -149,3 +149,4 @@ Argument|Type|Default|Description
 
 Return Value: `mixed`
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

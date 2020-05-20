@@ -103,3 +103,4 @@ public function getDangerousInnerClient(): Commercetools\Client
 
 Return Value: [`Commercetools`](Commercetools.md)\Client
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

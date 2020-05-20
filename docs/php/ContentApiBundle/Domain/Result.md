@@ -4,10 +4,11 @@
 
 **Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`offset`|`int`||
-`total`|`int`||
-`count`|`int`||
-`items`|`array`||
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`offset` | `int` |  | - | 
+`total` | `int` |  | - | 
+`count` | `int` |  | - | 
+`items` | `array` |  | - | 
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

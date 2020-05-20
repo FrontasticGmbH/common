@@ -37,3 +37,4 @@ Argument|Type|Default|Description
 
 Return Value: [`AccountApi`](AccountApi.md)
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

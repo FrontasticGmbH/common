@@ -4,14 +4,14 @@
 
 **Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`ok`|`bool`|`true`|
-`payload`|`array`|`[]`|
-`message`|`string`|`null`|
-`file`|`string`||
-`line`|`int`||
-`stack`|`array`||
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`ok` | `bool` | `true` | - | 
+`payload` | `array` | `[]` | - | 
+`message` | `string` | `null` | - | 
+`file` | `string` |  | - | 
+`line` | `int` |  | - | 
+`stack` | `array` |  | - | 
 
 ## Methods
 
@@ -31,3 +31,4 @@ Argument|Type|Default|Description
 
 Return Value: `mixed`
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

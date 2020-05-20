@@ -66,3 +66,4 @@ public function getDefault(): mixed
 
 Return Value: `mixed`
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

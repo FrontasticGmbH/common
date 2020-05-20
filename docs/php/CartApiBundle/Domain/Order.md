@@ -4,11 +4,12 @@
 
 **Extends**: [`Cart`](Cart.md)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`orderId`|`string`||
-`orderVersion`|`string`||
-`orderState`|`string`||
-`createdAt`|`\DateTimeImmutable`||
-`dangerousInnerOrder`|`mixed`||Access original object from backend
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`orderId` | `string` |  | - | 
+`orderVersion` | `string` |  | - | 
+`orderState` | `string` |  | - | 
+`createdAt` | `\DateTimeImmutable` |  | - | 
+`dangerousInnerOrder` | `mixed` |  | - | Access original object from backend
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

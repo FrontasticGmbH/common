@@ -4,11 +4,13 @@
 
 **Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`contentId`|`string`||
-`contentTypeId`|`string`||
-`name`|`string`||
-`attributes`|[`Attribute`](Attribute.md)[]|`[]`|
-`dangerousInnerContent`|`mixed`||Access original object from backend
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`contentId` | `string` |  | - | 
+`contentTypeId` | `string` |  | - | 
+`name` | `string` |  | - | 
+`slug` | `string` |  | - | 
+`attributes` | [`Attribute`](Attribute.md)[] | `[]` | - | 
+`dangerousInnerContent` | `mixed` |  | - | Access original object from backend
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

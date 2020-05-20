@@ -84,3 +84,4 @@ Argument|Type|Default|Description
 
 Return Value: [`Result`](Result.md)
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

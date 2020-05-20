@@ -16,6 +16,7 @@ use Kore\DataObject\DataObject;
 class Product extends DataObject
 {
     /**
+     * @required
      * @var string
      */
     public $productId;
@@ -34,11 +35,13 @@ class Product extends DataObject
     public $version;
 
     /**
+     * @required
      * @var string
      */
     public $name;
 
     /**
+     * @required
      * @var string
      */
     public $slug;
@@ -54,6 +57,7 @@ class Product extends DataObject
     public $categories = [];
 
     /**
+     * @required
      * @var \Frontastic\Common\ProductApiBundle\Domain\Variant[]
      */
     public $variants = [];

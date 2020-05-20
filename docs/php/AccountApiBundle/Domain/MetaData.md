@@ -4,8 +4,9 @@
 
 **Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`author`|`string`||
-`changed`|`\DateTimeImmutable`||
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`author` | `string` |  | - | 
+`changed` | `\DateTimeImmutable` |  | - | 
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).
