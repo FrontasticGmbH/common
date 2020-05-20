@@ -172,3 +172,4 @@ Argument|Type|Default|Description
 
 Return Value: [`Wishlist`](../Wishlist.md)
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

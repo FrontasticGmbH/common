@@ -4,8 +4,9 @@
 
 **Extends**: [`LineItem`](../LineItem.md)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`variant`|[`Variant`](../../../ProductApiBundle/Domain/Variant.md)||
-`type`|`string`|`'variant'`|
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`variant` | [`Variant`](../../../ProductApiBundle/Domain/Variant.md) |  | - | 
+`type` | `string` | `'variant'` | - | 
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

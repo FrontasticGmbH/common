@@ -4,10 +4,10 @@
 
 **Extends**: `\DomainException`
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`message`|``||
-`error`|``||
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`message` | `` |  | - | 
+`error` | `` |  | - | 
 
 ## Methods
 
@@ -38,3 +38,4 @@ public function getError(): string
 
 Return Value: `string`
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

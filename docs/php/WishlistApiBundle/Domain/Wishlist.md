@@ -4,13 +4,14 @@
 
 **Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`wishlistId`|`string`||
-`wishlistVersion`|`string`||
-`anonymousId`|`string`||
-`accountId`|`string`||
-`name`|`string[]`|`[]`|
-`lineItems`|[`LineItem`](LineItem.md)[]|`[]`|
-`dangerousInnerWishlist`|`mixed`||Access original object from backend
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`wishlistId` | `string` |  | - | 
+`wishlistVersion` | `string` |  | - | 
+`anonymousId` | `string` |  | - | 
+`accountId` | `string` |  | - | 
+`name` | `string[]` | `[]` | - | 
+`lineItems` | [`LineItem`](LineItem.md)[] | `[]` | - | 
+`dangerousInnerWishlist` | `mixed` |  | - | Access original object from backend
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

@@ -29,3 +29,4 @@ public function getQuery(): Query
 
 Return Value: [`Query`](../../../ProductApiBundle/Domain/ProductApi/Query.md)
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

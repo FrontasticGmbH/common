@@ -128,3 +128,4 @@ Argument|Type|Default|Description
 
 Return Value: `\Symfony\Component\HttpFoundation\JsonResponse`
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

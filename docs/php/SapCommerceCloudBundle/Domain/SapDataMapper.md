@@ -86,3 +86,4 @@ Argument|Type|Default|Description
 
 Return Value: [`Account`](../../AccountApiBundle/Domain/Account.md)
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

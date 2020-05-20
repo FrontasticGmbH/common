@@ -4,10 +4,11 @@
 
 **Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`id`|`string`||
-`name`|`string`||
-`active`|`bool`||
-`deliveryTime`|[`ShopwareShippingMethodDeliveryTime`](ShopwareShippingMethodDeliveryTime.md)||
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`id` | `string` |  | - | 
+`name` | `string` |  | - | 
+`active` | `bool` |  | - | 
+`deliveryTime` | [`ShopwareShippingMethodDeliveryTime`](ShopwareShippingMethodDeliveryTime.md) |  | - | 
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

@@ -18,7 +18,8 @@
 public function __construct(
     ContentApi $aggregate,
     \Psr\SimpleCache\CacheInterface $cache,
-    int $cacheTtlSec = 600
+    int $cacheTtlSec = 600,
+    bool $debug = false
 ): mixed
 ```
 
@@ -29,6 +30,7 @@ Argument|Type|Default|Description
 `$aggregate`|[`ContentApi`](../ContentApi.md)||
 `$cache`|`\Psr\SimpleCache\CacheInterface`||
 `$cacheTtlSec`|`int`|`600`|
+`$debug`|`bool`|`false`|
 
 Return Value: `mixed`
 
@@ -84,3 +86,4 @@ public function getDangerousInnerClient(): mixed
 
 Return Value: `mixed`
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

@@ -29,3 +29,4 @@ public function getProjectConfigApi(): ShopwareProjectConfigApiInterface
 
 Return Value: [`ShopwareProjectConfigApiInterface`](../ProjectConfigApi/ShopwareProjectConfigApiInterface.md)
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

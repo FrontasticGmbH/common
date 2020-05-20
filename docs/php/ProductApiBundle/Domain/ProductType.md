@@ -4,9 +4,10 @@
 
 **Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`productTypeId`|`string`||
-`name`|`string`||
-`dangerousInnerProductType`|`mixed`||Access original object from backend
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`productTypeId` | `string` |  | - | 
+`name` | `string` |  | - | 
+`dangerousInnerProductType` | `mixed` |  | - | Access original object from backend
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

@@ -37,3 +37,4 @@ Argument|Type|Default|Description
 
 Return Value: [`Query`](Query.md)
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

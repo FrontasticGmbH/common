@@ -4,11 +4,11 @@
 
 **Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`attributeId`|`array`||
-`content`|`string`||
-`type`|`string`||
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`attributeId` | `array` |  | - | 
+`content` | `string` |  | - | 
+`type` | `string` |  | - | 
 
 ## Methods
 
@@ -22,3 +22,4 @@ public function __toString(): mixed
 
 Return Value: `mixed`
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

@@ -107,3 +107,4 @@ public function getDangerousInnerClient(): ClientInterface
 
 Return Value: [`ClientInterface`](../ClientInterface.md)
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

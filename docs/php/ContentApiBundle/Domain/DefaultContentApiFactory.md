@@ -17,6 +17,7 @@ public function __construct(
     \Doctrine\Common\Cache\Cache $cache,
     \Psr\SimpleCache\CacheInterface $psrCache,
     \Contentful\RichText\Renderer $richtextRenderer,
+    bool $debug,
     iterable $decorators
 ): mixed
 ```
@@ -27,6 +28,7 @@ Argument|Type|Default|Description
 `$cache`|`\Doctrine\Common\Cache\Cache`||
 `$psrCache`|`\Psr\SimpleCache\CacheInterface`||
 `$richtextRenderer`|`\Contentful\RichText\Renderer`||
+`$debug`|`bool`||
 `$decorators`|`iterable`||
 
 Return Value: `mixed`
@@ -45,3 +47,4 @@ Argument|Type|Default|Description
 
 Return Value: [`ContentApi`](ContentApi.md)
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

@@ -435,3 +435,4 @@ Argument|Type|Default|Description
 
 Return Value: [`Cart`](../Cart.md)
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

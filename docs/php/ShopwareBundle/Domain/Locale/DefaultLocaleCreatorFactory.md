@@ -39,3 +39,4 @@ Argument|Type|Default|Description
 
 Return Value: [`LocaleCreator`](LocaleCreator.md)
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

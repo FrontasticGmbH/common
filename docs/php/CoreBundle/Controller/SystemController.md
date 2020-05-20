@@ -16,3 +16,4 @@ public function versionAction(): \Symfony\Component\HttpFoundation\JsonResponse
 
 Return Value: `\Symfony\Component\HttpFoundation\JsonResponse`
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

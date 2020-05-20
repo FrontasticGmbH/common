@@ -4,22 +4,22 @@
 
 **Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`cartId`|`string`||
-`cartVersion`|`string`||
-`custom`|`array`|`[]`|
-`lineItems`|[`LineItem`](LineItem.md)[]|`[]`|
-`email`|`string`||
-`birthday`|`\DateTimeImmutable`||
-`shippingMethod`|?[`ShippingMethod`](ShippingMethod.md)||
-`shippingAddress`|?[`Address`](../../AccountApiBundle/Domain/Address.md)||
-`billingAddress`|?[`Address`](../../AccountApiBundle/Domain/Address.md)||
-`sum`|`int`||
-`currency`|`string`||
-`payments`|[`Payment`](Payment.md)[]|`[]`|
-`discountCodes`|`string[]`|`[]`|
-`dangerousInnerCart`|`mixed`||Access original object from backend
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`cartId` | `string` |  | - | 
+`cartVersion` | `string` |  | - | 
+`custom` | `array` | `[]` | - | 
+`lineItems` | [`LineItem`](LineItem.md)[] | `[]` | - | 
+`email` | `string` |  | - | 
+`birthday` | `\DateTimeImmutable` |  | - | 
+`shippingMethod` | ?[`ShippingMethod`](ShippingMethod.md) |  | - | 
+`shippingAddress` | ?[`Address`](../../AccountApiBundle/Domain/Address.md) |  | - | 
+`billingAddress` | ?[`Address`](../../AccountApiBundle/Domain/Address.md) |  | - | 
+`sum` | `int` |  | - | 
+`currency` | `string` |  | - | 
+`payments` | [`Payment`](Payment.md)[] | `[]` | - | 
+`discountCodes` | `string[]` | `[]` | - | 
+`dangerousInnerCart` | `mixed` |  | - | Access original object from backend
 
 ## Methods
 
@@ -96,3 +96,4 @@ public function isComplete(): bool
 
 Return Value: `bool`
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

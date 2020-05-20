@@ -4,9 +4,10 @@
 
 **Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`email`|`string`||
-`confirmationToken`|`string|null`||
-`tokenValidUntil`|`\DateTime|null`||
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`email` | `string` |  | - | 
+`confirmationToken` | `string|null` |  | - | 
+`tokenValidUntil` | `\DateTime|null` |  | - | 
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

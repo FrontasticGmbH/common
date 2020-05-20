@@ -22,3 +22,4 @@ Argument|Type|Default|Description
 
 Return Value: [`SapLocaleCreator`](SapLocaleCreator.md)
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

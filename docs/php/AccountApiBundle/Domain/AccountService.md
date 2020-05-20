@@ -196,3 +196,4 @@ Argument|Type|Default|Description
 
 Return Value: [`Account`](Account.md)
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

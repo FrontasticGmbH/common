@@ -35,3 +35,4 @@ Argument|Type|Default|Description
 
 Return Value: [`DataMapperInterface`](DataMapperInterface.md)
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

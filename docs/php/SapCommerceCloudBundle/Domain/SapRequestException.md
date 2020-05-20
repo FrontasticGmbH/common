@@ -58,3 +58,4 @@ Argument|Type|Default|Description
 
 Return Value: [`SapRequestException`](SapRequestException.md)
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).
