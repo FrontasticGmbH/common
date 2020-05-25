@@ -4,11 +4,11 @@
 
 **Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`status`|`int`||Response HTTP status code
-`headers`|`string[]`||The HTTP headers from the response as a plain array
-`body`|`string`||Response body
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`status` | `int` |  | - | Response HTTP status code
+`headers` | `string[]` |  | - | The HTTP headers from the response as a plain array
+`body` | `string` |  | - | Response body
 
 ## Methods
 
@@ -22,3 +22,4 @@ public function __toString(): mixed
 
 Return Value: `mixed`
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

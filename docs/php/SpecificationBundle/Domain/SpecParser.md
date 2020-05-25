@@ -20,3 +20,4 @@ Argument|Type|Default|Description
 
 Return Value: `\stdClass`
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

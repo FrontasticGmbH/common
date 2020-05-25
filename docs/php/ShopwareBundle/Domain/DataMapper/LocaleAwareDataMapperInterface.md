@@ -29,3 +29,4 @@ public function getLocale(): ShopwareLocale
 
 Return Value: [`ShopwareLocale`](../Locale/ShopwareLocale.md)
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

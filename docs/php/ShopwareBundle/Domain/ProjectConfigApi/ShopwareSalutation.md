@@ -4,10 +4,11 @@
 
 **Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`id`|`string`||
-`salutationKey`|`string`||
-`displayName`|`string`||
-`letterName`|`string`||
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`id` | `string` |  | - | 
+`salutationKey` | `string` |  | - | 
+`displayName` | `string` |  | - | 
+`letterName` | `string` |  | - | 
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

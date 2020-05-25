@@ -4,10 +4,10 @@
 
 **Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`languageCode`|`string`||ISO code
-`currencyCode`|`string`||ISO code
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`languageCode` | `string` |  | - | ISO code
+`currencyCode` | `string` |  | - | ISO code
 
 ## Methods
 
@@ -21,3 +21,4 @@ public function toQueryParameters(): array
 
 Return Value: `array`
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

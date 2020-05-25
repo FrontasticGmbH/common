@@ -4,15 +4,16 @@
 
 **Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`id`|`string`||
-`paymentProvider`|`string`||
-`paymentId`|`string`||
-`amount`|`int`||In cent
-`currency`|`string`||
-`debug`|`string`||
-`paymentStatus`|``||
-`version`|``||
-`paymentMethod`|``||
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`id` | `string` |  | - | 
+`paymentProvider` | `string` |  | - | 
+`paymentId` | `string` |  | - | 
+`amount` | `int` |  | - | In cent
+`currency` | `string` |  | - | 
+`debug` | `string` |  | - | 
+`paymentStatus` | `` |  | - | 
+`version` | `` |  | - | 
+`paymentMethod` | `` |  | - | 
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

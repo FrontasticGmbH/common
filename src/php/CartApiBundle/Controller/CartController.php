@@ -290,7 +290,7 @@ class CartController extends CrudController
                 $cartId = $symfonySession->get('cart_id');
                 try {
                     return $cartApi->getById($cartId, $context->locale);
-                } catch (\RuntimeException $exception) {
+                } catch (\Exception $exception) {
                     $this->get('logger')
                         ->info(
                             'Error fetching anonymous cart {cartId}, creating new one',

@@ -4,9 +4,10 @@
 
 **Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`email`|`string`||
-`password`|`string`||
-`newPassword`|`string`||
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`email` | `string` |  | - | 
+`password` | `string` |  | - | 
+`newPassword` | `string` |  | - | 
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

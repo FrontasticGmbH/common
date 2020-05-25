@@ -4,3 +4,4 @@
 
 **Extends**: `\Symfony\Bundle\FrameworkBundle\Controller\Controller`
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

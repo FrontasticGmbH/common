@@ -20,3 +20,4 @@ Argument|Type|Default|Description
 
 Return Value: [`ShopwareLocale`](ShopwareLocale.md)
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

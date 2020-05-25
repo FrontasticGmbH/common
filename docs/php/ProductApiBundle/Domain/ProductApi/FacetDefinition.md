@@ -4,8 +4,9 @@
 
 **Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`attributeType`|`string`||
-`attributeId`|`string`||
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`attributeType` | `string` |  | - | 
+`attributeId` | `string` |  | - | 
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

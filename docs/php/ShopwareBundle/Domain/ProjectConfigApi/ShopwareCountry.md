@@ -4,14 +4,15 @@
 
 **Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`id`|`string`||
-`name`|`string`||
-`iso`|`string`||
-`iso3`|`string`||
-`taxFree`|`bool`||
-`active`|`bool`||
-`shippingAvailable`|`bool`||
-`position`|`int`||
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`id` | `string` |  | - | 
+`name` | `string` |  | - | 
+`iso` | `string` |  | - | 
+`iso3` | `string` |  | - | 
+`taxFree` | `bool` |  | - | 
+`active` | `bool` |  | - | 
+`shippingAvailable` | `bool` |  | - | 
+`position` | `int` |  | - | 
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

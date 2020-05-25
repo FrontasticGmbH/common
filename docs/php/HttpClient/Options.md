@@ -4,7 +4,8 @@
 
 **Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`timeout`|int|float|HttpClient\timeout|HttpClient\for|HttpClient\the|HttpClient\complete|HttpClient\request|HttpClient\in|[`HttpClient`](../HttpClient.md)\seconds|`1`|
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`timeout` | int|float|HttpClient\timeout|HttpClient\for|HttpClient\the|HttpClient\complete|HttpClient\request|HttpClient\in|[`HttpClient`](../HttpClient.md)\seconds | `1` | - | 
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

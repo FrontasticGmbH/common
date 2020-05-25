@@ -39,3 +39,4 @@ Argument|Type|Default|Description
 
 Return Value: [`ShopwareProjectConfigApiInterface`](ShopwareProjectConfigApiInterface.md)
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

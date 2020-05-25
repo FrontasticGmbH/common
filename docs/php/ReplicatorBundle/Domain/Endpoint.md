@@ -4,10 +4,11 @@
 
 **Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
-Property|Type|Default|Description
---------|----|-------|-----------
-`name`|`string`||
-`url`|`string`||
-`push`|`bool`|`true`|
-`environment`|`string`|`'production'`|
+Property|Type|Default|Required|Description
+--------|----|-------|--------|-----------
+`name` | `string` |  | - | 
+`url` | `string` |  | - | 
+`push` | `bool` | `true` | - | 
+`environment` | `string` | `'production'` | - | 
 
+Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

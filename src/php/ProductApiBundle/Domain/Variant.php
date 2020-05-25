@@ -6,11 +6,13 @@ use Kore\DataObject\DataObject;
 class Variant extends DataObject
 {
     /**
+     * @required
      * @var string
      */
     public $id;
 
     /**
+     * @required
      * @var string
      */
     public $sku;
@@ -23,6 +25,7 @@ class Variant extends DataObject
     /**
      * The product price in cent
      *
+     * @required
      * @var integer
      */
     public $price;
