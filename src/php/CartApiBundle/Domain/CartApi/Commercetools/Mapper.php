@@ -41,6 +41,7 @@ class Mapper
             'postalCode' => $addressData['postalCode'] ?? null,
             'city' => $addressData['city'] ?? null,
             'country' => $addressData['country'] ?? null,
+            'state' => $addressData['state'] ?? null,
             'phone' => $addressData['phone'] ?? null,
         ]);
     }
@@ -59,6 +60,7 @@ class Mapper
             'postalCode' => $address->postalCode,
             'city' => $address->city,
             'country' => $address->country,
+            'state' => $address->state,
             'phone' => $address->phone,
         ];
     }

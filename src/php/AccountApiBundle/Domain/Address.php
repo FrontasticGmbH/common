@@ -62,6 +62,12 @@ class Address extends DataObject
      * @var string
      */
     public $country;
+
+    /**
+     * @var string
+     */
+    public $state;
+
     /**
      * @var string
      */
