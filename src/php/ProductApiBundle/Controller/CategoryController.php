@@ -20,6 +20,8 @@ class CategoryController extends Controller
             'locale' => $context->locale,
             'limit' => $request->query->getInt('limit', 250),
             'offset' => $request->query->getInt('offset', 0),
+            'parentId' => $request->query->get('parentId'),
+            'slug' => $request->query->get('slug'),
         ]);
 
         return [
