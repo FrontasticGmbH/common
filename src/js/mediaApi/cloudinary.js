@@ -116,9 +116,9 @@ class Cloudinary {
      * @returns {{quality: string|number}}
      * @private
      */
-    getQuality(imageOptions) {
+    getQuality (imageOptions) {
         let options = {
-            quality: 'auto'
+            quality: 'auto',
         }
 
         if (imageOptions.quality) {
@@ -133,9 +133,9 @@ class Cloudinary {
      * @returns {{fetch_format: string}}
      * @private
      */
-    getFetchFormat(imageOptions) {
+    getFetchFormat (imageOptions) {
         let options = {
-            fetch_format: 'auto'
+            fetch_format: 'auto',
         }
 
         if (imageOptions.fetch_format) {
