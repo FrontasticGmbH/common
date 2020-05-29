@@ -14,12 +14,12 @@ class Cloudinary {
             media.mediaId,
             _.extend(
                 {
-                    fetch_format: 'auto',
                     width: width,
                     height: height,
-                    quality: 'auto',
                     secure: true,
                 },
+                this.getQuality(options),
+                this.getFetchFormat(options),
                 this.getGravityOptions(options),
                 this.cropOptions(options)
             )
@@ -36,13 +36,13 @@ class Cloudinary {
             url,
             _.extend(
                 {
-                    fetch_format: 'auto',
                     type: 'fetch',
                     width: width,
                     height: height,
-                    quality: 'auto',
                     secure: true,
                 },
+                this.getQuality(options),
+                this.getFetchFormat(options),
                 this.getGravityOptions(options),
                 this.cropOptions(options)
             )
@@ -106,6 +106,44 @@ class Cloudinary {
 
         if (imageOptions.background) {
             options.background = imageOptions.background
+        }
+
+        return options
+    }
+
+    /**
+     * @param imageOptions
+     * @returns {{quality: string|number}}
+     * @private
+     */
+    getQuality(imageOptions) {
+        let options = {
+            quality: 'auto'
+        }
+
+        if (imageOptions.quality) {
+            options.quality = imageOptions.quality
+        }
+
+        return options
+    }
+
+    /**
+     * @param imageOptions
+     * @returns {{fetch_format: string}}
+     * @private
+     */
+    getFetchFormat(imageOptions) {
+        let options = {
+            fetch_format: 'auto'
+        }
+
+        if (imageOptions.fetch_format) {
+            options.fetch_format = imageOptions.fetch_format
+        }
+
+        if (imageOptions.fetchFormat) {
+            options.fetch_format = imageOptions.fetchFormat
         }
 
         return options
