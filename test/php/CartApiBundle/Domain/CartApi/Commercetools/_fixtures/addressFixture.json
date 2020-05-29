@@ -10,5 +10,6 @@
     "postalCode": "12345",
     "city": "Musterstadt",
     "country": "DE",
+    "state": null,
     "phone": ""
 }

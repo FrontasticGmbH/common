@@ -81,6 +81,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     'postalCode' => null,
                     'city' => null,
                     'country' => null,
+                    'state' => null,
                     'phone' => null,
                 ],
             ],
@@ -473,6 +474,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             'additionalAddressInfo' => '',
             'postalCode' => '12345',
             'city' => 'Musterstadt',
+            'state' => null,
             'country' => 'DE',
             'phone' => '',
         ]);
