@@ -77,9 +77,9 @@ class AccountAuthController extends Controller
         return $this->loginAccount($account, $request);
     }
 
-    public function confirmAction(Request $request, Context $context, string $token): Response
+    public function confirmAction(Request $request, Context $context, string $confirmationToken): Response
     {
-        $account = $this->getAccountService()->confirmEmail($token, $context->locale);
+        $account = $this->getAccountService()->confirmEmail($confirmationToken, $context->locale);
 
         return $this->loginAccount($account, $request);
     }
