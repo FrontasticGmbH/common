@@ -19,7 +19,7 @@
                 service="Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory"
                 method="factor">
             </factory>
-            <argument type="expression">service('Frontastic\\Catwalk\\ApiCoreBundle\\Domain\\Context').customer</argument>
+            <argument type="service" id="Frontastic\Common\ReplicatorBundle\Domain\Project" />
         </service>
     </services>
 </container>
