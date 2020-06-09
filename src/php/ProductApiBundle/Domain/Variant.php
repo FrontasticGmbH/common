@@ -3,6 +3,9 @@ namespace Frontastic\Common\ProductApiBundle\Domain;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class Variant extends DataObject
 {
     /**

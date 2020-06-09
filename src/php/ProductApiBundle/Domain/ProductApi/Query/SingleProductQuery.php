@@ -8,6 +8,8 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 /**
  * This class represents a query for a single product. The product can be queried either by the product ID or by the
  * SKU.
+ *
+ * @type
  */
 class SingleProductQuery extends Query
 {

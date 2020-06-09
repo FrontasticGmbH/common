@@ -4,6 +4,9 @@ namespace Frontastic\Common\AccountApiBundle\Domain;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class Group extends DataObject
 {
     const GROUP_NAME_ALL = '__SYSTEM_ALL';

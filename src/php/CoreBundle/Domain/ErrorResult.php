@@ -4,6 +4,9 @@ namespace Frontastic\Common\CoreBundle\Domain;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class ErrorResult extends DataObject
 {
     /**

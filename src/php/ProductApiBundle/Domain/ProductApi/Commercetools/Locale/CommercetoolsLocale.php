@@ -4,6 +4,9 @@ namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Loc
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class CommercetoolsLocale extends DataObject
 {
     /**

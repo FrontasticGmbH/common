@@ -3,6 +3,9 @@ namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Facets;
 
+/**
+ * @type
+ */
 class TermFacet extends Facet
 {
     /**

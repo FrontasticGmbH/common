@@ -3,6 +3,9 @@ namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 abstract class Facet extends DataObject
 {
     /**

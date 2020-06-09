@@ -4,6 +4,9 @@ namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class Result extends DataObject implements \Countable, \IteratorAggregate
 {
     /**

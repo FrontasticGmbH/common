@@ -8,6 +8,9 @@ use Doctrine\Common\Collections\Collection;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class Account extends DataObject implements UserInterface, \Serializable
 {
     /**

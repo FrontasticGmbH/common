@@ -2,6 +2,9 @@
 
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 
+/**
+ * @type
+ */
 class PaginatedQuery extends Query
 {
     /**

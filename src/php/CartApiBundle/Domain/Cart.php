@@ -5,6 +5,9 @@ namespace Frontastic\Common\CartApiBundle\Domain;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class Cart extends DataObject
 {
     /**

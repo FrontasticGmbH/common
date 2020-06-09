@@ -5,6 +5,9 @@ namespace Frontastic\Common\CartApiBundle\Domain;
 use Frontastic\Common\Translatable;
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class Discount extends DataObject
 {
     /**

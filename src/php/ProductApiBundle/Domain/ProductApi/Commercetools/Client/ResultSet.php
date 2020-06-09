@@ -4,6 +4,9 @@ namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Cli
 use Kore\DataObject\DataObject;
 use Traversable;
 
+/**
+ * @type
+ */
 class ResultSet extends DataObject implements \IteratorAggregate
 {
     /**

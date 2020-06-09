@@ -4,6 +4,9 @@ namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class Attribute extends DataObject
 {
     /**

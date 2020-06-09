@@ -4,6 +4,9 @@ namespace Frontastic\Common\CartApiBundle\Domain;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class LineItem extends DataObject
 {
     /**

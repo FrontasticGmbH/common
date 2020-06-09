@@ -8,6 +8,7 @@ use Kore\DataObject\DataObject;
  * Class Wishlist
  *
  * @package Frontastic\Common\WishlistApiBundle\Domain
+ * @type
  */
 class Wishlist extends DataObject
 {

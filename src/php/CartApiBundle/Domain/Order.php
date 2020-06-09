@@ -2,6 +2,9 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain;
 
+/**
+ * @type
+ */
 class Order extends Cart
 {
     /**

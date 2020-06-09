@@ -10,6 +10,8 @@ use Kore\DataObject\DataObject;
  *
  * - de_DE
  * - en_GB@euro
+ *
+ * @type
  */
 class Locale extends DataObject
 {

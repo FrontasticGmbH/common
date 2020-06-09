@@ -5,6 +5,9 @@ namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\InvalidQueryException;
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class Query extends DataObject
 {
     /**

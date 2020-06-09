@@ -4,6 +4,9 @@ namespace Frontastic\Common\SapCommerceCloudBundle\Domain\Locale;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class SapLocale extends DataObject
 {
     /**

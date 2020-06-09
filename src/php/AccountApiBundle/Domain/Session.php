@@ -4,6 +4,9 @@ namespace Frontastic\Common\AccountApiBundle\Domain;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class Session extends DataObject
 {
     /**

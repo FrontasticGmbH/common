@@ -4,6 +4,9 @@ namespace Frontastic\Common\CartApiBundle\Domain;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class Payment extends DataObject
 {
     public const PAYMENT_STATUS_INIT = 'init';

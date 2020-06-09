@@ -4,6 +4,9 @@ namespace Frontastic\Common\ReplicatorBundle\Domain;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class Command extends DataObject
 {
     /**

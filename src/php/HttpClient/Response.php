@@ -2,6 +2,9 @@
 
 namespace Frontastic\Common\HttpClient;
 
+/**
+ * @type
+ */
 class Response extends \Kore\DataObject\DataObject
 {
     /**
