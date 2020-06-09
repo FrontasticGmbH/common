@@ -151,6 +151,6 @@ class SapAccountApi implements AccountApi
 
     public function getDangerousInnerClient()
     {
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        return $this->client;
     }
 }
