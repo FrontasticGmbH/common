@@ -13,13 +13,5 @@
             <argument type="service" id="Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator" />
             <argument type="tagged" tag="accountApi.lifecycleEventListener" />
         </service>
-
-        <service id="Frontastic\Common\AccountApiBundle\Domain\AccountApi">
-            <factory
-                service="Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory"
-                method="factor">
-            </factory>
-            <argument type="service" id="Frontastic\Common\ReplicatorBundle\Domain\Project" />
-        </service>
     </services>
 </container>
