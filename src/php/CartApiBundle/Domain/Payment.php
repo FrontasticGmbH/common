@@ -2,9 +2,9 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain;
 
-use Kore\DataObject\DataObject;
+use Frontastic\Common\CoreBundle\Domain\BaseObject;
 
-class Payment extends DataObject
+class Payment extends BaseObject
 {
     public const PAYMENT_STATUS_INIT = 'init';
     public const PAYMENT_STATUS_PENDING = 'pending';
@@ -15,6 +15,7 @@ class Payment extends DataObject
      * @var string
      */
     public $id;
+
     /**
      * @var string
      */

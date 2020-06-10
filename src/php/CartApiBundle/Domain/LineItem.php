@@ -2,9 +2,9 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain;
 
-use Kore\DataObject\DataObject;
+use Frontastic\Common\CoreBundle\Domain\BaseObject;
 
-class LineItem extends DataObject
+class LineItem extends BaseObject
 {
     /**
      * @var string

@@ -2,13 +2,11 @@
 
 namespace Frontastic\Common\AccountApiBundle\Domain;
 
-use InvalidArgumentException;
+use Frontastic\Common\CoreBundle\Domain\BaseObject;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\Collection;
 
-use Kore\DataObject\DataObject;
-
-class Account extends DataObject implements UserInterface, \Serializable
+class Account extends BaseObject implements UserInterface, \Serializable
 {
     /**
      * @var string
