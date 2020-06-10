@@ -65,22 +65,27 @@ class Commercetools implements AccountApi
                 '/customers',
                 [],
                 [],
-                json_encode([
-                    'email' => $account->email,
-                    'salutation' => $account->salutation,
-                    'firstName' => $account->firstName,
-                    'lastName' => $account->lastName,
-                    'dateOfBirth' => $account->birthday ? $account->birthday->format('Y-m-d') : null,
-                    'password' => $this->sanitizePassword($account->getPassword()),
-                    'isEmailVerified' => $account->confirmed,
-                    'custom' => [
-                        'type' => $this->getCustomerType(),
-                        'fields' => [
-                            'data' => json_encode($account->data),
-                        ],
-                    ],
-                    'anonymousCartId' => $cart ? $cart->cartId : null,
-                ])
+                json_encode(
+                    array_merge(
+                        (array)$account->rawApiInput,
+                        [
+                            'email' => $account->email,
+                            'salutation' => $account->salutation,
+                            'firstName' => $account->firstName,
+                            'lastName' => $account->lastName,
+                            'dateOfBirth' => $account->birthday ? $account->birthday->format('Y-m-d') : null,
+                            'password' => $this->sanitizePassword($account->getPassword()),
+                            'isEmailVerified' => $account->confirmed,
+                            'custom' => [
+                                'type' => $this->getCustomerType(),
+                                'fields' => [
+                                    'data' => json_encode($account->data),
+                                ],
+                            ],
+                            'anonymousCartId' => $cart ? $cart->cartId : null,
+                        ]
+                    )
+                )
             )['customer']);
 
             $token = $this->client->post(
@@ -296,18 +301,21 @@ class Commercetools implements AccountApi
                 'actions' => [
                     [
                         'action' => 'addAddress',
-                        'address' => [
-                            'salutation' => $address->salutation,
-                            'firstName' => $address->firstName,
-                            'lastName' => $address->lastName,
-                            'streetName' => $address->streetName,
-                            'streetNumber' => $address->streetNumber,
-                            'additionalStreetInfo' => $address->additionalStreetInfo,
-                            'additionalAddressInfo' => $address->additionalAddressInfo,
-                            'postalCode' => $address->postalCode,
-                            'city' => $address->city,
-                            'country' => $address->country,
-                        ],
+                        'address' => array_merge(
+                            $address->rawApiInput,
+                            [
+                                'salutation' => $address->salutation,
+                                'firstName' => $address->firstName,
+                                'lastName' => $address->lastName,
+                                'streetName' => $address->streetName,
+                                'streetNumber' => $address->streetNumber,
+                                'additionalStreetInfo' => $address->additionalStreetInfo,
+                                'additionalAddressInfo' => $address->additionalAddressInfo,
+                                'postalCode' => $address->postalCode,
+                                'city' => $address->city,
+                                'country' => $address->country,
+                            ]
+                        ),
                     ],
                 ],
             ])
@@ -418,20 +426,22 @@ class Commercetools implements AccountApi
         ));
     }
 
-    private function mapAccount(array $account): Account
+    private function mapAccount(array $accountData): Account
     {
         return new Account([
-            'accountId' => $account['id'],
-            'email' => $account['email'],
-            'salutation' => $account['salutation'] ?? null,
-            'firstName' => $account['firstName'] ?? null,
-            'lastName' => $account['lastName'] ?? null,
-            'birthday' => isset($account['dateOfBirth']) ? new \DateTimeImmutable($account['dateOfBirth']) : null,
-            'data' => json_decode($account['custom']['fields']['data'] ?? '{}'),
+            'accountId' => $accountData['id'],
+            'email' => $accountData['email'],
+            'salutation' => $accountData['salutation'] ?? null,
+            'firstName' => $accountData['firstName'] ?? null,
+            'lastName' => $accountData['lastName'] ?? null,
+            'birthday' => isset($accountData['dateOfBirth']) ?
+                new \DateTimeImmutable($accountData['dateOfBirth']) :
+                null,
+            'data' => json_decode($accountData['custom']['fields']['data'] ?? '{}'),
             // Do NOT map the password back
-            'confirmed' => $account['isEmailVerified'],
-            'addresses' => $this->mapAddresses($account),
-            'dangerousInnerAccount' => $account,
+            'confirmed' => $accountData['isEmailVerified'],
+            'addresses' => $this->mapAddresses($accountData),
+            'dangerousInnerAccount' => $accountData,
         ]);
     }
 

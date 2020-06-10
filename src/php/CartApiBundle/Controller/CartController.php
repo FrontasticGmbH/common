@@ -46,20 +46,23 @@ class CartController extends CrudController
         $cart = $this->getCart($context, $request);
         $beforeItemIds = $this->getLineItemIds($cart);
 
-        $cartApi->startTransaction($cart);
-        $cartApi->addToCart(
-            $cart,
-            new LineItem\Variant([
-                'variant' => new Variant([
-                    'id' => $payload['variant']['id'] ?? null,
-                    'sku' => $payload['variant']['sku'] ?? null,
-                    'attributes' => $payload['variant']['attributes'] ?? [],
-                ]),
-                'custom' => $payload['option'] ?? [],
-                'count' => $payload['count'] ?? 1,
-            ]),
-            $context->locale
+        $lineItemVariant = LineItem\Variant::newWithProjectSpecificData(
+            array_merge(
+                [
+                    'variant' => new Variant([
+                        'id' => $payload['variant']['id'] ?? null,
+                        'sku' => $payload['variant']['sku'] ?? null,
+                        'attributes' => $payload['variant']['attributes'] ?? [],
+                    ]),
+                    'custom' => $payload['option'] ?? [],
+                    'count' => $payload['count'] ?? 1,
+                ],
+                $payload
+            )
         );
+
+        $cartApi->startTransaction($cart);
+        $cartApi->addToCart($cart, $lineItemVariant, $context->locale);
         $cart = $cartApi->commit($context->locale);
 
         return [
@@ -89,19 +92,22 @@ class CartController extends CrudController
 
         $cartApi->startTransaction($cart);
         foreach (($payload['lineItems'] ?? []) as $lineItemData) {
-            $cartApi->addToCart(
-                $cart,
-                new LineItem\Variant([
-                    'variant' => new Variant([
-                        'id' => $lineItemData['variant']['id'] ?? null,
-                        'sku' => $lineItemData['variant']['sku'] ?? null,
-                        'attributes' => $lineItemData['variant']['attributes'],
-                    ]),
-                    'custom' => $lineItemData['option'] ?? [],
-                    'count' => $lineItemData['count'] ?? 1,
-                ]),
-                $context->locale
+            $lineItemVariant = LineItem\Variant::newWithProjectSpecificData(
+                array_merge(
+                    [
+                        'variant' => new Variant([
+                            'id' => $lineItemData['variant']['id'] ?? null,
+                            'sku' => $lineItemData['variant']['sku'] ?? null,
+                            'attributes' => $lineItemData['variant']['attributes'] ?? [],
+                        ]),
+                        'custom' => $lineItemData['option'] ?? [],
+                        'count' => $lineItemData['count'] ?? 1,
+                    ],
+                    $lineItemData
+                )
             );
+
+            $cartApi->addToCart($cart, $lineItemVariant, $context->locale);
         }
         $cart = $cartApi->commit($context->locale);
 
@@ -214,13 +220,13 @@ class CartController extends CrudController
         if (!empty($payload['shipping']) || !empty($payload['billing'])) {
             $cart = $cartApi->setShippingAddress(
                 $cart,
-                new Address($payload['shipping'] ?: $payload['billing']),
+                Address::newWithProjectSpecificData($payload['shipping'] ?: $payload['billing']),
                 $context->locale
             );
 
             $cart = $cartApi->setBillingAddress(
                 $cart,
-                new Address($payload['billing'] ?: $payload['shipping']),
+                Address::newWithProjectSpecificData($payload['billing'] ?: $payload['shipping']),
                 $context->locale
             );
         }

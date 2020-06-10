@@ -29,33 +29,30 @@ class AccountAuthController extends Controller
     public function registerAction(Request $request, Context $context): Response
     {
         $body = $this->getJsonBody($request);
-        $account = new Account([
-            'email' => $body['email'],
-            'salutation' => $body['salutation'],
-            'firstName' => $body['firstName'],
-            'lastName' => $body['lastName'],
-            'birthday' => isset($body['birthdayYear']) ?
-                new \DateTimeImmutable(
-                    $body['birthdayYear'] .
-                    '-' . ($body['birthdayMonth'] ?? 1) .
-                    '-' . ($body['birthdayDay'] ?? 1) .
-                    'T12:00'
-                ) : null,
-            'data' => [
-                'phonePrefix' => $body['phonePrefix'] ?? null,
-                'phone' => $body['phone'] ?? null,
-            ],
-        ]);
+
+        $account = Account::newWithProjectSpecificData(
+            array_merge(
+                [
+                    'birthday' => $this->parseBirthday($body),
+                    'data' => [
+                        'phonePrefix' => $body['phonePrefix'] ?? null,
+                        'phone' => $body['phone'] ?? null,
+                    ]
+                ],
+                $body
+            )
+        );
+
         $account->setPassword($body['password']);
 
         if (isset($body['billingAddress'])) {
-            $address = new Address($body['billingAddress']);
+            $address = Address::newWithProjectSpecificData($body['billingAddress']);
             $address->isDefaultBillingAddress = true;
             $address->isDefaultShippingAddress = !isset($body['shippingAddress']);
             $account->addresses[] = $address;
         }
         if (isset($body['shippingAddress'])) {
-            $address = new Address($body['shippingAddress']);
+            $address = Address::newWithProjectSpecificData($body['shippingAddress']);
             $address->isDefaultShippingAddress = true;
             $account->addresses[] = $address;
         }
@@ -122,10 +119,7 @@ class AccountAuthController extends Controller
         $account->salutation = $body['salutation'];
         $account->firstName = $body['firstName'];
         $account->lastName = $body['lastName'];
-        $account->birthday = new \DateTimeImmutable($body['birthdayYear'] .
-            '-' . $body['birthdayMonth'] .
-            '-' . $body['birthdayDay'] .
-            'T12:00');
+        $account->birthday = $this->parseBirthday($body);
         $account->data = [
             'phonePrefix' => $body['phonePrefix'],
             'phone' => $body['phone'],
@@ -171,5 +165,17 @@ class AccountAuthController extends Controller
             $this->get('Frontastic\Catwalk\FrontendBundle\Security\Authenticator'),
             'api'
         );
+    }
+
+    private function parseBirthday(array $body): ?\DateTimeImmutable
+    {
+        return isset($body['birthdayYear']) ?
+            new \DateTimeImmutable(
+                $body['birthdayYear'] .
+                '-' . ($body['birthdayMonth'] ?? 1) .
+                '-' . ($body['birthdayDay'] ?? 1) .
+                'T12:00'
+            ) :
+            null;
     }
 }
