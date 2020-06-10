@@ -7,7 +7,7 @@ nameSpace: "\\Frontastic\\Common"
 typeScript:
   target: src/js/types.ts
   nameSpace:
-    search: '(^\\(?:([A-Za-z]+?)(?:Api)?Bundle\\)?Domain\\)'
+    search: '(^(?:([A-Za-z]+?)(?:Api)?Bundle\\)?(?:Domain\\)?)'
     replace: '\1\\'
   indent: 4
 files:
