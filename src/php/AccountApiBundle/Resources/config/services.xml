@@ -14,12 +14,8 @@
             <argument type="tagged" tag="accountApi.lifecycleEventListener" />
         </service>
 
-        <service id="Frontastic\Common\AccountApiBundle\Domain\AccountApi">
-            <factory
-                service="Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory"
-                method="factor">
-            </factory>
-            <argument type="service" id="Frontastic\Common\ReplicatorBundle\Domain\Project" />
+        <service id="Frontastic\Common\AccountApiBundle\Domain\AccountApi\Commercetools\Mapper">
+            <tag name="frontastic.common.api_integration"/>
         </service>
     </services>
 </container>

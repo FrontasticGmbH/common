@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\AccountApiBundle\Domain;
 
+use Frontastic\Common\AccountApiBundle\Domain\AccountApi\Commercetools\Mapper as CommercetoolsAccountMapper;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory as CommercetoolsClientFactory;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFactory;
@@ -40,8 +41,9 @@ class AccountApiFactory
                 $client = $this->container
                     ->get(CommercetoolsClientFactory::class)
                     ->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+                $commercetoolsAccountMapper = $this->container->get(CommercetoolsAccountMapper::class);
 
-                $accountApi = new AccountApi\Commercetools($client);
+                $accountApi = new AccountApi\Commercetools($client, $commercetoolsAccountMapper);
                 break;
             case 'sap-commerce-cloud':
                 $client = $this->container

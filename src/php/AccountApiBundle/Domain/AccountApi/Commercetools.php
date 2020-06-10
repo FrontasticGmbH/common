@@ -4,6 +4,7 @@ namespace Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
+use Frontastic\Common\AccountApiBundle\Domain\AccountApi\Commercetools\Mapper as AccountMapper;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\AccountApiBundle\Domain\DuplicateAccountException;
 use Frontastic\Common\AccountApiBundle\Domain\PasswordResetToken;
@@ -18,6 +19,11 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class Commercetools implements AccountApi
 {
     /**
+     * @var AccountMapper
+     */
+    private $accountMapper;
+
+    /**
      * @var Client
      */
     private $client;
@@ -29,9 +35,10 @@ class Commercetools implements AccountApi
 
     const TYPE_NAME = 'frontastic-customer-type';
 
-    public function __construct(Client $client)
+    public function __construct(Client $client, AccountMapper $accountMapper)
     {
         $this->client = $client;
+        $this->accountMapper = $accountMapper;
     }
 
     public function getSalutations(string $locale): ?array
@@ -292,6 +299,10 @@ class Commercetools implements AccountApi
     public function addAddress(Account $account, Address $address, string $locale = null): Account
     {
         $accountData = $this->client->get('/customers/' . $account->accountId);
+
+        $addressData = $this->accountMapper->mapAddressToData($address);
+        unset($addressData['id']);
+
         return $this->mapAccount($this->client->post(
             '/customers/' . $account->accountId,
             [],
@@ -301,21 +312,7 @@ class Commercetools implements AccountApi
                 'actions' => [
                     [
                         'action' => 'addAddress',
-                        'address' => array_merge(
-                            $address->rawApiInput,
-                            [
-                                'salutation' => $address->salutation,
-                                'firstName' => $address->firstName,
-                                'lastName' => $address->lastName,
-                                'streetName' => $address->streetName,
-                                'streetNumber' => $address->streetNumber,
-                                'additionalStreetInfo' => $address->additionalStreetInfo,
-                                'additionalAddressInfo' => $address->additionalAddressInfo,
-                                'postalCode' => $address->postalCode,
-                                'city' => $address->city,
-                                'country' => $address->country,
-                            ]
-                        ),
+                        'address' => $addressData,
                     ],
                 ],
             ])
@@ -329,6 +326,10 @@ class Commercetools implements AccountApi
     public function updateAddress(Account $account, Address $address, string $locale = null): Account
     {
         $accountData = $this->client->get('/customers/' . $account->accountId);
+
+        $addressData = $this->accountMapper->mapAddressToData($address);
+        unset($addressData['id']);
+
         return $this->mapAccount($this->client->post(
             '/customers/' . $account->accountId,
             [],
@@ -339,18 +340,7 @@ class Commercetools implements AccountApi
                     [
                         'action' => 'changeAddress',
                         'addressId' => $address->addressId,
-                        'address' => [
-                            'salutation' => $address->salutation,
-                            'firstName' => $address->firstName,
-                            'lastName' => $address->lastName,
-                            'streetName' => $address->streetName,
-                            'streetNumber' => $address->streetNumber,
-                            'additionalStreetInfo' => $address->additionalStreetInfo,
-                            'additionalAddressInfo' => $address->additionalAddressInfo,
-                            'postalCode' => $address->postalCode,
-                            'city' => $address->city,
-                            'country' => $address->country,
-                        ],
+                        'address' => $addressData,
                     ],
                 ],
             ])

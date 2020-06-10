@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools;
 
+use Frontastic\Common\AccountApiBundle\Domain\AccountApi\Commercetools\Mapper as AccountMapper;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\Discount;
@@ -15,11 +16,15 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 
 class Mapper
 {
+    /** @var AccountMapper */
+    private $accountMapper;
+
     /** @var ProductMapper */
     private $productMapper;
 
-    public function __construct(ProductMapper $productMapper)
+    public function __construct(AccountMapper $accountMapper, ProductMapper $productMapper)
     {
+        $this->accountMapper = $accountMapper;
         $this->productMapper = $productMapper;
     }
 
@@ -48,21 +53,7 @@ class Mapper
 
     public function mapAddressToData(Address $address): array
     {
-        return [
-            'id' => $address->addressId,
-            'salutation' => $address->salutation,
-            'firstName' => $address->firstName,
-            'lastName' => $address->lastName,
-            'streetName' => $address->streetName,
-            'streetNumber' => $address->streetNumber,
-            'additionalStreetInfo' => $address->additionalStreetInfo,
-            'additionalAddressInfo' => $address->additionalAddressInfo,
-            'postalCode' => $address->postalCode,
-            'city' => $address->city,
-            'country' => $address->country,
-            'state' => $address->state,
-            'phone' => $address->phone,
-        ];
+        return $this->accountMapper->mapAddressToData($address);
     }
 
     public function mapDataToCart(array $cartData, CommercetoolsLocale $locale): Cart
