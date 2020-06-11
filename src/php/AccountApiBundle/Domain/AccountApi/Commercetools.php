@@ -132,24 +132,27 @@ class Commercetools implements AccountApi
             [],
             json_encode([
                 'version' => $accountVersion['version'],
-                'actions' => [
+                'actions' => array_merge(
+                    (array)$account->rawApiInput,
                     [
-                        'action' => 'setFirstName',
-                        'firstName' => $account->firstName,
-                    ],
-                    [
-                        'action' => 'setLastName',
-                        'lastName' => $account->lastName,
-                    ],
-                    [
-                        'action' => 'setSalutation',
-                        'salutation' => $account->salutation,
-                    ],
-                    [
-                        'action' => 'setDateOfBirth',
-                        'dateOfBirth' => $account->birthday->format('Y-m-d'),
-                    ],
-                ],
+                        [
+                            'action' => 'setFirstName',
+                            'firstName' => $account->firstName,
+                        ],
+                        [
+                            'action' => 'setLastName',
+                            'lastName' => $account->lastName,
+                        ],
+                        [
+                            'action' => 'setSalutation',
+                            'salutation' => $account->salutation,
+                        ],
+                        [
+                            'action' => 'setDateOfBirth',
+                            'dateOfBirth' => $account->birthday->format('Y-m-d'),
+                        ],
+                    ]
+                ),
             ])
         ));
     }
@@ -477,50 +480,6 @@ class Commercetools implements AccountApi
     public function getDangerousInnerClient()
     {
         return $this->client;
-    }
-
-    /**
-     * @throws RequestException
-     */
-    public function getCustomerType(): array
-    {
-        if ($this->customerType) {
-            return $this->customerType;
-        }
-
-        try {
-            $customerType = $this->client->get('/types/key=' . self::TYPE_NAME);
-        } catch (RequestException $e) {
-            $customerType = $this->createCustomerType();
-        }
-
-        return $this->customerType = ['id' => $customerType['id']];
-    }
-
-    /**
-     * @throws RequestException
-     */
-    private function createCustomerType(): array
-    {
-        return $this->client->post(
-            '/types',
-            [],
-            [],
-            json_encode([
-                'key' => self::TYPE_NAME,
-                'name' => ['de' => 'Frontastic Customer'],
-                'description' => ['de' => 'Additional data fields'],
-                'resourceTypeIds' => ['customer'],
-                'fieldDefinitions' => [
-                    [
-                        'name' => 'data',
-                        'type' => ['name' => 'String'],
-                        'label' => ['de' => 'Data (JSON)'],
-                        'required' => false,
-                    ],
-                ],
-            ])
-        );
     }
 
     private function sanitizePassword(string $password): string

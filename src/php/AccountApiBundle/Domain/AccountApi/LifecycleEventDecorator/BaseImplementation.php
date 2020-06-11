@@ -128,12 +128,12 @@ abstract class BaseImplementation
     ): void {
     }
 
-    public function afterLogin(AccountApi $accountApi, Account $account): ?Account
+    public function afterLogin(AccountApi $accountApi, ?Account $account = null): ?Account
     {
         return null;
     }
 
-    /*** refreshAccount() ******************************************************************************************************/
+    /*** refreshAccount() *********************************************************************************************/
     public function beforeRefreshAccount(AccountApi $accountApi, Account $account, string $locale = null): void
     {
     }

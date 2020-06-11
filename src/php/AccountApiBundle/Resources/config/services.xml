@@ -17,5 +17,9 @@
         <service id="Frontastic\Common\AccountApiBundle\Domain\AccountApi\Commercetools\Mapper">
             <tag name="frontastic.common.api_integration"/>
         </service>
+
+        <service id="Frontastic\Common\AccountApiBundle\Domain\AccountApi\Commercetools\LifecycleEventDecorator\AccountListener">
+            <tag name="accountApi.lifecycleEventListener" />
+        </service>
     </services>
 </container>
