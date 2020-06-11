@@ -25,10 +25,5 @@
             <argument type="tagged" tag="cartApi.lifecycleEventListener"/>
             <argument type="service" id="logger" />
         </service>
-
-        <service id="Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools\LifecycleEventDecorator\CartListener">
-            <tag name="cartApi.lifecycleEventListener" />
-        </service>
-
     </services>
 </container>
