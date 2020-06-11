@@ -23,7 +23,9 @@ class AnonymousCartTest extends FrontasticApiTestCase
         $this->assertNotEmptyString($cart->cartId);
         $this->assertNotEmptyString($cart->cartVersion);
 
-        $this->assertSame([], $cart->custom);
+        if ($cart->projectSpecificData !== null) {
+            $this->assertSame([], $cart->projectSpecificData);
+        }
         $this->assertSame([], $cart->lineItems);
 
         $this->assertNull($cart->email);

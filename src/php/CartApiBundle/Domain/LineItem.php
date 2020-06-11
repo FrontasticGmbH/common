@@ -22,11 +22,6 @@ class LineItem extends ApiDataObject
     public $type;
 
     /**
-     * @var array
-     */
-    public $custom = [];
-
-    /**
      * @var integer
      */
     public $count = 0;

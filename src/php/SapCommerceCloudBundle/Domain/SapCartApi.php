@@ -178,7 +178,7 @@ class SapCartApi implements CartApi
         $this->client
             ->post(
                 '/rest/v2/{siteId}/users/' . $userId . '/carts/' . $sapCartId . '/addresses/delivery',
-                (array)$address,
+                $this->dataMapper->mapAddressToData($address),
                 $this->createLocaleFromString($locale)->toQueryParameters()
             )
             ->then(function (array $data): void {

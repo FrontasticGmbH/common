@@ -83,12 +83,6 @@ class Commercetools implements AccountApi
                             'dateOfBirth' => $account->birthday ? $account->birthday->format('Y-m-d') : null,
                             'password' => $this->sanitizePassword($account->getPassword()),
                             'isEmailVerified' => $account->confirmed,
-                            'custom' => [
-                                'type' => $this->getCustomerType(),
-                                'fields' => [
-                                    'data' => json_encode($account->data),
-                                ],
-                            ],
                             'anonymousCartId' => $cart ? $cart->cartId : null,
                         ]
                     )
@@ -154,11 +148,6 @@ class Commercetools implements AccountApi
                     [
                         'action' => 'setDateOfBirth',
                         'dateOfBirth' => $account->birthday->format('Y-m-d'),
-                    ],
-                    [
-                        'action' => 'setCustomField',
-                        'name' => 'data',
-                        'value' => json_encode($account->data),
                     ],
                 ],
             ])
@@ -427,7 +416,6 @@ class Commercetools implements AccountApi
             'birthday' => isset($accountData['dateOfBirth']) ?
                 new \DateTimeImmutable($accountData['dateOfBirth']) :
                 null,
-            'data' => json_decode($accountData['custom']['fields']['data'] ?? '{}'),
             // Do NOT map the password back
             'confirmed' => $accountData['isEmailVerified'],
             'addresses' => $this->mapAddresses($accountData),

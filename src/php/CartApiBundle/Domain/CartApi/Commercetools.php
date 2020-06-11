@@ -295,10 +295,6 @@ class Commercetools implements CartApi
                         'action' => 'addLineItem',
                         'sku' => $lineItem->variant->sku,
                         'quantity' => $lineItem->count,
-                        'custom' => !$lineItem->custom ? null : [
-                            'type' => $this->getCustomLineItemType(),
-                            'fields' => $lineItem->custom,
-                        ],
                     ]
                 ),
             ],
@@ -324,10 +320,6 @@ class Commercetools implements CartApi
                             'type' => 'centPrecision',
                             'currencyCode' => $locale->currency,
                             'centAmount' => $lineItem->totalPrice,
-                        ],
-                        'custom' => !$lineItem->custom ? null : [
-                            'type' => $this->getCustomLineItemType(),
-                            'fields' => $lineItem->custom,
                         ],
                         'quantity' => $lineItem->count,
                     ]
@@ -507,28 +499,7 @@ class Commercetools implements CartApi
             '/payments',
             [],
             [],
-            json_encode(
-                array_merge(
-                    $payment->rawApiInput,
-                    [
-                        'key' => $payment->id,
-                        'amountPlanned' => [
-                            'centAmount' => $payment->amount,
-                            'currencyCode' => $payment->currency,
-                        ],
-                        'interfaceId' => $payment->paymentId,
-                        'paymentMethodInfo' => [
-                            'paymentInterface' => $payment->paymentProvider,
-                            'method' => $payment->paymentMethod,
-                        ],
-                        'paymentStatus' => [
-                            'interfaceCode' => $payment->paymentStatus,
-                            'interfaceText' => $payment->debug,
-                        ],
-                        'custom' => $custom,
-                    ]
-                )
-            )
+            json_encode($this->cartMapper->mapPaymentToData($payment))
         );
 
         return $this->postCartActions(
