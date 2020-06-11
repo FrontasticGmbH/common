@@ -16,6 +16,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreator;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to implementation of CartApi
@@ -69,16 +70,23 @@ class Commercetools implements CartApi
      */
     private $taxCategory = null;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     public function __construct(
         Client $client,
         CartMapper $cartMapper,
         CommercetoolsLocaleCreator $localeCreator,
-        OrderIdGenerator $orderIdGenerator
+        OrderIdGenerator $orderIdGenerator,
+        LoggerInterface $logger
     ) {
         $this->client = $client;
         $this->cartMapper = $cartMapper;
         $this->localeCreator = $localeCreator;
         $this->orderIdGenerator = $orderIdGenerator;
+        $this->logger = $logger;
     }
 
     /**
@@ -351,6 +359,7 @@ class Commercetools implements CartApi
             ];
         }
 
+        //For BC only.
         if ($custom) {
             foreach ($custom as $field => $value) {
                 $actions[] = [
@@ -360,9 +369,21 @@ class Commercetools implements CartApi
                     'value' => $value,
                 ];
             }
+            $this->logger
+                ->warning(
+                    'This usage of the key "{custom}" is deprecated, move it into "projectSpecificData" instead',
+                    ['key' => $custom]
+                );
         }
 
-        return $this->postCartActions($cart, $actions, $this->parseLocaleString($localeString));
+        return $this->postCartActions(
+            $cart,
+            array_merge(
+                (array)$lineItem->rawApiInput,
+                $actions
+            ),
+            $this->parseLocaleString($localeString)
+        );
     }
 
     public function removeLineItem(Cart $cart, LineItem $lineItem, string $localeString = null): Cart
@@ -425,22 +446,34 @@ class Commercetools implements CartApi
         );
     }
 
+    /**
+     * @deprecated Use and implement the setRawApiInput method. This method only exists for backwards compatibility.
+     */
     public function setCustomField(Cart $cart, array $fields, string $localeString = null): Cart
     {
-        if (!count($fields)) {
-            return $cart;
-        }
+        $this->logger
+            ->warning(
+                'The method setCustomField is deprecated, use "setRawApiInput" instead',
+                [
+                    'cart' => $cart,
+                    'fields' => $fields,
+                ]
+            );
 
-        $actions = [];
         foreach ($fields as $name => $value) {
-            $actions[] = [
+            $cart->rawApiInput[] = [
                 'action' => 'setCustomField',
                 'name' => $name,
                 'value' => $value,
             ];
         }
 
-        return $this->postCartActions($cart, $actions, $this->parseLocaleString($localeString));
+        return $this->setRawApiInput($cart, $localeString);
+    }
+
+    public function setRawApiInput(Cart $cart, string $localeString = null): Cart
+    {
+        return $this->postCartActions($cart, [], $this->parseLocaleString($localeString));
     }
 
     /**
@@ -495,6 +528,16 @@ class Commercetools implements CartApi
      */
     public function addPayment(Cart $cart, Payment $payment, ?array $custom = null, string $localeString = null): Cart
     {
+        // For BC only.
+        if (!key_exists('custom', $payment->rawApiInput) && !empty($custom)) {
+            $payment->rawApiInput['custom'] = $custom;
+            $this->logger
+                ->warning(
+                    'This usage of the key "{custom}" is deprecated, move it into "projectSpecificData" instead',
+                    ['key' => $custom]
+                );
+        }
+
         $payment = $this->client->post(
             '/payments',
             [],
@@ -642,7 +685,10 @@ class Commercetools implements CartApi
                 [],
                 json_encode([
                     'version' => (int)$cart->cartVersion,
-                    'actions' => $actions,
+                    'actions' => array_merge(
+                        $cart->rawApiInput,
+                        $actions
+                    ),
                 ])
             ),
             $locale

@@ -137,7 +137,7 @@ class CartController extends CrudController
             $cart,
             $lineItem,
             $payload['count'],
-            $payload['custom'] ?? null,
+            null,
             $context->locale
         );
         $cart = $cartApi->commit($context->locale);
@@ -216,10 +216,6 @@ class CartController extends CrudController
             );
         }
 
-        if (isset($payload['custom'])) {
-            $cart = $cartApi->setCustomField($cart, $payload["custom"]);
-        }
-
         if (!empty($payload['shipping']) || !empty($payload['billing'])) {
             $cart = $cartApi->setShippingAddress(
                 $cart,
@@ -233,6 +229,9 @@ class CartController extends CrudController
                 $context->locale
             );
         }
+
+        $cart->projectSpecificData = $this->parseProjectSpecificDataByKeys($payload, ['custom']);
+        $cart = $cartApi->setRawApiInput($cart, $context->locale);
 
         return ['cart' => $cartApi->commit($context->locale)];
     }

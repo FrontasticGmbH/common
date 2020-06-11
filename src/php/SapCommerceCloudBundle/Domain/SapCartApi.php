@@ -171,6 +171,11 @@ class SapCartApi implements CartApi
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
+    public function setRawApiInput(Cart $cart, string $locale = null): Cart
+    {
+        throw new \RuntimeException(__METHOD__ . ' not implemented');
+    }
+
     public function setShippingAddress(Cart $cart, Address $address, string $locale = null): Cart
     {
         list($userId, $sapCartId) = $this->splitCartId($cart->cartId);

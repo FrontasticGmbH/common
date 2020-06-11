@@ -114,7 +114,7 @@ class Mapper
      */
     public function mapDataToLineItems(array $cartData, CommercetoolsLocale $locale): array
     {
-        $lineItems = array_merge(
+        return array_merge(
             array_map(
                 function (array $lineItemData) use ($locale): LineItem {
                     list($price, $currency, $discountedPrice) = $this->productMapper->dataToPrice($lineItemData);
@@ -174,16 +174,6 @@ class Mapper
                 $cartData['customLineItems']
             )
         );
-
-        usort(
-            $lineItems,
-            function (LineItem $a, LineItem $b): int {
-                return ($a->custom['bundleNumber'] ?? $a->name) <=>
-                    ($b->custom['bundleNumber'] ?? $b->name);
-            }
-        );
-
-        return $lineItems;
     }
 
     public function mapDataToOrder(array $orderData, CommercetoolsLocale $locale): Order

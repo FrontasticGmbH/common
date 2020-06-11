@@ -43,7 +43,7 @@ abstract class BaseImplementation
 
     public function afterGetForUser(CartApi $cartApi, Cart $cart): ?Cart
     {
-        return null;
+        return $this->mapCustomFieldDataToCart($cart);
     }
 
     /*** getAnonymous() ***********************************************************************************************/
@@ -53,7 +53,7 @@ abstract class BaseImplementation
 
     public function afterGetAnonymous(CartApi $cartApi, Cart $cart): ?Cart
     {
-        return null;
+        return $this->mapCustomFieldDataToCart($cart);
     }
 
     /*** getById() ****************************************************************************************************/
@@ -63,7 +63,7 @@ abstract class BaseImplementation
 
     public function afterGetById(CartApi $cartApi, Cart $cart): ?Cart
     {
-        return null;
+        return $this->mapCustomFieldDataToCart($cart);
     }
 
     /*** addToCart() **************************************************************************************************/
@@ -73,7 +73,7 @@ abstract class BaseImplementation
 
     public function afterAddToCart(CartApi $cartApi, Cart $cart): ?Cart
     {
-        return null;
+        return $this->mapCustomFieldDataToCart($cart);
     }
 
     /*** updateLineItem() *********************************************************************************************/
@@ -89,7 +89,7 @@ abstract class BaseImplementation
 
     public function afterUpdateLineItem(CartApi $cartApi, Cart $cart): ?Cart
     {
-        return null;
+        return $this->mapCustomFieldDataToCart($cart);
     }
 
     /*** removeLineItem() *********************************************************************************************/
@@ -99,7 +99,7 @@ abstract class BaseImplementation
 
     public function afterRemoveLineItem(CartApi $cartApi, Cart $cart): ?Cart
     {
-        return null;
+        return $this->mapCustomFieldDataToCart($cart);
     }
 
     /*** setEmail() ***************************************************************************************************/
@@ -109,7 +109,7 @@ abstract class BaseImplementation
 
     public function afterSetEmail(CartApi $cartApi, Cart $cart): ?Cart
     {
-        return null;
+        return $this->mapCustomFieldDataToCart($cart);
     }
 
     /*** setShippingMethod() ******************************************************************************************/
@@ -123,7 +123,7 @@ abstract class BaseImplementation
 
     public function afterSetShippingMethod(CartApi $cartApi, Cart $cart): ?Cart
     {
-        return null;
+        return $this->mapCustomFieldDataToCart($cart);
     }
 
     /*** setCustomField() *********************************************************************************************/
@@ -133,7 +133,17 @@ abstract class BaseImplementation
 
     public function afterSetCustomField(CartApi $cartApi, Cart $cart): ?Cart
     {
-        return null;
+        return $this->mapCustomFieldDataToCart($cart);
+    }
+
+    /*** setRawApiInput() *********************************************************************************************/
+    public function beforeSetRawApiInput(CartApi $cartApi, Cart $cart, string $locale = null): void
+    {
+    }
+
+    public function afterSetRawApiInput(CartApi $cartApi, Cart $cart): ?Cart
+    {
+        return $this->mapCustomFieldDataToCart($cart);
     }
 
     /*** setShippingAddress() *****************************************************************************************/
@@ -147,7 +157,7 @@ abstract class BaseImplementation
 
     public function afterSetShippingAddress(CartApi $cartApi, Cart $cart): ?Cart
     {
-        return null;
+        return $this->mapCustomFieldDataToCart($cart);
     }
 
     /*** setBillingAddress() ******************************************************************************************/
@@ -157,7 +167,7 @@ abstract class BaseImplementation
 
     public function afterSetBillingAddress(CartApi $cartApi, Cart $cart): ?Cart
     {
-        return null;
+        return $this->mapCustomFieldDataToCart($cart);
     }
 
     /*** addPayment() *************************************************************************************************/
@@ -172,7 +182,7 @@ abstract class BaseImplementation
 
     public function afterAddPayment(CartApi $cartApi, Cart $cart): ?Cart
     {
-        return null;
+        return $this->mapCustomFieldDataToCart($cart);
     }
 
     /*** redeemDiscountCode() *****************************************************************************************/
@@ -182,7 +192,7 @@ abstract class BaseImplementation
 
     public function afterRedeemDiscountCode(CartApi $cartApi, Cart $cart): ?Cart
     {
-        return null;
+        return $this->mapCustomFieldDataToCart($cart);
     }
 
     /*** removeDiscountCode() *****************************************************************************************/
@@ -196,9 +206,8 @@ abstract class BaseImplementation
 
     public function afterRemoveDiscountCode(CartApi $cartApi, Cart $cart): ?Cart
     {
-        return null;
+        return $this->mapCustomFieldDataToCart($cart);
     }
-
 
     /*** order() ******************************************************************************************************/
     public function beforeOrder(CartApi $cartApi, Cart $cart, string $locale = null): void
@@ -207,7 +216,7 @@ abstract class BaseImplementation
 
     public function afterOrder(CartApi $cartApi, Order $order): ?Order
     {
-        return null;
+        return $this->mapCustomFieldDataToOrder($order);
     }
 
     /*** getOrder() ***************************************************************************************************/
@@ -215,9 +224,9 @@ abstract class BaseImplementation
     {
     }
 
-    public function afterGetOrder(CartApi $cartApi, Order $orderId): ?Order
+    public function afterGetOrder(CartApi $cartApi, Order $order): ?Order
     {
-        return null;
+        return $this->mapCustomFieldDataToOrder($order);
     }
 
     /*** getOrders() **************************************************************************************************/
@@ -232,7 +241,11 @@ abstract class BaseImplementation
      */
     public function afterGetOrders(CartApi $cartApi, array $orders): ?array
     {
-        return null;
+        foreach ($orders as &$order) {
+            $order = $this->mapCustomFieldDataToOrder($order);
+        }
+
+        return $orders;
     }
 
     /*** startTransaction() *******************************************************************************************/
@@ -248,6 +261,10 @@ abstract class BaseImplementation
 
     public function afterCommit(CartApi $cartApi, Cart $cart): ?Cart
     {
-        return null;
+        return $this->mapCustomFieldDataToCart($cart);
     }
+
+    abstract public function mapCustomFieldDataToCart(Cart $cart): ?Cart;
+
+    abstract public function mapCustomFieldDataToOrder(Order $order): ?Order;
 }

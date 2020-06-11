@@ -52,7 +52,10 @@ interface CartApi
 
     public function setShippingMethod(Cart $cart, string $shippingMethod, string $locale = null): Cart;
 
+    /** @deprecated  */
     public function setCustomField(Cart $cart, array $fields, string $locale = null): Cart;
+
+    public function setRawApiInput(Cart $cart, string $locale = null): Cart;
 
     public function setShippingAddress(Cart $cart, Address $address, string $locale = null): Cart;
 
