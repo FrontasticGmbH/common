@@ -48,22 +48,4 @@ abstract class CrudController extends Controller
 
         return $entity;
     }
-
-    protected function parseProjectSpecificDataByKeys(array $requestBody, array $keys): array
-    {
-        $projectSpecificData = $requestBody['projectSpecificData'] ?? [];
-
-        foreach ($keys as $key) {
-            if (!key_exists($key, $projectSpecificData) && key_exists($key, $requestBody)) {
-                $this->get('logger')
-                    ->warning(
-                        'This usage of the key "{key}" is deprecated, move it into "projectSpecificData" instead',
-                        ['key' => $key]
-                    );
-                $projectSpecificData[$key] = $requestBody[$key] ?? [];
-            }
-        }
-
-        return $projectSpecificData;
-    }
 }

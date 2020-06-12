@@ -59,7 +59,7 @@ class CartController extends CrudController
                 ]
             )
         );
-        $lineItemVariant->projectSpecificData = $this->parseProjectSpecificDataByKeys($payload, ['option']);
+        $lineItemVariant->projectSpecificData = $this->parseProjectSpecificDataByKey($payload, 'option');
 
         $cartApi->startTransaction($cart);
         $cartApi->addToCart($cart, $lineItemVariant, $context->locale);
@@ -105,7 +105,7 @@ class CartController extends CrudController
                     ]
                 )
             );
-            $lineItemVariant->projectSpecificData = $this->parseProjectSpecificDataByKeys($payload, ['option']);
+            $lineItemVariant->projectSpecificData = $this->parseProjectSpecificDataByKey($payload, 'option');
 
             $cartApi->addToCart($cart, $lineItemVariant, $context->locale);
         }
@@ -130,7 +130,7 @@ class CartController extends CrudController
 
         $cart = $this->getCart($context, $request);
         $lineItem = $this->getLineItem($cart, $payload['lineItemId']);
-        $lineItem->projectSpecificData = $this->parseProjectSpecificDataByKeys($payload, ['custom']);
+        $lineItem->projectSpecificData = $this->parseProjectSpecificDataByKey($payload, 'custom');
 
         $cartApi->startTransaction($cart);
         $cartApi->updateLineItem(
@@ -230,7 +230,7 @@ class CartController extends CrudController
             );
         }
 
-        $cart->projectSpecificData = $this->parseProjectSpecificDataByKeys($payload, ['custom']);
+        $cart->projectSpecificData = $this->parseProjectSpecificDataByKey($payload, 'custom');
         $cart = $cartApi->setRawApiInput($cart, $context->locale);
 
         return ['cart' => $cartApi->commit($context->locale)];
@@ -331,5 +331,21 @@ class CartController extends CrudController
         }
 
         return $body;
+    }
+
+    private function parseProjectSpecificDataByKey(array $requestBody, string $key): array
+    {
+        $projectSpecificData = $requestBody['projectSpecificData'] ?? [];
+
+        if (!key_exists($key, $projectSpecificData) && key_exists($key, $requestBody)) {
+            $this->get('logger')
+                ->warning(
+                    'This usage of the key "{key}" is deprecated, move it into "projectSpecificData" instead',
+                    ['key' => $key]
+                );
+            $projectSpecificData['custom'] = $requestBody[$key] ?? [];
+        }
+
+        return $projectSpecificData;
     }
 }
