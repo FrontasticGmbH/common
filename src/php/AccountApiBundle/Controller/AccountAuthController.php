@@ -8,16 +8,16 @@ use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\AccountService;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\AccountApiBundle\Domain\DuplicateAccountException;
+use Frontastic\Common\CoreBundle\Controller\CrudController;
 use Frontastic\Common\CoreBundle\Domain\ErrorResult;
 use QafooLabs\MVC\RedirectRoute;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class AccountAuthController extends Controller
+class AccountAuthController extends CrudController
 {
     public function indexAction(Request $request, UserInterface $account = null): JsonResponse
     {
@@ -179,23 +179,5 @@ class AccountAuthController extends Controller
                 'T12:00'
             ) :
             null;
-    }
-
-    private function parseProjectSpecificDataByKeys(array $requestBody, array $keys): array
-    {
-        $projectSpecificData = $requestBody['projectSpecificData'] ?? [];
-
-        foreach ($keys as $key) {
-            if (!key_exists($key, $projectSpecificData) && key_exists($key, $requestBody)) {
-                $projectSpecificData[$key] = $requestBody[$key];
-                $this->get('logger')
-                    ->warning(
-                        'This usage of the key "{key}" is deprecated, move it into "projectSpecificData" instead',
-                        ['key' => $key]
-                    );
-            }
-        }
-
-        return $projectSpecificData;
     }
 }

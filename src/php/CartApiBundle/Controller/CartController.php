@@ -332,22 +332,4 @@ class CartController extends CrudController
 
         return $body;
     }
-
-    private function parseProjectSpecificDataByKeys(array $requestBody, array $keys): array
-    {
-        $projectSpecificData = $requestBody['projectSpecificData'] ?? [];
-
-        foreach ($keys as $key) {
-            if (!key_exists($key, $projectSpecificData) && key_exists($key, $requestBody)) {
-                $projectSpecificData[$key] = $requestBody[$key];
-                $this->get('logger')
-                    ->warning(
-                        'This usage of the key "{key}" is deprecated, move it into "projectSpecificData" instead',
-                        ['key' => $key]
-                    );
-            }
-        }
-
-        return $projectSpecificData;
-    }
 }
