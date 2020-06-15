@@ -115,8 +115,8 @@ class AccountAuthController extends Controller
 
         $body = $this->getJsonBody($request);
 
-        $account = Account::updateWithProjectSpecificData(
-            $context->session->account,
+        $account = $context->session->account;
+        $account->updateWithProjectSpecificData(
             array_merge(
                 $body,
                 [

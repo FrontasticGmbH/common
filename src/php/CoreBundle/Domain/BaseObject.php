@@ -23,21 +23,19 @@ abstract class BaseObject extends DataObject
     /**
      * Updates instance of the class called on
      */
-    public static function updateWithProjectSpecificData(DataObject $dataObject, array $values): self
+    public function updateWithProjectSpecificData(array $values): self
     {
-        // @phpstan-ignore-next-line
-        $dataObject = new static(
-            array_merge(
-                (array)$dataObject,
-                $values
-            ),
-            true
-        );
-        $dataObject->rawApiInput = [];
-        //@TODO: un-comment the following line after refactor dangerousInner* to a common name
-        //$dataObject->rawApiOutput = null;
+        foreach ($this as $key => $value) {
+            if (key_exists($key, $values)) {
+                $this->{$key} = $values[$key];
+            }
+        }
 
-        return $dataObject;
+        $this->rawApiInput = [];
+        //@TODO: un-comment the following line after refactor dangerousInner* to a common name
+        //$this->rawApiOutput = null;
+
+        return $this;
     }
 
     /**
