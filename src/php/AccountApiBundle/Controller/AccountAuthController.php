@@ -113,17 +113,22 @@ class AccountAuthController extends Controller
     {
         $this->assertIsAuthenticated($context);
 
-        $account = $context->session->account;
-
         $body = $this->getJsonBody($request);
-        $account->salutation = $body['salutation'];
-        $account->firstName = $body['firstName'];
-        $account->lastName = $body['lastName'];
-        $account->birthday = $this->parseBirthday($body);
-        $account->data = [
-            'phonePrefix' => $body['phonePrefix'],
-            'phone' => $body['phone'],
-        ];
+
+        $account = Account::updateWithProjectSpecificData(
+            $context->session->account,
+            array_merge(
+                $body,
+                [
+                    'birthday' => $this->parseBirthday($body),
+                    'data' => [
+                        'phonePrefix' => $body['phonePrefix'] ?? null,
+                        'phone' => $body['phone'] ?? null,
+                    ]
+                ]
+            )
+        );
+
         $account = $this->getAccountService()->update($account, $context->locale);
 
         return new JsonResponse($account, 200);

@@ -21,6 +21,26 @@ abstract class BaseObject extends DataObject
     }
 
     /**
+     * Updates instance of the class called on
+     */
+    public static function updateWithProjectSpecificData(DataObject $dataObject, array $values): self
+    {
+        // @phpstan-ignore-next-line
+        $dataObject = new static(
+            array_merge(
+                (array)$dataObject,
+                $values
+            ),
+            true
+        );
+        $dataObject->rawApiInput = [];
+        //@TODO: un-comment the following line after refactor dangerousInner* to a common name
+        //$dataObject->rawApiOutput = null;
+
+        return $dataObject;
+    }
+
+    /**
      * Raw api data from client to backend.
      *
      * This property should not be filled by Frontastic itself, but if can be done only to allow backward compatibility.
