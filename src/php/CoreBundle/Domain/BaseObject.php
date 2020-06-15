@@ -12,7 +12,7 @@ abstract class BaseObject extends DataObject
     public static function newWithProjectSpecificData(array $values): self
     {
         // @phpstan-ignore-next-line
-        $dataObject = new static($values, false);
+        $dataObject = new static($values, true);
         $dataObject->rawApiInput = [];
         //@TODO: un-comment the following line after refactor dangerousInner* to a common name
         //$dataObject->rawApiOutput = null;
