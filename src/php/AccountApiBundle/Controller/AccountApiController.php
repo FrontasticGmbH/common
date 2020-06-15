@@ -35,9 +35,7 @@ class AccountApiController extends Controller
         $accountApi = $this->get(
             'Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory'
         )->factor($context->project);
-        $address = Address::newWithProjectSpecificData(
-            array_diff_key($this->getJsonBody($request), array_flip(['_type']))
-        );
+        $address = Address::newWithProjectSpecificData($this->getJsonBody($request));
         $account = $accountApi->updateAddress($context->session->account, $address);
 
         return new JsonResponse($account, 200);
@@ -52,9 +50,7 @@ class AccountApiController extends Controller
         $accountApi = $this->get(
             'Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory'
         )->factor($context->project);
-        $address = Address::newWithProjectSpecificData(
-            array_diff_key($this->getJsonBody($request), array_flip(['_type']))
-        );
+        $address = Address::newWithProjectSpecificData($this->getJsonBody($request));
         $accountApi->removeAddress($context->session->account, $address->addressId);
 
         return new JsonResponse([], 200);
@@ -69,9 +65,7 @@ class AccountApiController extends Controller
         $accountApi = $this->get(
             'Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory'
         )->factor($context->project);
-        $address = Address::newWithProjectSpecificData(
-            array_diff_key($this->getJsonBody($request), array_flip(['_type']))
-        );
+        $address = Address::newWithProjectSpecificData($this->getJsonBody($request));
         $account = $accountApi->setDefaultBillingAddress($context->session->account, $address->addressId);
 
         return new JsonResponse($account, 200);
@@ -86,9 +80,7 @@ class AccountApiController extends Controller
         $accountApi = $this->get(
             'Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory'
         )->factor($context->project);
-        $address = Address::newWithProjectSpecificData(
-            array_diff_key($this->getJsonBody($request), array_flip(['_type']))
-        );
+        $address = Address::newWithProjectSpecificData($this->getJsonBody($request));
         $account = $accountApi->setDefaultShippingAddress($context->session->account, $address->addressId);
 
         return new JsonResponse($account, 200);
