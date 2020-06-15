@@ -32,14 +32,14 @@ class AccountAuthController extends Controller
 
         $account = Account::newWithProjectSpecificData(
             array_merge(
+                $body,
                 [
                     'birthday' => $this->parseBirthday($body),
                     'data' => [
                         'phonePrefix' => $body['phonePrefix'] ?? null,
                         'phone' => $body['phone'] ?? null,
                     ]
-                ],
-                $body
+                ]
             )
         );
 

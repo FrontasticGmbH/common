@@ -48,6 +48,7 @@ class CartController extends CrudController
 
         $lineItemVariant = LineItem\Variant::newWithProjectSpecificData(
             array_merge(
+                $payload,
                 [
                     'variant' => new Variant([
                         'id' => $payload['variant']['id'] ?? null,
@@ -56,8 +57,7 @@ class CartController extends CrudController
                     ]),
                     'custom' => $payload['option'] ?? [],
                     'count' => $payload['count'] ?? 1,
-                ],
-                $payload
+                ]
             )
         );
 
@@ -94,6 +94,7 @@ class CartController extends CrudController
         foreach (($payload['lineItems'] ?? []) as $lineItemData) {
             $lineItemVariant = LineItem\Variant::newWithProjectSpecificData(
                 array_merge(
+                    $lineItemData,
                     [
                         'variant' => new Variant([
                             'id' => $lineItemData['variant']['id'] ?? null,
@@ -102,8 +103,7 @@ class CartController extends CrudController
                         ]),
                         'custom' => $lineItemData['option'] ?? [],
                         'count' => $lineItemData['count'] ?? 1,
-                    ],
-                    $lineItemData
+                    ]
                 )
             );
 
