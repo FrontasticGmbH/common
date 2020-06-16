@@ -4,7 +4,7 @@ namespace Frontastic\Common\CoreBundle\Domain;
 
 use Kore\DataObject\DataObject;
 
-abstract class BaseObject extends DataObject
+abstract class ApiDataObject extends DataObject
 {
     /**
      * Creates a new instance of the class called on

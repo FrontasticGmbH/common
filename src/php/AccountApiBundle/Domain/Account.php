@@ -2,11 +2,11 @@
 
 namespace Frontastic\Common\AccountApiBundle\Domain;
 
-use Frontastic\Common\CoreBundle\Domain\BaseObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\Collection;
 
-class Account extends BaseObject implements UserInterface, \Serializable
+class Account extends ApiDataObject implements UserInterface, \Serializable
 {
     /**
      * @var string

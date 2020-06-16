@@ -2,9 +2,9 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain;
 
-use Frontastic\Common\CoreBundle\Domain\BaseObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 
-class Cart extends BaseObject
+class Cart extends ApiDataObject
 {
     /**
      * @var string

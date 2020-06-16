@@ -2,9 +2,9 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain;
 
-use Frontastic\Common\CoreBundle\Domain\BaseObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 
-class Payment extends BaseObject
+class Payment extends ApiDataObject
 {
     public const PAYMENT_STATUS_INIT = 'init';
     public const PAYMENT_STATUS_PENDING = 'pending';

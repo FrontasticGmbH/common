@@ -2,9 +2,9 @@
 
 namespace Frontastic\Common\AccountApiBundle\Domain;
 
-use Frontastic\Common\CoreBundle\Domain\BaseObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 
-class Address extends BaseObject
+class Address extends ApiDataObject
 {
     /**
      * @var string
