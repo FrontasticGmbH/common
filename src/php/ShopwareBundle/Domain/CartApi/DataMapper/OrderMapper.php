@@ -5,7 +5,6 @@ namespace Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper;
 use DateTimeImmutable;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Order;
-use Frontastic\Common\CoreBundle\Domain\BaseObject;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\AddressMapper;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperInterface;
