@@ -231,5 +231,8 @@ abstract class BaseImplementation
         return $this->mapCustomFieldDataToAccount($account);
     }
 
-    abstract public function mapCustomFieldDataToAccount(Account $account): ?Account;
+    public function mapCustomFieldDataToAccount(Account $account): ?Account
+    {
+        return null;
+    }
 }

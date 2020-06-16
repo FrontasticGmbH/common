@@ -264,7 +264,13 @@ abstract class BaseImplementation
         return $this->mapCustomFieldDataToCart($cart);
     }
 
-    abstract public function mapCustomFieldDataToCart(Cart $cart): ?Cart;
+    public function mapCustomFieldDataToCart(Cart $cart): ?Cart
+    {
+        return null;
+    }
 
-    abstract public function mapCustomFieldDataToOrder(Order $order): ?Order;
+    public function mapCustomFieldDataToOrder(Order $order): ?Order
+    {
+        return null;
+    }
 }
