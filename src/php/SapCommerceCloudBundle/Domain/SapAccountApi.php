@@ -44,13 +44,16 @@ class SapAccountApi implements AccountApi
         return $this->client
             ->post(
                 '/rest/v2/{siteId}/users',
-                [
-                    'uid' => $account->email,
-                    'titleCode' => 'mrs',
-                    'firstName' => $account->firstName,
-                    'lastName' => $account->lastName,
-                    'password' => $account->getPassword(),
-                ],
+                array_merge(
+                    $account->rawApiInput,
+                    [
+                        'uid' => $account->email,
+                        'titleCode' => 'mrs',
+                        'firstName' => $account->firstName,
+                        'lastName' => $account->lastName,
+                        'password' => $account->getPassword(),
+                    ]
+                ),
                 [
                     'fields' => 'FULL',
                 ]
