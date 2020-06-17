@@ -51,7 +51,7 @@ abstract class BaseImplementation
 
     public function afterConfirmEmail(AccountApi $accountApi, Account $account): ?Account
     {
-        return $this->mapCustomFieldDataToAccount($account);
+        return $this->mapReturnedAccount($account);
     }
 
     /*** create() *****************************************************************************************************/
@@ -65,7 +65,7 @@ abstract class BaseImplementation
 
     public function afterCreate(AccountApi $accountApi, Account $account): ?Account
     {
-        return $this->mapCustomFieldDataToAccount($account);
+        return $this->mapReturnedAccount($account);
     }
 
     /*** update() *****************************************************************************************************/
@@ -75,7 +75,7 @@ abstract class BaseImplementation
 
     public function afterUpdate(AccountApi $accountApi, Account $account): ?Account
     {
-        return $this->mapCustomFieldDataToAccount($account);
+        return $this->mapReturnedAccount($account);
     }
 
     /*** updatePassword() *********************************************************************************************/
@@ -90,7 +90,7 @@ abstract class BaseImplementation
 
     public function afterUpdatePassword(AccountApi $accountApi, Account $account): ?Account
     {
-        return $this->mapCustomFieldDataToAccount($account);
+        return $this->mapReturnedAccount($account);
     }
 
     /*** generatePasswordResetToken() *********************************************************************************/
@@ -116,7 +116,7 @@ abstract class BaseImplementation
 
     public function afterResetPassword(AccountApi $accountApi, Account $account): ?Account
     {
-        return $this->mapCustomFieldDataToAccount($account);
+        return $this->mapReturnedAccount($account);
     }
 
     /*** login() ******************************************************************************************************/
@@ -133,7 +133,7 @@ abstract class BaseImplementation
         if (!isset($account)) {
             return null;
         }
-        return $this->mapCustomFieldDataToAccount($account);
+        return $this->mapReturnedAccount($account);
     }
 
     /*** refreshAccount() *********************************************************************************************/
@@ -143,7 +143,7 @@ abstract class BaseImplementation
 
     public function afterRefreshAccount(AccountApi $accountApi, Account $account): ?Account
     {
-        return $this->mapCustomFieldDataToAccount($account);
+        return $this->mapReturnedAccount($account);
     }
 
     /*** getAddresses() ***********************************************************************************************/
@@ -172,7 +172,7 @@ abstract class BaseImplementation
 
     public function afterAddAddress(AccountApi $accountApi, Account $account): ?Account
     {
-        return $this->mapCustomFieldDataToAccount($account);
+        return $this->mapReturnedAccount($account);
     }
 
     /*** updateAddress() **********************************************************************************************/
@@ -186,7 +186,7 @@ abstract class BaseImplementation
 
     public function afterUpdateAddress(AccountApi $accountApi, Account $account): ?Account
     {
-        return $this->mapCustomFieldDataToAccount($account);
+        return $this->mapReturnedAccount($account);
     }
 
     /*** removeAddress() **********************************************************************************************/
@@ -200,7 +200,7 @@ abstract class BaseImplementation
 
     public function afterRemoveAddress(AccountApi $accountApi, Account $account): ?Account
     {
-        return $this->mapCustomFieldDataToAccount($account);
+        return $this->mapReturnedAccount($account);
     }
 
     /*** setDefaultBillingAddress() ***********************************************************************************/
@@ -214,7 +214,7 @@ abstract class BaseImplementation
 
     public function afterSetDefaultBillingAddress(AccountApi $accountApi, Account $account): ?Account
     {
-        return $this->mapCustomFieldDataToAccount($account);
+        return $this->mapReturnedAccount($account);
     }
 
     /*** setDefaultShippingAddress() **********************************************************************************/
@@ -228,10 +228,10 @@ abstract class BaseImplementation
 
     public function afterSetDefaultShippingAddress(AccountApi $accountApi, Account $account): ?Account
     {
-        return $this->mapCustomFieldDataToAccount($account);
+        return $this->mapReturnedAccount($account);
     }
 
-    public function mapCustomFieldDataToAccount(Account $account): ?Account
+    public function mapReturnedAccount(Account $account): ?Account
     {
         return null;
     }
