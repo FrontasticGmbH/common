@@ -303,6 +303,14 @@ class Commercetools implements CartApi
                         'action' => 'addLineItem',
                         'sku' => $lineItem->variant->sku,
                         'quantity' => $lineItem->count,
+                        /** @TODO: To guarantee BC only!
+                         * This data should be mapped on the corresponding EventDecorator
+                         * Remove the commented lines below if the data is already handle in MapCartDataDecorator
+                         */
+//                        'custom' => !$lineItem->custom ? null : [
+//                            'type' => $this->getCustomLineItemType(),
+//                            'fields' => $lineItem->custom,
+//                        ],
                     ]
                 ),
             ],
@@ -329,6 +337,14 @@ class Commercetools implements CartApi
                             'currencyCode' => $locale->currency,
                             'centAmount' => $lineItem->totalPrice,
                         ],
+                        /** @TODO: To guarantee BC only!
+                         * This data should be mapped on the corresponding EventDecorator
+                         * Remove the commented lines below if the data is already handle in MapCartDataDecorator
+                         */
+//                        'custom' => !$lineItem->custom ? null : [
+//                            'type' => $this->getCustomLineItemType(),
+//                            'fields' => $lineItem->custom,
+//                        ],
                         'quantity' => $lineItem->count,
                     ]
                 ),

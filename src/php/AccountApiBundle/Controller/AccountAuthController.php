@@ -35,6 +35,14 @@ class AccountAuthController extends Controller
                 $body,
                 [
                     'birthday' => $this->parseBirthday($body)
+                    /** @TODO: To guarantee BC only!
+                     * This data should be mapped on the corresponding EventDecorator
+                     * Remove the commented lines below if the data is already handle in MapAccountDataDecorator
+                     */
+//                    'data' => [
+//                        'phonePrefix' => $body['phonePrefix'] ?? null,
+//                        'phone' => $body['phone'] ?? null,
+//                    ],
                 ]
             )
         );
@@ -118,10 +126,14 @@ class AccountAuthController extends Controller
                 $body,
                 [
                     'birthday' => $this->parseBirthday($body),
-                    'data' => [
-                        'phonePrefix' => $body['phonePrefix'] ?? null,
-                        'phone' => $body['phone'] ?? null,
-                    ]
+                    /** @TODO: To guarantee BC only!
+                     * This data should be mapped on the corresponding EventDecorator
+                     * Remove the commented lines below if the data is already handle in MapAccountDataDecorator
+                     */
+//                    'data' => [
+//                        'phonePrefix' => $body['phonePrefix'] ?? null,
+//                        'phone' => $body['phone'] ?? null,
+//                    ]
                 ]
             )
         );

@@ -83,6 +83,16 @@ class Commercetools implements AccountApi
                             'dateOfBirth' => $account->birthday ? $account->birthday->format('Y-m-d') : null,
                             'password' => $this->sanitizePassword($account->getPassword()),
                             'isEmailVerified' => $account->confirmed,
+                            /** @TODO: To guarantee BC only!
+                             * This data should be mapped on the corresponding EventDecorator
+                             * Remove the commented lines below if the data is already handle in MapAccountDataDecorator
+                             */
+//                            'custom' => [
+//                                'type' => $this->getCustomerType(),
+//                                'fields' => [
+//                                    'data' => json_encode($account->data),
+//                                ],
+//                            ],
                             'anonymousCartId' => $cart ? $cart->cartId : null,
                         ]
                     )
@@ -151,6 +161,15 @@ class Commercetools implements AccountApi
                             'action' => 'setDateOfBirth',
                             'dateOfBirth' => $account->birthday->format('Y-m-d'),
                         ],
+                        /** @TODO: To guarantee BC only!
+                         * This data should be mapped on the corresponding EventDecorator
+                         * Remove the commented lines below if the data is already handle in MapAccountDataDecorator
+                         */
+//                        [
+//                            'action' => 'setCustomField',
+//                            'name' => 'data',
+//                            'value' => json_encode($account->data),
+//                        ],
                     ]
                 ),
             ])
@@ -419,6 +438,11 @@ class Commercetools implements AccountApi
             'birthday' => isset($accountData['dateOfBirth']) ?
                 new \DateTimeImmutable($accountData['dateOfBirth']) :
                 null,
+            /** @TODO: To guarantee BC only!
+             * This data should be mapped on the corresponding EventDecorator
+             * Remove the commented lines below if the data is already handle in MapAccountDataDecorator
+             */
+//            'data' => json_decode($account['custom']['fields']['data'] ?? '{}'),
             // Do NOT map the password back
             'confirmed' => $accountData['isEmailVerified'],
             'addresses' => $this->mapAddresses($accountData),
