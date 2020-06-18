@@ -307,10 +307,10 @@ class Commercetools implements CartApi
                          * This data should be mapped on the corresponding EventDecorator
                          * Remove the commented lines below if the data is already handle in MapCartDataDecorator
                          */
-//                        'custom' => !$lineItem->custom ? null : [
-//                            'type' => $this->getCustomLineItemType(),
-//                            'fields' => $lineItem->custom,
-//                        ],
+                        // 'custom' => !$lineItem->custom ? null : [
+                            // 'type' => $this->getCustomLineItemType(),
+                            // 'fields' => $lineItem->custom,
+                        // ],
                     ]
                 ),
             ],
@@ -341,10 +341,10 @@ class Commercetools implements CartApi
                          * This data should be mapped on the corresponding EventDecorator
                          * Remove the commented lines below if the data is already handle in MapCartDataDecorator
                          */
-//                        'custom' => !$lineItem->custom ? null : [
-//                            'type' => $this->getCustomLineItemType(),
-//                            'fields' => $lineItem->custom,
-//                        ],
+                        // 'custom' => !$lineItem->custom ? null : [
+                            // 'type' => $this->getCustomLineItemType(),
+                            // 'fields' => $lineItem->custom,
+                        // ],
                         'quantity' => $lineItem->count,
                     ]
                 ),

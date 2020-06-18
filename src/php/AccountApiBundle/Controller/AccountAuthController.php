@@ -39,10 +39,10 @@ class AccountAuthController extends Controller
                      * This data should be mapped on the corresponding EventDecorator
                      * Remove the commented lines below if the data is already handle in MapAccountDataDecorator
                      */
-//                    'data' => [
-//                        'phonePrefix' => $body['phonePrefix'] ?? null,
-//                        'phone' => $body['phone'] ?? null,
-//                    ],
+                    // 'data' => [
+                       // 'phonePrefix' => $body['phonePrefix'] ?? null,
+                       // 'phone' => $body['phone'] ?? null,
+                    // ],
                 ]
             )
         );
@@ -130,10 +130,10 @@ class AccountAuthController extends Controller
                      * This data should be mapped on the corresponding EventDecorator
                      * Remove the commented lines below if the data is already handle in MapAccountDataDecorator
                      */
-//                    'data' => [
-//                        'phonePrefix' => $body['phonePrefix'] ?? null,
-//                        'phone' => $body['phone'] ?? null,
-//                    ]
+                    // 'data' => [
+                       // 'phonePrefix' => $body['phonePrefix'] ?? null,
+                       // 'phone' => $body['phone'] ?? null,
+                    // ]
                 ]
             )
         );
