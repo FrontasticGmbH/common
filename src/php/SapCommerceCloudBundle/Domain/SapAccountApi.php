@@ -55,6 +55,17 @@ class SapAccountApi implements AccountApi
                     'fields' => 'FULL',
                 ]
             )
+            ->then(function (array $accountData) use ($account, $locale) {
+                return $this->client
+                    ->get('/rest/v2/{siteId}/users/' . $account->email)
+                    ->then(function (array $fetchedAccountData) use ($account, $accountData): array {
+                        if ($fetchedAccountData['customerId'] !== $accountData['customerId']) {
+                            throw new DuplicateAccountException($account->email);
+                        }
+
+                        return $accountData;
+                    });
+            })
             ->then(function (array $accountData): Account {
                 return $this->dataMapper->mapDataToAccount($accountData);
             })
