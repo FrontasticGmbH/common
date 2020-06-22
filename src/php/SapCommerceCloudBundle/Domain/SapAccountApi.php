@@ -55,7 +55,7 @@ class SapAccountApi implements AccountApi
                     'fields' => 'FULL',
                 ]
             )
-            ->then(function (array $accountData) use ($account, $locale) {
+            ->then(function (array $accountData) use ($account) {
                 return $this->client
                     ->get('/rest/v2/{siteId}/users/' . $account->email)
                     ->then(function (array $fetchedAccountData) use ($account, $accountData): array {
