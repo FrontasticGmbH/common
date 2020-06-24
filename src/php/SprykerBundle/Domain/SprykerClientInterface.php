@@ -2,7 +2,7 @@
 
 namespace Frontastic\Common\SprykerBundle\Domain;
 
-interface ClientInterface
+interface SprykerClientInterface
 {
     public const MODE_SYNC = 'sync';
     public const MODE_ASYNC = 'async';
