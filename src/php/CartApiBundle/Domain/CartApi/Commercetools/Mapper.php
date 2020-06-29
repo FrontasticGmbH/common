@@ -70,12 +70,8 @@ class Mapper
         return new Cart([
             'cartId' => $cartData['id'],
             'cartVersion' => (string)$cartData['version'],
-            'custom' => $cartData['custom']['fields'] ?? [],
             'lineItems' => $this->mapDataToLineItems($cartData, $locale),
             'email' => $cartData['customerEmail'] ?? null,
-            'birthday' => isset($cartData['custom']['fields']['birthday']) ?
-                new \DateTimeImmutable($cartData['custom']['fields']['birthday']) :
-                null,
             'shippingMethod' => $this->mapDataToShippingMethod($cartData['shippingInfo'] ?? []),
             'shippingAddress' => $this->mapDataToAddress($cartData['shippingAddress'] ?? []),
             'billingAddress' => $this->mapDataToAddress($cartData['billingAddress'] ?? []),
@@ -118,79 +114,66 @@ class Mapper
      */
     public function mapDataToLineItems(array $cartData, CommercetoolsLocale $locale): array
     {
-        $lineItems = array_merge(
+        return array_merge(
             array_map(
-                function (array $lineItem) use ($locale): LineItem {
-                    list($price, $currency, $discountedPrice) = $this->productMapper->dataToPrice($lineItem);
+                function (array $lineItemData) use ($locale): LineItem {
+                    list($price, $currency, $discountedPrice) = $this->productMapper->dataToPrice($lineItemData);
                     return new LineItem\Variant([
-                        'lineItemId' => $lineItem['id'],
-                        'name' => $this->productMapper->getLocalizedValue($locale, $lineItem['name']),
+                        'lineItemId' => $lineItemData['id'],
+                        'name' => $this->productMapper->getLocalizedValue($locale, $lineItemData['name']),
                         'type' => 'variant',
                         'variant' => $this->productMapper->dataToVariant(
-                            $lineItem['variant'],
+                            $lineItemData['variant'],
                             new Query(),
                             $locale
                         ),
-                        'custom' => $lineItem['custom']['fields'] ?? [],
-                        'count' => $lineItem['quantity'],
+                        'count' => $lineItemData['quantity'],
                         'price' => $price,
                         'discountedPrice' => $discountedPrice,
                         'discountTexts' => array_map(
                             function ($discount): array {
                                 return $discount['discount']['obj']['name'] ?? [];
                             },
-                            (isset($lineItem['discountedPrice']['includedDiscounts'])
-                                ? $lineItem['discountedPrice']['includedDiscounts']
+                            (isset($lineItemData['discountedPrice']['includedDiscounts'])
+                                ? $lineItemData['discountedPrice']['includedDiscounts']
                                 : []
                             )
                         ),
-                        'totalPrice' => $lineItem['totalPrice']['centAmount'],
+                        'totalPrice' => $lineItemData['totalPrice']['centAmount'],
                         'currency' => $currency,
-                        'isGift' => ($lineItem['lineItemMode'] === 'GiftLineItem'),
-                        'dangerousInnerItem' => $lineItem,
+                        'isGift' => ($lineItemData['lineItemMode'] === 'GiftLineItem'),
+                        'dangerousInnerItem' => $lineItemData,
                     ]);
                 },
                 $cartData['lineItems']
             ),
             array_map(
-                function (array $lineItem) use ($locale): LineItem {
+                function (array $lineItemData) use ($locale): LineItem {
                     return new LineItem([
-                        'lineItemId' => $lineItem['id'],
-                        'name' => $this->productMapper->getLocalizedValue($locale, $lineItem['name']),
-                        'type' => $lineItem['custom']['type'] ?? $lineItem['slug'],
-                        'custom' => $lineItem['custom']['fields'] ?? [],
-                        'count' => $lineItem['quantity'],
-                        'price' => $lineItem['money']['centAmount'],
-                        'discountedPrice' => (isset($lineItem['discountedPrice'])
-                            ? $lineItem['totalPrice']['centAmount']
+                        'lineItemId' => $lineItemData['id'],
+                        'name' => $this->productMapper->getLocalizedValue($locale, $lineItemData['name']),
+                        'count' => $lineItemData['quantity'],
+                        'price' => $lineItemData['money']['centAmount'],
+                        'discountedPrice' => (isset($lineItemData['discountedPrice'])
+                            ? $lineItemData['totalPrice']['centAmount']
                             : null
                         ),
                         'discountTexts' => array_map(
                             function ($discount): array {
                                 return $discount['discount']['obj']['name'] ?? [];
                             },
-                            (isset($lineItem['discountedPrice']['includedDiscounts'])
-                                ? $lineItem['discountedPrice']['includedDiscounts']
+                            (isset($lineItemData['discountedPrice']['includedDiscounts'])
+                                ? $lineItemData['discountedPrice']['includedDiscounts']
                                 : []
                             )
                         ),
-                        'totalPrice' => $lineItem['totalPrice']['centAmount'],
-                        'dangerousInnerItem' => $lineItem,
+                        'totalPrice' => $lineItemData['totalPrice']['centAmount'],
+                        'dangerousInnerItem' => $lineItemData,
                     ]);
                 },
                 $cartData['customLineItems']
             )
         );
-
-        usort(
-            $lineItems,
-            function (LineItem $a, LineItem $b): int {
-                return ($a->custom['bundleNumber'] ?? $a->name) <=>
-                    ($b->custom['bundleNumber'] ?? $b->name);
-            }
-        );
-
-        return $lineItems;
     }
 
     public function mapDataToOrder(array $orderData, CommercetoolsLocale $locale): Order
@@ -207,16 +190,12 @@ class Mapper
          */
         return new Order([
             'cartId' => $orderData['id'],
-            'custom' => $orderData['custom']['fields'] ?? [],
             'orderState' => $orderData['orderState'],
             'createdAt' => new \DateTimeImmutable($orderData['createdAt']),
             'orderId' => $orderData['orderNumber'],
             'orderVersion' => $orderData['version'],
             'lineItems' => $this->mapDataToLineItems($orderData, $locale),
             'email' => $orderData['customerEmail'] ?? null,
-            'birthday' => isset($orderData['custom']['fields']['birthday']) ?
-                new \DateTimeImmutable($orderData['custom']['fields']['birthday']) :
-                null,
             'shippingMethod' => $this->mapDataToShippingMethod($orderData['shippingInfo'] ?? []),
             'shippingAddress' => $this->mapDataToAddress($orderData['shippingAddress'] ?? []),
             'billingAddress' => $this->mapDataToAddress($orderData['billingAddress'] ?? []),
@@ -258,6 +237,29 @@ class Mapper
                 'debug' => json_encode($paymentData),
                 'paymentStatus' => $paymentData['paymentStatus']['interfaceCode'] ?? null,
                 'version' => $paymentData['version'] ?? 0,
+            ]
+        );
+    }
+
+    public function mapPaymentToData(Payment $payment): array
+    {
+        return array_merge(
+            $payment->rawApiInput,
+            [
+                'key' => $payment->id,
+                'amountPlanned' => [
+                    'centAmount' => $payment->amount,
+                    'currencyCode' => $payment->currency,
+                ],
+                'interfaceId' => $payment->paymentId,
+                'paymentMethodInfo' => [
+                    'paymentInterface' => $payment->paymentProvider,
+                    'method' => $payment->paymentMethod,
+                ],
+                'paymentStatus' => [
+                    'interfaceCode' => $payment->paymentStatus,
+                    'interfaceText' => $payment->debug,
+                ],
             ]
         );
     }

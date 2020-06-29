@@ -34,15 +34,20 @@ class AccountAuthController extends Controller
             array_merge(
                 $body,
                 [
-                    'birthday' => $this->parseBirthday($body),
-                    'data' => [
-                        'phonePrefix' => $body['phonePrefix'] ?? null,
-                        'phone' => $body['phone'] ?? null,
-                    ]
+                    'birthday' => $this->parseBirthday($body)
+                    /** @TODO: To guarantee BC only!
+                     * This data should be mapped on the corresponding EventDecorator
+                     * Remove the commented lines below if the data is already handle in MapAccountDataDecorator
+                     */
+                    // 'data' => [
+                       // 'phonePrefix' => $body['phonePrefix'] ?? null,
+                       // 'phone' => $body['phone'] ?? null,
+                    // ],
                 ]
             )
         );
 
+        $account->projectSpecificData = $this->parseProjectSpecificDataByKeys($body, ['phonePrefix', 'phone']);
         $account->setPassword($body['password']);
 
         if (isset($body['billingAddress'])) {
@@ -121,10 +126,14 @@ class AccountAuthController extends Controller
                 $body,
                 [
                     'birthday' => $this->parseBirthday($body),
-                    'data' => [
-                        'phonePrefix' => $body['phonePrefix'] ?? null,
-                        'phone' => $body['phone'] ?? null,
-                    ]
+                    /** @TODO: To guarantee BC only!
+                     * This data should be mapped on the corresponding EventDecorator
+                     * Remove the commented lines below if the data is already handle in MapAccountDataDecorator
+                     */
+                    // 'data' => [
+                       // 'phonePrefix' => $body['phonePrefix'] ?? null,
+                       // 'phone' => $body['phone'] ?? null,
+                    // ]
                 ]
             )
         );
@@ -182,5 +191,23 @@ class AccountAuthController extends Controller
                 'T12:00'
             ) :
             null;
+    }
+
+    private function parseProjectSpecificDataByKeys(array $requestBody, array $keys): array
+    {
+        $projectSpecificData = $requestBody['projectSpecificData'] ?? [];
+
+        foreach ($keys as $key) {
+            if (!key_exists($key, $projectSpecificData) && key_exists($key, $requestBody)) {
+                $this->get('logger')
+                    ->warning(
+                        'This usage of the key "{key}" is deprecated, move it into "projectSpecificData" instead',
+                        ['key' => $key]
+                    );
+                $projectSpecificData['custom'][$key] = $requestBody[$key] ?? [];
+            }
+        }
+
+        return $projectSpecificData;
     }
 }

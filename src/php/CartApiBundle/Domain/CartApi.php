@@ -52,7 +52,18 @@ interface CartApi
 
     public function setShippingMethod(Cart $cart, string $shippingMethod, string $locale = null): Cart;
 
+    /** @deprecated Use and implement the setRawApiInput method. This method only exists for backwards compatibility. */
     public function setCustomField(Cart $cart, array $fields, string $locale = null): Cart;
+
+    /**
+     * The aim of this method is to ensure the backward compatibility with
+     * the deprecation of setCustomField and support all the existing
+     * event decorators already implemented.
+     *
+     * This method should be used along with the event decorator beforeSetRawApiInput
+     * where you could inject any required data into Cart.rawApiInput.
+     */
+    public function setRawApiInput(Cart $cart, string $locale = null): Cart;
 
     public function setShippingAddress(Cart $cart, Address $address, string $locale = null): Cart;
 

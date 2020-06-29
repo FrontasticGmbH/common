@@ -17,7 +17,6 @@ use Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper\OrdersMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
-use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
@@ -206,6 +205,12 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
     }
 
     public function setCustomField(Cart $cart, array $fields, string $locale = null): Cart
+    {
+        // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
+        throw new RuntimeException(__METHOD__ . ' not implemented');
+    }
+
+    public function setRawApiInput(Cart $cart, string $locale = null): Cart
     {
         // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
         throw new RuntimeException(__METHOD__ . ' not implemented');

@@ -46,9 +46,8 @@ class OrderMapper extends AbstractDataMapper implements
     {
         $orderData = $this->extractData($resource);
 
-        return new Order([
+        $order = new Order([
             'cartId' => $orderData['id'],
-            'custom' => $orderData['customFields'],
             'currency' => $this->resolveCurrencyCode($orderData['currencyId']),
             'orderState' => $orderData['stateMachineState']['technicalName'],
             'createdAt' => new DateTimeImmutable($orderData['orderDateTime']),
@@ -67,6 +66,11 @@ class OrderMapper extends AbstractDataMapper implements
 //            'discountCodes' => $this->mapDiscounts($order),
             'dangerousInnerOrder' => $orderData,
         ]);
+
+        //@TODO: Should we handle this data here or delegate it to the client?
+        $order->projectSpecificData = $orderData['customFields'];
+
+        return $order;
     }
 
     private function getAddressMapper(): AddressMapper

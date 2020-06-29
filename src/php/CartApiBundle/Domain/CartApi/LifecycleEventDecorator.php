@@ -118,6 +118,11 @@ class LifecycleEventDecorator implements CartApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
+    public function setRawApiInput(Cart $cart, string $locale = null): Cart
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
     public function setShippingAddress(Cart $cart, Address $address, string $locale = null): Cart
     {
         return $this->dispatch(__FUNCTION__, func_get_args());

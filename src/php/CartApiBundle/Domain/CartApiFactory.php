@@ -16,6 +16,7 @@ use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFacto
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory as ShopwareLocaleCreatorFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Factory
@@ -35,6 +36,11 @@ class CartApiFactory
     private $orderIdGenerator;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @var iterable
      */
     private $decorators = [];
@@ -42,11 +48,13 @@ class CartApiFactory
     public function __construct(
         FactoryServiceLocator $factoryServiceLocator,
         OrderIdGenerator $orderIdGenerator,
-        iterable $decorators
+        iterable $decorators,
+        LoggerInterface $logger
     ) {
         $this->factoryServiceLocator = $factoryServiceLocator;
         $this->orderIdGenerator = $orderIdGenerator;
         $this->decorators = $decorators;
+        $this->logger = $logger;
     }
 
     public function factor(Project $project): CartApi
@@ -63,7 +71,8 @@ class CartApiFactory
                     $client,
                     $this->factoryServiceLocator->get(CommercetoolsCartMapper::class),
                     $localeCreatorFactory->factor($project, $client),
-                    $this->orderIdGenerator
+                    $this->orderIdGenerator,
+                    $this->logger
                 );
                 break;
 

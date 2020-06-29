@@ -83,12 +83,16 @@ class Commercetools implements AccountApi
                             'dateOfBirth' => $account->birthday ? $account->birthday->format('Y-m-d') : null,
                             'password' => $this->sanitizePassword($account->getPassword()),
                             'isEmailVerified' => $account->confirmed,
-                            'custom' => [
-                                'type' => $this->getCustomerType(),
-                                'fields' => [
-                                    'data' => json_encode($account->data),
-                                ],
-                            ],
+                            /** @TODO: To guarantee BC only!
+                             * This data should be mapped on the corresponding EventDecorator
+                             * Remove the commented lines below if the data is already handle in MapAccountDataDecorator
+                             */
+                            // 'custom' => [
+                                // 'type' => $this->getCustomerType(),
+                                // 'fields' => [
+                                   // 'data' => json_encode($account->data),
+                                // ],
+                            // ],
                             'anonymousCartId' => $cart ? $cart->cartId : null,
                         ]
                     )
@@ -138,29 +142,36 @@ class Commercetools implements AccountApi
             [],
             json_encode([
                 'version' => $accountVersion['version'],
-                'actions' => [
+                'actions' => array_merge(
+                    (array)$account->rawApiInput,
                     [
-                        'action' => 'setFirstName',
-                        'firstName' => $account->firstName,
-                    ],
-                    [
-                        'action' => 'setLastName',
-                        'lastName' => $account->lastName,
-                    ],
-                    [
-                        'action' => 'setSalutation',
-                        'salutation' => $account->salutation,
-                    ],
-                    [
-                        'action' => 'setDateOfBirth',
-                        'dateOfBirth' => $account->birthday->format('Y-m-d'),
-                    ],
-                    [
-                        'action' => 'setCustomField',
-                        'name' => 'data',
-                        'value' => json_encode($account->data),
-                    ],
-                ],
+                        [
+                            'action' => 'setFirstName',
+                            'firstName' => $account->firstName,
+                        ],
+                        [
+                            'action' => 'setLastName',
+                            'lastName' => $account->lastName,
+                        ],
+                        [
+                            'action' => 'setSalutation',
+                            'salutation' => $account->salutation,
+                        ],
+                        [
+                            'action' => 'setDateOfBirth',
+                            'dateOfBirth' => $account->birthday->format('Y-m-d'),
+                        ],
+                        /** @TODO: To guarantee BC only!
+                         * This data should be mapped on the corresponding EventDecorator
+                         * Remove the commented lines below if the data is already handle in MapAccountDataDecorator
+                         */
+                        // [
+                            // 'action' => 'setCustomField',
+                            // 'name' => 'data',
+                            // 'value' => json_encode($account->data),
+                        // ],
+                    ]
+                ),
             ])
         ));
     }
@@ -427,7 +438,11 @@ class Commercetools implements AccountApi
             'birthday' => isset($accountData['dateOfBirth']) ?
                 new \DateTimeImmutable($accountData['dateOfBirth']) :
                 null,
-            'data' => json_decode($accountData['custom']['fields']['data'] ?? '{}'),
+            /** @TODO: To guarantee BC only!
+             * This data should be mapped on the corresponding EventDecorator
+             * Remove the commented lines below if the data is already handle in MapAccountDataDecorator
+             */
+            // 'data' => json_decode($account['custom']['fields']['data'] ?? '{}'),
             // Do NOT map the password back
             'confirmed' => $accountData['isEmailVerified'],
             'addresses' => $this->mapAddresses($accountData),
@@ -489,50 +504,6 @@ class Commercetools implements AccountApi
     public function getDangerousInnerClient()
     {
         return $this->client;
-    }
-
-    /**
-     * @throws RequestException
-     */
-    public function getCustomerType(): array
-    {
-        if ($this->customerType) {
-            return $this->customerType;
-        }
-
-        try {
-            $customerType = $this->client->get('/types/key=' . self::TYPE_NAME);
-        } catch (RequestException $e) {
-            $customerType = $this->createCustomerType();
-        }
-
-        return $this->customerType = ['id' => $customerType['id']];
-    }
-
-    /**
-     * @throws RequestException
-     */
-    private function createCustomerType(): array
-    {
-        return $this->client->post(
-            '/types',
-            [],
-            [],
-            json_encode([
-                'key' => self::TYPE_NAME,
-                'name' => ['de' => 'Frontastic Customer'],
-                'description' => ['de' => 'Additional data fields'],
-                'resourceTypeIds' => ['customer'],
-                'fieldDefinitions' => [
-                    [
-                        'name' => 'data',
-                        'type' => ['name' => 'String'],
-                        'label' => ['de' => 'Data (JSON)'],
-                        'required' => false,
-                    ],
-                ],
-            ])
-        );
     }
 
     private function sanitizePassword(string $password): string

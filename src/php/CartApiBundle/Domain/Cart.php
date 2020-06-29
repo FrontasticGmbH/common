@@ -17,11 +17,6 @@ class Cart extends ApiDataObject
     public $cartVersion;
 
     /**
-     * @var array
-     */
-    public $custom = [];
-
-    /**
      * @var \Frontastic\Common\CartApiBundle\Domain\LineItem[]
      */
     public $lineItems = [];

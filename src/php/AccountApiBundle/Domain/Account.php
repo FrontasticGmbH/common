@@ -39,11 +39,6 @@ class Account extends ApiDataObject implements UserInterface, \Serializable
     public $birthday;
 
     /**
-     * @var array
-     */
-    public $data = [];
-
-    /**
      * @var string
      */
     private $passwordHash;

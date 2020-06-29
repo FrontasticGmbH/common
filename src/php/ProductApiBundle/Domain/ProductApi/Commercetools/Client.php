@@ -78,6 +78,7 @@ class Client
                     ? $urlParts['user'] . ':' . $urlParts['pass'] . '@' : '',
                 $urlParts['host'],
                 isset($urlParts['port']) ? ':' . $urlParts['port'] : '',
+                $urlParts['path'] ?? '',
             ]
         );
     }

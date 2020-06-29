@@ -55,11 +55,11 @@ class CartController extends CrudController
                         'sku' => $payload['variant']['sku'] ?? null,
                         'attributes' => $payload['variant']['attributes'] ?? [],
                     ]),
-                    'custom' => $payload['option'] ?? [],
                     'count' => $payload['count'] ?? 1,
                 ]
             )
         );
+        $lineItemVariant->projectSpecificData = $this->parseProjectSpecificDataByKey($payload, 'option');
 
         $cartApi->startTransaction($cart);
         $cartApi->addToCart($cart, $lineItemVariant, $context->locale);
@@ -101,11 +101,11 @@ class CartController extends CrudController
                             'sku' => $lineItemData['variant']['sku'] ?? null,
                             'attributes' => $lineItemData['variant']['attributes'] ?? [],
                         ]),
-                        'custom' => $lineItemData['option'] ?? [],
                         'count' => $lineItemData['count'] ?? 1,
                     ]
                 )
             );
+            $lineItemVariant->projectSpecificData = $this->parseProjectSpecificDataByKey($payload, 'option');
 
             $cartApi->addToCart($cart, $lineItemVariant, $context->locale);
         }
@@ -129,12 +129,15 @@ class CartController extends CrudController
         $cartApi = $this->getCartApi($context);
 
         $cart = $this->getCart($context, $request);
+        $lineItem = $this->getLineItem($cart, $payload['lineItemId']);
+        $lineItem->projectSpecificData = $this->parseProjectSpecificDataByKey($payload, 'custom');
+
         $cartApi->startTransaction($cart);
         $cartApi->updateLineItem(
             $cart,
-            $this->getLineItem($cart, $payload['lineItemId']),
+            $lineItem,
             $payload['count'],
-            $payload['custom'] ?? null,
+            null,
             $context->locale
         );
         $cart = $cartApi->commit($context->locale);
@@ -213,10 +216,6 @@ class CartController extends CrudController
             );
         }
 
-        if (isset($payload['custom'])) {
-            $cart = $cartApi->setCustomField($cart, $payload["custom"]);
-        }
-
         if (!empty($payload['shipping']) || !empty($payload['billing'])) {
             $cart = $cartApi->setShippingAddress(
                 $cart,
@@ -230,6 +229,9 @@ class CartController extends CrudController
                 $context->locale
             );
         }
+
+        $cart->projectSpecificData = $this->parseProjectSpecificDataByKey($payload, 'custom');
+        $cart = $cartApi->setRawApiInput($cart, $context->locale);
 
         return ['cart' => $cartApi->commit($context->locale)];
     }
@@ -329,5 +331,21 @@ class CartController extends CrudController
         }
 
         return $body;
+    }
+
+    private function parseProjectSpecificDataByKey(array $requestBody, string $key): array
+    {
+        $projectSpecificData = $requestBody['projectSpecificData'] ?? [];
+
+        if (!key_exists($key, $projectSpecificData) && key_exists($key, $requestBody)) {
+            $this->get('logger')
+                ->warning(
+                    'This usage of the key "{key}" is deprecated, move it into "projectSpecificData" instead',
+                    ['key' => $key]
+                );
+            $projectSpecificData['custom'] = $requestBody[$key] ?? [];
+        }
+
+        return $projectSpecificData;
     }
 }
