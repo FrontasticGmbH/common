@@ -11,6 +11,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\TermFacet;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\SprykerBundle\Domain\MapperInterface;
 use Frontastic\Common\SprykerBundle\Domain\Product\SprykerSlugger;
+use WoohooLabs\Yang\JsonApi\Schema\Resource\ResourceObject;
 
 class ProductResultMapper implements MapperInterface
 {
@@ -19,10 +20,10 @@ class ProductResultMapper implements MapperInterface
     protected const IMAGE_KEY = 'externalUrlSmall';
 
     /**
-     * @param $resource
+     * @param ResourceObject $resource
      * @return Result|mixed
      */
-    public function mapResource($resource)
+    public function mapResource(ResourceObject $resource)
     {
         $result = new Result();
 
@@ -47,10 +48,10 @@ class ProductResultMapper implements MapperInterface
     }
 
     /**
-     * @param array $resource
+     * @param ResourceObject $resource
      * @return Product[]
      */
-    private function mapProducts(array $resource): array
+    private function mapProducts(ResourceObject $resource): array
     {
         $products = [];
 
@@ -88,10 +89,10 @@ class ProductResultMapper implements MapperInterface
     }
 
     /**
-     * @param array $resource
+     * @param ResourceObject $resource
      * @return Facet[]
      */
-    private function mapFacets(array $resource): array
+    private function mapFacets(ResourceObject $resource): array
     {
         $facets = [];
 

@@ -6,6 +6,7 @@ use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\SprykerBundle\Domain\MapperInterface;
 use Frontastic\Common\SprykerBundle\Domain\Product\SprykerSlugger;
+use WoohooLabs\Yang\JsonApi\Schema\Resource\ResourceObject;
 
 class ProductMapper implements MapperInterface
 {
@@ -25,22 +26,19 @@ class ProductMapper implements MapperInterface
     }
 
     /**
-     * @param $resource
+     * @param ResourceObject $resource
      * @return Product
      */
-    public function mapResource($resource): Product
+    public function mapResource(ResourceObject $resource): Product
     {
-        // Support for list with single resources as well as direct single resource
-        $productData = $this->extractData($resource, $resource);
-        $productData = $productData[0] ?? $productData;
-
         $product = new Product();
-        $product->name = $productData['name'];
+        $product->name = $resource->attribute('name');
         $product->productId = (string)$resource->id();
-        $product->description = $productData['description'];
-        $product->slug = SprykerSlugger::slugify($productData['name']);
-        $product->version = $productData['productType'];
-        $product->dangerousInnerProduct = $resource->attributes();
+        $product->description = $resource->attribute('description');
+        $product->slug = SprykerSlugger::slugify($resource->attribute('name'));
+        $product->version = $resource->attribute('productType');
+        // @TODO: Use the value of Query.loadDangerousInnerData to asses if dangerousInnerVariant should be setted
+        // $product->dangerousInnerProduct = $resource->attributes();
 
         $product->categories = $this->mapCategories($resource);
         $product->variants = $this->mapConcreteProducts($resource);
@@ -57,10 +55,10 @@ class ProductMapper implements MapperInterface
     }
 
     /**
-     * @param array $resource
+     * @param ResourceObject $resource
      * @return Variant[]
      */
-    private function mapConcreteProducts(array $resource): array
+    private function mapConcreteProducts(ResourceObject $resource): array
     {
         $variants = [];
 
@@ -72,10 +70,10 @@ class ProductMapper implements MapperInterface
     }
 
     /**
-     * @param array $resource
+     * @param ResourceObject $resource
      * @return string[]
      */
-    private function mapCategories(array $resource): array
+    private function mapCategories(ResourceObject $resource): array
     {
         $categories = [];
 
@@ -86,10 +84,5 @@ class ProductMapper implements MapperInterface
         }
 
         return $categories;
-    }
-
-    protected function extractData(array $resource, array $fallback = []): array
-    {
-        return $resource[self::KEY_DATA] ?? $fallback;
     }
 }

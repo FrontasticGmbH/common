@@ -8,6 +8,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Promise\PromiseInterface;
+use WoohooLabs\Yang\JsonApi\Response\JsonApiResponse;
 
 class SprykerClient implements SprykerClientInterface
 {
@@ -49,7 +50,7 @@ class SprykerClient implements SprykerClientInterface
      * @param string $endpoint
      * @param array $headers
      * @param string $mode
-     * @return PromiseInterface
+     * @return JsonApiResponse|PromiseInterface<JsonApiResponse>
      */
     public function get(string $endpoint, array $headers = [], string $mode = self::MODE_SYNC)
     {
@@ -73,7 +74,7 @@ class SprykerClient implements SprykerClientInterface
      * @param array $headers
      * @param string $body
      * @param string $mode
-     * @return PromiseInterface
+     * @return JsonApiResponse|PromiseInterface<JsonApiResponse>
      */
     public function post(
         string $endpoint,
@@ -92,9 +93,9 @@ class SprykerClient implements SprykerClientInterface
      * @param string $endpoint
      * @param array $headers
      * @param string $body
-     * @return PromiseInterface
+     * @return JsonApiResponse
      */
-    public function patch(string $endpoint, array $headers = [], string $body = ''): PromiseInterface
+    public function patch(string $endpoint, array $headers = [], string $body = ''): JsonApiResponse
     {
         return $this->sendRequest(SprykerClientInterface::METHOD_PATCH, $endpoint, $headers, $body);
     }
@@ -102,9 +103,9 @@ class SprykerClient implements SprykerClientInterface
     /**
      * @param string $endpoint
      * @param array $headers
-     * @return PromiseInterface
+     * @return JsonApiResponse
      */
-    public function delete(string $endpoint, array $headers = []): PromiseInterface
+    public function delete(string $endpoint, array $headers = []): JsonApiResponse
     {
         return $this->sendRequest(SprykerClientInterface::METHOD_DELETE, $endpoint, $headers);
     }
@@ -114,14 +115,14 @@ class SprykerClient implements SprykerClientInterface
      * @param string $endpoint
      * @param array $headers
      * @param string $body
-     * @return PromiseInterface
+     * @return JsonApiResponse
      */
     private function sendRequest(
         string $method,
         string $endpoint,
         array $headers = [],
         string $body = ''
-    ): PromiseInterface {
+    ): JsonApiResponse {
         return $this->sendAsyncRequest($method, $endpoint, $headers, $body)->wait();
     }
 
@@ -131,7 +132,7 @@ class SprykerClient implements SprykerClientInterface
      * @param array $headers
      * @param string $body
      *
-     * @return PromiseInterface
+     * @return PromiseInterface<JsonApiResponse>
      */
     private function sendAsyncRequest(
         string $method,
@@ -140,14 +141,12 @@ class SprykerClient implements SprykerClientInterface
         string $body = ''
     ): PromiseInterface {
         $fullUrl = $this->getFullAddress($endpoint);
-//        $request = new Request($method, $fullUrl, $headers, $body);
 
         return $this->httpClient
             ->requestAsync($method, $fullUrl, $body, $this->buildRequestHeaders($headers))
             ->then(
                 static function (HttpClient\Response $response) {
-    //                return new JsonApiResponse($response);
-                    return $response;
+                    return new JsonApiResponse($response->rawApiOutput);
                 },
                 function (RequestException $exception) use ($endpoint) {
                     if ($exception instanceof ServerException) {

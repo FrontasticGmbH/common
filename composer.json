@@ -37,7 +37,8 @@
         "symfony/finder": "^4.1",
         "symfony/http-kernel": "^4.1",
         "symfony/symfony": "^4.1",
-        "symfony/yaml": "^4.1"
+        "symfony/yaml": "^4.1",
+        "woohoolabs/yang": "^2.3"
     },
     "require-dev": {
         "doctrine/common": "^2.9",

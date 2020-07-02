@@ -7,6 +7,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\SingleProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\SprykerBundle\BaseApi\ProductExpandingTrait;
 use Frontastic\Common\SprykerBundle\BaseApi\SprykerApiBase;
@@ -83,7 +84,7 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
      */
     public function getProduct($query, string $mode = ProductApi::QUERY_SYNC): ?object
     {
-        $query = ProductApi\Query\SingleProductQuery::fromLegacyQuery($query);
+        $query = SingleProductQuery::fromLegacyQuery($query);
         $query->validate();
 
         $id = $this->resolveProductIdentifier($query);
@@ -117,17 +118,21 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
     public function query(ProductQuery $query, string $mode = ProductApi::QUERY_SYNC): object
     {
         $searchQuery = CatalogSearchQuery::createFromProductQuery($query);
-        $response = $this->client->get(
-            $this->withIncludes("/catalog-search?{$searchQuery}", $this->queryResources),
-            [],
-            ProductApi::QUERY_ASYNC
-        )->then(function ($response) {
+        $response = $this->client
+            ->get(
+                $this->withIncludes("/catalog-search?{$searchQuery}", $this->queryResources),
+                [],
+                ProductApi::QUERY_ASYNC
+            )
+            ->then(function ($response) use ($query) {
             $products = $this->mapResponseResource($response, ProductResultMapper::MAPPER_NAME);
             $includedResources = $this->getAllResources($response) ?? [];
 
             if (count($products->items) && count($includedResources)) {
                 $this->expandProductList($products->items, $includedResources);
             }
+
+            $products->query = clone $query;
 
             return $products;
         });
@@ -148,11 +153,11 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
     }
 
     /**
-     * @param ProductQuery $query
+     * @param SingleProductQuery $query
      *
      * @return string
      */
-    protected function resolveProductIdentifier(ProductQuery $query): string
+    protected function resolveProductIdentifier(SingleProductQuery $query): string
     {
         return $query->sku ?? $query->productId;
     }

@@ -6,6 +6,7 @@ use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\SprykerBundle\Domain\Locale\SprykerLocale;
 use Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver;
+use WoohooLabs\Yang\JsonApi\Response\JsonApiResponse;
 
 class SprykerApiBase
 {
@@ -48,34 +49,31 @@ class SprykerApiBase
     }
 
     /**
-     * @param $response
+     * @param JsonApiResponse $response
      * @param string $mapperName
      *
      * @return mixed
      */
-    protected function mapResponseResource($response, string $mapperName)
+    protected function mapResponseResource(JsonApiResponse $response, string $mapperName)
     {
-//        $document = $response->document();
+        $document = $response->document();
         $mapper = $this->mapperResolver->getMapper($mapperName);
 
-//        if ($document->isSingleResourceDocument()) {
-//            return $mapper->mapResource($document->primaryResource());
-//        }
+        if ($document->isSingleResourceDocument()) {
+            return $mapper->mapResource($document->primaryResource());
+        }
 
-//        return $mapper->mapResource($document->primaryResources()[0]);
-        return $mapper->mapResource($response);
+        return $mapper->mapResource($document->primaryResources()[0]);
     }
 
     /**
-     * @param $response
+     * @param JsonApiResponse $response
      * @param string $mapperName
      *
      * @return array
      */
-    protected function mapResponseArray($response, string $mapperName): array
+    protected function mapResponseArray(JsonApiResponse $response, string $mapperName): array
     {
-        $document = $response->document();
-
         return $this->mapperResolver
             ->getExtendedMapper($mapperName)
             ->mapResourceArray($response->document()->primaryResources());

@@ -19,12 +19,14 @@ class VariantImagesHelper
             $setName = $imageSet['name'] ?? SprykerProductApiExtendedConstants::DEFAULT_IMAGE_SET_NAME;
 
             foreach ($imageSet['images'] as $image) {
-                $images[$setName][SprykerProductApiExtendedConstants::IMAGE_SIZE_LARGE][] = $image['externalUrlLarge'];
-                $images[$setName][SprykerProductApiExtendedConstants::IMAGE_SIZE_SMALL][] = $image['externalUrlSmall'];
+                // @TODO: Should we keep all image sizes?
+                // $images[$setName][SprykerProductApiExtendedConstants::IMAGE_SIZE_LARGE][] = $image['externalUrlLarge'];
+                // $images[$setName][SprykerProductApiExtendedConstants::IMAGE_SIZE_SMALL][] = $image['externalUrlSmall'];
 
-                if (isset($image['externalUrlMedium'])) {
-                    $images[$setName][SprykerProductApiExtendedConstants::IMAGE_SIZE_MEDIUM][] = $image['externalUrlSmall'];
-                }
+                // if (isset($image['externalUrlMedium'])) {
+                //     $images[$setName][SprykerProductApiExtendedConstants::IMAGE_SIZE_MEDIUM][] = $image['externalUrlSmall'];
+                // }
+                $images[] = $image['externalUrlLarge'];
             }
         }
 

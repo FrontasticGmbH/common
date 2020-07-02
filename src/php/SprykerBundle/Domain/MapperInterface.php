@@ -1,15 +1,16 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Frontastic\Common\SprykerBundle\Domain;
+
+use WoohooLabs\Yang\JsonApi\Schema\Resource\ResourceObject;
 
 interface MapperInterface
 {
     /**
-     * @param $resource
-     *
+     * @param ResourceObject $resource
      * @return mixed
      */
-    public function mapResource($resource);
+    public function mapResource(ResourceObject $resource);
 
     /**
      * @return string

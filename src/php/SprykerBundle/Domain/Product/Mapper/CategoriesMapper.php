@@ -5,6 +5,7 @@ namespace Frontastic\Common\SprykerBundle\Domain\Product\Mapper;
 use Frontastic\Common\ProductApiBundle\Domain\Category;
 use Frontastic\Common\SprykerBundle\Domain\MapperInterface;
 use Frontastic\Common\SprykerBundle\Domain\Product\SprykerSlugger;
+use WoohooLabs\Yang\JsonApi\Schema\Resource\ResourceObject;
 
 class CategoriesMapper implements MapperInterface
 {
@@ -16,10 +17,10 @@ class CategoriesMapper implements MapperInterface
     private $categories = [];
 
     /**
-     * @param array $resource
+     * @param ResourceObject $resource
      * @return Category[]
      */
-    public function mapResource(array $resource): array
+    public function mapResource(ResourceObject $resource): array
     {
         $this->categories = [];
 

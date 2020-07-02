@@ -7,6 +7,7 @@ use Frontastic\Common\SprykerBundle\Domain\MapperInterface;
 use Frontastic\Common\SprykerBundle\Domain\Product\SprykerProductApiConstants;
 use Frontastic\Common\SprykerBundle\Common\VariantImagesHelper;
 use WoohooLabs\Yang\JsonApi\Exception\DocumentException;
+use WoohooLabs\Yang\JsonApi\Schema\Resource\ResourceObject;
 
 class VariantMapper implements MapperInterface
 {
@@ -16,16 +17,18 @@ class VariantMapper implements MapperInterface
 
     /**
      * /**
-     * @param array $resource
+     * @param ResourceObject $resource
      * @return Variant
      */
-    public function mapResource(array $resource): Variant
+    public function mapResource(ResourceObject $resource): Variant
     {
         $variant = new Variant();
         $variant->id = $resource->id();
         $variant->sku = (string)$resource->attribute('sku');
+        $variant->groupId = (string)$resource->attribute('idProductAbstract');
         $variant->attributes = $resource->attribute('attributes');
-        $variant->dangerousInnerVariant = $resource->attributes();
+        // @TODO: Use the value of Query.loadDangerousInnerData to asses if dangerousInnerVariant should be setted
+        // $variant->dangerousInnerVariant = $resource->attributes();
         $variant->images = $this->mapImages($resource);
 
         try {
@@ -50,10 +53,10 @@ class VariantMapper implements MapperInterface
     }
 
     /**
-     * @param array $concreteProductResource
+     * @param ResourceObject $concreteProductResource
      * @param Variant $variant
      */
-    private function mapPrice(array $concreteProductResource, Variant $variant): void
+    private function mapPrice(ResourceObject $concreteProductResource, Variant $variant): void
     {
         if (!$concreteProductResource->hasRelationship(self::RELATION_PRICES)) {
             return;
@@ -65,14 +68,15 @@ class VariantMapper implements MapperInterface
 
         $variant->discountedPrice = $map[SprykerProductApiConstants::PRICE_WITH_DISCOUNT] ?? null;
         $variant->price = $map[SprykerProductApiConstants::PRICE_OLD] ?? $variant->discountedPrice;
+        $variant->currency = $priceResource->attribute('prices')[0]['currency']['code'];
     }
 
     /**
-     * @param array $priceResource
+     * @param ResourceObject $priceResource
      *
      * @return int[]
      */
-    private function getPriceMap(array $priceResource): array
+    private function getPriceMap(ResourceObject $priceResource): array
     {
         $map = [];
 
@@ -86,12 +90,12 @@ class VariantMapper implements MapperInterface
     }
 
     /**
-     * @param array $concreteProductResource
+     * @param ResourceObject $concreteProductResource
      * @param string[]
      *
      * @return array
      */
-    protected function mapImages(array $concreteProductResource): array
+    protected function mapImages(ResourceObject $concreteProductResource): array
     {
         $images = [];
 
@@ -107,12 +111,12 @@ class VariantMapper implements MapperInterface
     }
 
     /**
-     * @param array $concreteProductResource
+     * @param ResourceObject $concreteProductResource
      * @param Variant $variant
      */
-    private function mapAvailability(array $concreteProductResource, Variant $variant): void
+    private function mapAvailability(ResourceObject $concreteProductResource, Variant $variant): void
     {
-        /*** @var $resource array */
+        /*** @var $resource ResourceObject */
         $resource = $concreteProductResource->relationship('concrete-product-availabilities')->resources()[0];
 
         $variant->isOnStock = $resource->attribute('availability', false);
@@ -123,12 +127,12 @@ class VariantMapper implements MapperInterface
     }
 
     /**
-     * @param array $resource
+     * @param ResourceObject $resource
      * @param \Frontastic\Common\ProductApiBundle\Domain\Variant $variant
      *
      * @return void
      */
-    private function mapAttributeLabels(array $resource, Variant $variant): void
+    private function mapAttributeLabels(ResourceObject $resource, Variant $variant): void
     {
         $names = $resource->attribute('attributeNames', []);
 
