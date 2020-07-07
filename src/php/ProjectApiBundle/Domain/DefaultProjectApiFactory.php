@@ -14,6 +14,10 @@ use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFacto
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory as ShopwareLocaleCreatorFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectApi\ShopwareProjectApi;
+use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreatorFactory as SprykerLocaleCreatorFactory;
+use Frontastic\Common\SprykerBundle\Domain\Project\SprykerProjectApi;
+use Frontastic\Common\SprykerBundle\Domain\MapperResolver as SprykerMapperResolver;
+use Frontastic\Common\SprykerBundle\Domain\SprykerClientFactory;
 use OutOfBoundsException;
 
 class DefaultProjectApiFactory implements ProjectApiFactory
@@ -62,6 +66,18 @@ class DefaultProjectApiFactory implements ProjectApiFactory
 
                 $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
                 return new ShopwareProjectApi(
+                    $client,
+                    $dataMapper,
+                    $localeCreatorFactory->factor($project, $client),
+                    $project->languages
+                );
+            case 'spryker':
+                $clientFactory = $this->serviceLocator->get(SprykerClientFactory::class);
+                $dataMapper = $this->serviceLocator->get(SprykerMapperResolver::class);
+                $localeCreatorFactory = $this->serviceLocator->get(SprykerLocaleCreatorFactory::class);
+
+                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+                return new SprykerProjectApi(
                     $client,
                     $dataMapper,
                     $localeCreatorFactory->factor($project, $client),
