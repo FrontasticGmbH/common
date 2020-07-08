@@ -220,7 +220,7 @@ abstract class BaseImplementation
     }
 
     /*** getOrder() ***************************************************************************************************/
-    public function beforeGetOrder(CartApi $cartApi, string $orderId, string $locale = null): void
+    public function beforeGetOrder(CartApi $cartApi, Account $account, string $orderId, string $locale = null): void
     {
     }
 

@@ -136,6 +136,7 @@ class Commercetools implements AccountApi
     public function update(Account $account, string $locale = null): Account
     {
         $accountVersion = $this->client->get('/customers/' . $account->accountId);
+
         return $this->mapAccount($this->client->post(
             '/customers/' . $account->accountId,
             [],
@@ -159,7 +160,10 @@ class Commercetools implements AccountApi
                         ],
                         [
                             'action' => 'setDateOfBirth',
-                            'dateOfBirth' => $account->birthday->format('Y-m-d'),
+                            'dateOfBirth' => ($account->birthday instanceof \DateTimeInterface
+                                ? $account->birthday->format('Y-m-d')
+                                : null
+                            ),
                         ],
                         /** @TODO: To guarantee BC only!
                          * This data should be mapped on the corresponding EventDecorator
