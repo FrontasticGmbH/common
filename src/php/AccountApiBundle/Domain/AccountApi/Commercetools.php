@@ -520,6 +520,8 @@ class Commercetools implements AccountApi
                     'postalCode' => $address['postalCode'] ?? null,
                     'city' => $address['city'] ?? null,
                     'country' => $address['country'] ?? null,
+                    'state' => $address['state'] ?? null,
+                    'phone' => $address['phone'] ?? null,
                     'isDefaultBillingAddress' => ($address['id'] === $account['defaultBillingAddressId']),
                     'isDefaultShippingAddress' => ($address['id'] === $account['defaultShippingAddressId']),
                     'dangerousInnerAddress' => $address,
