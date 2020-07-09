@@ -11,6 +11,7 @@ use Frontastic\Common\AccountApiBundle\Domain\PasswordResetToken;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
@@ -318,18 +319,40 @@ class Commercetools implements AccountApi
         $addressData = $this->accountMapper->mapAddressToData($address);
         unset($addressData['id']);
 
+        $additionalActions = [];
+        if ($address->isDefaultBillingAddress || $address->isDefaultShippingAddress) {
+            if (($addressData['key'] ?? null) === null) {
+                $addressData['key'] = Uuid::uuid4()->toString();
+            }
+        }
+        if ($address->isDefaultBillingAddress) {
+            $additionalActions[] = [
+                'action' => 'setDefaultBillingAddress',
+                'addressKey' => $addressData['key'],
+            ];
+        }
+        if ($address->isDefaultShippingAddress) {
+            $additionalActions[] = [
+                'action' => 'setDefaultShippingAddress',
+                'addressKey' => $addressData['key'],
+            ];
+        }
+
         return $this->mapAccount($this->client->post(
             '/customers/' . $account->accountId,
             [],
             [],
             json_encode([
                 'version' => $accountData['version'],
-                'actions' => [
+                'actions' => array_merge(
                     [
-                        'action' => 'addAddress',
-                        'address' => $addressData,
+                        [
+                            'action' => 'addAddress',
+                            'address' => $addressData,
+                        ],
                     ],
-                ],
+                    $additionalActions
+                ),
             ])
         ));
     }
@@ -345,19 +368,34 @@ class Commercetools implements AccountApi
         $addressData = $this->accountMapper->mapAddressToData($address);
         unset($addressData['id']);
 
+        $actions = [
+            [
+                'action' => 'changeAddress',
+                'addressId' => $address->addressId,
+                'address' => $addressData,
+            ],
+        ];
+
+        if ($address->isDefaultBillingAddress) {
+            $actions[] = [
+                'action' => 'setDefaultBillingAddress',
+                'addressId' => $address->addressId,
+            ];
+        }
+        if ($address->isDefaultShippingAddress) {
+            $actions[] = [
+                'action' => 'setDefaultShippingAddress',
+                'addressId' => $address->addressId,
+            ];
+        }
+
         return $this->mapAccount($this->client->post(
             '/customers/' . $account->accountId,
             [],
             [],
             json_encode([
                 'version' => $accountData['version'],
-                'actions' => [
-                    [
-                        'action' => 'changeAddress',
-                        'addressId' => $address->addressId,
-                        'address' => $addressData,
-                    ],
-                ],
+                'actions' => $actions,
             ])
         ));
     }
@@ -481,6 +519,8 @@ class Commercetools implements AccountApi
                     'postalCode' => $address['postalCode'] ?? null,
                     'city' => $address['city'] ?? null,
                     'country' => $address['country'] ?? null,
+                    'state' => $address['state'] ?? null,
+                    'phone' => $address['phone'] ?? null,
                     'isDefaultBillingAddress' => ($address['id'] === $account['defaultBillingAddressId']),
                     'isDefaultShippingAddress' => ($address['id'] === $account['defaultShippingAddressId']),
                     'dangerousInnerAddress' => $address,
