@@ -16,6 +16,15 @@
             <tag name="frontastic.common.api_integration"/>
         </service>
 
+        <service id="Frontastic\Common\SprykerBundle\Domain\Account\TokenDecoder">
+            <tag name="frontastic.common.api_integration"/>
+        </service>
+
+        <service id="Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper">
+<!--            <argument type="service" id="Frontastic\Catwalk\ApiCoreBundle\Domain\ContextService" />-->
+            <tag name="frontastic.common.api_integration"/>
+        </service>
+
         <service id="Frontastic\Common\SprykerBundle\Domain\Exception\ExceptionFactory"
                  autowire="true"
                  autoconfigure="true"

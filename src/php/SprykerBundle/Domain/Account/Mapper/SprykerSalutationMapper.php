@@ -1,6 +1,6 @@
 <?php
 
-namespace Frontastic\Common\SprykerBundle\Domain\Project\Mapper;
+namespace Frontastic\Common\SprykerBundle\Domain\Account\Mapper;
 
 use Frontastic\Common\SprykerBundle\Domain\MapperInterface;
 use Frontastic\Common\SprykerBundle\Domain\SprykerSalutation;

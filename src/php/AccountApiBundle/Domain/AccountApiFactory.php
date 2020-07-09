@@ -13,6 +13,12 @@ use Frontastic\Common\ShopwareBundle\Domain\AccountApi\ShopwareAccountApi;
 use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFactory;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
+use Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper;
+use Frontastic\Common\SprykerBundle\Domain\Account\SprykerAccountApi;
+use Frontastic\Common\SprykerBundle\Domain\Account\TokenDecoder;
+use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreatorFactory as SprykerLocaleCreatorFactory;
+use Frontastic\Common\SprykerBundle\Domain\SprykerClientFactory;
+use Frontastic\Common\SprykerBundle\Domain\MapperResolver as SprykerMapperResolver;
 use Psr\Container\ContainerInterface;
 
 class AccountApiFactory
@@ -67,6 +73,25 @@ class AccountApiFactory
                     $client,
                     $this->container->get(DataMapperResolver::class),
                     $this->container->get(ShopwareProjectConfigApiFactory::class)
+                );
+
+                break;
+            case 'spryker':
+                $dataMapper = $this->container->get(SprykerMapperResolver::class);
+                $localeCreatorFactory = $this->container->get(SprykerLocaleCreatorFactory::class);
+                $accountHelper = $this->container->get(AccountHelper::class);
+                $tokenDecoder = $this->container->get(TokenDecoder::class);
+
+                $client = $this->container
+                    ->get(SprykerClientFactory::class)
+                    ->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+
+                $accountApi = new SprykerAccountApi(
+                    $client,
+                    $dataMapper,
+                    $accountHelper,
+                    $tokenDecoder,
+                    $localeCreatorFactory->factor($project, $client)
                 );
 
                 break;

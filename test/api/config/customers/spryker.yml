@@ -6,7 +6,7 @@ configuration:
         disabled: false
     spryker:
         endpoint: https://api-stage-spryker.prym.de
-#        endpoint: https://glue.de.26.b2b.demo-spryker.com
+#        endpoint: https://glue.de.b2c.demo-spryker.com
     account:
         engine: spryker
     cart:
