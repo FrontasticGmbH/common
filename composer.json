@@ -29,7 +29,7 @@
         "league/oauth2-client": "^2.3",
         "myclabs/deep-copy": "^1.0",
         "qafoolabs/no-framework-bundle": "^2.6",
-        "ramsey/uuid": "^4.0",
+        "ramsey/uuid": "^3.9",
         "seld/jsonlint": "@stable",
         "swiftmailer/swiftmailer": "^6.2",
         "symfony/config": "^4.1",
