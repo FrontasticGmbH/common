@@ -5,7 +5,7 @@ namespace Frontastic\Common\SprykerBundle\Domain\Account;
 class SalutationHelper
 {
     private const GENDER_MALE = 'Male';
-    private const GENDER_FEMALE = 'Male';
+    private const GENDER_FEMALE = 'Female';
     private const GENDER_OTHER = 'Other';
 
     public const DEFAULT_SPRYKER_SALUTATION = 'Mrs';

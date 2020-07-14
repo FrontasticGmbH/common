@@ -2,3 +2,14 @@ framework:
     templating:
         engines:
             - twig
+services:
+    _defaults:
+        public: true
+
+#    Frontastic\Common\ApiTests\Mock\ContextServiceMock: ~
+    Frontastic\Catwalk\ApiCoreBundle\Domain\ContextService: ~
+    Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper:
+        arguments:
+#            - '@Frontastic\Common\ApiTests\Mock\ContextServiceMock'
+            - '@Frontastic\Catwalk\ApiCoreBundle\Domain\ContextService'
+        tags: ['frontastic.common.api_integration']

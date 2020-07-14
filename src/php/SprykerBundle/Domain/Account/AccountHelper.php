@@ -15,10 +15,9 @@ class AccountHelper
      */
     private $contextService;
 
-//    public function __construct(ContextService $contextService)
-    public function __construct()
+    public function __construct(ContextService $contextService)
     {
-        $this->contextService = null;
+        $this->contextService = $contextService;
     }
 
     /**
@@ -49,7 +48,7 @@ class AccountHelper
         }
 
         if (!$token) {
-            $token = $this->getAccount()->getToken(self::TOKEN_TYPE);
+            $token = $this->getAccount()->authToken();
         }
 
         return ['Authorization' => sprintf('Bearer %s', $token)];
@@ -85,9 +84,9 @@ class AccountHelper
      */
     public function getAutoHeader(?string $id = null, ?string $token = null): array
     {
-//        if ($token || $this->isLoggedIn()) {
-//            return $this->getAuthHeader($token);
-//        }
+        if ($token || $this->isLoggedIn()) {
+            return $this->getAuthHeader($token);
+        }
 
         return $this->getAnonymousHeader($id);
     }

@@ -2,8 +2,11 @@
 
 namespace Frontastic\Common\ApiTests;
 
+use Frontastic\Catwalk\ApiCoreBundle\Domain\ContextService;
+use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory;
+use Frontastic\Common\ApiTests\Mock\AccountHelperMock;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\CartApiFactory;
 use Frontastic\Common\EnvironmentResolver;
@@ -18,6 +21,7 @@ use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ProjectApiBundle\Domain\ProjectApiFactory;
 use Frontastic\Common\ReplicatorBundle\Domain\CustomerService;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
+use Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class FrontasticApiTestCase extends KernelTestCase
@@ -44,7 +48,6 @@ class FrontasticApiTestCase extends KernelTestCase
                 __DIR__,
             ]
         );
-
         self::bootKernel();
     }
 

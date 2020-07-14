@@ -5,10 +5,10 @@ namespace Frontastic\Common\SprykerBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
+use Frontastic\Common\AccountApiBundle\Domain\DuplicateAccountException;
 use Frontastic\Common\AccountApiBundle\Domain\PasswordResetToken;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\SprykerBundle\BaseApi\SprykerApiBase;
-use Frontastic\Common\SprykerBundle\Domain\Account\Mapper\SprykerSalutationMapper;
 use Frontastic\Common\SprykerBundle\Domain\Account\Mapper\TokenMapper;
 use Frontastic\Common\SprykerBundle\Domain\Account\Mapper\AccountMapper;
 use Frontastic\Common\SprykerBundle\Domain\Account\Mapper\AddressMapper;
@@ -21,7 +21,6 @@ use Frontastic\Common\SprykerBundle\Domain\Account\Request\RestorePasswordReques
 use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver;
-use Frontastic\Common\SprykerBundle\Domain\SprykerSalutation;
 use WoohooLabs\Yang\JsonApi\Schema\Resource\ResourceObject;
 
 class SprykerAccountApi extends SprykerApiBase implements AccountApi
@@ -78,12 +77,20 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
     {
         $request = CustomerRequestData::createFromAccount($account);
 
-//        $headers = $cart ? $this->accountHelper->getAnonymousHeader() : [];
-        $headers = [];
+        $headers = $this->accountHelper->getAnonymousHeader();
 
-        $response = $this->client->post('/customers', $headers, $request->encode());
+        try {
+            $response = $this->client->post('/customers', $headers, $request->encode());
 
-        return $this->mapAccount($response->document()->primaryResource());
+            $account = $this->mapAccount($response->document()->primaryResource());
+        } catch (\Exception $e) {
+            if ($response->getStatusCode() === 422) {
+                throw new DuplicateAccountException($account->email, 0);
+            }
+            throw $e;
+        }
+
+        return $account;
     }
 
     /**
@@ -107,12 +114,10 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
 
         $response = $this->client->patch(
             sprintf('/customers/%s', $account->accountId),
-//            $this->getAuthHeader(),
-            $this->getAuthHeader($account->authToken),
+            $this->getAuthHeader(),
             $request->encode()
         );
 
-//        return $this->getAccountFromToken();
         return $this->mapAccount($response->document()->primaryResource());
     }
 
@@ -137,19 +142,18 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
             $request->encode()
         );
 
-//        return $this->getAccountFromToken();
         return $this->mapAccount($response->document()->primaryResource());
     }
 
     /**
-     * @param string $account
+     * @param string $email
      * @return PasswordResetToken
      */
     public function generatePasswordResetToken(string $email): PasswordResetToken
     {
         $request = new ForgotPasswordRequestData($email);
 
-        $this->client->post('/customer-forgotten-password', [], $request->encode());
+        $response = $this->client->post('/customer-forgotten-password', [], $request->encode());
 
         // @TODO: Implement generatePasswordResetToken() method
         return new PasswordResetToken();
@@ -171,10 +175,10 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
 
         $accessToken = $this->mapResource($response->document()->primaryResource(), TokenMapper::MAPPER_NAME);
 
-        $this->accountHelper->getAccount()->setToken(AccountHelper::TOKEN_TYPE, $accessToken);
-        $this->accountHelper->getAccount()->authToken($token);
+        $account = $this->accountHelper->getAccount();
+        $account->authToken = $accessToken;
 
-        return $this->getAccountFromToken();
+        return $account;
     }
 
     /**
@@ -187,17 +191,19 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
     {
         $request = new AccessTokenRequestData($account->email, $account->getPassword());
 
-//        $headers = $cart ? $this->accountHelper->getAnonymousHeader() : [];
-        $headers = [];
+        $headers = $cart ? $this->accountHelper->getAnonymousHeader() : [];
 
-        $response = $this->client->post('/access-tokens', $headers, $request->encode());
+        try {
+            $response = $this->client->post('/access-tokens', $headers, $request->encode());
 
-        $token = $this->mapResource($response->document()->primaryResource(), TokenMapper::MAPPER_NAME);
+            $token = $this->mapResource($response->document()->primaryResource(), TokenMapper::MAPPER_NAME);
+        } catch (\Exception $e) {
+            return null;
+        }
 
-//        $account->setToken(AccountHelper::TOKEN_TYPE, $token);
-        $account->authToken($token);
+        $account->authToken = $token;
 
-        return $account;
+        return $this->refreshAccount($account, $locale);
     }
 
     /**
@@ -209,7 +215,7 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
     {
         $response = $this->client->get(
             sprintf('/customers/%s/addresses', $account->accountId),
-            $this->getAuthHeader($account->authToken)
+            $this->getAuthHeader()
         );
 
         return $this->mapAddressArray($response->document()->primaryResources());
@@ -227,11 +233,10 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
 
         $response = $this->client->post(
             sprintf('/customers/%s/addresses', $account->accountId),
-            $this->getAuthHeader($account->authToken),
+            $this->getAuthHeader(),
             $request->encode()
         );
 
-//        return $this->getAccountFromToken();
         return $this->mapAccount($response->document()->primaryResource());
     }
 
@@ -247,12 +252,10 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
 
         $response = $this->client->patch(
             sprintf('/customers/%s/addresses/%s', $account->accountId, $address->addressId),
-//            $this->getAuthHeader(),
-            $this->accountHelper->getAuthHeader($account->authToken),
+            $this->getAuthHeader(),
             $request->encode()
         );
 
-//        return $this->getAccountFromToken();
         return $this->mapAccount($response->document()->primaryResource());
     }
 
@@ -266,12 +269,10 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
     {
         $this->client->delete(
             sprintf('/customers/%s/addresses/%s', $account->accountId, $addressId),
-//            $this->getAuthHeader()
-            $this->accountHelper->getAuthHeader($account->authToken)
+            $this->getAuthHeader()
         );
 
-//        return $this->getAccountFromToken();
-        return $account;
+        return $this->refreshAccount($account, $locale);
     }
 
     /**
@@ -284,16 +285,13 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
     {
         $response = $this->client->get(
             sprintf('/customers/%s/addresses/%s', $account->accountId, $addressId),
-//            $this->getAuthHeader()
-            $this->accountHelper->getAuthHeader($account->authToken)
+            $this->getAuthHeader()
         );
 
         $address = $this->mapAddress($response->document()->primaryResource());
         $address->isDefaultBillingAddress = true;
 
         return $this->updateAddress($account, $address);
-
-//        return $this->getAccountFromToken();
     }
 
     /**
@@ -306,36 +304,45 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
     {
         $response = $this->client->get(
             sprintf('/customers/%s/addresses/%s', $account->accountId, $addressId),
-//            $this->getAuthHeader()
-            $this->accountHelper->getAuthHeader($account->authToken)
+            $this->getAuthHeader()
         );
 
         $address = $this->mapAddress($response->document()->primaryResource());
         $address->isDefaultShippingAddress = true;
 
         return $this->updateAddress($account, $address);
-
-//        return $this->getAccountFromToken();
     }
 
     public function getSalutations(string $locale): ?array
     {
-        $response = $this->client->get('/salutations');
-
-        $salutations = $this->mapResponseResource($response, SprykerSalutationMapper::MAPPER_NAME);
-
-        return array_map(
-            function (SprykerSalutation $salutation): string {
-                return $salutation->label;
-            },
-            $salutations
-        );
+        // TODO: This endpoint only exist in Prym but not in the default Spryker API
+//        $response = $this->client->get('/salutations');
+//
+//        $salutations = $this->mapResponseResource($response, SprykerSalutationMapper::MAPPER_NAME);
+//
+//        return array_map(
+//            function (SprykerSalutation $salutation): string {
+//                return $salutation->label;
+//            },
+//            $salutations
+//        );
+        return [SalutationHelper::DEFAULT_SPRYKER_SALUTATION];
     }
 
     public function refreshAccount(Account $account, string $locale = null): Account
     {
-        // TODO: Implement refreshAccount() method.
-        throw new \RuntimeException('refreshAccount() is not implemented');
+        $authToken = $account->authToken;
+        $id = $this->getCustomerReference($authToken);
+
+        $response = $this->client->get(
+            $this->withIncludes("/customers/{$id}", ['addresses']),
+            $this->accountHelper->getAutoHeader($id, $authToken)
+        );
+
+        $account = $this->mapAccount($response->document()->primaryResource());
+        $account->authToken = $authToken;
+
+        return $account;
     }
 
     /**
@@ -347,21 +354,11 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
     }
 
     /**
-     * @param string $token
      * @return array
      */
-    protected function getAuthHeader(string $token): array
+    protected function getAuthHeader(): array
     {
-//        return $this->accountHelper->getAuthHeader($token);
-        return ['Authorization' => sprintf('Bearer %s', $token)];
-    }
-
-    /**
-     * @return Account
-     */
-    private function getAccountFromToken(): Account
-    {
-        return $this->get($this->accountHelper->getAccount()->getToken(AccountHelper::TOKEN_TYPE));
+        return $this->accountHelper->getAuthHeader();
     }
 
     /**
@@ -399,5 +396,18 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
     private function mapResource(ResourceObject $resource, string $mapperName)
     {
         return $this->mapperResolver->getMapper($mapperName)->mapResource($resource);
+    }
+
+    /**
+     * @param string $token
+     * @return string
+     */
+    private function getCustomerReference(string $token): string
+    {
+        $data = $this->tokenDecoder->decode($token);
+
+        $sub = json_decode($data['sub'], true);
+
+        return $sub['customer_reference'];
     }
 }

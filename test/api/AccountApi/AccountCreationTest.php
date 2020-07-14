@@ -2,15 +2,38 @@
 
 namespace Frontastic\Common\ApiTests\AccountApi;
 
+use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
+use Frontastic\Catwalk\ApiCoreBundle\Domain\ContextService;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\AccountApiBundle\Domain\DuplicateAccountException;
+use Frontastic\Common\AccountApiBundle\Domain\Session;
 use Frontastic\Common\ApiTests\FrontasticApiTestCase;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
+use Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper;
 
 class AccountCreationTest extends FrontasticApiTestCase
 {
+    public function setup()
+    {
+        $account = new Account(['accountId' => uniqid()]);
+        $session = new Session(['account' => $account, 'loggedIn' => false]);
+        $contextMock = $this->getMockBuilder(Context::class)->getMock();
+        $contextMock->session = $session;
+        $contextServiceMock = $this
+            ->getMockBuilder(ContextService::class)
+            ->setMethods(['createContextFromRequest'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $contextServiceMock
+            ->method('createContextFromRequest')
+            ->willReturn($contextMock);
+
+        self::$kernel->getContainer()
+            ->set('Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper', new AccountHelper($contextServiceMock));
+    }
+
     /**
      * @dataProvider projectAndLanguage
      */

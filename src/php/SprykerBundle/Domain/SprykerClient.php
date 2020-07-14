@@ -179,14 +179,16 @@ class SprykerClient implements SprykerClientInterface
      */
     private function buildRequestHeaders(array $additionalHeaders): array
     {
+        $nonFormattedHeaders = array_merge($this->defaultHeaders, $additionalHeaders);
+
         $headers = [];
-        foreach ($this->defaultHeaders as $header => $value) {
+        foreach ($nonFormattedHeaders as $header => $value) {
             if (is_array($value) && is_callable([$this, $value[0]])) {
                 $value = $this->{$value[0]}();
             }
             $headers[] = sprintf('%s: %s', $header, $value);
         }
 
-        return array_merge($headers, $additionalHeaders);
+        return $headers;
     }
 }
