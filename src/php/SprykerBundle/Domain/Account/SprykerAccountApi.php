@@ -316,16 +316,16 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
     public function getSalutations(string $locale): ?array
     {
         // TODO: This endpoint only exist in Prym but not in the default Spryker API
-//        $response = $this->client->get('/salutations');
-//
-//        $salutations = $this->mapResponseResource($response, SprykerSalutationMapper::MAPPER_NAME);
-//
-//        return array_map(
-//            function (SprykerSalutation $salutation): string {
-//                return $salutation->label;
-//            },
-//            $salutations
-//        );
+        // $response = $this->client->get('/salutations');
+
+        // $salutations = $this->mapResponseResource($response, SprykerSalutationMapper::MAPPER_NAME);
+
+        // return array_map(
+            // function (SprykerSalutation $salutation): string {
+                // return $salutation->label;
+            // },
+            // $salutations
+        // );
         return [SalutationHelper::DEFAULT_SPRYKER_SALUTATION];
     }
 

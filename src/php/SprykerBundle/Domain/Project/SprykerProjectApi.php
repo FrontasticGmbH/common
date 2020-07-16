@@ -75,14 +75,4 @@ class SprykerProjectApi extends SprykerApiBase implements SprykerProjectApiInter
 
         return $attributes;
     }
-
-//    /**
-//     * @return \Frontastic\Common\SprykerBundle\Domain\SprykerSalutation[]
-//     */
-//    public function getSalutations(): array
-//    {
-//        $response = $this->client->get('/salutations');
-//
-//        return $this->mapResponseResource($response, SprykerSalutationMapper::MAPPER_NAME);
-//    }
 }
