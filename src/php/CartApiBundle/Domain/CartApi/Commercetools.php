@@ -554,6 +554,8 @@ class Commercetools implements CartApi
                 );
         }
 
+        $this->ensureCustomPaymentFieldsExist();
+
         $payment = $this->client->post(
             '/payments',
             [],
@@ -869,5 +871,37 @@ class Commercetools implements CartApi
 
         return $innerCart['country'] !== $locale->country
             || $innerCart['locale'] !== $locale->language;
+    }
+
+    private function ensureCustomPaymentFieldsExist()
+    {
+        try {
+            $this->client->get('/types/key=' . CartApi\Commercetools\Mapper::CUSTOM_PAYMENT_FIELDS_KEY);
+            return;
+        } catch (RequestException $exception) {
+            if ($exception->getTranslationCode() !== 'commercetools.ResourceNotFound') {
+                throw $exception;
+            }
+        }
+
+        $this->client->post(
+            '/types',
+            [],
+            [],
+            json_encode([
+                'key' => CartApi\Commercetools\Mapper::CUSTOM_PAYMENT_FIELDS_KEY,
+                'name' => ['en' => 'Frontastic payment fields'],
+                'description' => ['en' => 'Additional fields from Frontastic for the payment'],
+                'resourceTypeIds' => ['payment'],
+                'fieldDefinitions' => [
+                    [
+                        'name' => 'frontasticDetails',
+                        'type' => ['name' => 'String'],
+                        'label' => ['en' => 'Additional details from the payment integration'],
+                        'required' => false,
+                    ],
+                ],
+            ])
+        );
     }
 }

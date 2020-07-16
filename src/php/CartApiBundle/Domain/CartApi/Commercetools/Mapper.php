@@ -16,6 +16,8 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 
 class Mapper
 {
+    public const CUSTOM_PAYMENT_FIELDS_KEY = 'frontastic-payment';
+
     /** @var AccountMapper */
     private $accountMapper;
 
@@ -243,6 +245,11 @@ class Mapper
 
     public function mapPaymentToData(Payment $payment): array
     {
+        $customFields = $payment->rawApiInput['custom']['fields'] ?? [];
+        if ($payment->details !== null) {
+            $customFields['frontasticDetails'] = json_encode($payment->details);
+        }
+
         return array_merge(
             $payment->rawApiInput,
             [
@@ -259,6 +266,12 @@ class Mapper
                 'paymentStatus' => [
                     'interfaceCode' => $payment->paymentStatus,
                     'interfaceText' => $payment->debug,
+                ],
+                'custom' => [
+                    'type' => [
+                        'key' => self::CUSTOM_PAYMENT_FIELDS_KEY,
+                    ],
+                    'fields' => (object)$customFields,
                 ],
             ]
         );
