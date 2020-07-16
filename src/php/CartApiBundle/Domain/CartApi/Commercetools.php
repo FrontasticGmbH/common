@@ -12,6 +12,7 @@ use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
+use Frontastic\Common\CartApiBundle\Domain\UpdatePaymentCommand;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreator;
@@ -575,6 +576,63 @@ class Commercetools implements CartApi
                 ],
             ],
             $this->parseLocaleString($localeString)
+        );
+    }
+
+    public function updatePayment(UpdatePaymentCommand $command): Payment
+    {
+        $originalPayment = null;
+        foreach ($command->cart->payments as $payment) {
+            if ($payment->id === $command->id) {
+                $originalPayment = $payment;
+            }
+        }
+        if ($originalPayment === null) {
+            throw new \RuntimeException('The cart has no payment with ID ' . $command->id);
+        }
+
+        $actions = [];
+        if ($command->paymentStatus !== null) {
+            $actions[] = [
+                'action' => 'setStatusInterfaceCode',
+                'interfaceCode' => $command->paymentStatus,
+            ];
+        }
+        if ($command->debug !== null) {
+            $actions[] = [
+                'action' => 'setStatusInterfaceText',
+                'interfaceText' => $command->debug,
+            ];
+        }
+        if ($command->paymentInterfaceId !== null) {
+            $actions[] = [
+                'action' => 'setInterfaceId',
+                'interfaceId' => $command->paymentInterfaceId,
+            ];
+        }
+
+        if ($command->details !== null) {
+            $this->ensureCustomPaymentFieldsExist();
+            $actions[] = [
+                'action' => 'setCustomField',
+                'name' => 'frontasticDetails',
+                'value' => \GuzzleHttp\json_encode($command->details),
+            ];
+        }
+
+        return $this->cartMapper->mapDataToPayment(
+            $this->client->post(
+                '/payments/key=' . $command->id,
+                [],
+                [],
+                json_encode([
+                    'version' => (int)$originalPayment->version,
+                    'actions' => array_merge(
+                        $command->rawApiInput,
+                        $actions
+                    ),
+                ])
+            )
         );
     }
 

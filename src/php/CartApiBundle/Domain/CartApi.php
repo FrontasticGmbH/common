@@ -71,6 +71,8 @@ interface CartApi
 
     public function addPayment(Cart $cart, Payment $payment, ?array $custom = null, string $locale = null): Cart;
 
+    public function updatePayment(UpdatePaymentCommand $command): Payment;
+
     public function redeemDiscountCode(Cart $cart, string $code, string $locale = null): Cart;
 
     public function removeDiscountCode(Cart $cart, LineItem $discountLineItem, string $locale = null): Cart;

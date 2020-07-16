@@ -9,6 +9,7 @@ use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
+use Frontastic\Common\CartApiBundle\Domain\UpdatePaymentCommand;
 use Frontastic\Common\ShopwareBundle\Domain\AbstractShopwareApi;
 use Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper\CartItemRequestDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper\CartMapper;
@@ -231,6 +232,12 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
     }
 
     public function addPayment(Cart $cart, Payment $payment, ?array $custom = null, string $locale = null): Cart
+    {
+        // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
+        throw new RuntimeException(__METHOD__ . ' not implemented');
+    }
+
+    public function updatePayment(UpdatePaymentCommand $command): Payment
     {
         // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
         throw new RuntimeException(__METHOD__ . ' not implemented');
