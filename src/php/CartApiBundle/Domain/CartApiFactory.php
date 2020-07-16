@@ -120,10 +120,12 @@ class CartApiFactory
                     ->get(SprykerClientFactory::class)
                     ->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
 
+                $projectCartConfiguration = $project->configuration['cart'];
+
                 $customerCartRequestData = new CustomerCartRequestData(
-                    $project->configuration['cart']->priceMode,
-                    $project->configuration['cart']->currency,
-                    $project->configuration['cart']->shop
+                    $projectCartConfiguration->priceMode,
+                    $projectCartConfiguration->currency,
+                    $projectCartConfiguration->shop
                 );
 
                 $guestCart = new GuestCart($client, $dataMapper, $accountHelper);
