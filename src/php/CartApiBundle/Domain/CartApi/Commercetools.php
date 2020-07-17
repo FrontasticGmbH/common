@@ -580,15 +580,7 @@ class Commercetools implements CartApi
 
     public function updatePayment(UpdatePaymentCommand $command): Payment
     {
-        $originalPayment = null;
-        foreach ($command->cart->payments as $payment) {
-            if ($payment->id === $command->id) {
-                $originalPayment = $payment;
-            }
-        }
-        if ($originalPayment === null) {
-            throw new \RuntimeException('The cart has no payment with ID ' . $command->id);
-        }
+        $originalPayment = $command->cart->getPaymentById($command->id);
 
         $actions = [];
         if ($command->paymentStatus !== null) {
