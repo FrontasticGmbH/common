@@ -3,18 +3,18 @@ import cloudinary from 'cloudinary-core'
 import _ from 'lodash'
 
 class Cloudinary {
-    constructor (configuration) {
+    constructor(configuration) {
         this.cloudinary = new cloudinary.Cloudinary({
             cloud_name: configuration.cloudName,
         })
     }
 
-    getImageUrl (media, width, height, options = {}) {
+    getImageUrl(media, width, height, options = {}) {
         return this.cloudinary.url(
             media.mediaId,
             _.extend(
                 {
-                    fetch_format: 'auto',
+                    fetch_format: media.format && media.format === 'svg' ? undefined : 'auto',
                     width: width,
                     height: height,
                     quality: 'auto',
@@ -26,7 +26,7 @@ class Cloudinary {
         )
     }
 
-    getFetchImageUrl (url, width, height, options = {}) {
+    getFetchImageUrl(url, width, height, options = {}) {
         if (url.startsWith('//')) {
             // Cloudinary cannot cope with non-schemed URLs, assume HTTPS
             url = 'https:' + url
@@ -49,7 +49,7 @@ class Cloudinary {
         )
     }
 
-    getImageUrlWithoutDefaults (media, width, height, options = {}) {
+    getImageUrlWithoutDefaults(media, width, height, options = {}) {
         return this.cloudinary.url(
             media.mediaId,
             _.extend(
@@ -67,7 +67,7 @@ class Cloudinary {
      * @returns {{gravity: string}}
      * @private
      */
-    getGravityOptions (imageOptions) {
+    getGravityOptions(imageOptions) {
         if (imageOptions.crop) {
             return {}
         }
@@ -77,9 +77,7 @@ class Cloudinary {
         }
 
         if (imageOptions.gravity) {
-            options.gravity = (imageOptions.gravity.mode === 'custom'
-                ? 'xy_center'
-                : imageOptions.gravity.mode)
+            options.gravity = imageOptions.gravity.mode === 'custom' ? 'xy_center' : imageOptions.gravity.mode
 
             if (imageOptions.gravity.coordinates) {
                 options.x = imageOptions.gravity.coordinates.x
@@ -95,7 +93,7 @@ class Cloudinary {
      * @returns {{crop: string}}
      * @private
      */
-    cropOptions (imageOptions) {
+    cropOptions(imageOptions) {
         let options = {
             crop: 'fill',
         }
