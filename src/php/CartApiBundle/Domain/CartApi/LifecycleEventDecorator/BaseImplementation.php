@@ -9,7 +9,6 @@ use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
-use Frontastic\Common\CartApiBundle\Domain\UpdatePaymentCommand;
 
 /**
  * Base implementation of the CartApi LifecycleDecorator, which should be used when writing own LifecycleDecorators
@@ -190,7 +189,7 @@ abstract class BaseImplementation
     public function beforeUpdatePayment(
         CartApi $cartApi,
         Cart $cart,
-        UpdatePaymentCommand $command,
+        Payment $payment,
         string $localeString
     ): void {
     }

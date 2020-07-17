@@ -139,7 +139,7 @@ class LifecycleEventDecorator implements CartApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function updatePayment(Cart $cart, UpdatePaymentCommand $command, string $localeString): Payment
+    public function updatePayment(Cart $cart, Payment $payment, string $localeString): Payment
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }

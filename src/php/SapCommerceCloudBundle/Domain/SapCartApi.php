@@ -207,7 +207,7 @@ class SapCartApi implements CartApi
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function updatePayment(Cart $cart, UpdatePaymentCommand $command, string $localeString): Payment
+    public function updatePayment(Cart $cart, Payment $payment, string $localeString): Payment
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
