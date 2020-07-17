@@ -228,6 +228,12 @@ class Mapper
     {
         $paymentData = isset($paymentData['obj']) ? $paymentData['obj'] : $paymentData;
 
+        $frontasticDetails = $paymentData['custom']['fields']['frontasticDetails'] ?? null;
+        $details = null;
+        if (is_string($frontasticDetails)) {
+            $details = json_decode($frontasticDetails, true);
+        }
+
         return new Payment(
             [
                 'id' => $paymentData['key'] ?? null,
@@ -238,6 +244,7 @@ class Mapper
                 'currency' => $paymentData['amountPlanned']['currencyCode'] ?? null,
                 'debug' => json_encode($paymentData),
                 'paymentStatus' => $paymentData['paymentStatus']['interfaceCode'] ?? null,
+                'details' => $details,
                 'version' => $paymentData['version'] ?? 0,
             ]
         );
