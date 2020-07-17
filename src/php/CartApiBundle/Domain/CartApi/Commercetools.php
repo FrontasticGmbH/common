@@ -578,9 +578,9 @@ class Commercetools implements CartApi
         );
     }
 
-    public function updatePayment(UpdatePaymentCommand $command): Payment
+    public function updatePayment(Cart $cart, UpdatePaymentCommand $command, string $localeString): Payment
     {
-        $originalPayment = $command->cart->getPaymentById($command->id);
+        $originalPayment = $cart->getPaymentById($command->id);
 
         $actions = [];
         if ($command->paymentStatus !== null) {

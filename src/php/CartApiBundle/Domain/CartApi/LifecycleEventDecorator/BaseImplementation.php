@@ -187,8 +187,12 @@ abstract class BaseImplementation
     }
 
     /*** updatePayment() *************************************************************************************************/
-    public function beforeUpdatePayment(CartApi $cartApi, UpdatePaymentCommand $command): void
-    {
+    public function beforeUpdatePayment(
+        CartApi $cartApi,
+        Cart $cart,
+        UpdatePaymentCommand $command,
+        string $localeString
+    ): void {
     }
 
     public function afterUpdatePayment(CartApi $cartApi, Payment $payment): ?Payment
