@@ -598,8 +598,8 @@ class Commercetools implements CartApi
         ];
         $actions[] = [
             'action' => 'setCustomField',
-            'name' => 'frontasticDetails',
-            'value' => json_encode($payment->details),
+            'name' => 'frontasticPaymentDetails',
+            'value' => json_encode($payment->paymentDetails),
         ];
 
         return $this->cartMapper->mapDataToPayment(
@@ -935,7 +935,7 @@ class Commercetools implements CartApi
                 'resourceTypeIds' => ['payment'],
                 'fieldDefinitions' => [
                     [
-                        'name' => 'frontasticDetails',
+                        'name' => 'frontasticPaymentDetails',
                         'type' => ['name' => 'String'],
                         'label' => ['en' => 'Additional details from the payment integration'],
                         'required' => false,

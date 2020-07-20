@@ -228,10 +228,10 @@ class Mapper
     {
         $paymentData = isset($paymentData['obj']) ? $paymentData['obj'] : $paymentData;
 
-        $frontasticDetails = $paymentData['custom']['fields']['frontasticDetails'] ?? null;
-        $details = null;
-        if (is_string($frontasticDetails)) {
-            $details = json_decode($frontasticDetails, true);
+        $frontasticPaymentDetails = $paymentData['custom']['fields']['frontasticPaymentDetails'] ?? null;
+        $paymentDetails = null;
+        if (is_string($frontasticPaymentDetails)) {
+            $paymentDetails = json_decode($frontasticPaymentDetails, true);
         }
 
         return new Payment(
@@ -244,7 +244,7 @@ class Mapper
                 'currency' => $paymentData['amountPlanned']['currencyCode'] ?? null,
                 'debug' => json_encode($paymentData),
                 'paymentStatus' => $paymentData['paymentStatus']['interfaceCode'] ?? null,
-                'details' => $details,
+                'paymentDetails' => $paymentDetails,
                 'version' => $paymentData['version'] ?? 0,
             ]
         );
@@ -253,8 +253,8 @@ class Mapper
     public function mapPaymentToData(Payment $payment): array
     {
         $customFields = $payment->rawApiInput['custom']['fields'] ?? [];
-        if ($payment->details !== null) {
-            $customFields['frontasticDetails'] = json_encode($payment->details);
+        if ($payment->paymentDetails !== null) {
+            $customFields['frontasticPaymentDetails'] = json_encode($payment->paymentDetails);
         }
 
         return array_merge(

@@ -76,5 +76,5 @@ class Payment extends ApiDataObject
      *
      * @var array|null
      */
-    public $details;
+    public $paymentDetails;
 }
