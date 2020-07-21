@@ -3,13 +3,13 @@ import cloudinary from 'cloudinary-core'
 import _ from 'lodash'
 
 class Cloudinary {
-    constructor(configuration) {
+    constructor (configuration) {
         this.cloudinary = new cloudinary.Cloudinary({
             cloud_name: configuration.cloudName,
         })
     }
 
-    getImageUrl(media, width, height, options = {}) {
+    getImageUrl (media, width, height, options = {}) {
         return this.cloudinary.url(
             media.mediaId,
             _.extend(
@@ -26,7 +26,7 @@ class Cloudinary {
         )
     }
 
-    getFetchImageUrl(url, width, height, options = {}) {
+    getFetchImageUrl (url, width, height, options = {}) {
         if (url.startsWith('//')) {
             // Cloudinary cannot cope with non-schemed URLs, assume HTTPS
             url = 'https:' + url
@@ -49,7 +49,7 @@ class Cloudinary {
         )
     }
 
-    getImageUrlWithoutDefaults(media, width, height, options = {}) {
+    getImageUrlWithoutDefaults (media, width, height, options = {}) {
         return this.cloudinary.url(
             media.mediaId,
             _.extend(
@@ -67,7 +67,7 @@ class Cloudinary {
      * @returns {{gravity: string}}
      * @private
      */
-    getGravityOptions(imageOptions) {
+    getGravityOptions (imageOptions) {
         if (imageOptions.crop) {
             return {}
         }
@@ -93,7 +93,7 @@ class Cloudinary {
      * @returns {{crop: string}}
      * @private
      */
-    cropOptions(imageOptions) {
+    cropOptions (imageOptions) {
         let options = {
             crop: 'fill',
         }
