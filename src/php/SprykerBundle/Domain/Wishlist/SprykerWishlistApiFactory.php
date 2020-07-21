@@ -8,7 +8,7 @@ use Frontastic\Common\WishlistApiBundle\Domain\WishlistApi;
 use Frontastic\Common\SprykerBundle\BaseApi\Factory\AbstractSprykerBaseFactory;
 use Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver;
-use Frontastic\Common\SprykerBundle\Domain\SprykerJsonClient;
+use Frontastic\Common\SprykerBundle\Domain\SprykerClient;
 use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -21,7 +21,7 @@ class SprykerWishlistApiFactory extends AbstractSprykerBaseFactory
     public function factor(Project $project): WishlistApi
     {
         return new SprykerWishlistApi(
-            $this->createSprykerJsonClient($project->configuration),
+            $this->createSprykerClient($project->configuration),
             $this->getMapperResolver(),
             $this->getAccountHelper(),
             WishlistConstants::RESOURCES_MAIN
