@@ -25,7 +25,8 @@ class VariantMapper implements MapperInterface
         $variant = new Variant();
         $variant->id = $resource->id();
         $variant->sku = (string)$resource->attribute('sku');
-        $variant->groupId = (string)$resource->attribute('idProductAbstract');
+        // $variant->groupId = (string)$resource->attribute('idProductAbstract');
+        $variant->groupId = (string)$resource->attribute('sku');
         $variant->attributes = $resource->attribute('attributes');
         // @TODO: Use the value of Query.loadDangerousInnerData to asses if dangerousInnerVariant should be setted
         // $variant->dangerousInnerVariant = $resource->attributes();

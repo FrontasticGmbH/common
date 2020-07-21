@@ -3,9 +3,9 @@
 namespace Frontastic\Common\SprykerBundle\Domain;
 
 use Frontastic\Common\HttpClient;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use Frontastic\Common\SprykerBundle\Domain\Exception\ExceptionFactoryInterface;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Promise\PromiseInterface;
 use WoohooLabs\Yang\JsonApi\Response\JsonApiResponse;
@@ -145,7 +145,10 @@ class SprykerClient implements SprykerClientInterface
         return $this->httpClient
             ->requestAsync($method, $fullUrl, $body, $this->buildRequestHeaders($headers))
             ->then(
-                static function (HttpClient\Response $response) {
+                function (HttpClient\Response $response) {
+                    if ($response->status >= 400) {
+                        throw $this->prepareException($response);
+                    }
                     return new JsonApiResponse($response->rawApiOutput);
                 },
                 function (RequestException $exception) use ($endpoint) {
@@ -190,5 +193,35 @@ class SprykerClient implements SprykerClientInterface
         }
 
         return $headers;
+    }
+
+    protected function prepareException(HttpClient\Response $response): \Exception
+    {
+        $errorData = json_decode($response->body);
+        $exception = new RequestException(
+            ($errorData->message ?? $response->body) ?: 'Internal Server Error',
+            $response->status ?? 503
+        );
+
+        if (isset($errorData->errors)) {
+            $errorData->errors = array_reverse($errorData->errors);
+            foreach ($errorData->errors as $error) {
+                $exception = new RequestException(
+                    $error->message ?? 'Unknown error',
+                    $response->status ?? 503,
+                    $exception
+                );
+
+                $exception->setTranslationData(
+                    $error->code ?? 'Unknown',
+                    array_diff_key(
+                        (array)$error,
+                        ['action' => true, 'message' => true, 'code' => true]
+                    )
+                );
+            }
+        }
+
+        return $exception;
     }
 }

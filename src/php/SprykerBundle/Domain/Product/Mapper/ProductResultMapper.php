@@ -74,7 +74,9 @@ class ProductResultMapper implements MapperInterface
         $variant = new Variant();
         $variant->sku = (string)$abstractProduct['abstractSku'];
         $variant->id = $abstractProduct['abstractSku'];
+        $variant->groupId = $abstractProduct['abstractSku'];
         $variant->price = $abstractProduct['price'];
+        $variant->currency = $abstractProduct['prices'][0]['currency']['code'];
         $variant->images = $images;
         $variant->dangerousInnerVariant = $abstractProduct;
 

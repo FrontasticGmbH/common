@@ -45,5 +45,15 @@
                  alias="Frontastic\Common\SprykerBundle\Domain\Locale\DefaultLocaleCreatorFactory"
                  public="true"
         />
+
+        <service id="Spryker.Api.VariantUrlEncoder" class="Frontastic\Common\SprykerBundle\Domain\Route\Service\VariantUrlEncoder">
+            <argument type="service">
+                <service class="Frontastic\Common\SprykerBundle\Domain\Product\SprykerSlugger" />
+            </argument>
+        </service>
+
+        <service id="Frontastic\Common\SprykerBundle\Domain\Product\Expander\Nested\NestedVariantAttributeUrlExpander">
+            <argument type="service" id="Spryker.Api.VariantUrlEncoder" />
+        </service>
     </services>
 </container>

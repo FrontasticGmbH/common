@@ -4,6 +4,7 @@ namespace Frontastic\Common\SprykerBundle\Domain\Product;
 
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
@@ -12,6 +13,8 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\SprykerBundle\BaseApi\ProductExpandingTrait;
 use Frontastic\Common\SprykerBundle\BaseApi\SprykerApiBase;
 use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreator;
+use Frontastic\Common\SprykerBundle\Domain\Product\Expander\Nested\NestedSearchProductAbstractExpander;
+use Frontastic\Common\SprykerBundle\Domain\Product\Mapper\ProductConcreteMapper;
 use Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver;
 use Frontastic\Common\SprykerBundle\Domain\Product\Mapper\CategoriesMapper;
@@ -32,6 +35,11 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
     /**
      * @var array
      */
+    protected $concreteProductResources;
+
+    /**
+     * @var array
+     */
     protected $queryResources;
 
     /**
@@ -42,17 +50,22 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
      * @param LocaleCreator $localeCreator
      * @param array $resources
      * @param array $queryResources
+     * @param array $concreteProductresources
      */
     public function __construct(
         SprykerClientInterface $client,
         MapperResolver $mapperResolver,
         LocaleCreator $localeCreator,
         array $resources = SprykerProductApiExtendedConstants::SPRYKER_DEFAULT_PRODUCT_RESOURCES,
-        array $queryResources = SprykerProductApiExtendedConstants::SPRYKER_PRODUCT_QUERY_RESOURCES
+        array $queryResources = SprykerProductApiExtendedConstants::SPRYKER_PRODUCT_QUERY_RESOURCES,
+        array $concreteProductresources = SprykerProductApiExtendedConstants::SPRYKER_DEFAULT_CONCRETE_PRODUCT_RESOURCES
     ) {
         parent::__construct($client, $mapperResolver, $localeCreator);
         $this->productResources = $resources;
         $this->queryResources = $queryResources;
+        $this->concreteProductResources = $concreteProductresources;
+
+        $this->registerProductExpander(new NestedSearchProductAbstractExpander());
     }
 
     /**
@@ -87,13 +100,20 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
         $query = SingleProductQuery::fromLegacyQuery($query);
         $query->validate();
 
-        $id = $this->resolveProductIdentifier($query);
+        $endpoint = $this->withIncludes("/abstract-products/{$query->productId}", $this->productResources);
+        $mapperName = ProductMapper::MAPPER_NAME;
+
+        if ($query->sku) {
+            $endpoint = $this->withIncludes("/concrete-products/{$query->sku}", $this->concreteProductResources);
+            $mapperName = ProductConcreteMapper::MAPPER_NAME;
+        }
+
         $response = $this->client->get(
-            $this->withIncludes("/abstract-products/{$id}", $this->productResources),
+            $endpoint,
             [],
             ProductApi::QUERY_ASYNC
-        )->then(function ($response) {
-            $product = $this->mapResponseResource($response, ProductMapper::MAPPER_NAME);
+        )->then(function ($response) use ($mapperName, $query) {
+            $product = $this->mapResponseResource($response, $mapperName);
             $resources = $this->getAllResources($response);
 
             if ($product && count($resources) > 0) {
@@ -101,6 +121,18 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
             }
 
             return $product;
+        })
+        ->otherwise(function (\Throwable $exception) use ($query) {
+            if ($exception instanceof RequestException && $exception->getCode() >= 500) {
+                return;
+            }
+            if ($exception instanceof RequestException && $exception->getCode() === 404) {
+                if ($query->sku !== null) {
+                    throw ProductApi\ProductNotFoundException::bySku($query->sku);
+                }
+                throw ProductApi\ProductNotFoundException::byProductId($query->productId);
+            }
+            throw $exception;
         });
 
         if ($mode === ProductApi::QUERY_SYNC) {
@@ -125,17 +157,25 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
                 ProductApi::QUERY_ASYNC
             )
             ->then(function ($response) use ($query) {
-            $products = $this->mapResponseResource($response, ProductResultMapper::MAPPER_NAME);
-            $includedResources = $this->getAllResources($response) ?? [];
+                $products = $this->mapResponseResource($response, ProductResultMapper::MAPPER_NAME);
+                $includedResources = $this->getAllResources($response) ?? [];
 
-            if (count($products->items) && count($includedResources)) {
-                $this->expandProductList($products->items, $includedResources);
-            }
+                if (count($products->items) && count($includedResources)) {
+                    $this->expandProductList($products->items, $includedResources);
+                }
 
-            $products->query = clone $query;
+                $products->query = clone $query;
 
-            return $products;
-        });
+                return $products;
+            })
+            ->otherwise(function (\Throwable $exception) use ($query) {
+                if ($exception instanceof RequestException && $exception->getCode() >= 500) {
+                    return new Result([
+                        'query' => clone $query
+                    ]);
+                }
+                throw $exception;
+            });
 
         if ($mode === ProductApi::QUERY_SYNC) {
             return $response->wait();
