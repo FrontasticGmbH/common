@@ -294,7 +294,10 @@ class CartController extends CrudController
             return $cartApi->getForUser($context->session->account, $context->locale);
         } else {
             $symfonySession = $request->hasSession() ? $request->getSession() : null;
-            if ($symfonySession !== null && $symfonySession->has('cart_id')) {
+            if ($symfonySession !== null &&
+                $symfonySession->has('cart_id') &&
+                $symfonySession->get('cart_id') !== null)
+            {
                 $cartId = $symfonySession->get('cart_id');
                 try {
                     return $cartApi->getById($cartId, $context->locale);
@@ -304,6 +307,25 @@ class CartController extends CrudController
                             'Error fetching anonymous cart {cartId}, creating new one',
                             [
                                 'cartId' => $cartId,
+                                'exception' => $exception,
+                            ]
+                        );
+                }
+            }
+
+            if ($symfonySession !== null &&
+                $symfonySession->has('anonymousId') &&
+                $symfonySession->get('anonymousId') !== null)
+            {
+                $anonymousId = $symfonySession->get('anonymousId');
+                try {
+                    return $cartApi->getAnonymous($anonymousId, $context->locale);
+                } catch (\Exception $exception) {
+                    $this->get('logger')
+                        ->info(
+                            'Error fetching anonymous cart, creating new one',
+                            [
+                                'anonymousId' => $anonymousId,
                                 'exception' => $exception,
                             ]
                         );

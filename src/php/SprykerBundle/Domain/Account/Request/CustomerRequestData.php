@@ -113,7 +113,7 @@ class CustomerRequestData extends AbstractRequestData
             $account->firstName,
             $account->lastName,
             SalutationHelper::resolveGenderFromSalutation($salutation),
-            SalutationHelper::getSprykerSalutation($salutation),
+            SalutationHelper::DEFAULT_SPRYKER_SALUTATION,
             $account->email,
             $account->getPassword(),
             $account->getPassword(),

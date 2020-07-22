@@ -48,7 +48,7 @@ class AccountHelper
         }
 
         if (!$token) {
-            $token = $this->getAccount()->authToken();
+            $token = $this->getAccount()->authToken;
         }
 
         return ['Authorization' => sprintf('Bearer %s', $token)];

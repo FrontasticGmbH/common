@@ -79,13 +79,6 @@ class GuestCart extends AbstractSprykerCart
         }
 
         return new Cart();
-
-//         @TODO: Get currency from locale
-//        return new Cart([
-//            'cartId' => $id,
-//            'cartVersion' => '1',
-//            'currency' => 'EUR'
-//        ]);
     }
 
     /**

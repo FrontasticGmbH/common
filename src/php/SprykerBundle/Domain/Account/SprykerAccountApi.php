@@ -80,11 +80,11 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
         $headers = $this->accountHelper->getAnonymousHeader();
 
         try {
-            $response = $this->client->post('/customers', $headers, $request->encode());
+            $this->client->post('/customers', $headers, $request->encode());
 
-            $account = $this->mapAccount($response->document()->primaryResource());
+            $account = $this->login($account, $cart, $locale);
         } catch (\Exception $e) {
-            if ($response->getStatusCode() === 422) {
+            if ($e->getCode() === 422) {
                 throw new DuplicateAccountException($account->email, 0);
             }
             throw $e;
@@ -332,6 +332,11 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
     public function refreshAccount(Account $account, string $locale = null): Account
     {
         $authToken = $account->authToken;
+
+        if ($authToken === null) {
+            throw new \OutOfBoundsException('Could not refresh account');
+        }
+
         $id = $this->getCustomerReference($authToken);
 
         $response = $this->client->get(

@@ -90,7 +90,7 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
      */
     public function getAnonymous(string $anonymousId, string $locale): Cart
     {
-        return $this->guestCart->getCart(null, $locale);
+        return $this->guestCart->getCart($anonymousId, $locale);
     }
 
     /**
@@ -311,7 +311,7 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
      */
     public function commit(string $locale = null): Cart
     {
-        return $this->getResolvedCart()->getCart($locale);
+        return $this->getResolvedCart()->getCart(null, $locale);
     }
 
     /**

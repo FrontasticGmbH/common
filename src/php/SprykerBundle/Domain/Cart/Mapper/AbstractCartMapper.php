@@ -34,9 +34,6 @@ abstract class AbstractCartMapper implements MapperInterface
         $cart->sum = $totals['grandTotal'];
         $cart->discountCodes = $resource->attribute('discounts', []);
         $cart->lineItems = $this->mapLineItems($resource);
-        $cart->custom['_taxTotal'] = $totals['taxTotal'] ?? 0;
-        $cart->custom['_discountTotal'] = $totals['discountTotal'] ?? 0;
-        $cart->custom['_shippingTotal'] = $totals['expenseTotal'] ?? null;
 
         $cart->dangerousInnerCart = $resource->attributes();
 

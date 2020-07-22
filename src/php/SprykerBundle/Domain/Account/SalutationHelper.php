@@ -52,6 +52,6 @@ class SalutationHelper
      */
     public static function resolveGenderFromSalutation(string $frontasticSalutation): string
     {
-        return self::$genderMap[$frontasticSalutation] ?? $frontasticSalutation;
+        return self::$genderMap[$frontasticSalutation] ?? self::GENDER_MALE;
     }
 }
