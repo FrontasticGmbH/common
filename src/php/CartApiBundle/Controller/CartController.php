@@ -294,7 +294,8 @@ class CartController extends CrudController
             return $cartApi->getForUser($context->session->account, $context->locale);
         } else {
             $symfonySession = $request->hasSession() ? $request->getSession() : null;
-            if ($symfonySession !== null && $symfonySession->has('cart_id')) {
+
+            if ($symfonySession !== null && $symfonySession->has('cart_id') && $symfonySession->get('cart_id') !== null) {
                 $cartId = $symfonySession->get('cart_id');
                 try {
                     return $cartApi->getById($cartId, $context->locale);
@@ -333,7 +334,7 @@ class CartController extends CrudController
         return $body;
     }
 
-    private function parseProjectSpecificDataByKey(array $requestBody, string $key): array
+    protected function parseProjectSpecificDataByKey(array $requestBody, string $key): array
     {
         $projectSpecificData = $requestBody['projectSpecificData'] ?? [];
 
