@@ -24,15 +24,24 @@ class DefaultLocaleCreator extends LocaleCreator
         $locale = Locale::createFromPosix($localeString);
 
         [$language, $languageId] = $this->pickLanguageFromProjectConfig(
-            $this->extractProjectConfigResource($projectConfig, SprykerProjectConfigApiInterface::RESOURCE_LANGUAGES),
+            $this->extractProjectConfigResource(
+                $projectConfig,
+                SprykerProjectConfigApi::RESOURCE_LANGUAGES
+            ),
             $locale
         );
         [$country, $countryId] = $this->pickCountryFromProjectConfig(
-            $this->extractProjectConfigResource($projectConfig, SprykerProjectConfigApiInterface::RESOURCE_COUNTRIES),
+            $this->extractProjectConfigResource(
+                $projectConfig,
+                SprykerProjectConfigApi::RESOURCE_COUNTRIES
+            ),
             $locale
         );
         [$currency, $currencyId] = $this->pickCurrencyFromProjectConfig(
-            $this->extractProjectConfigResource($projectConfig, SprykerProjectConfigApiInterface::RESOURCE_CURRENCIES),
+            $this->extractProjectConfigResource(
+                $projectConfig,
+                SprykerProjectConfigApi::RESOURCE_CURRENCIES
+            ),
             $locale
         );
 

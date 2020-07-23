@@ -117,7 +117,7 @@ class ProductResultMapper implements MapperInterface
             $facet->key = $parameterName;
             $facet->handle = $parameterName;
 
-            $facet->terms = array_map(function ($value) use ($parameterName) {
+            $facet->terms = array_map(function ($value) {
                 $term = new Term();
                 $term->name = $value['value'];
                 $term->handle = $value['value'];

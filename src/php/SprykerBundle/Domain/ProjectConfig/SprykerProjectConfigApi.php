@@ -7,6 +7,10 @@ use Psr\SimpleCache\CacheInterface;
 
 class SprykerProjectConfigApi
 {
+    public const RESOURCE_COUNTRIES = 'countries';
+    public const RESOURCE_CURRENCIES = 'currencies';
+    public const RESOURCE_LANGUAGES = 'languages';
+
     /** @var SprykerClient */
     private $client;
 

@@ -112,7 +112,7 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
             $endpoint,
             [],
             ProductApi::QUERY_ASYNC
-        )->then(function ($response) use ($mapperName, $query) {
+        )->then(function ($response) use ($mapperName) {
             $product = $this->mapResponseResource($response, $mapperName);
             $resources = $this->getAllResources($response);
 

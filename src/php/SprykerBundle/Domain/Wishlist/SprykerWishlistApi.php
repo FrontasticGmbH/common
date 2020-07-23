@@ -186,7 +186,8 @@ class SprykerWishlistApi extends SprykerApiBase implements WishlistApi
 
     public function addMultipleToWishlist(Wishlist $wishlist, array $lineItems, string $locale): Wishlist
     {
-        // toDo
+        // TODO: Implement addMultipleToWishlist() method.
+        throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
     /**

@@ -237,6 +237,11 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
         return $cart;
     }
 
+    public function updatePayment(Cart $cart, Payment $payment, string $localeString): Payment
+    {
+        throw new \RuntimeException(__METHOD__ . ' not implemented');
+    }
+
     /**
      * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
      * @param string $code
@@ -293,7 +298,7 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
         $orders = [];
 
         foreach ($mappedOrders as $mappedOrder) {
-            $orders[] = $this->getOrder($mappedOrder->orderId);
+            $orders[] = $this->getOrder($account, $mappedOrder->orderId, $locale);
         }
 
         return $orders;
@@ -383,10 +388,12 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
     public function setRawApiInput(Cart $cart, string $locale = null): Cart
     {
         // TODO: Implement setRawApiInput() method.
+        throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
     public function removeDiscountCode(Cart $cart, LineItem $discountLineItem, string $locale = null): Cart
     {
         // TODO: Implement removeDiscountCode() method.
+        throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 }

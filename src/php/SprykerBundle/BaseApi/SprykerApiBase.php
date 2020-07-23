@@ -31,21 +31,29 @@ class SprykerApiBase
     protected $locale;
 
     /**
+     * @var string
+     */
+    private $defaultLanguage;
+
+    /**
      * SprykerApiBase constructor.
      *
      * @param \Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface $client
      * @param \Frontastic\Common\SprykerBundle\Domain\MapperResolver $mapperResolver
      * @param LocaleCreator|null $localeCreator
+     * @param string|null $defaultLanguage
      */
     public function __construct(
         SprykerClientInterface $client,
         MapperResolver $mapperResolver,
-        ?LocaleCreator $localeCreator = null
+        ?LocaleCreator $localeCreator = null,
+        ?string $defaultLanguage = null
     )
     {
         $this->client = $client;
         $this->mapperResolver = $mapperResolver;
         $this->localeCreator = $localeCreator;
+        $this->defaultLanguage = $defaultLanguage;
     }
 
     /**

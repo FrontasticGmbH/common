@@ -138,7 +138,7 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
 
         $response = $this->client->patch(
             sprintf('/customer-password/%s', $account->accountId),
-            $this->getAuthHeader($account->authToken),
+            $this->getAuthHeader(),
             $request->encode()
         );
 

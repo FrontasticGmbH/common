@@ -141,7 +141,8 @@ class CartApiFactory
                     $accountHelper,
                     $guestCart,
                     $customerCart,
-                    $localeCreatorFactory->factor($project, $client)
+                    $localeCreatorFactory->factor($project, $client),
+                    $project->defaultLanguage
                 );
 
                 break;
