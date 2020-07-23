@@ -118,7 +118,7 @@ class Commercetools implements AccountApi
                 /*
                  * The cart might already belong to another user so we try to login without the cart.
                  */
-                return $this->create($account);
+                return $this->create($account, null, $locale);
             }
 
             throw $e;
@@ -266,7 +266,7 @@ class Commercetools implements AccountApi
                 /*
                  * The cart might already belong to another user so we try to login without the cart.
                  */
-                return $this->login($account);
+                return $this->login($account, null, $locale);
             }
 
             return null;

@@ -236,6 +236,12 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
         throw new RuntimeException(__METHOD__ . ' not implemented');
     }
 
+    public function updatePayment(Cart $cart, Payment $payment, string $localeString): Payment
+    {
+        // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
+        throw new RuntimeException(__METHOD__ . ' not implemented');
+    }
+
     public function redeemDiscountCode(Cart $cart, string $code, string $locale = null): Cart
     {
         $shopwareLocale = $this->parseLocaleString($locale);

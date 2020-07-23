@@ -10,6 +10,7 @@ use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
+use Frontastic\Common\CartApiBundle\Domain\UpdatePaymentCommand;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocale;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreator;
 
@@ -202,6 +203,11 @@ class SapCartApi implements CartApi
     }
 
     public function addPayment(Cart $cart, Payment $payment, ?array $custom = null, string $locale = null): Cart
+    {
+        throw new \RuntimeException(__METHOD__ . ' not implemented');
+    }
+
+    public function updatePayment(Cart $cart, Payment $payment, string $localeString): Payment
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }

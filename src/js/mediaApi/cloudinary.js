@@ -14,7 +14,7 @@ class Cloudinary {
             media.mediaId,
             _.extend(
                 {
-                    fetch_format: 'auto',
+                    fetch_format: media.format && media.format === 'svg' ? undefined : 'auto',
                     width: width,
                     height: height,
                     quality: 'auto',
@@ -77,9 +77,7 @@ class Cloudinary {
         }
 
         if (imageOptions.gravity) {
-            options.gravity = (imageOptions.gravity.mode === 'custom'
-                ? 'xy_center'
-                : imageOptions.gravity.mode)
+            options.gravity = imageOptions.gravity.mode === 'custom' ? 'xy_center' : imageOptions.gravity.mode
 
             if (imageOptions.gravity.coordinates) {
                 options.x = imageOptions.gravity.coordinates.x

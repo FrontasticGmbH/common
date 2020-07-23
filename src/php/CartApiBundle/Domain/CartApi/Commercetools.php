@@ -7,7 +7,6 @@ use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools\Mapper as CartMapper;
-use Frontastic\Common\CartApiBundle\Domain\Category;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator;
@@ -554,6 +553,8 @@ class Commercetools implements CartApi
                 );
         }
 
+        $this->ensureCustomPaymentFieldsExist();
+
         $payment = $this->client->post(
             '/payments',
             [],
@@ -573,6 +574,47 @@ class Commercetools implements CartApi
                 ],
             ],
             $this->parseLocaleString($localeString)
+        );
+    }
+
+    public function updatePayment(Cart $cart, Payment $payment, string $localeString): Payment
+    {
+        $originalPayment = $cart->getPaymentById($payment->id);
+
+        $this->ensureCustomPaymentFieldsExist();
+
+        $actions = [];
+        $actions[] = [
+            'action' => 'setStatusInterfaceCode',
+            'interfaceCode' => $payment->paymentStatus,
+        ];
+        $actions[] = [
+            'action' => 'setStatusInterfaceText',
+            'interfaceText' => $payment->debug,
+        ];
+        $actions[] = [
+            'action' => 'setInterfaceId',
+            'interfaceId' => $payment->paymentId,
+        ];
+        $actions[] = [
+            'action' => 'setCustomField',
+            'name' => 'frontasticPaymentDetails',
+            'value' => json_encode($payment->paymentDetails),
+        ];
+
+        return $this->cartMapper->mapDataToPayment(
+            $this->client->post(
+                '/payments/key=' . $payment->id,
+                [],
+                [],
+                json_encode([
+                    'version' => (int)$originalPayment->version,
+                    'actions' => array_merge(
+                        $payment->rawApiInput,
+                        $actions
+                    ),
+                ])
+            )
         );
     }
 
@@ -869,5 +911,37 @@ class Commercetools implements CartApi
 
         return $innerCart['country'] !== $locale->country
             || $innerCart['locale'] !== $locale->language;
+    }
+
+    private function ensureCustomPaymentFieldsExist()
+    {
+        try {
+            $this->client->get('/types/key=' . CartApi\Commercetools\Mapper::CUSTOM_PAYMENT_FIELDS_KEY);
+            return;
+        } catch (RequestException $exception) {
+            if ($exception->getTranslationCode() !== 'commercetools.ResourceNotFound') {
+                throw $exception;
+            }
+        }
+
+        $this->client->post(
+            '/types',
+            [],
+            [],
+            json_encode([
+                'key' => CartApi\Commercetools\Mapper::CUSTOM_PAYMENT_FIELDS_KEY,
+                'name' => ['en' => 'Frontastic payment fields'],
+                'description' => ['en' => 'Additional fields from Frontastic for the payment'],
+                'resourceTypeIds' => ['payment'],
+                'fieldDefinitions' => [
+                    [
+                        'name' => 'frontasticPaymentDetails',
+                        'type' => ['name' => 'String'],
+                        'label' => ['en' => 'Additional details from the payment integration'],
+                        'required' => false,
+                    ],
+                ],
+            ])
+        );
     }
 }

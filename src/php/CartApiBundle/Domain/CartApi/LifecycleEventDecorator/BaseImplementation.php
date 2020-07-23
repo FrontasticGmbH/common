@@ -185,6 +185,20 @@ abstract class BaseImplementation
         return $this->mapReturnedCart($cart);
     }
 
+    /*** updatePayment() *************************************************************************************************/
+    public function beforeUpdatePayment(
+        CartApi $cartApi,
+        Cart $cart,
+        Payment $payment,
+        string $localeString
+    ): void {
+    }
+
+    public function afterUpdatePayment(CartApi $cartApi, Payment $payment): ?Payment
+    {
+        return null;
+    }
+
     /*** redeemDiscountCode() *****************************************************************************************/
     public function beforeRedeemDiscountCode(CartApi $cartApi, Cart $cart, string $code, string $locale = null): void
     {

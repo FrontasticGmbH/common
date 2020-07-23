@@ -16,6 +16,8 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 
 class Mapper
 {
+    public const CUSTOM_PAYMENT_FIELDS_KEY = 'frontastic-payment';
+
     /** @var AccountMapper */
     private $accountMapper;
 
@@ -226,6 +228,12 @@ class Mapper
     {
         $paymentData = isset($paymentData['obj']) ? $paymentData['obj'] : $paymentData;
 
+        $frontasticPaymentDetails = $paymentData['custom']['fields']['frontasticPaymentDetails'] ?? null;
+        $paymentDetails = null;
+        if (is_string($frontasticPaymentDetails)) {
+            $paymentDetails = json_decode($frontasticPaymentDetails, true);
+        }
+
         return new Payment(
             [
                 'id' => $paymentData['key'] ?? null,
@@ -236,6 +244,7 @@ class Mapper
                 'currency' => $paymentData['amountPlanned']['currencyCode'] ?? null,
                 'debug' => json_encode($paymentData),
                 'paymentStatus' => $paymentData['paymentStatus']['interfaceCode'] ?? null,
+                'paymentDetails' => $paymentDetails,
                 'version' => $paymentData['version'] ?? 0,
             ]
         );
@@ -243,6 +252,11 @@ class Mapper
 
     public function mapPaymentToData(Payment $payment): array
     {
+        $customFields = $payment->rawApiInput['custom']['fields'] ?? [];
+        if ($payment->paymentDetails !== null) {
+            $customFields['frontasticPaymentDetails'] = json_encode($payment->paymentDetails);
+        }
+
         return array_merge(
             $payment->rawApiInput,
             [
@@ -259,6 +273,12 @@ class Mapper
                 'paymentStatus' => [
                     'interfaceCode' => $payment->paymentStatus,
                     'interfaceText' => $payment->debug,
+                ],
+                'custom' => [
+                    'type' => [
+                        'key' => self::CUSTOM_PAYMENT_FIELDS_KEY,
+                    ],
+                    'fields' => (object)$customFields,
                 ],
             ]
         );
