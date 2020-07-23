@@ -30,8 +30,11 @@ abstract class AbstractSprykerCart extends SprykerApiBase implements SprykerCart
      * @param \Frontastic\Common\SprykerBundle\Domain\MapperResolver $mapperResolver
      * @param \Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper $accountHelper
      */
-    public function __construct(SprykerClientInterface $client, MapperResolver $mapperResolver, AccountHelper $accountHelper)
-    {
+    public function __construct(
+        SprykerClientInterface $client,
+        MapperResolver $mapperResolver,
+        AccountHelper $accountHelper
+    ) {
         parent::__construct($client, $mapperResolver);
         $this->accountHelper = $accountHelper;
     }
@@ -44,8 +47,12 @@ abstract class AbstractSprykerCart extends SprykerApiBase implements SprykerCart
      *
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    protected function lineItemAction(string $url, Variant $lineItem, ?int $count = null, string $restMethod = 'post'): Cart
-    {
+    protected function lineItemAction(
+        string $url,
+        Variant $lineItem,
+        ?int $count = null,
+        string $restMethod = 'post'
+    ): Cart {
         $request = $this->createCartItemRequestData($lineItem, $count);
 
         $response = $this->client->{$restMethod}(
@@ -88,5 +95,8 @@ abstract class AbstractSprykerCart extends SprykerApiBase implements SprykerCart
      *
      * @return \Frontastic\Common\SprykerBundle\Domain\Cart\Request\CartItemRequestDataInterface
      */
-    abstract protected function createCartItemRequestData(Variant $lineItem, ?int $count = null): CartItemRequestDataInterface;
+    abstract protected function createCartItemRequestData(
+        Variant $lineItem,
+        ?int $count = null
+    ): CartItemRequestDataInterface;
 }

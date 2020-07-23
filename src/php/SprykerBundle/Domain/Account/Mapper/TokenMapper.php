@@ -13,9 +13,9 @@ class TokenMapper implements MapperInterface
      * @param ResourceObject $resource
      * @return string
      */
-    public function mapResource(ResourceObject $resource):string
+    public function mapResource(ResourceObject $resource): string
     {
-       return $resource->attribute('accessToken');
+        return $resource->attribute('accessToken');
     }
 
     /**

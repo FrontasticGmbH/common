@@ -132,8 +132,7 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
         string $oldPassword,
         string $newPassword,
         string $locale = null
-    ): Account
-    {
+    ): Account {
         $request = new CustomerPasswordRequestData($oldPassword, $newPassword, $newPassword);
 
         $response = $this->client->patch(
@@ -371,7 +370,9 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
      */
     private function mapAddressArray(array $primaryResources): array
     {
-        return $this->mapperResolver->getExtendedMapper(AddressMapper::MAPPER_NAME)->mapResourceArray($primaryResources);
+        return $this->mapperResolver->getExtendedMapper(
+            AddressMapper::MAPPER_NAME)->mapResourceArray($primaryResources
+        );
     }
 
     /**

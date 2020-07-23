@@ -85,7 +85,7 @@ class CatalogSearchQuery
             foreach ($facet->terms as $term) {
                 $result[] = urldecode($term);
             }
-        } else if ($facet instanceof RangeFacet) {
+        } elseif ($facet instanceof RangeFacet) {
             $result['min'] = $facet->min;
             $result['max'] = $facet->max;
         }

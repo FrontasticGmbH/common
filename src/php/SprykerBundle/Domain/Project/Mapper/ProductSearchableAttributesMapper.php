@@ -19,12 +19,12 @@ class ProductSearchableAttributesMapper implements ExtendedMapperInterface
     ];
 
     /**
-     * @var \Frontastic\Common\SprykerBundle\Domain\Project\Mapper\LocalizedEnumAttributesMapper
+     * @var LocalizedEnumAttributesMapper
      */
     private $localizedEnumAttributesMapper;
 
-    /**\
-     * @param \Frontastic\Common\SprykerBundle\Domain\Project\Mapper\LocalizedEnumAttributesMapper $localizedEnumAttributesMapper
+    /**
+     * @param LocalizedEnumAttributesMapper $localizedEnumAttributesMapper
      */
     public function __construct(LocalizedEnumAttributesMapper $localizedEnumAttributesMapper)
     {

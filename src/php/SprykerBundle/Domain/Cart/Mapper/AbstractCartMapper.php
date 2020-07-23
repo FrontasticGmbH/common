@@ -56,5 +56,4 @@ abstract class AbstractCartMapper implements MapperInterface
 
         return $lineItems;
     }
-
 }

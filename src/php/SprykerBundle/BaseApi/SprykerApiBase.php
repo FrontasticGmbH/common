@@ -48,8 +48,7 @@ class SprykerApiBase
         MapperResolver $mapperResolver,
         ?LocaleCreator $localeCreator = null,
         ?string $defaultLanguage = null
-    )
-    {
+    ) {
         $this->client = $client;
         $this->mapperResolver = $mapperResolver;
         $this->localeCreator = $localeCreator;

@@ -211,17 +211,17 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
     {
         $resources = [];
 
-        if(!$response->document()->hasAnyPrimaryResources()) {
+        if (!$response->document()->hasAnyPrimaryResources()) {
             return $resources;
         }
 
-        if($response->document()->isSingleResourceDocument()) {
+        if ($response->document()->isSingleResourceDocument()) {
             $resources[] = $response->document()->primaryResource();
         } else {
             $resources = $response->document()->primaryResources();
         }
 
-        if(!$response->document()->hasAnyIncludedResources()) {
+        if (!$response->document()->hasAnyIncludedResources()) {
             return $resources;
         }
 

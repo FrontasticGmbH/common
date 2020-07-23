@@ -35,7 +35,9 @@ class AccountMapper implements MapperInterface
         $account->firstName = $resource->attribute('firstName');
         $account->lastName = $resource->attribute('lastName');
         $account->salutation = SalutationHelper::getFrontasticSalutation($resource->attribute('salutation'));
-        $account->birthday = $resource->attribute('dateOfBirth') ? new \DateTime($resource->attribute('dateOfBirth')) : null;
+        $account->birthday = $resource->attribute('dateOfBirth') ?
+            new \DateTime($resource->attribute('dateOfBirth')) :
+            null;
         $account->addresses = $this->mapAddresses($resource);
         $account->confirmed = true;
 

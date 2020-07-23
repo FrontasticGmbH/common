@@ -77,12 +77,11 @@ class NestedSearchProductAbstractExpander implements ProductExpanderInterface
     private function mapVariantData(Product $product, ResourceObject $resource): void
     {
         $commonAttributes = $this->formatCommonAttributes($resource);
-        $variantAttributeMap = $resource->attribute('attributeMap',
-            [
-                'product_concrete_ids' => [],
-                'super_attributes' => [],
-                'attribute_variants' => [],
-            ]);
+        $variantAttributeMap = $resource->attribute('attributeMap', [
+            'product_concrete_ids' => [],
+            'super_attributes' => [],
+            'attribute_variants' => [],
+        ]);
 
         foreach ($variantAttributeMap['product_concrete_ids'] as $index => $sku) {
             $variant = $this->getOrCreateVariant($product, $index);
@@ -192,8 +191,12 @@ class NestedSearchProductAbstractExpander implements ProductExpanderInterface
      *
      * @return void
      */
-    private function updateAttributeFieldFromArray(array &$attributes, string $attributeKey, string $key, ?array $value): void
-    {
+    private function updateAttributeFieldFromArray(
+        array &$attributes,
+        string $attributeKey,
+        string $key,
+        ?array $value
+    ): void {
         $valueScalar = $value[$key] ?? null;
         $this->updateAttributeField($attributes, $attributeKey, $key, $valueScalar);
     }
@@ -207,8 +210,13 @@ class NestedSearchProductAbstractExpander implements ProductExpanderInterface
      *
      * @return void
      */
-    private function updateAttributeField(array &$attributes, string $attributeKey, string $key, $value, $overwrite = false): void
-    {
+    private function updateAttributeField(
+        array &$attributes,
+        string $attributeKey,
+        string $key,
+        $value,
+        $overwrite = false
+    ): void {
         $existing = $attributes[$attributeKey] ?? [];
 
         if (!is_array($existing)) {

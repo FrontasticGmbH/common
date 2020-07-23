@@ -27,7 +27,7 @@ class ProductConcreteMapper implements MapperInterface
         VariantMapperExtended $variantMapper,
         NestedAttributeValueTransformExpander $expander1,
         NestedVariantAttributeUrlExpander $expander2
-    )    {
+    ) {
         $this->variantMapper = $variantMapper;
         $this->expanders[] = $expander1;
         $this->expanders[] = $expander2;

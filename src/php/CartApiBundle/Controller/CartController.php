@@ -296,8 +296,8 @@ class CartController extends CrudController
             $symfonySession = $request->hasSession() ? $request->getSession() : null;
             if ($symfonySession !== null &&
                 $symfonySession->has('cart_id') &&
-                $symfonySession->get('cart_id') !== null)
-            {
+                $symfonySession->get('cart_id') !== null
+            ) {
                 $cartId = $symfonySession->get('cart_id');
                 try {
                     return $cartApi->getById($cartId, $context->locale);
@@ -315,8 +315,8 @@ class CartController extends CrudController
 
             if ($symfonySession !== null &&
                 $symfonySession->has('anonymousId') &&
-                $symfonySession->get('anonymousId') !== null)
-            {
+                $symfonySession->get('anonymousId') !== null
+            ) {
                 $anonymousId = $symfonySession->get('anonymousId');
                 try {
                     return $cartApi->getAnonymous($anonymousId, $context->locale);

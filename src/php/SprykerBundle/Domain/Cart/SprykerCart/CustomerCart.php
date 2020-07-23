@@ -76,7 +76,6 @@ class CustomerCart extends AbstractSprykerCart
         $response = $this->client->get(
             $this->withIncludes('/carts', $this->customerCartIncludes),
             $this->getAuthHeader()
-//            ['Authorization' => sprintf('Bearer %s', $id)]
         );
 
         if ($response->document()->hasAnyPrimaryResources()) {

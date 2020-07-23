@@ -103,7 +103,10 @@ class GuestCart extends AbstractSprykerCart
      */
     public function updateLineItem(Cart $cart, Variant $lineItem, int $count): Cart
     {
-        $url = $this->withIncludes("/guest-carts/{$cart->cartId}/guest-cart-items/{$lineItem->variant->sku}", $this->guestCartIncludes);
+        $url = $this->withIncludes(
+            "/guest-carts/{$cart->cartId}/guest-cart-items/{$lineItem->variant->sku}",
+            $this->guestCartIncludes
+        );
 
         return $this->lineItemAction($url, $lineItem, $count, 'patch');
     }

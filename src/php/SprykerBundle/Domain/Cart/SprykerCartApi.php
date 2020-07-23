@@ -142,8 +142,13 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
      * @param array|null $custom
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function updateLineItem(Cart $cart, LineItem $lineItem, int $count, ?array $custom = null, string $locale = null): Cart
-    {
+    public function updateLineItem(
+        Cart $cart,
+        LineItem $lineItem,
+        int $count,
+        ?array $custom = null,
+        string $locale = null
+    ): Cart {
         return $this->getResolvedCart()->updateLineItem($cart, $lineItem, $count);
     }
 

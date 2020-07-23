@@ -40,7 +40,7 @@ class MapperResolver
     {
         $mapper = $this->getMapper($name);
 
-        if(!($mapper instanceof ExtendedMapperInterface)) {
+        if (!($mapper instanceof ExtendedMapperInterface)) {
             throw new \InvalidArgumentException(sprintf('Mapper: %s is not an ExtendedMapper', $name));
         }
 

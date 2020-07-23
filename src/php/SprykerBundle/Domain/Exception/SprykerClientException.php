@@ -12,8 +12,10 @@ class SprykerClientException extends \RuntimeException
      *
      * @return self
      */
-    public static function createFromGuzzleClientException(ClientException $clientException, ?string $endpoint =null): self
-    {
+    public static function createFromGuzzleClientException(
+        ClientException $clientException,
+        ?string $endpoint = null
+    ): self {
         $message = $clientException->getResponse()
             ? (string) $clientException->getResponse()->getBody()
             : $clientException->getMessage();

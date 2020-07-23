@@ -43,7 +43,7 @@ class CheckoutRequestData extends AbstractRequestData
     private $idShipmentMethod;
 
     /**
-     * @param \Frontastic\Common\AccountApiBundle\Domain\Address|\Frontastic\Common\SprykerBundle\Domain\Address $address
+     * @param Address|\Frontastic\Common\SprykerBundle\Domain\Address $address
      *
      * @return void
      */
@@ -53,7 +53,7 @@ class CheckoutRequestData extends AbstractRequestData
     }
 
     /**
-     * @param \Frontastic\Common\AccountApiBundle\Domain\Address|\Frontastic\Common\SprykerBundle\Domain\Address $address
+     * @param Address|\Frontastic\Common\SprykerBundle\Domain\Address $address
      *
      * @return void
      */
@@ -116,7 +116,9 @@ class CheckoutRequestData extends AbstractRequestData
             'idCart' => $this->idCart,
             'customer' => [
                 'email' => $customer->email,
-                'salutation' => SalutationHelper::getSprykerSalutation($customer->salutation ?? SalutationHelper::DEFAULT_FRONTASTIC_SALUTATION),
+                'salutation' => SalutationHelper::getSprykerSalutation(
+                    $customer->salutation ?? SalutationHelper::DEFAULT_FRONTASTIC_SALUTATION
+                ),
                 'firstName' => $billingAddress->firstName,
                 'lastName' => $billingAddress->lastName,
             ],
@@ -157,7 +159,9 @@ class CheckoutRequestData extends AbstractRequestData
     private function addressAttributes(Address $address): array
     {
         $data = [
-            'salutation' => SalutationHelper::getSprykerSalutation($address->salutation ?? SalutationHelper::DEFAULT_FRONTASTIC_SALUTATION),
+            'salutation' => SalutationHelper::getSprykerSalutation(
+                $address->salutation ?? SalutationHelper::DEFAULT_FRONTASTIC_SALUTATION
+            ),
             'firstName' => $address->firstName,
             'lastName' => $address->lastName,
             'address1' => $address->streetName,
