@@ -5,7 +5,6 @@ namespace Frontastic\Common\SprykerBundle\Domain\Account;
 use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
 use Frontastic\Catwalk\ApiCoreBundle\Domain\ContextService;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
-use Kore\DataObject\DataObject;
 
 class AccountHelper
 {
@@ -69,7 +68,7 @@ class AccountHelper
         return ['X-Anonymous-Customer-Unique-Id' => $id];
     }
 
-    private function getContext(): DataObject
+    private function getContext(): Context
     {
         return $this->contextService->createContextFromRequest();
     }
