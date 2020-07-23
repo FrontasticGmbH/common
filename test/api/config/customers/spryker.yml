@@ -5,15 +5,14 @@ configuration:
     test:
         disabled: false
     spryker:
-        endpoint: https://api-stage-spryker.prym.de
-#        endpoint: https://glue.de.b2c.demo-spryker.com
+        endpoint: https://glue.de.b2c.demo-spryker.com
     account:
         engine: spryker
     cart:
         engine: spryker
         priceMode: GROSS_MODE
         currency: EUR
-        shop: MDE
+        shop: DE
     product:
         engine: spryker
     whislist:
