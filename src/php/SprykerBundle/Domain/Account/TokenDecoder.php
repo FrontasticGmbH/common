@@ -12,7 +12,7 @@ class TokenDecoder
     {
         //TODO: temp solution. Use proper token decoder.
 
-        list ($header, $payload, $signature) = explode ('.', $token);
+        list($header, $payload, $signature) = explode('.', $token);
 
         $decode = json_decode(base64_decode($payload), true);
 

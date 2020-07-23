@@ -153,8 +153,8 @@ class NestedSearchProductAbstractExpander implements ProductExpanderInterface
         string $sku,
         array $attributes,
         array $commonAttributes,
-        array $variantAttributeMap): array
-    {
+        array $variantAttributeMap
+    ): array {
         $super = array_flip($attributes['_super'] ?? []);
 
         foreach ($commonAttributes as $key => $value) {
