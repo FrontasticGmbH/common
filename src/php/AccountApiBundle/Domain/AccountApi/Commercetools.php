@@ -322,7 +322,6 @@ class Commercetools implements AccountApi
         $additionalActions = [];
         if ($address->isDefaultBillingAddress || $address->isDefaultShippingAddress) {
             if (($addressData['key'] ?? null) === null) {
-                // @phpstan-ignore-next-line
                 $addressData['key'] = Uuid::uuid4()->toString();
             }
         }
