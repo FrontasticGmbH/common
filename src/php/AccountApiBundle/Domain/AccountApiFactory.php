@@ -43,7 +43,9 @@ class AccountApiFactory
                     ->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
                 $commercetoolsAccountMapper = $this->container->get(CommercetoolsAccountMapper::class);
 
-                $accountApi = new AccountApi\Commercetools($client, $commercetoolsAccountMapper);
+                $logger = $this->container->get('logger');
+
+                $accountApi = new AccountApi\Commercetools($client, $commercetoolsAccountMapper, $logger);
                 break;
             case 'sap-commerce-cloud':
                 $client = $this->container

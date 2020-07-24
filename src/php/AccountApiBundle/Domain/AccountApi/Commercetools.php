@@ -13,6 +13,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Central API entry point is OK to have many public methods.
@@ -30,16 +31,22 @@ class Commercetools implements AccountApi
     private $client;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @var array
      */
     private $customerType;
 
     const TYPE_NAME = 'frontastic-customer-type';
 
-    public function __construct(Client $client, AccountMapper $accountMapper)
+    public function __construct(Client $client, AccountMapper $accountMapper, LoggerInterface $logger)
     {
         $this->client = $client;
         $this->accountMapper = $accountMapper;
+        $this->logger = $logger;
     }
 
     public function getSalutations(string $locale): ?array
@@ -269,8 +276,12 @@ class Commercetools implements AccountApi
                 return $this->login($account, null, $locale);
             }
 
+            $this->logger->error('Failed to login user. RequestException: ' . $e->getMessage());
+
             return null;
         } catch (\Exception $e) {
+            $this->logger->error('Failed to login user. Exception: ' . $e->getMessage());
+
             return null;
         }
         if (!$account->confirmed) {
