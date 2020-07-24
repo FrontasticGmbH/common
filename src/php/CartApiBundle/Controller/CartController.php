@@ -295,7 +295,10 @@ class CartController extends CrudController
         } else {
             $symfonySession = $request->hasSession() ? $request->getSession() : null;
 
-            if ($symfonySession !== null && $symfonySession->has('cart_id') && $symfonySession->get('cart_id') !== null) {
+            if ($symfonySession !== null &&
+                $symfonySession->has('cart_id') &&
+                $symfonySession->get('cart_id') !== null
+            ) {
                 $cartId = $symfonySession->get('cart_id');
                 try {
                     return $cartApi->getById($cartId, $context->locale);
