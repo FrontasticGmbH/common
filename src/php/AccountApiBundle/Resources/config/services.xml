@@ -10,7 +10,7 @@
         <prototype namespace="Frontastic\Common\AccountApiBundle\Command\" resource="../../Command" autoconfigure="true" />
 
         <service id="Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory">
-            <argument type="service" id="Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator" />
+            <argument type="service" id="Psr\Container\ContainerInterface" />
             <argument type="tagged" tag="accountApi.lifecycleEventListener" />
         </service>
 
