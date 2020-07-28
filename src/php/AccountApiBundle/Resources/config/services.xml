@@ -12,6 +12,7 @@
         <service id="Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory">
             <argument type="service" id="Psr\Container\ContainerInterface" />
             <argument type="tagged" tag="accountApi.lifecycleEventListener" />
+            <argument type="service" id="logger" />
         </service>
 
         <service id="Frontastic\Common\AccountApiBundle\Domain\AccountApi\Commercetools\Mapper">
