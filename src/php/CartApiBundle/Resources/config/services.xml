@@ -16,7 +16,6 @@
         <service id="Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools\Mapper">
             <argument type="service" id="Frontastic\Common\AccountApiBundle\Domain\AccountApi\Commercetools\Mapper"/>
             <argument type="service" id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper"/>
-            <tag name="frontastic.common.api_integration"/>
         </service>
 
         <service id="Frontastic\Common\CartApiBundle\Domain\CartApiFactory">

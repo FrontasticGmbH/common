@@ -16,7 +16,6 @@
         </service>
 
         <service id="Frontastic\Common\AccountApiBundle\Domain\AccountApi\Commercetools\Mapper">
-            <tag name="frontastic.common.api_integration"/>
         </service>
     </services>
 </container>
