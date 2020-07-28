@@ -13,6 +13,8 @@ use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFacto
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapDataMapper;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapProductApi;
+use Frontastic\Common\ShopifyBundle\Domain\ProductApi\ShopifyProductApi;
+use Frontastic\Common\ShopifyBundle\Domain\ShopifyClientFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFactory;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver as ShopwareDataMapperResolver;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory as ShopwareLocaleCreatorFactory;
@@ -96,6 +98,14 @@ class DefaultProductApiFactory implements ProductApiFactory
                     $project->defaultLanguage,
                     $this->enabledFacetService,
                     $this->serviceLocator->get(ShopwareProjectConfigApiFactory::class)
+                );
+                break;
+            case 'shopify':
+                $clientFactory = $this->serviceLocator->get(ShopifyClientFactory::class);
+                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+
+                $productApi = new ShopifyProductApi(
+                    $client
                 );
                 break;
             default:

@@ -1,0 +1,22 @@
+---
+name: "shopify"
+secret: "secret"
+configuration:
+    test:
+        disabled: false
+    shopify:
+        hostUrl: https://cmourulloft.myshopify.com/api/2019-07/graphql.json
+        storefrontAccessToken: 7452ec975bd1ce38c50dbe7aa7111b5d
+    account:
+        engine: shopify
+    cart:
+        engine: shopify
+    product:
+        engine: shopify
+    whislist:
+        engine: shopify
+projects:
+    -   projectId: test
+        name: Shopify Test Catwalk
+        languages: ["en_GB@GBP", "de_DE@EUR"]
+        defaultLanguage: en_GB@GBP

@@ -9,6 +9,7 @@ use Frontastic\Common\Kernel;
 use Frontastic\Common\ProductApiBundle\FrontasticCommonProductApiBundle;
 use Frontastic\Common\ProjectApiBundle\FrontasticCommonProjectApiBundle;
 use Frontastic\Common\SapCommerceCloudBundle\FrontasticCommonSapCommerceCloudBundle;
+use Frontastic\Common\ShopifyBundle\FrontasticCommonShopifyBundle;
 use Frontastic\Common\ShopwareBundle\FrontasticCommonShopwareBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
@@ -34,8 +35,9 @@ class TestKernel extends Kernel
             new FrontasticCommonProductApiBundle(),
             new FrontasticCommonProjectApiBundle(),
 
-            new FrontasticCommonShopwareBundle(),
             new FrontasticCommonSapCommerceCloudBundle(),
+            new FrontasticCommonShopifyBundle(),
+            new FrontasticCommonShopwareBundle(),
         ];
     }
 }
