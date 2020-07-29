@@ -17,6 +17,21 @@ class Result extends DataObject implements \Countable, \IteratorAggregate
     public $total;
 
     /**
+     * @var string
+     */
+    public $cursor;
+
+    /**
+     * @var boolean
+     */
+    public $hasNextPage = false;
+
+    /**
+     * @var boolean
+     */
+    public $hasPreviousPage = false;
+
+    /**
      * @var integer
      */
     public $count;
