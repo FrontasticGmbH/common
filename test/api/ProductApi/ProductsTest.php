@@ -65,6 +65,76 @@ class ProductsTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
+    public function testQueryProductsBySingleQueryParameterReturnsProducts(Project $project, string $language): void
+    {
+        $result = $this->getProductApiForProject($project)
+            ->query(new ProductQuery($this->buildQueryParameters($language)));
+
+        /** @var Product $product */
+        $product = $result->items[0];
+
+        /**
+         * Filter by SKUs
+         */
+        $queryParameters = [
+            'skus' => [$product->sku],
+        ];
+
+        $result = $this->queryProducts($project, $language, $queryParameters);
+
+        $this->assertSame($product->productId, $result->items[0]->productId);
+        $this->assertSame($product->sku, $result->items[0]->sku);
+
+        /**
+         * Filter by name
+         */
+        $queryParameters = [
+            'query' => $product->name,
+        ];
+
+        $result = $this->queryProducts($project, $language, $queryParameters);
+
+        $this->assertSame($product->productId, $result->items[0]->productId);
+        $this->assertSame($product->sku, $result->items[0]->sku);
+
+        /**
+         * Filter by productId
+         */
+        $queryParameters = [
+            'productId' => $product->productId,
+        ];
+
+        $result = $this->queryProducts($project, $language, $queryParameters);
+
+        $this->assertSame($product->productId, $result->items[0]->productId);
+        $this->assertSame($product->sku, $result->items[0]->sku);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testQueryProductsByMultipleQueryParametersReturnsProducts(Project $project, string $language): void
+    {
+        $result = $this->getProductApiForProject($project)
+            ->query(new ProductQuery($this->buildQueryParameters($language)));
+
+        /** @var Product $product */
+        $product = $result->items[0];
+
+        $queryParameters = [
+            'query' => $product->name,
+            'skus' => [$product->sku],
+        ];
+
+        $result = $this->queryProducts($project, $language, $queryParameters);
+
+        $this->assertSame($product->productId, $result->items[0]->productId);
+        $this->assertSame($product->sku, $result->items[0]->sku);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
     public function testGetProductSyncBySkuReturnsProduct(Project $project, string $language): void
     {
         $product = $this->getAProduct($project, $language);
