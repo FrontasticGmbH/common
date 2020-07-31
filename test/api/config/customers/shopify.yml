@@ -5,8 +5,8 @@ configuration:
     test:
         disabled: false
     shopify:
-        hostUrl: https://cmourulloft.myshopify.com/api/2020-07/graphql.json
-        storefrontAccessToken: 7452ec975bd1ce38c50dbe7aa7111b5d
+        hostUrl: https://frontastic.myshopify.com/api/2020-07/graphql.json
+        storefrontAccessToken: c3673b639f34e27e9885ddb459d148bd
     account:
         engine: shopify
     cart:
