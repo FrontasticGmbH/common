@@ -19,6 +19,9 @@ use GuzzleHttp\Promise\PromiseInterface;
 
 class ShopifyProductApi implements ProductApi
 {
+    private const DEFAULT_VARIANTS_TO_FETCH = 1;
+    private const DEFAULT_COLLECTIONS_TO_FETCH = 10;
+
     /**
      * @var ShopifyClient
      */
@@ -46,72 +49,135 @@ class ShopifyProductApi implements ProductApi
 
     public function query(ProductQuery $query, string $mode = self::QUERY_SYNC): object
     {
-        $query->query = "{
-          products(first: $query->limit) {
-            edges {
-              cursor
-              node {
-                id
-                title
-                description
-                handle
-                updatedAt
-                collections(first: 10) {
-                  edges {
+        $productQuery = "
+            id
+            title
+            description
+            handle
+            updatedAt
+            collections(first: " . self::DEFAULT_COLLECTIONS_TO_FETCH . ") {
+                edges {
                     node {
-                      id
-                    }
-                  }
-                }
-                variants(first: 1) {
-                  edges {
-                    node {
-                      id
-                      sku
-                      title
-                      currentlyNotInStock
-                      priceV2 {
-                        amount
-                        currencyCode
-                      }
-                      product {
                         id
-                      }
-                      selectedOptions {
-                        name
-                        value
-                      }
-                      image {
-                        originalSrc
-                      }
                     }
-                  }
                 }
-              }
             }
-            pageInfo {
-              hasNextPage
-              hasPreviousPage
+            variants(first: " . self::DEFAULT_VARIANTS_TO_FETCH . ") {
+                edges {
+                    node {
+                        id
+                        sku
+                        title
+                        currentlyNotInStock
+                        priceV2 {
+                            amount
+                            currencyCode
+                        }
+                        product {
+                            id
+                        }
+                        selectedOptions {
+                            name
+                            value
+                        }
+                        image {
+                            originalSrc
+                        }
+                    }
+                }
             }
-          }
+        ";
+
+        $parameters = [];
+
+        if ($query->query) {
+            $parameters[] = "$query->query";
+        }
+
+        $skus = [];
+        if ($query->sku !== null) {
+            $skus[] = $query->sku;
+        }
+        if ($query->skus !== null) {
+            $skus = array_merge($skus, $query->skus);
+        }
+
+        if (count($skus)) {
+            $parameters = array_merge($parameters, $skus);
+        }
+
+        $queryFilter = "query:\"". implode(' AND ', $parameters) . "\"";
+
+        $query->query = "{
+            products(first: $query->limit $queryFilter) {
+                edges {
+                    cursor
+                    node {
+                        $productQuery
+                    }
+                }
+                pageInfo {
+                  hasNextPage
+                  hasPreviousPage
+                }
+            }
         }";
+
+        $productIds = [];
+        if ($query->productId !== null) {
+            $productIds[] = $query->productId;
+        }
+        if ($query->productIds !== null) {
+            $productIds = array_merge($productIds, $query->productIds);
+        }
+
+        if (count($parameters) && count($productIds)) {
+            throw new \InvalidArgumentException(
+                'Currently it is not possible to filter by products and other parameters at the same time'
+            );
+        }
+
+        if (count($productIds)) {
+            $query->query = "{
+                nodes(ids: [\"". implode("\",\"", $productIds). "\"]) {
+                    id
+                    ... on Product {
+                        $productQuery
+                    }
+                }
+            }";
+        }
 
         $promise = $this->client
             ->request($query->query, $query->locale)
             ->then(function ($result) use ($query): ProductApi\Result {
-                $resultBody = $result['body'];
                 $cursor = null;
+                $hasNextPage = null;
+                $hasPreviousPage = null;
 
-                foreach ($resultBody['data']['products']['edges'] as $product) {
-                    $products[] = $this->mapDataToProduct($product['node']);
-                    $cursor = $product['cursor'];
+                $products = [];
+                $productsData = [];
+
+                if (key_exists('products', $result['body']['data'])) {
+                    $productsData = $result['body']['data']['products']['edges'];
+                    $hasNextPage = $result['body']['data']['products']['pageInfo']['hasNextPage'];
+                    $hasPreviousPage = $result['body']['data']['products']['pageInfo']['hasPreviousPage'];
+                }
+
+                if (key_exists('nodes', $result['body']['data'])) {
+                    $productsData = $result['body']['data']['nodes'];
+                }
+
+                foreach ($productsData as $productData) {
+                    $products[] = $this->mapDataToProduct($productData['node'] ?? $productData);
+                    $cursor = $productData['cursor'] ?? null;
                 }
 
                 return new ProductApi\Result([
                     // @TODO: "offset" and "total" are not available in Shopify. They implement cursor-based pagination
                     'cursor' => $cursor,
-                    'hasNextPage' => $resultBody['data']['products']['pageInfo']['hasNextPage'],
-                    'hasPreviousPage' => $resultBody['data']['products']['pageInfo']['hasPreviousPage'],
+                    'hasNextPage' => $hasNextPage,
+                    'hasPreviousPage' => $hasPreviousPage,
                     'count' => count($products),
                     'items' => $products,
                     'query' => clone $query,
