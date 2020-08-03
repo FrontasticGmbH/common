@@ -14,15 +14,15 @@
                    exclude="../../Domain/{Search}"
                    autoconfigure="true"/>
 
-        <service id="Frontastic\Common\ShopwareBundle\Domain\ClientFactory">
+        <service id="Frontastic\Common\ShopwareBundle\Domain\ClientFactory" public="true">
             <argument type="service" id="Frontastic\Common\HttpClient"/>
         </service>
 
-        <service id="Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver">
+        <service id="Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver" public="true">
             <argument type="tagged_iterator" tag="frontastic.common.shopware.data_mapper"/>
         </service>
 
-        <service id="Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory">
+        <service id="Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory" public="true">
             <argument type="service" id="cache.app.simple"/>
             <argument type="service" id="Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver"/>
             <argument>%kernel.debug%</argument>
