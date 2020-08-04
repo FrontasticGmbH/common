@@ -2,20 +2,16 @@
 
 namespace Frontastic\Common\ShopifyBundle\Domain\ProductApi;
 
-use Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS\Client;
-use Frontastic\Common\ProductApiBundle\Domain\Category;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\ProductNotFoundException;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\SingleProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
-use Frontastic\Common\ProductApiBundle\Domain\ProductType;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
-use Frontastic\Common\ShopifyBundle\Domain\ResponseAccess;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClient;
-use GuzzleHttp\Promise\PromiseInterface;
 
 class ShopifyProductApi implements ProductApi
 {
@@ -44,7 +40,52 @@ class ShopifyProductApi implements ProductApi
 
     public function getProduct($query, string $mode = self::QUERY_SYNC): ?object
     {
-        // TODO: Implement getProduct() method.
+        $query = SingleProductQuery::fromLegacyQuery($query);
+        $query->validate();
+
+        if ($query->sku) {
+            $promise = $this
+                ->query(
+                    new ProductQuery([
+                        'skus' => [$query->sku],
+                        'locale' => $query->locale,
+                        'loadDangerousInnerData' => $query->loadDangerousInnerData,
+                    ]),
+                    self::QUERY_ASYNC
+                )
+                ->then(
+                    function (Result $productQueryResult) use ($query) {
+                        if (count($productQueryResult->items) === 0) {
+                            throw ProductNotFoundException::bySku($query->sku);
+                        }
+                        return reset($productQueryResult->items);
+                    }
+                );
+        } else {
+            $promise = $this
+                ->query(
+                    new ProductQuery([
+                        'productIds' => [$query->productId],
+                        'locale' => $query->locale,
+                        'loadDangerousInnerData' => $query->loadDangerousInnerData,
+                    ]),
+                    self::QUERY_ASYNC
+                )
+                ->then(
+                    function (Result $productQueryResult) use ($query) {
+                        if (count($productQueryResult->items) === 0) {
+                            throw ProductNotFoundException::byProperty($query->productId);
+                        }
+                        return reset($productQueryResult->items);
+                    }
+                );
+        }
+
+        if ($mode === self::QUERY_SYNC) {
+            return $promise->wait();
+        }
+
+        return $promise;
     }
 
     public function query(ProductQuery $query, string $mode = self::QUERY_SYNC): object
@@ -193,7 +234,6 @@ class ShopifyProductApi implements ProductApi
         }
 
         return $promise;
-
     }
 
     public function getDangerousInnerClient(): ShopifyClient
