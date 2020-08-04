@@ -10,6 +10,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\SingleProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
+use Frontastic\Common\ProductApiBundle\Domain\ProductType;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClient;
 
@@ -17,6 +18,7 @@ class ShopifyProductApi implements ProductApi
 {
     private const DEFAULT_VARIANTS_TO_FETCH = 1;
     private const DEFAULT_COLLECTIONS_TO_FETCH = 10;
+    private const DEFAULT_PRODUCT_TYPES_TO_FETCH = 10;
 
     /**
      * @var ShopifyClient
@@ -35,7 +37,31 @@ class ShopifyProductApi implements ProductApi
 
     public function getProductTypes(ProductTypeQuery $query): array
     {
-        // TODO: Implement getProductTypes() method.
+        $queryString = "{
+            productTypes(first: " . self::DEFAULT_PRODUCT_TYPES_TO_FETCH . ") {
+                edges {
+                    cursor
+                    node
+                }
+            }
+        }";
+
+        $result = $this->client->request($queryString)->wait();
+
+        $productTypes = [];
+        foreach ($result['body']['data']['productTypes']['edges'] as $productTypeData) {
+            if ($productTypeData['cursor'] === '' || $productTypeData['node'] == '') {
+                continue;
+            }
+
+            $productTypes[] = new ProductType([
+                'productTypeId' => $productTypeData['cursor'],
+                'name' => $productTypeData['node'],
+                // 'dangerousInnerProductType' => $productType,
+            ]);
+        }
+
+        return $productTypes;
     }
 
     public function getProduct($query, string $mode = self::QUERY_SYNC): ?object
@@ -256,7 +282,7 @@ class ShopifyProductApi implements ProductApi
             ),
             'changed' => $this->parseDate($productData['updatedAt']),
             'variants' => $this->mapDataToVariants($productData['variants']['edges']),
-            // @TODO Include dangerousInnerVariant base on locale flag
+            // @TODO Include dangerousInnerProduct base on locale flag
             // 'dangerousInnerProduct' => $productData,
         ]);
     }
