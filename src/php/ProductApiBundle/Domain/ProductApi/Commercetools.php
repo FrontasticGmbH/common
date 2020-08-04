@@ -275,7 +275,8 @@ class Commercetools implements ProductApi
                 '/product-projections/search',
                 array_filter(
                     array_merge($query->rawApiInput, $parameters)
-                ))
+                )
+            )
             ->then(function ($result) use ($query, $locale) {
                 return new Result([
                     'offset' => $result->offset,
