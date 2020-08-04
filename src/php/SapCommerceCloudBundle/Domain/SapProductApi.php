@@ -159,6 +159,7 @@ class SapProductApi implements ProductApi
         }
 
         $parameters = array_merge(
+            $query->rawApiInput,
             $sapLocale->toQueryParameters(),
             [
                 'currentPage' => $query->offset / $query->limit,

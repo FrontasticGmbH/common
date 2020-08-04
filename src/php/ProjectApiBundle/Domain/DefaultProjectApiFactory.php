@@ -2,7 +2,6 @@
 
 namespace Frontastic\Common\ProjectApiBundle\Domain;
 
-use Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory as CommercetoolsClientFactory;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory;
 use Frontastic\Common\ProjectApiBundle\Domain\ProjectApi\Commercetools as CommercetoolsProjcetApi;
@@ -14,6 +13,8 @@ use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFacto
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory as ShopwareLocaleCreatorFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectApi\ShopwareProjectApi;
+
+use Psr\Container\ContainerInterface;
 use OutOfBoundsException;
 
 class DefaultProjectApiFactory implements ProjectApiFactory
@@ -21,13 +22,13 @@ class DefaultProjectApiFactory implements ProjectApiFactory
     private const CONFIGURATION_TYPE_NAME = 'product';
 
     /**
-     * @var \Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator
+     * @var \Psr\Container\ContainerInterface
      */
-    private $serviceLocator;
+    private $container;
 
-    public function __construct(FactoryServiceLocator $serviceLocator)
+    public function __construct(ContainerInterface $container)
     {
-        $this->serviceLocator = $serviceLocator;
+        $this->container = $container;
     }
 
     public function factor(Project $project): ProjectApi
@@ -36,8 +37,8 @@ class DefaultProjectApiFactory implements ProjectApiFactory
 
         switch ($productConfig->engine) {
             case 'commercetools':
-                $clientFactory = $this->serviceLocator->get(CommercetoolsClientFactory::class);
-                $localeCreatorFactory = $this->serviceLocator->get(CommercetoolsLocaleCreatorFactory::class);
+                $clientFactory = $this->container->get(CommercetoolsClientFactory::class);
+                $localeCreatorFactory = $this->container->get(CommercetoolsLocaleCreatorFactory::class);
 
                 $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
                 return new CommercetoolsProjcetApi(
@@ -46,8 +47,8 @@ class DefaultProjectApiFactory implements ProjectApiFactory
                     $project->languages
                 );
             case 'sap-commerce-cloud':
-                $clientFactory = $this->serviceLocator->get(SapClientFactory::class);
-                $localeCreatorFactory = $this->serviceLocator->get(SapLocaleCreatorFactory::class);
+                $clientFactory = $this->container->get(SapClientFactory::class);
+                $localeCreatorFactory = $this->container->get(SapLocaleCreatorFactory::class);
 
                 $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
                 return new SapProjectApi(
@@ -56,9 +57,9 @@ class DefaultProjectApiFactory implements ProjectApiFactory
                     $project->languages
                 );
             case 'shopware':
-                $clientFactory = $this->serviceLocator->get(ShopwareClientFactory::class);
-                $dataMapper = $this->serviceLocator->get(DataMapperResolver::class);
-                $localeCreatorFactory = $this->serviceLocator->get(ShopwareLocaleCreatorFactory::class);
+                $clientFactory = $this->container->get(ShopwareClientFactory::class);
+                $dataMapper = $this->container->get(DataMapperResolver::class);
+                $localeCreatorFactory = $this->container->get(ShopwareLocaleCreatorFactory::class);
 
                 $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
                 return new ShopwareProjectApi(

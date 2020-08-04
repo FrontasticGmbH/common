@@ -65,6 +65,22 @@ class ProductsTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
+    public function testQueryProductsByCustomQueryParameterReturnsProducts(Project $project, string $language): void
+    {
+        $queryParameters = [
+            'rawApiInput' => [
+                'foo' => 'var'
+            ]
+        ];
+
+        $result = $this->queryProducts($project, $language, $queryParameters);
+
+        $this->assertSame($result->query->rawApiInput, $queryParameters['rawApiInput']);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
     public function testQueryProductsBySingleQueryParameterReturnsProducts(Project $project, string $language): void
     {
         $result = $this->getProductApiForProject($project)
@@ -113,7 +129,7 @@ class ProductsTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
-    public function testQueryProductsByMultipleQueryParametersReturnsProduct(Project $project, string $language): void
+    public function testQueryProductsByMultipleQueryParametersReturnsProducts(Project $project, string $language): void
     {
         $result = $this->getProductApiForProject($project)
             ->query(new ProductQuery($this->buildQueryParameters($language)));
@@ -121,50 +137,15 @@ class ProductsTest extends FrontasticApiTestCase
         /** @var Product $product */
         $product = $result->items[0];
 
-        /**
-         *  Filter by multiple parameters from same product
-         */
         $queryParameters = [
             'query' => $product->name,
-            'category' => $product->categories[0],
             'skus' => [$product->sku],
         ];
 
         $result = $this->queryProducts($project, $language, $queryParameters);
 
-        $this->assertSame(1, $result->count);
         $this->assertSame($product->productId, $result->items[0]->productId);
         $this->assertSame($product->sku, $result->items[0]->sku);
-    }
-
-    /**
-     * @dataProvider projectAndLanguage
-     */
-    public function testQueryProductsByMultipleSkusQueryParametersReturnsProducts(Project $project, string $language): void
-    {
-        $result = $this->getProductApiForProject($project)
-            ->query(new ProductQuery($this->buildQueryParameters($language)));
-
-        $skus = [];
-
-        /** @var Product $product */
-        foreach ($result->items as $product) {
-            if ($product->sku !== null) {
-                $skus[] = $product->sku;
-            }
-        }
-
-        $queryParameters = [
-            'skus' => array_slice($skus, 0, 2),
-        ];
-
-        $result = $this->queryProducts($project, $language, $queryParameters);
-
-        $this->assertSame(count($queryParameters['skus']), $result->count);
-        /** @var Product $product */
-        foreach ($result->items as $key => $product) {
-            $this->assertContains($product->sku, $queryParameters['skus']);
-        }
     }
 
     /**

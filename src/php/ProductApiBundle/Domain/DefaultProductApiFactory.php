@@ -2,7 +2,6 @@
 
 namespace Frontastic\Common\ProductApiBundle\Domain;
 
-use Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools as CommercetoolsProductApi;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory as CommercetoolsClientFactory;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory;
@@ -21,6 +20,8 @@ use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory as Shopw
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\ShopwareProductApi;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
 
+use Psr\Container\ContainerInterface;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -29,9 +30,9 @@ class DefaultProductApiFactory implements ProductApiFactory
     private const CONFIGURATION_TYPE_NAME = 'product';
 
     /**
-     * @var \Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator
+     * @var \Psr\Container\ContainerInterface
      */
-    private $serviceLocator;
+    private $container;
 
     /**
      * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService
@@ -44,11 +45,11 @@ class DefaultProductApiFactory implements ProductApiFactory
     private $decorators;
 
     public function __construct(
-        FactoryServiceLocator $serviceLocator,
+        ContainerInterface $container,
         EnabledFacetService $enabledFacetService,
         iterable $decorators = []
     ) {
-        $this->serviceLocator = $serviceLocator;
+        $this->container = $container;
         $this->enabledFacetService = $enabledFacetService;
         $this->decorators = $decorators;
     }
@@ -59,9 +60,9 @@ class DefaultProductApiFactory implements ProductApiFactory
 
         switch ($productConfig->engine) {
             case 'commercetools':
-                $clientFactory = $this->serviceLocator->get(CommercetoolsClientFactory::class);
-                $dataMapper = $this->serviceLocator->get(CommercetoolsDataMapper::class);
-                $localeCreatorFactory = $this->serviceLocator->get(CommercetoolsLocaleCreatorFactory::class);
+                $clientFactory = $this->container->get(CommercetoolsClientFactory::class);
+                $dataMapper = $this->container->get(CommercetoolsDataMapper::class);
+                $localeCreatorFactory = $this->container->get(CommercetoolsLocaleCreatorFactory::class);
 
                 $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
 
@@ -74,8 +75,8 @@ class DefaultProductApiFactory implements ProductApiFactory
                 );
                 break;
             case 'sap-commerce-cloud':
-                $clientFactory = $this->serviceLocator->get(SapClientFactory::class);
-                $localeCreatorFactory = $this->serviceLocator->get(SapLocaleCreatorFactory::class);
+                $clientFactory = $this->container->get(SapClientFactory::class);
+                $localeCreatorFactory = $this->container->get(SapLocaleCreatorFactory::class);
 
                 $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
                 $productApi = new SapProductApi(
@@ -85,9 +86,9 @@ class DefaultProductApiFactory implements ProductApiFactory
                 );
                 break;
             case 'shopware':
-                $clientFactory = $this->serviceLocator->get(ShopwareClientFactory::class);
-                $dataMapper = $this->serviceLocator->get(ShopwareDataMapperResolver::class);
-                $localeCreatorFactory = $this->serviceLocator->get(ShopwareLocaleCreatorFactory::class);
+                $clientFactory = $this->container->get(ShopwareClientFactory::class);
+                $dataMapper = $this->container->get(ShopwareDataMapperResolver::class);
+                $localeCreatorFactory = $this->container->get(ShopwareLocaleCreatorFactory::class);
 
                 $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
 
@@ -97,7 +98,7 @@ class DefaultProductApiFactory implements ProductApiFactory
                     $localeCreatorFactory->factor($project, $client),
                     $project->defaultLanguage,
                     $this->enabledFacetService,
-                    $this->serviceLocator->get(ShopwareProjectConfigApiFactory::class)
+                    $this->container->get(ShopwareProjectConfigApiFactory::class)
                 );
                 break;
             case 'shopify':
