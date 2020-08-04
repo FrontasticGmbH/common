@@ -106,7 +106,7 @@ class ShopifyProductApi implements ProductApi
             $parameters = array_merge($parameters, $skus);
         }
 
-        $queryFilter = "query:\"". implode(' AND ', $parameters) . "\"";
+        $queryFilter = "query:\"". implode(' OR ', $parameters) . "\"";
 
         $query->query = "{
             products(first: $query->limit $queryFilter) {
