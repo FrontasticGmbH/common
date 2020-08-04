@@ -102,7 +102,7 @@ class DefaultProductApiFactory implements ProductApiFactory
                 );
                 break;
             case 'shopify':
-                $clientFactory = $this->serviceLocator->get(ShopifyClientFactory::class);
+                $clientFactory = $this->container->get(ShopifyClientFactory::class);
                 $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
 
                 $productApi = new ShopifyProductApi(
