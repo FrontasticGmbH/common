@@ -65,6 +65,22 @@ class ProductsTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
+    public function testQueryProductsByCustomQueryParameterReturnsProducts(Project $project, string $language): void
+    {
+        $queryParameters = [
+            'rawApiInput' => [
+                'foo' => 'var'
+            ]
+        ];
+
+        $result = $this->queryProducts($project, $language, $queryParameters);
+
+        $this->assertSame($result->query->rawApiInput, $queryParameters['rawApiInput']);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
     public function testGetProductSyncBySkuReturnsProduct(Project $project, string $language): void
     {
         $product = $this->getAProduct($project, $language);

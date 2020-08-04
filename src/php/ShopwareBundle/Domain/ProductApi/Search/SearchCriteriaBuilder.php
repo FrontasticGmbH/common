@@ -178,7 +178,7 @@ class SearchCriteriaBuilder
             );
         }
 
-        return $criteria;
+        return array_merge($query->rawApiInput, $criteria);
     }
 
     public static function buildFromSimpleProductQuery(Query\SingleProductQuery $query): array

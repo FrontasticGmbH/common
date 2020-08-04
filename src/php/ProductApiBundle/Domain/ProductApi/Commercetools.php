@@ -271,7 +271,11 @@ class Commercetools implements ProductApi
         $parameters['filter.facets'] = $facetsToFilter;
 
         $promise = $this->client
-            ->fetchAsync('/product-projections/search', array_filter($parameters))
+            ->fetchAsync(
+                '/product-projections/search',
+                array_filter(
+                    array_merge($query->rawApiInput, $parameters)
+                ))
             ->then(function ($result) use ($query, $locale) {
                 return new Result([
                     'offset' => $result->offset,
