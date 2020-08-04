@@ -94,6 +94,10 @@ class ShopifyProductApi implements ProductApi
             $parameters[] = "$query->query";
         }
 
+        if ($query->category) {
+            $parameters[] = "$query->category";
+        }
+
         $skus = [];
         if ($query->sku !== null) {
             $skus[] = $query->sku;
