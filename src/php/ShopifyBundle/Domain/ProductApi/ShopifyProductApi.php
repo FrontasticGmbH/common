@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\ShopifyBundle\Domain\ProductApi;
 
+use Frontastic\Common\ProductApiBundle\Domain\Category;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\ProductNotFoundException;
@@ -32,7 +33,43 @@ class ShopifyProductApi implements ProductApi
 
     public function getCategories(CategoryQuery $query): array
     {
-        // TODO: Implement getCategories() method.
+        $queryFilter = null;
+
+        if ($query->slug) {
+            $queryFilter = "query:\"'$query->slug'\"";
+        }
+
+        $queryString = "{
+            collections(first: $query->limit $queryFilter) {
+                edges {
+                    cursor
+                    node {
+                        id
+                        title
+                        handle
+                    }
+                }
+                pageInfo {
+                    hasNextPage
+                    hasPreviousPage
+                }
+            }
+        }";
+
+        $result = $this->client->request($queryString)->wait();
+
+        $categories = [];
+
+        foreach ($result['body']['data']['collections']['edges'] as $collectionData) {
+            $categories[] = new Category([
+                'categoryId' => $collectionData['node']['id'],
+                'name' => $collectionData['node']['title'],
+                'slug' => $collectionData['node']['handle'],
+                'path' => '/' .$collectionData['node']['id'],
+            ]);
+        }
+
+        return $categories;
     }
 
     public function getProductTypes(ProductTypeQuery $query): array

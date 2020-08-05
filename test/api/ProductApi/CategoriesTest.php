@@ -103,6 +103,8 @@ class CategoriesTest extends FrontasticApiTestCase
      */
     public function testCategoriesWithHighOffsetAreEmpty(Project $project, string $language): void
     {
+        $this->requireCategoryEndpointToSupportOffsetPagination($project);
+
         $categories = $this->fetchCategories($project, $language, null, 5000);
         $this->assertEmpty($categories);
     }
@@ -121,6 +123,8 @@ class CategoriesTest extends FrontasticApiTestCase
      */
     public function testFetchingPastAllCategoriesReturnsEmptyResult(Project $project, string $language): void
     {
+        $this->requireCategoryEndpointToSupportOffsetPagination($project);
+
         $limit = 10;
         $offset = 0;
         do {
@@ -154,6 +158,8 @@ class CategoriesTest extends FrontasticApiTestCase
      */
     public function testFetchCategoriesWithLowLimitReturnsSameAsWithHighLimit(Project $project, string $language): void
     {
+        $this->requireCategoryEndpointToSupportOffsetPagination($project);
+
         $limit = 24;
 
         $categoriesFetchedInOneRequest = $this->fetchCategories($project, $language, $limit);
@@ -243,5 +249,10 @@ class CategoriesTest extends FrontasticApiTestCase
     private function requireCategoryEndpointToSupportSlugs(Project $project): void
     {
         $this->requireProjectFeature($project, 'canQueryCategoriesBySlug');
+    }
+
+    private function requireCategoryEndpointToSupportOffsetPagination(Project $project): void
+    {
+        $this->requireProjectFeature($project, 'supportOffsetPagination');
     }
 }

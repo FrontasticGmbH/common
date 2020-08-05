@@ -4,7 +4,7 @@ secret: "secret"
 configuration:
   test:
     disabled: false
-    canQueryCategoriesBySlug: false
+    supportOffsetPagination: true
   shopware:
     apiKey: SWSCBHFSNTVMAWNZDNFKSHLAYW
     endpoint: https://frontastic-test.shopwaredemo.store/sales-channel-api/v1

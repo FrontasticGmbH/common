@@ -4,6 +4,7 @@ secret: "secret"
 configuration:
     test:
         disabled: false
+        supportOffsetPagination: true
     commercetools:
         projectKey: frontastic-1
         clientId: nJIPfHoT9_GlC29EfL75zdkg
