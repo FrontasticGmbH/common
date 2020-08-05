@@ -1,4 +1,8 @@
+# common Changelog
 
+## `1.1.5` (2020-08-05)
+
+* fix: Restore (again) missing CHANGELOG.md in common
 ## `1.1.4` (2020-08-05)
 
 * fix: Restore missing CHANGELOG.md in common
