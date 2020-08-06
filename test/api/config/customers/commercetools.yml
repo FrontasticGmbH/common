@@ -4,6 +4,7 @@ secret: "secret"
 configuration:
     test:
         disabled: false
+        supportCursorBasedPagination: false
         supportOffsetPagination: true
     commercetools:
         projectKey: frontastic-1

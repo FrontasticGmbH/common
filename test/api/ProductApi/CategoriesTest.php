@@ -141,6 +141,28 @@ class CategoriesTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
+    public function testFetchingPastAllCategoriesReturnsEmptyResultWithCursor(Project $project, string $language): void
+    {
+        $this->requireCategoryEndpointToSupportCursorBasedPagination($project);
+
+        $limit = 10;
+        $cursor = null;
+        do {
+            $categoryResult = $this->queryCategories($project, $language, $limit, $cursor);
+            $this->assertNotEmpty($categoryResult->count);
+
+            $cursor = $categoryResult->cursor;
+        } while ($categoryResult->hasNextPage === true);
+
+        $categoryResultPastLastCategory = $this->queryCategories($project, $language, $limit, $cursor);
+        $this->assertEquals(0, $categoryResultPastLastCategory->count);
+        $this->assertEmpty($categoryResultPastLastCategory->items);
+        $this->assertFalse($categoryResultPastLastCategory->hasNextPage);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
     public function testFetchingAllCategoriesReturnsDistinctPaths(Project $project, string $language): void
     {
         $categories = $this->fetchAllCategories($project, $language);
@@ -249,6 +271,11 @@ class CategoriesTest extends FrontasticApiTestCase
     private function requireCategoryEndpointToSupportSlugs(Project $project): void
     {
         $this->requireProjectFeature($project, 'canQueryCategoriesBySlug');
+    }
+
+    private function requireCategoryEndpointToSupportCursorBasedPagination(Project $project): void
+    {
+        $this->requireProjectFeature($project, 'supportCursorBasedPagination');
     }
 
     private function requireCategoryEndpointToSupportOffsetPagination(Project $project): void

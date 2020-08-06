@@ -70,6 +70,17 @@ class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
             ->wait();
     }
 
+    public function queryCategories(CategoryQuery $query): object
+    {
+        $categories = $this->getCategories($query);
+
+        return new ProductApi\Result([
+            'count' => count($categories),
+            'items' => $categories,
+            'query' => clone($query)
+        ]);
+    }
+
     public function getProductTypes(ProductTypeQuery $query): array
     {
         return [];

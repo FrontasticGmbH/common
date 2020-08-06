@@ -234,6 +234,20 @@ class FrontasticApiTestCase extends KernelTestCase
         return $categories;
     }
 
+    /**
+     * @return Result
+     */
+    protected function queryCategories(
+        Project $project,
+        string $language,
+        ?int $limit = null,
+        ?string $cursor = null
+    ): object {
+        return $this
+            ->getProductApiForProject($project)
+            ->queryCategories(new CategoryQuery($this->buildQueryParameters($language, $limit, null, $cursor)));
+    }
+
     protected function getAProduct(Project $project, string $language): Product
     {
         $result = $this->queryProducts($project, $language);
@@ -256,7 +270,12 @@ class FrontasticApiTestCase extends KernelTestCase
             ->factor($project);
     }
 
-    protected function buildQueryParameters(string $language, ?int $limit = null, ?int $offset = null)
+    protected function buildQueryParameters(
+        string $language,
+        ?int $limit = null,
+        ?int $offset = null,
+        ?string $cursor = null
+    )
     {
         $parameters = [
             'locale' => $language,
@@ -267,6 +286,9 @@ class FrontasticApiTestCase extends KernelTestCase
         }
         if ($offset !== null) {
             $parameters['offset'] = $offset;
+        }
+        if ($cursor !== null) {
+            $parameters['cursor'] = $cursor;
         }
 
         return $parameters;

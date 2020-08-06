@@ -23,6 +23,27 @@ class PaginatedQuery extends Query
      * Optional start offset, default is <b>0</b>.
      *
      * @var integer
+     * @deprecated Use $cursor instead
      */
     public $offset = 0;
+
+    /**
+     * Optional item reference.
+     *
+     * @var string
+     */
+    public $cursor;
+
+    /**
+     * Optional flag that indicates if there are more pages to fetch.
+     *
+     * @var boolean
+     */
+    public $hasNextPage = false;
+
+    /**
+     * Option flag that indicates if there are any pages prior to the current page.
+     * @var boolean
+     */
+    public $hasPreviousPage = false;
 }

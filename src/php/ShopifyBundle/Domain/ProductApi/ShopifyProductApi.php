@@ -31,16 +31,28 @@ class ShopifyProductApi implements ProductApi
         $this->client = $client;
     }
 
+    /**
+     * @deprecated Use queryCategories instead. This method only exists for backwards compatibility.
+     */
     public function getCategories(CategoryQuery $query): array
     {
-        $queryFilter = null;
+        return $this->queryCategories($query)->items;
+    }
+
+    public function queryCategories(CategoryQuery $query): object
+    {
+        $filters = [];
+
+        if ($query->cursor) {
+            $filters[] = "after:\"$query->cursor\"";
+        }
 
         if ($query->slug) {
-            $queryFilter = "query:\"'$query->slug'\"";
+            $filters[] = "query:\"'$query->slug'\"";
         }
 
         $queryString = "{
-            collections(first: $query->limit $queryFilter) {
+            collections(first: $query->limit, " . implode(' , ', $filters) . ") {
                 edges {
                     cursor
                     node {
@@ -58,18 +70,37 @@ class ShopifyProductApi implements ProductApi
 
         $result = $this->client->request($queryString)->wait();
 
+        $cursor = null;
+        $hasNextPage = null;
+        $hasPreviousPage = null;
         $categories = [];
 
-        foreach ($result['body']['data']['collections']['edges'] as $collectionData) {
+        if (key_exists('collections', $result['body']['data'])) {
+            $collectionsData = $result['body']['data']['collections']['edges'];
+            $hasNextPage = $result['body']['data']['collections']['pageInfo']['hasNextPage'];
+            $hasPreviousPage = $result['body']['data']['collections']['pageInfo']['hasPreviousPage'];
+        }
+
+        foreach ($collectionsData as $collectionData) {
             $categories[] = new Category([
                 'categoryId' => $collectionData['node']['id'],
                 'name' => $collectionData['node']['title'],
                 'slug' => $collectionData['node']['handle'],
                 'path' => '/' .$collectionData['node']['id'],
             ]);
+
+            $cursor = $collectionData['cursor'];
         }
 
-        return $categories;
+        return new Result([
+            // @TODO: "offset" and "total" are not available in Shopify. Use cursor-based pagination instead
+            'cursor' => $cursor,
+            'hasNextPage' => $hasNextPage,
+            'hasPreviousPage' => $hasPreviousPage,
+            'count' => count($categories),
+            'items' => $categories,
+            'query' => clone $query,
+        ]);
     }
 
     public function getProductTypes(ProductTypeQuery $query): array
@@ -281,8 +312,8 @@ class ShopifyProductApi implements ProductApi
                     $cursor = $productData['cursor'] ?? null;
                 }
 
-                return new ProductApi\Result([
-                    // @TODO: "offset" and "total" are not available in Shopify. They implement cursor-based pagination
+                return new Result([
+                    // @TODO: "offset" and "total" are not available in Shopify. Use cursor-based pagination instead
                     'cursor' => $cursor,
                     'hasNextPage' => $hasNextPage,
                     'hasPreviousPage' => $hasPreviousPage,

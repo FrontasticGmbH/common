@@ -4,6 +4,7 @@ secret: "secret"
 configuration:
     test:
         disabled: false
+        supportCursorBasedPagination: true
         supportOffsetPagination: false
     shopify:
         hostUrl: https://frontastic.myshopify.com/api/2020-07/graphql.json

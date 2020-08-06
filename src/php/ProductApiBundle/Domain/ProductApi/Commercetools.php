@@ -142,6 +142,17 @@ class Commercetools implements ProductApi
         return array_values($categoryMap);
     }
 
+    public function queryCategories(CategoryQuery $query): object
+    {
+        $categories = $this->getCategories($query);
+
+        return new ProductApi\Result([
+            'count' => count($categories),
+            'items' => $categories,
+            'query' => clone($query)
+        ]);
+    }
+
     public function getProductTypes(ProductTypeQuery $query): array
     {
         $result = $this->client->fetchAsync('/product-types')->wait();
