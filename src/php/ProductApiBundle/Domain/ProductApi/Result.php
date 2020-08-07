@@ -8,7 +8,6 @@ class Result extends DataObject implements \Countable, \IteratorAggregate
 {
     /**
      * @var integer
-     * @deprecated Use $cursor instead
      */
     public $offset;
 
