@@ -3,6 +3,7 @@
 namespace Frontastic\Common\ShopifyBundle\Domain;
 
 use Frontastic\Common\HttpClient;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\SimpleCache\CacheInterface;
 
