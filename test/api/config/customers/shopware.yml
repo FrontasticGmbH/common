@@ -5,6 +5,7 @@ configuration:
   test:
     disabled: false
     canQueryCategoriesBySlug: false
+    supportCursorBasedPagination: false
     supportOffsetPagination: true
   shopware:
     apiKey: SWSCBHFSNTVMAWNZDNFKSHLAYW

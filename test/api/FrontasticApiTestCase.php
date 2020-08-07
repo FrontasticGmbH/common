@@ -216,6 +216,20 @@ class FrontasticApiTestCase extends KernelTestCase
     }
 
     /**
+     * @return Result
+     */
+    protected function queryCategories(
+        Project $project,
+        string $language,
+        ?int $limit = null,
+        ?string $cursor = null
+    ): object {
+        return $this
+            ->getProductApiForProject($project)
+            ->queryCategories(new CategoryQuery($this->buildQueryParameters($language, $limit, null, $cursor)));
+    }
+
+    /**
      * @return Category[]
      */
     protected function fetchAllCategories(Project $project, string $language): array
@@ -235,17 +249,22 @@ class FrontasticApiTestCase extends KernelTestCase
     }
 
     /**
-     * @return Result
+     * @return Category[]
      */
-    protected function queryCategories(
-        Project $project,
-        string $language,
-        ?int $limit = null,
-        ?string $cursor = null
-    ): object {
-        return $this
-            ->getProductApiForProject($project)
-            ->queryCategories(new CategoryQuery($this->buildQueryParameters($language, $limit, null, $cursor)));
+    protected function queryAllCategoriesWithCursor(Project $project, string $language): array
+    {
+        $categories = [];
+
+        $limit = 50;
+        $cursor = null;
+        do {
+            $resultFromCurrentStep = $this->queryCategories($project, $language, $limit, $cursor);
+            $categories = array_merge($categories, $resultFromCurrentStep->items);
+
+            $cursor = $resultFromCurrentStep->cursor;
+        } while ($resultFromCurrentStep->hasNextPage === true);
+
+        return $categories;
     }
 
     protected function getAProduct(Project $project, string $language): Product

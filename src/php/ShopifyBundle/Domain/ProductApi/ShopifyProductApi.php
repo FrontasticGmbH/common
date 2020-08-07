@@ -79,17 +79,17 @@ class ShopifyProductApi implements ProductApi
             $collectionsData = $result['body']['data']['collections']['edges'];
             $hasNextPage = $result['body']['data']['collections']['pageInfo']['hasNextPage'];
             $hasPreviousPage = $result['body']['data']['collections']['pageInfo']['hasPreviousPage'];
-        }
 
-        foreach ($collectionsData as $collectionData) {
-            $categories[] = new Category([
-                'categoryId' => $collectionData['node']['id'],
-                'name' => $collectionData['node']['title'],
-                'slug' => $collectionData['node']['handle'],
-                'path' => '/' .$collectionData['node']['id'],
-            ]);
+            foreach ($collectionsData as $collectionData) {
+                $categories[] = new Category([
+                    'categoryId' => $collectionData['node']['id'],
+                    'name' => $collectionData['node']['title'],
+                    'slug' => $collectionData['node']['handle'],
+                    'path' => '/' .$collectionData['node']['id'],
+                ]);
 
-            $cursor = $collectionData['cursor'];
+                $cursor = $collectionData['cursor'];
+            }
         }
 
         return new Result([
@@ -168,7 +168,7 @@ class ShopifyProductApi implements ProductApi
                 ->then(
                     function (Result $productQueryResult) use ($query) {
                         if (count($productQueryResult->items) === 0) {
-                            throw ProductNotFoundException::byProperty($query->productId);
+                            throw ProductNotFoundException::byProductId($query->productId);
                         }
                         return reset($productQueryResult->items);
                     }
