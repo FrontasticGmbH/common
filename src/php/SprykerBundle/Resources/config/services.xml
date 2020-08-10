@@ -11,18 +11,14 @@
 
         <prototype namespace="Frontastic\Common\SprykerBundle\Domain\" resource="../../Domain" autoconfigure="true"/>
 
-        <service id="Frontastic\Common\SprykerBundle\Domain\MapperResolver">
+        <service id="Frontastic\Common\SprykerBundle\Domain\MapperResolver" public="true">
             <argument type="tagged_iterator" tag="frontastic.common.spryker.mapper"/>
-            <tag name="frontastic.common.api_integration"/>
         </service>
 
-        <service id="Frontastic\Common\SprykerBundle\Domain\Account\TokenDecoder">
-            <tag name="frontastic.common.api_integration"/>
-        </service>
+        <service id="Frontastic\Common\SprykerBundle\Domain\Account\TokenDecoder" public="true" />
 
         <service id="Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper">
             <argument type="service" id="Frontastic\Catwalk\ApiCoreBundle\Domain\ContextService" />
-            <tag name="frontastic.common.api_integration"/>
         </service>
 
         <service id="Frontastic\Common\SprykerBundle\Domain\Exception\ExceptionFactory"
@@ -30,15 +26,13 @@
                  autoconfigure="true"
         />
 
-        <service id="Frontastic\Common\SprykerBundle\Domain\SprykerClientFactory">
+        <service id="Frontastic\Common\SprykerBundle\Domain\SprykerClientFactory" public="true">
             <argument type="service" id="Frontastic\Common\HttpClient" />
             <argument type="service" id="Frontastic\Common\SprykerBundle\Domain\Exception\ExceptionFactory" />
-            <tag name="frontastic.common.api_integration" />
         </service>
 
         <service id="Frontastic\Common\SprykerBundle\Domain\Locale\DefaultLocaleCreatorFactory">
             <argument type="service" id="cache.app.simple" />
-            <tag name="frontastic.common.api_integration" />
         </service>
 
         <service id="Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreatorFactory"
