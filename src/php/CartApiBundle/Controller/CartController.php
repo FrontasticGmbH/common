@@ -247,9 +247,12 @@ class CartController extends CrudController
 
         $order = $cartApi->order($cart, $context->locale);
 
-        // @TODO: Remove old cart instead (also for logged in users)
-        // @HACK: Regenerate session ID to get a "new" cart:
-        session_regenerate_id();
+        $symfonySession = $request->hasSession() ? $request->getSession() : null;
+        if ($symfonySession !== null) {
+            // Increase security
+            session_regenerate_id();
+            $symfonySession->remove('cart_id');
+        }
 
         return [
             'order' => $order,
@@ -294,6 +297,7 @@ class CartController extends CrudController
             return $cartApi->getForUser($context->session->account, $context->locale);
         } else {
             $symfonySession = $request->hasSession() ? $request->getSession() : null;
+
             if ($symfonySession !== null &&
                 $symfonySession->has('cart_id') &&
                 $symfonySession->get('cart_id') !== null
@@ -355,7 +359,7 @@ class CartController extends CrudController
         return $body;
     }
 
-    private function parseProjectSpecificDataByKey(array $requestBody, string $key): array
+    protected function parseProjectSpecificDataByKey(array $requestBody, string $key): array
     {
         $projectSpecificData = $requestBody['projectSpecificData'] ?? [];
 

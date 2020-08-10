@@ -20,6 +20,7 @@ use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreatorFactory as Spryke
 use Frontastic\Common\SprykerBundle\Domain\SprykerClientFactory;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver as SprykerMapperResolver;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
 class AccountApiFactory
 {
@@ -32,10 +33,16 @@ class AccountApiFactory
 
     private $decorators = [];
 
-    public function __construct(ContainerInterface $container, iterable $decorators)
-    {
+    private $logger;
+
+    public function __construct(
+        ContainerInterface $container,
+        iterable $decorators,
+        LoggerInterface $logger
+    ) {
         $this->container = $container;
         $this->decorators = $decorators;
+        $this->logger = $logger;
     }
 
     public function factor(Project $project): AccountApi
@@ -49,7 +56,9 @@ class AccountApiFactory
                     ->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
                 $commercetoolsAccountMapper = $this->container->get(CommercetoolsAccountMapper::class);
 
-                $accountApi = new AccountApi\Commercetools($client, $commercetoolsAccountMapper);
+                $logger = $this->logger;
+
+                $accountApi = new AccountApi\Commercetools($client, $commercetoolsAccountMapper, $logger);
                 break;
             case 'sap-commerce-cloud':
                 $client = $this->container

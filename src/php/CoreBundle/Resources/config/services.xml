@@ -7,11 +7,6 @@
     <services>
         <defaults public="true"/>
 
-        <service id="Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator">
-            <argument type="service" id="Psr\Container\ContainerInterface"/>
-            <argument type="tagged_locator" tag="frontastic.common.api_integration" index-by="id"/>
-        </service>
-
         <service id="Frontastic\Common\HttpClient">
             <factory service="Frontastic\Common\HttpClient\Factory" method="create"/>
 
