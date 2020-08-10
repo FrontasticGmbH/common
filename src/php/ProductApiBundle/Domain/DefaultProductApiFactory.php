@@ -104,9 +104,9 @@ class DefaultProductApiFactory implements ProductApiFactory
                 );
                 break;
             case 'spryker':
-                $clientFactory = $this->serviceLocator->get(SprykerClientFactory::class);
-                $dataMapper = $this->serviceLocator->get(SprykerMapperResolver::class);
-                $localeCreatorFactory = $this->serviceLocator->get(SprykerLocaleCreatorFactory::class);
+                $clientFactory = $this->container->get(SprykerClientFactory::class);
+                $dataMapper = $this->container->get(SprykerMapperResolver::class);
+                $localeCreatorFactory = $this->container->get(SprykerLocaleCreatorFactory::class);
 
                 $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
 
