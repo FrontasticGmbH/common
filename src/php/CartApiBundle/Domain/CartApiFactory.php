@@ -112,11 +112,11 @@ class CartApiFactory
                 break;
 
             case 'spryker':
-                $dataMapper = $this->factoryServiceLocator->get(SprykerMapperResolver::class);
-                $localeCreatorFactory = $this->factoryServiceLocator->get(SprykerLocaleCreatorFactory::class);
-                $accountHelper = $this->factoryServiceLocator->get(AccountHelper::class);
+                $dataMapper = $this->container->get(SprykerMapperResolver::class);
+                $localeCreatorFactory = $this->container->get(SprykerLocaleCreatorFactory::class);
+                $accountHelper = $this->container->get(AccountHelper::class);
 
-                $client = $this->factoryServiceLocator
+                $client = $this->container
                     ->get(SprykerClientFactory::class)
                     ->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
 
