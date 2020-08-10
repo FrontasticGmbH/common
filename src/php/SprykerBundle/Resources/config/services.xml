@@ -17,7 +17,7 @@
 
         <service id="Frontastic\Common\SprykerBundle\Domain\Account\TokenDecoder" public="true" />
 
-        <service id="Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper">
+        <service id="Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper" public="true">
             <argument type="service" id="Frontastic\Catwalk\ApiCoreBundle\Domain\ContextService" />
         </service>
 
