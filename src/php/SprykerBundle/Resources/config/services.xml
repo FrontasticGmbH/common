@@ -17,9 +17,11 @@
 
         <service id="Frontastic\Common\SprykerBundle\Domain\Account\TokenDecoder" public="true" />
 
+        <service id="Frontastic\Common\SprykerBundle\Domain\Account\SessionService" public="true" />
+
         <service id="Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper" public="true">
             <argument type="service" id="Frontastic\Catwalk\ApiCoreBundle\Domain\ContextService" />
-            <argument type="service" id="Frontastic\Catwalk\ApiCoreBundle\Domain\SessionService" />
+            <argument type="service" id="Frontastic\Common\SprykerBundle\Domain\Account\SessionService" />
         </service>
 
         <service id="Frontastic\Common\SprykerBundle\Domain\Exception\ExceptionFactory"
