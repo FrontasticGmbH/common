@@ -45,8 +45,8 @@ class GuestCart extends AbstractSprykerCart
     public function getById(string $cartId, string $locale = null): Cart
     {
         $response = $this->client->get(
-            $this->withIncludes("/guest-carts/{cartId}", $this->guestCartIncludes),
-            $this->accountHelper->getAnonymousHeader($cartId)
+            $this->withIncludes("/guest-carts/$cartId", $this->guestCartIncludes),
+            $this->accountHelper->getAnonymousHeader()
         );
 
         if ($response->document()->hasAnyPrimaryResources()) {
