@@ -90,8 +90,8 @@ class SearchCriteriaBuilder
                 // Exclude variants as they are returned in the list
                 new Filter\Equals([
                     'field' => 'parentId',
-                    'value' => null
-                ])
+                    'value' => null,
+                ]),
             ],
             'post-filter' => [],
             'aggregations' => [],
@@ -110,7 +110,7 @@ class SearchCriteriaBuilder
                                 'group' => [],
                             ],
                         ],
-                    ]
+                    ],
                 ],
                 'media' => [],
                 'options' => [
@@ -125,7 +125,7 @@ class SearchCriteriaBuilder
                 ],
                 'manufacturer' => [],
             ],
-//            'source' => self::PRODUCT_SOURCE_FIELDS,
+            //            'source' => self::PRODUCT_SOURCE_FIELDS,
         ];
 
         foreach ($query->filter as $filter) {
@@ -187,8 +187,8 @@ class SearchCriteriaBuilder
             'page' => 1,
             'limit' => 1,
             'filter' => [],
-// @TODO: uncomment if doing response optimizations
-//            'source' => self::PRODUCT_SOURCE_FIELDS,
+            // @TODO: uncomment if doing response optimizations
+            //            'source' => self::PRODUCT_SOURCE_FIELDS,
         ];
 
         if ($query->productId !== null) {
@@ -226,7 +226,7 @@ class SearchCriteriaBuilder
                     'name' => $aggregationName . '.inner',
                     'field' => $field,
                     'definition' => $definition,
-                ])
+                ]),
             ]);
 
             if (!empty($facet->terms)) {
@@ -238,7 +238,7 @@ class SearchCriteriaBuilder
         } elseif ($facet instanceof Query\RangeFacet) {
             $aggregation = new Aggregation\Stats([
                 'name' => $facet->handle,
-                'field' => $facet->handle
+                'field' => $facet->handle,
             ]);
 
             if ($facet->min !== 0 || $facet->max !== PHP_INT_MAX) {
