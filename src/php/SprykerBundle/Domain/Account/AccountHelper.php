@@ -15,9 +15,15 @@ class AccountHelper
      */
     private $contextService;
 
-    public function __construct(ContextService $contextService)
+    /**
+     * @var SessionService
+     */
+    private $sessionService;
+
+    public function __construct(ContextService $contextService, SessionService $sessionService)
     {
         $this->contextService = $contextService;
+        $this->sessionService = $sessionService;
     }
 
     /**
@@ -62,7 +68,7 @@ class AccountHelper
     public function getAnonymousHeader(?string $id = null): array
     {
         if (!$id) {
-            $id = session_id();
+            $id = $this->sessionService->getSessionId();
         }
 
         return ['X-Anonymous-Customer-Unique-Id' => $id];

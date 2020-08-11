@@ -23,6 +23,7 @@ use Frontastic\Common\ProjectApiBundle\Domain\ProjectApiFactory;
 use Frontastic\Common\ReplicatorBundle\Domain\CustomerService;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper;
+use Frontastic\Common\SprykerBundle\Domain\Account\SessionService;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class FrontasticApiTestCase extends KernelTestCase
@@ -67,8 +68,20 @@ class FrontasticApiTestCase extends KernelTestCase
             ->method('createContextFromRequest')
             ->willReturn($contextMock);
 
+        $sessionServiceMock = $this
+            ->getMockBuilder(SessionService::class)
+            ->setMethods(['getSessionId'])
+            ->getMock();
+
+        $sessionServiceMock
+            ->method('getSessionId')
+            ->willReturn(uniqid());
+
         self::$kernel->getContainer()
-            ->set('Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper', new AccountHelper($contextServiceMock));
+            ->set(
+                'Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper',
+                new AccountHelper($contextServiceMock, $sessionServiceMock)
+            );
     }
 
     public function customerAndProject(): array

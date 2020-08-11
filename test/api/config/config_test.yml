@@ -12,4 +12,3 @@ services:
         arguments:
 #            - '@Frontastic\Common\ApiTests\Mock\ContextServiceMock'
             - '@Frontastic\Catwalk\ApiCoreBundle\Domain\ContextService'
-        tags: ['frontastic.common.api_integration']

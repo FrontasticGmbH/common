@@ -19,6 +19,7 @@
 
         <service id="Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper" public="true">
             <argument type="service" id="Frontastic\Catwalk\ApiCoreBundle\Domain\ContextService" />
+            <argument type="service" id="Frontastic\Catwalk\ApiCoreBundle\Domain\SessionService" />
         </service>
 
         <service id="Frontastic\Common\SprykerBundle\Domain\Exception\ExceptionFactory"
