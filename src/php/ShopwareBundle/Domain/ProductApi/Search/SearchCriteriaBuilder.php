@@ -94,7 +94,13 @@ class SearchCriteriaBuilder
                 ]),
             ],
             'post-filter' => [],
-            'aggregations' => [],
+            'aggregations' => [
+                [
+                    'name' => 'count#productIds',
+                    'type' => 'count',
+                    'field' => 'id',
+                ],
+            ],
             'associations' => [
                 'children' => [
                     'associations' => [
