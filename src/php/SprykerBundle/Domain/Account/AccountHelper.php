@@ -62,7 +62,7 @@ class AccountHelper
     public function getAnonymousHeader(?string $id = null): array
     {
         if (!$id) {
-            $id = $this->getAccount()->accountId;
+            $id = session_id();
         }
 
         return ['X-Anonymous-Customer-Unique-Id' => $id];

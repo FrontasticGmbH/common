@@ -317,25 +317,6 @@ class CartController extends CrudController
                 }
             }
 
-            if ($symfonySession !== null &&
-                $symfonySession->has('anonymousId') &&
-                $symfonySession->get('anonymousId') !== null
-            ) {
-                $anonymousId = $symfonySession->get('anonymousId');
-                try {
-                    return $cartApi->getAnonymous($anonymousId, $context->locale);
-                } catch (\Exception $exception) {
-                    $this->get('logger')
-                        ->info(
-                            'Error fetching anonymous cart, creating new one',
-                            [
-                                'anonymousId' => $anonymousId,
-                                'exception' => $exception,
-                            ]
-                        );
-                }
-            }
-
             $cart = $cartApi->getAnonymous(session_id(), $context->locale);
             if ($symfonySession !== null) {
                 $symfonySession->set('cart_id', $cart->cartId);
