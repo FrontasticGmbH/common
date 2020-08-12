@@ -80,6 +80,17 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
         return $this->mapResponseResource($response, CategoriesMapper::MAPPER_NAME);
     }
 
+    public function queryCategories(CategoryQuery $query): object
+    {
+        $categories = $this->getCategories($query);
+
+        return new ProductApi\Result([
+            'count' => count($categories),
+            'items' => $categories,
+            'query' => clone($query)
+        ]);
+    }
+
     /**
      * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery $query
      *
