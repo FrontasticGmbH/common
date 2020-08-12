@@ -19,6 +19,10 @@ use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver as Sho
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory as ShopwareLocaleCreatorFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\ShopwareProductApi;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
+use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreatorFactory as SprykerLocaleCreatorFactory;
+use Frontastic\Common\SprykerBundle\Domain\Product\SprykerProductApi;
+use Frontastic\Common\SprykerBundle\Domain\MapperResolver as SprykerMapperResolver;
+use Frontastic\Common\SprykerBundle\Domain\SprykerClientFactory;
 
 use Psr\Container\ContainerInterface;
 
@@ -108,6 +112,21 @@ class DefaultProductApiFactory implements ProductApiFactory
                 $productApi = new ShopifyProductApi(
                     $client
                 );
+
+                break;
+            case 'spryker':
+                $clientFactory = $this->container->get(SprykerClientFactory::class);
+                $dataMapper = $this->container->get(SprykerMapperResolver::class);
+                $localeCreatorFactory = $this->container->get(SprykerLocaleCreatorFactory::class);
+
+                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+
+                $productApi = new SprykerProductApi(
+                    $client,
+                    $dataMapper,
+                    $localeCreatorFactory->factor($project, $client)
+                );
+
                 break;
             default:
                 throw new \OutOfBoundsException(

@@ -2,6 +2,8 @@
 
 namespace Frontastic\Common\HttpClient;
 
+use Psr\Http\Message\ResponseInterface;
+
 class Response extends \Kore\DataObject\DataObject
 {
     /**
@@ -24,6 +26,13 @@ class Response extends \Kore\DataObject\DataObject
      * @var string
      */
     public $body;
+
+    /**
+     * Raw HTTP output response
+     *
+     * @var ResponseInterface
+     */
+    public $rawApiOutput;
 
     public function __toString()
     {

@@ -2,8 +2,12 @@
 
 namespace Frontastic\Common\ApiTests;
 
+use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
+use Frontastic\Catwalk\ApiCoreBundle\Domain\ContextService;
+use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory;
+use Frontastic\Common\AccountApiBundle\Domain\Session;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\CartApiFactory;
 use Frontastic\Common\EnvironmentResolver;
@@ -18,6 +22,8 @@ use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ProjectApiBundle\Domain\ProjectApiFactory;
 use Frontastic\Common\ReplicatorBundle\Domain\CustomerService;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
+use Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper;
+use Frontastic\Common\SprykerBundle\Domain\Account\SessionService;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class FrontasticApiTestCase extends KernelTestCase
@@ -44,8 +50,38 @@ class FrontasticApiTestCase extends KernelTestCase
                 __DIR__,
             ]
         );
-
         self::bootKernel();
+    }
+
+    public function setup()
+    {
+        $account = new Account(['accountId' => uniqid()]);
+        $session = new Session(['account' => $account, 'loggedIn' => false]);
+        $contextMock = $this->getMockBuilder(Context::class)->getMock();
+        $contextMock->session = $session;
+        $contextServiceMock = $this
+            ->getMockBuilder(ContextService::class)
+            ->setMethods(['createContextFromRequest'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $contextServiceMock
+            ->method('createContextFromRequest')
+            ->willReturn($contextMock);
+
+        $sessionServiceMock = $this
+            ->getMockBuilder(SessionService::class)
+            ->setMethods(['getSessionId'])
+            ->getMock();
+
+        $sessionServiceMock
+            ->method('getSessionId')
+            ->willReturn(uniqid());
+
+        self::$kernel->getContainer()
+            ->set(
+                'Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper',
+                new AccountHelper($contextServiceMock, $sessionServiceMock)
+            );
     }
 
     public function customerAndProject(): array

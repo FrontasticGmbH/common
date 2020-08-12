@@ -1,0 +1,24 @@
+---
+name: "spryker"
+secret: "secret"
+configuration:
+    test:
+        disabled: false
+    spryker:
+        endpoint: https://glue.de.b2c.demo-spryker.com
+    account:
+        engine: spryker
+    cart:
+        engine: spryker
+        priceMode: GROSS_MODE
+        currency: EUR
+        shop: DE
+    product:
+        engine: spryker
+    whislist:
+        engine: spryker
+projects:
+    -   projectId: test
+        name: Spryker Test Catwalk
+        languages: ["en_GB@GBP", "de_DE@EUR"]
+        defaultLanguage: en_GB@GBP

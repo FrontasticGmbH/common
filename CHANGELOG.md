@@ -1,4 +1,36 @@
-# Common Changelog
+# common Changelog
+
+## `1.1.5` (2020-08-05)
+
+* fix: Restore (again) missing CHANGELOG.md in common
+
+## `1.1.4` (2020-08-05)
+
+* fix: Restore missing CHANGELOG.md in common
+
+## `1.1.3` (2020-08-05)
+
+* Fixed release script
+
+## `1.1.2` (2020-08-05)
+
+* fix: Use readlink instead of realpath to work on mac
+* Enable tideways for sparhandy and fix check in setup handle
+* chore(frontasticli): only build a release on new tag
+* Adapted final message
+* Reactivated adyen in release script
+* chore(frontasticli): restrict release action to master branch
+* fix(boost-theme): using the default theme
+* chore: adding lobenberg for now again as the contract is not ended
+* fix: enables using correct emojis in MS teams as well
+* fix(boost-theme): product teaser - clickable
+* feat(boost-theme): theming - next phase
+* chore(frontasticli): Add github action for releasing
+* fix(boost-theme): custom hook and some photo scaling
+* fix(boost-theme): custom hook and some photo scaling (solution for now, until we get more customized photos from commerce tools)
+* chore: removing customers that have github actions by now
+* chore: enabling teams hook for Apollo and disabling Slack
+* chore: Remove orphan DI tag frontastic.common.api_integration.
 
 ## `1.1.1` (2020-07-30)
 

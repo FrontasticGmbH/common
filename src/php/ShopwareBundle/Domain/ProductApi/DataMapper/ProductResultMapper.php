@@ -52,7 +52,7 @@ class ProductResultMapper extends AbstractDataMapper implements
 
         $productData = $this->extractData($resource);
 
-        $result->total = $resource['total'];
+        $result->total = $resource['aggregations']['count#productIds']['count'];
         $result->count = count($productData);
         $result->offset = $this->getQuery()->offset;
         $result->items = $this->mapProducts($productData);
