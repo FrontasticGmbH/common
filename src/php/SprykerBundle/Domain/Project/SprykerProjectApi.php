@@ -34,14 +34,6 @@ class SprykerProjectApi extends SprykerApiBase implements SprykerProjectApiInter
     public function getSearchableAttributes(): array
     {
         // @TODO: implement multi languages
-//        $languagesToFetch = [];
-//        foreach ($this->projectLanguages as $language) {
-//            $locale = $this->localeCreator->createLocaleFromString($language);
-//            if (!array_key_exists($locale->language, $languagesToFetch)) {
-//                $languagesToFetch[$locale->language] = [];
-//            }
-//            $languagesToFetch[$locale->language][] = $language;
-//        }
 
         $response = $this->client->get('/product-searchable-attributes');
 
