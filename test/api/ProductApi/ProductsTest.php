@@ -65,6 +65,70 @@ class ProductsTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
+    public function testQueryCursoBasedPaginatedProductsReturnsProducts(Project $project, string $language): void
+    {
+        $this->requireCategoryEndpointToSupportCursorBasedPagination($project);
+
+        $firstResult = $this->queryProducts(
+            $project,
+            $language,
+            [],
+            1,
+            null,
+            null,
+            false
+        );
+
+        $this->assertTrue($firstResult->hasNextPage);
+        $this->assertFalse($firstResult->hasPreviousPage);
+
+        $secondResult = $this->queryProducts(
+            $project,
+            $language,
+            [],
+            1,
+            null,
+            $firstResult->cursor,
+            false
+        );
+
+        $this->assertNotSame($firstResult->items[0]->productId, $secondResult->items[0]->productId);
+        $this->assertTrue($secondResult->hasNextPage);
+        $this->assertTrue($secondResult->hasPreviousPage);
+
+        $thirdResult = $this->queryProducts(
+            $project,
+            $language,
+            [],
+            1,
+            null,
+            $secondResult->cursor,
+            false
+        );
+
+        $this->assertNotSame($secondResult->items[0]->productId, $thirdResult->items[0]->productId);
+        $this->assertTrue($thirdResult->hasNextPage);
+        $this->assertTrue($thirdResult->hasPreviousPage);
+
+        $secondResultBackward = $this->queryProducts(
+            $project,
+            $language,
+            [],
+            1,
+            null,
+            $thirdResult->cursor,
+            true
+        );
+
+        $this->assertNotSame($thirdResult->items[0]->productId, $secondResultBackward->items[0]->productId);
+        $this->assertSame($secondResult->items[0]->productId, $secondResultBackward->items[0]->productId);
+        $this->assertTrue($secondResultBackward->hasNextPage);
+        $this->assertTrue($secondResultBackward->hasPreviousPage);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
     public function testQueryProductsByCustomQueryParameterReturnsProducts(Project $project, string $language): void
     {
         $queryParameters = [
@@ -682,5 +746,15 @@ class ProductsTest extends FrontasticApiTestCase
     private function assertContainsNoHtml(string $actual, string $message = null): void
     {
         $this->assertEquals($actual, strip_tags($actual), $message ?? 'The string may not contain HTML tags.');
+    }
+
+    private function requireCategoryEndpointToSupportCursorBasedPagination(Project $project): void
+    {
+        $this->requireProjectFeature($project, 'supportCursorBasedPagination');
+    }
+
+    private function requireCategoryEndpointToSupportOffsetPagination(Project $project): void
+    {
+        $this->requireProjectFeature($project, 'supportOffsetPagination');
     }
 }

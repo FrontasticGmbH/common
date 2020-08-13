@@ -218,11 +218,13 @@ class FrontasticApiTestCase extends KernelTestCase
         string $language,
         array $queryParameters = [],
         ?int $limit = null,
-        ?int $offset = null
+        ?int $offset = null,
+        ?string $cursor = null,
+        ?bool $backward = false
     ): Result {
         $query = new ProductQuery(
             array_merge(
-                $this->buildQueryParameters($language, $limit, $offset),
+                $this->buildQueryParameters($language, $limit, $offset, $cursor, $backward),
                 $queryParameters
             )
         );
@@ -258,11 +260,13 @@ class FrontasticApiTestCase extends KernelTestCase
         Project $project,
         string $language,
         ?int $limit = null,
-        ?string $cursor = null
+        ?int $offset = null,
+        ?string $cursor = null,
+        ?bool $backward = false
     ): object {
         return $this
             ->getProductApiForProject($project)
-            ->queryCategories(new CategoryQuery($this->buildQueryParameters($language, $limit, null, $cursor)));
+            ->queryCategories(new CategoryQuery($this->buildQueryParameters($language, $limit, null, $cursor, $backward)));
     }
 
     /**
@@ -329,7 +333,8 @@ class FrontasticApiTestCase extends KernelTestCase
         string $language,
         ?int $limit = null,
         ?int $offset = null,
-        ?string $cursor = null
+        ?string $cursor = null,
+        ?bool $backward = false
     )
     {
         $parameters = [
@@ -344,6 +349,9 @@ class FrontasticApiTestCase extends KernelTestCase
         }
         if ($cursor !== null) {
             $parameters['cursor'] = $cursor;
+        }
+        if ($backward !== false) {
+            $parameters['backward'] = $backward;
         }
 
         return $parameters;

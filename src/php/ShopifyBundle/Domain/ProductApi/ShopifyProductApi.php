@@ -247,8 +247,16 @@ class ShopifyProductApi implements ProductApi
 
         $queryFilter = "query:\"". implode(' OR ', $parameters) . "\"";
 
+        $pageFilter = $query->backward ? "last:" : "first:";
+        $pageFilter .= $query->limit;
+        if ($query->cursor) {
+            $pageFilter .= ' ';
+            $pageFilter .= $query->backward ? "before:" : "after:";
+            $pageFilter .= "\"$query->cursor\"";
+        }
+
         $query->query = "{
-            products(first: $query->limit $queryFilter) {
+            products($pageFilter $queryFilter) {
                 edges {
                     cursor
                     node {
