@@ -32,4 +32,12 @@ class PaginatedQuery extends Query
      * @var string
      */
     public $cursor;
+
+    /**
+     * Direction of the search for cursor-based pagination.
+     * The default value "false" is used to query forward.
+     *
+     * @var boolean
+     */
+    public $backward = false;
 }
