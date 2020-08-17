@@ -7,6 +7,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ShopwareBundle\Domain\AbstractShopwareApi;
 use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
@@ -69,11 +70,11 @@ class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
             ->wait();
     }
 
-    public function queryCategories(CategoryQuery $query): object
+    public function queryCategories(CategoryQuery $query): Result
     {
         $categories = $this->getCategories($query);
 
-        return new ProductApi\Result([
+        return new Result([
             'count' => count($categories),
             'items' => $categories,
             'query' => clone($query)

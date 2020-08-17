@@ -9,6 +9,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestExcept
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductApiBundle\Domain\ProductType;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreator;
 
@@ -75,11 +76,11 @@ class SapProductApi implements ProductApi
             ->wait();
     }
 
-    public function queryCategories(CategoryQuery $query): object
+    public function queryCategories(CategoryQuery $query): Result
     {
         $categories = $this->getCategories($query);
 
-        return new ProductApi\Result([
+        return new Result([
             'count' => count($categories),
             'items' => $categories,
             'query' => clone($query)

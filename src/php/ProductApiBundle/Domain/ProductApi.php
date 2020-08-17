@@ -29,7 +29,7 @@ interface ProductApi
      * @param CategoryQuery $query
      * @return Result
      */
-    public function queryCategories(CategoryQuery $query): object;
+    public function queryCategories(CategoryQuery $query): Result;
 
     /**
      * @param ProductTypeQuery $query

@@ -142,7 +142,7 @@ class Commercetools implements ProductApi
         return array_values($categoryMap);
     }
 
-    public function queryCategories(CategoryQuery $query): object
+    public function queryCategories(CategoryQuery $query): Result
     {
         $categories = $this->getCategories($query);
 

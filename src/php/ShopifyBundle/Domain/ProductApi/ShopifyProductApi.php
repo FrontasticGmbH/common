@@ -40,7 +40,7 @@ class ShopifyProductApi implements ProductApi
         return $this->queryCategories($query)->items;
     }
 
-    public function queryCategories(CategoryQuery $query): object
+    public function queryCategories(CategoryQuery $query): Result
     {
         $filters = [];
 
