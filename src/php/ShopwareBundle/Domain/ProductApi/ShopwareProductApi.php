@@ -11,7 +11,6 @@ use Frontastic\Common\ShopwareBundle\Domain\AbstractShopwareApi;
 use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
-use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
@@ -101,8 +100,12 @@ class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
             ->forCurrency($locale->currencyId)
             ->forLanguage($locale->languageId)
             ->post('/product', [], $criteria)
-            ->then(function ($response) {
-                return $this->mapResponse($response, ProductMapper::MAPPER_NAME);
+            ->then(function ($response) use ($query) {
+                $product = $this->mapResponse($response, ProductMapper::MAPPER_NAME);
+                if ($product === null) {
+                    throw ProductApi\ProductNotFoundException::fromQuery($query);
+                }
+                return $product;
             });
 
         if ($mode === self::QUERY_SYNC) {
