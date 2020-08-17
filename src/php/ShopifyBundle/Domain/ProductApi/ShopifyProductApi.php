@@ -5,6 +5,7 @@ namespace Frontastic\Common\ShopifyBundle\Domain\ProductApi;
 use Frontastic\Common\ProductApiBundle\Domain\Category;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\PaginatedQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\ProductNotFoundException;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
@@ -301,6 +302,14 @@ class ShopifyProductApi implements ProductApi
                 $products = [];
                 $productsData = [];
 
+                if ($result['errors']
+                    && strpos($result['errors'][0]['message'], 'Invalid global id') !== false
+                ) {
+                    return new Result([
+                        'query' => clone $query,
+                    ]);
+                }
+
                 if (key_exists('products', $result['body']['data'])) {
                     $productsData = $result['body']['data']['products']['edges'];
                     $hasNextPage = $result['body']['data']['products']['pageInfo']['hasNextPage'];
@@ -339,7 +348,7 @@ class ShopifyProductApi implements ProductApi
         return $this->client;
     }
 
-    private function buildPageFilter(ProductQuery $query): string
+    private function buildPageFilter(PaginatedQuery $query): string
     {
         $pageFilter = "first: " . $query->limit;
         if ($query->nextCursor) {

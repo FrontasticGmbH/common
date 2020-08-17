@@ -49,6 +49,8 @@ class ProductsTest extends FrontasticApiTestCase
      */
     public function testQueryAllProductsReturnsValidResult(Project $project, string $language): void
     {
+        $this->requireCategoryEndpointToSupportOffsetPagination($project);
+
         $result = $this->queryProducts($project, $language);
 
         $this->assertSame(0, $result->offset);
@@ -56,6 +58,21 @@ class ProductsTest extends FrontasticApiTestCase
         $this->assertGreaterThanOrEqual(50, $result->total);
 
         $this->assertGreaterThanOrEqual(ProductApi\PaginatedQuery::DEFAULT_LIMIT, $result->count);
+        $this->assertCount($result->count, $result->items);
+
+        $this->assertInternalType('array', $result->items);
+        $this->assertContainsOnlyInstancesOf(Product::class, $result->items);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testQueryProductsReturnsValidResultWithCursoBasedPagination(Project $project, string $language): void
+    {
+        $this->requireCategoryEndpointToSupportCursorBasedPagination($project);
+
+        $result = $this->queryProducts($project, $language);
+
         $this->assertCount($result->count, $result->items);
 
         $this->assertInternalType('array', $result->items);
@@ -582,8 +599,13 @@ class ProductsTest extends FrontasticApiTestCase
 
     private function assertEmptyResult(Result $actual): void
     {
-        $this->assertEquals(0, $actual->count);
-        $this->assertEquals(0, $actual->total);
+        if ($actual->count) {
+            $this->assertEquals(0, $actual->count);
+        }
+        if ($actual->total) {
+            $this->assertEquals(0, $actual->total);
+        }
+
         $this->assertEmpty($actual->items);
     }
 
