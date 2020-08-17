@@ -31,13 +31,12 @@ class PaginatedQuery extends Query
      *
      * @var string
      */
-    public $cursor;
+    public $nextCursor;
 
     /**
-     * Direction of the search for cursor-based pagination.
-     * The default value "false" is used to query forward.
+     * Optional item reference. If exist, will prevail over $nextCursor.
      *
-     * @var boolean
+     * @var string
      */
-    public $backward = false;
+    public $previousCursor;
 }

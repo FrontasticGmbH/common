@@ -219,12 +219,12 @@ class FrontasticApiTestCase extends KernelTestCase
         array $queryParameters = [],
         ?int $limit = null,
         ?int $offset = null,
-        ?string $cursor = null,
-        ?bool $backward = false
+        ?string $nextCursor = null,
+        ?string $previousCursor = null
     ): Result {
         $query = new ProductQuery(
             array_merge(
-                $this->buildQueryParameters($language, $limit, $offset, $cursor, $backward),
+                $this->buildQueryParameters($language, $limit, $offset, $nextCursor, $previousCursor),
                 $queryParameters
             )
         );
@@ -261,12 +261,12 @@ class FrontasticApiTestCase extends KernelTestCase
         string $language,
         ?int $limit = null,
         ?int $offset = null,
-        ?string $cursor = null,
-        ?bool $backward = false
+        ?string $nextCursor = null,
+        ?string $previousCursor = null
     ): object {
         return $this
             ->getProductApiForProject($project)
-            ->queryCategories(new CategoryQuery($this->buildQueryParameters($language, $limit, null, $cursor, $backward)));
+            ->queryCategories(new CategoryQuery($this->buildQueryParameters($language, $limit, null, $nextCursor, $previousCursor)));
     }
 
     /**
@@ -296,12 +296,12 @@ class FrontasticApiTestCase extends KernelTestCase
         $categories = [];
 
         $limit = 50;
-        $cursor = null;
+        $nextCursor = null;
         do {
-            $resultFromCurrentStep = $this->queryCategories($project, $language, $limit, $cursor);
+            $resultFromCurrentStep = $this->queryCategories($project, $language, $limit, $nextCursor);
             $categories = array_merge($categories, $resultFromCurrentStep->items);
 
-            $cursor = $resultFromCurrentStep->cursor;
+            $nextCursor = $resultFromCurrentStep->nextCursor;
         } while ($resultFromCurrentStep->hasNextPage === true);
 
         return $categories;
@@ -333,8 +333,8 @@ class FrontasticApiTestCase extends KernelTestCase
         string $language,
         ?int $limit = null,
         ?int $offset = null,
-        ?string $cursor = null,
-        ?bool $backward = false
+        ?string $nextCursor = null,
+        ?string $previousCursor = null
     )
     {
         $parameters = [
@@ -347,11 +347,11 @@ class FrontasticApiTestCase extends KernelTestCase
         if ($offset !== null) {
             $parameters['offset'] = $offset;
         }
-        if ($cursor !== null) {
-            $parameters['cursor'] = $cursor;
+        if ($nextCursor !== null) {
+            $parameters['nextCursor'] = $nextCursor;
         }
-        if ($backward !== false) {
-            $parameters['backward'] = $backward;
+        if ($previousCursor !== null) {
+            $parameters['previousCursor'] = $previousCursor;
         }
 
         return $parameters;

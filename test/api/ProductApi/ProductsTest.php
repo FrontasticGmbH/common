@@ -75,8 +75,7 @@ class ProductsTest extends FrontasticApiTestCase
             [],
             1,
             null,
-            null,
-            false
+            null
         );
 
         $this->assertTrue($firstResult->hasNextPage);
@@ -89,7 +88,7 @@ class ProductsTest extends FrontasticApiTestCase
             1,
             null,
             $firstResult->cursor,
-            false
+            null
         );
 
         $this->assertNotSame($firstResult->items[0]->productId, $secondResult->items[0]->productId);
@@ -103,27 +102,27 @@ class ProductsTest extends FrontasticApiTestCase
             1,
             null,
             $secondResult->cursor,
-            false
+            null
         );
 
         $this->assertNotSame($secondResult->items[0]->productId, $thirdResult->items[0]->productId);
         $this->assertTrue($thirdResult->hasNextPage);
         $this->assertTrue($thirdResult->hasPreviousPage);
 
-        $secondResultBackward = $this->queryProducts(
+        $secondResultPreviousCursor = $this->queryProducts(
             $project,
             $language,
             [],
             1,
             null,
-            $thirdResult->cursor,
-            true
+            null,
+            $thirdResult->cursor
         );
 
-        $this->assertNotSame($thirdResult->items[0]->productId, $secondResultBackward->items[0]->productId);
-        $this->assertSame($secondResult->items[0]->productId, $secondResultBackward->items[0]->productId);
-        $this->assertTrue($secondResultBackward->hasNextPage);
-        $this->assertTrue($secondResultBackward->hasPreviousPage);
+        $this->assertNotSame($thirdResult->items[0]->productId, $secondResultPreviousCursor->items[0]->productId);
+        $this->assertSame($secondResult->items[0]->productId, $secondResultPreviousCursor->items[0]->productId);
+        $this->assertTrue($secondResultPreviousCursor->hasNextPage);
+        $this->assertTrue($secondResultPreviousCursor->hasPreviousPage);
     }
 
     /**

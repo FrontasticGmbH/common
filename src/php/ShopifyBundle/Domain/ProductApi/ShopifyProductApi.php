@@ -43,16 +43,18 @@ class ShopifyProductApi implements ProductApi
     {
         $filters = [];
 
-        if ($query->cursor) {
-            $filters[] = "after:\"$query->cursor\"";
+        if ($query->nextCursor) {
+            $filters[] = "after:\"$query->nextCursor\"";
         }
 
         if ($query->slug) {
             $filters[] = "query:\"'$query->slug'\"";
         }
 
+        $pageFilter = $this->buildPageFilter($query);
+
         $queryString = "{
-            collections(first: $query->limit, " . implode(' , ', $filters) . ") {
+            collections($pageFilter, " . implode(' , ', $filters) . ") {
                 edges {
                     cursor
                     node {
@@ -247,13 +249,7 @@ class ShopifyProductApi implements ProductApi
 
         $queryFilter = "query:\"". implode(' OR ', $parameters) . "\"";
 
-        $pageFilter = $query->backward ? "last:" : "first:";
-        $pageFilter .= $query->limit;
-        if ($query->cursor) {
-            $pageFilter .= ' ';
-            $pageFilter .= $query->backward ? "before:" : "after:";
-            $pageFilter .= "\"$query->cursor\"";
-        }
+        $pageFilter = $this->buildPageFilter($query);
 
         $query->query = "{
             products($pageFilter $queryFilter) {
@@ -341,6 +337,21 @@ class ShopifyProductApi implements ProductApi
     public function getDangerousInnerClient(): ShopifyClient
     {
         return $this->client;
+    }
+
+    private function buildPageFilter(ProductQuery $query): string
+    {
+        $pageFilter = "first: " . $query->limit;
+        if ($query->nextCursor) {
+            $pageFilter .= " after: \"$query->nextCursor\"";
+        }
+
+        // Override $pageFilter if previousCursor exist
+        if ($query->previousCursor) {
+            $pageFilter = "last: " . $query->limit . " before: \"$query->previousCursor\"";
+        }
+
+        return $pageFilter;
     }
 
     private function mapDataToProduct(array $productData): Product
