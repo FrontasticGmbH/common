@@ -440,6 +440,8 @@ class ProductsTest extends FrontasticApiTestCase
         Project $project,
         string $language
     ): void {
+        $this->requireCategoryEndpointToSupportOffsetPagination($project);
+
         $limit = 24;
         $productsQueriedOneStep = $this->queryProducts($project, $language, $this->sortReproducibly(), $limit);
         $productsQueriedInMultipleSteps = $this->queryProductsInMultipleSteps(
@@ -447,6 +449,28 @@ class ProductsTest extends FrontasticApiTestCase
             $language,
             $this->sortReproducibly(),
             $productsQueriedOneStep->total,
+            $limit,
+            2
+        );
+
+        $this->assertEquals($productsQueriedOneStep->items, $productsQueriedInMultipleSteps);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testQueryAllProductsOrderedByIdWithLowLimitWithCursorBasedPaginationReturnsSameAsWithHighLimit(
+        Project $project,
+        string $language
+    ): void {
+        $this->requireCategoryEndpointToSupportCursorBasedPagination($project);
+
+        $limit = 24;
+        $productsQueriedOneStep = $this->queryProducts($project, $language, $this->sortReproducibly(), $limit);
+        $productsQueriedInMultipleSteps = $this->queryProductsInMultipleStepsWithCursorBasesPagination(
+            $project,
+            $language,
+            $this->sortReproducibly(),
             $limit,
             2
         );
@@ -588,6 +612,36 @@ class ProductsTest extends FrontasticApiTestCase
         return $products;
     }
 
+    /**
+     * @return Product[]
+     */
+    private function queryProductsInMultipleStepsWithCursorBasesPagination(
+        Project $project,
+        string $language,
+        array $queryParameters,
+        int $limit,
+        int $stepSize
+    ): array {
+        $products = [];
+
+        $nextCursor = null;
+        do {
+            $resultFromCurrentStep = $this->queryProducts(
+                $project,
+                $language,
+                $queryParameters,
+                $stepSize,
+                null,
+                $nextCursor
+            );
+            $products = array_merge($products, $resultFromCurrentStep->items);
+
+            $nextCursor = $resultFromCurrentStep->cursor;
+        } while ($resultFromCurrentStep->hasNextPage === true && count($products) < $limit);
+
+        return $products;
+    }
+
     private function sortReproducibly(): array
     {
         return [
@@ -599,10 +653,10 @@ class ProductsTest extends FrontasticApiTestCase
 
     private function assertEmptyResult(Result $actual): void
     {
-        if ($actual->count) {
+        if ($actual->count !== null) {
             $this->assertEquals(0, $actual->count);
         }
-        if ($actual->total) {
+        if ($actual->total !== null) {
             $this->assertEquals(0, $actual->total);
         }
 
@@ -611,16 +665,21 @@ class ProductsTest extends FrontasticApiTestCase
 
     private function assertSingleProductResult(Product $expectedProduct, Result $actual)
     {
+        if ($actual->total !== null) {
+            $this->assertEquals(1, $actual->total);
+        }
         $this->assertEquals(1, $actual->count);
-        $this->assertEquals(1, $actual->total);
         $this->assertCount(1, $actual->items);
         $this->assertResultContainsProduct($expectedProduct, $actual);
     }
 
     private function assertResultContainsProduct(Product $expectedProduct, Result $actual)
     {
+        if ($actual->total !== null) {
+            $this->assertGreaterThanOrEqual($actual->count, $actual->total);
+        }
+
         $this->assertGreaterThanOrEqual(1, $actual->count);
-        $this->assertGreaterThanOrEqual($actual->count, $actual->total);
         $this->assertCount($actual->count, $actual->items);
 
         $actualProducts = [];

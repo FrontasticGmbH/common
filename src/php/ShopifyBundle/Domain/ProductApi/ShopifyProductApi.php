@@ -415,7 +415,9 @@ class ShopifyProductApi implements ProductApi
     {
         return new Variant([
             'id' => $variantData['id'],
-            'sku' => $variantData['sku'],
+            'sku' => !empty($variantData['sku'])
+                ? $variantData['sku']
+                : $variantData['id'],
             'groupId' => $variantData['product']['id'],
             'isOnStock' => !$variantData['currentlyNotInStock'],
             'price' => $this->mapDataToPriceValue($variantData['priceV2']),
