@@ -218,11 +218,12 @@ class FrontasticApiTestCase extends KernelTestCase
         string $language,
         array $queryParameters = [],
         ?int $limit = null,
+        ?int $offset = null,
         ?string $cursor = null
     ): Result {
         $query = new ProductQuery(
             array_merge(
-                $this->buildQueryParameters($language, $limit, $cursor),
+                $this->buildQueryParameters($language, $limit, $offset, $cursor),
                 $queryParameters
             )
         );
@@ -244,11 +245,12 @@ class FrontasticApiTestCase extends KernelTestCase
         Project $project,
         string $language,
         ?int $limit = null,
+        ?int $offset = null,
         ?string $cursor = null
     ): array {
         return $this
             ->getProductApiForProject($project)
-            ->getCategories(new CategoryQuery($this->buildQueryParameters($language, $limit, $cursor)));
+            ->getCategories(new CategoryQuery($this->buildQueryParameters($language, $limit, $offset, $cursor)));
     }
 
     /**
@@ -258,6 +260,7 @@ class FrontasticApiTestCase extends KernelTestCase
         Project $project,
         string $language,
         ?int $limit = null,
+        ?int $offset = null,
         ?string $cursor = null
     ): object {
         return $this
@@ -265,6 +268,7 @@ class FrontasticApiTestCase extends KernelTestCase
             ->queryCategories(new CategoryQuery($this->buildQueryParameters(
                 $language,
                 $limit,
+                $offset,
                 $cursor
             )));
     }
@@ -302,7 +306,7 @@ class FrontasticApiTestCase extends KernelTestCase
             $categories = array_merge($categories, $resultFromCurrentStep->items);
 
             $cursor = $resultFromCurrentStep->nextCursor;
-        } while ($resultFromCurrentStep->hasNextPage === true);
+        } while ($resultFromCurrentStep->nextCursor !== null);
 
         return $categories;
     }
@@ -332,6 +336,7 @@ class FrontasticApiTestCase extends KernelTestCase
     protected function buildQueryParameters(
         string $language,
         ?int $limit = null,
+        ?int $offset = null,
         ?string $cursor = null
     )
     {
@@ -341,6 +346,9 @@ class FrontasticApiTestCase extends KernelTestCase
 
         if ($limit !== null) {
             $parameters['limit'] = $limit;
+        }
+        if ($offset !== null) {
+            $parameters['offset'] = $offset;
         }
         if ($cursor !== null) {
             $parameters['cursor'] = $cursor;

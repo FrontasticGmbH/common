@@ -166,28 +166,6 @@ class CategoriesTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
-    public function testQueryPastAllCategoriesReturnsEmptyResult(Project $project, string $language): void
-    {
-        $this->requireCategoryEndpointToSupportCursorBasedPagination($project);
-
-        $limit = 10;
-        $cursor = null;
-        do {
-            $categoryResult = $this->queryCategories($project, $language, $limit, $cursor);
-            $cursor = $categoryResult->cursor;
-
-            $this->assertNotEmpty($categoryResult->count);
-        } while ($categoryResult->hasNextPage === true);
-
-        $categoryResultPastLastCategory = $this->queryCategories($project, $language, $limit, $cursor);
-        $this->assertEquals(0, $categoryResultPastLastCategory->count);
-        $this->assertEmpty($categoryResultPastLastCategory->items);
-        $this->assertFalse($categoryResultPastLastCategory->hasNextPage);
-    }
-
-    /**
-     * @dataProvider projectAndLanguage
-     */
     public function testFetchingAllCategoriesReturnsDistinctPaths(Project $project, string $language): void
     {
         $categories = $this->fetchAllCategories($project, $language);
@@ -355,10 +333,10 @@ class CategoriesTest extends FrontasticApiTestCase
 
         $cursor = null;
         do {
-            $categoryResult = $this->queryCategories($project, $language, $stepSize, $cursor);
-            $cursor = $categoryResult->cursor;
+            $categoryResult = $this->queryCategories($project, $language, $stepSize, null, $cursor);
+            $cursor = $categoryResult->nextCursor;
             $categoriesInMultipleRequests = array_merge($categoriesInMultipleRequests, $categoryResult->items);
-        } while ($categoryResult->hasNextPage === true && count($categoriesInMultipleRequests) < $limit);
+        } while ($categoryResult->nextCursor !== null && count($categoriesInMultipleRequests) < $limit);
 
         return $categoriesInMultipleRequests;
     }

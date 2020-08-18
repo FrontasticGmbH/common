@@ -67,10 +67,8 @@ class ProductsTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
-    public function testQueryProductsReturnsValidResultWithCursoBasedPagination(Project $project, string $language): void
+    public function testQueryProductsReturnsValidResultWithNoPagination(Project $project, string $language): void
     {
-        $this->requireCategoryEndpointToSupportCursorBasedPagination($project);
-
         $result = $this->queryProducts($project, $language);
 
         $this->assertCount($result->count, $result->items);
@@ -95,8 +93,8 @@ class ProductsTest extends FrontasticApiTestCase
             null
         );
 
-        $this->assertTrue($firstResult->hasNextPage);
-        $this->assertFalse($firstResult->hasPreviousPage);
+        $this->assertNull($firstResult->previousCursor);
+        $this->assertNotNull($firstResult->nextCursor);
 
         $secondResult = $this->queryProducts(
             $project,
@@ -104,13 +102,12 @@ class ProductsTest extends FrontasticApiTestCase
             [],
             1,
             null,
-            $firstResult->cursor,
-            null
+            $firstResult->nextCursor
         );
 
         $this->assertNotSame($firstResult->items[0]->productId, $secondResult->items[0]->productId);
-        $this->assertTrue($secondResult->hasNextPage);
-        $this->assertTrue($secondResult->hasPreviousPage);
+        $this->assertNotNull($secondResult->previousCursor);
+        $this->assertNotNull($secondResult->nextCursor);
 
         $thirdResult = $this->queryProducts(
             $project,
@@ -118,13 +115,12 @@ class ProductsTest extends FrontasticApiTestCase
             [],
             1,
             null,
-            $secondResult->cursor,
-            null
+            $secondResult->nextCursor
         );
 
         $this->assertNotSame($secondResult->items[0]->productId, $thirdResult->items[0]->productId);
-        $this->assertTrue($thirdResult->hasNextPage);
-        $this->assertTrue($thirdResult->hasPreviousPage);
+        $this->assertNotNull($thirdResult->previousCursor);
+        $this->assertNotNull($thirdResult->nextCursor);
 
         $secondResultPreviousCursor = $this->queryProducts(
             $project,
@@ -132,14 +128,13 @@ class ProductsTest extends FrontasticApiTestCase
             [],
             1,
             null,
-            null,
-            $thirdResult->cursor
+            $thirdResult->previousCursor
         );
 
         $this->assertNotSame($thirdResult->items[0]->productId, $secondResultPreviousCursor->items[0]->productId);
         $this->assertSame($secondResult->items[0]->productId, $secondResultPreviousCursor->items[0]->productId);
-        $this->assertTrue($secondResultPreviousCursor->hasNextPage);
-        $this->assertTrue($secondResultPreviousCursor->hasPreviousPage);
+        $this->assertNotNull($secondResultPreviousCursor->previousCursor);
+        $this->assertNotNull($secondResultPreviousCursor->nextCursor);
     }
 
     /**
@@ -636,8 +631,8 @@ class ProductsTest extends FrontasticApiTestCase
             );
             $products = array_merge($products, $resultFromCurrentStep->items);
 
-            $nextCursor = $resultFromCurrentStep->cursor;
-        } while ($resultFromCurrentStep->hasNextPage === true && count($products) < $limit);
+            $nextCursor = $resultFromCurrentStep->nextCursor;
+        } while ($resultFromCurrentStep->nextCursor !== null && count($products) < $limit);
 
         return $products;
     }
