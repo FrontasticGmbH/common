@@ -31,12 +31,5 @@ class PaginatedQuery extends Query
      *
      * @var string
      */
-    public $nextCursor;
-
-    /**
-     * Optional item reference. If exist, will prevail over $nextCursor.
-     *
-     * @var string
-     */
-    public $previousCursor;
+    public $cursor;
 }

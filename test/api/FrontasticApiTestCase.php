@@ -218,13 +218,11 @@ class FrontasticApiTestCase extends KernelTestCase
         string $language,
         array $queryParameters = [],
         ?int $limit = null,
-        ?int $offset = null,
-        ?string $nextCursor = null,
-        ?string $previousCursor = null
+        ?string $cursor = null
     ): Result {
         $query = new ProductQuery(
             array_merge(
-                $this->buildQueryParameters($language, $limit, $offset, $nextCursor, $previousCursor),
+                $this->buildQueryParameters($language, $limit, $cursor),
                 $queryParameters
             )
         );
@@ -246,11 +244,11 @@ class FrontasticApiTestCase extends KernelTestCase
         Project $project,
         string $language,
         ?int $limit = null,
-        ?int $offset = null
+        ?string $cursor = null
     ): array {
         return $this
             ->getProductApiForProject($project)
-            ->getCategories(new CategoryQuery($this->buildQueryParameters($language, $limit, $offset)));
+            ->getCategories(new CategoryQuery($this->buildQueryParameters($language, $limit, $cursor)));
     }
 
     /**
@@ -260,13 +258,15 @@ class FrontasticApiTestCase extends KernelTestCase
         Project $project,
         string $language,
         ?int $limit = null,
-        ?int $offset = null,
-        ?string $nextCursor = null,
-        ?string $previousCursor = null
+        ?string $cursor = null
     ): object {
         return $this
             ->getProductApiForProject($project)
-            ->queryCategories(new CategoryQuery($this->buildQueryParameters($language, $limit, null, $nextCursor, $previousCursor)));
+            ->queryCategories(new CategoryQuery($this->buildQueryParameters(
+                $language,
+                $limit,
+                $cursor
+            )));
     }
 
     /**
@@ -277,12 +277,12 @@ class FrontasticApiTestCase extends KernelTestCase
         $categories = [];
 
         $limit = 50;
-        $offset = 0;
+        $cursor = 0;
         do {
-            $categoriesFromCurrentStep = $this->fetchCategories($project, $language, $limit, $offset);
+            $categoriesFromCurrentStep = $this->fetchCategories($project, $language, $limit, $cursor);
             $categories = array_merge($categories, $categoriesFromCurrentStep);
 
-            $offset += $limit;
+            $cursor += $limit;
         } while (count($categoriesFromCurrentStep) === $limit);
 
         return $categories;
@@ -296,12 +296,12 @@ class FrontasticApiTestCase extends KernelTestCase
         $categories = [];
 
         $limit = 50;
-        $nextCursor = null;
+        $cursor = null;
         do {
-            $resultFromCurrentStep = $this->queryCategories($project, $language, $limit, $nextCursor);
+            $resultFromCurrentStep = $this->queryCategories($project, $language, $limit, $cursor);
             $categories = array_merge($categories, $resultFromCurrentStep->items);
 
-            $nextCursor = $resultFromCurrentStep->nextCursor;
+            $cursor = $resultFromCurrentStep->nextCursor;
         } while ($resultFromCurrentStep->hasNextPage === true);
 
         return $categories;
@@ -332,9 +332,7 @@ class FrontasticApiTestCase extends KernelTestCase
     protected function buildQueryParameters(
         string $language,
         ?int $limit = null,
-        ?int $offset = null,
-        ?string $nextCursor = null,
-        ?string $previousCursor = null
+        ?string $cursor = null
     )
     {
         $parameters = [
@@ -344,14 +342,8 @@ class FrontasticApiTestCase extends KernelTestCase
         if ($limit !== null) {
             $parameters['limit'] = $limit;
         }
-        if ($offset !== null) {
-            $parameters['offset'] = $offset;
-        }
-        if ($nextCursor !== null) {
-            $parameters['nextCursor'] = $nextCursor;
-        }
-        if ($previousCursor !== null) {
-            $parameters['previousCursor'] = $previousCursor;
+        if ($cursor !== null) {
+            $parameters['cursor'] = $cursor;
         }
 
         return $parameters;

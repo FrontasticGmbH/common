@@ -44,10 +44,6 @@ class ShopifyProductApi implements ProductApi
     {
         $filters = [];
 
-        if ($query->nextCursor) {
-            $filters[] = "after:\"$query->nextCursor\"";
-        }
-
         if ($query->slug) {
             $filters[] = "query:\"'$query->slug'\"";
         }
@@ -73,7 +69,8 @@ class ShopifyProductApi implements ProductApi
 
         $result = $this->client->request($queryString)->wait();
 
-        $cursor = null;
+        $previousCursor = null;
+        $nextCursor = null;
         $hasNextPage = null;
         $hasPreviousPage = null;
         $categories = [];
@@ -83,6 +80,8 @@ class ShopifyProductApi implements ProductApi
             $hasNextPage = $result['body']['data']['collections']['pageInfo']['hasNextPage'];
             $hasPreviousPage = $result['body']['data']['collections']['pageInfo']['hasPreviousPage'];
 
+            $previousCursor = $collectionsData[0]['cursor'] ?? null;
+
             foreach ($collectionsData as $collectionData) {
                 $categories[] = new Category([
                     'categoryId' => $collectionData['node']['id'],
@@ -91,15 +90,15 @@ class ShopifyProductApi implements ProductApi
                     'path' => '/' .$collectionData['node']['id'],
                 ]);
 
-                $cursor = $collectionData['cursor'];
+                $nextCursor = $collectionData['cursor'] ?? null;
             }
+
         }
 
         return new Result([
-            // @TODO: "offset" and "total" are not available in Shopify. Use cursor-based pagination instead
-            'cursor' => $cursor,
-            'hasNextPage' => $hasNextPage,
-            'hasPreviousPage' => $hasPreviousPage,
+            // @TODO: "total" is not available in Shopify.
+            'previousCursor' => $hasPreviousPage ? "before:\"$previousCursor\""  : null,
+            'nextCursor' => $hasNextPage ? "after:\"$nextCursor\"" : null,
             'count' => count($categories),
             'items' => $categories,
             'query' => clone $query,
@@ -295,7 +294,6 @@ class ShopifyProductApi implements ProductApi
         $promise = $this->client
             ->request($query->query, $query->locale)
             ->then(function ($result) use ($query): ProductApi\Result {
-                $cursor = null;
                 $hasNextPage = null;
                 $hasPreviousPage = null;
 
@@ -320,16 +318,18 @@ class ShopifyProductApi implements ProductApi
                     $productsData = $result['body']['data']['nodes'];
                 }
 
-                foreach ($productsData as $productData) {
+                $previousCursor = $productsData[0]['cursor'] ?? null;
+
+                $nextCursor = null;
+                foreach ($productsData as $key => $productData) {
                     $products[] = $this->mapDataToProduct($productData['node'] ?? $productData);
-                    $cursor = $productData['cursor'] ?? null;
+                    $nextCursor = $productData['cursor'] ?? null;
                 }
 
                 return new Result([
-                    // @TODO: "offset" and "total" are not available in Shopify. Use cursor-based pagination instead
-                    'cursor' => $cursor,
-                    'hasNextPage' => $hasNextPage,
-                    'hasPreviousPage' => $hasPreviousPage,
+                    // @TODO: "total" is not available in Shopify.
+                    'previousCursor' => $hasPreviousPage ? "before:\"$previousCursor\""  : null,
+                    'nextCursor' => $hasNextPage ? "after:\"$nextCursor\"" : null,
                     'count' => count($products),
                     'items' => $products,
                     'query' => clone $query,
@@ -350,15 +350,9 @@ class ShopifyProductApi implements ProductApi
 
     private function buildPageFilter(PaginatedQuery $query): string
     {
-        $pageFilter = "first: " . $query->limit;
-        if ($query->nextCursor) {
-            $pageFilter .= " after: \"$query->nextCursor\"";
-        }
-
-        // Override $pageFilter if previousCursor exist
-        if ($query->previousCursor) {
-            $pageFilter = "last: " . $query->limit . " before: \"$query->previousCursor\"";
-        }
+        $pageFilter = strpos($query->cursor, 'before:') === 0 ? "last:" : "first:";
+        $pageFilter .= $query->limit;
+        $pageFilter .= !empty($query->cursor) ? ' ' . $query->cursor : null;
 
         return $pageFilter;
     }
