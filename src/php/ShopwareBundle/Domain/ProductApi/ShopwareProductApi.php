@@ -14,6 +14,7 @@ use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\Exception\RequestException;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper\CategoryMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper\ProductMapper;
@@ -107,6 +108,17 @@ class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
                     throw ProductApi\ProductNotFoundException::fromQuery($query);
                 }
                 return $product;
+            })
+            ->otherwise(function (\Throwable $exception) use ($query) {
+                if ($exception instanceof RequestException) {
+                    $messagePrefix = 'Value is not a valid UUID:';
+                    if ($exception->getCode() === 400 &&
+                        substr($exception->getMessage(), 0, strlen($messagePrefix)) === $messagePrefix) {
+                        throw ProductApi\ProductNotFoundException::fromQuery($query);
+                    }
+                }
+
+                throw $exception;
             });
 
         if ($mode === self::QUERY_SYNC) {
