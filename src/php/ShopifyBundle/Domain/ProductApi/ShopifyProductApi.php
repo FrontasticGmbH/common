@@ -92,7 +92,6 @@ class ShopifyProductApi implements ProductApi
 
                 $nextCursor = $collectionData['cursor'] ?? null;
             }
-
         }
 
         return new Result([
