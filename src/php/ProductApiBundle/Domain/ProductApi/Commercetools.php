@@ -180,6 +180,7 @@ class Commercetools implements ProductApi
                     new ProductQuery([
                         'skus' => [$query->sku],
                         'locale' => $query->locale,
+                        'rawApiInput' => $query->rawApiInput,
                         'loadDangerousInnerData' => $query->loadDangerousInnerData,
                     ]),
                     self::QUERY_ASYNC
@@ -197,7 +198,13 @@ class Commercetools implements ProductApi
             $parameters = ['priceCurrency' => $locale->currency, 'priceCountry' => $locale->country];
 
             $promise = $this->client
-                ->fetchAsyncById('/products', $query->productId, $parameters)
+                ->fetchAsyncById(
+                    '/products',
+                    $query->productId,
+                    array_filter(
+                        array_merge($query->rawApiInput, $parameters)
+                    )
+                )
                 ->then(
                     function ($product) use ($query, $locale) {
                         return $this->mapper->dataToProduct($product, $query, $locale);
