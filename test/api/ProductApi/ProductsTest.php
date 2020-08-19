@@ -81,6 +81,52 @@ class ProductsTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
+    public function testGetProductBySkuAndCustomQueryParameterReturnsProduct(Project $project, string $language): void
+    {
+        $product = $this->getAProduct($project, $language);
+        $sku = $product->variants[0]->sku;
+        $this->assertNotEmptyString($sku);
+
+        $query = ProductApi\Query\SingleProductQuery::bySkuWithLocale($sku, $language);
+        $query->rawApiInput = [
+            'foo' => 'var'
+        ];
+
+        $productByCustomQuery = $this->getProductApiForProject($project)->getProduct(
+            $query,
+            ProductApi::QUERY_SYNC
+        );
+
+        $this->assertProductsAreWellFormed($project, $language, [$productByCustomQuery]);
+        $this->assertSameProduct($product, $productByCustomQuery);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testGetProductSyncByIdAndCustomQueryParameterReturnsProduct(
+        Project $project,
+        string $language
+    ): void
+    {
+        $product = $this->getAProduct($project, $language);
+        $productId = $product->productId;
+        $this->assertNotEmptyString($productId);
+
+        $query = ProductApi\Query\SingleProductQuery::byProductIdWithLocale($productId, $language);
+        $query->rawApiInput = [
+            'foo' => 'var'
+        ];
+
+        $productById = $this->getProductApiForProject($project)->getProduct($query, ProductApi::QUERY_SYNC);
+
+        $this->assertProductsAreWellFormed($project, $language, [$productById]);
+        $this->assertSameProduct($product, $productById);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
     public function testGetProductSyncBySkuReturnsProduct(Project $project, string $language): void
     {
         $product = $this->getAProduct($project, $language);
