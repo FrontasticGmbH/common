@@ -705,6 +705,7 @@ class Commercetools implements CartApi
                 '/orders',
                 [
                     'where' => 'customerId="' . $account->accountId . '"',
+                    'sort' => 'createdAt desc',
                     'expand' => self::EXPAND,
                 ]
             )
