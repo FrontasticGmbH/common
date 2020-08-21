@@ -144,8 +144,8 @@ class ProductsTest extends FrontasticApiTestCase
     {
         $queryParameters = [
             'rawApiInput' => [
-                'foo' => 'var'
-            ]
+                'foo' => 'var',
+            ],
         ];
 
         $result = $this->queryProducts($project, $language, $queryParameters);
