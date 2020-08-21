@@ -691,7 +691,17 @@ class ProductsTest extends FrontasticApiTestCase
         // We only check certain attributes here since the search index may contain less data then the product DB and
         // the information from the search index might be outdated.
 
-        $this->assertSame($expected->productId, $actual->productId);
+        $this->assertSame(
+            $expected->productId,
+            $actual->productId,
+            sprintf(
+                'Expected product %s (SKU %s), got product %s (SKU %s)',
+                $expected->productId,
+                $expected->sku,
+                $actual->productId,
+                $actual->sku
+            )
+        );
         $this->assertSame(
             $expected->name,
             $actual->name,
