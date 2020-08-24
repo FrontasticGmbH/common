@@ -173,6 +173,7 @@ class ProductsTest extends FrontasticApiTestCase
 
         $result = $this->queryProducts($project, $language, $queryParameters);
 
+        $this->assertNotEmpty($result->items);
         $this->assertSame($product->productId, $result->items[0]->productId);
         $this->assertSame($product->sku, $result->items[0]->sku);
 
@@ -208,6 +209,8 @@ class ProductsTest extends FrontasticApiTestCase
     {
         $result = $this->getProductApiForProject($project)
             ->query(new ProductQuery($this->buildQueryParameters($language)));
+
+        $this->assertNotEmpty($result->items);
 
         /** @var Product $product */
         $product = $result->items[0];
