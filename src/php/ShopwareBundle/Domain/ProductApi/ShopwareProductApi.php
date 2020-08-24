@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi;
 
+use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
@@ -22,6 +23,8 @@ use Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper\ProductResultM
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Query\QueryFacetExpander;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchCriteriaBuilder;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
+use GuzzleHttp\Promise\PromiseInterface;
+use function GuzzleHttp\Promise\promise_for;
 
 class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
 {
@@ -94,20 +97,41 @@ class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
 
         $this->query = $query;
 
-        $criteria = SearchCriteriaBuilder::buildFromSimpleProductQuery($query);
-
         $locale = $this->parseLocaleString($query->locale);
-
-        $promise = $this->client
+        $client = $this->client
             ->forCurrency($locale->currencyId)
-            ->forLanguage($locale->languageId)
-            ->post('/product', [], $criteria)
-            ->then(function ($response) use ($query) {
-                $product = $this->mapResponse($response, ProductMapper::MAPPER_NAME);
-                if ($product === null) {
-                    throw ProductApi\ProductNotFoundException::fromQuery($query);
-                }
-                return $product;
+            ->forLanguage($locale->languageId);
+
+        if ($query->productId !== null) {
+            $productIdPromise = promise_for($query->productId);
+        } elseif ($query->sku !== null) {
+            $criteria = SearchCriteriaBuilder::buildFromSimpleProductQuery($query);
+
+            $productIdPromise = $client
+                ->post('/product', [], $criteria)
+                ->then(function ($response) use ($query): string {
+                    $product = $response['data'][0] ?? [];
+                    $productId = $product['parentId'] ?? $product['id'] ?? null;
+                    if ($productId === null) {
+                        throw ProductApi\ProductNotFoundException::fromQuery($query);
+                    }
+                    return $productId;
+                });
+        } else {
+            throw new \RuntimeException('Not implemented');
+        }
+
+        $promise = $productIdPromise
+            ->then(function (string $productId) use ($query, $client): PromiseInterface {
+                return $client
+                    ->get('/product/' . $productId, ['associations[children][]' => 1])
+                    ->then(function ($response) use ($query): Product {
+                        $product = $this->mapResponse($response, ProductMapper::MAPPER_NAME);
+                        if ($product === null) {
+                            throw ProductApi\ProductNotFoundException::fromQuery($query);
+                        }
+                        return $product;
+                    });
             })
             ->otherwise(function (\Throwable $exception) use ($query) {
                 if ($exception instanceof RequestException) {
