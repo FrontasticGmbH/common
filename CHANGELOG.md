@@ -1,5 +1,72 @@
 # common Changelog
 
+## `1.1.8` (2020-08-24)
+
+* chore(shopify integration): Included pagination documentation
+* fix(shopify integration): Updated Api test to use cursor based pagination
+* feat(shopify integration): Implemented cursor-based pagination with previousCursor and nextCursor
+* fix(shopware): throw not found exception on invalid ID
+* feat: Included custom query fields on ProductApi::getProduct()
+* fix(shopify integration): Returned concrete Result class on ProductApi::queryCatergories()
+* fix(shopify integration): ensured sku content in each variant
+* feat(shopify integration): handled non existing product response
+* feat(shopify integration): Included test flag on Spryker API test config
+* feat(shopify integration): Implement nextCursor and previousCursor for pagination
+* feat(shopify integration): Included filter on ProductApi:Query to allow pagination
+* feat(shopify integration): Included field to allow backward pagination
+* feat: Implement queryCategories in SprykerProductApi
+* fix(spyrker integration): Commented out SprykerProjectApi endpoint request
+* fix(spryker integration): Removed multi languages comments from SprykerProjectApi
+* fix(spryker integration): Defined SessionService and set right usage
+* fix(spryker integration): Removed usage of Account sesion in favour of session_id
+* fix(spryker integration): Used session_id to build the AnonymousHeader
+* fix(spryker integration): Fix url to use cartId
+* fix: fetch total product count from Shopware
+* fix(spryker integration): Promoted AccountHelper as public service
+* fix(spryker integration): Removed FactoryServiceLocator on WishlistApiFactory
+* fix(spryker integration): Replaced missing factoryServices by containers
+* fix(spryker integration): Removed missing orphan DI tags
+* fix(spryker integration): Replace factoryLocator by container for DI
+* feat(shopify integration): Added Category API tests
+* fix(shopify integration): Added missing import
+* fix(shopify integration): Rollback offset deprecation
+* feat(shopify integration): Implemented new endpoint ProductApi::queryCategories
+* feat(shopify integration): Implemented ProductApi::getCategories
+* feat(shopify integration): Implemented ProductApi:getProductTypes endpoint
+* feat(shopify integration): Implement ProductApi::getProduct endpoint
+* fix(shopify integration): Replaced serviceLocator by container
+* feat(spryker integration): Inlcuded filter by category
+* fix(shopify intetration): Filter by multiple SKUs
+* feat(shopify integration): Added query filters for ProductsAPI
+* feat(shopify integatrion): Included API for Product filters
+* feat(shopify integration): Set frontastic credentials
+* fix(shopify integration): Used newest API version
+* feat(shopify integration): Mapped Products and Variants
+* feat(shopify integration): Added variables for cursor pagination
+* feat(shopify integration): Created basic bundle structure and client
+* fix(spryker integration): Removed default language from Spryker Api
+* fix(spryker integration): Removed unused decorator
+* fix(spryker integration): Removed phpstan ignore tag
+* fix(spryker integration): Updated ignore class to cover API test missing class
+* fix(spryker integration): Fixed missed style issues
+* fix(Spryker integration): Fixed style issues
+* feat(spryker integration): Used default Spryker endpoint on API test
+* fix(spryker integration): Fixed unused classes
+* fix(spryker integration): Fixed typehint error
+* fix(spryker integration): Fixed phpstan issues
+* fix(spryker integration): Fixed add to cart by customer or guest
+* fix(spryker integration): Especified right API client
+* feat(spryker integration): Included extension to map concrete products
+* feat(spryker integration): Extracted cart config to variable
+* feat(spryker integration): Migrated Wishlist API
+* feat(spryker integration): Removed salutations from Project API
+* feat(spryker integration): Initial migration of Cart API with broken test
+* feat(spryker-integration): Fixed minimum Account API endpoint to pass API test
+* feat(spryker_integration): Initial migration of Account API
+* feat(spryker integration): Migrated Project API
+* feat(spryker integration): Impleted WoohooLabs ResourceObject to handle Api response content
+* feat(spryker integration): Included raw api output as part of Http/Response
+
 ## `1.1.5` (2020-08-05)
 
 * fix: Restore (again) missing CHANGELOG.md in common
