@@ -78,7 +78,7 @@ class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
         return new Result([
             'count' => count($categories),
             'items' => $categories,
-            'query' => clone($query)
+            'query' => clone($query),
         ]);
     }
 
