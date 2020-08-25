@@ -87,7 +87,7 @@ class ShopwareProjectApi extends AbstractShopwareApi implements ProjectApi
 
         return $this->client
             ->forLanguage($languageId)
-            ->post('/product', [], $criteria)
+            ->post('/sales-channel-api/v2/product', [], $criteria)
             ->then(static function ($response) use ($criteriaAggregations) {
                 $groupedAggregations = [];
                 foreach ($criteriaAggregations as $criteriaAggregation) {

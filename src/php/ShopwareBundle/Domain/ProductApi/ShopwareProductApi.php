@@ -67,7 +67,7 @@ class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
 
         return $this->client
             ->forLanguage($locale->languageId)
-            ->post('/category', [], $criteria)
+            ->post('/sales-channel-api/v2/category', [], $criteria)
             ->then(function ($response) {
                 return $this->mapResponse($response, CategoryMapper::MAPPER_NAME);
             })
@@ -108,7 +108,7 @@ class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
             $criteria = SearchCriteriaBuilder::buildFromSimpleProductQuery($query);
 
             $productIdPromise = $client
-                ->post('/product', [], $criteria)
+                ->post('/sales-channel-api/v2/product', [], $criteria)
                 ->then(function ($response) use ($query): string {
                     $product = $response['data'][0] ?? [];
                     $productId = $product['parentId'] ?? $product['id'] ?? null;
@@ -124,7 +124,7 @@ class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
         $promise = $productIdPromise
             ->then(function (string $productId) use ($query, $client): PromiseInterface {
                 return $client
-                    ->get('/product/' . $productId, ['associations[children][]' => 1])
+                    ->get('/sales-channel-api/v2/product/' . $productId, ['associations[children][]' => 1])
                     ->then(function ($response) use ($query): Product {
                         $product = $this->mapResponse($response, ProductMapper::MAPPER_NAME);
                         if ($product === null) {
@@ -168,7 +168,7 @@ class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
         $promise = $this->client
             ->forCurrency($locale->currencyId)
             ->forLanguage($locale->languageId)
-            ->post('/product', [], $criteria)
+            ->post('/sales-channel-api/v2/product', [], $criteria)
             ->then(function ($response) {
                 return $this->mapResponse($response, ProductResultMapper::MAPPER_NAME);
             });

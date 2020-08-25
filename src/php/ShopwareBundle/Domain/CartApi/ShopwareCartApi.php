@@ -76,7 +76,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
         return $this->client
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
-            ->post('/checkout/cart', [], $requestData)
+            ->post('/sales-channel-api/v2/checkout/cart', [], $requestData)
             ->then(static function ($response) {
                 return $response['sw-context-token'];
             })->then(function ($token) use ($locale) {
@@ -93,7 +93,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($token)
-            ->get('/checkout/cart')
+            ->get('/sales-channel-api/v2/checkout/cart')
             ->then(function ($response) {
                 return $this->mapResponse($response, CartMapper::MAPPER_NAME);
             })
@@ -135,7 +135,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($cart->cartId)
-            ->post("/checkout/cart/line-item/{$id}", [], $requestData)
+            ->post("/sales-channel-api/v2/checkout/cart/line-item/{$id}", [], $requestData)
             ->then(function ($response) {
                 if (isset($response['data']['errors']) && !empty($response['data']['errors'])) {
                     $this->respondWithError($response['data']['errors']);
@@ -162,7 +162,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($cart->cartId)
-            ->patch("/checkout/cart/line-item/{$id}", [], $requestData)
+            ->patch("/sales-channel-api/v2/checkout/cart/line-item/{$id}", [], $requestData)
             ->then(function ($response) {
                 if (isset($response['data']['errors']) && !empty($response['data']['errors'])) {
                     $this->respondWithError($response['data']['errors']);
@@ -181,7 +181,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($cart->cartId)
-            ->delete("/checkout/cart/line-item/{$lineItem->lineItemId}")
+            ->delete("/sales-channel-api/v2/checkout/cart/line-item/{$lineItem->lineItemId}")
             ->then(function ($response) {
                 if (isset($response['data']['errors']) && !empty($response['data']['errors'])) {
                     $this->respondWithError($response['data']['errors']);
@@ -250,7 +250,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($cart->cartId)
-            ->post("/checkout/cart/code/{$code}")
+            ->post("/sales-channel-api/v2/checkout/cart/code/{$code}")
             ->then(function ($response) {
                 if (isset($response['data']['errors']) && !empty($response['data']['errors'])) {
                     $this->respondWithError($response['data']['errors']);
@@ -274,7 +274,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($cart->cartId)
-            ->post('/checkout/order')
+            ->post('/sales-channel-api/v2/checkout/order')
             ->then(function ($orderResponse) {
                 return $this->mapResponse($orderResponse, OrderMapper::MAPPER_NAME);
             })
@@ -359,7 +359,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($token)
-            ->get('/customer/order', $requestParameters)
+            ->get('/sales-channel-api/v2/customer/order', $requestParameters)
             ->then(function ($response) {
                 return $this->mapResponse($response, OrdersMapper::MAPPER_NAME);
             })

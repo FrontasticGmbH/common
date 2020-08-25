@@ -9,7 +9,7 @@ configuration:
     supportOffsetPagination: true
   shopware:
     apiKey: SWSCBHFSNTVMAWNZDNFKSHLAYW
-    endpoint: https://frontastic-test.shopwaredemo.store/sales-channel-api/v1
+    endpoint: https://frontastic-test.shopwaredemo.store
   account:
     engine: shopware
   cart:
