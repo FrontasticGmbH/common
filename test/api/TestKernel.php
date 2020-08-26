@@ -7,6 +7,7 @@ use Frontastic\Common\CartApiBundle\FrontasticCommonCartApiBundle;
 use Frontastic\Common\CoreBundle\FrontasticCommonCoreBundle;
 use Frontastic\Common\Kernel;
 use Frontastic\Common\ProductApiBundle\FrontasticCommonProductApiBundle;
+use Frontastic\Common\ProductSearchApiBundle\FrontasticCommonProductSearchApiBundle;
 use Frontastic\Common\ProjectApiBundle\FrontasticCommonProjectApiBundle;
 use Frontastic\Common\SapCommerceCloudBundle\FrontasticCommonSapCommerceCloudBundle;
 use Frontastic\Common\ShopifyBundle\FrontasticCommonShopifyBundle;
@@ -34,6 +35,7 @@ class TestKernel extends Kernel
             new FrontasticCommonAccountApiBundle(),
             new FrontasticCommonCartApiBundle(),
             new FrontasticCommonProductApiBundle(),
+            new FrontasticCommonProductSearchApiBundle(),
             new FrontasticCommonProjectApiBundle(),
 
             new FrontasticCommonSapCommerceCloudBundle(),
