@@ -1,5 +1,5 @@
 const cloudinaryEncodeURI = (string) => {
-    return encodeURI(string).replace(/[?=]/g, function(character) {
+    return encodeURI(string).replace(/[?=]/g, function (character) {
         return '%' + character.charCodeAt(0).toString(16).toUpperCase()
     })
 }
@@ -18,7 +18,7 @@ const cloudinaryUrl = (imageIdentifier, configuration, options) => {
         case 'resourceType':
         case 'type':
             // Ignore, because they are part of the URL
-            break;
+            break
         case 'background':
         case 'crop':
         case 'fetch_format':
@@ -31,7 +31,7 @@ const cloudinaryUrl = (imageIdentifier, configuration, options) => {
             if (value) {
                 transformations.push(transformation[0] + '_' + value)
             }
-            break;
+            break
         default:
             throw new Error('Unhandled image transformation ' + transformation)
         }
@@ -59,7 +59,7 @@ class Cloudinary {
                 quality: 'auto',
                 secure: true,
                 ...this.getGravityOptions(options),
-                ...this.cropOptions(options)
+                ...this.cropOptions(options),
             },
         )
     }
@@ -81,7 +81,7 @@ class Cloudinary {
                 quality: 'auto',
                 secure: true,
                 ...this.getGravityOptions(options),
-                ...this.cropOptions(options)
+                ...this.cropOptions(options),
             },
         )
     }
