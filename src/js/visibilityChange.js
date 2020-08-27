@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 let VisibilityChange = function () {
     // Set the name of the hidden property and the change event for visibility
     let hidden
@@ -44,7 +42,7 @@ let VisibilityChange = function () {
 
     if (hidden && visibilityChange) {
         let handleVisibilityChange = function () {
-            _.map(callbacks, (callback, id) => {
+            callbacks && callbacks.map((callback, id) => {
                 if (document[hidden]) {
                     callback.hidden()
                 } else {

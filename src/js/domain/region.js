@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 import ConfigurationSchema from '../configuration/schema'
 import generateId from '../generateId'
 
@@ -206,13 +204,17 @@ class Region {
         return this.elements[this.elements.length - 1]
     }
 
-    getElement (elementId) {
-        let element = _.find(this.elements, elementId)
-        if (!element) {
-            throw new Error('Could not find element with ID ' + JSON.stringify(elementId))
+    getElement (elementIdentifier) {
+        const elementIdProperty = Object.keys(elementIdentifier)[0]
+        const elementId = Object.values(elementIdentifier)[0]
+
+        for (let element of this.elements) {
+            if (element[elementIdProperty] === elementId) {
+                return element
+            }
         }
 
-        return element
+        throw new Error('Could not find element with ID ' + JSON.stringify(elementId))
     }
 
     getCells () {
@@ -231,7 +233,7 @@ class Region {
         return {
             regionId: this.regionId,
             configuration: this.schema.getConfiguration(),
-            elements: _.map(this.elements, (element) => {
+            elements: this.elements.map((element) => {
                 return element.export()
             }),
         }

@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 /* eslint-disable */
 
 // http://phpjs.org/functions/parse_str/
@@ -122,34 +120,33 @@ let parse_str = function (str, array) {
 }
 
 /* eslint-enable */
-
 let isArrayAsObject = function (suspect) {
-    if (!_.isObject(suspect)) {
+    if (typeof suspect !== 'object') {
         return false
     }
 
-    const keys = _.keys(suspect)
-
-    for (let i = 0; i < keys.length; i++) {
-        if (keys[i] !== _.toString(i)) {
+    let index = 0
+    for (let key of Object.keys(suspect)) {
+        if (key != index++) {
             return false
         }
     }
+
     return true
 }
 
 let convertArrayObjectsToArrays = function (object) {
-    return _.mapValues(object, (value) => {
-        if (_.isObject(value)) {
-            value = convertArrayObjectsToArrays(value)
+    Object.entries(object).map(([key, value]) => {
+        if (value && typeof value === 'object') {
+            object[key] = convertArrayObjectsToArrays(value)
         }
 
         if (isArrayAsObject(value)) {
-            value = _.values(value)
+            object[key] = Object.values(value)
         }
-
-        return value
     })
+
+    return object
 }
 
 let httpParseQuery = function (queryString) {

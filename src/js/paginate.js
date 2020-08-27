@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 export default class Pagination {
     constructor (productStream) {
         this.stream = productStream
@@ -46,7 +44,8 @@ export default class Pagination {
     }
 
     getPages () {
-        return _.map(this.paginate(this.firstPage, this.lastPage, this.currentPage, this.delta), (page) => {
+        const pages = this.paginate(this.firstPage, this.lastPage, this.currentPage, this.delta)
+        return pages && pages.map((page) => {
             if (page === null) {
                 return null
             }

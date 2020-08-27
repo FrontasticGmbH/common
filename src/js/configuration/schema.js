@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 const AUTOMATIC_REQUIRED_STREAM_TYPES = [
     'product',
     'product-list',
@@ -17,7 +15,7 @@ function fieldIsRequired (requiredFlag, type, streamType) {
 }
 
 function buildFieldsFromSectionSchema (sectionSchema) {
-    if (!_.isArray(sectionSchema.fields)) {
+    if (!Array.isArray(sectionSchema.fields)) {
         return {}
     }
 
@@ -67,30 +65,31 @@ function getFieldValue (schema, configuration) {
 }
 
 function completeGroupConfig (groupEntries, fieldDefinitions) {
-    return _.map(groupEntries, (groupEntry) => {
+    return (groupEntries || []).map((groupEntry) => {
         if (groupEntry === null || typeof groupEntry !== 'object') {
             groupEntry = {}
         }
-        _.forEach(fieldDefinitions, (fieldDefinition) => {
+
+        for (let fieldDefinition of fieldDefinitions) {
             if (typeof groupEntry[fieldDefinition.field] === 'undefined' || groupEntry[fieldDefinition.field] === null) {
                 groupEntry[fieldDefinition.field] = fieldDefinition.default || null
             }
-        })
+        }
+
         return groupEntry
     })
 }
 
 function getFieldsWithResolvedStreams (fields, configuration, streamData, customStreamData) {
-    if (typeof customStreamData !== 'object' || _.isArray(customStreamData)) {
+    if (typeof customStreamData !== 'object' || Array.isArray(customStreamData)) {
         customStreamData = {}
     }
 
-    return _.fromPairs(
-        Object.values(fields)
-            .map((schema) => {
-                return [schema.field, getSchemaWithResolvedStreams(schema, configuration, streamData, customStreamData)]
-            })
-    )
+    let resolvedFields = {}
+    for (let schema of Object.values(fields)) {
+        resolvedFields[schema.field] = getSchemaWithResolvedStreams(schema, configuration, streamData, customStreamData)
+    }
+    return resolvedFields
 }
 
 function getSchemaWithResolvedStreams (schema, configuration, streamData, customStreamData) {
@@ -160,7 +159,7 @@ class ConfigurationSchema {
     }
 
     setConfiguration (configuration) {
-        this.configuration = !_.isArray(configuration) ? configuration || {} : {}
+        this.configuration = !Array.isArray(configuration) ? configuration || {} : {}
     }
 
     set (field, value) {
@@ -177,11 +176,10 @@ class ConfigurationSchema {
         // React-Redux apps works
         return new ConfigurationSchema(
             this.schema,
-            _.extend(
-                {},
-                this.configuration,
-                { [field]: value }
-            )
+            {
+                ...this.configuration,
+                ...{ [field]: value }
+            }
         )
     }
 

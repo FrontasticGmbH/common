@@ -1,7 +1,5 @@
-import _ from 'lodash'
-
 export default function (value, currentLocale, defaultLocale) {
-    if (!_.isObject(value)) {
+    if (typeof value === 'object') {
         return {
             text: value,
             locale: currentLocale,
