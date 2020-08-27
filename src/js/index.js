@@ -13,6 +13,7 @@ import Region from './domain/region'
 import Tastic from './domain/tastic'
 import MediaApi from './mediaApi'
 import FacetTypeSchemaMap from './facetTypeSchema/map'
+import omit from './helper/omit'
 
 export {
     ConfigurationSchema,
@@ -32,4 +33,5 @@ export {
     Tastic,
     MediaApi,
     FacetTypeSchemaMap,
+    omit,
 }
