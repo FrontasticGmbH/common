@@ -1,28 +1,66 @@
-import cloudinary from 'cloudinary-core'
+const cloudinaryEncodeURI = (string) => {
+    return encodeURI(string).replace(/[?=]/g, function(character) {
+        return '%' + character.charCodeAt(0).toString(16).toUpperCase()
+    })
+}
 
-import _ from 'lodash'
+const cloudinaryUrl = (imageIdentifier, configuration, options) => {
+    options = {
+        resourceType: 'image',
+        type: 'upload',
+        ...options,
+    }
+
+    let transformations = []
+    for (let [transformation, value] of Object.entries(options)) {
+        switch (transformation) {
+        case 'secure':
+        case 'resourceType':
+        case 'type':
+            // Ignore, because they are part of the URL
+            break;
+        case 'background':
+        case 'crop':
+        case 'fetch_format':
+        case 'gravity':
+        case 'height':
+        case 'quality':
+        case 'width':
+        case 'x':
+        case 'y':
+            if (value) {
+                transformations.push(transformation[0] + '_' + value)
+            }
+            break;
+        default:
+            throw new Error('Unhandled image transformation ' + transformation)
+        }
+    }
+    transformations.sort()
+
+    return `https://res.cloudinary.com/${configuration.cloudName}/${options.resourceType}/${options.type}/${transformations.join(',')}/${cloudinaryEncodeURI(imageIdentifier)}`
+}
 
 class Cloudinary {
     constructor (configuration) {
-        this.cloudinary = new cloudinary.Cloudinary({
-            cloud_name: configuration.cloudName,
-        })
+        this.configuration = {
+            cloudName: configuration.cloudName,
+        }
     }
 
     getImageUrl (media, width, height, options = {}) {
-        return this.cloudinary.url(
+        return cloudinaryUrl(
             media.mediaId,
-            _.extend(
-                {
-                    fetch_format: media.format && media.format === 'svg' ? undefined : 'auto',
-                    width: width,
-                    height: height,
-                    quality: 'auto',
-                    secure: true,
-                },
-                this.getGravityOptions(options),
-                this.cropOptions(options)
-            )
+            this.configuration,
+            {
+                fetch_format: media.format && media.format === 'svg' ? undefined : 'auto',
+                width: width,
+                height: height,
+                quality: 'auto',
+                secure: true,
+                ...this.getGravityOptions(options),
+                ...this.cropOptions(options)
+            },
         )
     }
 
@@ -32,33 +70,31 @@ class Cloudinary {
             url = 'https:' + url
         }
 
-        return this.cloudinary.url(
+        return cloudinaryUrl(
             url,
-            _.extend(
-                {
-                    fetch_format: 'auto',
-                    type: 'fetch',
-                    width: width,
-                    height: height,
-                    quality: 'auto',
-                    secure: true,
-                },
-                this.getGravityOptions(options),
-                this.cropOptions(options)
-            )
+            this.configuration,
+            {
+                fetch_format: 'auto',
+                type: 'fetch',
+                width: width,
+                height: height,
+                quality: 'auto',
+                secure: true,
+                ...this.getGravityOptions(options),
+                ...this.cropOptions(options)
+            },
         )
     }
 
     getImageUrlWithoutDefaults (media, width, height, options = {}) {
-        return this.cloudinary.url(
+        return cloudinaryUrl(
             media.mediaId,
-            _.extend(
-                {
-                    width: width,
-                    height: height,
-                },
-                options
-            )
+            this.configuration,
+            {
+                width: width,
+                height: height,
+                ...options,
+            },
         )
     }
 
