@@ -42,7 +42,7 @@ let VisibilityChange = function () {
 
     if (hidden && visibilityChange) {
         let handleVisibilityChange = function () {
-            callbacks && callbacks.map((callback, id) => {
+            Object.values(callbacks).map((callback, id) => {
                 if (document[hidden]) {
                     callback.hidden()
                 } else {

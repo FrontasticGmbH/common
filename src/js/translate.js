@@ -1,5 +1,5 @@
 export default function (value, currentLocale, defaultLocale) {
-    if (typeof value === 'object') {
+    if (!value || typeof value !== 'object') {
         return {
             text: value,
             locale: currentLocale,
