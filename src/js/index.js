@@ -14,6 +14,8 @@ import Tastic from './domain/tastic'
 import MediaApi from './mediaApi'
 import FacetTypeSchemaMap from './facetTypeSchema/map'
 import omit from './helper/omit'
+import debounce from './helper/debounce'
+import throttle from './helper/throttle'
 
 export {
     ConfigurationSchema,
@@ -34,4 +36,6 @@ export {
     MediaApi,
     FacetTypeSchemaMap,
     omit,
+    debounce,
+    throttle,
 }
