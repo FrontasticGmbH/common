@@ -12,7 +12,7 @@ class Page {
 
         this.regions = {}
 
-        this.tasticSchemas = (tastics || []).map(tastic => tastic.configurationSchema)
+        this.tasticSchemas = (tastics || []).map(tastic => { return tastic.configurationSchema })
 
         for (let i = 0; i < layoutRegions.length; ++i) {
             let regionId = layoutRegions[i]

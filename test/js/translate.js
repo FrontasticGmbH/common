@@ -107,6 +107,6 @@ describe('translate', () => {
         [{}],
         [[]],
     ])('empty text on broken input object', (input) => {
-        expect(translate( input, 'it_IT', 'en_GB')).toEqual({ text: '', locale: null, translated: false })
+        expect(translate(input, 'it_IT', 'en_GB')).toEqual({ text: '', locale: null, translated: false })
     })
 })

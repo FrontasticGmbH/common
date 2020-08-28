@@ -178,7 +178,7 @@ class ConfigurationSchema {
             this.schema,
             {
                 ...this.configuration,
-                ...{ [field]: value }
+                ...{ [field]: value },
             }
         )
     }

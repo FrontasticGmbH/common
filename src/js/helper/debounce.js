@@ -9,17 +9,17 @@
 // function and not the entirety of lodash:
 export default (func, wait, immediate = false) => {
     let timeout = false
-    return function() {
+    return function () {
         let context = this
         let args = arguments
-        let later = function() {
+        let later = function () {
             timeout = null
-            if (!immediate) func.apply(context, args)
+            if (!immediate) { func.apply(context, args) }
         }
         let callNow = immediate && !timeout
 
         clearTimeout(timeout)
         timeout = setTimeout(later, wait)
-        if (callNow) func.apply(context, args)
+        if (callNow) { func.apply(context, args) }
     }
 }

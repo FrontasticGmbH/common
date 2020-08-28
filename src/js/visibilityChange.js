@@ -42,13 +42,13 @@ let VisibilityChange = function () {
 
     if (hidden && visibilityChange) {
         let handleVisibilityChange = function () {
-            Object.values(callbacks).map((callback, id) => {
+            for (let callback of Object.values(callbacks)) {
                 if (document[hidden]) {
                     callback.hidden()
                 } else {
                     callback.active()
                 }
-            })
+            }
         }
 
         if (typeof document.addEventListener === 'undefined' ||

@@ -127,7 +127,7 @@ let isArrayAsObject = function (suspect) {
 
     let index = 0
     for (let key of Object.keys(suspect)) {
-        if (key != index++) {
+        if (+key !== index++) {
             return false
         }
     }
@@ -136,7 +136,7 @@ let isArrayAsObject = function (suspect) {
 }
 
 let convertArrayObjectsToArrays = function (object) {
-    Object.entries(object).map(([key, value]) => {
+    for (let [key, value] of Object.entries(object)) {
         if (value && typeof value === 'object') {
             object[key] = convertArrayObjectsToArrays(value)
         }
@@ -144,7 +144,7 @@ let convertArrayObjectsToArrays = function (object) {
         if (isArrayAsObject(value)) {
             object[key] = Object.values(value)
         }
-    })
+    }
 
     return object
 }
