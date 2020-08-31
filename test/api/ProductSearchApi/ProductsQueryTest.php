@@ -21,21 +21,10 @@ class ProductsQueryTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
-    public function testQuerySyncReturnsResult(Project $project, string $language): void
-    {
-        $result = $this->getProductApiForProject($project)
-            ->query(new ProductQuery($this->buildQueryParameters($language)), ProductApi::QUERY_SYNC);
-
-        $this->assertInstanceOf(Result::class, $result);
-    }
-
-    /**
-     * @dataProvider projectAndLanguage
-     */
     public function testQueryAsyncReturnsPromiseToResult(Project $project, string $language): void
     {
-        $promise = $this->getProductApiForProject($project)
-            ->query(new ProductQuery($this->buildQueryParameters($language)), ProductApi::QUERY_ASYNC);
+        $promise = $this->getProductSearchApiForProject($project)
+            ->query(new ProductQuery($this->buildQueryParameters($language)));
 
         $this->assertInstanceOf(PromiseInterface::class, $promise);
 
@@ -51,7 +40,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
     {
         $this->requireCategoryEndpointToSupportOffsetPagination($project);
 
-        $result = $this->queryProducts($project, $language);
+        $result = $this->queryProductsWithProductSearchApi($project, $language);
 
         $this->assertSame(0, $result->offset);
 
@@ -69,7 +58,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
      */
     public function testQueryProductsReturnsValidResultWithNoPagination(Project $project, string $language): void
     {
-        $result = $this->queryProducts($project, $language);
+        $result = $this->queryProductsWithProductSearchApi($project, $language);
 
         $this->assertCount($result->count, $result->items);
 
@@ -84,7 +73,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
     {
         $this->requireCategoryEndpointToSupportCursorBasedPagination($project);
 
-        $firstResult = $this->queryProducts(
+        $firstResult = $this->queryProductsWithProductSearchApi(
             $project,
             $language,
             [],
@@ -96,7 +85,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
         $this->assertNull($firstResult->previousCursor);
         $this->assertNotNull($firstResult->nextCursor);
 
-        $secondResult = $this->queryProducts(
+        $secondResult = $this->queryProductsWithProductSearchApi(
             $project,
             $language,
             [],
@@ -109,7 +98,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
         $this->assertNotNull($secondResult->previousCursor);
         $this->assertNotNull($secondResult->nextCursor);
 
-        $thirdResult = $this->queryProducts(
+        $thirdResult = $this->queryProductsWithProductSearchApi(
             $project,
             $language,
             [],
@@ -122,7 +111,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
         $this->assertNotNull($thirdResult->previousCursor);
         $this->assertNotNull($thirdResult->nextCursor);
 
-        $secondResultPreviousCursor = $this->queryProducts(
+        $secondResultPreviousCursor = $this->queryProductsWithProductSearchApi(
             $project,
             $language,
             [],
@@ -148,7 +137,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
             ],
         ];
 
-        $result = $this->queryProducts($project, $language, $queryParameters);
+        $result = $this->queryProductsWithProductSearchApi($project, $language, $queryParameters);
 
         $this->assertSame($result->query->rawApiInput, $queryParameters['rawApiInput']);
     }
@@ -158,8 +147,10 @@ class ProductsQueryTest extends FrontasticApiTestCase
      */
     public function testQueryProductsBySingleQueryParameterReturnsProducts(Project $project, string $language): void
     {
-        $result = $this->getProductApiForProject($project)
+        $promise = $this->getProductSearchApiForProject($project)
             ->query(new ProductQuery($this->buildQueryParameters($language)));
+
+        $result = $promise->wait();
 
         /** @var Product $product */
         $product = $result->items[0];
@@ -171,7 +162,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
             'skus' => [$product->sku],
         ];
 
-        $result = $this->queryProducts($project, $language, $queryParameters);
+        $result = $this->queryProductsWithProductSearchApi($project, $language, $queryParameters);
 
         $this->assertNotEmpty($result->items);
         $this->assertSame($product->productId, $result->items[0]->productId);
@@ -184,7 +175,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
             'query' => $product->name,
         ];
 
-        $result = $this->queryProducts($project, $language, $queryParameters);
+        $result = $this->queryProductsWithProductSearchApi($project, $language, $queryParameters);
 
         $this->assertSame($product->productId, $result->items[0]->productId);
         $this->assertSame($product->sku, $result->items[0]->sku);
@@ -196,7 +187,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
             'productId' => $product->productId,
         ];
 
-        $result = $this->queryProducts($project, $language, $queryParameters);
+        $result = $this->queryProductsWithProductSearchApi($project, $language, $queryParameters);
 
         $this->assertSame($product->productId, $result->items[0]->productId);
         $this->assertSame($product->sku, $result->items[0]->sku);
@@ -207,8 +198,10 @@ class ProductsQueryTest extends FrontasticApiTestCase
      */
     public function testQueryProductsByMultipleQueryParametersReturnsProducts(Project $project, string $language): void
     {
-        $result = $this->getProductApiForProject($project)
+        $promise = $this->getProductSearchApiForProject($project)
             ->query(new ProductQuery($this->buildQueryParameters($language)));
+
+        $result = $promise->wait();
 
         $this->assertNotEmpty($result->items);
 
@@ -220,7 +213,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
             'skus' => [$product->sku],
         ];
 
-        $result = $this->queryProducts($project, $language, $queryParameters);
+        $result = $this->queryProductsWithProductSearchApi($project, $language, $queryParameters);
 
         $this->assertSame($product->productId, $result->items[0]->productId);
         $this->assertSame($product->sku, $result->items[0]->sku);
@@ -231,8 +224,8 @@ class ProductsQueryTest extends FrontasticApiTestCase
      */
     public function testQueryAllProductsOrderedByIdTwiceReturnsSameResult(Project $project, string $language): void
     {
-        $firstResult = $this->queryProducts($project, $language, $this->sortReproducibly());
-        $secondResult = $this->queryProducts($project, $language, $this->sortReproducibly());
+        $firstResult = $this->queryProductsWithProductSearchApi($project, $language, $this->sortReproducibly());
+        $secondResult = $this->queryProductsWithProductSearchApi($project, $language, $this->sortReproducibly());
 
         $this->assertEquals($firstResult, $secondResult);
     }
@@ -247,7 +240,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
         $this->requireCategoryEndpointToSupportOffsetPagination($project);
 
         $limit = 24;
-        $productsQueriedOneStep = $this->queryProducts($project, $language, $this->sortReproducibly(), $limit);
+        $productsQueriedOneStep = $this->queryProductsWithProductSearchApi($project, $language, $this->sortReproducibly(), $limit);
         $productsQueriedInMultipleSteps = $this->queryProductsInMultipleSteps(
             $project,
             $language,
@@ -270,7 +263,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
         $this->requireCategoryEndpointToSupportCursorBasedPagination($project);
 
         $limit = 24;
-        $productsQueriedOneStep = $this->queryProducts($project, $language, $this->sortReproducibly(), $limit);
+        $productsQueriedOneStep = $this->queryProductsWithProductSearchApi($project, $language, $this->sortReproducibly(), $limit);
         $productsQueriedInMultipleSteps = $this->queryProductsInMultipleStepsWithCursorBasesPagination(
             $project,
             $language,
@@ -287,7 +280,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
      */
     public function testProductsFromSearchAreWellFormed(Project $project, string $language): void
     {
-        $result = $this->queryProducts($project, $language, [], 50);
+        $result = $this->queryProductsWithProductSearchApi($project, $language, [], 50);
         $this->assertProductsAreWellFormed($project, $language, $result->items);
     }
 
@@ -296,7 +289,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
      */
     public function testQueryByNonExistingCategoryReturnsEmptyResult(Project $project, string $language): void
     {
-        $products = $this->queryProducts($project, $language, ['category' => self::NON_EXISTING_CATEGORY]);
+        $products = $this->queryProductsWithProductSearchApi($project, $language, ['category' => self::NON_EXISTING_CATEGORY]);
         $this->assertEmptyResult($products);
     }
 
@@ -305,7 +298,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
      */
     public function testQueryByNonExistingSkuReturnsEmptyResult(Project $project, string $language): void
     {
-        $products = $this->queryProducts($project, $language, ['sku' => self::NON_EXISTING_SKU]);
+        $products = $this->queryProductsWithProductSearchApi($project, $language, ['sku' => self::NON_EXISTING_SKU]);
         $this->assertEmptyResult($products);
     }
 
@@ -314,7 +307,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
      */
     public function testQueryByNonExistingSkusReturnsEmptyResult(Project $project, string $language): void
     {
-        $products = $this->queryProducts($project, $language, ['skus' => [self::NON_EXISTING_SKU]]);
+        $products = $this->queryProductsWithProductSearchApi($project, $language, ['skus' => [self::NON_EXISTING_SKU]]);
         $this->assertEmptyResult($products);
     }
 
@@ -323,7 +316,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
      */
     public function testQueryByNonExistingProductIdsReturnsEmptyResult(Project $project, string $language): void
     {
-        $products = $this->queryProducts($project, $language, ['productIds' => [self::NON_EXISTING_PRODUCT_ID]]);
+        $products = $this->queryProductsWithProductSearchApi($project, $language, ['productIds' => [self::NON_EXISTING_PRODUCT_ID]]);
         $this->assertEmptyResult($products);
     }
 
@@ -358,12 +351,12 @@ class ProductsQueryTest extends FrontasticApiTestCase
      */
     public function testQueryProductByProductIdsReturnsOnlyProduct(Project $project, string $language): void
     {
-        $product = $this->getAProduct($project, $language);
+        $product = $this->getAProductWithProductSearchApi($project, $language);
         $productId = $product->productId;
         $this->assertNotEmptyString($productId);
 
         $productsByProductId =
-            $this->queryProducts($project, $language, ['productIds' => [$productId]]);
+            $this->queryProductsWithProductSearchApi($project, $language, ['productIds' => [$productId]]);
         $this->assertSingleProductResult($product, $productsByProductId);
     }
 
@@ -380,7 +373,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
     ): array {
         $products = [];
         for ($offset = 0; $offset < $limit; $offset += $stepSize) {
-            $result = $this->queryProducts(
+            $result = $this->queryProductsWithProductSearchApi(
                 $project,
                 $language,
                 $queryParameters,
@@ -408,7 +401,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
 
         $nextCursor = null;
         do {
-            $resultFromCurrentStep = $this->queryProducts(
+            $resultFromCurrentStep = $this->queryProductsWithProductSearchApi(
                 $project,
                 $language,
                 $queryParameters,

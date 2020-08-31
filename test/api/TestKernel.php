@@ -10,7 +10,7 @@ use Frontastic\Common\ProductApiBundle\FrontasticCommonProductApiBundle;
 use Frontastic\Common\ProductSearchApiBundle\FrontasticCommonProductSearchApiBundle;
 use Frontastic\Common\ProjectApiBundle\FrontasticCommonProjectApiBundle;
 use Frontastic\Common\SapCommerceCloudBundle\FrontasticCommonSapCommerceCloudBundle;
-use Frontastic\Common\ShopifyBundle\FrontasticCommonFindologicBundle;
+use Frontastic\Common\FindologicBundle\FrontasticCommonFindologicBundle;
 use Frontastic\Common\ShopifyBundle\FrontasticCommonShopifyBundle;
 use Frontastic\Common\ShopwareBundle\FrontasticCommonShopwareBundle;
 use Frontastic\Common\SprykerBundle\FrontasticCommonSprykerBundle;
