@@ -33,9 +33,13 @@ class FindologicProductSearchApi implements ProductSearchApi
 
     public function query(ProductQuery $query): PromiseInterface
     {
+        $currentCursor = $query->cursor ?? $query->offset ?? null;
+
         $request = new SearchRequest(
             [
                 'query' => $query->query,
+                'first' => $currentCursor ?? $query->offset ?? null,
+                'count' => $query->limit,
             ]
         );
 
@@ -44,7 +48,8 @@ class FindologicProductSearchApi implements ProductSearchApi
 
         return $this->client->search($request)
             ->then(
-                function ($result) use ($query, $currency) {
+                function ($result) use ($query, $currency, $currentCursor) {
+                    $previousCursor = $currentCursor - $query->limit;
                     return new Result(
                         [
                             'query' => clone $query,
@@ -52,6 +57,8 @@ class FindologicProductSearchApi implements ProductSearchApi
                             'count' => count($result['body']['result']['items']),
                             'total' => $result['body']['result']['metadata']['totalResults'],
                             'items' => $this->mapProducts($result['body']['result']['items'], $currency),
+                            'previousCursor' => $previousCursor < 0 ? null : $previousCursor,
+                            'nextCursor' => ($currentCursor) + $query->limit,
                         ]
                     );
                 }

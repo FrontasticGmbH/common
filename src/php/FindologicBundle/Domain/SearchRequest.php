@@ -30,12 +30,7 @@ class SearchRequest extends DataObject
     /**
      * @var int
      */
-    public $limit;
-
-    /**
-     * @var int
-     */
-    public $offset;
+    public $first;
 
     public function toArray()
     {
@@ -43,6 +38,8 @@ class SearchRequest extends DataObject
             'query' => $this->query,
             'attrib' => $this->attributes,
             'order' => $this->order,
+            'count' => $this->count,
+            'first' => $this->first,
         ];
     }
 }
