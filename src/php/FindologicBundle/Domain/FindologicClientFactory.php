@@ -22,17 +22,17 @@ class FindologicClientFactory
         $findologicConfig = $project->getConfigurationSection('findologic');
 
         $config = [];
-        foreach (['hostUrl', 'storefrontAccessToken'] as $option) {
+        foreach (['hostUrl', 'shopkey'] as $option) {
             $value = $typeSpecificConfiguration->$option ?? $findologicConfig->$option ?? null;
 
             if ($value === null) {
-                throw new \RuntimeException('Shopify config option ' . $option . ' is not set');
+                throw new \RuntimeException('Findologic config option ' . $option . ' is not set');
             }
             if (!is_string($value)) {
-                throw new \RuntimeException('Shopify config option ' . $option . ' is no string');
+                throw new \RuntimeException('Findologic config option ' . $option . ' is no string');
             }
             if ($value === '') {
-                throw new \RuntimeException('Shopify config option ' . $option . ' is empty');
+                throw new \RuntimeException('Findologic config option ' . $option . ' is empty');
             }
 
             $config[$option] = $value;

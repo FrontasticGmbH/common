@@ -1,0 +1,18 @@
+---
+name: "findologic"
+secret: "secret"
+configuration:
+    test:
+        disabled: false
+        supportCursorBasedPagination: true
+        supportOffsetPagination: true
+    findologic:
+        hostUrl: https://service.findologic.com/ps/centralized-frontend
+        shopkey: 3330286AB8B769B8C4372E89D9BEB10F
+    product:
+        engine: findologic
+projects:
+    -   projectId: test
+        name: Findologic Test
+        languages: ["en_GB@GBP"]
+        defaultLanguage: en_GB@GBP
