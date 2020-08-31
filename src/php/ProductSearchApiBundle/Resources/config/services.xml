@@ -6,5 +6,15 @@
 
     <services>
         <defaults public="true"/>
+        <service
+            id="Frontastic\Common\ProductSearchApiBundle\Domain\DefaultProductSearchApiFactory"
+            class="Frontastic\Common\ProductSearchApiBundle\Domain\DefaultProductSearchApiFactory">
+            <argument type="service" id="Psr\Container\ContainerInterface"/>
+        </service>
+
+        <service
+            id="Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiFactory"
+            alias="Frontastic\Common\ProductSearchApiBundle\Domain\DefaultProductSearchApiFactory"
+        />
     </services>
 </container>
