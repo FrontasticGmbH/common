@@ -5,16 +5,15 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <defaults public="true"/>
         <service
             id="Frontastic\Common\ProductSearchApiBundle\Domain\DefaultProductSearchApiFactory"
             class="Frontastic\Common\ProductSearchApiBundle\Domain\DefaultProductSearchApiFactory">
-            <argument type="service" id="Psr\Container\ContainerInterface"/>
+            <argument type="service" id="Psr\Container\ContainerInterface" />
         </service>
 
         <service
             id="Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiFactory"
             alias="Frontastic\Common\ProductSearchApiBundle\Domain\DefaultProductSearchApiFactory"
-        />
+            public="true" />
     </services>
 </container>
