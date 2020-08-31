@@ -1,5 +1,4 @@
 import Cloudinary from './mediaApi/cloudinary'
-import _ from 'lodash'
 
 class MediaApi {
     constructor () {
@@ -49,7 +48,7 @@ class MediaApi {
             height = !options.autoHeight ? Math.ceil(width / ratio) : null
         }
 
-        if (_.isString(media)) {
+        if (typeof media === 'string') {
             return mediaApi.getFetchImageUrl(media, width, height, options)
         } else {
             return mediaApi.getImageUrl(media, width, height, options)
