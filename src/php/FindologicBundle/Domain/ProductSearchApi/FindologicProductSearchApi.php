@@ -7,7 +7,13 @@ use Frontastic\Common\FindologicBundle\Domain\SearchRequest;
 use Frontastic\Common\FindologicBundle\Exception\ServiceNotAliveException;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\Facet;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\Filter;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\RangeFacet;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\RangeFilter;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\TermFacet;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\TermFilter;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi;
@@ -25,38 +31,36 @@ class FindologicProductSearchApi implements ProductSearchApi
      */
     private $fallback;
 
-    public function __construct(FindologicClient $client, ProductSearchApi $fallback)
+    /**
+     * @var Mapper
+     */
+    private $mapper;
+
+    public function __construct(FindologicClient $client, ProductSearchApi $fallback, Mapper $mapper)
     {
         $this->client = $client;
         $this->fallback = $fallback;
+        $this->mapper = $mapper;
     }
 
     public function query(ProductQuery $query): PromiseInterface
     {
         $currentCursor = $query->cursor ?? $query->offset ?? null;
 
-        $request = new SearchRequest(
-            [
-                'query' => $query->query,
-                'first' => $currentCursor ?? $query->offset ?? null,
-                'count' => $query->limit,
-            ]
-        );
-
-        $locale = Locale::createFromPosix($query->locale);
-        $currency = $locale->currency;
+        $request = $this->buildSearchRequest($query, $currentCursor);
 
         return $this->client->search($request)
             ->then(
-                function ($result) use ($query, $currency, $currentCursor) {
+                function ($result) use ($query, $currentCursor) {
                     $previousCursor = $currentCursor - $query->limit;
+
                     return new Result(
                         [
                             'query' => clone $query,
                             'offset' => $result['body']['request']['first'],
                             'count' => count($result['body']['result']['items']),
                             'total' => $result['body']['result']['metadata']['totalResults'],
-                            'items' => $this->mapProducts($result['body']['result']['items'], $currency),
+                            'items' => $this->mapper->dataToProducts($result['body']['result']['items'], $query),
                             'previousCursor' => $previousCursor < 0 ? null : $previousCursor,
                             'nextCursor' => ($currentCursor) + $query->limit,
                         ]
@@ -85,58 +89,22 @@ class FindologicProductSearchApi implements ProductSearchApi
         return $this->client;
     }
 
-    /**
-     * @return Product[]
-     */
-    private function mapProducts(array $items, string $currency): array
-    {
-        return array_map(
-            function ($item) use ($currency) {
-                return new Product(
-                    [
-                        'productId' => $item['id'],
-                        'name' => $item['name'],
-                        'slug' => $this->getSlugFromUrl($item['url']),
-                        'description' => $item['summary'],
-                        'categories' => $item['attributes']['cat'],
-                        'variants' => empty($item['variants'])
-                            ? $this->mapVariants([$item], $item['id'], $currency)
-                            : $this->mapVariants($item['variants'], $item['id'], $currency),
-                        'dangerousInnerProduct' => $item,
-                    ]
-                );
-            },
-            $items
-        );
-    }
-
-    private function getSlugFromUrl(string $url)
-    {
-        // @TODO implement slug extraction
-        return $url;
-    }
 
     /**
-     * @return Variant[]
+     * @param ProductQuery $query
+     * @param int|null $currentCursor
+     * @return SearchRequest
      */
-    private function mapVariants(array $variants, string $itemId, string $currency)
+    private function buildSearchRequest(ProductQuery $query, ?int $currentCursor): SearchRequest
     {
-        return array_map(
-            function ($variant) use ($itemId, $currency) {
-                return new Variant(
-                    [
-                        'id' => $variant['id'],
-                        'sku' => current($variant['ordernumbers']),
-                        'groupId' => $itemId,
-                        'price' => intval($variant['price'] * 100),
-                        'currency' => $currency,
-                        'attributes' => $variant['attributes'],
-                        'images' => [$variant['imageUrl']],
-                        'dangerousInnerVariant' => $variant,
-                    ]
-                );
-            },
-            $variants
-        );
+        $parameters = [
+            'query' => $query->query,
+            'first' => $currentCursor ?? $query->offset ?? null,
+            'count' => $query->limit,
+            'order' => $this->mapper->sortAttributesToRequest($query),
+            'attributes' => $this->mapper->attributesToRequest($query)
+        ];
+
+        return new SearchRequest($parameters);
     }
 }
