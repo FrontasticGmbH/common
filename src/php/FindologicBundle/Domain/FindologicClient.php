@@ -86,7 +86,7 @@ class FindologicClient
     private function buildQueryUrl(string $route, array $parameters = null)
     {
         return sprintf(
-            '%s/%s?shopkey=%s&outputAdapter=JSON_1.0&outputAttrib[]=cat&%s',
+            '%s/%s?shopkey=%s&outputAdapter=JSON_1.0&outputAttrib[]=cat%s',
             $this->hostUrl,
             $route,
             $this->shopkey,
