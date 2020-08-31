@@ -1,0 +1,243 @@
+<?php
+
+namespace Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi;
+
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreator;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
+use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi;
+use Frontastic\Common\ProjectApiBundle\Domain\Attribute;
+use GuzzleHttp\Promise\PromiseInterface;
+
+class Commercetools implements ProductSearchApi
+{
+    private const TYPE_MAP = [
+        'lenum' => Attribute::TYPE_LOCALIZED_ENUM,
+        'ltext' => Attribute::TYPE_LOCALIZED_TEXT,
+    ];
+
+    /**
+     * @var Client
+     */
+    private $client;
+
+    /**
+     * @var Mapper
+     */
+    private $mapper;
+
+    /**
+     * @var CommercetoolsLocaleCreator
+     */
+    private $localeCreator;
+
+    /**
+     * @var EnabledFacetService
+     */
+    private $enabledFacetService;
+
+    /**
+     * @var string[]
+     */
+    private $languages;
+
+    /**
+     * @var string
+     */
+    private $defaultLocale;
+
+    public function __construct(
+        Client $client,
+        Mapper $mapper,
+        CommercetoolsLocaleCreator $localeCreator,
+        EnabledFacetService $enabledFacetService,
+        array $languages,
+        string $defaultLocale
+    ) {
+        $this->client = $client;
+        $this->mapper = $mapper;
+        $this->localeCreator = $localeCreator;
+        $this->defaultLocale = $defaultLocale;
+        $this->languages = $languages;
+        $this->enabledFacetService = $enabledFacetService;
+    }
+
+    public function query(ProductQuery $query): PromiseInterface
+    {
+        $locale = $this->localeCreator->createLocaleFromString($query->locale);
+        $defaultLocale = $this->localeCreator->createLocaleFromString($this->defaultLocale);
+        $parameters = [
+            'offset' => $query->offset,
+            'limit' => $query->limit,
+            'filter' => [],
+            'filter.query' => [],
+            'filter.facets' => [],
+            'facet' => $this->mapper->facetsToRequest(
+                $this->enabledFacetService->getEnabledFacetDefinitions(),
+                $locale
+            ),
+            'priceCurrency' => $locale->currency,
+            'priceCountry' => $locale->country,
+            'fuzzy' => $query->fuzzy ? 'true' : 'false',
+        ];
+
+        if (count($query->filter) > 0) {
+            $parameters['filter.query'] = $this->mapper->prepareQueryFilter($query->filter, $defaultLocale);
+        }
+
+        if ($query->productType) {
+            $parameters['filter.query'][] = sprintf('productType.id:"%s"', $query->productType);
+        }
+        if ($query->category) {
+            $parameters['filter.query'][] = sprintf('categories.id: subtree("%s")', $query->category);
+        }
+        if ($query->query) {
+            $parameters[sprintf('text.%s', $locale->language)] = $query->query;
+        }
+        if ($query->productIds) {
+            $parameters['filter.query'][] = sprintf('id: "%s"', join('","', $query->productIds));
+        }
+        if ($query->sku) {
+            $parameters['filter.query'][] = sprintf('variants.sku:"%s"', $query->sku);
+        }
+        if ($query->skus) {
+            $parameters['filter.query'][] = sprintf('variants.sku:"%s"', join('","', $query->skus));
+        }
+
+        if ($query->sortAttributes) {
+            $parameters['sort'] = array_map(
+                function (string $direction, string $field): string {
+                    return $field . ($direction === ProductQuery::SORT_ORDER_ASCENDING ? ' asc' : ' desc');
+                },
+                $query->sortAttributes,
+                array_keys($query->sortAttributes)
+            );
+        }
+        $facetsToFilter = $this->mapper->facetsToFilter(
+            $query->facets,
+            $this->enabledFacetService->getEnabledFacetDefinitions(),
+            $locale
+        );
+        $parameters['filter'] = $facetsToFilter;
+        $parameters['filter.facets'] = $facetsToFilter;
+
+        return $this->client
+            ->fetchAsync(
+                '/product-projections/search',
+                array_filter(
+                    array_merge($query->rawApiInput, $parameters)
+                )
+            )
+            ->then(function ($result) use ($query, $locale) {
+                return new Result([
+                    'offset' => $result->offset,
+                    'total' => $result->total,
+                    'count' => $result->count,
+                    'items' => array_map(
+                        function (array $productData) use ($query, $locale) {
+                            return $this->mapper->dataToProduct($productData, $query, $locale);
+                        },
+                        $result->results
+                    ),
+                    'facets' => $this->mapper->dataToFacets($result->facets, $query),
+                    'query' => clone $query,
+                ]);
+            });
+    }
+
+    public function getSearchableAttributes(): array
+    {
+        $productTypes = $this->client->fetchAsync('/product-types')->wait();
+
+        $attributes = [];
+        foreach ($productTypes->results as $productType) {
+            foreach ($productType['attributes'] as $rawAttribute) {
+                if (!$rawAttribute['isSearchable']) {
+                    continue;
+                }
+
+                $attributeId = 'variants.attributes.' . $rawAttribute['name'];
+
+                $rawType = $rawAttribute['type']['name'];
+                $rawValues = $rawAttribute['type']['values'] ?? null;
+                if ($rawType === 'set') {
+                    $rawType = $rawAttribute['type']['elementType']['name'];
+                    $rawValues = $rawAttribute['type']['elementType']['values'] ?? null;
+                }
+
+                $attributes[$attributeId] = new Attribute([
+                    'attributeId' => $attributeId,
+                    'type' => $this->mapAttributeType($rawType),
+                    'label' => $this->mapLocales($rawAttribute['label']),
+                    'values' => $this->mapValueLocales($rawValues),
+                ]);
+            }
+        }
+
+        // Not included in attributes in CT
+        $attributeId = 'variants.price';
+        $attributes[$attributeId] = new Attribute([
+            'attributeId' => $attributeId,
+            'type' => Attribute::TYPE_MONEY,
+            'label' => null, // Can we get the price label somehow?
+        ]);
+
+        $attributeId = 'variants.scopedPrice.value';
+        $attributes[$attributeId] = new Attribute([
+            'attributeId' => $attributeId,
+            'type' => Attribute::TYPE_MONEY,
+            'label' => null, // Can we get the price label somehow?
+        ]);
+
+        $attributeId = 'categories.id';
+        $attributes[$attributeId] = new Attribute([
+            'attributeId' => $attributeId,
+            'type' => Attribute::TYPE_CATEGORY_ID,
+            'label' => null, // Can we get the label somehow?
+        ]);
+
+        return $attributes;
+    }
+
+    public function getDangerousInnerClient(): Client
+    {
+        return $this->client;
+    }
+
+    private function mapLocales(array $localizedStrings): array
+    {
+        $localizedResult = [];
+        foreach ($this->languages as $language) {
+            $locale = $this->localeCreator->createLocaleFromString($language);
+            $localizedResult[$language] =
+                $localizedStrings[$locale->language] ??
+                (reset($localizedStrings) ?: '');
+        }
+        return $localizedResult;
+    }
+
+    private function mapValueLocales(array $values = null): ?array
+    {
+        if ($values === null) {
+            return null;
+        }
+
+        foreach ($values as $key => $value) {
+            if (is_array($value['label'])) {
+                $values[$key]['label'] = $this->mapLocales($value['label']);
+            }
+        }
+        return $values;
+    }
+
+    private function mapAttributeType(string $commerceToolsType): string
+    {
+        if (isset(self::TYPE_MAP[$commerceToolsType])) {
+            return self::TYPE_MAP[$commerceToolsType];
+        }
+        return $commerceToolsType;
+    }
+}

@@ -9,6 +9,8 @@
             id="Frontastic\Common\ProductSearchApiBundle\Domain\DefaultProductSearchApiFactory"
             class="Frontastic\Common\ProductSearchApiBundle\Domain\DefaultProductSearchApiFactory">
             <argument type="service" id="Psr\Container\ContainerInterface" />
+            <argument type="service"
+                      id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService" />
             <argument type="tagged" tag="productSearchApi.lifecycleEventListener" />
         </service>
 
