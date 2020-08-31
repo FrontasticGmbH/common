@@ -6,6 +6,7 @@ configuration:
         disabled: false
         supportCursorBasedPagination: true
         supportOffsetPagination: false
+        hasConsistentProductSearchData: true
     shopify:
         hostUrl: https://frontastic.myshopify.com/api/2020-07/graphql.json
         storefrontAccessToken: c3673b639f34e27e9885ddb459d148bd

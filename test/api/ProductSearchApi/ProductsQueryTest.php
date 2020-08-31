@@ -280,6 +280,8 @@ class ProductsQueryTest extends FrontasticApiTestCase
      */
     public function testProductsFromSearchAreWellFormed(Project $project, string $language): void
     {
+        $this->requireCategoryEndpointToHaveConsistentProductSearchData($project);
+
         $result = $this->queryProductsWithProductSearchApi($project, $language, [], 50);
         $this->assertProductsAreWellFormed($project, $language, $result->items);
     }
@@ -621,5 +623,10 @@ class ProductsQueryTest extends FrontasticApiTestCase
     private function requireCategoryEndpointToSupportOffsetPagination(Project $project): void
     {
         $this->requireProjectFeature($project, 'supportOffsetPagination');
+    }
+
+    private function requireCategoryEndpointToHaveConsistentProductSearchData(Project $project): void
+    {
+        $this->requireProjectFeature($project, 'hasConsistentProductSearchData');
     }
 }

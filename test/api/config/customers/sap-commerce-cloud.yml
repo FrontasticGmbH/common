@@ -7,6 +7,7 @@ configuration:
         anonymousCheckout: false
         supportCursorBasedPagination: false
         supportOffsetPagination: true
+        hasConsistentProductSearchData: true
     sap-commerce-cloud:
         hostUrl: https://api.cjy0ke8wo2-frontasti1-d1-public.model-t.cc.commerce.ondemand.com
     account:

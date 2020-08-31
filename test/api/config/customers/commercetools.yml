@@ -6,6 +6,7 @@ configuration:
         disabled: false
         supportCursorBasedPagination: false
         supportOffsetPagination: true
+        hasConsistentProductSearchData: true
     commercetools:
         projectKey: frontastic-1
         clientId: nJIPfHoT9_GlC29EfL75zdkg
