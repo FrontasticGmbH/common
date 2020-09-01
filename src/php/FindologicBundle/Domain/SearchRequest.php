@@ -13,6 +13,11 @@ class SearchRequest extends DataObject
     public $query;
 
     /**
+     * @var null|string
+     */
+    public $identifier;
+
+    /**
      * @var array
      */
     public $attributes;
@@ -36,10 +41,11 @@ class SearchRequest extends DataObject
     {
         return [
             'query' => $this->query,
-            'attrib' => $this->attributes,
-            'order' => $this->order,
-            'count' => $this->count,
+            'identifier' => $this->identifier,
             'first' => $this->first,
+            'count' => $this->count,
+            'order' => $this->order,
+            'attrib' => $this->attributes,
         ];
     }
 }
