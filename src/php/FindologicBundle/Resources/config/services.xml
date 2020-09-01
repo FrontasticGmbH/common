@@ -8,6 +8,9 @@
         <service id="Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\Mapper" public="true">
         </service>
 
+        <service id="Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\QueryValidator" public="true">
+        </service>
+
         <service id="Frontastic\Common\FindologicBundle\Domain\FindologicClientFactory" public="true">
             <argument type="service" id="Frontastic\Common\HttpClient" />
             <tag name="frontastic.common.api_integration"/>

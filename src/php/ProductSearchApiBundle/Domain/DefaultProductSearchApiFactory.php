@@ -4,6 +4,7 @@ namespace Frontastic\Common\ProductSearchApiBundle\Domain;
 
 use Frontastic\Common\FindologicBundle\Domain\FindologicClientFactory;
 use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\FindologicProductSearchApi;
+use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\QueryValidator;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory as CommercetoolsClientFactory;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper as CommercetoolsDataMapper;
@@ -60,9 +61,11 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
             case 'findologic':
                 $clientFactory = $this->container->get(FindologicClientFactory::class);
                 $dataMapper = $this->container->get(FindologicDataMapper::class);
+                $queryValidator = $this->container->get(QueryValidator::class);
                 $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
 
-                $productSearchApi = new FindologicProductSearchApi($client, new NoopProductSearchApi(), $dataMapper);
+                $productSearchApi =
+                    new FindologicProductSearchApi($client, new NoopProductSearchApi(), $dataMapper, $queryValidator);
                 break;
             default:
                 throw new \OutOfBoundsException(

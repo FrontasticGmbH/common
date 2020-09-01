@@ -7,6 +7,7 @@ configuration:
         supportCursorBasedPagination: false
         supportOffsetPagination: true
         hasConsistentProductSearchData: true
+        supportSearchByIdentifierAndQueryParameters: true
     spryker:
         endpoint: https://glue.de.b2c.demo-spryker.com
     account:

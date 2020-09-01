@@ -198,6 +198,8 @@ class ProductsQueryTest extends FrontasticApiTestCase
      */
     public function testQueryProductsByMultipleQueryParametersReturnsProducts(Project $project, string $language): void
     {
+        $this->requireCategoryEndpointToSupportSearchByIdentifierAndQueryParameters($project);
+
         $promise = $this->getProductSearchApiForProject($project)
             ->query(new ProductQuery($this->buildQueryParameters($language)));
 
@@ -327,11 +329,11 @@ class ProductsQueryTest extends FrontasticApiTestCase
      */
     public function testQueryProductBySkuReturnsOnlyProduct(Project $project, string $language): void
     {
-        $product = $this->getAProduct($project, $language);
+        $product = $this->getAProductWithProductSearchApi($project, $language);
         $sku = $product->variants[0]->sku;
         $this->assertNotEmptyString($sku);
 
-        $productsBySku = $this->queryProducts($project, $language, ['sku' => $sku]);
+        $productsBySku = $this->queryProductsWithProductSearchApi($project, $language, ['sku' => $sku]);
         $this->assertSingleProductResult($product, $productsBySku);
     }
 
@@ -340,11 +342,11 @@ class ProductsQueryTest extends FrontasticApiTestCase
      */
     public function testQueryProductBySkusReturnsOnlyProduct(Project $project, string $language): void
     {
-        $product = $this->getAProduct($project, $language);
+        $product = $this->getAProductWithProductSearchApi($project, $language);
         $sku = $product->variants[0]->sku;
         $this->assertNotEmptyString($sku);
 
-        $productsBySku = $this->queryProducts($project, $language, ['skus' => [$sku]]);
+        $productsBySku = $this->queryProductsWithProductSearchApi($project, $language, ['skus' => [$sku]]);
         $this->assertSingleProductResult($product, $productsBySku);
     }
 
@@ -628,5 +630,10 @@ class ProductsQueryTest extends FrontasticApiTestCase
     private function requireCategoryEndpointToHaveConsistentProductSearchData(Project $project): void
     {
         $this->requireProjectFeature($project, 'hasConsistentProductSearchData');
+    }
+
+    private function requireCategoryEndpointToSupportSearchByIdentifierAndQueryParameters(Project $project): void
+    {
+        $this->requireProjectFeature($project, 'supportSearchByIdentifierAndQueryParameters');
     }
 }

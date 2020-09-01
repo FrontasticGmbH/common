@@ -7,6 +7,7 @@ configuration:
         supportCursorBasedPagination: true
         supportOffsetPagination: true
         hasConsistentProductSearchData: false
+        supportSearchByIdentifierAndQueryParameters: false
     findologic:
         hostUrl: https://service.findologic.com/ps/centralized-frontend
         shopkey: 3330286AB8B769B8C4372E89D9BEB10F

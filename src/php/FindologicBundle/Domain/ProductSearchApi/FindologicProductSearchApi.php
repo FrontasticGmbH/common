@@ -4,6 +4,7 @@ namespace Frontastic\Common\FindologicBundle\Domain\ProductSearchApi;
 
 use Frontastic\Common\FindologicBundle\Domain\FindologicClient;
 use Frontastic\Common\FindologicBundle\Exception\ServiceNotAliveException;
+use Frontastic\Common\FindologicBundle\Exception\UnsupportedQueryException;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi;
@@ -26,15 +27,30 @@ class FindologicProductSearchApi implements ProductSearchApi
      */
     private $mapper;
 
-    public function __construct(FindologicClient $client, ProductSearchApi $fallback, Mapper $mapper)
-    {
+    /**
+     * @var QueryValidator
+     */
+    private $validator;
+
+    public function __construct(
+        FindologicClient $client,
+        ProductSearchApi $fallback,
+        Mapper $mapper,
+        QueryValidator $validator
+    ) {
         $this->client = $client;
         $this->fallback = $fallback;
         $this->mapper = $mapper;
+        $this->validator = $validator;
     }
 
     public function query(ProductQuery $query): PromiseInterface
     {
+        $validationResult = $this->validator->isSupported($query);
+
+        if (!$validationResult->isSupported) {
+            throw new UnsupportedQueryException($validationResult->validationError);
+        }
 
         $request = $this->mapper->queryToRequest($query);
 
@@ -73,6 +89,7 @@ class FindologicProductSearchApi implements ProductSearchApi
     public function getSearchableAttributes(): array
     {
         // TODO: Implement getSearchableAttributes() method.
+        return [];
     }
 
     public function getDangerousInnerClient()
