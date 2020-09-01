@@ -9,7 +9,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\Co
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper as CommercetoolsDataMapper;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi\Commercetools as CommercetoolsProductSearchApi;
-use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\Mapper;
+use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\Mapper as FindologicDataMapper;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Psr\Container\ContainerInterface;
 
@@ -59,7 +59,7 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
                 break;
             case 'findologic':
                 $clientFactory = $this->container->get(FindologicClientFactory::class);
-                $dataMapper = $this->container->get(Mapper::class);
+                $dataMapper = $this->container->get(FindologicDataMapper::class);
                 $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
 
                 $productSearchApi = new FindologicProductSearchApi($client, new NoopProductSearchApi(), $dataMapper);
