@@ -8,9 +8,10 @@ use Frontastic\Common\FindologicBundle\Exception\UnsupportedQueryException;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi;
+use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiBase;
 use GuzzleHttp\Promise\PromiseInterface;
 
-class FindologicProductSearchApi implements ProductSearchApi
+class FindologicProductSearchApi extends ProductSearchApiBase
 {
     /**
      * @var FindologicClient
@@ -44,7 +45,7 @@ class FindologicProductSearchApi implements ProductSearchApi
         $this->validator = $validator;
     }
 
-    public function query(ProductQuery $query): PromiseInterface
+    public function queryImplementation(ProductQuery $query): PromiseInterface
     {
         $validationResult = $this->validator->isSupported($query);
 
@@ -86,7 +87,7 @@ class FindologicProductSearchApi implements ProductSearchApi
             );
     }
 
-    public function getSearchableAttributes(): array
+    public function getSearchableAttributesImplementation(): array
     {
         // TODO: Implement getSearchableAttributes() method.
         return [];

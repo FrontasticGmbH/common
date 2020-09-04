@@ -8,11 +8,11 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
-use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi;
+use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiBase;
 use Frontastic\Common\ProjectApiBundle\Domain\Attribute;
 use GuzzleHttp\Promise\PromiseInterface;
 
-class Commercetools implements ProductSearchApi
+class Commercetools extends ProductSearchApiBase
 {
     private const TYPE_MAP = [
         'lenum' => Attribute::TYPE_LOCALIZED_ENUM,
@@ -65,7 +65,7 @@ class Commercetools implements ProductSearchApi
         $this->enabledFacetService = $enabledFacetService;
     }
 
-    public function query(ProductQuery $query): PromiseInterface
+    public function queryImplementation(ProductQuery $query): PromiseInterface
     {
         $locale = $this->localeCreator->createLocaleFromString($query->locale);
         $defaultLocale = $this->localeCreator->createLocaleFromString($this->defaultLocale);
@@ -148,7 +148,7 @@ class Commercetools implements ProductSearchApi
             });
     }
 
-    public function getSearchableAttributes(): array
+    public function getSearchableAttributesImplementation(): array
     {
         $productTypes = $this->client->fetchAsync('/product-types')->wait();
 

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Frontastic\Common\ProductSearchApiBundle\Domain;
 
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
@@ -8,9 +7,9 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
 
-class NoopProductSearchApi implements ProductSearchApi
+class NoopProductSearchApi extends ProductSearchApiBase
 {
-    public function query(ProductQuery $query): PromiseInterface
+    public function queryImplementation(ProductQuery $query): PromiseInterface
     {
         $promise = new Promise();
 
@@ -19,7 +18,7 @@ class NoopProductSearchApi implements ProductSearchApi
         return $promise;
     }
 
-    public function getSearchableAttributes(): array
+    public function getSearchableAttributesImplementation(): array
     {
         return [];
     }
