@@ -22,6 +22,7 @@ use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory as Shopw
 use Frontastic\Common\ShopwareBundle\Domain\ProductSearchApi\ShopwareProductSearchApi;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
 class DefaultProductSearchApiFactory implements ProductSearchApiFactory
 {
@@ -36,14 +37,19 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
     /** @var array */
     private $decorators;
 
+    /** @var LoggerInterface */
+    private $logger;
+
     public function __construct(
         ContainerInterface $container,
         EnabledFacetService $enabledFacetService,
+        LoggerInterface $logger,
         iterable $decorators = []
     ) {
         $this->container = $container;
         $this->enabledFacetService = $enabledFacetService;
         $this->decorators = $decorators;
+        $this->logger = $logger;
     }
 
     public function factor(Project $project): ProductSearchApi
@@ -104,7 +110,13 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
                 $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
 
                 $productSearchApi =
-                    new FindologicProductSearchApi($client, new NoopProductSearchApi(), $dataMapper, $queryValidator);
+                    new FindologicProductSearchApi(
+                        $client,
+                        new NoopProductSearchApi(),
+                        $dataMapper,
+                        $queryValidator,
+                        $this->logger
+                    );
                 break;
             default:
                 throw new \OutOfBoundsException(

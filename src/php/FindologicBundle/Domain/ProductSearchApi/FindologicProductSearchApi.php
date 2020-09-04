@@ -10,6 +10,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiBase;
 use GuzzleHttp\Promise\PromiseInterface;
+use Psr\Log\LoggerInterface;
 
 class FindologicProductSearchApi extends ProductSearchApiBase
 {
@@ -33,16 +34,23 @@ class FindologicProductSearchApi extends ProductSearchApiBase
      */
     private $validator;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     public function __construct(
         FindologicClient $client,
         ProductSearchApi $fallback,
         Mapper $mapper,
-        QueryValidator $validator
+        QueryValidator $validator,
+        LoggerInterface $logger
     ) {
         $this->client = $client;
         $this->fallback = $fallback;
         $this->mapper = $mapper;
         $this->validator = $validator;
+        $this->logger = $logger;
     }
 
     protected function queryImplementation(ProductQuery $query): PromiseInterface
@@ -78,7 +86,7 @@ class FindologicProductSearchApi extends ProductSearchApiBase
             ->otherwise(
                 function ($reason) use ($query) {
                     if ($reason instanceof ServiceNotAliveException) {
-                        // @TODO log fallback usage
+                        $this->logger->info('ProductSearchApi: Findologic service unavailable - using fallback backend.');
                         return $this->fallback->query($query);
                     }
 

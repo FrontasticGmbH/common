@@ -11,6 +11,7 @@
             <argument type="service" id="Psr\Container\ContainerInterface" />
             <argument type="service"
                       id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService" />
+            <argument type="service" id="logger" />
             <argument type="tagged" tag="productSearchApi.lifecycleEventListener" />
         </service>
 
