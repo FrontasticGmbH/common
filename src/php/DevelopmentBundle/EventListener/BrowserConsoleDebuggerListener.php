@@ -39,9 +39,9 @@ class BrowserConsoleDebuggerListener
 
         if (($headers->has('Content-Type') && preg_match('(html)', $headers->get('Content-Type')))) {
             $content = $response->getContent();
-            $debugProp = 'data-debug="' . htmlentities(json_encode(
+            $debugProp = 'data-debug="' . htmlspecialchars(addcslashes(json_encode(
                 $this->serializer->serialize(Debugger::getMessages())
-            )) . '"';
+            , JSON_UNESCAPED_SLASHES | JSON_HEX_QUOT), '\\')) . '"';
             $content = preg_replace('(<\s*div\s*id="appData")i', '\\0 ' . $debugProp, $content);
             $response->setContent($content);
         }
