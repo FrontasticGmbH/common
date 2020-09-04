@@ -50,7 +50,7 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
      * @param LocaleCreator $localeCreator
      * @param array $resources
      * @param array $queryResources
-     * @param array $concreteProductresources
+     * @param array $concreteProductResources
      */
     public function __construct(
         SprykerClientInterface $client,
@@ -58,12 +58,12 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
         LocaleCreator $localeCreator,
         array $resources = SprykerProductApiExtendedConstants::SPRYKER_DEFAULT_PRODUCT_RESOURCES,
         array $queryResources = SprykerProductApiExtendedConstants::SPRYKER_PRODUCT_QUERY_RESOURCES,
-        array $concreteProductresources = SprykerProductApiExtendedConstants::SPRYKER_DEFAULT_CONCRETE_PRODUCT_RESOURCES
+        array $concreteProductResources = SprykerProductApiExtendedConstants::SPRYKER_DEFAULT_CONCRETE_PRODUCT_RESOURCES
     ) {
         parent::__construct($client, $mapperResolver, $localeCreator);
         $this->productResources = $resources;
         $this->queryResources = $queryResources;
-        $this->concreteProductResources = $concreteProductresources;
+        $this->concreteProductResources = $concreteProductResources;
 
         $this->registerProductExpander(new NestedSearchProductAbstractExpander());
     }
@@ -75,7 +75,11 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
      */
     public function getCategories(CategoryQuery $query): array
     {
-        $response = $this->client->get('/category-trees');
+        $locale = $this->localeCreator->createLocaleFromString($query->locale);
+
+        $response = $this->client
+            ->forLanguage($locale->language)
+            ->get('/category-trees');
 
         return $this->mapResponseResource($response, CategoriesMapper::MAPPER_NAME);
     }
@@ -111,6 +115,8 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
         $query = SingleProductQuery::fromLegacyQuery($query);
         $query->validate();
 
+        $locale = $this->localeCreator->createLocaleFromString($query->locale);
+
         $endpoint = $this->withIncludes("/abstract-products/{$query->productId}", $this->productResources);
         $mapperName = ProductMapper::MAPPER_NAME;
 
@@ -119,32 +125,35 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
             $mapperName = ProductConcreteMapper::MAPPER_NAME;
         }
 
-        $response = $this->client->get(
-            $endpoint,
-            [],
-            ProductApi::QUERY_ASYNC
-        )->then(function ($response) use ($mapperName) {
-            $product = $this->mapResponseResource($response, $mapperName);
-            $resources = $this->getAllResources($response);
+        $response = $this->client
+            ->forLanguage($locale->language)
+            ->get(
+                $endpoint,
+                [],
+                ProductApi::QUERY_ASYNC
+            )
+            ->then(function ($response) use ($mapperName) {
+                $product = $this->mapResponseResource($response, $mapperName);
+                $resources = $this->getAllResources($response);
 
-            if ($product && count($resources) > 0) {
-                $this->expandProduct($product, $resources);
-            }
-
-            return $product;
-        })
-        ->otherwise(function (\Throwable $exception) use ($query) {
-            if ($exception instanceof RequestException && $exception->getCode() >= 500) {
-                return;
-            }
-            if ($exception instanceof RequestException && $exception->getCode() === 404) {
-                if ($query->sku !== null) {
-                    throw ProductApi\ProductNotFoundException::bySku($query->sku);
+                if ($product && count($resources) > 0) {
+                    $this->expandProduct($product, $resources);
                 }
-                throw ProductApi\ProductNotFoundException::byProductId($query->productId);
-            }
-            throw $exception;
-        });
+
+                return $product;
+            })
+            ->otherwise(function (\Throwable $exception) use ($query) {
+                if ($exception instanceof RequestException && $exception->getCode() >= 500) {
+                    return;
+                }
+                if ($exception instanceof RequestException && $exception->getCode() === 404) {
+                    if ($query->sku !== null) {
+                        throw ProductApi\ProductNotFoundException::bySku($query->sku);
+                    }
+                    throw ProductApi\ProductNotFoundException::byProductId($query->productId);
+                }
+                throw $exception;
+            });
 
         if ($mode === ProductApi::QUERY_SYNC) {
             return $response->wait();
@@ -160,8 +169,11 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
      */
     public function query(ProductQuery $query, string $mode = ProductApi::QUERY_SYNC): object
     {
-        $searchQuery = CatalogSearchQuery::createFromProductQuery($query);
+        $locale = $this->localeCreator->createLocaleFromString($query->locale);
+
+        $searchQuery = CatalogSearchQuery::createFromProductQuery($query) . "&currency=$locale->currency";
         $response = $this->client
+            ->forLanguage($locale->language)
             ->get(
                 $this->withIncludes("/catalog-search?{$searchQuery}", $this->queryResources),
                 [],

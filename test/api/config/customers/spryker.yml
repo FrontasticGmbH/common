@@ -8,6 +8,7 @@ configuration:
         supportOffsetPagination: true
     spryker:
         endpoint: https://glue.de.b2c.demo-spryker.com
+        projectKey: DE
     account:
         engine: spryker
     cart:

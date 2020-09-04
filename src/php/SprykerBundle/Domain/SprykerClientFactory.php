@@ -16,6 +16,7 @@ class SprykerClientFactory
      */
     private $requiredConfigOptions = [
         'endpoint',
+        'projectKey',
     ];
 
     /**
@@ -44,6 +45,7 @@ class SprykerClientFactory
         return new SprykerClient(
             $this->httpClient,
             $config['endpoint'],
+            $config['projectKey'],
             $this->exceptionFactory
         );
     }

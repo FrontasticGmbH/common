@@ -23,21 +23,21 @@ class DefaultLocaleCreator extends LocaleCreator
 
         $locale = Locale::createFromPosix($localeString);
 
-        [$language, $languageId] = $this->pickLanguageFromProjectConfig(
+        $language = $this->pickLanguageFromProjectConfig(
             $this->extractProjectConfigResource(
                 $projectConfig,
-                SprykerProjectConfigApi::RESOURCE_LANGUAGES
+                SprykerProjectConfigApi::RESOURCE_LOCALES
             ),
             $locale
         );
-        [$country, $countryId] = $this->pickCountryFromProjectConfig(
+        $country = $this->pickCountryFromProjectConfig(
             $this->extractProjectConfigResource(
                 $projectConfig,
                 SprykerProjectConfigApi::RESOURCE_COUNTRIES
             ),
             $locale
         );
-        [$currency, $currencyId] = $this->pickCurrencyFromProjectConfig(
+        $currency= $this->pickCurrencyFromProjectConfig(
             $this->extractProjectConfigResource(
                 $projectConfig,
                 SprykerProjectConfigApi::RESOURCE_CURRENCIES
@@ -47,11 +47,8 @@ class DefaultLocaleCreator extends LocaleCreator
 
         return new SprykerLocale([
             'language' => $language,
-            'languageId' => $languageId,
             'country' => $country,
-            'countryId' => $countryId,
             'currency' => $currency,
-            'currencyId' => $currencyId,
         ]);
     }
 
@@ -65,56 +62,44 @@ class DefaultLocaleCreator extends LocaleCreator
         return $this->projectConfigApi->getProjectConfig();
     }
 
-    /**
-     * @param \Frontastic\Common\SprykerBundle\Domain\ProjectConfigApi\SprykerLanguage[] $projectConfigLanguages
-     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale $frontasticLocale
-     *
-     * @return [?string, ?string]
-     */
-    private function pickLanguageFromProjectConfig(array $projectConfigLanguages, Locale $frontasticLocale): array
+    private function pickLanguageFromProjectConfig(array $projectConfigLanguages, Locale $frontasticLocale): string
     {
-        $locale = sprintf('%s-%s', $frontasticLocale->language, $frontasticLocale->territory);
+        $locale = sprintf('%s_%s', $frontasticLocale->language, $frontasticLocale->territory);
 
         foreach ($projectConfigLanguages as $projectConfigLanguage) {
-            if ($projectConfigLanguage->localeCode === $locale) {
-                return [$projectConfigLanguage->localeCode, $projectConfigLanguage->id];
+            if ($projectConfigLanguage['name'] === $locale) {
+                return $projectConfigLanguage['code'];
             }
         }
 
-        return [null, null];
+        foreach ($projectConfigLanguages as $projectConfigLanguage) {
+            if ($projectConfigLanguage['code'] === $frontasticLocale->language) {
+                return $projectConfigLanguage['code'];
+            }
+        }
+
+        return $projectConfigLanguages[0]['code'];
     }
 
-    /**
-     * @param \Frontastic\Common\SprykerBundle\Domain\ProjectConfigApi\SprykerCountry[] $projectConfigCountries
-     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale $frontasticLocale
-     *
-     * @return [?string, ?string]
-     */
-    private function pickCountryFromProjectConfig(array $projectConfigCountries, Locale $frontasticLocale): array
+    private function pickCountryFromProjectConfig(array $projectConfigCountries, Locale $frontasticLocale): string
     {
         foreach ($projectConfigCountries as $projectConfigCountry) {
-            if ($projectConfigCountry->iso === $frontasticLocale->territory) {
-                return [$projectConfigCountry->name, $projectConfigCountry->id];
+            if ($projectConfigCountry['iso2Code'] === $frontasticLocale->territory) {
+                return $projectConfigCountry['name'];
             }
         }
 
-        return [null, null];
+        return $projectConfigCountries[0]['name'];
     }
 
-    /**
-     * @param \Frontastic\Common\SprykerBundle\Domain\ProjectConfigApi\SprykerCurrency[] $projectConfigCurrencies
-     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale $frontasticLocale
-     *
-     * @return [?string, ?string]
-     */
-    private function pickCurrencyFromProjectConfig(array $projectConfigCurrencies, Locale $frontasticLocale): array
+    private function pickCurrencyFromProjectConfig(array $projectConfigCurrencies, Locale $frontasticLocale): string
     {
         foreach ($projectConfigCurrencies as $projectConfigCurrency) {
-            if ($projectConfigCurrency->isoCode === $frontasticLocale->currency) {
-                return [$projectConfigCurrency->isoCode, $projectConfigCurrency->id];
+            if ($projectConfigCurrency['code'] === $frontasticLocale->currency) {
+                return $projectConfigCurrency['code'];
             }
         }
 
-        return [null, null];
+        return $projectConfigCurrencies[0]['code'];
     }
 }
