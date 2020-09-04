@@ -86,7 +86,9 @@ class FindologicProductSearchApi extends ProductSearchApiBase
             ->otherwise(
                 function ($reason) use ($query) {
                     if ($reason instanceof ServiceNotAliveException) {
-                        $this->logger->info('ProductSearchApi: Findologic service unavailable - using fallback backend.');
+                        $this->logger->info(
+                            'ProductSearchApi: Findologic service unavailable - using fallback backend.'
+                        );
                         return $this->fallback->query($query);
                     }
 
