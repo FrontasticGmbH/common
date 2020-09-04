@@ -147,6 +147,8 @@ class ProductsQueryTest extends FrontasticApiTestCase
      */
     public function testQueryProductsBySingleQueryParameterReturnsProducts(Project $project, string $language): void
     {
+        $this->requireCategoryEndpointToSupportSearchByIdentifierAndQueryParameters($project);
+
         $promise = $this->getProductSearchApiForProject($project)
             ->query(new ProductQuery($this->buildQueryParameters($language)));
 
@@ -302,6 +304,8 @@ class ProductsQueryTest extends FrontasticApiTestCase
      */
     public function testQueryByNonExistingSkuReturnsEmptyResult(Project $project, string $language): void
     {
+        $this->requireCategoryEndpointToSupportSearchByIdentifierAndQueryParameters($project);
+
         $products = $this->queryProductsWithProductSearchApi($project, $language, ['sku' => self::NON_EXISTING_SKU]);
         $this->assertEmptyResult($products);
     }
@@ -311,6 +315,8 @@ class ProductsQueryTest extends FrontasticApiTestCase
      */
     public function testQueryByNonExistingSkusReturnsEmptyResult(Project $project, string $language): void
     {
+        $this->requireCategoryEndpointToSupportSearchByIdentifierAndQueryParameters($project);
+
         $products = $this->queryProductsWithProductSearchApi($project, $language, ['skus' => [self::NON_EXISTING_SKU]]);
         $this->assertEmptyResult($products);
     }
@@ -320,6 +326,8 @@ class ProductsQueryTest extends FrontasticApiTestCase
      */
     public function testQueryByNonExistingProductIdsReturnsEmptyResult(Project $project, string $language): void
     {
+        $this->requireCategoryEndpointToSupportSearchByIdentifierAndQueryParameters($project);
+
         $products = $this->queryProductsWithProductSearchApi($project, $language, ['productIds' => [self::NON_EXISTING_PRODUCT_ID]]);
         $this->assertEmptyResult($products);
     }
@@ -329,6 +337,8 @@ class ProductsQueryTest extends FrontasticApiTestCase
      */
     public function testQueryProductBySkuReturnsOnlyProduct(Project $project, string $language): void
     {
+        $this->requireCategoryEndpointToSupportSearchByIdentifierAndQueryParameters($project);
+
         $product = $this->getAProductWithProductSearchApi($project, $language);
         $sku = $product->variants[0]->sku;
         $this->assertNotEmptyString($sku);
@@ -342,6 +352,8 @@ class ProductsQueryTest extends FrontasticApiTestCase
      */
     public function testQueryProductBySkusReturnsOnlyProduct(Project $project, string $language): void
     {
+        $this->requireCategoryEndpointToSupportSearchByIdentifierAndQueryParameters($project);
+
         $product = $this->getAProductWithProductSearchApi($project, $language);
         $sku = $product->variants[0]->sku;
         $this->assertNotEmptyString($sku);
@@ -355,6 +367,8 @@ class ProductsQueryTest extends FrontasticApiTestCase
      */
     public function testQueryProductByProductIdsReturnsOnlyProduct(Project $project, string $language): void
     {
+        $this->requireCategoryEndpointToSupportSearchByIdentifierAndQueryParameters($project);
+
         $product = $this->getAProductWithProductSearchApi($project, $language);
         $productId = $product->productId;
         $this->assertNotEmptyString($productId);

@@ -20,17 +20,8 @@ class QueryValidator
             return ValidationResult::createUnsupported('Searching for SKUs is not supported.');
         }
 
-        if (!empty($query->productIds) && count($query->productIds) > 1) {
-            return ValidationResult::createUnsupported('Searching for multiple productIds is not supported.');
-        }
-
-        $hasCriteria = !empty($query->query) || !empty($query->facets) || !empty($query->filter);
-        $hasIds = !empty($query->productIds) || !empty($query->productId);
-
-        if ($hasCriteria && $hasIds) {
-            return ValidationResult::createUnsupported(
-                'Searching for productIds with additional query parameters is not supported'
-            );
+        if (!empty($query->productId) || !empty($query->productIds)) {
+            return ValidationResult::createUnsupported('Searching for productIds is not supported.');
         }
 
         return ValidationResult::createValid();
