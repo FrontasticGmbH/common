@@ -3,7 +3,6 @@
 namespace Frontastic\Common\DevelopmentBundle\EventListener;
 
 use Frontastic\Common\DevelopmentBundle\Debugger;
-
 use Frontastic\Common\JsonSerializer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
@@ -39,9 +38,15 @@ class BrowserConsoleDebuggerListener
 
         if (($headers->has('Content-Type') && preg_match('(html)', $headers->get('Content-Type')))) {
             $content = $response->getContent();
-            $debugProp = 'data-debug="' . htmlspecialchars(addcslashes(json_encode(
-                $this->serializer->serialize(Debugger::getMessages())
-            , JSON_UNESCAPED_SLASHES | JSON_HEX_QUOT), '\\')) . '"';
+            $debugProp = 'data-debug="' .
+                htmlspecialchars(addcslashes(
+                    json_encode(
+                        $this->serializer->serialize(Debugger::getMessages()),
+                        JSON_UNESCAPED_SLASHES | JSON_HEX_QUOT
+                    ),
+                    '\\'
+                )) .
+                '"';
             $content = preg_replace('(<\s*div\s*id="appData")i', '\\0 ' . $debugProp, $content);
             $response->setContent($content);
         }
