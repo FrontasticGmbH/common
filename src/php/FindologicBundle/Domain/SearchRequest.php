@@ -23,6 +23,11 @@ class SearchRequest extends DataObject
     public $attributes;
 
     /**
+     * @var string[]
+     */
+    public $outputAttributes;
+
+    /**
      * @var array
      */
     public $order;
@@ -46,6 +51,7 @@ class SearchRequest extends DataObject
             'count' => $this->count,
             'order' => $this->order,
             'attrib' => $this->attributes,
+            'outputAttrib' => $this->outputAttributes,
         ];
     }
 }

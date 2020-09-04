@@ -1,0 +1,264 @@
+{
+    "request": {
+        "query": "ordernumber:SW10002 OR ordernumber:SW10132",
+        "first": 0,
+        "count": 24,
+        "serviceId": "3330286AB8B769B8C4372E89D9BEB10F",
+        "usergroup": null,
+        "order": {
+            "field": "salesfrequency",
+            "relevanceBased": true,
+            "direction": "DESC"
+        }
+    },
+    "result": {
+        "metadata": {
+            "landingpage": null,
+            "promotion": null,
+            "searchConcept": null,
+            "effectiveQuery": "ordernumber:SW10002 OR ordernumber:SW10132",
+            "totalResults": 4,
+            "currencySymbol": "€"
+        },
+        "items": [
+            {
+                "id": "131",
+                "score": 1.38629,
+                "url": "https:\/\/ose.demo.findologic.com\/mountain-air-adventure\/fashion\/men\/131\/sw-jacket-piz-bianco",
+                "name": "(SW) JACKET PIZ BIANCO",
+                "ordernumbers": [
+                    "SW10131"
+                ],
+                "summary": "",
+                "price": 249.95,
+                "attributes": {},
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/ose.demo.findologic.com\/media\/image\/18\/c2\/bd\/SW10131.jpg",
+                "highlightedName": "<span class=\"flEmphasis\">(SW)<\/span> JACKET PIZ BIANCO"
+            },
+            {
+                "id": "133",
+                "score": 1.38629,
+                "url": "https:\/\/ose.demo.findologic.com\/mountain-air-adventure\/fashion\/women\/133\/sw-hybrid-jacket",
+                "name": "(SW) HYBRID JACKET",
+                "ordernumbers": [
+                    "SW10133"
+                ],
+                "summary": "",
+                "price": 179.95,
+                "attributes": {},
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/ose.demo.findologic.com\/media\/image\/04\/2b\/ac\/SW10133.jpg",
+                "highlightedName": "<span class=\"flEmphasis\">(SW)<\/span> HYBRID JACKET"
+            },
+            {
+                "id": "148",
+                "score": 1.38629,
+                "url": "https:\/\/ose.demo.findologic.com\/mountain-air-adventure\/fashion\/men\/148\/sw-hybrid-pants-men",
+                "name": "(SW) HYBRID PANTS MEN",
+                "ordernumbers": [
+                    "SW10148"
+                ],
+                "summary": "",
+                "price": 299.95,
+                "attributes": {},
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/ose.demo.findologic.com\/media\/image\/32\/35\/dd\/SW10148.jpg",
+                "highlightedName": "<span class=\"flEmphasis\">(SW)<\/span> HYBRID PANTS MEN"
+            },
+            {
+                "id": "149",
+                "score": 1.38629,
+                "url": "https:\/\/ose.demo.findologic.com\/mountain-air-adventure\/fashion\/women\/149\/sw-hybrid-pants-women",
+                "name": "(SW) HYBRID PANTS WOMEN",
+                "ordernumbers": [
+                    "SW10149"
+                ],
+                "summary": "",
+                "price": 299.95,
+                "attributes": {},
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/ose.demo.findologic.com\/media\/image\/17\/06\/ab\/SW10149.jpg",
+                "highlightedName": "<span class=\"flEmphasis\">(SW)<\/span> HYBRID PANTS WOMEN"
+            }
+        ],
+        "variant": {
+            "name": "classic"
+        },
+        "filters": {
+            "main": [
+                {
+                    "type": "select",
+                    "pinnedFilterValueCount": 6,
+                    "name": "cat",
+                    "displayName": "Kategorie",
+                    "selectMode": "single",
+                    "values": [
+                        {
+                            "displayName": "Mountain air & adventure",
+                            "value": "Mountain air & adventure",
+                            "weight": 0,
+                            "frequency": 4,
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "type": "range-slider",
+                    "totalRange": {
+                        "min": 179.95,
+                        "max": 299.95
+                    },
+                    "selectedRange": {
+                        "min": 179.95,
+                        "max": 299.95
+                    },
+                    "stepSize": 0.1,
+                    "unit": "€",
+                    "name": "price",
+                    "displayName": "Preis",
+                    "selectMode": "single",
+                    "values": [
+                        {
+                            "value": {
+                                "min": 179.95,
+                                "max": 179.95
+                            },
+                            "weight": 0.5,
+                            "frequency": null
+                        },
+                        {
+                            "value": {
+                                "min": 249.95,
+                                "max": 249.95
+                            },
+                            "weight": 0.5,
+                            "frequency": null
+                        },
+                        {
+                            "value": {
+                                "min": 299.95,
+                                "max": 299.95
+                            },
+                            "weight": 1,
+                            "frequency": null
+                        }
+                    ]
+                }
+            ],
+            "other": [
+                {
+                    "type": "select",
+                    "pinnedFilterValueCount": 6,
+                    "name": "brand",
+                    "displayName": "Marke",
+                    "selectMode": "multiple",
+                    "combinationOperation": "and",
+                    "values": [
+                        {
+                            "value": "ORTOVOX",
+                            "weight": 0,
+                            "frequency": null,
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "type": "color",
+                    "name": "Color",
+                    "displayName": "Color",
+                    "selectMode": "multiple",
+                    "combinationOperation": "or",
+                    "values": [
+                        {
+                            "selected": false,
+                            "value": "Black",
+                            "weight": 0.5,
+                            "frequency": null
+                        },
+                        {
+                            "selected": false,
+                            "value": "Blue",
+                            "weight": 1,
+                            "frequency": null
+                        },
+                        {
+                            "selected": false,
+                            "value": "White",
+                            "weight": 0.5,
+                            "frequency": null
+                        }
+                    ]
+                },
+                {
+                    "type": "select",
+                    "pinnedFilterValueCount": 6,
+                    "name": "Item type",
+                    "displayName": "Item type",
+                    "selectMode": "multiple",
+                    "combinationOperation": "and",
+                    "values": [
+                        {
+                            "value": "Basic variants",
+                            "weight": 1,
+                            "frequency": 2,
+                            "selected": false
+                        },
+                        {
+                            "value": "Image variants",
+                            "weight": 0.5,
+                            "frequency": 1,
+                            "selected": false
+                        },
+                        {
+                            "value": "Notification",
+                            "weight": 0.5,
+                            "frequency": 1,
+                            "selected": false
+                        },
+                        {
+                            "value": "Selective variants",
+                            "weight": 0.5,
+                            "frequency": 1,
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "type": "select",
+                    "pinnedFilterValueCount": 6,
+                    "name": "Material",
+                    "displayName": "Material",
+                    "selectMode": "multiple",
+                    "combinationOperation": "and",
+                    "values": [
+                        {
+                            "value": "New wool",
+                            "weight": 0,
+                            "frequency": 4,
+                            "selected": false
+                        },
+                        {
+                            "value": "Nylon",
+                            "weight": 0.5,
+                            "frequency": 3,
+                            "selected": false
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

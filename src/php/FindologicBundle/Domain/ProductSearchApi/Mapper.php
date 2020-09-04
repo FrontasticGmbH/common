@@ -18,12 +18,12 @@ class Mapper
     public function queryToRequest(ProductQuery $query): SearchRequest
     {
         $parameters = [
-            'query' => $this->getQueryParametersForRequest($query),
-            'identifier' => $query->productId ?? (empty($query->productIds) ? null : $query->productIds[0]),
+            'query' => $query->query,
             'first' => $query->cursor ?? $query->offset ?? null,
             'count' => $query->limit,
             'order' => $this->getSortAttributesForRequest($query),
-            'attributes' => $this->getAttributesForRequest($query)
+            'attributes' => $this->getAttributesForRequest($query),
+            'outputAttributes' => ['cat'],
         ];
 
         return new SearchRequest($parameters);
@@ -274,18 +274,5 @@ class Mapper
         }
 
         return $value;
-    }
-
-    private function getQueryParametersForRequest(ProductQuery $query): ?string
-    {
-        if ($query->sku) {
-            return $query->sku;
-        }
-
-        if (!empty($query->skus)) {
-            return $query->skus[0];
-        }
-
-        return $query->query;
     }
 }
