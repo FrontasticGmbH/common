@@ -5,7 +5,6 @@ namespace Frontastic\Common\SapCommerceCloudBundle\Domain;
 use Frontastic\Common\ProductApiBundle\Domain\Category;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
@@ -83,7 +82,7 @@ class SapProductApi implements ProductApi
         return new Result([
             'count' => count($categories),
             'items' => $categories,
-            'query' => clone($query)
+            'query' => clone($query),
         ]);
     }
 
