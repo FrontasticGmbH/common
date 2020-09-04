@@ -7,12 +7,12 @@ use GuzzleHttp\Promise\PromiseInterface;
 
 abstract class ProductSearchApiBase implements ProductSearchApi
 {
-    public final function query(ProductQuery $query): PromiseInterface
+    final public function query(ProductQuery $query): PromiseInterface
     {
         return $this->queryImplementation($query);
     }
 
-    public final function getSearchableAttributes(): array
+    final public function getSearchableAttributes(): array
     {
         return $this->getSearchableAttributesImplementation();
     }
