@@ -168,7 +168,8 @@ class Page {
     findTastic (tasticId) {
         for (let region in this.regions) {
             for (let elementIndex = 0; elementIndex < this.regions[region].elements.length; ++elementIndex) {
-                for (let [tasticIndex, tastic] of Object.entries(this.regions[region].elements[elementIndex].tastics)) {
+                for (let tasticIndex in (this.regions[region].elements[elementIndex].tastics || [])) {
+                    let tastic = this.regions[region].elements[elementIndex].tastics[tasticIndex]
                     if (tastic.tasticId === tasticId) {
                         return [region, +elementIndex, +tasticIndex]
                     }
