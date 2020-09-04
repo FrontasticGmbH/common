@@ -45,7 +45,7 @@ class FindologicProductSearchApi extends ProductSearchApiBase
         $this->validator = $validator;
     }
 
-    public function queryImplementation(ProductQuery $query): PromiseInterface
+    protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
         $validationResult = $this->validator->isSupported($query);
 
@@ -87,7 +87,7 @@ class FindologicProductSearchApi extends ProductSearchApiBase
             );
     }
 
-    public function getSearchableAttributesImplementation(): array
+    protected function getSearchableAttributesImplementation(): array
     {
         // TODO: Implement getSearchableAttributes() method.
         return [];

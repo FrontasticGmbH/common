@@ -65,7 +65,7 @@ class Commercetools extends ProductSearchApiBase
         $this->enabledFacetService = $enabledFacetService;
     }
 
-    public function queryImplementation(ProductQuery $query): PromiseInterface
+    protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
         $locale = $this->localeCreator->createLocaleFromString($query->locale);
         $defaultLocale = $this->localeCreator->createLocaleFromString($this->defaultLocale);
@@ -148,7 +148,7 @@ class Commercetools extends ProductSearchApiBase
             });
     }
 
-    public function getSearchableAttributesImplementation(): array
+    protected function getSearchableAttributesImplementation(): array
     {
         $productTypes = $this->client->fetchAsync('/product-types')->wait();
 

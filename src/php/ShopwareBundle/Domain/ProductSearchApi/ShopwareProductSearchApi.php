@@ -67,7 +67,7 @@ class ShopwareProductSearchApi extends ProductSearchApiBase
         $this->defaultLanguage = $defaultLanguage;
     }
 
-    public function queryImplementation(ProductQuery $query): PromiseInterface
+    protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
         $query = QueryFacetExpander::expandQueryEnabledFacets(
             $query,
@@ -89,7 +89,7 @@ class ShopwareProductSearchApi extends ProductSearchApiBase
         return $promise;
     }
 
-    public function getSearchableAttributesImplementation(): array
+    protected function getSearchableAttributesImplementation(): array
     {
         $localizedAttributes = $this->getLocalizedSearchableAttributes();
 

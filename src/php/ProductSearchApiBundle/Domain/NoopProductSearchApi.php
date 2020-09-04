@@ -9,7 +9,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 
 class NoopProductSearchApi extends ProductSearchApiBase
 {
-    public function queryImplementation(ProductQuery $query): PromiseInterface
+    protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
         $promise = new Promise();
 
@@ -18,7 +18,7 @@ class NoopProductSearchApi extends ProductSearchApiBase
         return $promise;
     }
 
-    public function getSearchableAttributesImplementation(): array
+    protected function getSearchableAttributesImplementation(): array
     {
         return [];
     }

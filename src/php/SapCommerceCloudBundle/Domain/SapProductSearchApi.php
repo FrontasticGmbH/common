@@ -40,7 +40,7 @@ class SapProductSearchApi extends ProductSearchApiBase
         $this->projectLanguages = $projectLanguages;
     }
 
-    public function queryImplementation(ProductQuery $query): PromiseInterface
+    protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
         $sapLocale = $this->localeCreator->createLocaleFromString($query->locale);
 
@@ -102,7 +102,7 @@ class SapProductSearchApi extends ProductSearchApiBase
         return $promise;
     }
 
-    public function getSearchableAttributesImplementation(): array
+    protected function getSearchableAttributesImplementation(): array
     {
         $languagesToFetch = [];
         foreach ($this->projectLanguages as $language) {
