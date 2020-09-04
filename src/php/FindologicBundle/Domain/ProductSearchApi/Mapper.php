@@ -165,6 +165,7 @@ class Mapper
                     'key' => $facetData['name'],
                     'min' => $this->transformValueToResult($facetData['totalRange']['min'], $facetData['name']),
                     'max' => $this->transformValueToResult($facetData['totalRange']['max'], $facetData['name']),
+                    'step' => $this->transformValueToResult($facetData['stepSize'], $facetData['name'])
                 ];
 
                 if (isset($facetData['selectedRange'])) {
