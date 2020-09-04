@@ -227,8 +227,8 @@ class Mapper
                 $attributes[$facet->handle] = $facet->terms;
             } elseif ($facet instanceof RangeFacet) {
                 $attributes[$facet->handle] = [
-                    'min' => $facet->min,
-                    'max' => $facet->max,
+                    'min' => $this->transformValueToQuery($facet->min, $facet->handle),
+                    'max' => $this->transformValueToQuery($facet->max, $facet->handle),
                 ];
             } else {
                 throw new \RuntimeException('Unsupported facet type ' . get_class($facet));
@@ -247,8 +247,8 @@ class Mapper
                 $attributes[$filter->handle] = $filter->terms;
             } elseif ($filter instanceof RangeFilter) {
                 $attributes[$filter->handle] = [
-                    'min' => $filter->min,
-                    'max' => $filter->max,
+                    'min' => $this->transformValueToQuery($filter->min, $filter->handle),
+                    'max' => $this->transformValueToQuery($filter->max, $filter->handle),
                 ];
             } else {
                 throw new \RuntimeException('Unsupported filter type ' . get_class($filter));
@@ -262,6 +262,15 @@ class Mapper
     {
         if ($valueKey === 'price') {
             return intval($value * 100);
+        }
+
+        return $value;
+    }
+
+    private function transformValueToQuery($value, string $valueKey)
+    {
+        if ($valueKey === 'price') {
+            return (float) $value / 100;
         }
 
         return $value;
