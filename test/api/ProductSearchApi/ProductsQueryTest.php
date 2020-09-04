@@ -379,6 +379,74 @@ class ProductsQueryTest extends FrontasticApiTestCase
     }
 
     /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testQueryProductsByFacetOrFilterReturnsResults(Project $project, string $language)
+    {
+        $result = $this->queryProductsWithProductSearchApi($project, $language, ['limit' => 1]);
+
+        $total = $result->total;
+
+        if (empty($result->facets)) {
+            $this->markTestSkipped('This test requires facets to be returned from an empty query. Consider looking at Facets returned from your configured EnabledFacetService implementation.');
+        }
+
+        /** @var Result\TermFacet[] $resultTermFacets */
+        $resultTermFacets = array_values(array_filter($result->facets, function(Result\Facet $facet) {
+            return $facet instanceof Result\TermFacet;
+        }));
+
+        /** @var Result\RangeFacet[] $resultRangeFacets */
+        $resultRangeFacets = array_values(array_filter($result->facets, function(Result\Facet $facet) {
+            return $facet instanceof Result\RangeFacet;
+        }));
+
+        $termFacets = count($resultTermFacets) === 0 ? [] : [
+            new ProductApi\Query\TermFacet([
+                'handle' => $resultTermFacets[0]->handle,
+                'terms' => [$resultTermFacets[0]->terms[0]->value]
+            ]),
+        ];
+
+        $rangeFacets = count($resultRangeFacets) === 0 ? [] : [
+            new ProductApi\Query\RangeFacet([
+                'handle' => $resultRangeFacets[0]->handle,
+                'min' => $resultRangeFacets[0]->min,
+                'max' => $resultRangeFacets[0]->max,
+            ]),
+        ];
+
+        $facetResults = $this->queryProductsWithProductSearchApi($project, $language, [
+            'facets' => array_merge($termFacets, $rangeFacets)
+        ]);
+
+        $this->assertLessThan($total, $facetResults->total);
+        $this->assertGreaterThan(0, count($facetResults->items));
+
+        $termFacets = count($resultTermFacets) === 0 ? [] : [
+            new ProductApi\Query\TermFilter([
+                'handle' => $resultTermFacets[0]->handle,
+                'terms' => [$resultTermFacets[0]->terms[0]->value]
+            ]),
+        ];
+
+        $rangeFacets = count($resultRangeFacets) === 0 ? [] : [
+            new ProductApi\Query\RangeFilter([
+                'handle' => $resultRangeFacets[0]->handle,
+                'min' => $resultRangeFacets[0]->min,
+                'max' => $resultRangeFacets[0]->max,
+            ]),
+        ];
+
+        $filterResults = $this->queryProductsWithProductSearchApi($project, $language, [
+            'filter' => array_merge($termFacets, $rangeFacets)
+        ]);
+
+        $this->assertLessThan($total, $filterResults->total);
+        $this->assertGreaterThan(0, count($filterResults->items));
+    }
+
+    /**
      * @return Product[]
      */
     private function queryProductsInMultipleSteps(
