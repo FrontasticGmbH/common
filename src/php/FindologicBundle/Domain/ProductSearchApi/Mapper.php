@@ -154,7 +154,6 @@ class Mapper
                 return new Result\TermFacet(
                     [
                         'handle' => $facetData['name'],
-                        // @TODO identify key vs. handle
                         'key' => $facetData['name'],
                         'terms' => $terms,
                         'selected' => $selectedTerms > 0,
