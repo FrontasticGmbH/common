@@ -4,14 +4,18 @@ namespace Frontastic\Common\ProductSearchApiBundle\Domain;
 
 use Frontastic\Common\FindologicBundle\Domain\FindologicClientFactory;
 use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\FindologicProductSearchApi;
+use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\Mapper as FindologicDataMapper;
 use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\QueryValidator;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory as CommercetoolsClientFactory;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper as CommercetoolsDataMapper;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi\Commercetools as CommercetoolsProductSearchApi;
-use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\Mapper as FindologicDataMapper;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFactory;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\SapDataMapper;
+use Frontastic\Common\SapCommerceCloudBundle\Domain\SapProductSearchApi;
 use Psr\Container\ContainerInterface;
 
 class DefaultProductSearchApiFactory implements ProductSearchApiFactory
@@ -56,6 +60,19 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
                     $this->enabledFacetService,
                     $project->languages,
                     $project->defaultLanguage
+                );
+                break;
+            case 'sap-commerce-cloud':
+                $clientFactory = $this->container->get(SapClientFactory::class);
+                $localeCreatorFactory = $this->container->get(SapLocaleCreatorFactory::class);
+
+                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+
+                $productSearchApi = new SapProductSearchApi(
+                    $client,
+                    $localeCreatorFactory->factor($project, $client),
+                    new SapDataMapper($client),
+                    $project->languages
                 );
                 break;
             case 'findologic':
