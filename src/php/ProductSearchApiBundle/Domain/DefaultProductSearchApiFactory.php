@@ -16,6 +16,11 @@ use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFacto
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapDataMapper;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapProductSearchApi;
+use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFactory;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver as ShopwareDataMapperResolver;
+use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory as ShopwareLocaleCreatorFactory;
+use Frontastic\Common\ShopwareBundle\Domain\ProductSearchApi\ShopwareProductSearchApi;
+use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
 use Psr\Container\ContainerInterface;
 
 class DefaultProductSearchApiFactory implements ProductSearchApiFactory
@@ -73,6 +78,23 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
                     $localeCreatorFactory->factor($project, $client),
                     new SapDataMapper($client),
                     $project->languages
+                );
+                break;
+            case 'shopware':
+                $clientFactory = $this->container->get(ShopwareClientFactory::class);
+                $dataMapper = $this->container->get(ShopwareDataMapperResolver::class);
+                $localeCreatorFactory = $this->container->get(ShopwareLocaleCreatorFactory::class);
+
+                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+
+                $productSearchApi = new ShopwareProductSearchApi(
+                    $client,
+                    $localeCreatorFactory->factor($project, $client),
+                    $dataMapper,
+                    $this->enabledFacetService,
+                    $this->container->get(ShopwareProjectConfigApiFactory::class),
+                    $project->languages,
+                    $project->defaultLanguage
                 );
                 break;
             case 'findologic':
