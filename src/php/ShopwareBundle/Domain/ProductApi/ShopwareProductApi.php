@@ -8,75 +8,77 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\SingleProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
-use Frontastic\Common\ShopwareBundle\Domain\AbstractShopwareApi;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApiBase;
 use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\Exception\RequestException;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
+use Frontastic\Common\ShopwareBundle\Domain\Locale\ShopwareLocale;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper\CategoryMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper\ProductMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper\ProductResultMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Query\QueryFacetExpander;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchCriteriaBuilder;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
+use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiInterface;
 use GuzzleHttp\Promise\PromiseInterface;
 use function GuzzleHttp\Promise\promise_for;
 
-class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
+class ShopwareProductApi extends ProductApiBase
 {
-    /**
-     * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService
-     */
+    /** @var ClientInterface */
+    private $client;
+
+    /** @var LocaleCreator */
+    private $localeCreator;
+
+    /** @var DataMapperResolver */
+    private $mapperResolver;
+
+    /** @var EnabledFacetService */
     private $enabledFacetService;
 
-    /**
-     * @var \Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiInterface
-     */
+    /** @var ShopwareProjectConfigApiInterface */
     private $projectConfigApi;
 
-    /**
-     * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query
-     */
-    private $query;
+    /** @var string|null */
+    private $defaultLanguage;
 
     public function __construct(
         ClientInterface $client,
-        DataMapperResolver $mapperResolver,
         LocaleCreator $localeCreator,
-        string $defaultLanguage,
+        DataMapperResolver $mapperResolver,
         EnabledFacetService $enabledFacetService,
-        ShopwareProjectConfigApiFactory $projectConfigApiFactory
+        ShopwareProjectConfigApiFactory $projectConfigApiFactory,
+        ?string $defaultLanguage
     ) {
-        parent::__construct($client, $mapperResolver, $localeCreator, $defaultLanguage);
-
+        $this->client = $client;
+        $this->localeCreator = $localeCreator;
+        $this->mapperResolver = $mapperResolver;
         $this->enabledFacetService = $enabledFacetService;
         $this->projectConfigApi = $projectConfigApiFactory->factor($this->client);
+        $this->defaultLanguage = $defaultLanguage;
     }
 
-    public function getCategories(CategoryQuery $query): array
+    protected function queryCategoriesImplementation(CategoryQuery $query): Result
     {
-        $this->query = $query;
-
         $criteria = SearchCriteriaBuilder::buildFromCategoryQuery($query);
-
         $locale = $this->parseLocaleString($query->locale);
+        $mapper = $this->buildMapper(CategoryMapper::MAPPER_NAME, $locale, $query);
 
-        return $this->client
+        $categories = $this->client
             ->forLanguage($locale->languageId)
             ->post('/sales-channel-api/v2/category', [], $criteria)
-            ->then(function ($response) {
-                return $this->mapResponse($response, CategoryMapper::MAPPER_NAME);
+            ->then(function ($response) use ($mapper) {
+                return $mapper->map($response);
             })
             ->wait();
-    }
-
-    public function queryCategories(CategoryQuery $query): Result
-    {
-        $categories = $this->getCategories($query);
 
         return new Result([
             'count' => count($categories),
@@ -85,22 +87,18 @@ class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
         ]);
     }
 
-    public function getProductTypes(ProductTypeQuery $query): array
+    protected function getProductTypesImplementation(ProductTypeQuery $query): array
     {
         return [];
     }
 
-    public function getProduct($query, string $mode = self::QUERY_SYNC): ?object
+    protected function getProductImplementation(SingleProductQuery $query): PromiseInterface
     {
-        $query = ProductApi\Query\SingleProductQuery::fromLegacyQuery($query);
-        $query->validate();
-
-        $this->query = $query;
-
         $locale = $this->parseLocaleString($query->locale);
         $client = $this->client
             ->forCurrency($locale->currencyId)
             ->forLanguage($locale->languageId);
+        $mapper = $this->buildMapper(ProductMapper::MAPPER_NAME, $locale, $query);
 
         if ($query->productId !== null) {
             $productIdPromise = promise_for($query->productId);
@@ -121,12 +119,12 @@ class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
             throw new \RuntimeException('Not implemented');
         }
 
-        $promise = $productIdPromise
-            ->then(function (string $productId) use ($query, $client): PromiseInterface {
+        return $productIdPromise
+            ->then(function (string $productId) use ($mapper, $query, $client): PromiseInterface {
                 return $client
                     ->get('/sales-channel-api/v2/product/' . $productId, ['associations[children][]' => 1])
-                    ->then(function ($response) use ($query): Product {
-                        $product = $this->mapResponse($response, ProductMapper::MAPPER_NAME);
+                    ->then(function ($response) use ($mapper, $query): Product {
+                        $product = $mapper->map($response);
                         if ($product === null) {
                             throw ProductApi\ProductNotFoundException::fromQuery($query);
                         }
@@ -144,38 +142,26 @@ class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
 
                 throw $exception;
             });
-
-        if ($mode === self::QUERY_SYNC) {
-            return $promise->wait();
-        }
-
-        return $promise;
     }
 
-    public function query(ProductQuery $query, string $mode = self::QUERY_SYNC): object
+    protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
         $query = QueryFacetExpander::expandQueryEnabledFacets(
             $query,
             $this->enabledFacetService->getEnabledFacetDefinitions()
         );
 
-        $this->query = $query;
-
         $criteria = SearchCriteriaBuilder::buildFromProductQuery($query);
-
         $locale = $this->parseLocaleString($query->locale);
+        $mapper = $this->buildMapper(ProductResultMapper::MAPPER_NAME, $locale, $query);
 
         $promise = $this->client
             ->forCurrency($locale->currencyId)
             ->forLanguage($locale->languageId)
             ->post('/sales-channel-api/v2/product', [], $criteria)
-            ->then(function ($response) {
-                return $this->mapResponse($response, ProductResultMapper::MAPPER_NAME);
+            ->then(function ($response) use ($mapper) {
+                return $mapper->map($response);
             });
-
-        if ($mode === self::QUERY_SYNC) {
-            return $promise->wait();
-        }
 
         return $promise;
     }
@@ -185,16 +171,26 @@ class ShopwareProductApi extends AbstractShopwareApi implements ProductApi
         return $this->client;
     }
 
-    protected function configureMapper(DataMapperInterface $mapper): void
+    private function parseLocaleString(string $localeString): ShopwareLocale
     {
-        parent::configureMapper($mapper);
+        return $this->localeCreator->createLocaleFromString($localeString ?? $this->defaultLanguage);
+    }
 
+    private function buildMapper(
+        string $mapperName,
+        ShopwareLocale $locale,
+        ProductApi\Query $query
+    ): DataMapperInterface {
+        $mapper = $this->mapperResolver->getMapper($mapperName);
+        if ($mapper instanceof LocaleAwareDataMapperInterface) {
+            $mapper->setLocale($locale);
+        }
         if ($mapper instanceof ProjectConfigApiAwareDataMapperInterface) {
             $mapper->setProjectConfigApi($this->projectConfigApi);
         }
-
-        if ($this->query !== null && $mapper instanceof QueryAwareDataMapperInterface) {
-            $mapper->setQuery($this->query);
+        if ($mapper instanceof QueryAwareDataMapperInterface) {
+            $mapper->setQuery($query);
         }
+        return $mapper;
     }
 }
