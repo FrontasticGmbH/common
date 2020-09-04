@@ -87,7 +87,7 @@ class ShopifyProductApi implements ProductApi
                     'categoryId' => $collectionData['node']['id'],
                     'name' => $collectionData['node']['title'],
                     'slug' => $collectionData['node']['handle'],
-                    'path' => '/' .$collectionData['node']['id'],
+                    'path' => '/' . $collectionData['node']['id'],
                 ]);
 
                 $nextCursor = $collectionData['cursor'] ?? null;
@@ -96,7 +96,7 @@ class ShopifyProductApi implements ProductApi
 
         return new Result([
             // @TODO: "total" is not available in Shopify.
-            'previousCursor' => $hasPreviousPage ? "before:\"$previousCursor\""  : null,
+            'previousCursor' => $hasPreviousPage ? "before:\"$previousCursor\"" : null,
             'nextCursor' => $hasNextPage ? "after:\"$nextCursor\"" : null,
             'count' => count($categories),
             'items' => $categories,
@@ -246,7 +246,7 @@ class ShopifyProductApi implements ProductApi
             $parameters = array_merge($parameters, $skus);
         }
 
-        $queryFilter = "query:\"". implode(' OR ', $parameters) . "\"";
+        $queryFilter = "query:\"" . implode(' OR ', $parameters) . "\"";
 
         $pageFilter = $this->buildPageFilter($query);
 
@@ -281,7 +281,7 @@ class ShopifyProductApi implements ProductApi
 
         if (count($productIds)) {
             $query->query = "{
-                nodes(ids: [\"". implode("\",\"", $productIds). "\"]) {
+                nodes(ids: [\"" . implode("\",\"", $productIds) . "\"]) {
                     id
                     ... on Product {
                         $productQuery
@@ -327,7 +327,7 @@ class ShopifyProductApi implements ProductApi
 
                 return new Result([
                     // @TODO: "total" is not available in Shopify.
-                    'previousCursor' => $hasPreviousPage ? "before:\"$previousCursor\""  : null,
+                    'previousCursor' => $hasPreviousPage ? "before:\"$previousCursor\"" : null,
                     'nextCursor' => $hasNextPage ? "after:\"$nextCursor\"" : null,
                     'count' => count($products),
                     'items' => $products,
@@ -416,7 +416,7 @@ class ShopifyProductApi implements ProductApi
             'price' => $this->mapDataToPriceValue($variantData['priceV2']),
             'currency' => $variantData['priceV2']['currencyCode'],
             'attributes' => $this->mapDataToAttributes($variantData),
-            'images' =>  [$variantData['image']['originalSrc']],
+            'images' => [$variantData['image']['originalSrc']],
             // @TODO Include dangerousInnerVariant base on locale flag
             // 'dangerousInnerVariant' => $variantData,
         ]);
