@@ -31,7 +31,13 @@
                 ],
                 "summary": "",
                 "price": 249.95,
-                "attributes": {},
+                "attributes": {
+                    "cat": [
+                        "Mountain air & adventure_Fashion_Men",
+                        "Mountain air & adventure",
+                        "Mountain air & adventure_Fashion"
+                    ]
+                },
                 "matchingOrdernumber": "",
                 "properties": {},
                 "productPlacement": null,
@@ -49,7 +55,13 @@
                 ],
                 "summary": "",
                 "price": 179.95,
-                "attributes": {},
+                "attributes": {
+                    "cat": [
+                        "Mountain air & adventure_Fashion_Women",
+                        "Mountain air & adventure",
+                        "Mountain air & adventure_Fashion"
+                    ]
+                },
                 "matchingOrdernumber": "",
                 "properties": {},
                 "productPlacement": null,
@@ -67,7 +79,13 @@
                 ],
                 "summary": "",
                 "price": 299.95,
-                "attributes": {},
+                "attributes": {
+                    "cat": [
+                        "Mountain air & adventure_Fashion_Men",
+                        "Mountain air & adventure",
+                        "Mountain air & adventure_Fashion"
+                    ]
+                },
                 "matchingOrdernumber": "",
                 "properties": {},
                 "productPlacement": null,
@@ -85,7 +103,13 @@
                 ],
                 "summary": "",
                 "price": 299.95,
-                "attributes": {},
+                "attributes": {
+                    "cat": [
+                        "Mountain air & adventure_Fashion_Women",
+                        "Mountain air & adventure",
+                        "Mountain air & adventure_Fashion"
+                    ]
+                },
                 "matchingOrdernumber": "",
                 "properties": {},
                 "productPlacement": null,
@@ -160,22 +184,6 @@
             ],
             "other": [
                 {
-                    "type": "select",
-                    "pinnedFilterValueCount": 6,
-                    "name": "brand",
-                    "displayName": "Marke",
-                    "selectMode": "multiple",
-                    "combinationOperation": "and",
-                    "values": [
-                        {
-                            "value": "ORTOVOX",
-                            "weight": 0,
-                            "frequency": null,
-                            "selected": false
-                        }
-                    ]
-                },
-                {
                     "type": "color",
                     "name": "Color",
                     "displayName": "Color",
@@ -199,62 +207,6 @@
                             "value": "White",
                             "weight": 0.5,
                             "frequency": null
-                        }
-                    ]
-                },
-                {
-                    "type": "select",
-                    "pinnedFilterValueCount": 6,
-                    "name": "Item type",
-                    "displayName": "Item type",
-                    "selectMode": "multiple",
-                    "combinationOperation": "and",
-                    "values": [
-                        {
-                            "value": "Basic variants",
-                            "weight": 1,
-                            "frequency": 2,
-                            "selected": false
-                        },
-                        {
-                            "value": "Image variants",
-                            "weight": 0.5,
-                            "frequency": 1,
-                            "selected": false
-                        },
-                        {
-                            "value": "Notification",
-                            "weight": 0.5,
-                            "frequency": 1,
-                            "selected": false
-                        },
-                        {
-                            "value": "Selective variants",
-                            "weight": 0.5,
-                            "frequency": 1,
-                            "selected": false
-                        }
-                    ]
-                },
-                {
-                    "type": "select",
-                    "pinnedFilterValueCount": 6,
-                    "name": "Material",
-                    "displayName": "Material",
-                    "selectMode": "multiple",
-                    "combinationOperation": "and",
-                    "values": [
-                        {
-                            "value": "New wool",
-                            "weight": 0,
-                            "frequency": 4,
-                            "selected": false
-                        },
-                        {
-                            "value": "Nylon",
-                            "weight": 0.5,
-                            "frequency": 3,
-                            "selected": false
                         }
                     ]
                 }
