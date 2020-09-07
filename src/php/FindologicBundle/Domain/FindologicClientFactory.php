@@ -16,14 +16,11 @@ class FindologicClientFactory
         $this->httpClient = $httpClient;
     }
 
-    public function factorForProjectAndType(Project $project, string $typeName): FindologicClient
+    public function factorForConfigs(object $typeSpecificConfig, ?object $defaultConfig = null): FindologicClient
     {
-        $typeSpecificConfiguration = $project->getConfigurationSection($typeName);
-        $findologicConfig = $project->getConfigurationSection('findologic');
-
         $config = [];
         foreach (['hostUrl', 'shopkey'] as $option) {
-            $value = $typeSpecificConfiguration->$option ?? $findologicConfig->$option ?? null;
+            $value = $typeSpecificConfig->$option ?? $defaultConfig->$option ?? null;
 
             if ($value === null) {
                 throw new \RuntimeException('Findologic config option ' . $option . ' is not set');
@@ -38,10 +35,14 @@ class FindologicClientFactory
             $config[$option] = $value;
         }
 
-        return new FindologicClient(
-            $this->httpClient,
-            $config['hostUrl'],
-            $config['shopkey']
-        );
+        return new FindologicClient($this->httpClient, $config['hostUrl'], $config['shopkey']);
+    }
+
+    public function factorForProjectAndType(Project $project, string $typeName): FindologicClient
+    {
+        $typeSpecificConfiguration = $project->getConfigurationSection($typeName);
+        $findologicConfig = $project->getConfigurationSection('findologic');
+
+        return $this->factorForConfigs($typeSpecificConfiguration, $findologicConfig);
     }
 }
