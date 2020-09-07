@@ -37,12 +37,4 @@ class FindologicClientFactory
 
         return new FindologicClient($this->httpClient, $config['hostUrl'], $config['shopkey']);
     }
-
-    public function factorForProjectAndType(Project $project, string $typeName): FindologicClient
-    {
-        $typeSpecificConfiguration = $project->getConfigurationSection($typeName);
-        $findologicConfig = $project->getConfigurationSection('findologic');
-
-        return $this->factorForConfigs($typeSpecificConfiguration, $findologicConfig);
-    }
 }
