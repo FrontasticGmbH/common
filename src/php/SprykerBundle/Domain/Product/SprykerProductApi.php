@@ -12,6 +12,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApiBase;
 use Frontastic\Common\SprykerBundle\BaseApi\ProductExpandingTrait;
 use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreator;
+use Frontastic\Common\SprykerBundle\Domain\Locale\SprykerLocale;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver;
 use Frontastic\Common\SprykerBundle\Domain\Product\Mapper\CategoriesMapper;
 use Frontastic\Common\SprykerBundle\Domain\Product\Mapper\ProductConcreteMapper;
@@ -43,10 +44,14 @@ class SprykerProductApi extends ProductApiBase
     /** @var array */
     protected $concreteProductResources;
 
+    /** @var string|null */
+    private $defaultLanguage;
+
     public function __construct(
         SprykerClientInterface $client,
         MapperResolver $mapperResolver,
         LocaleCreator $localeCreator,
+        ?string $defaultLanguage,
         array $productResources = SprykerProductApiExtendedConstants::SPRYKER_DEFAULT_PRODUCT_RESOURCES,
         array $queryResources = SprykerProductApiExtendedConstants::SPRYKER_PRODUCT_QUERY_RESOURCES,
         array $concreteProductResources = SprykerProductApiExtendedConstants::SPRYKER_DEFAULT_CONCRETE_PRODUCT_RESOURCES
@@ -54,6 +59,7 @@ class SprykerProductApi extends ProductApiBase
         $this->client = $client;
         $this->mapperResolver = $mapperResolver;
         $this->localeCreator = $localeCreator;
+        $this->defaultLanguage = $defaultLanguage;
         $this->productResources = $productResources;
         $this->queryResources = $queryResources;
         $this->concreteProductResources = $concreteProductResources;
@@ -226,13 +232,30 @@ class SprykerProductApi extends ProductApiBase
         return array_merge($resources, $response->document()->includedResources());
     }
 
+    private function parseLocaleString(string $localeString): SprykerLocale
+    {
+        return $this->localeCreator->createLocaleFromString($localeString ?? $this->defaultLanguage);
+    }
+
+    protected function getSeparator(string $url): string
+    {
+        return (strpos($url, '?') === false) ? '?' : '&';
+    }
+
+    protected function withCurrency(string $url, string $currency): string
+    {
+        $separator = $this->getSeparator($url);
+
+        return "{$url}{$separator}currency={$currency}";
+    }
+
     private function withIncludes(string $url, array $includes = []): string
     {
         if (count($includes) === 0) {
             return $url;
         }
 
-        $separator = (strpos($url, '?') === false) ? '?' : '&';
+        $separator = $this->getSeparator($url);
         $includesString = implode(',', $includes);
 
         return "{$url}{$separator}include={$includesString}";

@@ -124,7 +124,8 @@ class DefaultProductApiFactory implements ProductApiFactory
                 $productApi = new SprykerProductApi(
                     $client,
                     $dataMapper,
-                    $localeCreatorFactory->factor($project, $client)
+                    $localeCreatorFactory->factor($project, $client),
+                    $project->defaultLanguage
                 );
 
                 break;
