@@ -125,9 +125,9 @@ class FindologicProductSearchApi extends ProductSearchApiBase
                 $attributesRequest = new SearchRequest(['count' => 1]);
 
                 $attributeRequests = array_map(
-                    function($language) use ($attributesRequest) {
+                    function ($language) use ($attributesRequest) {
                         return $this->client->search($language, $attributesRequest)
-                            ->then(function($result) {
+                            ->then(function ($result) {
                                 $availableAttributeData = array_merge(
                                     $result['body']['result']['filters']['main'],
                                     $result['body']['result']['filters']['other']
