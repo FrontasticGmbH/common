@@ -128,7 +128,7 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
         $response = $this->client
             ->forLanguage($locale->language)
             ->get(
-                $this->withCurrency($url, $locale->currency)
+                $this->withCurrency($url, $locale->currency),
                 [],
                 ProductApi::QUERY_ASYNC
             )
