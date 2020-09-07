@@ -1,12 +1,8 @@
 <?php
 
-namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi;
+namespace Frontastic\Common\FindologicBundle\Domain\ProductSearchApi;
 
 use Frontastic\Common\FindologicBundle\Domain\FindologicClient;
-use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\FindologicProductSearchApi;
-use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\Mapper;
-use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\QueryValidator;
-use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\ValidationResult;
 use Frontastic\Common\FindologicBundle\Domain\SearchRequest;
 use Frontastic\Common\FindologicBundle\Exception\ServiceNotAliveException;
 use Frontastic\Common\HttpClient;
