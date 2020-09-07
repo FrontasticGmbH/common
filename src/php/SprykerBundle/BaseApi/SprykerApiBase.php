@@ -86,6 +86,18 @@ class SprykerApiBase
             ->mapResourceArray($response->document()->primaryResources());
     }
 
+    protected function getSeparator(string $url): string
+    {
+        return (strpos($url, '?') === false) ? '?' : '&';
+    }
+
+    protected function withCurrency(string $url, string $currency): string
+    {
+        $separator = $this->getSeparator($url);
+
+        return "{$url}{$separator}currency={$currency}";
+    }
+
     /**
      * @param string $url
      * @param array $includes
@@ -98,12 +110,11 @@ class SprykerApiBase
             return $url;
         }
 
-        $separator = (strpos($url, '?') === false) ? '?' : '&';
+        $separator = $this->getSeparator($url);
         $includesString = implode(',', $includes);
 
         return "{$url}{$separator}include={$includesString}";
     }
-
 
     /**
      * @param string $json

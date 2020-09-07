@@ -53,10 +53,16 @@ class CustomerCart extends AbstractSprykerCart
 
     public function getById(string $cartId, string $locale = null): Cart
     {
-        $response = $this->client->get(
-            $this->withIncludes("/carts/{$cartId}", $this->customerCartIncludes),
-            $this->getAuthHeader()
-        );
+        $sprykerLocale = $this->parseLocaleString($locale);
+
+        $url = $this->withIncludes("/carts/{$cartId}", $this->customerCartIncludes);
+
+        $response = $this->client
+            ->forLanguage($sprykerLocale->language)
+            ->get(
+                $this->withCurrency($url, $sprykerLocale->currency),
+                $this->getAuthHeader()
+            );
 
         if ($response->document()->hasAnyPrimaryResources()) {
             return $this->mapResponseToCart($response);
@@ -73,10 +79,16 @@ class CustomerCart extends AbstractSprykerCart
      */
     public function getCart(?string $id = null, ?string $locale = null): Cart
     {
-        $response = $this->client->get(
-            $this->withIncludes('/carts', $this->customerCartIncludes),
-            $this->getAuthHeader()
-        );
+        $sprykerLocale = $this->parseLocaleString($locale);
+
+        $url = $this->withIncludes('/carts', $this->customerCartIncludes);
+
+        $response = $this->client
+            ->forLanguage($sprykerLocale->language)
+            ->get(
+                $this->withCurrency($url, $sprykerLocale->currency),
+                $this->getAuthHeader()
+            );
 
         if ($response->document()->hasAnyPrimaryResources()) {
             return $this->mapResponseToCart($response);

@@ -44,10 +44,16 @@ class GuestCart extends AbstractSprykerCart
 
     public function getById(string $cartId, string $locale = null): Cart
     {
-        $response = $this->client->get(
-            $this->withIncludes("/guest-carts/$cartId", $this->guestCartIncludes),
-            $this->accountHelper->getAnonymousHeader()
-        );
+        $sprykerLocale = $this->parseLocaleString($locale);
+
+        $url = $this->withIncludes("/guest-carts/$cartId", $this->guestCartIncludes);
+
+        $response = $this->client
+            ->forLanguage($sprykerLocale->language)
+            ->get(
+                $this->withCurrency($url, $sprykerLocale->currency),
+                $this->accountHelper->getAnonymousHeader()
+            );
 
         if ($response->document()->hasAnyPrimaryResources()) {
             return $this->mapResponseToCart($response);
@@ -56,8 +62,7 @@ class GuestCart extends AbstractSprykerCart
         return new Cart([
             'cartId' => $cartId,
             'cartVersion' => '1',
-            // @TODO: Get currency from locale
-            'currency' => 'EUR'
+            'currency' => $sprykerLocale->currency
         ]);
     }
 
@@ -69,10 +74,16 @@ class GuestCart extends AbstractSprykerCart
      */
     public function getCart(?string $id = null, ?string $locale = null): Cart
     {
-        $response = $this->client->get(
-            $this->withIncludes('/guest-carts', $this->guestCartIncludes),
-            $this->accountHelper->getAnonymousHeader($id)
-        );
+        $sprykerLocale = $this->parseLocaleString($locale);
+
+        $url = $this->withIncludes('/guest-carts', $this->guestCartIncludes);
+
+        $response = $this->client
+            ->forLanguage($sprykerLocale->language)
+            ->get(
+                $this->withCurrency($url, $sprykerLocale->currency),
+                $this->accountHelper->getAnonymousHeader($id)
+            );
 
         if ($response->document()->hasAnyPrimaryResources()) {
             return $this->mapResponseToCart($response);

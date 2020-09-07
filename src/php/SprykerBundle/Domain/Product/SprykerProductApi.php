@@ -75,7 +75,7 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
      */
     public function getCategories(CategoryQuery $query): array
     {
-        $locale = $this->localeCreator->createLocaleFromString($query->locale);
+        $locale = $this->parseLocaleString($query->locale);
 
         $response = $this->client
             ->forLanguage($locale->language)
@@ -115,20 +115,20 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
         $query = SingleProductQuery::fromLegacyQuery($query);
         $query->validate();
 
-        $locale = $this->localeCreator->createLocaleFromString($query->locale);
+        $locale = $this->parseLocaleString($query->locale);
 
-        $endpoint = $this->withIncludes("/abstract-products/{$query->productId}", $this->productResources);
+        $url = $this->withIncludes("/abstract-products/{$query->productId}", $this->productResources);
         $mapperName = ProductMapper::MAPPER_NAME;
 
         if ($query->sku) {
-            $endpoint = $this->withIncludes("/concrete-products/{$query->sku}", $this->concreteProductResources);
+            $url = $this->withIncludes("/concrete-products/{$query->sku}", $this->concreteProductResources);
             $mapperName = ProductConcreteMapper::MAPPER_NAME;
         }
 
         $response = $this->client
             ->forLanguage($locale->language)
             ->get(
-                $endpoint,
+                $this->withCurrency($url, $locale->currency)
                 [],
                 ProductApi::QUERY_ASYNC
             )
@@ -169,13 +169,15 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
      */
     public function query(ProductQuery $query, string $mode = ProductApi::QUERY_SYNC): object
     {
-        $locale = $this->localeCreator->createLocaleFromString($query->locale);
+        $locale = $this->parseLocaleString($query->locale);
 
-        $searchQuery = CatalogSearchQuery::createFromProductQuery($query) . "&currency=$locale->currency";
+        $searchQuery = CatalogSearchQuery::createFromProductQuery($query);
+        $url = $this->withIncludes("/catalog-search?{$searchQuery}", $this->queryResources);
+
         $response = $this->client
             ->forLanguage($locale->language)
             ->get(
-                $this->withIncludes("/catalog-search?{$searchQuery}", $this->queryResources),
+                $this->withCurrency($url, $locale->currency),
                 [],
                 ProductApi::QUERY_ASYNC
             )
