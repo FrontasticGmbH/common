@@ -13,33 +13,27 @@ class FindologicClient
     private const REQUEST_TIMEOUT = 3;
 
     /**
-     * @var string
-     */
-    private $shopkey;
-
-    /**
-     * @var string
-     */
-    private $hostUrl;
-
-    /**
      * @var HttpClient
      */
     private $httpClient;
 
-    public function __construct(
-        HttpClient $httpClient,
-        string $hostUrl,
-        string $shopkey
-    ) {
+    /**
+     * @var array<string, FindologicClientConfig> An array of client configs keyed by language
+     */
+    private $configs;
+
+    /**
+     * @param array<string, FindologicClientConfig> $configs
+     */
+    public function __construct(HttpClient $httpClient, array $configs)
+    {
         $this->httpClient = $httpClient;
-        $this->hostUrl = $hostUrl;
-        $this->shopkey = $shopkey;
+        $this->configs = $configs;
     }
 
-    public function isAlive(): PromiseInterface
+    public function isAlive(string $language): PromiseInterface
     {
-        $url = $this->buildQueryUrl('alivetest.php');
+        $url = $this->buildQueryUrl($language, 'alivetest.php');
         $options = new HttpClient\Options(['timeout' => self::ALIVE_TIMEOUT]);
 
         return $this->httpClient
@@ -60,12 +54,12 @@ class FindologicClient
             );
     }
 
-    public function search(SearchRequest $request): PromiseInterface
+    public function search(string $language, SearchRequest $request): PromiseInterface
     {
-        return $this->isAlive()
+        return $this->isAlive($language)
             ->then(
-                function () use ($request) {
-                    $url = $this->buildQueryUrl('index.php', $request->toArray());
+                function () use ($language, $request) {
+                    $url = $this->buildQueryUrl($language, 'index.php', $request->toArray());
                     $options = new HttpClient\Options(['timeout' => self::REQUEST_TIMEOUT]);
 
                     return $this->httpClient
@@ -83,13 +77,13 @@ class FindologicClient
             );
     }
 
-    private function buildQueryUrl(string $route, array $parameters = null)
+    private function buildQueryUrl(string $language, string $route, array $parameters = null)
     {
         return sprintf(
             '%s/%s?shopkey=%s&outputAdapter=JSON_1.0&outputAttrib[]=cat%s',
-            $this->hostUrl,
+            $this->configs[$language]->hostUrl,
             $route,
-            $this->shopkey,
+            $this->configs[$language]->shopkey,
             empty($parameters) ? '' : '&' . http_build_query($parameters)
         );
     }

@@ -11,9 +11,9 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiBase;
 use Frontastic\Common\ProjectApiBundle\Domain\Attribute;
-use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Log\LoggerInterface;
+use function GuzzleHttp\Promise\unwrap;
 
 class FindologicProductSearchApi extends ProductSearchApiBase
 {
@@ -42,18 +42,25 @@ class FindologicProductSearchApi extends ProductSearchApiBase
      */
     private $logger;
 
+    /**
+     * @var string[]
+     */
+    private $languages;
+
     public function __construct(
         FindologicClient $client,
         ProductSearchApi $originalDataSource,
         Mapper $mapper,
         QueryValidator $validator,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        array $languages
     ) {
         $this->client = $client;
         $this->originalDataSource = $originalDataSource;
         $this->mapper = $mapper;
         $this->validator = $validator;
         $this->logger = $logger;
+        $this->languages = $languages;
     }
 
     protected function queryImplementation(ProductQuery $query): PromiseInterface
@@ -66,7 +73,7 @@ class FindologicProductSearchApi extends ProductSearchApiBase
 
         $request = $this->mapper->queryToRequest($query);
 
-        return $this->client->search($request)
+        return $this->client->search($query->locale, $request)
             ->then(
                 function ($result) use ($query) {
                     $currentCursor = $query->cursor ?? $query->offset ?? null;
@@ -106,27 +113,37 @@ class FindologicProductSearchApi extends ProductSearchApiBase
             ->then(function (array $originalAttributes) {
                 $attributesRequest = new SearchRequest(['limit' => 1]);
 
-                return $this->client->search($attributesRequest)
-                    ->then(function($result) use ($originalAttributes) {
-                        $availableAttributeData = array_merge(
-                            $result['result']['filters']['main'],
-                            $result['result']['filters']['other']
-                        );
+                $attributeRequests = array_map(
+                    function($language) use ($attributesRequest) {
+                        return $this->client->search($language, $attributesRequest)
+                            ->then(function($result) {
+                                $availableAttributeData = array_merge(
+                                    $result['result']['filters']['main'],
+                                    $result['result']['filters']['other']
+                                );
 
-                        $availableAttributeIds = array_map(
-                            function (array $attributeData) {
-                                return $attributeData['name'];
-                            },
-                            $availableAttributeData
-                        );
+                                return array_map(
+                                    function (array $attributeData) {
+                                        return $attributeData['name'];
+                                    },
+                                    $availableAttributeData
+                                );
+                            });
+                    },
+                    $this->languages
+                );
 
-                        return array_filter(
-                            $originalAttributes,
-                            function (Attribute $originalAttribute) use ($availableAttributeIds) {
-                                return in_array($originalAttribute->attributeId, $availableAttributeIds);
-                            }
-                        );
-                    });
+                $attributeIds = unwrap($attributeRequests);
+
+                // Only use attributes available across all locales
+                $availableAttributeIds = array_intersect(...$attributeIds);
+
+                return array_filter(
+                    $originalAttributes,
+                    function (Attribute $originalAttribute) use ($availableAttributeIds) {
+                        return in_array($originalAttribute->attributeId, $availableAttributeIds);
+                    }
+                );
             });
     }
 

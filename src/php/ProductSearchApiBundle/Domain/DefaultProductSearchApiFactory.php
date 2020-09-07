@@ -135,7 +135,7 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
                 $dataMapper = $this->container->get(FindologicDataMapper::class);
                 $queryValidator = $this->container->get(QueryValidator::class);
 
-                $client = $clientFactory->factorForConfigs($productSearchConfig, $engineConfig);
+                $client = $clientFactory->factorForConfigs($project->languages, $productSearchConfig, $engineConfig);
 
                 $originalDataSourceConfig = (object) $productSearchConfig->originalDataSource;
                 $originalDataSourceVendorConfig = $project->getConfigurationSection($originalDataSourceConfig->engine);
@@ -151,7 +151,8 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
                     $originalDataSource,
                     $dataMapper,
                     $queryValidator,
-                    $this->logger
+                    $this->logger,
+                    $project->languages
                 );
                 break;
             default:
