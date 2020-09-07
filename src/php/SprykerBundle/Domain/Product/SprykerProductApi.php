@@ -2,7 +2,6 @@
 
 namespace Frontastic\Common\SprykerBundle\Domain\Product;
 
-use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
@@ -10,70 +9,57 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\SingleProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApiBase;
 use Frontastic\Common\SprykerBundle\BaseApi\ProductExpandingTrait;
-use Frontastic\Common\SprykerBundle\BaseApi\SprykerApiBase;
 use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreator;
-use Frontastic\Common\SprykerBundle\Domain\Product\Expander\Nested\NestedSearchProductAbstractExpander;
-use Frontastic\Common\SprykerBundle\Domain\Product\Mapper\ProductConcreteMapper;
-use Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver;
 use Frontastic\Common\SprykerBundle\Domain\Product\Mapper\CategoriesMapper;
+use Frontastic\Common\SprykerBundle\Domain\Product\Mapper\ProductConcreteMapper;
 use Frontastic\Common\SprykerBundle\Domain\Product\Mapper\ProductMapper;
 use Frontastic\Common\SprykerBundle\Domain\Product\Mapper\ProductResultMapper;
+use Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface;
 use GuzzleHttp\Promise\PromiseInterface;
 use WoohooLabs\Yang\JsonApi\Response\JsonApiResponse;
 
-class SprykerProductApi extends SprykerApiBase implements ProductApi
+class SprykerProductApi extends ProductApiBase
 {
     use ProductExpandingTrait;
 
-    /**
-     * @var array
-     */
+    /** @var SprykerClientInterface */
+    private $client;
+
+    /** @var MapperResolver */
+    private $mapperResolver;
+
+    /** @var LocaleCreator */
+    private $localeCreator;
+
+    /** @var array */
     protected $productResources;
 
-    /**
-     * @var array
-     */
+    /** @var array */
+    private $queryResources;
+
+    /** @var array */
     protected $concreteProductResources;
 
-    /**
-     * @var array
-     */
-    protected $queryResources;
-
-    /**
-     * SprykerProductApi constructor.
-     *
-     * @param \Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface $client
-     * @param \Frontastic\Common\SprykerBundle\Domain\MapperResolver $mapperResolver
-     * @param LocaleCreator $localeCreator
-     * @param array $resources
-     * @param array $queryResources
-     * @param array $concreteProductResources
-     */
     public function __construct(
         SprykerClientInterface $client,
         MapperResolver $mapperResolver,
         LocaleCreator $localeCreator,
-        array $resources = SprykerProductApiExtendedConstants::SPRYKER_DEFAULT_PRODUCT_RESOURCES,
+        array $productResources = SprykerProductApiExtendedConstants::SPRYKER_DEFAULT_PRODUCT_RESOURCES,
         array $queryResources = SprykerProductApiExtendedConstants::SPRYKER_PRODUCT_QUERY_RESOURCES,
         array $concreteProductResources = SprykerProductApiExtendedConstants::SPRYKER_DEFAULT_CONCRETE_PRODUCT_RESOURCES
     ) {
-        parent::__construct($client, $mapperResolver, $localeCreator);
-        $this->productResources = $resources;
+        $this->client = $client;
+        $this->mapperResolver = $mapperResolver;
+        $this->localeCreator = $localeCreator;
+        $this->productResources = $productResources;
         $this->queryResources = $queryResources;
         $this->concreteProductResources = $concreteProductResources;
-
-        $this->registerProductExpander(new NestedSearchProductAbstractExpander());
     }
 
-    /**
-     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery $query
-     *
-     * @return \Frontastic\Common\ProductApiBundle\Domain\Category[]
-     */
-    public function getCategories(CategoryQuery $query): array
+    protected function queryCategoriesImplementation(CategoryQuery $query): Result
     {
         $locale = $this->parseLocaleString($query->locale);
 
@@ -81,59 +67,51 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
             ->forLanguage($locale->language)
             ->get('/category-trees');
 
-        return $this->mapResponseResource($response, CategoriesMapper::MAPPER_NAME);
-    }
-
-    public function queryCategories(CategoryQuery $query): Result
-    {
-        $categories = $this->getCategories($query);
+        $document = $response->document();
+        $categories = $this->mapperResolver->getMapper(CategoriesMapper::MAPPER_NAME)->mapResource(
+            $document->isSingleResourceDocument() ?
+                $document->primaryResource() :
+                $document->primaryResources()[0]
+        );
 
         return new Result([
             'count' => count($categories),
             'items' => $categories,
-            'query' => clone($query)
+            'query' => clone($query),
         ]);
     }
 
-    /**
-     * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery $query
-     *
-     * @return \Frontastic\Common\ProductApiBundle\Domain\ProductType[]
-     */
-    public function getProductTypes(ProductTypeQuery $query): array
+    protected function getProductTypesImplementation(ProductTypeQuery $query): array
     {
         return [];
     }
 
-    /**
-     * @param $query
-     * @param string $mode One of the QUERY_* connstants. Execute the query synchronously or asynchronously?
-     * @return Product|PromiseInterface|null A product or null when the mode is sync and a promise if the mode is async.
-     */
-    public function getProduct($query, string $mode = ProductApi::QUERY_SYNC): ?object
+    protected function getProductImplementation(SingleProductQuery $query): PromiseInterface
     {
-        $query = SingleProductQuery::fromLegacyQuery($query);
-        $query->validate();
-
         $locale = $this->parseLocaleString($query->locale);
-
-        $url = $this->withIncludes("/abstract-products/{$query->productId}", $this->productResources);
-        $mapperName = ProductMapper::MAPPER_NAME;
 
         if ($query->sku) {
             $url = $this->withIncludes("/concrete-products/{$query->sku}", $this->concreteProductResources);
-            $mapperName = ProductConcreteMapper::MAPPER_NAME;
+            $mapper = $this->mapperResolver->getMapper(ProductConcreteMapper::MAPPER_NAME);
+        } else {
+            $url = $this->withIncludes("/abstract-products/{$query->productId}", $this->productResources);
+            $mapper = $this->mapperResolver->getMapper(ProductMapper::MAPPER_NAME);
         }
 
-        $response = $this->client
+        return $this->client
             ->forLanguage($locale->language)
             ->get(
                 $this->withCurrency($url, $locale->currency),
                 [],
                 ProductApi::QUERY_ASYNC
             )
-            ->then(function ($response) use ($mapperName) {
-                $product = $this->mapResponseResource($response, $mapperName);
+            ->then(function ($response) use ($mapper) {
+                $document = $response->document();
+                $product = $mapper->mapResource(
+                    $document->isSingleResourceDocument() ?
+                        $document->primaryResource() :
+                        $document->primaryResources()[0]
+                );
                 $resources = $this->getAllResources($response);
 
                 if ($product && count($resources) > 0) {
@@ -154,25 +132,17 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
                 }
                 throw $exception;
             });
-
-        if ($mode === ProductApi::QUERY_SYNC) {
-            return $response->wait();
-        }
-
-        return $response;
     }
 
-    /**
-     * @param ProductQuery $query
-     * @param string $mode One of the QUERY_* constants. Execute the query synchronously or asynchronously?
-     * @return Result|PromiseInterface<Result> A result when the mode is sync and a promise if the mode is async.
-     */
-    public function query(ProductQuery $query, string $mode = ProductApi::QUERY_SYNC): object
+    protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
         $locale = $this->parseLocaleString($query->locale);
 
         $searchQuery = CatalogSearchQuery::createFromProductQuery($query);
+
         $url = $this->withIncludes("/catalog-search?{$searchQuery}", $this->queryResources);
+
+        $mapper = $this->mapperResolver->getMapper(ProductResultMapper::MAPPER_NAME);
 
         $response = $this->client
             ->forLanguage($locale->language)
@@ -181,12 +151,19 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
                 [],
                 ProductApi::QUERY_ASYNC
             )
-            ->then(function ($response) use ($query) {
-                $products = $this->mapResponseResource($response, ProductResultMapper::MAPPER_NAME);
-                $includedResources = $this->getAllResources($response) ?? [];
+            ->then(function (JsonApiResponse $response) use ($mapper, $query): Result {
+                $document = $response->document();
+                $resources = $document->isSingleResourceDocument() ?
+                    [$document->primaryResource()] :
+                    $document->primaryResources();
+                if ($document->hasAnyIncludedResources()) {
+                    $resources = array_merge($resources, $document->includedResources());
+                }
 
-                if (count($products->items) && count($includedResources)) {
-                    $this->expandProductList($products->items, $includedResources);
+                $products = $mapper->mapResource($resources[0]);
+
+                if (count($products->items) && count($resources)) {
+                    $this->expandProductList($products->items, $resources);
                 }
 
                 $products->query = clone $query;
@@ -196,15 +173,11 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
             ->otherwise(function (\Throwable $exception) use ($query) {
                 if ($exception instanceof RequestException && $exception->getCode() >= 500) {
                     return new Result([
-                        'query' => clone $query
+                        'query' => clone $query,
                     ]);
                 }
                 throw $exception;
             });
-
-        if ($mode === ProductApi::QUERY_SYNC) {
-            return $response->wait();
-        }
 
         return $response;
     }
@@ -251,5 +224,17 @@ class SprykerProductApi extends SprykerApiBase implements ProductApi
         }
 
         return array_merge($resources, $response->document()->includedResources());
+    }
+
+    private function withIncludes(string $url, array $includes = []): string
+    {
+        if (count($includes) === 0) {
+            return $url;
+        }
+
+        $separator = (strpos($url, '?') === false) ? '?' : '&';
+        $includesString = implode(',', $includes);
+
+        return "{$url}{$separator}include={$includesString}";
     }
 }

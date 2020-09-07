@@ -28,11 +28,8 @@ class ClientFactory
         $this->httpClient = $httpClient;
     }
 
-    public function factorForProjectAndType(Project $project, string $typeName): Client
+    public function factorForConfigs(object $typeSpecificConfiguration, ?object $genericConfiguration = null): Client
     {
-        $typeSpecificConfiguration = $project->getConfigurationSection($typeName);
-        $genericConfiguration = $project->getConfigurationSection(self::MAIN_CONFIGURATION_SECTION);
-
         $config = $this->resolveConfiguration($typeSpecificConfiguration, $genericConfiguration);
 
         return new Client(
@@ -40,6 +37,14 @@ class ClientFactory
             $config['apiKey'],
             $config['endpoint']
         );
+    }
+
+    public function factorForProjectAndType(Project $project, string $typeName): Client
+    {
+        $typeSpecificConfiguration = $project->getConfigurationSection($typeName);
+        $genericConfiguration = $project->getConfigurationSection(self::MAIN_CONFIGURATION_SECTION);
+
+        return $this->factorForConfigs($typeSpecificConfiguration, $genericConfiguration);
     }
 
     private function resolveConfiguration(object $typeSpecificConfiguration, object $genericConfiguration): array

@@ -12,11 +12,13 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\SingleProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApiBase;
 use Frontastic\Common\ProductApiBundle\Domain\ProductType;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClient;
+use GuzzleHttp\Promise\PromiseInterface;
 
-class ShopifyProductApi implements ProductApi
+class ShopifyProductApi extends ProductApiBase
 {
     private const DEFAULT_VARIANTS_TO_FETCH = 1;
     private const DEFAULT_COLLECTIONS_TO_FETCH = 10;
@@ -32,15 +34,7 @@ class ShopifyProductApi implements ProductApi
         $this->client = $client;
     }
 
-    /**
-     * @deprecated Use queryCategories instead. This method only exists for backwards compatibility.
-     */
-    public function getCategories(CategoryQuery $query): array
-    {
-        return $this->queryCategories($query)->items;
-    }
-
-    public function queryCategories(CategoryQuery $query): Result
+    protected function queryCategoriesImplementation(CategoryQuery $query): Result
     {
         $filters = [];
 
@@ -87,7 +81,7 @@ class ShopifyProductApi implements ProductApi
                     'categoryId' => $collectionData['node']['id'],
                     'name' => $collectionData['node']['title'],
                     'slug' => $collectionData['node']['handle'],
-                    'path' => '/' .$collectionData['node']['id'],
+                    'path' => '/' . $collectionData['node']['id'],
                 ]);
 
                 $nextCursor = $collectionData['cursor'] ?? null;
@@ -96,7 +90,7 @@ class ShopifyProductApi implements ProductApi
 
         return new Result([
             // @TODO: "total" is not available in Shopify.
-            'previousCursor' => $hasPreviousPage ? "before:\"$previousCursor\""  : null,
+            'previousCursor' => $hasPreviousPage ? "before:\"$previousCursor\"" : null,
             'nextCursor' => $hasNextPage ? "after:\"$nextCursor\"" : null,
             'count' => count($categories),
             'items' => $categories,
@@ -104,7 +98,7 @@ class ShopifyProductApi implements ProductApi
         ]);
     }
 
-    public function getProductTypes(ProductTypeQuery $query): array
+    protected function getProductTypesImplementation(ProductTypeQuery $query): array
     {
         $queryString = "{
             productTypes(first: " . self::DEFAULT_PRODUCT_TYPES_TO_FETCH . ") {
@@ -133,13 +127,10 @@ class ShopifyProductApi implements ProductApi
         return $productTypes;
     }
 
-    public function getProduct($query, string $mode = self::QUERY_SYNC): ?object
+    protected function getProductImplementation(SingleProductQuery $query): PromiseInterface
     {
-        $query = SingleProductQuery::fromLegacyQuery($query);
-        $query->validate();
-
         if ($query->sku) {
-            $promise = $this
+            return $this
                 ->query(
                     new ProductQuery([
                         'skus' => [$query->sku],
@@ -156,34 +147,28 @@ class ShopifyProductApi implements ProductApi
                         return reset($productQueryResult->items);
                     }
                 );
-        } else {
-            $promise = $this
-                ->query(
-                    new ProductQuery([
-                        'productIds' => [$query->productId],
-                        'locale' => $query->locale,
-                        'loadDangerousInnerData' => $query->loadDangerousInnerData,
-                    ]),
-                    self::QUERY_ASYNC
-                )
-                ->then(
-                    function (Result $productQueryResult) use ($query) {
-                        if (count($productQueryResult->items) === 0) {
-                            throw ProductNotFoundException::byProductId($query->productId);
-                        }
-                        return reset($productQueryResult->items);
+        }
+
+        return $this
+            ->query(
+                new ProductQuery([
+                    'productIds' => [$query->productId],
+                    'locale' => $query->locale,
+                    'loadDangerousInnerData' => $query->loadDangerousInnerData,
+                ]),
+                self::QUERY_ASYNC
+            )
+            ->then(
+                function (Result $productQueryResult) use ($query) {
+                    if (count($productQueryResult->items) === 0) {
+                        throw ProductNotFoundException::byProductId($query->productId);
                     }
-                );
-        }
-
-        if ($mode === self::QUERY_SYNC) {
-            return $promise->wait();
-        }
-
-        return $promise;
+                    return reset($productQueryResult->items);
+                }
+            );
     }
 
-    public function query(ProductQuery $query, string $mode = self::QUERY_SYNC): object
+    protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
         $productQuery = "
             id
@@ -246,7 +231,7 @@ class ShopifyProductApi implements ProductApi
             $parameters = array_merge($parameters, $skus);
         }
 
-        $queryFilter = "query:\"". implode(' OR ', $parameters) . "\"";
+        $queryFilter = "query:\"" . implode(' OR ', $parameters) . "\"";
 
         $pageFilter = $this->buildPageFilter($query);
 
@@ -281,7 +266,7 @@ class ShopifyProductApi implements ProductApi
 
         if (count($productIds)) {
             $query->query = "{
-                nodes(ids: [\"". implode("\",\"", $productIds). "\"]) {
+                nodes(ids: [\"" . implode("\",\"", $productIds) . "\"]) {
                     id
                     ... on Product {
                         $productQuery
@@ -290,7 +275,7 @@ class ShopifyProductApi implements ProductApi
             }";
         }
 
-        $promise = $this->client
+        return $this->client
             ->request($query->query, $query->locale)
             ->then(function ($result) use ($query): ProductApi\Result {
                 $hasNextPage = null;
@@ -327,19 +312,13 @@ class ShopifyProductApi implements ProductApi
 
                 return new Result([
                     // @TODO: "total" is not available in Shopify.
-                    'previousCursor' => $hasPreviousPage ? "before:\"$previousCursor\""  : null,
+                    'previousCursor' => $hasPreviousPage ? "before:\"$previousCursor\"" : null,
                     'nextCursor' => $hasNextPage ? "after:\"$nextCursor\"" : null,
                     'count' => count($products),
                     'items' => $products,
                     'query' => clone $query,
                 ]);
             });
-
-        if ($mode === self::QUERY_SYNC) {
-            return $promise->wait();
-        }
-
-        return $promise;
     }
 
     public function getDangerousInnerClient(): ShopifyClient
@@ -416,7 +395,7 @@ class ShopifyProductApi implements ProductApi
             'price' => $this->mapDataToPriceValue($variantData['priceV2']),
             'currency' => $variantData['priceV2']['currencyCode'],
             'attributes' => $this->mapDataToAttributes($variantData),
-            'images' =>  [$variantData['image']['originalSrc']],
+            'images' => [$variantData['image']['originalSrc']],
             // @TODO Include dangerousInnerVariant base on locale flag
             // 'dangerousInnerVariant' => $variantData,
         ]);

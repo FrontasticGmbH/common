@@ -28,6 +28,7 @@ class CustomerService
         'product' => [
             'engine' => 'commercetools',
         ],
+        'productSearch' => [],
         'account' => [
             'engine' => 'commercetools',
         ],
@@ -83,10 +84,17 @@ class CustomerService
     private function explodeConfiguration(array $values, ?array $defaults = null): array
     {
         $baseConfiguration = array_replace_recursive($defaults ?: $this->apis, $values);
-        foreach ($this->apis as $api => $defaultEngine) {
+
+        foreach (array_keys($this->apis) as $api) {
+            $engine = $baseConfiguration[$api]['engine'] ?? null;
+
+            if ($engine === null) {
+                continue;
+            }
+
             $baseConfiguration[$api] = array_replace_recursive(
                 $baseConfiguration[$api],
-                $baseConfiguration[$baseConfiguration[$api]['engine']] ?? []
+                $baseConfiguration[$engine] ?? []
             );
         }
 

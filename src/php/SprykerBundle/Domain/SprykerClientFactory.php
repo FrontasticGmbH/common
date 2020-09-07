@@ -35,11 +35,10 @@ class SprykerClientFactory
         $this->exceptionFactory = $exceptionFactory;
     }
 
-    public function factorForProjectAndType(Project $project, string $typeName): SprykerClient
-    {
-        $typeSpecificConfiguration = $project->getConfigurationSection($typeName);
-        $genericConfiguration = $project->getConfigurationSection(self::MAIN_CONFIGURATION_SECTION);
-
+    public function factorForConfigs(
+        object $typeSpecificConfiguration,
+        ?object $genericConfiguration = null
+    ): SprykerClient {
         $config = $this->resolveConfiguration($typeSpecificConfiguration, $genericConfiguration);
 
         return new SprykerClient(
@@ -48,6 +47,14 @@ class SprykerClientFactory
             $config['projectKey'],
             $this->exceptionFactory
         );
+    }
+
+    public function factorForProjectAndType(Project $project, string $typeName): SprykerClient
+    {
+        $typeSpecificConfiguration = $project->getConfigurationSection($typeName);
+        $genericConfiguration = $project->getConfigurationSection(self::MAIN_CONFIGURATION_SECTION);
+
+        return $this->factorForConfigs($typeSpecificConfiguration, $genericConfiguration);
     }
 
     private function resolveConfiguration(object $typeSpecificConfiguration, object $genericConfiguration): array
