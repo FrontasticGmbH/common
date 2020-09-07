@@ -65,6 +65,17 @@ class FindologicProductSearchApi extends ProductSearchApiBase
 
     protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
+        /**
+         * Fall back to original data source for SKU-based searches. Findologic does not support this in a reliable
+         * way out of the box since it always executes a full text search across all fields when using "query".
+         */
+        if (!empty($query->sku || !empty($query->skus))) {
+            $this->logger->info(
+                'ProductSearchApi: Falling back to original data source for searching by SKU.'
+            );
+            return $this->originalDataSource->query($query);
+        }
+
         $validationResult = $this->validator->isSupported($query);
 
         if (!$validationResult->isSupported) {
