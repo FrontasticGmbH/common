@@ -98,11 +98,11 @@ class DefaultProductApiFactory implements ProductApiFactory
 
                 $productApi = new ShopwareProductApi(
                     $client,
-                    $dataMapper,
                     $localeCreatorFactory->factor($project, $client),
-                    $project->defaultLanguage,
+                    $dataMapper,
                     $this->enabledFacetService,
-                    $this->container->get(ShopwareProjectConfigApiFactory::class)
+                    $this->container->get(ShopwareProjectConfigApiFactory::class),
+                    $project->defaultLanguage
                 );
                 break;
             case 'shopify':

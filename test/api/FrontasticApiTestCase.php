@@ -19,6 +19,8 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
+use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi;
+use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiFactory;
 use Frontastic\Common\ProjectApiBundle\Domain\ProjectApiFactory;
 use Frontastic\Common\ReplicatorBundle\Domain\CustomerService;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
@@ -36,6 +38,11 @@ class FrontasticApiTestCase extends KernelTestCase
      * @var array<string, ProductApi>
      */
     private $productApis = [];
+
+    /**
+     * @var array<string, ProductSearchApi>
+     */
+    private $productSearchApis = [];
 
     /**
      * @before
@@ -238,6 +245,42 @@ class FrontasticApiTestCase extends KernelTestCase
         return $result;
     }
 
+
+    protected function getProductSearchApiForProject(Project $project): ProductSearchApi
+    {
+        $key = sprintf('%s_%s', $project->customer, $project->projectId);
+        if (!array_key_exists($key, $this->productSearchApis)) {
+            $this->productSearchApis[$key] = self::$container->get(ProductSearchApiFactory::class)->factor($project);
+        }
+
+        return $this->productSearchApis[$key];
+    }
+
+    protected function queryProductsWithProductSearchApi(
+        Project $project,
+        string $language,
+        array $queryParameters = [],
+        ?int $limit = null,
+        ?int $offset = null,
+        ?string $cursor = null
+    ): Result {
+        $query = new ProductQuery(
+            array_merge(
+                $this->buildQueryParameters($language, $limit, $offset, $cursor),
+                $queryParameters
+            )
+        );
+        $result = $this
+            ->getProductSearchApiForProject($project)
+            ->query($query)
+            ->wait();
+
+        $this->assertEquals($query, $result->query);
+        $this->assertNotSame($query, $result->query);
+
+        return $result;
+    }
+
     /**
      * @return Category[]
      */
@@ -309,6 +352,14 @@ class FrontasticApiTestCase extends KernelTestCase
         } while ($resultFromCurrentStep->nextCursor !== null);
 
         return $categories;
+    }
+
+    protected function getAProductWithProductSearchApi(Project $project, string $language): Product
+    {
+        $result = $this->queryProductsWithProductSearchApi($project, $language);
+        $this->assertNotEmpty($result->items);
+
+        return $result->items[0];
     }
 
     protected function getAProduct(Project $project, string $language): Product

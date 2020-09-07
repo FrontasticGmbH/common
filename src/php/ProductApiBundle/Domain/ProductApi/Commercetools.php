@@ -10,6 +10,8 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestExcept
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\SingleProductQuery;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApiBase;
 use Frontastic\Common\ProductApiBundle\Domain\ProductType;
 use GuzzleHttp\Promise\PromiseInterface;
 
@@ -20,7 +22,7 @@ use GuzzleHttp\Promise\PromiseInterface;
  * @SuppressWarnings(PHPMD.NPathComplexity)
  * @TODO: Refactor result parsing and request generation out of here.
  */
-class Commercetools implements ProductApi
+class Commercetools extends ProductApiBase
 {
     /**
      * @var Client
@@ -62,10 +64,9 @@ class Commercetools implements ProductApi
     }
 
     /**
-     * @return Category[]
      * @throws RequestException
      */
-    public function getCategories(CategoryQuery $query): array
+    protected function queryCategoriesImplementation(CategoryQuery $query): Result
     {
         $parameters = [
             'offset' => $query->offset,
@@ -139,21 +140,16 @@ class Commercetools implements ProductApi
         }
 
         ksort($categoryMap);
-        return array_values($categoryMap);
-    }
-
-    public function queryCategories(CategoryQuery $query): Result
-    {
-        $categories = $this->getCategories($query);
+        $categoryItems = array_values($categoryMap);
 
         return new ProductApi\Result([
-            'count' => count($categories),
-            'items' => $categories,
-            'query' => clone($query)
+            'count' => count($categoryItems),
+            'items' => $categoryItems,
+            'query' => clone($query),
         ]);
     }
 
-    public function getProductTypes(ProductTypeQuery $query): array
+    protected function getProductTypesImplementation(ProductTypeQuery $query): array
     {
         $result = $this->client->fetchAsync('/product-types')->wait();
 
@@ -169,13 +165,10 @@ class Commercetools implements ProductApi
         );
     }
 
-    public function getProduct($originalQuery, string $mode = self::QUERY_SYNC): ?object
+    protected function getProductImplementation(SingleProductQuery $query): PromiseInterface
     {
-        $query = ProductApi\Query\SingleProductQuery::fromLegacyQuery($originalQuery);
-        $query->validate();
-
         if ($query->sku) {
-            $promise = $this
+            return $this
                 ->query(
                     new ProductQuery([
                         'skus' => [$query->sku],
@@ -193,43 +186,34 @@ class Commercetools implements ProductApi
                         return reset($productQueryResult->items);
                     }
                 );
-        } else {
-            $locale = $this->localeCreator->createLocaleFromString($query->locale);
-            $parameters = ['priceCurrency' => $locale->currency, 'priceCountry' => $locale->country];
+        }
 
-            $promise = $this->client
-                ->fetchAsyncById(
-                    '/products',
-                    $query->productId,
-                    array_filter(
-                        array_merge($query->rawApiInput, $parameters)
-                    )
+        $locale = $this->localeCreator->createLocaleFromString($query->locale);
+        $parameters = ['priceCurrency' => $locale->currency, 'priceCountry' => $locale->country];
+
+        return $this->client
+            ->fetchAsyncById(
+                '/products',
+                $query->productId,
+                array_filter(
+                    array_merge($query->rawApiInput, $parameters)
                 )
-                ->then(
-                    function ($product) use ($query, $locale) {
-                        return $this->mapper->dataToProduct($product, $query, $locale);
-                    },
-                    function (\Throwable $exception) use ($query) {
-                        if ($exception instanceof RequestException && $exception->getCode() === 404) {
-                            throw ProductNotFoundException::byProductId($query->productId);
-                        }
-
-                        throw $exception;
+            )
+            ->then(
+                function ($product) use ($query, $locale) {
+                    return $this->mapper->dataToProduct($product, $query, $locale);
+                },
+                function (\Throwable $exception) use ($query) {
+                    if ($exception instanceof RequestException && $exception->getCode() === 404) {
+                        throw ProductNotFoundException::byProductId($query->productId);
                     }
-                );
-        }
 
-        if ($mode === self::QUERY_SYNC) {
-            return $promise->wait();
-        }
-
-        return $promise;
+                    throw $exception;
+                }
+            );
     }
 
-    /**
-     * @return Result|PromiseInterface
-     */
-    public function query(ProductQuery $query, string $mode = self::QUERY_SYNC): object
+    protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
         $locale = $this->localeCreator->createLocaleFromString($query->locale);
         $defaultLocale = $this->localeCreator->createLocaleFromString($this->defaultLocale);
@@ -288,7 +272,7 @@ class Commercetools implements ProductApi
         $parameters['filter'] = $facetsToFilter;
         $parameters['filter.facets'] = $facetsToFilter;
 
-        $promise = $this->client
+        return $this->client
             ->fetchAsync(
                 '/product-projections/search',
                 array_filter(
@@ -310,12 +294,6 @@ class Commercetools implements ProductApi
                     'query' => clone $query,
                 ]);
             });
-
-        if ($mode === self::QUERY_SYNC) {
-            return $promise->wait();
-        }
-
-        return $promise;
     }
 
     public function getDangerousInnerClient(): Client

@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service
+            id="Frontastic\Common\ProductSearchApiBundle\Domain\DefaultProductSearchApiFactory"
+            class="Frontastic\Common\ProductSearchApiBundle\Domain\DefaultProductSearchApiFactory">
+            <argument type="service" id="Psr\Container\ContainerInterface" />
+            <argument type="service"
+                      id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService" />
+            <argument type="service" id="logger" />
+            <argument type="tagged" tag="productSearchApi.lifecycleEventListener" />
+        </service>
+
+        <service
+            id="Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiFactory"
+            alias="Frontastic\Common\ProductSearchApiBundle\Domain\DefaultProductSearchApiFactory"
+            public="true" />
+    </services>
+</container>

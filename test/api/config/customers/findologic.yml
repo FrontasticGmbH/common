@@ -1,0 +1,26 @@
+---
+name: "findologic"
+secret: "secret"
+configuration:
+    test:
+        disabled: false
+        supportCursorBasedPagination: true
+        supportOffsetPagination: true
+        hasConsistentProductSearchData: false
+        supportSearchByIdentifierAndQueryParameters: false
+    commercetools:
+        projectKey: frontastic-1
+        clientId: nJIPfHoT9_GlC29EfL75zdkg
+        clientSecret: tUrh_yyjWn7RcVY0MRXMbe6h7S9MPiz0
+    findologic:
+        hostUrl: https://service.findologic.com/ps/centralized-frontend
+        shopkey: 3330286AB8B769B8C4372E89D9BEB10F
+        originalDataSource:
+            engine: commercetools
+    productSearch:
+        engine: findologic
+projects:
+    -   projectId: test
+        name: Findologic Test
+        languages: ["en_GB@GBP"]
+        defaultLanguage: en_GB@GBP
