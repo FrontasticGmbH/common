@@ -30,7 +30,8 @@ use Psr\Log\LoggerInterface;
 
 class DefaultProductSearchApiFactory implements ProductSearchApiFactory
 {
-    private const CONFIGURATION_TYPE_NAME = 'product';
+    private const CONFIGURATION_TYPE_NAME_PRODUCT = 'product';
+    private const CONFIGURATION_TYPE_NAME_PRODUCT_SEARCH = 'productSearch';
 
     /** @var ContainerInterface */
     private $container;
@@ -58,15 +59,23 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
 
     public function factor(Project $project): ProductSearchApi
     {
-        $productConfig = $project->getConfigurationSection(self::CONFIGURATION_TYPE_NAME);
+        $productSearchConfig = $this->getProductSearchConfigForProject($project);
+        $vendorConfig = $project->getConfigurationSection($productSearchConfig->engine);
 
-        switch ($productConfig->engine) {
+        $productSearchApi = $this->factorFromConfiguration($project, $productSearchConfig, $vendorConfig);
+
+        return new LifecycleEventDecorator($productSearchApi, $this->decorators);
+    }
+
+    private function factorFromConfiguration(Project $project, object $productSearchConfig, object $engineConfig)
+    {
+        switch ($productSearchConfig->engine) {
             case 'commercetools':
                 $clientFactory = $this->container->get(CommercetoolsClientFactory::class);
                 $dataMapper = $this->container->get(CommercetoolsDataMapper::class);
                 $localeCreatorFactory = $this->container->get(CommercetoolsLocaleCreatorFactory::class);
 
-                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+                $client = $clientFactory->factorForConfigs($productSearchConfig, $engineConfig);
 
                 $productSearchApi = new CommercetoolsProductSearchApi(
                     $client,
@@ -81,7 +90,7 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
                 $clientFactory = $this->container->get(SapClientFactory::class);
                 $localeCreatorFactory = $this->container->get(SapLocaleCreatorFactory::class);
 
-                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+                $client = $clientFactory->factorForConfigs($productSearchConfig, $engineConfig);
 
                 $productSearchApi = new SapProductSearchApi(
                     $client,
@@ -95,7 +104,7 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
                 $dataMapper = $this->container->get(ShopwareDataMapperResolver::class);
                 $localeCreatorFactory = $this->container->get(ShopwareLocaleCreatorFactory::class);
 
-                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+                $client = $clientFactory->factorForConfigs($productSearchConfig, $engineConfig);
 
                 $productSearchApi = new ShopwareProductSearchApi(
                     $client,
@@ -112,7 +121,7 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
                 $dataMapper = $this->container->get(SprykerMapperResolver::class);
                 $localeCreatorFactory = $this->container->get(SprykerLocaleCreatorFactory::class);
 
-                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+                $client = $clientFactory->factorForConfigs($productSearchConfig, $engineConfig);
 
                 $productSearchApi = new SprykerProductSearchApi(
                     $client,
@@ -125,16 +134,25 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
                 $clientFactory = $this->container->get(FindologicClientFactory::class);
                 $dataMapper = $this->container->get(FindologicDataMapper::class);
                 $queryValidator = $this->container->get(QueryValidator::class);
-                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
 
-                $productSearchApi =
-                    new FindologicProductSearchApi(
-                        $client,
-                        new NoopProductSearchApi(),
-                        $dataMapper,
-                        $queryValidator,
-                        $this->logger
-                    );
+                $client = $clientFactory->factorForConfigs($productSearchConfig, $engineConfig);
+
+                $originalDataSourceConfig = (object) $productSearchConfig->originalDataSource;
+                $originalDataSourceVendorConfig = $project->getConfigurationSection($originalDataSourceConfig->engine);
+
+                $originalDataSource = $this->factorFromConfiguration(
+                    $project,
+                    $originalDataSourceConfig,
+                    $originalDataSourceVendorConfig
+                );
+
+                $productSearchApi = new FindologicProductSearchApi(
+                    $client,
+                    $originalDataSource,
+                    $dataMapper,
+                    $queryValidator,
+                    $this->logger
+                );
                 break;
             default:
                 throw new \OutOfBoundsException(
@@ -143,6 +161,21 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
                 );
         }
 
-        return new LifecycleEventDecorator($productSearchApi, $this->decorators);
+        return $productSearchApi;
+    }
+
+    /**
+     * Try to fetch the "productSearch" configuration for this project and default to "project" configuration
+     * for BC reasons.
+     */
+    private function getProductSearchConfigForProject(Project $project): object
+    {
+        $config = $project->getConfigurationSection(self::CONFIGURATION_TYPE_NAME_PRODUCT_SEARCH);
+
+        if (!empty((array)$config)) {
+            return $config;
+        }
+
+        return $project->getConfigurationSection(self::CONFIGURATION_TYPE_NAME_PRODUCT);
     }
 }

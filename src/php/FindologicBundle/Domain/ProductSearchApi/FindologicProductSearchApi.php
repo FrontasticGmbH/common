@@ -22,7 +22,7 @@ class FindologicProductSearchApi extends ProductSearchApiBase
     /**
      * @var ProductSearchApi
      */
-    private $fallback;
+    private $originalDataSource;
 
     /**
      * @var Mapper
@@ -41,13 +41,13 @@ class FindologicProductSearchApi extends ProductSearchApiBase
 
     public function __construct(
         FindologicClient $client,
-        ProductSearchApi $fallback,
+        ProductSearchApi $originalDataSource,
         Mapper $mapper,
         QueryValidator $validator,
         LoggerInterface $logger
     ) {
         $this->client = $client;
-        $this->fallback = $fallback;
+        $this->originalDataSource = $originalDataSource;
         $this->mapper = $mapper;
         $this->validator = $validator;
         $this->logger = $logger;
@@ -87,9 +87,9 @@ class FindologicProductSearchApi extends ProductSearchApiBase
                 function ($reason) use ($query) {
                     if ($reason instanceof ServiceNotAliveException) {
                         $this->logger->info(
-                            'ProductSearchApi: Findologic service unavailable - using fallback backend.'
+                            'ProductSearchApi: Findologic service unavailable - falling back to original data source.'
                         );
-                        return $this->fallback->query($query);
+                        return $this->originalDataSource->query($query);
                     }
 
                     throw $reason;
