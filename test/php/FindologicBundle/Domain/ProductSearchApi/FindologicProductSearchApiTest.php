@@ -3,6 +3,7 @@
 namespace Frontastic\Common\FindologicBundle\Domain\ProductSearchApi;
 
 use Frontastic\Common\FindologicBundle\Domain\FindologicClient;
+use Frontastic\Common\FindologicBundle\Domain\FindologicClientConfig;
 use Frontastic\Common\FindologicBundle\Domain\SearchRequest;
 use Frontastic\Common\FindologicBundle\Exception\ServiceNotAliveException;
 use Frontastic\Common\HttpClient;
@@ -18,15 +19,22 @@ class FindologicProductSearchApiTest extends TestCase
     public function testUsesFallbackOnUnavailableService()
     {
         $serviceDeadResult = new RejectedPromise(new ServiceNotAliveException('dead'));
-        $query = new ProductQuery();
+        $locale = 'en_GB@GBP';
+        $query = new ProductQuery(['locale' => $locale]);
         $searchRequest = new SearchRequest();
+        $clientConfig = new FindologicClientConfig(['hostUrl' => 'foo', 'shopkey' => 'bar']);
 
-        $client = \Phake::partialMock(FindologicClient::class, \Phake::mock(HttpClient::class), 'foo', 'bar');
+        $client = \Phake::partialMock(
+            FindologicClient::class,
+            \Phake::mock(HttpClient::class),
+            [$locale => $clientConfig]
+        );
+
         $originalDataSource = \Phake::mock(ProductSearchApi::class);
         $mapper = \Phake::mock(Mapper::class);
         $validator = \Phake::mock(QueryValidator::class);
 
-        \Phake::when($client)->isAlive()->thenReturn($serviceDeadResult);
+        \Phake::when($client)->isAlive($locale)->thenReturn($serviceDeadResult);
         \Phake::when($validator)->isSupported($query)->thenReturn(ValidationResult::createValid());
         \Phake::when($mapper)->queryToRequest($query)->thenReturn($searchRequest);
         \Phake::when($originalDataSource)->query($query)->thenReturn(new FulfilledPromise('result'));
@@ -36,13 +44,14 @@ class FindologicProductSearchApiTest extends TestCase
             $originalDataSource,
             $mapper,
             $validator,
-            \Phake::mock(LoggerInterface::class)
+            \Phake::mock(LoggerInterface::class),
+            [$locale]
         );
 
         $api->query($query)->wait();
 
-        \Phake::verify($client, \Phake::times(1))->search($searchRequest);
-        \Phake::verify($client, \Phake::times(1))->isAlive();
+        \Phake::verify($client, \Phake::times(1))->search($locale, $searchRequest);
+        \Phake::verify($client, \Phake::times(1))->isAlive($locale);
         \Phake::verifyNoOtherInteractions($client);
 
         \Phake::verify($originalDataSource, \Phake::times(1))->query($query);
