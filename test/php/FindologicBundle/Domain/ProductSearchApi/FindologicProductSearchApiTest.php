@@ -21,7 +21,7 @@ class FindologicProductSearchApiTest extends TestCase
 {
     public function testUsesFallbackOnUnavailableService()
     {
-        $serviceDeadResult = (new RejectedPromise(new ServiceNotAliveException('asdf')));
+        $serviceDeadResult = new RejectedPromise(new ServiceNotAliveException('dead'));
         $query = new ProductQuery();
         $searchRequest = new SearchRequest();
 
@@ -40,7 +40,7 @@ class FindologicProductSearchApiTest extends TestCase
             $originalDataSource,
             $mapper,
             $validator,
-            $this->createMock(LoggerInterface::class)
+            \Phake::mock(LoggerInterface::class)
         );
 
         $api->query($query)->wait();
