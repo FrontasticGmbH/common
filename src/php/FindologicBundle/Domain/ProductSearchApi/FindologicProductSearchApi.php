@@ -9,6 +9,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiBase;
+use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Log\LoggerInterface;
 
@@ -97,10 +98,9 @@ class FindologicProductSearchApi extends ProductSearchApiBase
             );
     }
 
-    protected function getSearchableAttributesImplementation(): array
+    protected function getSearchableAttributesImplementation(): PromiseInterface
     {
-        // TODO: Implement getSearchableAttributes() method.
-        return [];
+        return new FulfilledPromise([]);
     }
 
     public function getDangerousInnerClient()

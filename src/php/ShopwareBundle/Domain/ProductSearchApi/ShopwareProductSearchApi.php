@@ -24,7 +24,9 @@ use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchCriteriaBuil
 use Frontastic\Common\ShopwareBundle\Domain\ProjectApi\DataMapper\GenericGroupAggregationMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiInterface;
+use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
+use function GuzzleHttp\Promise\promise_for;
 
 class ShopwareProductSearchApi extends ProductSearchApiBase
 {
@@ -89,7 +91,7 @@ class ShopwareProductSearchApi extends ProductSearchApiBase
         return $promise;
     }
 
-    protected function getSearchableAttributesImplementation(): array
+    protected function getSearchableAttributesImplementation(): PromiseInterface
     {
         $localizedAttributes = $this->getLocalizedSearchableAttributes();
 
@@ -117,7 +119,7 @@ class ShopwareProductSearchApi extends ProductSearchApiBase
             'type' => Attribute::TYPE_CATEGORY_ID,
         ]);
 
-        return $attributes->getArrayCopy();
+        return promise_for($attributes->getArrayCopy());
     }
 
     public function getDangerousInnerClient(): ClientInterface

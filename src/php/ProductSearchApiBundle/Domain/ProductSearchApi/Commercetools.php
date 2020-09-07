@@ -10,7 +10,9 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiBase;
 use Frontastic\Common\ProjectApiBundle\Domain\Attribute;
+use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
+use function GuzzleHttp\Promise\promise_for;
 
 class Commercetools extends ProductSearchApiBase
 {
@@ -148,58 +150,59 @@ class Commercetools extends ProductSearchApiBase
             });
     }
 
-    protected function getSearchableAttributesImplementation(): array
+    protected function getSearchableAttributesImplementation(): PromiseInterface
     {
-        $productTypes = $this->client->fetchAsync('/product-types')->wait();
+        return $this->client->fetchAsync('/product-types')
+            ->then(function ($productTypes) {
+                $attributes = [];
+                foreach ($productTypes->results as $productType) {
+                    foreach ($productType['attributes'] as $rawAttribute) {
+                        if (!$rawAttribute['isSearchable']) {
+                            continue;
+                        }
 
-        $attributes = [];
-        foreach ($productTypes->results as $productType) {
-            foreach ($productType['attributes'] as $rawAttribute) {
-                if (!$rawAttribute['isSearchable']) {
-                    continue;
+                        $attributeId = 'variants.attributes.' . $rawAttribute['name'];
+
+                        $rawType = $rawAttribute['type']['name'];
+                        $rawValues = $rawAttribute['type']['values'] ?? null;
+                        if ($rawType === 'set') {
+                            $rawType = $rawAttribute['type']['elementType']['name'];
+                            $rawValues = $rawAttribute['type']['elementType']['values'] ?? null;
+                        }
+
+                        $attributes[$attributeId] = new Attribute([
+                            'attributeId' => $attributeId,
+                            'type' => $this->mapAttributeType($rawType),
+                            'label' => $this->mapLocales($rawAttribute['label']),
+                            'values' => $this->mapValueLocales($rawValues),
+                        ]);
+                    }
                 }
 
-                $attributeId = 'variants.attributes.' . $rawAttribute['name'];
-
-                $rawType = $rawAttribute['type']['name'];
-                $rawValues = $rawAttribute['type']['values'] ?? null;
-                if ($rawType === 'set') {
-                    $rawType = $rawAttribute['type']['elementType']['name'];
-                    $rawValues = $rawAttribute['type']['elementType']['values'] ?? null;
-                }
-
+                // Not included in attributes in CT
+                $attributeId = 'variants.price';
                 $attributes[$attributeId] = new Attribute([
                     'attributeId' => $attributeId,
-                    'type' => $this->mapAttributeType($rawType),
-                    'label' => $this->mapLocales($rawAttribute['label']),
-                    'values' => $this->mapValueLocales($rawValues),
+                    'type' => Attribute::TYPE_MONEY,
+                    'label' => null, // Can we get the price label somehow?
                 ]);
-            }
-        }
 
-        // Not included in attributes in CT
-        $attributeId = 'variants.price';
-        $attributes[$attributeId] = new Attribute([
-            'attributeId' => $attributeId,
-            'type' => Attribute::TYPE_MONEY,
-            'label' => null, // Can we get the price label somehow?
-        ]);
+                $attributeId = 'variants.scopedPrice.value';
+                $attributes[$attributeId] = new Attribute([
+                    'attributeId' => $attributeId,
+                    'type' => Attribute::TYPE_MONEY,
+                    'label' => null, // Can we get the price label somehow?
+                ]);
 
-        $attributeId = 'variants.scopedPrice.value';
-        $attributes[$attributeId] = new Attribute([
-            'attributeId' => $attributeId,
-            'type' => Attribute::TYPE_MONEY,
-            'label' => null, // Can we get the price label somehow?
-        ]);
+                $attributeId = 'categories.id';
+                $attributes[$attributeId] = new Attribute([
+                    'attributeId' => $attributeId,
+                    'type' => Attribute::TYPE_CATEGORY_ID,
+                    'label' => null, // Can we get the label somehow?
+                ]);
 
-        $attributeId = 'categories.id';
-        $attributes[$attributeId] = new Attribute([
-            'attributeId' => $attributeId,
-            'type' => Attribute::TYPE_CATEGORY_ID,
-            'label' => null, // Can we get the label somehow?
-        ]);
-
-        return $attributes;
+                return $attributes;
+            });
     }
 
     public function getDangerousInnerClient(): Client

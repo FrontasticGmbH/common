@@ -32,7 +32,7 @@ class LifecycleEventDecorator implements ProductSearchApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function getSearchableAttributes(): array
+    public function getSearchableAttributes(): PromiseInterface
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }

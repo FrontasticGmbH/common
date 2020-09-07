@@ -17,6 +17,7 @@ use Frontastic\Common\SprykerBundle\Domain\Product\SprykerProductApiExtendedCons
 use Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface;
 use GuzzleHttp\Promise\PromiseInterface;
 use WoohooLabs\Yang\JsonApi\Response\JsonApiResponse;
+use function GuzzleHttp\Promise\promise_for;
 
 class SprykerProductSearchApi extends ProductSearchApiBase
 {
@@ -89,7 +90,7 @@ class SprykerProductSearchApi extends ProductSearchApiBase
         return $response;
     }
 
-    protected function getSearchableAttributesImplementation(): array
+    protected function getSearchableAttributesImplementation(): PromiseInterface
     {
         $attributes = [];
 
@@ -109,7 +110,7 @@ class SprykerProductSearchApi extends ProductSearchApiBase
         //    return $attributes;
         // }
 
-        return $this->addCustomAttributes($attributes);
+        return promise_for($this->addCustomAttributes($attributes));
     }
 
     public function getDangerousInnerClient()

@@ -8,6 +8,7 @@ use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiBase;
 use Frontastic\Common\ProjectApiBundle\Domain\Attribute;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreator;
 use GuzzleHttp\Promise\PromiseInterface;
+use function GuzzleHttp\Promise\promise_for;
 use function GuzzleHttp\Promise\unwrap;
 
 class SapProductSearchApi extends ProductSearchApiBase
@@ -102,7 +103,7 @@ class SapProductSearchApi extends ProductSearchApiBase
         return $promise;
     }
 
-    protected function getSearchableAttributesImplementation(): array
+    protected function getSearchableAttributesImplementation(): PromiseInterface
     {
         $languagesToFetch = [];
         foreach ($this->projectLanguages as $language) {
@@ -168,7 +169,7 @@ class SapProductSearchApi extends ProductSearchApiBase
             }
         }
 
-        return $attributes;
+        return promise_for($attributes);
     }
 
     public function getDangerousInnerClient()
