@@ -11,7 +11,6 @@
 
 ```php
 public function __construct(
-    \Psr\Container\ContainerInterface $container,
     ProductApiFactory $productApiFactory,
     Commercetools\ClientFactory $commercetoolsClientFactory,
     iterable $decorators
@@ -20,7 +19,6 @@ public function __construct(
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$container`|`\Psr\Container\ContainerInterface`||
 `$productApiFactory`|[`ProductApiFactory`](../../ProductApiBundle/Domain/ProductApiFactory.md)||
 `$commercetoolsClientFactory`|[`Commercetools`](../../ProductApiBundle/Domain/ProductApi/Commercetools.md)\ClientFactory||
 `$decorators`|`iterable`||

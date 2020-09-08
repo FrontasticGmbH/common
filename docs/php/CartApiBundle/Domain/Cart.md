@@ -2,18 +2,19 @@
 
 **Fully Qualified**: [`\Frontastic\Common\CartApiBundle\Domain\Cart`](../../../../src/php/CartApiBundle/Domain/Cart.php)
 
-**Extends**: [`ApiDataObject`](../../CoreBundle/Domain/ApiDataObject.md)
+**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
 `cartId` | `string` |  | - | 
 `cartVersion` | `string` |  | - | 
+`custom` | `array` | `[]` | - | 
 `lineItems` | [`LineItem`](LineItem.md)[] | `[]` | - | 
 `email` | `string` |  | - | 
 `birthday` | `\DateTimeImmutable` |  | - | 
 `shippingMethod` | ?[`ShippingMethod`](ShippingMethod.md) |  | - | 
-`shippingAddress` | `?\Frontastic\Common\CartApiBundle\Domain\Address` |  | - | 
-`billingAddress` | `?\Frontastic\Common\CartApiBundle\Domain\Address` |  | - | 
+`shippingAddress` | ?[`Address`](../../AccountApiBundle/Domain/Address.md) |  | - | 
+`billingAddress` | ?[`Address`](../../AccountApiBundle/Domain/Address.md) |  | - | 
 `sum` | `int` |  | - | 
 `currency` | `string` |  | - | 
 `payments` | [`Payment`](Payment.md)[] | `[]` | - | 
@@ -30,7 +31,6 @@ Property|Type|Default|Required|Description
 * [hasCompletePayments()](#hascompletepayments)
 * [isReadyForCheckout()](#isreadyforcheckout)
 * [isComplete()](#iscomplete)
-* [getPaymentById()](#getpaymentbyid)
 
 ### getPayedAmount()
 
@@ -95,19 +95,5 @@ public function isComplete(): bool
 ```
 
 Return Value: `bool`
-
-### getPaymentById()
-
-```php
-public function getPaymentById(
-    string $paymentId
-): Payment
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$paymentId`|`string`||
-
-Return Value: [`Payment`](Payment.md)
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

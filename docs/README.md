@@ -90,9 +90,12 @@ Here you find the API documentation for the relevant classes:
     * [RequestUtilities](php/CoreBundle/Controller/RequestUtilities.md)
     * [SystemController](php/CoreBundle/Controller/SystemController.md)
   * DependencyInjection
+    * CompilerPass
+      * [FactoryServiceLocatorServiceProviderPass](php/CoreBundle/DependencyInjection/CompilerPass/FactoryServiceLocatorServiceProviderPass.md)
     * [FrontasticCommonCoreExtension](php/CoreBundle/DependencyInjection/FrontasticCommonCoreExtension.md)
   * Domain
-    * [ApiDataObject](php/CoreBundle/Domain/ApiDataObject.md)
+    * Api
+      * [FactoryServiceLocator](php/CoreBundle/Domain/Api/FactoryServiceLocator.md)
     * [DateTimeConverter](php/CoreBundle/Domain/DateTimeConverter.md)
     * [ErrorResult](php/CoreBundle/Domain/ErrorResult.md)
     * [Mailer](php/CoreBundle/Domain/Mailer.md)
@@ -111,23 +114,6 @@ Here you find the API documentation for the relevant classes:
     * [BrowserConsoleDebuggerListener](php/DevelopmentBundle/EventListener/BrowserConsoleDebuggerListener.md)
   * [FrontasticCommonDevelopmentBundle](php/DevelopmentBundle/FrontasticCommonDevelopmentBundle.md)
 * [EnvironmentResolver](php/EnvironmentResolver.md)
-* FindologicBundle
-  * DependencyInjection
-    * [Configuration](php/FindologicBundle/DependencyInjection/Configuration.md)
-    * [FrontasticCommonFindologicExtension](php/FindologicBundle/DependencyInjection/FrontasticCommonFindologicExtension.md)
-  * Domain
-    * [FindologicClient](php/FindologicBundle/Domain/FindologicClient.md)
-    * [FindologicClientFactory](php/FindologicBundle/Domain/FindologicClientFactory.md)
-    * ProductSearchApi
-      * [FindologicProductSearchApi](php/FindologicBundle/Domain/ProductSearchApi/FindologicProductSearchApi.md)
-      * [Mapper](php/FindologicBundle/Domain/ProductSearchApi/Mapper.md)
-      * [QueryValidator](php/FindologicBundle/Domain/ProductSearchApi/QueryValidator.md)
-      * [ValidationResult](php/FindologicBundle/Domain/ProductSearchApi/ValidationResult.md)
-    * [SearchRequest](php/FindologicBundle/Domain/SearchRequest.md)
-  * Exception
-    * [ServiceNotAliveException](php/FindologicBundle/Exception/ServiceNotAliveException.md)
-    * [UnsupportedQueryException](php/FindologicBundle/Exception/UnsupportedQueryException.md)
-  * [FrontasticCommonFindologicBundle](php/FindologicBundle/FrontasticCommonFindologicBundle.md)
 * [Functions](php/Functions.md)
 * [HttpClient](php/HttpClient.md)
 * HttpClient
@@ -172,24 +158,10 @@ Here you find the API documentation for the relevant classes:
       * [ProductNotFoundException](php/ProductApiBundle/Domain/ProductApi/ProductNotFoundException.md)
       * [Query](php/ProductApiBundle/Domain/ProductApi/Query.md)
       * [Result](php/ProductApiBundle/Domain/ProductApi/Result.md)
-    * [ProductApiBase](php/ProductApiBundle/Domain/ProductApiBase.md)
     * [ProductApiFactory](php/ProductApiBundle/Domain/ProductApiFactory.md)
     * [ProductType](php/ProductApiBundle/Domain/ProductType.md)
     * [Variant](php/ProductApiBundle/Domain/Variant.md)
   * [FrontasticCommonProductApiBundle](php/ProductApiBundle/FrontasticCommonProductApiBundle.md)
-* ProductSearchApiBundle
-  * DependencyInjection
-    * [FrontasticCommonProductSearchApiExtension](php/ProductSearchApiBundle/DependencyInjection/FrontasticCommonProductSearchApiExtension.md)
-  * Domain
-    * [DefaultProductSearchApiFactory](php/ProductSearchApiBundle/Domain/DefaultProductSearchApiFactory.md)
-    * [LifecycleEventDecorator](php/ProductSearchApiBundle/Domain/LifecycleEventDecorator.md)
-    * [NoopProductSearchApi](php/ProductSearchApiBundle/Domain/NoopProductSearchApi.md)
-    * [ProductSearchApi](php/ProductSearchApiBundle/Domain/ProductSearchApi.md)
-    * ProductSearchApi
-      * [Commercetools](php/ProductSearchApiBundle/Domain/ProductSearchApi/Commercetools.md)
-    * [ProductSearchApiBase](php/ProductSearchApiBundle/Domain/ProductSearchApiBase.md)
-    * [ProductSearchApiFactory](php/ProductSearchApiBundle/Domain/ProductSearchApiFactory.md)
-  * [FrontasticCommonProductSearchApiBundle](php/ProductSearchApiBundle/FrontasticCommonProductSearchApiBundle.md)
 * ProjectApiBundle
   * Controller
     * [AttributesController](php/ProjectApiBundle/Controller/AttributesController.md)
@@ -237,22 +209,10 @@ Here you find the API documentation for the relevant classes:
     * [SapClientFactory](php/SapCommerceCloudBundle/Domain/SapClientFactory.md)
     * [SapDataMapper](php/SapCommerceCloudBundle/Domain/SapDataMapper.md)
     * [SapProductApi](php/SapCommerceCloudBundle/Domain/SapProductApi.md)
-    * [SapProductSearchApi](php/SapCommerceCloudBundle/Domain/SapProductSearchApi.md)
     * [SapProjectApi](php/SapCommerceCloudBundle/Domain/SapProjectApi.md)
     * [SapProjectConfigApi](php/SapCommerceCloudBundle/Domain/SapProjectConfigApi.md)
     * [SapRequestException](php/SapCommerceCloudBundle/Domain/SapRequestException.md)
   * [FrontasticCommonSapCommerceCloudBundle](php/SapCommerceCloudBundle/FrontasticCommonSapCommerceCloudBundle.md)
-* ShopifyBundle
-  * DependencyInjection
-    * [Configuration](php/ShopifyBundle/DependencyInjection/Configuration.md)
-    * [FrontasticCommonShopifyExtension](php/ShopifyBundle/DependencyInjection/FrontasticCommonShopifyExtension.md)
-  * Domain
-    * ProductApi
-      * [ShopifyProductApi](php/ShopifyBundle/Domain/ProductApi/ShopifyProductApi.md)
-    * [ResponseAccess](php/ShopifyBundle/Domain/ResponseAccess.md)
-    * [ShopifyClient](php/ShopifyBundle/Domain/ShopifyClient.md)
-    * [ShopifyClientFactory](php/ShopifyBundle/Domain/ShopifyClientFactory.md)
-  * [FrontasticCommonShopifyBundle](php/ShopifyBundle/FrontasticCommonShopifyBundle.md)
 * ShopwareBundle
   * DependencyInjection
     * [FrontasticCommonShopwareExtension](php/ShopwareBundle/DependencyInjection/FrontasticCommonShopwareExtension.md)
@@ -286,8 +246,6 @@ Here you find the API documentation for the relevant classes:
       * [ShopwareLocale](php/ShopwareBundle/Domain/Locale/ShopwareLocale.md)
     * ProductApi
       * [ShopwareProductApi](php/ShopwareBundle/Domain/ProductApi/ShopwareProductApi.md)
-    * ProductSearchApi
-      * [ShopwareProductSearchApi](php/ShopwareBundle/Domain/ProductSearchApi/ShopwareProductSearchApi.md)
     * ProjectApi
       * [ShopwareProjectApi](php/ShopwareBundle/Domain/ProjectApi/ShopwareProjectApi.md)
     * ProjectConfigApi
@@ -319,64 +277,6 @@ Here you find the API documentation for the relevant classes:
     * [SpecParser](php/SpecificationBundle/Domain/SpecParser.md)
     * [TasticSpecParser](php/SpecificationBundle/Domain/TasticSpecParser.md)
     * [ValidatingSpecParser](php/SpecificationBundle/Domain/ValidatingSpecParser.md)
-* SprykerBundle
-  * BaseApi
-    * Factory
-      * [AbstractSprykerBaseFactory](php/SprykerBundle/BaseApi/Factory/AbstractSprykerBaseFactory.md)
-    * [SprykerApiBase](php/SprykerBundle/BaseApi/SprykerApiBase.md)
-  * Common
-    * [VariantImagesHelper](php/SprykerBundle/Common/VariantImagesHelper.md)
-  * DependencyInjection
-    * [Configuration](php/SprykerBundle/DependencyInjection/Configuration.md)
-    * [FrontasticCommonSprykerExtension](php/SprykerBundle/DependencyInjection/FrontasticCommonSprykerExtension.md)
-  * Domain
-    * [AbstractRequestData](php/SprykerBundle/Domain/AbstractRequestData.md)
-    * Account
-      * [AccountHelper](php/SprykerBundle/Domain/Account/AccountHelper.md)
-      * [SalutationHelper](php/SprykerBundle/Domain/Account/SalutationHelper.md)
-      * [SessionService](php/SprykerBundle/Domain/Account/SessionService.md)
-      * [SprykerAccountApi](php/SprykerBundle/Domain/Account/SprykerAccountApi.md)
-      * [TokenDecoder](php/SprykerBundle/Domain/Account/TokenDecoder.md)
-    * [Address](php/SprykerBundle/Domain/Address.md)
-    * Cart
-      * [SprykerCartApi](php/SprykerBundle/Domain/Cart/SprykerCartApi.md)
-    * Exception
-      * [ExceptionFactory](php/SprykerBundle/Domain/Exception/ExceptionFactory.md)
-      * [ExceptionFactoryInterface](php/SprykerBundle/Domain/Exception/ExceptionFactoryInterface.md)
-      * [SprykerClientException](php/SprykerBundle/Domain/Exception/SprykerClientException.md)
-      * [SprykerServerException](php/SprykerBundle/Domain/Exception/SprykerServerException.md)
-    * [ExtendedMapperInterface](php/SprykerBundle/Domain/ExtendedMapperInterface.md)
-    * Locale
-      * [DefaultLocaleCreator](php/SprykerBundle/Domain/Locale/DefaultLocaleCreator.md)
-      * [DefaultLocaleCreatorFactory](php/SprykerBundle/Domain/Locale/DefaultLocaleCreatorFactory.md)
-      * [LocaleCreator](php/SprykerBundle/Domain/Locale/LocaleCreator.md)
-      * [LocaleCreatorFactory](php/SprykerBundle/Domain/Locale/LocaleCreatorFactory.md)
-      * [SprykerLocale](php/SprykerBundle/Domain/Locale/SprykerLocale.md)
-    * [MapperInterface](php/SprykerBundle/Domain/MapperInterface.md)
-    * [MapperResolver](php/SprykerBundle/Domain/MapperResolver.md)
-    * Product
-      * [CatalogSearchQuery](php/SprykerBundle/Domain/Product/CatalogSearchQuery.md)
-      * [SprykerProductApi](php/SprykerBundle/Domain/Product/SprykerProductApi.md)
-      * [SprykerProductApiConstants](php/SprykerBundle/Domain/Product/SprykerProductApiConstants.md)
-      * [SprykerProductApiExtendedConstants](php/SprykerBundle/Domain/Product/SprykerProductApiExtendedConstants.md)
-      * [SprykerSlugger](php/SprykerBundle/Domain/Product/SprykerSlugger.md)
-    * ProductSearch
-      * [SprykerProductSearchApi](php/SprykerBundle/Domain/ProductSearch/SprykerProductSearchApi.md)
-    * Project
-      * [SprykerProjectApi](php/SprykerBundle/Domain/Project/SprykerProjectApi.md)
-      * [SprykerProjectApiInterface](php/SprykerBundle/Domain/Project/SprykerProjectApiInterface.md)
-    * ProjectConfig
-      * [SprykerProjectConfigApi](php/SprykerBundle/Domain/ProjectConfig/SprykerProjectConfigApi.md)
-    * Route
-      * [RouteConstants](php/SprykerBundle/Domain/Route/RouteConstants.md)
-    * [SprykerClient](php/SprykerBundle/Domain/SprykerClient.md)
-    * [SprykerClientFactory](php/SprykerBundle/Domain/SprykerClientFactory.md)
-    * [SprykerClientInterface](php/SprykerBundle/Domain/SprykerClientInterface.md)
-    * [SprykerSalutation](php/SprykerBundle/Domain/SprykerSalutation.md)
-    * Wishlist
-      * [SprykerWishlistApi](php/SprykerBundle/Domain/Wishlist/SprykerWishlistApi.md)
-      * [WishlistConstants](php/SprykerBundle/Domain/Wishlist/WishlistConstants.md)
-  * [FrontasticCommonSprykerBundle](php/SprykerBundle/FrontasticCommonSprykerBundle.md)
 * [Translatable](php/Translatable.md)
 * WishlistApiBundle
   * Controller

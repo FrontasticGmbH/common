@@ -16,12 +16,10 @@
 * [setEmail()](#setemail)
 * [setShippingMethod()](#setshippingmethod)
 * [setCustomField()](#setcustomfield)
-* [setRawApiInput()](#setrawapiinput)
 * [setCustomType()](#setcustomtype)
 * [setShippingAddress()](#setshippingaddress)
 * [setBillingAddress()](#setbillingaddress)
 * [addPayment()](#addpayment)
-* [updatePayment()](#updatepayment)
 * [redeemDiscountCode()](#redeemdiscountcode)
 * [removeDiscountCode()](#removediscountcode)
 * [order()](#order)
@@ -45,8 +43,7 @@ public function __construct(
     Commercetools\Client $client,
     Commercetools\Mapper $cartMapper,
     Commercetools\Locale\CommercetoolsLocaleCreator $localeCreator,
-    OrderIdGenerator $orderIdGenerator,
-    \Psr\Log\LoggerInterface $logger
+    OrderIdGenerator $orderIdGenerator
 ): mixed
 ```
 
@@ -56,7 +53,6 @@ Argument|Type|Default|Description
 `$cartMapper`|[`Commercetools`](Commercetools.md)\Mapper||
 `$localeCreator`|[`Commercetools`](../../../ProductApiBundle/Domain/ProductApi/Commercetools.md)\Locale\CommercetoolsLocaleCreator||
 `$orderIdGenerator`|[`OrderIdGenerator`](../OrderIdGenerator.md)||
-`$logger`|`\Psr\Log\LoggerInterface`||
 
 Return Value: `mixed`
 
@@ -220,22 +216,6 @@ Argument|Type|Default|Description
 
 Return Value: [`Cart`](../Cart.md)
 
-### setRawApiInput()
-
-```php
-public function setRawApiInput(
-    Cart $cart,
-    string $localeString = null
-): Cart
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$cart`|[`Cart`](../Cart.md)||
-`$localeString`|`string`|`null`|
-
-Return Value: [`Cart`](../Cart.md)
-
 ### setCustomType()
 
 ```php
@@ -313,24 +293,6 @@ Argument|Type|Default|Description
 `$localeString`|`string`|`null`|
 
 Return Value: [`Cart`](../Cart.md)
-
-### updatePayment()
-
-```php
-public function updatePayment(
-    Cart $cart,
-    Payment $payment,
-    string $localeString
-): Payment
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$cart`|[`Cart`](../Cart.md)||
-`$payment`|[`Payment`](../Payment.md)||
-`$localeString`|`string`||
-
-Return Value: [`Payment`](../Payment.md)
 
 ### redeemDiscountCode()
 

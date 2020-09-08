@@ -5,7 +5,6 @@
 ## Methods
 
 * [__construct()](#__construct)
-* [factorForConfigs()](#factorforconfigs)
 * [factorForProjectAndType()](#factorforprojectandtype)
 
 ### __construct()
@@ -21,22 +20,6 @@ Argument|Type|Default|Description
 `$httpClient`|[`HttpClient`](../../HttpClient.md)||
 
 Return Value: `mixed`
-
-### factorForConfigs()
-
-```php
-public function factorForConfigs(
-    object $typeSpecificConfiguration,
-    ?object $genericConfiguration = null
-): Client
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$typeSpecificConfiguration`|`object`||
-`$genericConfiguration`|`?object`|`null`|
-
-Return Value: [`Client`](Client.md)
 
 ### factorForProjectAndType()
 

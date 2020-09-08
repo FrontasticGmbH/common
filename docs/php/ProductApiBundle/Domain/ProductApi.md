@@ -5,7 +5,6 @@
 ## Methods
 
 * [getCategories()](#getcategories)
-* [queryCategories()](#querycategories)
 * [getProductTypes()](#getproducttypes)
 * [getProduct()](#getproduct)
 * [query()](#query)
@@ -24,20 +23,6 @@ Argument|Type|Default|Description
 `$query`|[`Query`](ProductApi/Query.md)\CategoryQuery||
 
 Return Value: `array`
-
-### queryCategories()
-
-```php
-public function queryCategories(
-    Query\CategoryQuery $query
-): Result
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$query`|[`Query`](ProductApi/Query.md)\CategoryQuery||
-
-Return Value: [`Result`](ProductApi/Result.md)
 
 ### getProductTypes()
 

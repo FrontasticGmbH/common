@@ -9,7 +9,6 @@
 * [byProperty()](#byproperty)
 * [byProductId()](#byproductid)
 * [bySku()](#bysku)
-* [fromQuery()](#fromquery)
 
 ### byProperty()
 
@@ -52,20 +51,6 @@ static public function bySku(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$sku`|`string`||
-
-Return Value: [`ProductNotFoundException`](ProductNotFoundException.md)
-
-### fromQuery()
-
-```php
-static public function fromQuery(
-    Query\SingleProductQuery $query
-): ProductNotFoundException
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$query`|[`Query`](Query.md)\SingleProductQuery||
 
 Return Value: [`ProductNotFoundException`](ProductNotFoundException.md)
 

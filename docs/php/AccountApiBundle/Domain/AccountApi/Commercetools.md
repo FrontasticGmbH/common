@@ -23,22 +23,19 @@
 * [setDefaultBillingAddress()](#setdefaultbillingaddress)
 * [setDefaultShippingAddress()](#setdefaultshippingaddress)
 * [getDangerousInnerClient()](#getdangerousinnerclient)
+* [getCustomerType()](#getcustomertype)
 
 ### __construct()
 
 ```php
 public function __construct(
-    Commercetools\Client $client,
-    Commercetools\Mapper $accountMapper,
-    \Psr\Log\LoggerInterface $logger
+    Commercetools\Client $client
 ): mixed
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$client`|[`Commercetools`](../../../ProductApiBundle/Domain/ProductApi/Commercetools.md)\Client||
-`$accountMapper`|[`Commercetools`](Commercetools.md)\Mapper||
-`$logger`|`\Psr\Log\LoggerInterface`||
 
 Return Value: `mixed`
 
@@ -317,5 +314,13 @@ Use this with care for features necessary in your customer and talk with
 Frontastic about provising an abstraction.
 
 Return Value: `mixed`
+
+### getCustomerType()
+
+```php
+public function getCustomerType(): array
+```
+
+Return Value: `array`
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

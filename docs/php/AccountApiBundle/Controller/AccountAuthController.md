@@ -52,7 +52,7 @@ Return Value: `\Symfony\Component\HttpFoundation\Response`
 public function confirmAction(
     \Symfony\Component\HttpFoundation\Request $request,
     \Frontastic\Catwalk\ApiCoreBundle\Domain\Context $context,
-    string $confirmationToken
+    string $token
 ): \Symfony\Component\HttpFoundation\Response
 ```
 
@@ -60,7 +60,7 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$request`|`\Symfony\Component\HttpFoundation\Request`||
 `$context`|`\Frontastic\Catwalk\ApiCoreBundle\Domain\Context`||
-`$confirmationToken`|`string`||
+`$token`|`string`||
 
 Return Value: `\Symfony\Component\HttpFoundation\Response`
 

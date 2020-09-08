@@ -2,7 +2,7 @@
 
 **Fully Qualified**: [`\Frontastic\Common\AccountApiBundle\Domain\Account`](../../../../src/php/AccountApiBundle/Domain/Account.php)
 
-**Extends**: [`ApiDataObject`](../../CoreBundle/Domain/ApiDataObject.md)
+**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
 **Implements**: `\Symfony\Component\Security\Core\User\UserInterface`, [`\Serializable`](https://www.php.net/manual/de/class.serializable.php)
 
@@ -14,6 +14,7 @@ Property|Type|Default|Required|Description
 `firstName` | `string` |  | - | 
 `lastName` | `string` |  | - | 
 `birthday` | `\DateTime` |  | - | 
+`data` | `array` | `[]` | - | 
 `groups` | [`Group`](Group.md)[] | `[]` | - | 
 `confirmationToken` | `string` |  | - | 
 `confirmed` | `string` | `false` | - | 

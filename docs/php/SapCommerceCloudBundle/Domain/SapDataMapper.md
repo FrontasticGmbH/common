@@ -5,7 +5,6 @@
 ## Methods
 
 * [__construct()](#__construct)
-* [mapAddressToData()](#mapaddresstodata)
 * [mapDataToProduct()](#mapdatatoproduct)
 * [mapDataToCategories()](#mapdatatocategories)
 * [mapDataToCart()](#mapdatatocart)
@@ -24,20 +23,6 @@ Argument|Type|Default|Description
 `$client`|[`SapClient`](SapClient.md)||
 
 Return Value: `mixed`
-
-### mapAddressToData()
-
-```php
-public function mapAddressToData(
-    Address $address
-): array
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$address`|[`Address`](../../AccountApiBundle/Domain/Address.md)||
-
-Return Value: `array`
 
 ### mapDataToProduct()
 

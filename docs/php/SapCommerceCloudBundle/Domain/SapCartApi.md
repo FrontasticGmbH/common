@@ -20,11 +20,9 @@
 * [setEmail()](#setemail)
 * [setShippingMethod()](#setshippingmethod)
 * [setCustomField()](#setcustomfield)
-* [setRawApiInput()](#setrawapiinput)
 * [setShippingAddress()](#setshippingaddress)
 * [setBillingAddress()](#setbillingaddress)
 * [addPayment()](#addpayment)
-* [updatePayment()](#updatepayment)
 * [redeemDiscountCode()](#redeemdiscountcode)
 * [removeDiscountCode()](#removediscountcode)
 * [order()](#order)
@@ -258,22 +256,6 @@ Argument|Type|Default|Description
 
 Return Value: [`Cart`](../../CartApiBundle/Domain/Cart.md)
 
-### setRawApiInput()
-
-```php
-public function setRawApiInput(
-    Cart $cart,
-    string $locale = null
-): Cart
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$cart`|[`Cart`](../../CartApiBundle/Domain/Cart.md)||
-`$locale`|`string`|`null`|
-
-Return Value: [`Cart`](../../CartApiBundle/Domain/Cart.md)
-
 ### setShippingAddress()
 
 ```php
@@ -329,24 +311,6 @@ Argument|Type|Default|Description
 `$locale`|`string`|`null`|
 
 Return Value: [`Cart`](../../CartApiBundle/Domain/Cart.md)
-
-### updatePayment()
-
-```php
-public function updatePayment(
-    Cart $cart,
-    Payment $payment,
-    string $localeString
-): Payment
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$cart`|[`Cart`](../../CartApiBundle/Domain/Cart.md)||
-`$payment`|[`Payment`](../../CartApiBundle/Domain/Payment.md)||
-`$localeString`|`string`||
-
-Return Value: [`Payment`](../../CartApiBundle/Domain/Payment.md)
 
 ### redeemDiscountCode()
 

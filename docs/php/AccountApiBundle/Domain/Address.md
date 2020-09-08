@@ -2,7 +2,7 @@
 
 **Fully Qualified**: [`\Frontastic\Common\AccountApiBundle\Domain\Address`](../../../../src/php/AccountApiBundle/Domain/Address.php)
 
-**Extends**: [`ApiDataObject`](../../CoreBundle/Domain/ApiDataObject.md)
+**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
@@ -17,10 +17,9 @@ Property|Type|Default|Required|Description
 `postalCode` | `string` |  | - | 
 `city` | `string` |  | - | 
 `country` | `string` |  | - | 2 letter ISO code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
-`state` | `string` |  | - | 
 `phone` | `string` |  | - | 
 `isDefaultBillingAddress` | `bool` | `false` | - | 
 `isDefaultShippingAddress` | `bool` | `false` | - | 
-`dangerousInnerAddress` | `mixed` |  | - | Access original object from backend.
+`dangerousInnerAddress` | `mixed` |  | - | Access original object from backend
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

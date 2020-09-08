@@ -2,13 +2,14 @@
 
 **Fully Qualified**: [`\Frontastic\Common\CartApiBundle\Domain\LineItem`](../../../../src/php/CartApiBundle/Domain/LineItem.php)
 
-**Extends**: [`ApiDataObject`](../../CoreBundle/Domain/ApiDataObject.md)
+**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
 `lineItemId` | `string` |  | - | 
 `name` | `string` |  | - | 
 `type` | `string` |  | - | 
+`custom` | `array` | `[]` | - | 
 `count` | `int` |  | - | 
 `price` | `int` |  | - | 
 `discountedPrice` | `int` |  | - | 
