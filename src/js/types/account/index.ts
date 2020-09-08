@@ -10,11 +10,11 @@ export interface Account extends ApiDataObject {
      firstName?: string;
      lastName?: string;
      birthday?: any /* \DateTime */;
-     groups?: Account.Group[];
+     groups?: Group[];
      confirmationToken?: string;
      confirmed?: string;
      tokenValidUntil?: any /* \DateTime */;
-     addresses?: Account.Address[];
+     addresses?: Address[];
      authToken?: string | null;
      dangerousInnerAccount?: any;
 }
@@ -63,6 +63,6 @@ export interface PasswordResetToken {
 
 export interface Session {
      loggedIn?: boolean;
-     account?: Account.Account;
+     account?: Account;
      message?: string;
 }

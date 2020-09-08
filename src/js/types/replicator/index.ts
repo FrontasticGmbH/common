@@ -15,7 +15,7 @@ export interface Customer {
      isTransient?: boolean;
      configuration?: any;
      environments?: any;
-     projects?: Replicator.Project[];
+     projects?: Project[];
 }
 
 export interface Endpoint {
@@ -39,7 +39,7 @@ export interface Project {
      languages?: string[];
      defaultLanguage?: string;
      projectSpecific?: string[];
-     endpoints?: Replicator.Endpoint[];
+     endpoints?: Endpoint[];
 }
 
 export interface Result {

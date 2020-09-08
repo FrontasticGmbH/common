@@ -1,6 +1,6 @@
 
 export interface Configuration {
-     options?: HttpClient.Options;
+     options?: Options;
      defaultHeaders?: string[];
      signatureSecret?: null | string;
      collectStats?: boolean;

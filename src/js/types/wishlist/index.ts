@@ -14,6 +14,6 @@ export interface Wishlist {
      anonymousId?: string;
      accountId?: string;
      name?: string[];
-     lineItems?: Wishlist.LineItem[];
+     lineItems?: LineItem[];
      dangerousInnerWishlist?: any;
 }

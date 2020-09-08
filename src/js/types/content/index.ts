@@ -13,7 +13,7 @@ export interface Query {
      contentType?: string;
      query?: string;
      contentIds?: any;
-     attributes?: Content.AttributeFilter[];
+     attributes?: AttributeFilter[];
 }
 
 export interface Result {

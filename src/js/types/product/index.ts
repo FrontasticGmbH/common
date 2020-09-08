@@ -16,7 +16,7 @@ export interface Product {
      slug: string;
      description?: string;
      categories?: string[];
-     variants: Product.Variant[];
+     variants: Variant[];
      dangerousInnerProduct?: any;
 }
 

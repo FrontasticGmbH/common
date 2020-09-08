@@ -49,7 +49,7 @@ export interface ShopwareShippingMethod {
      id?: string;
      name?: string;
      active?: boolean;
-     deliveryTime?: Shopware.ProjectConfigApi.ShopwareShippingMethodDeliveryTime;
+     deliveryTime?: ShopwareShippingMethodDeliveryTime;
 }
 
 export interface ShopwareShippingMethodDeliveryTime {

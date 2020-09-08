@@ -35,5 +35,5 @@ export interface Result {
      count?: number;
      items?: any;
      facets?: any /* \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\Facet */[];
-     query?: Product.ProductApi.Query;
+     query?: Query;
 }

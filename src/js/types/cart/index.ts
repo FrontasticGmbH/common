@@ -3,18 +3,22 @@ import {
     ApiDataObject,
 } from '../core'
 
+import {
+    Translatable,
+} from '..'
+
 export interface Cart extends ApiDataObject {
      cartId?: string;
      cartVersion?: string;
-     lineItems?: Cart.LineItem[];
+     lineItems?: LineItem[];
      email?: string;
      birthday?: any /* \DateTimeImmutable */;
-     shippingMethod?: null | Cart.ShippingMethod;
+     shippingMethod?: null | ShippingMethod;
      shippingAddress?: null | any /* \Frontastic\Common\CartApiBundle\Domain\Address */;
      billingAddress?: null | any /* \Frontastic\Common\CartApiBundle\Domain\Address */;
      sum?: number;
      currency?: string;
-     payments?: Cart.Payment[];
+     payments?: Payment[];
      discountCodes?: string[];
      dangerousInnerCart?: any;
 }

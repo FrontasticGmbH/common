@@ -10,6 +10,6 @@ export interface Content {
      contentTypeId?: string;
      name?: string;
      slug?: string;
-     attributes?: Content.ContentApi.Attribute[];
+     attributes?: Attribute[];
      dangerousInnerContent?: any;
 }

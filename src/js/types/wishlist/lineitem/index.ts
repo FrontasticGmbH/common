@@ -3,7 +3,11 @@ import {
     LineItem,
 } from '..'
 
+import {
+    Variant,
+} from '../../product'
+
 export interface Variant extends LineItem {
-     variant?: Product.Variant;
+     variant?: Variant;
      type?: string;
 }
