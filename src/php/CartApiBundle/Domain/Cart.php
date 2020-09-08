@@ -2,13 +2,13 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain;
 
-use Frontastic\Common\AccountApiBundle\Domain\Address;
-use Kore\DataObject\DataObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @type
  */
-class Cart extends DataObject
+class Cart extends ApiDataObject
 {
     /**
      * @var string
@@ -19,11 +19,6 @@ class Cart extends DataObject
      * @var string
      */
     public $cartVersion;
-
-    /**
-     * @var array
-     */
-    public $custom = [];
 
     /**
      * @var \Frontastic\Common\CartApiBundle\Domain\LineItem[]
@@ -163,5 +158,16 @@ class Cart extends DataObject
     public function isComplete(): bool
     {
         return $this->hasUser() && $this->hasAddresses() && $this->hasCompletePayments();
+    }
+
+    public function getPaymentById(string $paymentId): Payment
+    {
+        foreach ($this->payments as $payment) {
+            if ($payment->id === $paymentId) {
+                return $payment;
+            }
+        }
+
+        throw new NotFoundHttpException('Payment ' . $paymentId . ' not found in cart ' . $this->cartId);
     }
 }

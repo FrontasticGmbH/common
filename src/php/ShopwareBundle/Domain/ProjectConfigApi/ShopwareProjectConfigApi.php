@@ -32,7 +32,7 @@ class ShopwareProjectConfigApi extends AbstractShopwareApi implements ShopwarePr
 
         try {
             return $this->client
-                ->get('/country', $parameters)
+                ->get('/sales-channel-api/v2/country', $parameters)
                 ->then(function ($response) {
                     return $this->mapResponse($response, CountryMapper::MAPPER_NAME);
                 })->wait();
@@ -51,7 +51,7 @@ class ShopwareProjectConfigApi extends AbstractShopwareApi implements ShopwarePr
         ];
 
         return $this->client
-            ->get('/currency', $parameters)
+            ->get('/sales-channel-api/v2/currency', $parameters)
             ->then(function ($response) {
                 return $this->mapResponse($response, CurrenciesMapper::MAPPER_NAME)[0] ?? null;
             })->wait();
@@ -63,7 +63,7 @@ class ShopwareProjectConfigApi extends AbstractShopwareApi implements ShopwarePr
     public function getPaymentMethods(): array
     {
         return $this->client
-            ->get('/payment-method?associations[media][]')
+            ->get('/sales-channel-api/v2/payment-method?associations[media][]')
             ->then(function ($response) {
                 return $this->mapResponse($response, PaymentMethodsMapper::MAPPER_NAME);
             })->wait();
@@ -75,9 +75,9 @@ class ShopwareProjectConfigApi extends AbstractShopwareApi implements ShopwarePr
     public function getProjectConfig(): array
     {
         $contextResources = [
-            self::RESOURCE_COUNTRIES => '/country',
-            self::RESOURCE_CURRENCIES => '/currency',
-            self::RESOURCE_LANGUAGES => '/language?associations[locale][]',
+            self::RESOURCE_COUNTRIES => '/sales-channel-api/v2/country',
+            self::RESOURCE_CURRENCIES => '/sales-channel-api/v2/currency',
+            self::RESOURCE_LANGUAGES => '/sales-channel-api/v2/language?associations[locale][]',
         ];
 
         $contextPromises = (function () use ($contextResources) {
@@ -129,7 +129,7 @@ class ShopwareProjectConfigApi extends AbstractShopwareApi implements ShopwarePr
         }
 
         return $this->client
-            ->get('/salutation', $parameters)
+            ->get('/sales-channel-api/v2/salutation', $parameters)
             ->then(function ($response) {
                 return $this->mapResponse($response, SalutationsMapper::MAPPER_NAME);
             })->wait();
@@ -141,7 +141,7 @@ class ShopwareProjectConfigApi extends AbstractShopwareApi implements ShopwarePr
     public function getShippingMethods(): array
     {
         return $this->client
-            ->get('/shipping-method?associations[media][]')
+            ->get('/sales-channel-api/v2/shipping-method?associations[media][]')
             ->then(function ($response) {
                 return $this->mapResponse($response, ShippingMethodsMapper::MAPPER_NAME);
             })->wait();

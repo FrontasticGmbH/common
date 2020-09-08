@@ -3,6 +3,7 @@
 namespace Frontastic\Common\SapCommerceCloudBundle\Domain;
 
 use Frontastic\Common\AccountApiBundle\Domain\Account;
+use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\ProductApiBundle\Domain\Category;
@@ -19,6 +20,27 @@ class SapDataMapper
     public function __construct(SapClient $client)
     {
         $this->client = $client;
+    }
+
+    public function mapAddressToData(Address $address): array
+    {
+        return array_merge(
+            (array)$address->rawApiInput,
+            [
+                'addressId' => $address->addressId,
+                'salutation' => $address->salutation,
+                'firstName' => $address->firstName,
+                'lastName' => $address->lastName,
+                'streetName' => $address->streetName,
+                'streetNumber' => $address->streetNumber,
+                'additionalStreetInfo' => $address->additionalStreetInfo,
+                'additionalAddressInfo' => $address->additionalAddressInfo,
+                'postalCode' => $address->postalCode,
+                'city' => $address->city,
+                'country' => $address->country,
+                'phone' => $address->phone,
+            ]
+        );
     }
 
     public function mapDataToProduct(array $data): Product

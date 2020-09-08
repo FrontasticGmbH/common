@@ -38,6 +38,7 @@ class SingleProductQuery extends Query
                 'sku' => $query->sku,
                 'locale' => $query->locale,
                 'loadDangerousInnerData' => $query->loadDangerousInnerData,
+                'rawApiInput' => $query->rawApiInput,
             ]);
         }
 

@@ -159,6 +159,7 @@ abstract class Kernel extends SymfonyKernel
     {
         $files = array(
             static::getBaseDir() . '/../environment',
+            static::getBaseDir() . '/../environment.local',
             static::getBaseDir() . '/environment',
             static::getBaseDir() . '/environment.local',
         );

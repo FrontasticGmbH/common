@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 import Region from './region'
 
 export const DEFAULT_PAGE_LAYOUT = 'three_rows'
@@ -14,7 +12,7 @@ class Page {
 
         this.regions = {}
 
-        this.tastics = _.map(tastics, 'configurationSchema')
+        this.tasticSchemas = (tastics || []).map(tastic => { return tastic.configurationSchema })
 
         for (let i = 0; i < layoutRegions.length; ++i) {
             let regionId = layoutRegions[i]
@@ -48,11 +46,13 @@ class Page {
             for (let k = 0; k < element.tastics.length; ++k) {
                 let tastic = element.tastics[k]
 
-                let tasticSpecification = _.find(this.tastics, (tasticSpecification) => {
-                    return tasticSpecification.tasticType === tastic.tasticType
-                }) || { schema: [] }
-
-                tastic.schema = tasticSpecification.schema
+                tastic.schema = { schema: [] }
+                for (let tasticSchema of this.tasticSchemas) {
+                    if (tasticSchema.tasticType === tastic.tasticType) {
+                        tastic.schema = tasticSchema.schema
+                        break
+                    }
+                }
             }
         }
 
@@ -91,15 +91,19 @@ class Page {
         return this.getRegion(region).addKit(kit)
     }
 
-    findElement (elementId) {
+    findElement (elementIdentifier) {
+        const elementIdProperty = Object.keys(elementIdentifier)[0]
+        const elementId = Object.values(elementIdentifier)[0]
+
         for (let region in this.regions) {
-            let elementIndex = _.findIndex(this.regions[region].elements, elementId)
-            if (elementIndex >= 0) {
-                return [region, elementIndex]
+            for (let [elementIndex, element] of Object.entries(this.regions[region].elements)) {
+                if (element[elementIdProperty] === elementId) {
+                    return [region, +elementIndex]
+                }
             }
         }
 
-        throw new Error('Could not find element with ' + JSON.stringify(elementId))
+        throw new Error('Could not find element with ' + JSON.stringify(elementIdentifier))
     }
 
     hasElement (elementId) {
@@ -138,7 +142,13 @@ class Page {
     }
 
     addTastic (regionId, cellId, tasticType, position, configuration = {}) {
-        let schema = _.find(this.tastics, { tasticType: tasticType })
+        let schema = null
+        for (let tasticSchema of this.tasticSchemas) {
+            if (tasticSchema.tasticType === tasticType) {
+                schema = tasticSchema
+                break
+            }
+        }
 
         return this.getRegion(regionId).getElement({ cellId: cellId }).addTastic(tasticType, configuration, schema, position)
     }
@@ -158,12 +168,11 @@ class Page {
     findTastic (tasticId) {
         for (let region in this.regions) {
             for (let elementIndex = 0; elementIndex < this.regions[region].elements.length; ++elementIndex) {
-                let tasticIndex = _.findIndex(
-                    this.regions[region].elements[elementIndex].tastics,
-                    { tasticId: tasticId }
-                )
-                if (tasticIndex >= 0) {
-                    return [region, elementIndex, tasticIndex]
+                for (let tasticIndex in (this.regions[region].elements[elementIndex].tastics || [])) {
+                    let tastic = this.regions[region].elements[elementIndex].tastics[tasticIndex]
+                    if (tastic.tasticId === tasticId) {
+                        return [region, +elementIndex, +tasticIndex]
+                    }
                 }
             }
         }
@@ -200,7 +209,7 @@ class Page {
                 target.tasticDropPosition - (
                     (region === targetRegion) &&
                         (elementIndex === targetElementIndex) &&
-                        (target.tasticDropPosition > tasticIndex) ? 1 : 0),
+                        (target.tasticDropPosition >= tasticIndex) ? 1 : 0),
             0,
             tastic
         )
@@ -213,14 +222,17 @@ class Page {
     }
 
     export () {
+        let regions = {}
+        for (let [name, region] of Object.entries(this.regions)) {
+            regions[name] = region.export()
+        }
+
         return {
             pageId: this.pageId,
             nodes: this.nodes,
             layoutId: this.layoutId,
             name: this.name,
-            regions: _.mapValues(this.regions, (region) => {
-                return region.export()
-            }),
+            regions: regions,
         }
     }
 }

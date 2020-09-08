@@ -17,7 +17,6 @@ use Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper\OrdersMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
-use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
@@ -77,7 +76,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
         return $this->client
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
-            ->post('/checkout/cart', [], $requestData)
+            ->post('/sales-channel-api/v2/checkout/cart', [], $requestData)
             ->then(static function ($response) {
                 return $response['sw-context-token'];
             })->then(function ($token) use ($locale) {
@@ -94,7 +93,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($token)
-            ->get('/checkout/cart')
+            ->get('/sales-channel-api/v2/checkout/cart')
             ->then(function ($response) {
                 return $this->mapResponse($response, CartMapper::MAPPER_NAME);
             })
@@ -136,7 +135,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($cart->cartId)
-            ->post("/checkout/cart/line-item/{$id}", [], $requestData)
+            ->post("/sales-channel-api/v2/checkout/cart/line-item/{$id}", [], $requestData)
             ->then(function ($response) {
                 if (isset($response['data']['errors']) && !empty($response['data']['errors'])) {
                     $this->respondWithError($response['data']['errors']);
@@ -163,7 +162,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($cart->cartId)
-            ->patch("/checkout/cart/line-item/{$id}", [], $requestData)
+            ->patch("/sales-channel-api/v2/checkout/cart/line-item/{$id}", [], $requestData)
             ->then(function ($response) {
                 if (isset($response['data']['errors']) && !empty($response['data']['errors'])) {
                     $this->respondWithError($response['data']['errors']);
@@ -182,7 +181,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($cart->cartId)
-            ->delete("/checkout/cart/line-item/{$lineItem->lineItemId}")
+            ->delete("/sales-channel-api/v2/checkout/cart/line-item/{$lineItem->lineItemId}")
             ->then(function ($response) {
                 if (isset($response['data']['errors']) && !empty($response['data']['errors'])) {
                     $this->respondWithError($response['data']['errors']);
@@ -211,6 +210,12 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
         throw new RuntimeException(__METHOD__ . ' not implemented');
     }
 
+    public function setRawApiInput(Cart $cart, string $locale = null): Cart
+    {
+        // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
+        throw new RuntimeException(__METHOD__ . ' not implemented');
+    }
+
     public function setShippingAddress(Cart $cart, Address $address, string $locale = null): Cart
     {
         // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
@@ -231,6 +236,12 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
         throw new RuntimeException(__METHOD__ . ' not implemented');
     }
 
+    public function updatePayment(Cart $cart, Payment $payment, string $localeString): Payment
+    {
+        // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
+        throw new RuntimeException(__METHOD__ . ' not implemented');
+    }
+
     public function redeemDiscountCode(Cart $cart, string $code, string $locale = null): Cart
     {
         $shopwareLocale = $this->parseLocaleString($locale);
@@ -239,7 +250,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($cart->cartId)
-            ->post("/checkout/cart/code/{$code}")
+            ->post("/sales-channel-api/v2/checkout/cart/code/{$code}")
             ->then(function ($response) {
                 if (isset($response['data']['errors']) && !empty($response['data']['errors'])) {
                     $this->respondWithError($response['data']['errors']);
@@ -263,7 +274,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($cart->cartId)
-            ->post('/checkout/order')
+            ->post('/sales-channel-api/v2/checkout/order')
             ->then(function ($orderResponse) {
                 return $this->mapResponse($orderResponse, OrderMapper::MAPPER_NAME);
             })
@@ -348,7 +359,7 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($token)
-            ->get('/customer/order', $requestParameters)
+            ->get('/sales-channel-api/v2/customer/order', $requestParameters)
             ->then(function ($response) {
                 return $this->mapResponse($response, OrdersMapper::MAPPER_NAME);
             })

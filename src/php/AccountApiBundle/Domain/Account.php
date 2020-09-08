@@ -2,16 +2,14 @@
 
 namespace Frontastic\Common\AccountApiBundle\Domain;
 
-use InvalidArgumentException;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\Collection;
-
-use Kore\DataObject\DataObject;
 
 /**
  * @type
  */
-class Account extends DataObject implements UserInterface, \Serializable
+class Account extends ApiDataObject implements UserInterface, \Serializable
 {
     /**
      * @var string
@@ -42,11 +40,6 @@ class Account extends DataObject implements UserInterface, \Serializable
      * @var \DateTime
      */
     public $birthday;
-
-    /**
-     * @var array
-     */
-    public $data = [];
 
     /**
      * @var string

@@ -4,13 +4,16 @@ namespace Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
+use Frontastic\Common\AccountApiBundle\Domain\AccountApi\Commercetools\Mapper as AccountMapper;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\AccountApiBundle\Domain\DuplicateAccountException;
 use Frontastic\Common\AccountApiBundle\Domain\PasswordResetToken;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Central API entry point is OK to have many public methods.
@@ -18,9 +21,19 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class Commercetools implements AccountApi
 {
     /**
+     * @var AccountMapper
+     */
+    private $accountMapper;
+
+    /**
      * @var Client
      */
     private $client;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * @var array
@@ -29,9 +42,11 @@ class Commercetools implements AccountApi
 
     const TYPE_NAME = 'frontastic-customer-type';
 
-    public function __construct(Client $client)
+    public function __construct(Client $client, AccountMapper $accountMapper, LoggerInterface $logger)
     {
         $this->client = $client;
+        $this->accountMapper = $accountMapper;
+        $this->logger = $logger;
     }
 
     public function getSalutations(string $locale): ?array
@@ -65,22 +80,31 @@ class Commercetools implements AccountApi
                 '/customers',
                 [],
                 [],
-                json_encode([
-                    'email' => $account->email,
-                    'salutation' => $account->salutation,
-                    'firstName' => $account->firstName,
-                    'lastName' => $account->lastName,
-                    'dateOfBirth' => $account->birthday ? $account->birthday->format('Y-m-d') : null,
-                    'password' => $this->sanitizePassword($account->getPassword()),
-                    'isEmailVerified' => $account->confirmed,
-                    'custom' => [
-                        'type' => $this->getCustomerType(),
-                        'fields' => [
-                            'data' => json_encode($account->data),
-                        ],
-                    ],
-                    'anonymousCartId' => $cart ? $cart->cartId : null,
-                ])
+                json_encode(
+                    array_merge(
+                        (array)$account->rawApiInput,
+                        [
+                            'email' => $account->email,
+                            'salutation' => $account->salutation,
+                            'firstName' => $account->firstName,
+                            'lastName' => $account->lastName,
+                            'dateOfBirth' => $account->birthday ? $account->birthday->format('Y-m-d') : null,
+                            'password' => $this->sanitizePassword($account->getPassword()),
+                            'isEmailVerified' => $account->confirmed,
+                            /** @TODO: To guarantee BC only!
+                             * This data should be mapped on the corresponding EventDecorator
+                             * Remove the commented lines below if the data is already handle in MapAccountDataDecorator
+                             */
+                            // 'custom' => [
+                                // 'type' => $this->getCustomerType(),
+                                // 'fields' => [
+                                   // 'data' => json_encode($account->data),
+                                // ],
+                            // ],
+                            'anonymousCartId' => $cart ? $cart->cartId : null,
+                        ]
+                    )
+                )
             )['customer']);
 
             $token = $this->client->post(
@@ -101,7 +125,7 @@ class Commercetools implements AccountApi
                 /*
                  * The cart might already belong to another user so we try to login without the cart.
                  */
-                return $this->create($account);
+                return $this->create($account, null, $locale);
             }
 
             throw $e;
@@ -120,35 +144,46 @@ class Commercetools implements AccountApi
     public function update(Account $account, string $locale = null): Account
     {
         $accountVersion = $this->client->get('/customers/' . $account->accountId);
+
         return $this->mapAccount($this->client->post(
             '/customers/' . $account->accountId,
             [],
             [],
             json_encode([
                 'version' => $accountVersion['version'],
-                'actions' => [
+                'actions' => array_merge(
+                    (array)$account->rawApiInput,
                     [
-                        'action' => 'setFirstName',
-                        'firstName' => $account->firstName,
-                    ],
-                    [
-                        'action' => 'setLastName',
-                        'lastName' => $account->lastName,
-                    ],
-                    [
-                        'action' => 'setSalutation',
-                        'salutation' => $account->salutation,
-                    ],
-                    [
-                        'action' => 'setDateOfBirth',
-                        'dateOfBirth' => $account->birthday->format('Y-m-d'),
-                    ],
-                    [
-                        'action' => 'setCustomField',
-                        'name' => 'data',
-                        'value' => json_encode($account->data),
-                    ],
-                ],
+                        [
+                            'action' => 'setFirstName',
+                            'firstName' => $account->firstName,
+                        ],
+                        [
+                            'action' => 'setLastName',
+                            'lastName' => $account->lastName,
+                        ],
+                        [
+                            'action' => 'setSalutation',
+                            'salutation' => $account->salutation,
+                        ],
+                        [
+                            'action' => 'setDateOfBirth',
+                            'dateOfBirth' => ($account->birthday instanceof \DateTimeInterface
+                                ? $account->birthday->format('Y-m-d')
+                                : null
+                            ),
+                        ],
+                        /** @TODO: To guarantee BC only!
+                         * This data should be mapped on the corresponding EventDecorator
+                         * Remove the commented lines below if the data is already handle in MapAccountDataDecorator
+                         */
+                        // [
+                            // 'action' => 'setCustomField',
+                            // 'name' => 'data',
+                            // 'value' => json_encode($account->data),
+                        // ],
+                    ]
+                ),
             ])
         ));
     }
@@ -238,11 +273,15 @@ class Commercetools implements AccountApi
                 /*
                  * The cart might already belong to another user so we try to login without the cart.
                  */
-                return $this->login($account);
+                return $this->login($account, null, $locale);
             }
+
+            $this->logger->error('Failed to login user. RequestException: ' . $e->getMessage());
 
             return null;
         } catch (\Exception $e) {
+            $this->logger->error('Failed to login user. Exception: ' . $e->getMessage());
+
             return null;
         }
         if (!$account->confirmed) {
@@ -287,29 +326,44 @@ class Commercetools implements AccountApi
     public function addAddress(Account $account, Address $address, string $locale = null): Account
     {
         $accountData = $this->client->get('/customers/' . $account->accountId);
+
+        $addressData = $this->accountMapper->mapAddressToData($address);
+        unset($addressData['id']);
+
+        $additionalActions = [];
+        if ($address->isDefaultBillingAddress || $address->isDefaultShippingAddress) {
+            if (($addressData['key'] ?? null) === null) {
+                $addressData['key'] = Uuid::uuid4()->toString();
+            }
+        }
+        if ($address->isDefaultBillingAddress) {
+            $additionalActions[] = [
+                'action' => 'setDefaultBillingAddress',
+                'addressKey' => $addressData['key'],
+            ];
+        }
+        if ($address->isDefaultShippingAddress) {
+            $additionalActions[] = [
+                'action' => 'setDefaultShippingAddress',
+                'addressKey' => $addressData['key'],
+            ];
+        }
+
         return $this->mapAccount($this->client->post(
             '/customers/' . $account->accountId,
             [],
             [],
             json_encode([
                 'version' => $accountData['version'],
-                'actions' => [
+                'actions' => array_merge(
                     [
-                        'action' => 'addAddress',
-                        'address' => [
-                            'salutation' => $address->salutation,
-                            'firstName' => $address->firstName,
-                            'lastName' => $address->lastName,
-                            'streetName' => $address->streetName,
-                            'streetNumber' => $address->streetNumber,
-                            'additionalStreetInfo' => $address->additionalStreetInfo,
-                            'additionalAddressInfo' => $address->additionalAddressInfo,
-                            'postalCode' => $address->postalCode,
-                            'city' => $address->city,
-                            'country' => $address->country,
+                        [
+                            'action' => 'addAddress',
+                            'address' => $addressData,
                         ],
                     ],
-                ],
+                    $additionalActions
+                ),
             ])
         ));
     }
@@ -321,30 +375,38 @@ class Commercetools implements AccountApi
     public function updateAddress(Account $account, Address $address, string $locale = null): Account
     {
         $accountData = $this->client->get('/customers/' . $account->accountId);
+
+        $addressData = $this->accountMapper->mapAddressToData($address);
+        unset($addressData['id']);
+
+        $actions = [
+            [
+                'action' => 'changeAddress',
+                'addressId' => $address->addressId,
+                'address' => $addressData,
+            ],
+        ];
+
+        if ($address->isDefaultBillingAddress) {
+            $actions[] = [
+                'action' => 'setDefaultBillingAddress',
+                'addressId' => $address->addressId,
+            ];
+        }
+        if ($address->isDefaultShippingAddress) {
+            $actions[] = [
+                'action' => 'setDefaultShippingAddress',
+                'addressId' => $address->addressId,
+            ];
+        }
+
         return $this->mapAccount($this->client->post(
             '/customers/' . $account->accountId,
             [],
             [],
             json_encode([
                 'version' => $accountData['version'],
-                'actions' => [
-                    [
-                        'action' => 'changeAddress',
-                        'addressId' => $address->addressId,
-                        'address' => [
-                            'salutation' => $address->salutation,
-                            'firstName' => $address->firstName,
-                            'lastName' => $address->lastName,
-                            'streetName' => $address->streetName,
-                            'streetNumber' => $address->streetNumber,
-                            'additionalStreetInfo' => $address->additionalStreetInfo,
-                            'additionalAddressInfo' => $address->additionalAddressInfo,
-                            'postalCode' => $address->postalCode,
-                            'city' => $address->city,
-                            'country' => $address->country,
-                        ],
-                    ],
-                ],
+                'actions' => $actions,
             ])
         ));
     }
@@ -418,20 +480,26 @@ class Commercetools implements AccountApi
         ));
     }
 
-    private function mapAccount(array $account): Account
+    private function mapAccount(array $accountData): Account
     {
         return new Account([
-            'accountId' => $account['id'],
-            'email' => $account['email'],
-            'salutation' => $account['salutation'] ?? null,
-            'firstName' => $account['firstName'] ?? null,
-            'lastName' => $account['lastName'] ?? null,
-            'birthday' => isset($account['dateOfBirth']) ? new \DateTimeImmutable($account['dateOfBirth']) : null,
-            'data' => json_decode($account['custom']['fields']['data'] ?? '{}'),
+            'accountId' => $accountData['id'],
+            'email' => $accountData['email'],
+            'salutation' => $accountData['salutation'] ?? null,
+            'firstName' => $accountData['firstName'] ?? null,
+            'lastName' => $accountData['lastName'] ?? null,
+            'birthday' => isset($accountData['dateOfBirth']) ?
+                new \DateTimeImmutable($accountData['dateOfBirth']) :
+                null,
+            /** @TODO: To guarantee BC only!
+             * This data should be mapped on the corresponding EventDecorator
+             * Remove the commented lines below if the data is already handle in MapAccountDataDecorator
+             */
+            // 'data' => json_decode($account['custom']['fields']['data'] ?? '{}'),
             // Do NOT map the password back
-            'confirmed' => $account['isEmailVerified'],
-            'addresses' => $this->mapAddresses($account),
-            'dangerousInnerAccount' => $account,
+            'confirmed' => $accountData['isEmailVerified'],
+            'addresses' => $this->mapAddresses($accountData),
+            'dangerousInnerAccount' => $accountData,
         ]);
     }
 
@@ -462,6 +530,8 @@ class Commercetools implements AccountApi
                     'postalCode' => $address['postalCode'] ?? null,
                     'city' => $address['city'] ?? null,
                     'country' => $address['country'] ?? null,
+                    'state' => $address['state'] ?? null,
+                    'phone' => $address['phone'] ?? null,
                     'isDefaultBillingAddress' => ($address['id'] === $account['defaultBillingAddressId']),
                     'isDefaultShippingAddress' => ($address['id'] === $account['defaultShippingAddressId']),
                     'dangerousInnerAddress' => $address,
@@ -489,50 +559,6 @@ class Commercetools implements AccountApi
     public function getDangerousInnerClient()
     {
         return $this->client;
-    }
-
-    /**
-     * @throws RequestException
-     */
-    public function getCustomerType(): array
-    {
-        if ($this->customerType) {
-            return $this->customerType;
-        }
-
-        try {
-            $customerType = $this->client->get('/types/key=' . self::TYPE_NAME);
-        } catch (RequestException $e) {
-            $customerType = $this->createCustomerType();
-        }
-
-        return $this->customerType = ['id' => $customerType['id']];
-    }
-
-    /**
-     * @throws RequestException
-     */
-    private function createCustomerType(): array
-    {
-        return $this->client->post(
-            '/types',
-            [],
-            [],
-            json_encode([
-                'key' => self::TYPE_NAME,
-                'name' => ['de' => 'Frontastic Customer'],
-                'description' => ['de' => 'Additional data fields'],
-                'resourceTypeIds' => ['customer'],
-                'fieldDefinitions' => [
-                    [
-                        'name' => 'data',
-                        'type' => ['name' => 'String'],
-                        'label' => ['de' => 'Data (JSON)'],
-                        'required' => false,
-                    ],
-                ],
-            ])
-        );
     }
 
     private function sanitizePassword(string $password): string

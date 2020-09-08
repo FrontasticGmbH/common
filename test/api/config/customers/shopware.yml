@@ -3,12 +3,15 @@ name: "shopware"
 secret: "secret"
 configuration:
   test:
-    authTokenType: shopware
     disabled: false
     canQueryCategoriesBySlug: false
+    supportCursorBasedPagination: false
+    supportOffsetPagination: true
+    hasConsistentProductSearchData: true
+    supportSearchByIdentifierAndQueryParameters: true
   shopware:
     apiKey: SWSCBHFSNTVMAWNZDNFKSHLAYW
-    endpoint: https://frontastic-test.shopwaredemo.store/sales-channel-api/v1
+    endpoint: https://frontastic-test.shopwaredemo.store
   account:
     engine: shopware
   cart:

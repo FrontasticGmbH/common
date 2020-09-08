@@ -5,14 +5,17 @@ namespace Frontastic\Common\SapCommerceCloudBundle\Domain;
 use Frontastic\Common\ProductApiBundle\Domain\Category;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\SingleProductQuery;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApiBase;
 use Frontastic\Common\ProductApiBundle\Domain\ProductType;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreator;
+use GuzzleHttp\Promise\PromiseInterface;
 
-class SapProductApi implements ProductApi
+class SapProductApi extends ProductApiBase
 {
     /** @var SapClient */
     private $client;
@@ -30,9 +33,9 @@ class SapProductApi implements ProductApi
         $this->dataMapper = $dataMapper;
     }
 
-    public function getCategories(CategoryQuery $query): array
+    protected function queryCategoriesImplementation(CategoryQuery $query): Result
     {
-        return $this->client
+        $categories = $this->client
             ->get(
                 '/rest/v2/{siteId}/catalogs/{catalogId}/{catalogVersionId}',
                 array_merge(
@@ -73,9 +76,15 @@ class SapProductApi implements ProductApi
                 );
             })
             ->wait();
+
+        return new Result([
+            'count' => count($categories),
+            'items' => $categories,
+            'query' => clone($query),
+        ]);
     }
 
-    public function getProductTypes(ProductTypeQuery $query): array
+    protected function getProductTypesImplementation(ProductTypeQuery $query): array
     {
         return [
             new ProductType([
@@ -85,11 +94,8 @@ class SapProductApi implements ProductApi
         ];
     }
 
-    public function getProduct($originalQuery, string $mode = self::QUERY_SYNC): ?object
+    protected function getProductImplementation(SingleProductQuery $query): PromiseInterface
     {
-        $query = ProductApi\Query\SingleProductQuery::fromLegacyQuery($originalQuery);
-        $query->validate();
-
         if ($query->productId !== null) {
             $code = $query->productId;
         } elseif ($query->sku !== null) {
@@ -99,7 +105,7 @@ class SapProductApi implements ProductApi
             throw new ProductApi\Exception\InvalidQueryException('Query needs product ID or SKU');
         }
 
-        $promise = $this->client
+        return $this->client
             ->get(
                 '/rest/v2/{siteId}/products/' . $code,
                 array_merge(
@@ -121,14 +127,9 @@ class SapProductApi implements ProductApi
                 }
                 throw $exception;
             });
-
-        if ($mode === self::QUERY_SYNC) {
-            return $promise->wait();
-        }
-        return $promise;
     }
 
-    public function query(ProductQuery $query, string $mode = self::QUERY_SYNC): object
+    protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
         $sapLocale = $this->localeCreator->createLocaleFromString($query->locale);
 
@@ -159,6 +160,7 @@ class SapProductApi implements ProductApi
         }
 
         $parameters = array_merge(
+            $query->rawApiInput,
             $sapLocale->toQueryParameters(),
             [
                 'currentPage' => $query->offset / $query->limit,
@@ -172,7 +174,7 @@ class SapProductApi implements ProductApi
             ]
         );
 
-        $promise = $this->client
+        return $this->client
             ->get('/rest/v2/{siteId}/products/search', $parameters)
             ->then(function (array $result) use ($query): ProductApi\Result {
                 $products = array_map([$this->dataMapper, 'mapDataToProduct'], $result['products']);
@@ -185,11 +187,6 @@ class SapProductApi implements ProductApi
                     'query' => clone $query,
                 ]);
             });
-
-        if ($mode === self::QUERY_SYNC) {
-            return $promise->wait();
-        }
-        return $promise;
     }
 
     public function getDangerousInnerClient()

@@ -29,33 +29,35 @@ class AccountAuthController extends Controller
     public function registerAction(Request $request, Context $context): Response
     {
         $body = $this->getJsonBody($request);
-        $account = new Account([
-            'email' => $body['email'],
-            'salutation' => $body['salutation'],
-            'firstName' => $body['firstName'],
-            'lastName' => $body['lastName'],
-            'birthday' => isset($body['birthdayYear']) ?
-                new \DateTimeImmutable(
-                    $body['birthdayYear'] .
-                    '-' . ($body['birthdayMonth'] ?? 1) .
-                    '-' . ($body['birthdayDay'] ?? 1) .
-                    'T12:00'
-                ) : null,
-            'data' => [
-                'phonePrefix' => $body['phonePrefix'] ?? null,
-                'phone' => $body['phone'] ?? null,
-            ],
-        ]);
+
+        $account = Account::newWithProjectSpecificData(
+            array_merge(
+                $body,
+                [
+                    'birthday' => $this->parseBirthday($body)
+                    /** @TODO: To guarantee BC only!
+                     * This data should be mapped on the corresponding EventDecorator
+                     * Remove the commented lines below if the data is already handle in MapAccountDataDecorator
+                     */
+                    // 'data' => [
+                       // 'phonePrefix' => $body['phonePrefix'] ?? null,
+                       // 'phone' => $body['phone'] ?? null,
+                    // ],
+                ]
+            )
+        );
+
+        $account->projectSpecificData = $this->parseProjectSpecificDataByKeys($body, ['phonePrefix', 'phone']);
         $account->setPassword($body['password']);
 
         if (isset($body['billingAddress'])) {
-            $address = new Address($body['billingAddress']);
+            $address = Address::newWithProjectSpecificData($body['billingAddress']);
             $address->isDefaultBillingAddress = true;
             $address->isDefaultShippingAddress = !isset($body['shippingAddress']);
             $account->addresses[] = $address;
         }
         if (isset($body['shippingAddress'])) {
-            $address = new Address($body['shippingAddress']);
+            $address = Address::newWithProjectSpecificData($body['shippingAddress']);
             $address->isDefaultShippingAddress = true;
             $account->addresses[] = $address;
         }
@@ -116,20 +118,26 @@ class AccountAuthController extends Controller
     {
         $this->assertIsAuthenticated($context);
 
-        $account = $context->session->account;
-
         $body = $this->getJsonBody($request);
-        $account->salutation = $body['salutation'];
-        $account->firstName = $body['firstName'];
-        $account->lastName = $body['lastName'];
-        $account->birthday = new \DateTimeImmutable($body['birthdayYear'] .
-            '-' . $body['birthdayMonth'] .
-            '-' . $body['birthdayDay'] .
-            'T12:00');
-        $account->data = [
-            'phonePrefix' => $body['phonePrefix'],
-            'phone' => $body['phone'],
-        ];
+
+        $account = $context->session->account;
+        $account->updateWithProjectSpecificData(
+            array_merge(
+                $body,
+                [
+                    'birthday' => $this->parseBirthday($body),
+                    /** @TODO: To guarantee BC only!
+                     * This data should be mapped on the corresponding EventDecorator
+                     * Remove the commented lines below if the data is already handle in MapAccountDataDecorator
+                     */
+                    // 'data' => [
+                       // 'phonePrefix' => $body['phonePrefix'] ?? null,
+                       // 'phone' => $body['phone'] ?? null,
+                    // ]
+                ]
+            )
+        );
+
         $account = $this->getAccountService()->update($account, $context->locale);
 
         return new JsonResponse($account, 200);
@@ -171,5 +179,35 @@ class AccountAuthController extends Controller
             $this->get('Frontastic\Catwalk\FrontendBundle\Security\Authenticator'),
             'api'
         );
+    }
+
+    private function parseBirthday(array $body): ?\DateTimeImmutable
+    {
+        return isset($body['birthdayYear']) ?
+            new \DateTimeImmutable(
+                $body['birthdayYear'] .
+                '-' . ($body['birthdayMonth'] ?? 1) .
+                '-' . ($body['birthdayDay'] ?? 1) .
+                'T12:00'
+            ) :
+            null;
+    }
+
+    private function parseProjectSpecificDataByKeys(array $requestBody, array $keys): array
+    {
+        $projectSpecificData = $requestBody['projectSpecificData'] ?? [];
+
+        foreach ($keys as $key) {
+            if (!key_exists($key, $projectSpecificData) && key_exists($key, $requestBody)) {
+                $this->get('logger')
+                    ->warning(
+                        'This usage of the key "{key}" is deprecated, move it into "projectSpecificData" instead',
+                        ['key' => $key]
+                    );
+                $projectSpecificData['custom'][$key] = $requestBody[$key] ?? [];
+            }
+        }
+
+        return $projectSpecificData;
     }
 }

@@ -61,10 +61,11 @@ class ProductVariantMapper extends AbstractDataMapper implements
     {
         $variantData = $this->extractData($resource, $resource);
 
+        $variantId = (string)$variantData['id'];
         return new Variant([
-            'id' => (string)$variantData['id'],
+            'id' => $variantId,
             'sku' => $variantData['productNumber'],
-            'groupId' => $variantData['parentId'],
+            'groupId' => $variantData['parentId'] ?? $variantId,
             'price' => $this->convertPriceToCent($variantData['price'][0]['gross']),
             'currency' => $this->resolveCurrencyCodeFromLocale(),
             'attributes' => $this->mapDataToAttributes($variantData),

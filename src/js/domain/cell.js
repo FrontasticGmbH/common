@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 import ConfigurationSchema from '../configuration/schema'
 import generateId from '../generateId'
 
@@ -20,8 +18,7 @@ class Cell {
                         label: 'Cell Width',
                         field: 'size',
                         type: 'enum',
-                        values: _.map(
-                            cellDimensions,
+                        values: cellDimensions && cellDimensions.map(
                             (cell) => {
                                 return {
                                     name: cell.name,
@@ -74,12 +71,13 @@ class Cell {
     }
 
     getTastic (tasticId) {
-        let tastic = _.find(this.tastics, { tasticId: tasticId })
-        if (!tastic) {
-            throw new Error('Could not find tastic with ID ' + tasticId)
+        for (let tastic of this.tastics) {
+            if (tastic.tasticId === tasticId) {
+                return tastic
+            }
         }
 
-        return tastic
+        throw new Error('Could not find tastic with ID ' + tasticId)
     }
 
     getTasticCount () {
@@ -91,7 +89,7 @@ class Cell {
             cellId: this.cellId,
             configuration: this.schema.getConfiguration(),
             customConfiguration: this.customConfiguration,
-            tastics: _.map(this.tastics, (tastic) => {
+            tastics: this.tastics.map((tastic) => {
                 return tastic.export()
             }),
         }

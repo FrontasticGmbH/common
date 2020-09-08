@@ -7,7 +7,6 @@ use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools\Mapper as CartMapper;
-use Frontastic\Common\CartApiBundle\Domain\Category;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator;
@@ -16,6 +15,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreator;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to implementation of CartApi
@@ -69,16 +69,23 @@ class Commercetools implements CartApi
      */
     private $taxCategory = null;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     public function __construct(
         Client $client,
         CartMapper $cartMapper,
         CommercetoolsLocaleCreator $localeCreator,
-        OrderIdGenerator $orderIdGenerator
+        OrderIdGenerator $orderIdGenerator,
+        LoggerInterface $logger
     ) {
         $this->client = $client;
         $this->cartMapper = $cartMapper;
         $this->localeCreator = $localeCreator;
         $this->orderIdGenerator = $orderIdGenerator;
+        $this->logger = $logger;
     }
 
     /**
@@ -289,15 +296,22 @@ class Commercetools implements CartApi
         return $this->postCartActions(
             $cart,
             [
-                [
-                    'action' => 'addLineItem',
-                    'sku' => $lineItem->variant->sku,
-                    'quantity' => $lineItem->count,
-                    'custom' => !$lineItem->custom ? null : [
-                        'type' => $this->getCustomLineItemType(),
-                        'fields' => $lineItem->custom,
-                    ],
-                ],
+                array_merge(
+                    (array)$lineItem->rawApiInput,
+                    [
+                        'action' => 'addLineItem',
+                        'sku' => $lineItem->variant->sku,
+                        'quantity' => $lineItem->count,
+                        /** @TODO: To guarantee BC only!
+                         * This data should be mapped on the corresponding EventDecorator
+                         * Remove the commented lines below if the data is already handle in MapCartDataDecorator
+                         */
+                        // 'custom' => !$lineItem->custom ? null : [
+                            // 'type' => $this->getCustomLineItemType(),
+                            // 'fields' => $lineItem->custom,
+                        // ],
+                    ]
+                ),
             ],
             $locale
         );
@@ -308,24 +322,31 @@ class Commercetools implements CartApi
         return $this->postCartActions(
             $cart,
             [
-                [
-                    'action' => 'addCustomLineItem',
-                    'name' => [$locale->language => $lineItem->name],
-                    // Must be unique inside the entire cart. We do not use
-                    // this for anything relevant. Random seems fine for now.
-                    'slug' => md5(microtime()),
-                    'taxCategory' => $this->getTaxCategory(),
-                    'money' => [
-                        'type' => 'centPrecision',
-                        'currencyCode' => $locale->currency,
-                        'centAmount' => $lineItem->totalPrice,
-                    ],
-                    'custom' => !$lineItem->custom ? null : [
-                        'type' => $this->getCustomLineItemType(),
-                        'fields' => $lineItem->custom,
-                    ],
-                    'quantity' => $lineItem->count,
-                ],
+                array_merge(
+                    (array)$lineItem->rawApiInput,
+                    [
+                        'action' => 'addCustomLineItem',
+                        'name' => [$locale->language => $lineItem->name],
+                        // Must be unique inside the entire cart. We do not use
+                        // this for anything relevant. Random seems fine for now.
+                        'slug' => md5(microtime()),
+                        'taxCategory' => $this->getTaxCategory(),
+                        'money' => [
+                            'type' => 'centPrecision',
+                            'currencyCode' => $locale->currency,
+                            'centAmount' => $lineItem->totalPrice,
+                        ],
+                        /** @TODO: To guarantee BC only!
+                         * This data should be mapped on the corresponding EventDecorator
+                         * Remove the commented lines below if the data is already handle in MapCartDataDecorator
+                         */
+                        // 'custom' => !$lineItem->custom ? null : [
+                            // 'type' => $this->getCustomLineItemType(),
+                            // 'fields' => $lineItem->custom,
+                        // ],
+                        'quantity' => $lineItem->count,
+                    ]
+                ),
             ],
             $locale
         );
@@ -353,6 +374,7 @@ class Commercetools implements CartApi
             ];
         }
 
+        //For BC only.
         if ($custom) {
             foreach ($custom as $field => $value) {
                 $actions[] = [
@@ -362,9 +384,21 @@ class Commercetools implements CartApi
                     'value' => $value,
                 ];
             }
+            $this->logger
+                ->warning(
+                    'This usage of the key "{custom}" is deprecated, move it into "projectSpecificData" instead',
+                    ['key' => $custom]
+                );
         }
 
-        return $this->postCartActions($cart, $actions, $this->parseLocaleString($localeString));
+        return $this->postCartActions(
+            $cart,
+            array_merge(
+                (array)$lineItem->rawApiInput,
+                $actions
+            ),
+            $this->parseLocaleString($localeString)
+        );
     }
 
     public function removeLineItem(Cart $cart, LineItem $lineItem, string $localeString = null): Cart
@@ -427,22 +461,34 @@ class Commercetools implements CartApi
         );
     }
 
+    /**
+     * @deprecated Use and implement the setRawApiInput method. This method only exists for backwards compatibility.
+     */
     public function setCustomField(Cart $cart, array $fields, string $localeString = null): Cart
     {
-        if (!count($fields)) {
-            return $cart;
-        }
+        $this->logger
+            ->warning(
+                'The method setCustomField is deprecated, use "setRawApiInput" instead',
+                [
+                    'cart' => $cart,
+                    'fields' => $fields,
+                ]
+            );
 
-        $actions = [];
         foreach ($fields as $name => $value) {
-            $actions[] = [
+            $cart->rawApiInput[] = [
                 'action' => 'setCustomField',
                 'name' => $name,
                 'value' => $value,
             ];
         }
 
-        return $this->postCartActions($cart, $actions, $this->parseLocaleString($localeString));
+        return $this->setRawApiInput($cart, $localeString);
+    }
+
+    public function setRawApiInput(Cart $cart, string $localeString = null): Cart
+    {
+        return $this->postCartActions($cart, [], $this->parseLocaleString($localeString));
     }
 
     /**
@@ -497,27 +543,23 @@ class Commercetools implements CartApi
      */
     public function addPayment(Cart $cart, Payment $payment, ?array $custom = null, string $localeString = null): Cart
     {
+        // For BC only.
+        if (!key_exists('custom', $payment->rawApiInput) && !empty($custom)) {
+            $payment->rawApiInput['custom'] = $custom;
+            $this->logger
+                ->warning(
+                    'This usage of the key "{custom}" is deprecated, move it into "projectSpecificData" instead',
+                    ['key' => $custom]
+                );
+        }
+
+        $this->ensureCustomPaymentFieldsExist();
+
         $payment = $this->client->post(
             '/payments',
             [],
             [],
-            json_encode([
-                'key' => $payment->id,
-                'amountPlanned' => [
-                    'centAmount' => $payment->amount,
-                    'currencyCode' => $payment->currency,
-                ],
-                'interfaceId' => $payment->paymentId,
-                'paymentMethodInfo' => [
-                    'paymentInterface' => $payment->paymentProvider,
-                    'method' => $payment->paymentMethod,
-                ],
-                'paymentStatus' => [
-                    'interfaceCode' => $payment->paymentStatus,
-                    'interfaceText' => $payment->debug,
-                ],
-                'custom' => $custom,
-            ])
+            json_encode($this->cartMapper->mapPaymentToData($payment))
         );
 
         return $this->postCartActions(
@@ -532,6 +574,47 @@ class Commercetools implements CartApi
                 ],
             ],
             $this->parseLocaleString($localeString)
+        );
+    }
+
+    public function updatePayment(Cart $cart, Payment $payment, string $localeString): Payment
+    {
+        $originalPayment = $cart->getPaymentById($payment->id);
+
+        $this->ensureCustomPaymentFieldsExist();
+
+        $actions = [];
+        $actions[] = [
+            'action' => 'setStatusInterfaceCode',
+            'interfaceCode' => $payment->paymentStatus,
+        ];
+        $actions[] = [
+            'action' => 'setStatusInterfaceText',
+            'interfaceText' => $payment->debug,
+        ];
+        $actions[] = [
+            'action' => 'setInterfaceId',
+            'interfaceId' => $payment->paymentId,
+        ];
+        $actions[] = [
+            'action' => 'setCustomField',
+            'name' => 'frontasticPaymentDetails',
+            'value' => json_encode($payment->paymentDetails),
+        ];
+
+        return $this->cartMapper->mapDataToPayment(
+            $this->client->post(
+                '/payments/key=' . $payment->id,
+                [],
+                [],
+                json_encode([
+                    'version' => (int)$originalPayment->version,
+                    'actions' => array_merge(
+                        $payment->rawApiInput,
+                        $actions
+                    ),
+                ])
+            )
         );
     }
 
@@ -622,6 +705,7 @@ class Commercetools implements CartApi
                 '/orders',
                 [
                     'where' => 'customerId="' . $account->accountId . '"',
+                    'sort' => 'createdAt desc',
                     'expand' => self::EXPAND,
                 ]
             )
@@ -660,7 +744,10 @@ class Commercetools implements CartApi
                 [],
                 json_encode([
                     'version' => (int)$cart->cartVersion,
-                    'actions' => $actions,
+                    'actions' => array_merge(
+                        $cart->rawApiInput,
+                        $actions
+                    ),
                 ])
             ),
             $locale
@@ -825,5 +912,37 @@ class Commercetools implements CartApi
 
         return $innerCart['country'] !== $locale->country
             || $innerCart['locale'] !== $locale->language;
+    }
+
+    private function ensureCustomPaymentFieldsExist()
+    {
+        try {
+            $this->client->get('/types/key=' . CartApi\Commercetools\Mapper::CUSTOM_PAYMENT_FIELDS_KEY);
+            return;
+        } catch (RequestException $exception) {
+            if ($exception->getTranslationCode() !== 'commercetools.ResourceNotFound') {
+                throw $exception;
+            }
+        }
+
+        $this->client->post(
+            '/types',
+            [],
+            [],
+            json_encode([
+                'key' => CartApi\Commercetools\Mapper::CUSTOM_PAYMENT_FIELDS_KEY,
+                'name' => ['en' => 'Frontastic payment fields'],
+                'description' => ['en' => 'Additional fields from Frontastic for the payment'],
+                'resourceTypeIds' => ['payment'],
+                'fieldDefinitions' => [
+                    [
+                        'name' => 'frontasticPaymentDetails',
+                        'type' => ['name' => 'String'],
+                        'label' => ['en' => 'Additional details from the payment integration'],
+                        'required' => false,
+                    ],
+                ],
+            ])
+        );
     }
 }

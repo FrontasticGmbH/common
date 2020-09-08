@@ -84,20 +84,31 @@ class Project extends DataObject
      */
     public $endpoints = [];
 
-    public function getConfigurationSection(string $sectionName): object
+    public function getConfigurationSection(string ...$sectionNamePath): object
     {
-        if (!array_key_exists($sectionName, $this->configuration)) {
-            return new \stdClass();
+        $config = $this->configuration;
+        $currentSectionNamePath = [];
+
+        foreach ($sectionNamePath as $sectionName) {
+            $currentSectionNamePath[] = $sectionName;
+
+            $config = (array)$config;
+            if (!array_key_exists($sectionName, $config)) {
+                return new \stdClass();
+            }
+
+            $config = $config[$sectionName];
+            if (is_array($config)) {
+                $config = (object)$config;
+            }
+
+            if (!is_object($config)) {
+                throw new \RuntimeException(
+                    'Invalid project configuration section ' . implode('.', $currentSectionNamePath)
+                );
+            }
         }
 
-        $config = $this->configuration[$sectionName];
-        if (is_array($config)) {
-            $config = (object)$config;
-        }
-
-        if (!is_object($config)) {
-            throw new \RuntimeException('Invalid project configuration section ' . $sectionName);
-        }
         return $config;
     }
 }

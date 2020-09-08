@@ -56,6 +56,11 @@ class LifecycleEventDecorator implements ProductApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
+    public function queryCategories(CategoryQuery $query): Result
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
     /**
      * @param \Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery $query
      * @return \Frontastic\Common\ProductApiBundle\Domain\ProductType[]

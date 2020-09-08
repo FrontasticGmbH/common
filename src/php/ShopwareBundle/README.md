@@ -31,7 +31,7 @@ In `project.yml` set `API_KEY` to API access key taken from Shopware6 Admin Sale
 configuration:
     showpare:
        apiKey: API_KEY
-       endpoint: https://shopware6-url/sales-channel-api/v1
+       endpoint: https://shopware6-url
     products:
        engine: shopware
 ```

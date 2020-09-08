@@ -9,6 +9,7 @@ use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
+use Frontastic\Common\CartApiBundle\Domain\UpdatePaymentCommand;
 use Frontastic\Common\LifecycleTrait;
 
 /**
@@ -118,6 +119,11 @@ class LifecycleEventDecorator implements CartApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
+    public function setRawApiInput(Cart $cart, string $locale = null): Cart
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
     public function setShippingAddress(Cart $cart, Address $address, string $locale = null): Cart
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
@@ -129,6 +135,11 @@ class LifecycleEventDecorator implements CartApi
     }
 
     public function addPayment(Cart $cart, Payment $payment, ?array $custom = null, string $locale = null): Cart
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
+    public function updatePayment(Cart $cart, Payment $payment, string $localeString): Payment
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }

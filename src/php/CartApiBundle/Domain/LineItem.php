@@ -2,12 +2,12 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain;
 
-use Kore\DataObject\DataObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 
 /**
  * @type
  */
-class LineItem extends DataObject
+class LineItem extends ApiDataObject
 {
     /**
      * @var string
@@ -23,11 +23,6 @@ class LineItem extends DataObject
      * @var string
      */
     public $type;
-
-    /**
-     * @var array
-     */
-    public $custom = [];
 
     /**
      * @var integer

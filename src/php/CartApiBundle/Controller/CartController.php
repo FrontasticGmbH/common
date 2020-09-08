@@ -46,20 +46,23 @@ class CartController extends CrudController
         $cart = $this->getCart($context, $request);
         $beforeItemIds = $this->getLineItemIds($cart);
 
-        $cartApi->startTransaction($cart);
-        $cartApi->addToCart(
-            $cart,
-            new LineItem\Variant([
-                'variant' => new Variant([
-                    'id' => $payload['variant']['id'] ?? null,
-                    'sku' => $payload['variant']['sku'] ?? null,
-                    'attributes' => $payload['variant']['attributes'] ?? [],
-                ]),
-                'custom' => $payload['option'] ?? [],
-                'count' => $payload['count'] ?? 1,
-            ]),
-            $context->locale
+        $lineItemVariant = LineItem\Variant::newWithProjectSpecificData(
+            array_merge(
+                $payload,
+                [
+                    'variant' => new Variant([
+                        'id' => $payload['variant']['id'] ?? null,
+                        'sku' => $payload['variant']['sku'] ?? null,
+                        'attributes' => $payload['variant']['attributes'] ?? [],
+                    ]),
+                    'count' => $payload['count'] ?? 1,
+                ]
+            )
         );
+        $lineItemVariant->projectSpecificData = $this->parseProjectSpecificDataByKey($payload, 'option');
+
+        $cartApi->startTransaction($cart);
+        $cartApi->addToCart($cart, $lineItemVariant, $context->locale);
         $cart = $cartApi->commit($context->locale);
 
         return [
@@ -89,19 +92,22 @@ class CartController extends CrudController
 
         $cartApi->startTransaction($cart);
         foreach (($payload['lineItems'] ?? []) as $lineItemData) {
-            $cartApi->addToCart(
-                $cart,
-                new LineItem\Variant([
-                    'variant' => new Variant([
-                        'id' => $lineItemData['variant']['id'] ?? null,
-                        'sku' => $lineItemData['variant']['sku'] ?? null,
-                        'attributes' => $lineItemData['variant']['attributes'],
-                    ]),
-                    'custom' => $lineItemData['option'] ?? [],
-                    'count' => $lineItemData['count'] ?? 1,
-                ]),
-                $context->locale
+            $lineItemVariant = LineItem\Variant::newWithProjectSpecificData(
+                array_merge(
+                    $lineItemData,
+                    [
+                        'variant' => new Variant([
+                            'id' => $lineItemData['variant']['id'] ?? null,
+                            'sku' => $lineItemData['variant']['sku'] ?? null,
+                            'attributes' => $lineItemData['variant']['attributes'] ?? [],
+                        ]),
+                        'count' => $lineItemData['count'] ?? 1,
+                    ]
+                )
             );
+            $lineItemVariant->projectSpecificData = $this->parseProjectSpecificDataByKey($payload, 'option');
+
+            $cartApi->addToCart($cart, $lineItemVariant, $context->locale);
         }
         $cart = $cartApi->commit($context->locale);
 
@@ -123,12 +129,15 @@ class CartController extends CrudController
         $cartApi = $this->getCartApi($context);
 
         $cart = $this->getCart($context, $request);
+        $lineItem = $this->getLineItem($cart, $payload['lineItemId']);
+        $lineItem->projectSpecificData = $this->parseProjectSpecificDataByKey($payload, 'custom');
+
         $cartApi->startTransaction($cart);
         $cartApi->updateLineItem(
             $cart,
-            $this->getLineItem($cart, $payload['lineItemId']),
+            $lineItem,
             $payload['count'],
-            $payload['custom'] ?? null,
+            null,
             $context->locale
         );
         $cart = $cartApi->commit($context->locale);
@@ -207,23 +216,22 @@ class CartController extends CrudController
             );
         }
 
-        if (isset($payload['custom'])) {
-            $cart = $cartApi->setCustomField($cart, $payload["custom"]);
-        }
-
         if (!empty($payload['shipping']) || !empty($payload['billing'])) {
             $cart = $cartApi->setShippingAddress(
                 $cart,
-                new Address($payload['shipping'] ?: $payload['billing']),
+                Address::newWithProjectSpecificData($payload['shipping'] ?: $payload['billing']),
                 $context->locale
             );
 
             $cart = $cartApi->setBillingAddress(
                 $cart,
-                new Address($payload['billing'] ?: $payload['shipping']),
+                Address::newWithProjectSpecificData($payload['billing'] ?: $payload['shipping']),
                 $context->locale
             );
         }
+
+        $cart->projectSpecificData = $this->parseProjectSpecificDataByKey($payload, 'custom');
+        $cart = $cartApi->setRawApiInput($cart, $context->locale);
 
         return ['cart' => $cartApi->commit($context->locale)];
     }
@@ -239,9 +247,12 @@ class CartController extends CrudController
 
         $order = $cartApi->order($cart, $context->locale);
 
-        // @TODO: Remove old cart instead (also for logged in users)
-        // @HACK: Regenerate session ID to get a "new" cart:
-        session_regenerate_id();
+        $symfonySession = $request->hasSession() ? $request->getSession() : null;
+        if ($symfonySession !== null) {
+            // Increase security
+            session_regenerate_id();
+            $symfonySession->remove('cart_id');
+        }
 
         return [
             'order' => $order,
@@ -286,7 +297,11 @@ class CartController extends CrudController
             return $cartApi->getForUser($context->session->account, $context->locale);
         } else {
             $symfonySession = $request->hasSession() ? $request->getSession() : null;
-            if ($symfonySession !== null && $symfonySession->has('cart_id')) {
+
+            if ($symfonySession !== null &&
+                $symfonySession->has('cart_id') &&
+                $symfonySession->get('cart_id') !== null
+            ) {
                 $cartId = $symfonySession->get('cart_id');
                 try {
                     return $cartApi->getById($cartId, $context->locale);
@@ -323,5 +338,21 @@ class CartController extends CrudController
         }
 
         return $body;
+    }
+
+    protected function parseProjectSpecificDataByKey(array $requestBody, string $key): array
+    {
+        $projectSpecificData = $requestBody['projectSpecificData'] ?? [];
+
+        if (!key_exists($key, $projectSpecificData) && key_exists($key, $requestBody)) {
+            $this->get('logger')
+                ->warning(
+                    'This usage of the key "{key}" is deprecated, move it into "projectSpecificData" instead',
+                    ['key' => $key]
+                );
+            $projectSpecificData['custom'] = $requestBody[$key] ?? [];
+        }
+
+        return $projectSpecificData;
     }
 }

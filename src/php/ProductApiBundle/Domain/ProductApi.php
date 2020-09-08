@@ -21,8 +21,15 @@ interface ProductApi
     /**
      * @param CategoryQuery $query
      * @return Category[]
+     * @deprecated Use `queryCategories()` instead
      */
     public function getCategories(CategoryQuery $query): array;
+
+    /**
+     * @param CategoryQuery $query
+     * @return Result
+     */
+    public function queryCategories(CategoryQuery $query): Result;
 
     /**
      * @param ProductTypeQuery $query
