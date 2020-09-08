@@ -24,6 +24,7 @@ use Frontastic\Common\SprykerBundle\Domain\Product\SprykerProductApi;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver as SprykerMapperResolver;
 use Frontastic\Common\SprykerBundle\Domain\SprykerClientFactory;
 
+use Frontastic\Common\SprykerBundle\Domain\SprykerUrlAppender;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -118,6 +119,7 @@ class DefaultProductApiFactory implements ProductApiFactory
                 $clientFactory = $this->container->get(SprykerClientFactory::class);
                 $dataMapper = $this->container->get(SprykerMapperResolver::class);
                 $localeCreatorFactory = $this->container->get(SprykerLocaleCreatorFactory::class);
+                $urlAppender = $this->container->get(SprykerUrlAppender::class);
 
                 $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
 
@@ -125,6 +127,7 @@ class DefaultProductApiFactory implements ProductApiFactory
                     $client,
                     $dataMapper,
                     $localeCreatorFactory->factor($project, $client),
+                    $urlAppender,
                     $project->defaultLanguage
                 );
 

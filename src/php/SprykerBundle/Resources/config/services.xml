@@ -15,6 +15,8 @@
             <argument type="tagged_iterator" tag="frontastic.common.spryker.mapper"/>
         </service>
 
+        <service id="Frontastic\Common\SprykerBundle\Domain\SprykerUrlAppender" public="true" />
+
         <service id="Frontastic\Common\SprykerBundle\Domain\Account\TokenDecoder" public="true" />
 
         <service id="Frontastic\Common\SprykerBundle\Domain\Account\SessionService" public="true" />
