@@ -12,7 +12,8 @@
 ```php
 public function __construct(
     \Psr\Container\ContainerInterface $container,
-    iterable $decorators
+    iterable $decorators,
+    \Psr\Log\LoggerInterface $logger
 ): mixed
 ```
 
@@ -20,6 +21,7 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$container`|`\Psr\Container\ContainerInterface`||
 `$decorators`|`iterable`||
+`$logger`|`\Psr\Log\LoggerInterface`||
 
 Return Value: `mixed`
 
