@@ -1,13 +1,13 @@
 
 import {
-    LineItem,
+    LineItem as WishlistLineItem,
 } from '..'
 
 import {
-    Variant,
+    Variant as ProductVariant,
 } from '../../product'
 
-export interface Variant extends LineItem {
-     variant?: Variant;
+export interface Variant extends WishlistLineItem {
+     variant?: ProductVariant;
      type?: string;
 }

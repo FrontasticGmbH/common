@@ -1,9 +1,9 @@
 
 import {
-    ApiDataObject,
+    ApiDataObject as CoreApiDataObject,
 } from '../core'
 
-export interface Account extends ApiDataObject {
+export interface Account extends CoreApiDataObject {
      accountId?: string;
      email?: string;
      salutation?: string;
@@ -19,7 +19,7 @@ export interface Account extends ApiDataObject {
      dangerousInnerAccount?: any;
 }
 
-export interface Address extends ApiDataObject {
+export interface Address extends CoreApiDataObject {
      addressId?: string;
      salutation?: string;
      firstName?: string;

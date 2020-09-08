@@ -1,6 +1,6 @@
 
 import {
-    ApiDataObject,
+    ApiDataObject as CoreApiDataObject,
 } from '../../core'
 
 export interface FacetDefinition {
@@ -22,7 +22,7 @@ export interface PaginatedQuery extends Query {
      cursor?: string;
 }
 
-export interface Query extends ApiDataObject {
+export interface Query extends CoreApiDataObject {
      locale?: string;
      loadDangerousInnerData?: boolean;
 }

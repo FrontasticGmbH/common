@@ -1,13 +1,13 @@
 
 import {
-    ApiDataObject,
+    ApiDataObject as CoreApiDataObject,
 } from '../core'
 
 import {
-    Translatable,
+    Translatable as Translatable,
 } from '..'
 
-export interface Cart extends ApiDataObject {
+export interface Cart extends CoreApiDataObject {
      cartId?: string;
      cartVersion?: string;
      lineItems?: LineItem[];
@@ -32,7 +32,7 @@ export interface Discount {
      dangerousInnerDiscount?: any;
 }
 
-export interface LineItem extends ApiDataObject {
+export interface LineItem extends CoreApiDataObject {
      lineItemId?: string;
      name?: string;
      type?: string;
@@ -54,7 +54,7 @@ export interface Order extends Cart {
      dangerousInnerOrder?: any;
 }
 
-export interface Payment extends ApiDataObject {
+export interface Payment extends CoreApiDataObject {
      id?: string;
      paymentProvider?: string;
      paymentId?: string;
