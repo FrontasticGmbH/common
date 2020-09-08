@@ -73,19 +73,6 @@ class SprykerApiBase
         return $mapper->mapResource($document->primaryResources()[0]);
     }
 
-    /**
-     * @param JsonApiResponse $response
-     * @param string $mapperName
-     *
-     * @return array
-     */
-    protected function mapResponseArray(JsonApiResponse $response, string $mapperName): array
-    {
-        return $this->mapperResolver
-            ->getExtendedMapper($mapperName)
-            ->mapResourceArray($response->document()->primaryResources());
-    }
-
     protected function getSeparator(string $url): string
     {
         return (strpos($url, '?') === false) ? '?' : '&';
@@ -106,7 +93,7 @@ class SprykerApiBase
      */
     protected function withIncludes(string $url, array $includes = []): string
     {
-        if (count($includes) === 0) {
+        if (empty($includes)) {
             return $url;
         }
 
@@ -114,22 +101,6 @@ class SprykerApiBase
         $includesString = implode(',', $includes);
 
         return "{$url}{$separator}include={$includesString}";
-    }
-
-    /**
-     * @param string $json
-     *
-     * @return array
-     */
-    protected function mapErrors(string $json): array
-    {
-        $data = json_decode($json, true);
-
-        if (isset($data['message'])) {
-            $data = json_decode($data['message'], true);
-        }
-
-        return $data['errors'] ?? [];
     }
 
     protected function parseLocaleString(?string $localeString): SprykerLocale
