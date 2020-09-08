@@ -27,6 +27,13 @@ class Customer extends DataObject
     public $hasPaasModifications = false;
 
     /**
+     * Number of available Frontastic Machines
+     *
+     * @var int
+     */
+    public $machineLimit = 0;
+
+    /**
      * @var array
      */
     public $features = [];
