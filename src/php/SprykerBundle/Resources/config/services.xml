@@ -37,7 +37,9 @@
         </service>
 
         <service id="Frontastic\Common\SprykerBundle\Domain\Locale\DefaultLocaleCreatorFactory">
-            <argument type="service" id="cache.app.simple" />
+            <argument type="service">
+                <service class="Doctrine\Common\Cache\ApcuCache"/>
+            </argument>
         </service>
 
         <service id="Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreatorFactory"
