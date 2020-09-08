@@ -8,6 +8,10 @@ use Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver;
 use WoohooLabs\Yang\JsonApi\Response\JsonApiResponse;
 
+/**
+ * TODO: Get rid off this class by using dedicated service SprykerUrlAppender and
+ * implement mapper resolver strategy within each Api implementation.
+ */
 class SprykerApiBase
 {
     /**
