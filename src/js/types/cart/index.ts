@@ -2,11 +2,11 @@
 
 import {
     ApiDataObject as CoreApiDataObject,
-} from '../core'
+} from '../core/'
 
 import {
     Translatable as Translatable,
-} from '..'
+} from '../'
 
 export interface Cart extends CoreApiDataObject {
      cartId?: string;

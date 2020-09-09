@@ -2,11 +2,11 @@
 
 import {
     LineItem as CartLineItem,
-} from '..'
+} from '../'
 
 import {
     Variant as ProductVariant,
-} from '../../product'
+} from '../../product/'
 
 export interface Variant extends CartLineItem {
      variant?: ProductVariant;

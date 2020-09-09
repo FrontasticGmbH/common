@@ -2,7 +2,7 @@
 
 import {
     ApiDataObject as CoreApiDataObject,
-} from '../core'
+} from '../core/'
 
 export interface Account extends CoreApiDataObject {
      accountId?: string;

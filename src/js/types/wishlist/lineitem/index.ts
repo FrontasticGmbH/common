@@ -2,11 +2,11 @@
 
 import {
     LineItem as WishlistLineItem,
-} from '..'
+} from '../'
 
 import {
     Variant as ProductVariant,
-} from '../../product'
+} from '../../product/'
 
 export interface Variant extends WishlistLineItem {
      variant?: ProductVariant;

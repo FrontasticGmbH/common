@@ -12,6 +12,7 @@ export interface Customer {
      secret?: string;
      edition?: string;
      hasPaasModifications?: boolean;
+     machineLimit?: number;
      features?: any;
      isTransient?: boolean;
      configuration?: any;
