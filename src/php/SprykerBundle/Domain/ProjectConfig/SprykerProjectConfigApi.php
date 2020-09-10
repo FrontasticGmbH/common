@@ -2,8 +2,8 @@
 
 namespace Frontastic\Common\SprykerBundle\Domain\ProjectConfig;
 
-use Doctrine\Common\Cache\Cache;
 use Frontastic\Common\SprykerBundle\Domain\SprykerClient;
+use Psr\SimpleCache\CacheInterface;
 
 class SprykerProjectConfigApi
 {
@@ -14,13 +14,13 @@ class SprykerProjectConfigApi
     /** @var SprykerClient */
     private $client;
 
-    /** @var Cache */
+    /** @var CacheInterface */
     private $cache;
 
     /** @var int */
     private $cacheTtl;
 
-    public function __construct(SprykerClient $client, Cache $cache)
+    public function __construct(SprykerClient $client, CacheInterface $cache)
     {
         $this->client = $client;
         $this->cache = $cache;
@@ -34,8 +34,8 @@ class SprykerProjectConfigApi
             $this->client->getProjectKey()
         );
 
-        $projectConfig = $this->cache->fetch($cacheKey);
-        if ($projectConfig !== false) {
+        $projectConfig = $this->cache->get($cacheKey);
+        if ($projectConfig !== null) {
             return $projectConfig;
         }
 
@@ -43,7 +43,7 @@ class SprykerProjectConfigApi
         $resource = $response->document()->primaryResource()->toArray();
         $projectConfig = $resource['attributes'];
 
-        $this->cache->save($cacheKey, $projectConfig, $this->cacheTtl);
+        $this->cache->set($cacheKey, $projectConfig, $this->cacheTtl);
 
         return $projectConfig;
     }

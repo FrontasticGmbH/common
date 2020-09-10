@@ -2,19 +2,19 @@
 
 namespace Frontastic\Common\SprykerBundle\Domain\Locale;
 
-use Doctrine\Common\Cache\Cache;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Frontastic\Common\SprykerBundle\Domain\ProjectConfig\SprykerProjectConfigApi;
 use Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface;
+use Psr\SimpleCache\CacheInterface;
 
 class DefaultLocaleCreatorFactory extends LocaleCreatorFactory
 {
     /**
-     * @var Cache
+     * @var CacheInterface
      */
     private $cache;
 
-    public function __construct(Cache $cache)
+    public function __construct(CacheInterface $cache)
     {
         $this->cache = $cache;
     }
