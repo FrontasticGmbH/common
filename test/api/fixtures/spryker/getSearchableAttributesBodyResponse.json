@@ -1,0 +1,94 @@
+{
+    "data": [
+        {
+            "type": "product-management-attributes",
+            "id": "shape",
+            "attributes": {
+                "inputType": "text",
+                "allowInput": true,
+                "isSuper": false,
+                "localizedKeys": [
+                    {
+                        "localeName": "en_US",
+                        "translation": "Shape"
+                    },
+                    {
+                        "localeName": "de_DE",
+                        "translation": "Form"
+                    }
+                ],
+                "values": [
+                    {
+                        "value": "square",
+                        "localizedValues": [
+                            {
+                                "localeName": "en_US",
+                                "translation": "square"
+                            },
+                            {
+                                "localeName": "de_DE",
+                                "translation": "viereckig"
+                            }
+                        ]
+                    },
+                    {
+                        "value": "round",
+                        "localizedValues": [
+                            {
+                                "localeName": "en_US",
+                                "translation": "round"
+                            },
+                            {
+                                "localeName": "de_DE",
+                                "translation": "rund"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "links": {
+                "self": "http://glue.mysprykershop.com/product-management-attributes/shape"
+            }
+        },
+        {
+            "type": "product-management-attributes",
+            "id": "storage_capacity",
+            "attributes": {
+                "inputType": "text",
+                "allowInput": true,
+                "isSuper": false,
+                "localizedKeys": [
+                    {
+                        "localeName": "en_US",
+                        "translation": "Storage Capacity"
+                    },
+                    {
+                        "localeName": "de_DE",
+                        "translation": "Speichergröße"
+                    }
+                ],
+                "values": [
+                    {
+                        "value": "16 GB",
+                        "localizedValues": []
+                    },
+                    {
+                        "value": "32 GB",
+                        "localizedValues": []
+                    },
+                    {
+                        "value": "64 GB",
+                        "localizedValues": []
+                    },
+                    {
+                        "value": "128 GB",
+                        "localizedValues": []
+                    }
+                ]
+            },
+            "links": {
+                "self": "http://glue.mysprykershop.com/product-management-attributes/shape"
+            }
+        }
+    ]
+}

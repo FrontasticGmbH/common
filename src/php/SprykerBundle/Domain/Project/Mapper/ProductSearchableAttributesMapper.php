@@ -12,24 +12,15 @@ class ProductSearchableAttributesMapper implements ExtendedMapperInterface
     public const MAPPER_NAME = 'product-searchable-attributes';
 
     private const SPRYKER_TO_FRONTASTIC_TYPE_MAPPING = [
-        'enumeration' => Attribute::TYPE_LOCALIZED_ENUM,
-        'range' => Attribute::TYPE_TEXT,
-        'price-range' => Attribute::TYPE_MONEY,
-        'category' => Attribute::TYPE_CATEGORY_ID,
+        'text' => Attribute::TYPE_TEXT,
+        'textarea' => Attribute::TYPE_TEXT,
+        'number' => Attribute::TYPE_NUMBER,
+        'float' => Attribute::TYPE_NUMBER,
+        'date' => Attribute::TYPE_TEXT,
+        'time' => Attribute::TYPE_TEXT,
+        'datetime' => Attribute::TYPE_TEXT,
+        'select' => Attribute::TYPE_ENUM,
     ];
-
-    /**
-     * @var LocalizedEnumAttributesMapper
-     */
-    private $localizedEnumAttributesMapper;
-
-    /**
-     * @param LocalizedEnumAttributesMapper $localizedEnumAttributesMapper
-     */
-    public function __construct(LocalizedEnumAttributesMapper $localizedEnumAttributesMapper)
-    {
-        $this->localizedEnumAttributesMapper = $localizedEnumAttributesMapper;
-    }
 
     /**
      * @param \WoohooLabs\Yang\JsonApi\Schema\Resource\ResourceObject[] $resources
@@ -55,8 +46,8 @@ class ProductSearchableAttributesMapper implements ExtendedMapperInterface
      */
     public function mapResource(ResourceObject $resource): Attribute
     {
-        $attributeName = $resource->attribute('name');
-        $attributeType = $this->mapType($resource->attribute('type'));
+        $attributeName = $resource->id();
+        $attributeType = $this->mapType($resource->attribute('inputType'));
         if ($attributeName === null) {
             throw new SprykerClientException('Attribute is missing a name for type: ' . $attributeType);
         }
@@ -64,10 +55,39 @@ class ProductSearchableAttributesMapper implements ExtendedMapperInterface
         $attribute = new Attribute();
         $attribute->attributeId = $attributeName;
         $attribute->type = $attributeType;
-        $attribute->label = $resource->attribute('label');
-        $attribute->values = $resource->attribute('values');
+        $attribute->label = array_combine(
+            array_map(
+                function (array $localizedKey): string {
+                    return $localizedKey['localeName'];
+                },
+                $resource->attribute('localizedKeys')
+            ),
+            array_map(
+                function (array $localizedKey): string {
+                    return $localizedKey['translation'];
+                },
+                $resource->attribute('localizedKeys')
+            )
+        );
 
-        $this->localizedEnumAttributesMapper->process($attribute);
+        foreach ($resource->attribute('values') as $attributeValue) {
+            $value = array_combine(
+                array_map(
+                    function (array $localizedValue): string {
+                        return $localizedValue['localeName'];
+                    },
+                    $attributeValue['localizedValues']
+                ),
+                array_map(
+                    function (array $localizedValue): string {
+                        return $localizedValue['translation'];
+                    },
+                    $attributeValue['localizedValues']
+                )
+            );
+
+            $attribute->values[] = !empty($value) ? $value : $attributeValue['value'];
+        }
 
         return $attribute;
     }
