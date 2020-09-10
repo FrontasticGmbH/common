@@ -85,11 +85,11 @@ class DefaultLocaleCreator extends LocaleCreator
     {
         foreach ($projectConfigCountries as $projectConfigCountry) {
             if ($projectConfigCountry['iso2Code'] === $frontasticLocale->territory) {
-                return $projectConfigCountry['name'];
+                return $projectConfigCountry['iso2Code'];
             }
         }
 
-        return $projectConfigCountries[0]['name'];
+        return $projectConfigCountries[0]['iso2Code'];
     }
 
     private function pickCurrencyFromProjectConfig(array $projectConfigCurrencies, Locale $frontasticLocale): string
