@@ -32,8 +32,6 @@ class SprykerProjectApi extends SprykerApiBase implements SprykerProjectApiInter
      */
     public function getSearchableAttributes(): array
     {
-        // @TODO: implement multi languages
-
         $resources = [];
         try {
             $response = $this->client->get('/product-management-attributes');
