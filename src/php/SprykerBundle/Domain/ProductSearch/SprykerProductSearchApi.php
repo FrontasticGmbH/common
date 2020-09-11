@@ -14,6 +14,7 @@ use Frontastic\Common\SprykerBundle\Domain\MapperResolver;
 use Frontastic\Common\SprykerBundle\Domain\Product\CatalogSearchQuery;
 use Frontastic\Common\SprykerBundle\Domain\Product\Mapper\ProductResultMapper;
 use Frontastic\Common\SprykerBundle\Domain\Product\SprykerProductApiExtendedConstants;
+use Frontastic\Common\SprykerBundle\Domain\Project\Mapper\ProductSearchableAttributesMapper;
 use Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface;
 use GuzzleHttp\Promise\PromiseInterface;
 use WoohooLabs\Yang\JsonApi\Response\JsonApiResponse;
@@ -34,15 +35,20 @@ class SprykerProductSearchApi extends ProductSearchApiBase
     /** @var array */
     private $queryResources;
 
+    /** @var string[] */
+    private $projectLanguages;
+
     public function __construct(
         SprykerClientInterface $client,
         MapperResolver $mapperResolver,
         LocaleCreator $localeCreator,
+        array $projectLanguages,
         array $queryResources = SprykerProductApiExtendedConstants::SPRYKER_PRODUCT_QUERY_RESOURCES
     ) {
         $this->client = $client;
         $this->mapperResolver = $mapperResolver;
         $this->localeCreator = $localeCreator;
+        $this->projectLanguages = $projectLanguages;
         $this->queryResources = $queryResources;
     }
 
@@ -91,23 +97,29 @@ class SprykerProductSearchApi extends ProductSearchApiBase
 
     protected function getSearchableAttributesImplementation(): array
     {
-        $attributes = [];
+        $resources = [];
+        try {
+            $response = $this->client->get('/product-management-attributes');
+            $resources  = $response->document()->primaryResources();
+        } catch (\Exception $e) {
+            // Endpoint not implemented
+            if ($e->getCode() === 404) {
+                // TODO: Log error
+            }
+        }
 
-        // @TODO: implement multi languages
+        $attributes = $this->mapperResolver
+            ->getExtendedMapper(ProductSearchableAttributesMapper::MAPPER_NAME)
+            ->mapResourceArray($resources);
 
-        // @TODO: implement /product-searchable-attributes alternative from Spryker ocre
-
-        // $response = $this->client->get('/product-searchable-attributes');
-
-        // $attributes = $this->mapperResolver
-        //    ->getExtendedMapper(ProductSearchableAttributesMapper::MAPPER_NAME)
-        //    ->mapResourceArray($response->document()->primaryResources());
-
-        // check if there are no attributes due to error or something, just return an empty result and don't add the
-        // price attribute, as this will lead to disabling all other facets in backstage.
-        // if (empty($attributes)) {
-        //    return $attributes;
-        // }
+        foreach ($attributes as &$attribute) {
+            $attribute->label = $this->mapLocales($attribute->label);
+            foreach ($attribute->values as &$value) {
+                if (is_array($value)) {
+                    $value = $this->mapLocales($value);
+                }
+            }
+        }
 
         return $this->addCustomAttributes($attributes);
     }
@@ -127,6 +139,19 @@ class SprykerProductSearchApi extends ProductSearchApiBase
         $includesString = implode(',', $includes);
 
         return "{$url}{$separator}include={$includesString}";
+    }
+
+    private function mapLocales(array $localizedStrings): array
+    {
+        $localizedResult = [];
+        foreach ($this->projectLanguages as $language) {
+            $locale = $this->localeCreator->createLocaleFromString($language);
+            $localizedResult[$language] =
+                $localizedStrings[$locale->language . '_' . $locale->country] ??
+                (reset($localizedStrings) ?: '');
+        }
+
+        return $localizedResult;
     }
 
     private function addCustomAttributes(array $attributes): array

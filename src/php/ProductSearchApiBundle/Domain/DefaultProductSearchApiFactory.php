@@ -126,7 +126,8 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
                 $productSearchApi = new SprykerProductSearchApi(
                     $client,
                     $dataMapper,
-                    $localeCreatorFactory->factor($project, $client)
+                    $localeCreatorFactory->factor($project, $client),
+                    $project->languages
                 );
 
                 break;
