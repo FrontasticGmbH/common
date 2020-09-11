@@ -1,5 +1,20 @@
 # common Changelog
 
+## `1.1.9` (2020-09-11)
+
+* Implement localization and include Product filter by language
+* add Spryker product search API
+* add Shopware product search API
+* add SAP product search API
+* Add query validator and throw on unsupported features
+* Add result facet mapping and refactor transformations fully into mapper
+* Deprecate Tastics not wrapped into tastify()
+* add feature flag for consistency between product and product search api
+* Implement Findologic pagination
+* Removed lodash dependency
+* Build cloudinary URLs ourselves
+* Add FindologicBundle
+
 ## `1.1.8` (2020-08-24)
 
 * chore(shopify integration): Included pagination documentation
