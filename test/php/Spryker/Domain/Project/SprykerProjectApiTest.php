@@ -2,15 +2,12 @@
 
 namespace Frontastic\Common\SprykerBundle\Domain\Project;
 
-use Frontastic\Common\HttpClient;
 use Frontastic\Common\SprykerBundle\Domain\Locale\DefaultLocaleCreator;
 use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\SprykerBundle\Domain\Locale\SprykerLocale;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver as SprykerMapperResolver;
-use Frontastic\Common\SprykerBundle\Domain\Project\Mapper\LocalizedEnumAttributesMapper;
 use Frontastic\Common\SprykerBundle\Domain\Project\Mapper\ProductSearchableAttributesMapper;
 use Frontastic\Common\SprykerBundle\Domain\SprykerClient;
-use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -39,7 +36,7 @@ class SprykerProjectApiTest extends TestCase
             ->getMockBuilder(SprykerClient::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productSearchableAttributesMapper = new ProductSearchableAttributesMapper(new LocalizedEnumAttributesMapper);
+        $productSearchableAttributesMapper = new ProductSearchableAttributesMapper();
         $this->localCreatorMock = $this->createMock(LocaleCreator::class);
         $this->api = new SprykerProjectApi(
             $this->clientMock,
