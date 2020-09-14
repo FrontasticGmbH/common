@@ -139,12 +139,19 @@ class SearchCriteriaBuilder
 
         if (!empty($query->productIds)) {
             $criteria['ids'] = $query->productIds;
+        } elseif ($query->productId !== null) {
+            $criteria['ids'] = [$query->productId];
         }
 
         if (!empty($query->skus)) {
             $criteria['filter'][] = new Filter\EqualsAny([
                 'field' => 'productNumber',
                 'value' => $query->skus,
+            ]);
+        } elseif ($query->sku !== null) {
+            $criteria['filter'][] = new Filter\Equals([
+                'field' => 'productNumber',
+                'value' => $query->sku,
             ]);
         }
 
