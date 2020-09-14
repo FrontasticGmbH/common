@@ -86,6 +86,7 @@ class SearchCriteriaBuilder
         $criteria = [
             'page' => self::calculatePage($query),
             'limit' => $query->limit,
+            'total-count-mode' => true,
             'filter' => [
                 // Exclude variants as they are returned in the list
                 new Filter\Equals([
@@ -94,13 +95,7 @@ class SearchCriteriaBuilder
                 ]),
             ],
             'post-filter' => [],
-            'aggregations' => [
-                [
-                    'name' => 'count#productIds',
-                    'type' => 'count',
-                    'field' => 'id',
-                ],
-            ],
+            'aggregations' => [],
             'associations' => [
                 'children' => [
                     'associations' => [
