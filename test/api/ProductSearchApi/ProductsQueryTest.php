@@ -247,7 +247,8 @@ class ProductsQueryTest extends FrontasticApiTestCase
         $this->requireCategoryEndpointToSupportOffsetPagination($project);
 
         $limit = 24;
-        $productsQueriedOneStep = $this->queryProductsWithProductSearchApi($project, $language, $this->sortReproducibly(), $limit);
+        $productsQueriedOneStep =
+            $this->queryProductsWithProductSearchApi($project, $language, $this->sortReproducibly(), $limit);
         $productsQueriedInMultipleSteps = $this->queryProductsInMultipleSteps(
             $project,
             $language,
@@ -270,7 +271,8 @@ class ProductsQueryTest extends FrontasticApiTestCase
         $this->requireCategoryEndpointToSupportCursorBasedPagination($project);
 
         $limit = 24;
-        $productsQueriedOneStep = $this->queryProductsWithProductSearchApi($project, $language, $this->sortReproducibly(), $limit);
+        $productsQueriedOneStep =
+            $this->queryProductsWithProductSearchApi($project, $language, $this->sortReproducibly(), $limit);
         $productsQueriedInMultipleSteps = $this->queryProductsInMultipleStepsWithCursorBasesPagination(
             $project,
             $language,
@@ -298,7 +300,8 @@ class ProductsQueryTest extends FrontasticApiTestCase
      */
     public function testQueryByNonExistingCategoryReturnsEmptyResult(Project $project, string $language): void
     {
-        $products = $this->queryProductsWithProductSearchApi($project, $language, ['category' => self::NON_EXISTING_CATEGORY]);
+        $products =
+            $this->queryProductsWithProductSearchApi($project, $language, ['category' => self::NON_EXISTING_CATEGORY]);
         $this->assertEmptyResult($products);
     }
 
@@ -331,7 +334,9 @@ class ProductsQueryTest extends FrontasticApiTestCase
     {
         $this->requireCategoryEndpointToSupportSearchByIdentifierAndQueryParameters($project);
 
-        $products = $this->queryProductsWithProductSearchApi($project, $language, ['productIds' => [self::NON_EXISTING_PRODUCT_ID]]);
+        $products = $this->queryProductsWithProductSearchApi($project,
+            $language,
+            ['productIds' => [self::NON_EXISTING_PRODUCT_ID]]);
         $this->assertEmptyResult($products);
     }
 
@@ -395,19 +400,21 @@ class ProductsQueryTest extends FrontasticApiTestCase
         }
 
         /** @var Result\TermFacet[] $resultTermFacets */
-        $resultTermFacets = array_values(array_filter($result->facets, function(Result\Facet $facet) {
-            return $facet instanceof Result\TermFacet;
-        }));
+        $resultTermFacets = array_values(array_filter($result->facets,
+            function (Result\Facet $facet) {
+                return $facet instanceof Result\TermFacet;
+            }));
 
         /** @var Result\RangeFacet[] $resultRangeFacets */
-        $resultRangeFacets = array_values(array_filter($result->facets, function(Result\Facet $facet) {
-            return $facet instanceof Result\RangeFacet;
-        }));
+        $resultRangeFacets = array_values(array_filter($result->facets,
+            function (Result\Facet $facet) {
+                return $facet instanceof Result\RangeFacet;
+            }));
 
         $termFacets = count($resultTermFacets) === 0 ? [] : [
             new ProductApi\Query\TermFacet([
                 'handle' => $resultTermFacets[0]->handle,
-                'terms' => [$resultTermFacets[0]->terms[0]->value]
+                'terms' => [$resultTermFacets[0]->terms[0]->value],
             ]),
         ];
 
@@ -419,9 +426,11 @@ class ProductsQueryTest extends FrontasticApiTestCase
             ]),
         ];
 
-        $facetResults = $this->queryProductsWithProductSearchApi($project, $language, [
-            'facets' => array_merge($termFacets, $rangeFacets)
-        ]);
+        $facetResults = $this->queryProductsWithProductSearchApi($project,
+            $language,
+            [
+                'facets' => array_merge($termFacets, $rangeFacets),
+            ]);
 
         $this->assertLessThan($total, $facetResults->total);
         $this->assertGreaterThan(0, count($facetResults->items));
@@ -429,7 +438,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
         $termFacets = count($resultTermFacets) === 0 ? [] : [
             new ProductApi\Query\TermFilter([
                 'handle' => $resultTermFacets[0]->handle,
-                'terms' => [$resultTermFacets[0]->terms[0]->value]
+                'terms' => [$resultTermFacets[0]->terms[0]->value],
             ]),
         ];
 
@@ -441,9 +450,11 @@ class ProductsQueryTest extends FrontasticApiTestCase
             ]),
         ];
 
-        $filterResults = $this->queryProductsWithProductSearchApi($project, $language, [
-            'filter' => array_merge($termFacets, $rangeFacets)
-        ]);
+        $filterResults = $this->queryProductsWithProductSearchApi($project,
+            $language,
+            [
+                'filter' => array_merge($termFacets, $rangeFacets),
+            ]);
 
         $this->assertLessThan($total, $filterResults->total);
         $this->assertGreaterThan(0, count($filterResults->items));
