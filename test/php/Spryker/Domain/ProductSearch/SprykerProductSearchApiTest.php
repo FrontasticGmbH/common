@@ -1,6 +1,6 @@
 <?php
 
-namespace Frontastic\Common\SprykerBundle\Domain\Project;
+namespace Frontastic\Common\SprykerBundle\Domain\ProductSearch;
 
 use Frontastic\Common\SprykerBundle\Domain\Locale\DefaultLocaleCreator;
 use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreator;
@@ -13,7 +13,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WoohooLabs\Yang\JsonApi\Response\JsonApiResponse;
 
-class SprykerProjectApiTest extends TestCase
+class SprykerProductSearchApiTest extends TestCase
 {
     /**
      * @var SprykerClient|MockObject
@@ -26,7 +26,7 @@ class SprykerProjectApiTest extends TestCase
     private $localCreatorMock;
 
     /**
-     * @var SprykerProjectApi
+     * @var SprykerProductSearchApi
      */
     private $api;
 
@@ -38,7 +38,7 @@ class SprykerProjectApiTest extends TestCase
             ->getMock();
         $productSearchableAttributesMapper = new ProductSearchableAttributesMapper();
         $this->localCreatorMock = $this->createMock(LocaleCreator::class);
-        $this->api = new SprykerProjectApi(
+        $this->api = new SprykerProductSearchApi(
             $this->clientMock,
             new SprykerMapperResolver([$productSearchableAttributesMapper]),
             $this->localCreatorMock,
