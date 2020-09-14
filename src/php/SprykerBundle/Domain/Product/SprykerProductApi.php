@@ -12,12 +12,14 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApiBase;
 use Frontastic\Common\SprykerBundle\BaseApi\ProductExpandingTrait;
 use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreator;
+use Frontastic\Common\SprykerBundle\Domain\Locale\SprykerLocale;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver;
 use Frontastic\Common\SprykerBundle\Domain\Product\Mapper\CategoriesMapper;
 use Frontastic\Common\SprykerBundle\Domain\Product\Mapper\ProductConcreteMapper;
 use Frontastic\Common\SprykerBundle\Domain\Product\Mapper\ProductMapper;
 use Frontastic\Common\SprykerBundle\Domain\Product\Mapper\ProductResultMapper;
 use Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface;
+use Frontastic\Common\SprykerBundle\Domain\SprykerUrlAppender;
 use GuzzleHttp\Promise\PromiseInterface;
 use WoohooLabs\Yang\JsonApi\Response\JsonApiResponse;
 
@@ -34,6 +36,9 @@ class SprykerProductApi extends ProductApiBase
     /** @var LocaleCreator */
     private $localeCreator;
 
+    /** @var SprykerUrlAppender */
+    private $urlAppender;
+
     /** @var array */
     protected $productResources;
 
@@ -43,10 +48,15 @@ class SprykerProductApi extends ProductApiBase
     /** @var array */
     protected $concreteProductResources;
 
+    /** @var string|null */
+    private $defaultLanguage;
+
     public function __construct(
         SprykerClientInterface $client,
         MapperResolver $mapperResolver,
         LocaleCreator $localeCreator,
+        SprykerUrlAppender $urlAppender,
+        ?string $defaultLanguage,
         array $productResources = SprykerProductApiExtendedConstants::SPRYKER_DEFAULT_PRODUCT_RESOURCES,
         array $queryResources = SprykerProductApiExtendedConstants::SPRYKER_PRODUCT_QUERY_RESOURCES,
         array $concreteProductResources = SprykerProductApiExtendedConstants::SPRYKER_DEFAULT_CONCRETE_PRODUCT_RESOURCES
@@ -54,6 +64,8 @@ class SprykerProductApi extends ProductApiBase
         $this->client = $client;
         $this->mapperResolver = $mapperResolver;
         $this->localeCreator = $localeCreator;
+        $this->urlAppender = $urlAppender;
+        $this->defaultLanguage = $defaultLanguage;
         $this->productResources = $productResources;
         $this->queryResources = $queryResources;
         $this->concreteProductResources = $concreteProductResources;
@@ -61,7 +73,11 @@ class SprykerProductApi extends ProductApiBase
 
     protected function queryCategoriesImplementation(CategoryQuery $query): Result
     {
-        $response = $this->client->get('/category-trees');
+        $locale = $this->parseLocaleString($query->locale);
+
+        $response = $this->client
+            ->forLanguage($locale->language)
+            ->get('/category-trees');
 
         $document = $response->document();
         $categories = $this->mapperResolver->getMapper(CategoriesMapper::MAPPER_NAME)->mapResource(
@@ -84,17 +100,26 @@ class SprykerProductApi extends ProductApiBase
 
     protected function getProductImplementation(SingleProductQuery $query): PromiseInterface
     {
+        $locale = $this->parseLocaleString($query->locale);
+
         if ($query->sku) {
-            $endpoint = $this->withIncludes("/concrete-products/{$query->sku}", $this->concreteProductResources);
+            $url = $this->urlAppender->withIncludes(
+                "/concrete-products/{$query->sku}",
+                $this->concreteProductResources
+            );
             $mapper = $this->mapperResolver->getMapper(ProductConcreteMapper::MAPPER_NAME);
         } else {
-            $endpoint = $this->withIncludes("/abstract-products/{$query->productId}", $this->productResources);
+            $url = $this->urlAppender->withIncludes(
+                "/abstract-products/{$query->productId}",
+                $this->productResources
+            );
             $mapper = $this->mapperResolver->getMapper(ProductMapper::MAPPER_NAME);
         }
 
         return $this->client
+            ->forLanguage($locale->language)
             ->get(
-                $endpoint,
+                $this->urlAppender->withCurrency($url, $locale->currency),
                 [],
                 ProductApi::QUERY_ASYNC
             )
@@ -129,13 +154,18 @@ class SprykerProductApi extends ProductApiBase
 
     protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
+        $locale = $this->parseLocaleString($query->locale);
+
         $searchQuery = CatalogSearchQuery::createFromProductQuery($query);
+
+        $url = $this->urlAppender->withIncludes("/catalog-search?{$searchQuery}", $this->queryResources);
 
         $mapper = $this->mapperResolver->getMapper(ProductResultMapper::MAPPER_NAME);
 
-        $response = $this->client
+        return $this->client
+            ->forLanguage($locale->language)
             ->get(
-                $this->withIncludes("/catalog-search?{$searchQuery}", $this->queryResources),
+                $this->urlAppender->withCurrency($url, $locale->currency),
                 [],
                 ProductApi::QUERY_ASYNC
             )
@@ -166,8 +196,6 @@ class SprykerProductApi extends ProductApiBase
                 }
                 throw $exception;
             });
-
-        return $response;
     }
 
     /**
@@ -214,15 +242,8 @@ class SprykerProductApi extends ProductApiBase
         return array_merge($resources, $response->document()->includedResources());
     }
 
-    private function withIncludes(string $url, array $includes = []): string
+    private function parseLocaleString(string $localeString): SprykerLocale
     {
-        if (count($includes) === 0) {
-            return $url;
-        }
-
-        $separator = (strpos($url, '?') === false) ? '?' : '&';
-        $includesString = implode(',', $includes);
-
-        return "{$url}{$separator}include={$includesString}";
+        return $this->localeCreator->createLocaleFromString($localeString ?? $this->defaultLanguage);
     }
 }

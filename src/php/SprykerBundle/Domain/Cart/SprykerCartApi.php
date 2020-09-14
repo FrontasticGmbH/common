@@ -265,10 +265,14 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
      */
     public function order(Cart $cart, string $locale = null): Order
     {
+        $sprykerLocale = $this->parseLocaleString($locale);
+
         $request = $this->checkoutRequest;
         $request->setIdCart($cart->cartId);
 
-        $response = $this->client->post('/checkout?include=orders', $this->getClientHeader(), $request->encode());
+        $response = $this->client
+            ->forLanguage($sprykerLocale->language)
+            ->post('/checkout?include=orders', $this->getClientHeader(), $request->encode());
 
         return $this->getCheckoutMapper()->mapResource($response->document()->primaryResource());
     }
@@ -281,10 +285,14 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
      */
     public function getOrder(Account $account, string $orderId, string $locale = null): Order
     {
-        $response = $this->client->get(
-            $this->withIncludes("/orders/{$orderId}", $this->orderIncludes),
-            $this->getAuthHeader()
-        );
+        $sprykerLocale = $this->parseLocaleString($locale);
+
+        $response = $this->client
+            ->forLanguage($sprykerLocale->language)
+            ->get(
+                $this->withIncludes("/orders/{$orderId}", $this->orderIncludes),
+                $this->getAuthHeader()
+            );
 
         return $this->mapResponseResource($response, OrderMapper::MAPPER_NAME);
     }

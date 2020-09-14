@@ -8,6 +8,10 @@ use Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver;
 use WoohooLabs\Yang\JsonApi\Response\JsonApiResponse;
 
+/**
+ * TODO: Get rid off this class by using dedicated service SprykerUrlAppender and
+ * implement mapper resolver strategy within each Api implementation.
+ */
 class SprykerApiBase
 {
     /**
@@ -73,17 +77,16 @@ class SprykerApiBase
         return $mapper->mapResource($document->primaryResources()[0]);
     }
 
-    /**
-     * @param JsonApiResponse $response
-     * @param string $mapperName
-     *
-     * @return array
-     */
-    protected function mapResponseArray(JsonApiResponse $response, string $mapperName): array
+    protected function getSeparator(string $url): string
     {
-        return $this->mapperResolver
-            ->getExtendedMapper($mapperName)
-            ->mapResourceArray($response->document()->primaryResources());
+        return (strpos($url, '?') === false) ? '?' : '&';
+    }
+
+    protected function withCurrency(string $url, string $currency): string
+    {
+        $separator = $this->getSeparator($url);
+
+        return "{$url}{$separator}currency={$currency}";
     }
 
     /**
@@ -94,31 +97,14 @@ class SprykerApiBase
      */
     protected function withIncludes(string $url, array $includes = []): string
     {
-        if (count($includes) === 0) {
+        if (empty($includes)) {
             return $url;
         }
 
-        $separator = (strpos($url, '?') === false) ? '?' : '&';
+        $separator = $this->getSeparator($url);
         $includesString = implode(',', $includes);
 
         return "{$url}{$separator}include={$includesString}";
-    }
-
-
-    /**
-     * @param string $json
-     *
-     * @return array
-     */
-    protected function mapErrors(string $json): array
-    {
-        $data = json_decode($json, true);
-
-        if (isset($data['message'])) {
-            $data = json_decode($data['message'], true);
-        }
-
-        return $data['errors'] ?? [];
     }
 
     protected function parseLocaleString(?string $localeString): SprykerLocale

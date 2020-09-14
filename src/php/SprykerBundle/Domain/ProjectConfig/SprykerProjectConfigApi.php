@@ -9,7 +9,7 @@ class SprykerProjectConfigApi
 {
     public const RESOURCE_COUNTRIES = 'countries';
     public const RESOURCE_CURRENCIES = 'currencies';
-    public const RESOURCE_LANGUAGES = 'languages';
+    public const RESOURCE_LOCALES = 'locales';
 
     /** @var SprykerClient */
     private $client;
@@ -27,39 +27,24 @@ class SprykerProjectConfigApi
         $this->cacheTtl = 600;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getLanguageCodes(): array
+    public function getProjectConfig(): array
     {
-        return $this->getIsoCodesFromProjectConfig('languages');
-    }
+        $cacheKey = sprintf(
+            'frontastic.spryker.projectConfig.%s',
+            $this->client->getProjectKey()
+        );
 
-    /**
-     * @return string[]
-     */
-    public function getCurrencyCodes(): array
-    {
-        return $this->getIsoCodesFromProjectConfig('currencies');
-    }
-
-    private function getIsoCodesFromProjectConfig(string $configName): array
-    {
-        $cacheKey = sprintf('frontastic.spryker.%sCodes.%s', $configName, $this->client->getInstanceId());
-
-        $result = $this->cache->get($cacheKey);
-        if ($result !== null) {
-            return $result;
+        $projectConfig = $this->cache->get($cacheKey);
+        if ($projectConfig !== null) {
+            return $projectConfig;
         }
 
-        $languages = $this->client->get('/rest/v2/{siteId}/' . $configName)->wait();
-        $result = array_map(
-            function (array $language): string {
-                return $language['isocode'];
-            },
-            $languages[$configName]
-        );
-        $this->cache->set($cacheKey, $result, $this->cacheTtl);
-        return $result;
+        $response = $this->client->get("/stores/{$this->client->getProjectKey()}");
+        $resource = $response->document()->primaryResource()->toArray();
+        $projectConfig = $resource['attributes'];
+
+        $this->cache->set($cacheKey, $projectConfig, $this->cacheTtl);
+
+        return $projectConfig;
     }
 }

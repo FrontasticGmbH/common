@@ -12,6 +12,8 @@ use WoohooLabs\Yang\JsonApi\Response\JsonApiResponse;
 
 class SprykerClient implements SprykerClientInterface
 {
+    private const SPRYKER_LANGUAGE_HEADER = 'Accept-Language';
+
     /**
      * @var HttpClient
      */
@@ -21,6 +23,11 @@ class SprykerClient implements SprykerClientInterface
      * @var string
      */
     private $url;
+
+    /**
+     * @var string
+     */
+    private $projectKey;
 
     /**
      * @var array
@@ -37,13 +44,30 @@ class SprykerClient implements SprykerClientInterface
     /**
      * @param HttpClient $client
      * @param string $url
+     * @param string $projectKey
      * @param \Frontastic\Common\SprykerBundle\Domain\Exception\ExceptionFactoryInterface $exceptionFactory
      */
-    public function __construct(HttpClient $client, string $url, ExceptionFactoryInterface $exceptionFactory)
-    {
+    public function __construct(
+        HttpClient $client,
+        string $url,
+        string $projectKey,
+        ExceptionFactoryInterface $exceptionFactory
+    ) {
         $this->httpClient = $client;
         $this->url = $url;
+        $this->projectKey = $projectKey;
         $this->exceptionFactory = $exceptionFactory;
+    }
+
+    public function getProjectKey(): string
+    {
+        return $this->projectKey;
+    }
+
+    public function forLanguage(string $language): SprykerClientInterface
+    {
+        $this->defaultHeaders[self::SPRYKER_LANGUAGE_HEADER] = $language;
+        return $this;
     }
 
     /**

@@ -14,6 +14,10 @@ interface SprykerClientInterface
     public const METHOD_PUT = 'PUT';
     public const METHOD_PATCH = 'PATCH';
 
+    public function getProjectKey(): string;
+
+    public function forLanguage(string $language): SprykerClientInterface;
+
     /**
      * @param string $endpoint
      * @param array $headers
