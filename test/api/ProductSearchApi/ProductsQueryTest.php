@@ -166,6 +166,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
 
         $result = $this->queryProductsWithProductSearchApi($project, $language, $queryParameters);
 
+        $this->assertSingleProductResult($project, $product, $result);
         $this->assertNotEmpty($result->items);
         $this->assertSame($product->productId, $result->items[0]->productId);
         $this->assertSame($product->sku, $result->items[0]->sku);
@@ -179,6 +180,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
 
         $result = $this->queryProductsWithProductSearchApi($project, $language, $queryParameters);
 
+        $this->assertResultContainsProduct($project, $product, $result);
         $this->assertSame($product->productId, $result->items[0]->productId);
         $this->assertSame($product->sku, $result->items[0]->sku);
 
@@ -191,6 +193,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
 
         $result = $this->queryProductsWithProductSearchApi($project, $language, $queryParameters);
 
+        $this->assertSingleProductResult($project, $product, $result);
         $this->assertSame($product->productId, $result->items[0]->productId);
         $this->assertSame($product->sku, $result->items[0]->sku);
     }
