@@ -29,13 +29,13 @@ Property|Type|Default|Required|Description
 
 ```php
 public function getConfigurationSection(
-    string $sectionName
+    string …$sectionNamePath
 ): object
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$sectionName`|`string`||
+`…$sectionNamePath`|`string`||
 
 Return Value: `object`
 

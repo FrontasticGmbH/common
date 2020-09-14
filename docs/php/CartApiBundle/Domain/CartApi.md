@@ -17,9 +17,11 @@
 * [setEmail()](#setemail)
 * [setShippingMethod()](#setshippingmethod)
 * [setCustomField()](#setcustomfield)
+* [setRawApiInput()](#setrawapiinput)
 * [setShippingAddress()](#setshippingaddress)
 * [setBillingAddress()](#setbillingaddress)
 * [addPayment()](#addpayment)
+* [updatePayment()](#updatepayment)
 * [redeemDiscountCode()](#redeemdiscountcode)
 * [removeDiscountCode()](#removediscountcode)
 * [order()](#order)
@@ -233,6 +235,29 @@ Argument|Type|Default|Description
 
 Return Value: [`Cart`](Cart.md)
 
+### setRawApiInput()
+
+```php
+public function setRawApiInput(
+    Cart $cart,
+    string $locale = null
+): Cart
+```
+
+*The aim of this method is to ensure the backward compatibility with
+the deprecation of setCustomField and support all the existing
+event decorators already implemented.*
+
+This method should be used along with the event decorator beforeSetRawApiInput
+where you could inject any required data into Cart.rawApiInput.
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$cart`|[`Cart`](Cart.md)||
+`$locale`|`string`|`null`|
+
+Return Value: [`Cart`](Cart.md)
+
 ### setShippingAddress()
 
 ```php
@@ -288,6 +313,24 @@ Argument|Type|Default|Description
 `$locale`|`string`|`null`|
 
 Return Value: [`Cart`](Cart.md)
+
+### updatePayment()
+
+```php
+public function updatePayment(
+    Cart $cart,
+    Payment $payment,
+    string $localeString
+): Payment
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$cart`|[`Cart`](Cart.md)||
+`$payment`|[`Payment`](Payment.md)||
+`$localeString`|`string`||
+
+Return Value: [`Payment`](Payment.md)
 
 ### redeemDiscountCode()
 

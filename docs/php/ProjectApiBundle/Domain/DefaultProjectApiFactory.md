@@ -13,13 +13,13 @@
 
 ```php
 public function __construct(
-    FactoryServiceLocator $serviceLocator
+    \Psr\Container\ContainerInterface $container
 ): mixed
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$serviceLocator`|[`FactoryServiceLocator`](../../CoreBundle/Domain/Api/FactoryServiceLocator.md)||
+`$container`|`\Psr\Container\ContainerInterface`||
 
 Return Value: `mixed`
 

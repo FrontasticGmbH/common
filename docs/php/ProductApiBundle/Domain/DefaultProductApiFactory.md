@@ -13,7 +13,7 @@
 
 ```php
 public function __construct(
-    FactoryServiceLocator $serviceLocator,
+    \Psr\Container\ContainerInterface $container,
     EnabledFacetService $enabledFacetService,
     iterable $decorators = []
 ): mixed
@@ -21,7 +21,7 @@ public function __construct(
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$serviceLocator`|[`FactoryServiceLocator`](../../CoreBundle/Domain/Api/FactoryServiceLocator.md)||
+`$container`|`\Psr\Container\ContainerInterface`||
 `$enabledFacetService`|[`EnabledFacetService`](ProductApi/EnabledFacetService.md)||
 `$decorators`|`iterable`|`[]`|
 

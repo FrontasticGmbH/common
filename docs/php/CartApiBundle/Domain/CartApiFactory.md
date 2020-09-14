@@ -11,17 +11,19 @@
 
 ```php
 public function __construct(
-    FactoryServiceLocator $factoryServiceLocator,
+    \Psr\Container\ContainerInterface $container,
     OrderIdGenerator $orderIdGenerator,
-    iterable $decorators
+    iterable $decorators,
+    \Psr\Log\LoggerInterface $logger
 ): mixed
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$factoryServiceLocator`|[`FactoryServiceLocator`](../../CoreBundle/Domain/Api/FactoryServiceLocator.md)||
+`$container`|`\Psr\Container\ContainerInterface`||
 `$orderIdGenerator`|[`OrderIdGenerator`](OrderIdGenerator.md)||
 `$decorators`|`iterable`||
+`$logger`|`\Psr\Log\LoggerInterface`||
 
 Return Value: `mixed`
 

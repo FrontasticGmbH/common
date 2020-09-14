@@ -10,6 +10,7 @@ Property|Type|Default|Required|Description
 `secret` | `string` |  | - | 
 `edition` | `string` | `'micro'` | - | 
 `hasPaasModifications` | `bool` | `false` | - | 
+`machineLimit` | `int` |  | - | Number of available Frontastic Machines
 `features` | `array` | `[]` | - | 
 `isTransient` | `bool` | `false` | - | Used to indicate this customer is only "half" configured or similar.
 `configuration` | `array` | `[]` | - | 
