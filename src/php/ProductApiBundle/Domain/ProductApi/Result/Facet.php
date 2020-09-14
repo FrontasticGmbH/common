@@ -10,21 +10,25 @@ abstract class Facet extends DataObject
 {
     /**
      * @var string
+     * @required
      */
     public $type;
 
     /**
      * @var string
+     * @required
      */
     public $handle;
 
     /**
      * @var string
+     * @required
      */
     public $key;
 
     /**
      * @var boolean
+     * @required
      */
     public $selected = false;
 }

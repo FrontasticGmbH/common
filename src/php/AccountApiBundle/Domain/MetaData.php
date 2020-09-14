@@ -11,11 +11,13 @@ class MetaData extends DataObject
 {
     /**
      * @var string
+     * @required
      */
     public $author;
 
     /**
      * @var \DateTimeImmutable
+     * @required
      */
     public $changed;
 }

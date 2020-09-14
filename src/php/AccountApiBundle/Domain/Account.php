@@ -13,11 +13,13 @@ class Account extends ApiDataObject implements UserInterface, \Serializable
 {
     /**
      * @var string
+     * @required
      */
     public $accountId;
 
     /**
      * @var string
+     * @required
      */
     public $email;
 
@@ -48,6 +50,7 @@ class Account extends ApiDataObject implements UserInterface, \Serializable
 
     /**
      * @var Group[]
+     * @required
      */
     public $groups = [];
 
@@ -68,6 +71,7 @@ class Account extends ApiDataObject implements UserInterface, \Serializable
 
     /**
      * @var \Frontastic\Common\AccountApiBundle\Domain\Address[]
+     * @required
      */
     public $addresses = [];
 

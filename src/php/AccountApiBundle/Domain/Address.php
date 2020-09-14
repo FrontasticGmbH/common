@@ -11,6 +11,7 @@ class Address extends ApiDataObject
 {
     /**
      * @var string
+     * @required
      */
     public $addressId;
 

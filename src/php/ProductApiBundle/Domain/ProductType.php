@@ -11,11 +11,13 @@ class ProductType extends DataObject
 {
     /**
      * @var string
+     * @required
      */
     public $productTypeId;
 
     /**
      * @var string
+     * @required
      */
     public $name;
 

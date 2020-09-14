@@ -43,11 +43,13 @@ class Result extends DataObject implements \Countable, \IteratorAggregate
 
     /**
      * @var integer
+     * @required
      */
     public $count;
 
     /**
      * @var mixed[]
+     * @required
      */
     public $items = [];
 
@@ -60,6 +62,7 @@ class Result extends DataObject implements \Countable, \IteratorAggregate
      * The query used to generate this result (cloned)
      *
      * @var Query
+     * @required
      */
     public $query;
 

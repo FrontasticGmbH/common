@@ -6,7 +6,7 @@ export interface ApiDataObject {
 }
 
 export interface ErrorResult {
-     ok?: boolean;
+     ok: boolean;
      message?: string;
      endpoint?: string;
      file?: string;

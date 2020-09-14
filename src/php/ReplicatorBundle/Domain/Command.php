@@ -11,21 +11,25 @@ class Command extends DataObject
 {
     /**
      * @var string
+     * @required
      */
     public $command;
 
     /**
      * @var string
+     * @required
      */
     public $channel;
 
     /**
      * @var string
+     * @required
      */
     public $customer;
 
     /**
      * @var array
+     * @required
      */
     public $payload = [];
 }

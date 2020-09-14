@@ -33,6 +33,7 @@ class Attribute extends DataObject
 
     /**
      * @var string
+     * @required
      */
     public $attributeId;
 
@@ -40,6 +41,7 @@ class Attribute extends DataObject
      * TYPE_*
      *
      * @var string
+     * @required
      */
     public $type;
 

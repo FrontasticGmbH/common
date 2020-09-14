@@ -11,6 +11,7 @@ class ErrorResult extends DataObject
 {
     /**
      * @var boolean
+     * @required
      */
     public $ok = false;
 

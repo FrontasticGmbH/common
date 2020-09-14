@@ -18,6 +18,7 @@ class Payment extends ApiDataObject
      * An internal ID to identify this payment
      *
      * @var string
+     * @required
      */
     public $id;
 
@@ -25,6 +26,7 @@ class Payment extends ApiDataObject
      * The name of the payment service provider
      *
      * @var string
+     * @required
      */
     public $paymentProvider;
 
@@ -32,6 +34,7 @@ class Payment extends ApiDataObject
      * The ID used by the payment service provider for this payment
      *
      * @var string
+     * @required
      */
     public $paymentId;
 
@@ -39,11 +42,13 @@ class Payment extends ApiDataObject
      * In cent
      *
      * @var int
+     * @required
      */
     public $amount;
 
     /**
      * @var string
+     * @required
      */
     public $currency;
 
@@ -58,6 +63,7 @@ class Payment extends ApiDataObject
      * One of the `PAYMENT_STATUS_*` constants
      *
      * @var string
+     * @required
      */
     public $paymentStatus;
 
@@ -70,6 +76,7 @@ class Payment extends ApiDataObject
      * The descriptor of the payment method used for this payment
      *
      * @var string
+     * @required
      */
     public $paymentMethod;
 

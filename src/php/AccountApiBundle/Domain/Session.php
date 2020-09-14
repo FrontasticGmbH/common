@@ -16,6 +16,7 @@ class Session extends DataObject
 
     /**
      * @var boolean
+     * @required
      */
     public $loggedIn = false;
 

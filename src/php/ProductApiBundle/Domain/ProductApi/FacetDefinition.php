@@ -9,9 +9,15 @@ use Kore\DataObject\DataObject;
  */
 class FacetDefinition extends DataObject
 {
-    /** @var string */
+    /**
+     * @var string
+     * @required
+     */
     public $attributeType;
 
-    /** @var string */
+    /**
+     * @var string
+     * @required
+     */
     public $attributeId;
 }

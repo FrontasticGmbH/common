@@ -13,6 +13,7 @@ class SapLocale extends DataObject
      * ISO code
      *
      * @var string
+     * @required
      */
     public $languageCode;
 
@@ -20,6 +21,7 @@ class SapLocale extends DataObject
      * ISO code
      *
      * @var string
+     * @required
      */
     public $currencyCode;
 

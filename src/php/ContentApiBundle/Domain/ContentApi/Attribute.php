@@ -11,16 +11,19 @@ class Attribute extends DataObject
 {
     /**
      * @var array
+     * @required
      */
     public $attributeId;
 
     /**
      * @var string
+     * @required
      */
     public $content;
 
     /**
      * @var string
+     * @required
      */
     public $type;
 

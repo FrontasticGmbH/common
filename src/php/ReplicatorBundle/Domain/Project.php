@@ -11,16 +11,19 @@ class Project extends DataObject
 {
     /**
      * @var string
+     * @required
      */
     public $projectId;
 
     /**
      * @var string
+     * @required
      */
     public $name;
 
     /**
      * @var string
+     * @required
      */
     public $customer;
 
@@ -28,31 +31,37 @@ class Project extends DataObject
      * In the config this is the `secret`.
      *
      * @var string
+     * @required
      */
     public $apiKey;
 
     /**
      * @var string
+     * @required
      */
     public $previewUrl;
 
     /**
      * @var string
+     * @required
      */
     public $publicUrl;
 
     /**
      * @var int
+     * @required
      */
     public $webpackPort;
 
     /**
      * @var int
+     * @required
      */
     public $ssrPort;
 
     /**
      * @var array
+     * @required
      */
     public $configuration = [];
 
@@ -61,26 +70,31 @@ class Project extends DataObject
      * follow any defined schema.
      *
      * @var array
+     * @required
      */
     public $data = [];
 
     /**
      * @var string[]
+     * @required
      */
     public $languages = [];
 
     /**
      * @var string
+     * @required
      */
     public $defaultLanguage;
 
     /**
      * @var string[]
+     * @required
      */
     public $projectSpecific = [];
 
     /**
      * @var Endpoint[]
+     * @required
      */
     public $endpoints = [];
 

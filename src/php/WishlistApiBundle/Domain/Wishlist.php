@@ -14,6 +14,7 @@ class Wishlist extends DataObject
 {
     /**
      * @var string
+     * @required
      */
     public $wishlistId;
 
@@ -34,11 +35,13 @@ class Wishlist extends DataObject
 
     /**
      * @var string[]
+     * @required
      */
     public $name = [];
 
     /**
      * @var \Frontastic\Common\WishlistApiBundle\Domain\LineItem[]
+     * @required
      */
     public $lineItems = [];
 

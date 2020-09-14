@@ -11,26 +11,31 @@ class Content extends DataObject
 {
     /**
      * @var string
+     * @required
      */
     public $contentId;
 
     /**
      * @var string
+     * @required
      */
     public $contentTypeId;
 
     /**
      * @var string
+     * @required
      */
     public $name;
 
     /**
      * @var string
+     * @required
      */
     public $slug;
 
     /**
      * @var Attribute[]
+     * @required
      */
     public $attributes = [];
 

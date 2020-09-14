@@ -11,11 +11,13 @@ class AttributeFilter extends DataObject
 {
     /**
      * @var string
+     * @required
      */
     public $name;
 
     /**
      * @var string
+     * @required
      */
     public $value;
 }

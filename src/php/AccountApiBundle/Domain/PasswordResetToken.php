@@ -11,6 +11,7 @@ class PasswordResetToken extends DataObject
 {
     /**
      * @var string
+     * @required
      */
     public $email;
 

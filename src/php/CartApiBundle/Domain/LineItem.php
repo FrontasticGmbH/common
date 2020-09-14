@@ -11,6 +11,7 @@ class LineItem extends ApiDataObject
 {
     /**
      * @var string
+     * @required
      */
     public $lineItemId;
 
@@ -21,16 +22,19 @@ class LineItem extends ApiDataObject
 
     /**
      * @var string
+     * @required
      */
     public $type;
 
     /**
      * @var integer
+     * @required
      */
     public $count = 0;
 
     /**
      * @var integer
+     * @required
      */
     public $price = 0;
 
@@ -48,16 +52,19 @@ class LineItem extends ApiDataObject
 
     /**
      * @var integer
+     * @required
      */
     public $totalPrice = 0;
 
     /**
      * @var string
+     * @required
      */
     public $currency;
 
     /**
      * @var bool
+     * @required
      */
     public $isGift = false;
 

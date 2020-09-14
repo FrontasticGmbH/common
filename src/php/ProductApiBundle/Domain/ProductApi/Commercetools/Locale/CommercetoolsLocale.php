@@ -11,16 +11,19 @@ class CommercetoolsLocale extends DataObject
 {
     /**
      * @var string
+     * @required
      */
     public $country;
 
     /**
      * @var string
+     * @required
      */
     public $currency;
 
     /**
      * @var string
+     * @required
      */
     public $language;
 }

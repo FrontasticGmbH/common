@@ -9,41 +9,41 @@ import {
 } from '../'
 
 export interface Cart extends CoreApiDataObject {
-     cartId?: string;
+     cartId: string;
      cartVersion?: string;
-     lineItems?: LineItem[];
+     lineItems: LineItem[];
      email?: string;
      birthday?: any /* \DateTimeImmutable */;
      shippingMethod?: null | ShippingMethod;
      shippingAddress?: null | any /* \Frontastic\Common\CartApiBundle\Domain\Address */;
      billingAddress?: null | any /* \Frontastic\Common\CartApiBundle\Domain\Address */;
-     sum?: number;
-     currency?: string;
-     payments?: Payment[];
-     discountCodes?: string[];
+     sum: number;
+     currency: string;
+     payments: Payment[];
+     discountCodes: string[];
      dangerousInnerCart?: any;
 }
 
 export interface Discount {
-     discountId?: string;
-     code?: string;
-     state?: string;
-     name?: Translatable;
+     discountId: string;
+     code: string;
+     state: string;
+     name: Translatable;
      description?: Translatable;
      dangerousInnerDiscount?: any;
 }
 
 export interface LineItem extends CoreApiDataObject {
-     lineItemId?: string;
+     lineItemId: string;
      name?: string;
-     type?: string;
-     count?: number;
-     price?: number;
+     type: string;
+     count: number;
+     price: number;
      discountedPrice?: number;
      discountTexts?: any;
-     totalPrice?: number;
-     currency?: string;
-     isGift?: boolean;
+     totalPrice: number;
+     currency: string;
+     isGift: boolean;
      dangerousInnerItem?: any;
 }
 
@@ -56,19 +56,19 @@ export interface Order extends Cart {
 }
 
 export interface Payment extends CoreApiDataObject {
-     id?: string;
-     paymentProvider?: string;
-     paymentId?: string;
-     amount?: number;
-     currency?: string;
+     id: string;
+     paymentProvider: string;
+     paymentId: string;
+     amount: number;
+     currency: string;
      debug?: string;
-     paymentStatus?: string;
+     paymentStatus: string;
      version?: number;
-     paymentMethod?: string;
+     paymentMethod: string;
      paymentDetails?: any | null;
 }
 
 export interface ShippingMethod {
-     name?: string;
-     price?: number;
+     name: string;
+     price: number;
 }

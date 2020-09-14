@@ -13,8 +13,8 @@ export interface Options {
 }
 
 export interface Response {
-     status?: number;
-     headers?: string[];
+     status: number;
+     headers: string[];
      body?: string;
      rawApiOutput?: any /* \Psr\Http\Message\ResponseInterface */;
 }

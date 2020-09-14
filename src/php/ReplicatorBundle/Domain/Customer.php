@@ -11,21 +11,25 @@ class Customer extends DataObject
 {
     /**
      * @var string
+     * @required
      */
     public $name;
 
     /**
      * @var string
+     * @required
      */
     public $secret;
 
     /**
      * @var string
+     * @required
      */
     public $edition = 'micro';
 
     /**
      * @var bool
+     * @required
      */
     public $hasPaasModifications = false;
 
@@ -33,11 +37,13 @@ class Customer extends DataObject
      * Number of available Frontastic Machines
      *
      * @var int
+     * @required
      */
     public $machineLimit = 0;
 
     /**
      * @var array
+     * @required
      */
     public $features = [];
 
@@ -45,16 +51,19 @@ class Customer extends DataObject
      * Used to indicate this customer is only "half" configured or similar.
      *
      * @var bool
+     * @required
      */
     public $isTransient = false;
 
     /**
      * @var array
+     * @required
      */
     public $configuration = [];
 
     /**
      * @var array
+     * @required
      */
     public $environments = [
         'production',
@@ -73,6 +82,7 @@ class Customer extends DataObject
 
     /**
      * @var Project[]
+     * @required
      */
     public $projects = [];
 }

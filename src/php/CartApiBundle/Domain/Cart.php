@@ -12,6 +12,7 @@ class Cart extends ApiDataObject
 {
     /**
      * @var string
+     * @required
      */
     public $cartId;
 
@@ -22,6 +23,7 @@ class Cart extends ApiDataObject
 
     /**
      * @var \Frontastic\Common\CartApiBundle\Domain\LineItem[]
+     * @required
      */
     public $lineItems = [];
 
@@ -52,21 +54,25 @@ class Cart extends ApiDataObject
 
     /**
      * @var integer
+     * @required
      */
     public $sum = 0;
 
     /**
      * @var string
+     * @required
      */
     public $currency;
 
     /**
      * @var Payment[]
+     * @required
      */
     public $payments = [];
 
     /**
      * @var string[]
+     * @required
      */
     public $discountCodes = [];
 

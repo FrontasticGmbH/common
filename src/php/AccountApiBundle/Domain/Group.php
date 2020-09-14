@@ -13,16 +13,19 @@ class Group extends DataObject
 
     /**
      * @var string
+     * @required
      */
     public $groupId;
 
     /**
      * @var string
+     * @required
      */
     public $name;
 
     /**
      * @var string[]
+     * @required
      */
     public $permissions = [];
 }
