@@ -344,7 +344,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
         $this->assertNotEmptyString($sku);
 
         $productsBySku = $this->queryProductsWithProductSearchApi($project, $language, ['sku' => $sku]);
-        $this->assertSingleProductResult($product, $productsBySku);
+        $this->assertSingleProductResult($project, $product, $productsBySku);
     }
 
     /**
@@ -359,7 +359,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
         $this->assertNotEmptyString($sku);
 
         $productsBySku = $this->queryProductsWithProductSearchApi($project, $language, ['skus' => [$sku]]);
-        $this->assertSingleProductResult($product, $productsBySku);
+        $this->assertSingleProductResult($project, $product, $productsBySku);
     }
 
     /**
@@ -375,7 +375,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
 
         $productsByProductId =
             $this->queryProductsWithProductSearchApi($project, $language, ['productIds' => [$productId]]);
-        $this->assertSingleProductResult($product, $productsByProductId);
+        $this->assertSingleProductResult($project, $product, $productsByProductId);
     }
 
     /**
@@ -524,17 +524,17 @@ class ProductsQueryTest extends FrontasticApiTestCase
         $this->assertEmpty($actual->items);
     }
 
-    private function assertSingleProductResult(Product $expectedProduct, Result $actual)
+    private function assertSingleProductResult(Project $project, Product $expectedProduct, Result $actual)
     {
         if ($actual->total !== null) {
             $this->assertEquals(1, $actual->total);
         }
         $this->assertEquals(1, $actual->count);
         $this->assertCount(1, $actual->items);
-        $this->assertResultContainsProduct($expectedProduct, $actual);
+        $this->assertResultContainsProduct($project, $expectedProduct, $actual);
     }
 
-    private function assertResultContainsProduct(Product $expectedProduct, Result $actual)
+    private function assertResultContainsProduct(Project $project, Product $expectedProduct, Result $actual)
     {
         if ($actual->total !== null) {
             $this->assertGreaterThanOrEqual($actual->count, $actual->total);
@@ -549,10 +549,10 @@ class ProductsQueryTest extends FrontasticApiTestCase
         }
 
         $this->assertArrayHasKey($expectedProduct->productId, $actualProducts);
-        $this->assertSameProduct($expectedProduct, $actualProducts[$expectedProduct->productId]);
+        $this->assertSameProduct($project, $expectedProduct, $actualProducts[$expectedProduct->productId]);
     }
 
-    private function assertSameProduct(Product $expected, Product $actual): void
+    private function assertSameProduct(Project $project, Product $expected, Product $actual): void
     {
         // We only check certain attributes here since the search index may contain less data then the product DB and
         // the information from the search index might be outdated.
@@ -587,18 +587,20 @@ class ProductsQueryTest extends FrontasticApiTestCase
             );
         }
 
-        $this->assertSameSize($expected->variants, $actual->variants);
-        for ($variantIndex = 0; $variantIndex < count($expected->variants); ++$variantIndex) {
-            $this->assertArrayHasKey($variantIndex, $expected->variants);
-            $this->assertArrayHasKey($variantIndex, $actual->variants);
+        if ($this->hasProjectFeature($project, 'searchIncludesAllVariants')) {
+            $this->assertSameSize($expected->variants, $actual->variants);
+            for ($variantIndex = 0; $variantIndex < count($expected->variants); ++$variantIndex) {
+                $this->assertArrayHasKey($variantIndex, $expected->variants);
+                $this->assertArrayHasKey($variantIndex, $actual->variants);
 
-            $expectedVariant = $expected->variants[$variantIndex];
-            $actualVariant = $actual->variants[$variantIndex];
+                $expectedVariant = $expected->variants[$variantIndex];
+                $actualVariant = $actual->variants[$variantIndex];
 
-            $this->assertSame($expectedVariant->id, $actualVariant->id);
-            $this->assertSame($expectedVariant->sku, $actualVariant->sku);
-            $this->assertSame($expectedVariant->groupId, $actualVariant->groupId);
-            $this->assertSame($expectedVariant->currency, $actualVariant->currency);
+                $this->assertSame($expectedVariant->id, $actualVariant->id);
+                $this->assertSame($expectedVariant->sku, $actualVariant->sku);
+                $this->assertSame($expectedVariant->groupId, $actualVariant->groupId);
+                $this->assertSame($expectedVariant->currency, $actualVariant->currency);
+            }
         }
     }
 

@@ -9,6 +9,7 @@ configuration:
     supportOffsetPagination: true
     hasConsistentProductSearchData: true
     supportSearchByIdentifierAndQueryParameters: true
+    searchIncludesAllVariants: false
   shopware:
     apiKey: SWSCBHFSNTVMAWNZDNFKSHLAYW
     endpoint: https://frontastic-test.shopwaredemo.store
