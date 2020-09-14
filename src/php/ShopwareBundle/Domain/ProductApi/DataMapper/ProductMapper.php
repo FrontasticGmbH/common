@@ -57,7 +57,7 @@ class ProductMapper extends AbstractDataMapper implements
         $name = $this->resolveTranslatedValue($productData, 'name');
 
         return new Product([
-            'productId' => (string)$productData['id'],
+            'productId' => $productData['parentId'] ?? (string)$productData['id'],
             'changed' => ($lastModified !== null) ? $this->parseDate($lastModified) : null,
             'version' => (string)$productData['versionId'],
             'name' => $name,
