@@ -87,13 +87,7 @@ class SearchCriteriaBuilder
             'page' => self::calculatePage($query),
             'limit' => $query->limit,
             'total-count-mode' => true,
-            'filter' => [
-                // Exclude variants as they are returned in the list
-                new Filter\Equals([
-                    'field' => 'parentId',
-                    'value' => null,
-                ]),
-            ],
+            'filter' => [],
             'post-filter' => [],
             'aggregations' => [],
             'associations' => [
