@@ -6,7 +6,7 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`contentTypeId` | `string` |  | - | 
-`name` | `string` |  | - | 
+`contentTypeId` | `string` |  | *Yes* | 
+`name` | `string` |  | *Yes* | 
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

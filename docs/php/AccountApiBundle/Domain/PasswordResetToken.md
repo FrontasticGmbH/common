@@ -6,7 +6,7 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`email` | `string` |  | - | 
+`email` | `string` |  | *Yes* | 
 `confirmationToken` | `string|null` |  | - | 
 `tokenValidUntil` | `\DateTime|null` |  | - | 
 

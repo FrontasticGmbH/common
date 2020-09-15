@@ -6,9 +6,9 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`attributeId` | `array` |  | - | 
-`content` | `string` |  | - | 
-`type` | `string` |  | - | 
+`attributeId` | `array` |  | *Yes* | 
+`content` | `string` |  | *Yes* | 
+`type` | `string` |  | *Yes* | 
 
 ## Methods
 

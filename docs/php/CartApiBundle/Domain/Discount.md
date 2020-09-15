@@ -6,10 +6,10 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`discountId` | `string` |  | - | 
-`code` | `string` |  | - | 
-`state` | `string` |  | - | 
-`name` | [`Translatable`](../../Translatable.md) |  | - | 
+`discountId` | `string` |  | *Yes* | 
+`code` | `string` |  | *Yes* | 
+`state` | `string` |  | *Yes* | 
+`name` | [`Translatable`](../../Translatable.md) |  | *Yes* | 
 `description` | [`Translatable`](../../Translatable.md) |  | - | 
 `dangerousInnerDiscount` | `mixed` |  | - | Access original object from backend
 

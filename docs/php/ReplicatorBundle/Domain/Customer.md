@@ -6,16 +6,16 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`name` | `string` |  | - | 
-`secret` | `string` |  | - | 
-`edition` | `string` | `'micro'` | - | 
-`hasPaasModifications` | `bool` | `false` | - | 
-`machineLimit` | `int` |  | - | Number of available Frontastic Machines
-`features` | `array` | `[]` | - | 
-`isTransient` | `bool` | `false` | - | Used to indicate this customer is only "half" configured or similar.
-`configuration` | `array` | `[]` | - | 
-`environments` | `array` | `['production', 'staging', 'development']` | - | 
-`projects` | [`Project`](Project.md)[] | `[]` | - | 
+`name` | `string` |  | *Yes* | 
+`secret` | `string` |  | *Yes* | 
+`edition` | `string` | `'micro'` | *Yes* | 
+`hasPaasModifications` | `bool` | `false` | *Yes* | 
+`machineLimit` | `int` |  | *Yes* | Number of available Frontastic Machines
+`features` | `array` | `[]` | *Yes* | 
+`isTransient` | `bool` | `false` | *Yes* | Used to indicate this customer is only "half" configured or similar.
+`configuration` | `array` | `[]` | *Yes* | 
+`environments` | `array` | `['production', 'staging', 'development']` | *Yes* | 
+`projects` | [`Project`](Project.md)[] | `[]` | *Yes* | 
 
 ## Methods
 

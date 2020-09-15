@@ -6,18 +6,18 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`cartId` | `string` |  | - | 
+`cartId` | `string` |  | *Yes* | 
 `cartVersion` | `string` |  | - | 
-`lineItems` | [`LineItem`](LineItem.md)[] | `[]` | - | 
+`lineItems` | [`LineItem`](LineItem.md)[] | `[]` | *Yes* | 
 `email` | `string` |  | - | 
 `birthday` | `\DateTimeImmutable` |  | - | 
 `shippingMethod` | ?[`ShippingMethod`](ShippingMethod.md) |  | - | 
 `shippingAddress` | `?\Frontastic\Common\CartApiBundle\Domain\Address` |  | - | 
 `billingAddress` | `?\Frontastic\Common\CartApiBundle\Domain\Address` |  | - | 
-`sum` | `int` |  | - | 
-`currency` | `string` |  | - | 
-`payments` | [`Payment`](Payment.md)[] | `[]` | - | 
-`discountCodes` | `string[]` | `[]` | - | 
+`sum` | `int` |  | *Yes* | 
+`currency` | `string` |  | *Yes* | 
+`payments` | [`Payment`](Payment.md)[] | `[]` | *Yes* | 
+`discountCodes` | `string[]` | `[]` | *Yes* | 
 `dangerousInnerCart` | `mixed` |  | - | Access original object from backend
 
 ## Methods

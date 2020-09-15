@@ -23,10 +23,10 @@ Property|Type|Default|Required|Description
 `total` | `int` |  | - | 
 `previousCursor` | `string` |  | - | 
 `nextCursor` | `string` |  | - | 
-`count` | `int` |  | - | 
-`items` | `array` | `[]` | - | 
+`count` | `int` |  | *Yes* | 
+`items` | `array` | `[]` | *Yes* | 
 `facets` | [`Result`](Result.md)\Facet[] | `[]` | - | 
-`query` | [`Query`](Query.md) |  | - | The query used to generate this result (cloned)
+`query` | [`Query`](Query.md) |  | *Yes* | The query used to generate this result (cloned)
 
 ## Methods
 

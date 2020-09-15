@@ -8,17 +8,17 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`accountId` | `string` |  | - | 
-`email` | `string` |  | - | 
+`accountId` | `string` |  | *Yes* | 
+`email` | `string` |  | *Yes* | 
 `salutation` | `string` |  | - | 
 `firstName` | `string` |  | - | 
 `lastName` | `string` |  | - | 
 `birthday` | `\DateTime` |  | - | 
-`groups` | [`Group`](Group.md)[] | `[]` | - | 
+`groups` | [`Group`](Group.md)[] | `[]` | *Yes* | 
 `confirmationToken` | `string` |  | - | 
 `confirmed` | `string` | `false` | - | 
 `tokenValidUntil` | `\DateTime` |  | - | 
-`addresses` | [`Address`](Address.md)[] | `[]` | - | 
+`addresses` | [`Address`](Address.md)[] | `[]` | *Yes* | 
 `authToken` | `string|null` |  | - | 
 `dangerousInnerAccount` | `mixed` |  | - | Access original object from backend
 

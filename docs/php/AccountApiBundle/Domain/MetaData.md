@@ -6,7 +6,7 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`author` | `string` |  | - | 
-`changed` | `\DateTimeImmutable` |  | - | 
+`author` | `string` |  | *Yes* | 
+`changed` | `\DateTimeImmutable` |  | *Yes* | 
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

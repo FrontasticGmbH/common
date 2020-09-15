@@ -6,8 +6,8 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`productTypeId` | `string` |  | - | 
-`name` | `string` |  | - | 
+`productTypeId` | `string` |  | *Yes* | 
+`name` | `string` |  | *Yes* | 
 `dangerousInnerProductType` | `mixed` |  | - | Access original object from backend
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

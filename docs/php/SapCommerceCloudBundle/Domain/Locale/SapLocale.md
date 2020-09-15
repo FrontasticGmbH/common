@@ -6,8 +6,8 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`languageCode` | `string` |  | - | ISO code
-`currencyCode` | `string` |  | - | ISO code
+`languageCode` | `string` |  | *Yes* | ISO code
+`currencyCode` | `string` |  | *Yes* | ISO code
 
 ## Methods
 

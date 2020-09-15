@@ -6,16 +6,16 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`lineItemId` | `string` |  | - | 
+`lineItemId` | `string` |  | *Yes* | 
 `name` | `string` |  | - | 
-`type` | `string` |  | - | 
-`count` | `int` |  | - | 
-`price` | `int` |  | - | 
+`type` | `string` |  | *Yes* | 
+`count` | `int` |  | *Yes* | 
+`price` | `int` |  | *Yes* | 
 `discountedPrice` | `int` |  | - | 
 `discountTexts` | `array` | `[]` | - | Translatable discount texts, if any are applied
-`totalPrice` | `int` |  | - | 
-`currency` | `string` |  | - | 
-`isGift` | `bool` | `false` | - | 
+`totalPrice` | `int` |  | *Yes* | 
+`currency` | `string` |  | *Yes* | 
+`isGift` | `bool` | `false` | *Yes* | 
 `dangerousInnerItem` | `mixed` |  | - | Access original object from backend
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

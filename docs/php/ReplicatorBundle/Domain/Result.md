@@ -6,8 +6,8 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`ok` | `bool` | `true` | - | 
-`payload` | `array` | `[]` | - | 
+`ok` | `bool` | `true` | *Yes* | 
+`payload` | `array` | `[]` | *Yes* | 
 `message` | `string` | `null` | - | 
 `file` | `string` |  | - | 
 `line` | `int` |  | - | 

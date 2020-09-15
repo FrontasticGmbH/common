@@ -6,9 +6,9 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`name` | `string` |  | - | 
-`url` | `string` |  | - | 
-`push` | `bool` | `true` | - | 
-`environment` | `string` | `'production'` | - | 
+`name` | `string` |  | *Yes* | 
+`url` | `string` |  | *Yes* | 
+`push` | `bool` | `true` | *Yes* | 
+`environment` | `string` | `'production'` | *Yes* | 
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

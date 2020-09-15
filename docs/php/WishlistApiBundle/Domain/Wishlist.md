@@ -6,12 +6,12 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`wishlistId` | `string` |  | - | 
+`wishlistId` | `string` |  | *Yes* | 
 `wishlistVersion` | `string` |  | - | 
 `anonymousId` | `string` |  | - | 
 `accountId` | `string` |  | - | 
-`name` | `string[]` | `[]` | - | 
-`lineItems` | [`LineItem`](LineItem.md)[] | `[]` | - | 
+`name` | `string[]` | `[]` | *Yes* | 
+`lineItems` | [`LineItem`](LineItem.md)[] | `[]` | *Yes* | 
 `dangerousInnerWishlist` | `mixed` |  | - | Access original object from backend
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

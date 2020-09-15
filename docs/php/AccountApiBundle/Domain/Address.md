@@ -6,7 +6,7 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`addressId` | `string` |  | - | 
+`addressId` | `string` |  | *Yes* | 
 `salutation` | `string` |  | - | 
 `firstName` | `string` |  | - | 
 `lastName` | `string` |  | - | 

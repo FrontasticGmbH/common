@@ -6,7 +6,7 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`name` | `string` |  | - | 
-`value` | `string` |  | - | 
+`name` | `string` |  | *Yes* | 
+`value` | `string` |  | *Yes* | 
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).
