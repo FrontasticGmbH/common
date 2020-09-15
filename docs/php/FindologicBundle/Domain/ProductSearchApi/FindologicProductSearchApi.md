@@ -17,7 +17,8 @@ public function __construct(
     ProductSearchApi $originalDataSource,
     Mapper $mapper,
     QueryValidator $validator,
-    \Psr\Log\LoggerInterface $logger
+    \Psr\Log\LoggerInterface $logger,
+    array $languages
 ): mixed
 ```
 
@@ -28,6 +29,7 @@ Argument|Type|Default|Description
 `$mapper`|[`Mapper`](Mapper.md)||
 `$validator`|[`QueryValidator`](QueryValidator.md)||
 `$logger`|`\Psr\Log\LoggerInterface`||
+`$languages`|`array`||
 
 Return Value: `mixed`
 

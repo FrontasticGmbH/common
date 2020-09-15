@@ -1,6 +1,6 @@
-#  LifecycleEventDecorator
+#  LegacyLifecycleEventDecorator
 
-**Fully Qualified**: [`\Frontastic\Common\ProductSearchApiBundle\Domain\LifecycleEventDecorator`](../../../../src/php/ProductSearchApiBundle/Domain/LifecycleEventDecorator.php)
+**Fully Qualified**: [`\Frontastic\Common\ProductSearchApiBundle\Domain\LegacyLifecycleEventDecorator`](../../../../src/php/ProductSearchApiBundle/Domain/LegacyLifecycleEventDecorator.php)
 
 **Implements**: [`ProductSearchApi`](ProductSearchApi.md)
 

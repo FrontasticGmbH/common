@@ -26,9 +26,9 @@ Return Value: `\GuzzleHttp\Promise\PromiseInterface`
 ### getSearchableAttributes()
 
 ```php
-public function getSearchableAttributes(): array
+public function getSearchableAttributes(): \GuzzleHttp\Promise\PromiseInterface
 ```
 
-Return Value: `array`
+Return Value: `\GuzzleHttp\Promise\PromiseInterface`
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

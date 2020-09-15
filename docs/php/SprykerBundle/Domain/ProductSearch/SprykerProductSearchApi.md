@@ -16,6 +16,7 @@ public function __construct(
     SprykerClientInterface $client,
     MapperResolver $mapperResolver,
     LocaleCreator $localeCreator,
+    array $projectLanguages,
     array $queryResources = SprykerProductApiExtendedConstants::SPRYKER_PRODUCT_QUERY_RESOURCES
 ): mixed
 ```
@@ -25,6 +26,7 @@ Argument|Type|Default|Description
 `$client`|[`SprykerClientInterface`](../SprykerClientInterface.md)||
 `$mapperResolver`|[`MapperResolver`](../MapperResolver.md)||
 `$localeCreator`|[`LocaleCreator`](../Locale/LocaleCreator.md)||
+`$projectLanguages`|`array`||
 `$queryResources`|`array`|`SprykerProductApiExtendedConstants::SPRYKER_PRODUCT_QUERY_RESOURCES`|
 
 Return Value: `mixed`

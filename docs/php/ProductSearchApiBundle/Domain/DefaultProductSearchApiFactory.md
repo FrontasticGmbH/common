@@ -16,7 +16,8 @@ public function __construct(
     \Psr\Container\ContainerInterface $container,
     EnabledFacetService $enabledFacetService,
     \Psr\Log\LoggerInterface $logger,
-    iterable $decorators = []
+    iterable $decorators = [],
+    iterable $productDecorators = []
 ): mixed
 ```
 
@@ -26,6 +27,7 @@ Argument|Type|Default|Description
 `$enabledFacetService`|[`EnabledFacetService`](../../ProductApiBundle/Domain/ProductApi/EnabledFacetService.md)||
 `$logger`|`\Psr\Log\LoggerInterface`||
 `$decorators`|`iterable`|`[]`|
+`$productDecorators`|`iterable`|`[]`|
 
 Return Value: `mixed`
 

@@ -6,7 +6,6 @@
 
 * [__construct()](#__construct)
 * [factorForConfigs()](#factorforconfigs)
-* [factorForProjectAndType()](#factorforprojectandtype)
 
 ### __construct()
 
@@ -26,31 +25,17 @@ Return Value: `mixed`
 
 ```php
 public function factorForConfigs(
+    array $languages,
     object $typeSpecificConfig,
-    ?object $defaultConfig = null
+    ?object $findologicConfig = null
 ): FindologicClient
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
+`$languages`|`array`||
 `$typeSpecificConfig`|`object`||
-`$defaultConfig`|`?object`|`null`|
-
-Return Value: [`FindologicClient`](FindologicClient.md)
-
-### factorForProjectAndType()
-
-```php
-public function factorForProjectAndType(
-    Project $project,
-    string $typeName
-): FindologicClient
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$project`|[`Project`](../../ReplicatorBundle/Domain/Project.md)||
-`$typeName`|`string`||
+`$findologicConfig`|`?object`|`null`|
 
 Return Value: [`FindologicClient`](FindologicClient.md)
 

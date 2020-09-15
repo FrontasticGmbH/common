@@ -13,24 +13,28 @@
 ```php
 public function __construct(
     HttpClient $httpClient,
-    string $hostUrl,
-    string $shopkey
+    array $configs
 ): mixed
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$httpClient`|[`HttpClient`](../../HttpClient.md)||
-`$hostUrl`|`string`||
-`$shopkey`|`string`||
+`$configs`|`array`||
 
 Return Value: `mixed`
 
 ### isAlive()
 
 ```php
-public function isAlive(): \GuzzleHttp\Promise\PromiseInterface
+public function isAlive(
+    string $language
+): \GuzzleHttp\Promise\PromiseInterface
 ```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$language`|`string`||
 
 Return Value: `\GuzzleHttp\Promise\PromiseInterface`
 
@@ -38,12 +42,14 @@ Return Value: `\GuzzleHttp\Promise\PromiseInterface`
 
 ```php
 public function search(
+    string $language,
     SearchRequest $request
 ): \GuzzleHttp\Promise\PromiseInterface
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
+`$language`|`string`||
 `$request`|[`SearchRequest`](SearchRequest.md)||
 
 Return Value: `\GuzzleHttp\Promise\PromiseInterface`

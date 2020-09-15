@@ -117,6 +117,7 @@ Here you find the API documentation for the relevant classes:
     * [FrontasticCommonFindologicExtension](php/FindologicBundle/DependencyInjection/FrontasticCommonFindologicExtension.md)
   * Domain
     * [FindologicClient](php/FindologicBundle/Domain/FindologicClient.md)
+    * [FindologicClientConfig](php/FindologicBundle/Domain/FindologicClientConfig.md)
     * [FindologicClientFactory](php/FindologicBundle/Domain/FindologicClientFactory.md)
     * ProductSearchApi
       * [FindologicProductSearchApi](php/FindologicBundle/Domain/ProductSearchApi/FindologicProductSearchApi.md)
@@ -182,6 +183,7 @@ Here you find the API documentation for the relevant classes:
     * [FrontasticCommonProductSearchApiExtension](php/ProductSearchApiBundle/DependencyInjection/FrontasticCommonProductSearchApiExtension.md)
   * Domain
     * [DefaultProductSearchApiFactory](php/ProductSearchApiBundle/Domain/DefaultProductSearchApiFactory.md)
+    * [LegacyLifecycleEventDecorator](php/ProductSearchApiBundle/Domain/LegacyLifecycleEventDecorator.md)
     * [LifecycleEventDecorator](php/ProductSearchApiBundle/Domain/LifecycleEventDecorator.md)
     * [NoopProductSearchApi](php/ProductSearchApiBundle/Domain/NoopProductSearchApi.md)
     * [ProductSearchApi](php/ProductSearchApiBundle/Domain/ProductSearchApi.md)
