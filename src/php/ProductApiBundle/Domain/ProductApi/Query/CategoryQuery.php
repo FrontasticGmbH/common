@@ -3,6 +3,9 @@ namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\PaginatedQuery;
 
+/**
+ * @type
+ */
 class CategoryQuery extends PaginatedQuery
 {
     /**

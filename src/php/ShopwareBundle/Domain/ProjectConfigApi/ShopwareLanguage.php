@@ -4,6 +4,9 @@ namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class ShopwareLanguage extends DataObject
 {
     /**

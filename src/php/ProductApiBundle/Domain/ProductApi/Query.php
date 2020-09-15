@@ -5,6 +5,9 @@ namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\InvalidQueryException;
 
+/**
+ * @type
+ */
 class Query extends ApiDataObject
 {
     /**

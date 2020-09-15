@@ -4,15 +4,20 @@ namespace Frontastic\Common\ProductApiBundle\Domain;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class ProductType extends DataObject
 {
     /**
      * @var string
+     * @required
      */
     public $productTypeId;
 
     /**
      * @var string
+     * @required
      */
     public $name;
 

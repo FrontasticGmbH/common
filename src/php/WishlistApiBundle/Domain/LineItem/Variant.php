@@ -4,6 +4,9 @@ namespace Frontastic\Common\WishlistApiBundle\Domain\LineItem;
 
 use Frontastic\Common\WishlistApiBundle\Domain\LineItem;
 
+/**
+ * @type
+ */
 class Variant extends LineItem
 {
     /**

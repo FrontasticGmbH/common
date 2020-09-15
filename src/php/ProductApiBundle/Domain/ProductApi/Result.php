@@ -16,6 +16,8 @@ use Kore\DataObject\DataObject;
  * of the first element to allow backward pagination.
  *
  * NOTE: the property $offset will be deprecated in a further commit.
+ *
+ * @type
  */
 class Result extends DataObject implements \Countable, \IteratorAggregate
 {
@@ -41,11 +43,13 @@ class Result extends DataObject implements \Countable, \IteratorAggregate
 
     /**
      * @var integer
+     * @required
      */
     public $count;
 
     /**
      * @var mixed[]
+     * @required
      */
     public $items = [];
 
@@ -58,6 +62,7 @@ class Result extends DataObject implements \Countable, \IteratorAggregate
      * The query used to generate this result (cloned)
      *
      * @var Query
+     * @required
      */
     public $query;
 

@@ -4,6 +4,9 @@ namespace Frontastic\Common\AccountApiBundle\Domain;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class Session extends DataObject
 {
     /**
@@ -13,6 +16,7 @@ class Session extends DataObject
 
     /**
      * @var boolean
+     * @required
      */
     public $loggedIn = false;
 

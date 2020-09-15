@@ -4,6 +4,9 @@ namespace Frontastic\Common\ContentApiBundle\Domain;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class Query extends DataObject
 {
     /**

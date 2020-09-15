@@ -4,12 +4,16 @@ namespace Frontastic\Common\HttpClient;
 
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * @type
+ */
 class Response extends \Kore\DataObject\DataObject
 {
     /**
      * Response HTTP status code
      *
      * @var integer
+     * @required
      */
     public $status;
 
@@ -17,6 +21,7 @@ class Response extends \Kore\DataObject\DataObject
      * The HTTP headers from the response as a plain array
      *
      * @var string[]
+     * @required
      */
     public $headers;
 

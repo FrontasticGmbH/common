@@ -5,6 +5,9 @@ namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\InvalidQueryException;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\PaginatedQuery;
 
+/**
+ * @type
+ */
 class ProductQuery extends PaginatedQuery
 {
     public const SORT_ORDER_ASCENDING = 'ascending';

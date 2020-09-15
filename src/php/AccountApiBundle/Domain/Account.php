@@ -6,15 +6,20 @@ use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\Collection;
 
+/**
+ * @type
+ */
 class Account extends ApiDataObject implements UserInterface, \Serializable
 {
     /**
      * @var string
+     * @required
      */
     public $accountId;
 
     /**
      * @var string
+     * @required
      */
     public $email;
 
@@ -45,6 +50,7 @@ class Account extends ApiDataObject implements UserInterface, \Serializable
 
     /**
      * @var Group[]
+     * @required
      */
     public $groups = [];
 
@@ -65,6 +71,7 @@ class Account extends ApiDataObject implements UserInterface, \Serializable
 
     /**
      * @var \Frontastic\Common\AccountApiBundle\Domain\Address[]
+     * @required
      */
     public $addresses = [];
 

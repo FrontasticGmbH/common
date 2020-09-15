@@ -5,25 +5,32 @@ namespace Frontastic\Common\CartApiBundle\Domain;
 use Frontastic\Common\Translatable;
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class Discount extends DataObject
 {
     /**
      * @var string
+     * @required
      */
     public $discountId;
 
     /**
      * @var string
+     * @required
      */
     public $code;
 
     /**
      * @var string
+     * @required
      */
     public $state;
 
     /**
      * @var Translatable
+     * @required
      */
     public $name;
 

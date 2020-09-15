@@ -4,20 +4,26 @@ namespace Frontastic\Common\ProductApiBundle\Domain;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class Category extends DataObject
 {
     /**
      * @var string
+     * @required
      */
     public $categoryId;
 
     /**
      * @var string
+     * @required
      */
     public $name;
 
     /**
      * @var int
+     * @required
      */
     public $depth = 0;
 
@@ -25,11 +31,13 @@ class Category extends DataObject
      * The materialized id path for this category.
      *
      * @var string
+     * @required
      */
     public $path;
 
     /**
      * @var string
+     * @required
      */
     public $slug;
 

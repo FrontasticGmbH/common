@@ -10,6 +10,8 @@ use Kore\DataObject\DataObject;
  *
  * - de_DE
  * - en_GB@euro
+ *
+ * @type
  */
 class Locale extends DataObject
 {
@@ -17,6 +19,7 @@ class Locale extends DataObject
      * A two or three letter identifier for the language, e.g. fr, de, en …
      *
      * @var string
+     * @required
      */
     public $language;
 
@@ -24,6 +27,7 @@ class Locale extends DataObject
      * A two letter identifier for the territory, e.g. CH, DE, FR …
      *
      * @var string
+     * @required
      */
     public $territory;
 
@@ -31,6 +35,7 @@ class Locale extends DataObject
      * A human readable country identifier.
      *
      * @var string
+     * @required
      */
     public $country;
 
@@ -38,11 +43,13 @@ class Locale extends DataObject
      * A three letter identifier for used currency.
      *
      * @var string
+     * @required
      */
     public $currency;
 
     /**
      * @var string
+     * @required
      */
     public $original;
 

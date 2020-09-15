@@ -11,6 +11,8 @@ namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi;
  * the property $cursor to store the position where the pagination should start.
  *
  * NOTE: the property $offset will be deprecated in a further commit.
+ *
+ * @type
  */
 class PaginatedQuery extends Query
 {

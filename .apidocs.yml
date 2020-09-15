@@ -4,6 +4,12 @@ source: src
 target: docs
 autoloader: vendor/autoload.php
 nameSpace: "\\Frontastic\\Common"
+typeScript:
+  target: src/js/types/
+  nameSpace:
+    search: '(^(?:([A-Za-z]+?)(?:Api)?Bundle\\)?(?:Domain\\)?)'
+    replace: '\1\\'
+  indent: 4
 files:
  - php/*.php
  - php/*/*.php

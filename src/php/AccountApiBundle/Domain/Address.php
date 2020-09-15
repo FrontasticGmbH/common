@@ -4,10 +4,14 @@ namespace Frontastic\Common\AccountApiBundle\Domain;
 
 use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 
+/**
+ * @type
+ */
 class Address extends ApiDataObject
 {
     /**
      * @var string
+     * @required
      */
     public $addressId;
 
