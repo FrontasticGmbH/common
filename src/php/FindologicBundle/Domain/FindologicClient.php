@@ -9,8 +9,8 @@ use GuzzleHttp\Promise\PromiseInterface;
 
 class FindologicClient
 {
-    private const ALIVE_TIMEOUT = 1;
-    private const REQUEST_TIMEOUT = 3;
+    public const ALIVE_TIMEOUT = 1;
+    public const REQUEST_TIMEOUT = 3;
 
     private const DEFAULT_OUTPUT_ATTRIBUTES = [
         'cat',
@@ -81,7 +81,27 @@ class FindologicClient
         return $this->isAlive($language)
             ->then(
                 function () use ($language, $request) {
-                    $url = $this->buildQueryUrl($language, 'index.php', $request->toArray());
+                    $parameters = $request->toArray();
+
+                    $parameters['outputAttrib'] = array_unique(
+                        array_merge(self::DEFAULT_OUTPUT_ATTRIBUTES, $this->outputAttributes)
+                    );
+
+                    $request = $this->requestProvider->getCurrentRequest();
+
+                    if ($request !== null) {
+                        $parameters['userIp'] = $request->getClientIp();
+
+                        if ($request->headers->has('Referer')) {
+                            $referer = $request->headers->get('Referer');
+                            $urlParts = parse_url($referer);
+
+                            $parameters['referer'] = $referer;
+                            $parameters['shopUrl'] = sprintf('%s://%s', $urlParts['scheme'], $urlParts['host']);
+                        }
+                    }
+
+                    $url = $this->buildQueryUrl($language, 'index.php', $parameters);
                     $options = new HttpClient\Options(['timeout' => self::REQUEST_TIMEOUT]);
 
                     return $this->httpClient
@@ -103,24 +123,6 @@ class FindologicClient
     {
         if (!isset($this->endpoints[$language])) {
             throw new \RuntimeException('No Findologic backend configured for requested language "' . $language . '".');
-        }
-
-        $parameters['outputAttrib'] = array_unique(
-            array_merge(self::DEFAULT_OUTPUT_ATTRIBUTES, $this->outputAttributes)
-        );
-
-        $request = $this->requestProvider->getCurrentRequest();
-
-        if ($request !== null) {
-            $parameters['userIp'] = $request->getClientIp();
-
-            if ($request->headers->has('Referer')) {
-                $referer = $request->headers->get('Referer');
-                $urlParts = parse_url($referer);
-
-                $parameters['referer'] = $referer;
-                $parameters['shopUrl'] = sprintf('%s://%s', $urlParts['scheme'], $urlParts['host']);
-            }
         }
 
         return sprintf(
