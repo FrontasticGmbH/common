@@ -1,5 +1,4 @@
 <?php
-
 namespace Frontastic\Common\FindologicBundle\Domain;
 
 use Frontastic\Common\HttpClient;
@@ -11,9 +10,13 @@ class FindologicClientFactory
     /** @var HttpClient */
     private $httpClient;
 
-    public function __construct(HttpClient $httpClient)
+    /** @var RequestProvider */
+    private $requestProvider;
+
+    public function __construct(HttpClient $httpClient, RequestProvider $requestProvider)
     {
         $this->httpClient = $httpClient;
+        $this->requestProvider = $requestProvider;
     }
 
     public function factorForConfigs(
@@ -60,6 +63,6 @@ class FindologicClientFactory
             throw new \RuntimeException('Findologic config option outputAttributes needs to be an array');
         }
 
-        return new FindologicClient($this->httpClient, $clientConfigs, $outputAttributes);
+        return new FindologicClient($this->httpClient, $this->requestProvider, $clientConfigs, $outputAttributes);
     }
 }

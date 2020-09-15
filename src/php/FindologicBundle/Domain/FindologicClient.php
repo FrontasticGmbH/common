@@ -23,6 +23,11 @@ class FindologicClient
     private $httpClient;
 
     /**
+     * @var RequestProvider
+     */
+    private $requestProvider;
+
+    /**
      * @var array<string, FindologicEndpointConfig> An array of endpoint configs keyed by language
      */
     private $endpoints;
@@ -36,9 +41,14 @@ class FindologicClient
      * @param array<string, FindologicEndpointConfig> $endpoints
      * @param string[] $outputAttributes
      */
-    public function __construct(HttpClient $httpClient, array $endpoints, array $outputAttributes = [])
-    {
+    public function __construct(
+        HttpClient $httpClient,
+        RequestProvider $requestProvider,
+        array $endpoints,
+        array $outputAttributes = []
+    ) {
         $this->httpClient = $httpClient;
+        $this->requestProvider = $requestProvider;
         $this->endpoints = $endpoints;
         $this->outputAttributes = $outputAttributes;
     }
@@ -98,6 +108,20 @@ class FindologicClient
         $parameters['outputAttrib'] = array_unique(
             array_merge(self::DEFAULT_OUTPUT_ATTRIBUTES, $this->outputAttributes)
         );
+
+        $request = $this->requestProvider->getCurrentRequest();
+
+        if ($request !== null) {
+            $parameters['userIp'] = $request->getClientIp();
+
+            if ($request->headers->has('Referer')) {
+                $referer = $request->headers->get('Referer');
+                $urlParts = parse_url($referer);
+
+                $parameters['referer'] = $referer;
+                $parameters['shopUrl'] = sprintf('%s://%s', $urlParts['scheme'], $urlParts['host']);
+            }
+        }
 
         return sprintf(
             '%s/%s?shopkey=%s&outputAdapter=JSON_1.0%s',
