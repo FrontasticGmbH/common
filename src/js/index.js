@@ -16,6 +16,7 @@ import FacetTypeSchemaMap from './facetTypeSchema/map'
 import omit from './helper/omit'
 import debounce from './helper/debounce'
 import throttle from './helper/throttle'
+import Notifier from './notifier'
 
 export {
     ConfigurationSchema,
@@ -38,4 +39,5 @@ export {
     omit,
     debounce,
     throttle,
+    Notifier,
 }
