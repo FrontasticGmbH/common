@@ -79,6 +79,10 @@ class FindologicClient
 
     private function buildQueryUrl(string $language, string $route, array $parameters = null)
     {
+        if (!isset($this->configs[$language])) {
+            throw new \RuntimeException('No Findologic backend configured for requested language "' . $language . '".');
+        }
+
         return sprintf(
             '%s/%s?shopkey=%s&outputAdapter=JSON_1.0&outputAttrib[]=cat%s',
             $this->configs[$language]->hostUrl,
