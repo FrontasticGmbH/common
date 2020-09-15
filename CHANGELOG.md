@@ -1,5 +1,10 @@
 # common Changelog
 
+## `1.1.10` (2020-09-15)
+
+* Regenerated API documentation
+* Generated TypeScript types for catwalk & common domain models
+
 ## `1.1.9` (2020-09-11)
 
 * Implement localization and include Product filter by language
