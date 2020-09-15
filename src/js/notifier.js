@@ -19,10 +19,10 @@ class Notifier {
         this.connect()
     }
 
-    connect() {
+    connect () {
         this.webSocket = new WebSocket(
             (this.context.isDebug ? 'ws://' : 'wss://') +
-            `${this.context.customer}.frontastic.io` + 
+            `${this.context.customer}.frontastic.io` +
             (this.context.isDebug ? '.local' : '') +
             `:8080/ws?${this.context.endpoint}=${this.context.previewId}`
         )
@@ -39,7 +39,7 @@ class Notifier {
         }
     }
 
-    handleMessage(event) {
+    handleMessage (event) {
         let message = JSON.parse(event.data)
 
         if (message.Name === 'Ping') {
@@ -55,7 +55,7 @@ class Notifier {
         // Do nothing for other messages
     }
 
-    sendMessage(message, retry = false) {
+    sendMessage (message, retry = false) {
         message.Channel = this.context.previewId
         message.Payload = message.Payload || []
 
