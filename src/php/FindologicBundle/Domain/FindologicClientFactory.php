@@ -34,7 +34,7 @@ class FindologicClientFactory
 
                 if ($value === null) {
                     throw new \RuntimeException(
-                        'Findologic config option ' . $option . ' is not set for language' . $language
+                        'Findologic config option ' . $option . ' is not set for language ' . $language
                     );
                 }
                 if (!is_string($value)) {
@@ -44,7 +44,7 @@ class FindologicClientFactory
                 }
                 if ($value === '') {
                     throw new \RuntimeException(
-                        'Findologic config option ' . $option . ' is empty for language' . $language
+                        'Findologic config option ' . $option . ' is empty for language ' . $language
                     );
                 }
 
