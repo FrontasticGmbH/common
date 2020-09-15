@@ -15,6 +15,10 @@ configuration:
     findologic:
         hostUrl: https://service.findologic.com/ps/centralized-frontend
         shopkey: 3330286AB8B769B8C4372E89D9BEB10F
+        languages:
+            de_DE@EUR:
+                hostUrl: https://service.findologic.com/ps/centralized-frontend
+                shopkey: 3330286AB8B769B8C4372E89D9BEB10F
         originalDataSource:
             engine: commercetools
     productSearch:
@@ -22,5 +26,5 @@ configuration:
 projects:
     -   projectId: test
         name: Findologic Test
-        languages: ["en_GB@GBP"]
+        languages: ["en_GB@GBP", "de_DE@EUR"]
         defaultLanguage: en_GB@GBP

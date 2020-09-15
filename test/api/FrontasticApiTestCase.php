@@ -202,6 +202,15 @@ class FrontasticApiTestCase extends KernelTestCase
         $this->assertNull($variant->dangerousInnerVariant);
     }
 
+    protected function getSearchableAttributesForProjectWithProjectSearchApi(Project $project)
+    {
+        return self::$container
+            ->get(ProductSearchApiFactory::class)
+            ->factor($project)
+            ->getSearchableAttributes()
+            ->wait();
+    }
+
     protected function getSearchableAttributesForProject(Project $project)
     {
         return self::$container

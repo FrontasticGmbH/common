@@ -3,14 +3,17 @@
 namespace Frontastic\Common\FindologicBundle\Domain\ProductSearchApi;
 
 use Frontastic\Common\FindologicBundle\Domain\FindologicClient;
+use Frontastic\Common\FindologicBundle\Domain\SearchRequest;
 use Frontastic\Common\FindologicBundle\Exception\ServiceNotAliveException;
 use Frontastic\Common\FindologicBundle\Exception\UnsupportedQueryException;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiBase;
+use Frontastic\Common\ProjectApiBundle\Domain\Attribute;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Log\LoggerInterface;
+use function GuzzleHttp\Promise\all;
 
 class FindologicProductSearchApi extends ProductSearchApiBase
 {
@@ -39,22 +42,40 @@ class FindologicProductSearchApi extends ProductSearchApiBase
      */
     private $logger;
 
+    /**
+     * @var string[]
+     */
+    private $languages;
+
     public function __construct(
         FindologicClient $client,
         ProductSearchApi $originalDataSource,
         Mapper $mapper,
         QueryValidator $validator,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        array $languages
     ) {
         $this->client = $client;
         $this->originalDataSource = $originalDataSource;
         $this->mapper = $mapper;
         $this->validator = $validator;
         $this->logger = $logger;
+        $this->languages = $languages;
     }
 
     protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
+        /**
+         * Fall back to original data source for SKU-based searches. Findologic does not support this in a reliable
+         * way out of the box since it always executes a full text search across all fields when using "query".
+         */
+        if ($query->sku !== null  || !empty($query->skus)) {
+            $this->logger->info(
+                'ProductSearchApi: Falling back to original data source for searching by SKU.'
+            );
+            return $this->originalDataSource->query($query);
+        }
+
         $validationResult = $this->validator->isSupported($query);
 
         if (!$validationResult->isSupported) {
@@ -63,7 +84,7 @@ class FindologicProductSearchApi extends ProductSearchApiBase
 
         $request = $this->mapper->queryToRequest($query);
 
-        return $this->client->search($request)
+        return $this->client->search($query->locale, $request)
             ->then(
                 function ($result) use ($query) {
                     $currentCursor = $query->cursor ?? $query->offset ?? null;
@@ -97,10 +118,45 @@ class FindologicProductSearchApi extends ProductSearchApiBase
             );
     }
 
-    protected function getSearchableAttributesImplementation(): array
+    protected function getSearchableAttributesImplementation(): PromiseInterface
     {
-        // TODO: Implement getSearchableAttributes() method.
-        return [];
+        return $this->originalDataSource->getSearchableAttributes()
+            ->then(function (array $originalAttributes) {
+                $attributesRequest = new SearchRequest(['count' => 1]);
+
+                $attributeRequests = array_map(
+                    function ($language) use ($attributesRequest) {
+                        return $this->client->search($language, $attributesRequest)
+                            ->then(function ($result) {
+                                $availableAttributeData = array_merge(
+                                    $result['body']['result']['filters']['main'],
+                                    $result['body']['result']['filters']['other']
+                                );
+
+                                return array_map(
+                                    function (array $attributeData) {
+                                        return $attributeData['name'];
+                                    },
+                                    $availableAttributeData
+                                );
+                            });
+                    },
+                    $this->languages
+                );
+
+                return all($attributeRequests)
+                    ->then(function (array $attributeIds) use ($originalAttributes) {
+                        // Only use attributes available across all locales
+                        $availableAttributeIds = array_intersect(...$attributeIds);
+
+                        return array_filter(
+                            $originalAttributes,
+                            function (Attribute $originalAttribute) use ($availableAttributeIds) {
+                                return in_array($originalAttribute->attributeId, $availableAttributeIds);
+                            }
+                        );
+                    });
+            });
     }
 
     public function getDangerousInnerClient()

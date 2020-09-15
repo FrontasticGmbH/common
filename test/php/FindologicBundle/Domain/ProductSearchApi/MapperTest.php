@@ -1,8 +1,7 @@
 <?php
 
-namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi;
+namespace Frontastic\Common\FindologicBundle\Domain\ProductSearchApi;
 
-use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\Mapper;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\RangeFacet;

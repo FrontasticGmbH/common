@@ -12,12 +12,12 @@ abstract class ProductSearchApiBase implements ProductSearchApi
         return $this->queryImplementation($query);
     }
 
-    final public function getSearchableAttributes(): array
+    final public function getSearchableAttributes(): PromiseInterface
     {
         return $this->getSearchableAttributesImplementation();
     }
 
     abstract protected function queryImplementation(ProductQuery $query): PromiseInterface;
 
-    abstract protected function getSearchableAttributesImplementation(): array;
+    abstract protected function getSearchableAttributesImplementation(): PromiseInterface;
 }

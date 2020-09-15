@@ -15,9 +15,9 @@ interface ProductSearchApi
     public function query(ProductQuery $query): PromiseInterface;
 
     /**
-     * @return Attribute[] Attributes mapped by ID
+     * @return PromiseInterface A promise for an array of Attributes mapped by ID
      */
-    public function getSearchableAttributes(): array;
+    public function getSearchableAttributes(): PromiseInterface;
 
     /**
      * Get *dangerous* inner client

@@ -16,33 +16,44 @@ class FindologicClientFactory
         $this->httpClient = $httpClient;
     }
 
-    public function factorForConfigs(object $typeSpecificConfig, ?object $defaultConfig = null): FindologicClient
-    {
-        $config = [];
-        foreach (['hostUrl', 'shopkey'] as $option) {
-            $value = $typeSpecificConfig->$option ?? $defaultConfig->$option ?? null;
+    public function factorForConfigs(
+        array $languages,
+        object $typeSpecificConfig,
+        ?object $findologicConfig = null
+    ): FindologicClient {
+        $clientConfigs = [];
 
-            if ($value === null) {
-                throw new \RuntimeException('Findologic config option ' . $option . ' is not set');
-            }
-            if (!is_string($value)) {
-                throw new \RuntimeException('Findologic config option ' . $option . ' is no string');
-            }
-            if ($value === '') {
-                throw new \RuntimeException('Findologic config option ' . $option . ' is empty');
+        $languagesConfig = $typeSpecificConfig->languages ?? $findologicConfig->languages ?? null;
+
+        foreach ($languages as $language) {
+            $languageConfig = (object) ($languagesConfig[$language] ?? null);
+            $config = [];
+
+            foreach (['hostUrl', 'shopkey'] as $option) {
+                $value = $languageConfig->$option ?? $typeSpecificConfig->$option ?? $findologicConfig->$option ?? null;
+
+                if ($value === null) {
+                    throw new \RuntimeException(
+                        'Findologic config option ' . $option . ' is not set for language' . $language
+                    );
+                }
+                if (!is_string($value)) {
+                    throw new \RuntimeException(
+                        'Findologic config option ' . $option . ' is no string for language ' . $language
+                    );
+                }
+                if ($value === '') {
+                    throw new \RuntimeException(
+                        'Findologic config option ' . $option . ' is empty for language' . $language
+                    );
+                }
+
+                $config[$option] = $value;
             }
 
-            $config[$option] = $value;
+            $clientConfigs[$language] = new FindologicClientConfig($config);
         }
 
-        return new FindologicClient($this->httpClient, $config['hostUrl'], $config['shopkey']);
-    }
-
-    public function factorForProjectAndType(Project $project, string $typeName): FindologicClient
-    {
-        $typeSpecificConfiguration = $project->getConfigurationSection($typeName);
-        $findologicConfig = $project->getConfigurationSection('findologic');
-
-        return $this->factorForConfigs($typeSpecificConfiguration, $findologicConfig);
+        return new FindologicClient($this->httpClient, $clientConfigs);
     }
 }
