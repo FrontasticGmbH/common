@@ -13,7 +13,7 @@ use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiBase;
 use Frontastic\Common\ProjectApiBundle\Domain\Attribute;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Log\LoggerInterface;
-use function GuzzleHttp\Promise\unwrap;
+use function GuzzleHttp\Promise\all;
 
 class FindologicProductSearchApi extends ProductSearchApiBase
 {
@@ -144,17 +144,18 @@ class FindologicProductSearchApi extends ProductSearchApiBase
                     $this->languages
                 );
 
-                $attributeIds = unwrap($attributeRequests);
+                return all($attributeRequests)
+                    ->then(function (array $attributeIds) use ($originalAttributes) {
+                        // Only use attributes available across all locales
+                        $availableAttributeIds = array_intersect(...$attributeIds);
 
-                // Only use attributes available across all locales
-                $availableAttributeIds = array_intersect(...$attributeIds);
-
-                return array_filter(
-                    $originalAttributes,
-                    function (Attribute $originalAttribute) use ($availableAttributeIds) {
-                        return in_array($originalAttribute->attributeId, $availableAttributeIds);
-                    }
-                );
+                        return array_filter(
+                            $originalAttributes,
+                            function (Attribute $originalAttribute) use ($availableAttributeIds) {
+                                return in_array($originalAttribute->attributeId, $availableAttributeIds);
+                            }
+                        );
+                    });
             });
     }
 
