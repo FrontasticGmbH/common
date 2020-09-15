@@ -16,6 +16,8 @@ use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFacto
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapDataMapper;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapProductSearchApi;
+use Frontastic\Common\ShopifyBundle\Domain\ProductSearchApi\ShopifyProductSearchApi;
+use Frontastic\Common\ShopifyBundle\Domain\ShopifyClientFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFactory;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver as ShopwareDataMapperResolver;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory as ShopwareLocaleCreatorFactory;
@@ -122,6 +124,15 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
                     $project->languages,
                     $project->defaultLanguage
                 );
+                break;
+            case 'shopify':
+                $clientFactory = $this->container->get(ShopifyClientFactory::class);
+                $client = $clientFactory->factorForConfigs($productSearchConfig, $engineConfig);
+
+                $productSearchApi = new ShopifyProductSearchApi(
+                    $client
+                );
+
                 break;
             case 'spryker':
                 $clientFactory = $this->container->get(SprykerClientFactory::class);

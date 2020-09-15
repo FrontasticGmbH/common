@@ -20,11 +20,8 @@ class ShopifyClientFactory
         $this->cache = $cache;
     }
 
-    public function factorForProjectAndType(Project $project, string $typeName): ShopifyClient
+    public function factorForConfigs(object $typeSpecificConfiguration, ?object $shopifyConfig = null): ShopifyClient
     {
-        $typeSpecificConfiguration = $project->getConfigurationSection($typeName);
-        $shopifyConfig = $project->getConfigurationSection('shopify');
-
         $config = [];
         foreach (['hostUrl', 'storefrontAccessToken'] as $option) {
             $value = $typeSpecificConfiguration->$option ?? $shopifyConfig->$option ?? null;
@@ -48,5 +45,13 @@ class ShopifyClientFactory
             $config['hostUrl'],
             $config['storefrontAccessToken']
         );
+    }
+
+    public function factorForProjectAndType(Project $project, string $typeName): ShopifyClient
+    {
+        $typeSpecificConfiguration = $project->getConfigurationSection($typeName);
+        $shopifyConfig = $project->getConfigurationSection('shopify');
+
+        return $this->factorForConfigs($typeSpecificConfiguration, $shopifyConfig);
     }
 }
