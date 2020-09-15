@@ -138,7 +138,7 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
 
                 $client = $clientFactory->factorForConfigs($project->languages, $productSearchConfig, $engineConfig);
 
-                $originalDataSourceConfig = (object) $productSearchConfig->originalDataSource;
+                $originalDataSourceConfig = (object)$productSearchConfig->originalDataSource;
                 $originalDataSourceVendorConfig = $project->getConfigurationSection($originalDataSourceConfig->engine);
 
                 $originalDataSource = $this->factorFromConfiguration(
