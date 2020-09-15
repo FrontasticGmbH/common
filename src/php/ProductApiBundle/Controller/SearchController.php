@@ -12,7 +12,7 @@ class SearchController extends Controller
 {
     public function listAction(Request $request, Context $context): array
     {
-        $productApi = $this->get('frontastic.catwalk.product_api');
+        $productSearchApi = $this->get('frontastic.catwalk.product_search_api');
 
         $query = ProductQueryFactory::queryFromParameters(
             ['locale' => $context->locale],
@@ -20,7 +20,7 @@ class SearchController extends Controller
         );
 
         return [
-            'result' => $productApi->query($query),
+            'result' => $productSearchApi->query($query)->wait(),
         ];
     }
 }
