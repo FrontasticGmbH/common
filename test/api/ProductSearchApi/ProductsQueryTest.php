@@ -69,7 +69,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
-    public function testQueryCursoBasedPaginatedProductsReturnsProducts(Project $project, string $language): void
+    public function testQueryCursorBasedPaginatedProductsReturnsProducts(Project $project, string $language): void
     {
         $this->requireCategoryEndpointToSupportCursorBasedPagination($project);
 
