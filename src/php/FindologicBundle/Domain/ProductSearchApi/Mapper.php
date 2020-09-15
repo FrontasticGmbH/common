@@ -23,7 +23,6 @@ class Mapper
             'count' => $query->limit,
             'order' => $this->getSortAttributesForRequest($query),
             'attributes' => $this->getAttributesForRequest($query),
-            'outputAttributes' => ['cat'],
         ];
 
         return new SearchRequest($parameters);

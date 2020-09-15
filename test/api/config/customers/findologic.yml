@@ -21,6 +21,8 @@ configuration:
                 shopkey: 3330286AB8B769B8C4372E89D9BEB10F
         originalDataSource:
             engine: commercetools
+        outputAttributes:
+            - Color
     productSearch:
         engine: findologic
 projects:

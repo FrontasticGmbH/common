@@ -12,23 +12,35 @@ class FindologicClient
     private const ALIVE_TIMEOUT = 1;
     private const REQUEST_TIMEOUT = 3;
 
+    private const DEFAULT_OUTPUT_ATTRIBUTES = [
+        'cat',
+        'price',
+    ];
+
     /**
      * @var HttpClient
      */
     private $httpClient;
 
     /**
-     * @var array<string, FindologicClientConfig> An array of client configs keyed by language
+     * @var array<string, FindologicEndpointConfig> An array of endpoint configs keyed by language
      */
-    private $configs;
+    private $endpoints;
 
     /**
-     * @param array<string, FindologicClientConfig> $configs
+     * @var string[]
      */
-    public function __construct(HttpClient $httpClient, array $configs)
+    private $outputAttributes;
+
+    /**
+     * @param array<string, FindologicEndpointConfig> $endpoints
+     * @param string[] $outputAttributes
+     */
+    public function __construct(HttpClient $httpClient, array $endpoints, array $outputAttributes = [])
     {
         $this->httpClient = $httpClient;
-        $this->configs = $configs;
+        $this->endpoints = $endpoints;
+        $this->outputAttributes = $outputAttributes;
     }
 
     public function isAlive(string $language): PromiseInterface
@@ -79,15 +91,19 @@ class FindologicClient
 
     private function buildQueryUrl(string $language, string $route, array $parameters = null)
     {
-        if (!isset($this->configs[$language])) {
+        if (!isset($this->endpoints[$language])) {
             throw new \RuntimeException('No Findologic backend configured for requested language "' . $language . '".');
         }
 
+        $parameters['outputAttrib'] = array_unique(
+            array_merge(self::DEFAULT_OUTPUT_ATTRIBUTES, $this->outputAttributes)
+        );
+
         return sprintf(
-            '%s/%s?shopkey=%s&outputAdapter=JSON_1.0&outputAttrib[]=cat%s',
-            $this->configs[$language]->hostUrl,
+            '%s/%s?shopkey=%s&outputAdapter=JSON_1.0%s',
+            $this->endpoints[$language]->hostUrl,
             $route,
-            $this->configs[$language]->shopkey,
+            $this->endpoints[$language]->shopkey,
             empty($parameters) ? '' : '&' . http_build_query($parameters)
         );
     }
