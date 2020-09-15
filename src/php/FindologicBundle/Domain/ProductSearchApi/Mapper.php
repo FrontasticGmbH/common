@@ -74,9 +74,9 @@ class Mapper
                 return new Product(
                     [
                         'productId' => $item['id'],
-                        'name' => $item['name'],
+                        'name' => $this->stripHtml($item['name']),
                         'slug' => $this->getSlugFromUrl($item['url']),
-                        'description' => $item['summary'],
+                        'description' => $this->stripHtml($item['summary']),
                         'categories' => $item['attributes']['cat'],
                         'variants' => empty($item['variants'])
                             ? $this->dataToVariants($query, [$item], $item['id'], $currency)
@@ -273,5 +273,18 @@ class Mapper
         }
 
         return $value;
+    }
+
+    private function stripHtml(string $input): string
+    {
+        return htmlspecialchars_decode(
+            strip_tags(
+                preg_replace(
+                    '{<br\s*/?>}i',
+                    "\n",
+                    $input
+                )
+            )
+        );
     }
 }
