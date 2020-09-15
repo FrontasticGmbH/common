@@ -131,6 +131,7 @@ class Mapper
         switch ($type) {
             case 'color':
             case 'select':
+            case 'label':
                 $terms = [];
                 $selectedTerms = 0;
 
@@ -177,8 +178,6 @@ class Mapper
 
                 return new Result\RangeFacet($facetValues);
             case 'image':
-            case 'label':
-                throw new \RuntimeException('ResultFacet of type ' . $type . ' is not yet implemented.');
             default:
                 throw new \RuntimeException('ResultFacet of type '. $type . ' is not supported.');
         }
