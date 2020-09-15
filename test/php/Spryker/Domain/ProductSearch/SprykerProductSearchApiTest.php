@@ -63,8 +63,8 @@ class SprykerProductSearchApiTest extends TestCase
             ->method('createLocaleFromString')
             ->willReturn($sprykerLocale);
 
-        $attributes = $this->api->getSearchableAttributes();
-        $this->markTestIncomplete('$attributes are not countable');
+        $attributes = $this->api->getSearchableAttributes()->wait();
+
         $this->assertCount(5, $attributes);
 
         foreach ($attributes as $attribute) {
