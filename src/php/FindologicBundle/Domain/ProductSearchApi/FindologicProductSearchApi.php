@@ -69,7 +69,7 @@ class FindologicProductSearchApi extends ProductSearchApiBase
          * Fall back to original data source for SKU-based searches. Findologic does not support this in a reliable
          * way out of the box since it always executes a full text search across all fields when using "query".
          */
-        if (!empty($query->sku || !empty($query->skus))) {
+        if ($query->sku !== null  || !empty($query->skus)) {
             $this->logger->info(
                 'ProductSearchApi: Falling back to original data source for searching by SKU.'
             );
