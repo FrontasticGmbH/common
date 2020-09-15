@@ -42,6 +42,9 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
     /** @var array */
     private $decorators;
 
+    /** @var array */
+    private $productDecorators;
+
     /** @var LoggerInterface */
     private $logger;
 
@@ -49,11 +52,13 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
         ContainerInterface $container,
         EnabledFacetService $enabledFacetService,
         LoggerInterface $logger,
-        iterable $decorators = []
+        iterable $decorators = [],
+        iterable $productDecorators = []
     ) {
         $this->container = $container;
         $this->enabledFacetService = $enabledFacetService;
         $this->decorators = $decorators;
+        $this->productDecorators = $productDecorators;
         $this->logger = $logger;
     }
 
@@ -63,8 +68,10 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
         $vendorConfig = $project->getConfigurationSection($productSearchConfig->engine);
 
         $productSearchApi = $this->factorFromConfiguration($project, $productSearchConfig, $vendorConfig);
+        $productSearchApi = new LifecycleEventDecorator($productSearchApi, $this->decorators);
+        $productSearchApi = new LegacyLifecycleEventDecorator($productSearchApi, $this->productDecorators);
 
-        return new LifecycleEventDecorator($productSearchApi, $this->decorators);
+        return $productSearchApi;
     }
 
     private function factorFromConfiguration(Project $project, object $productSearchConfig, object $engineConfig)

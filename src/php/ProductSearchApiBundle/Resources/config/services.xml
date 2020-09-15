@@ -13,6 +13,7 @@
                       id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService" />
             <argument type="service" id="logger" />
             <argument type="tagged" tag="productSearchApi.lifecycleEventListener" />
+            <argument type="tagged" tag="productApi.lifecycleEventListener" />
         </service>
 
         <service
