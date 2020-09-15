@@ -7,10 +7,19 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\SingleProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
+use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi;
 use GuzzleHttp\Promise\PromiseInterface;
 
 abstract class ProductApiBase implements ProductApi
 {
+    /** @var ProductSearchApi */
+    private $productSearchApi;
+
+    public function __construct(ProductSearchApi $productSearchApi)
+    {
+        $this->productSearchApi = $productSearchApi;
+    }
+
     final public function getCategories(CategoryQuery $query): array
     {
         return $this->queryCategoriesImplementation($query)->items;
@@ -37,7 +46,7 @@ abstract class ProductApiBase implements ProductApi
 
     final public function query(ProductQuery $query, string $mode = self::QUERY_SYNC): object
     {
-        $promise = $this->queryImplementation($query);
+        $promise = $this->productSearchApi->query($query);
         return $mode === self::QUERY_SYNC ? $promise->wait() : $promise;
     }
 
@@ -46,6 +55,4 @@ abstract class ProductApiBase implements ProductApi
     abstract protected function getProductTypesImplementation(ProductTypeQuery $query): array;
 
     abstract protected function getProductImplementation(SingleProductQuery $query): PromiseInterface;
-
-    abstract protected function queryImplementation(ProductQuery $query): PromiseInterface;
 }

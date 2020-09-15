@@ -11,6 +11,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\SingleProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApiBase;
+use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi;
 use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
@@ -56,8 +57,11 @@ class ShopwareProductApi extends ProductApiBase
         DataMapperResolver $mapperResolver,
         EnabledFacetService $enabledFacetService,
         ShopwareProjectConfigApiFactory $projectConfigApiFactory,
+        ProductSearchApi $productSearchApi,
         ?string $defaultLanguage
     ) {
+        parent::__construct($productSearchApi);
+
         $this->client = $client;
         $this->localeCreator = $localeCreator;
         $this->mapperResolver = $mapperResolver;
@@ -142,28 +146,6 @@ class ShopwareProductApi extends ProductApiBase
 
                 throw $exception;
             });
-    }
-
-    protected function queryImplementation(ProductQuery $query): PromiseInterface
-    {
-        $query = QueryFacetExpander::expandQueryEnabledFacets(
-            $query,
-            $this->enabledFacetService->getEnabledFacetDefinitions()
-        );
-
-        $criteria = SearchCriteriaBuilder::buildFromProductQuery($query);
-        $locale = $this->parseLocaleString($query->locale);
-        $mapper = $this->buildMapper(ProductResultMapper::MAPPER_NAME, $locale, $query);
-
-        $promise = $this->client
-            ->forCurrency($locale->currencyId)
-            ->forLanguage($locale->languageId)
-            ->post('/sales-channel-api/v2/product', [], $criteria)
-            ->then(function ($response) use ($mapper) {
-                return $mapper->map($response);
-            });
-
-        return $promise;
     }
 
     public function getDangerousInnerClient(): ClientInterface

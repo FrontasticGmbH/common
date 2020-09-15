@@ -13,6 +13,8 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\SingleProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApiBase;
 use Frontastic\Common\ProductApiBundle\Domain\ProductType;
+use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi;
+use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi\Commercetools as CommercetoolsProductSearchApi;
 use GuzzleHttp\Promise\PromiseInterface;
 
 /**
@@ -49,18 +51,36 @@ class Commercetools extends ProductApiBase
      */
     private $defaultLocale;
 
+    /**
+     * @var CommercetoolsProductSearchApi
+     */
+    private $commercetoolsSearchApi;
+
     public function __construct(
         Client $client,
         Mapper $mapper,
         Commercetools\Locale\CommercetoolsLocaleCreator $localeCreator,
         EnabledFacetService $enabledFacetService,
+        ProductSearchApi $productSearchApi,
+        array $languages,
         string $defaultLocale
     ) {
+        parent::__construct($productSearchApi);
+
         $this->client = $client;
         $this->mapper = $mapper;
         $this->localeCreator = $localeCreator;
         $this->defaultLocale = $defaultLocale;
         $this->enabledFacetService = $enabledFacetService;
+
+        $this->commercetoolsSearchApi = new CommercetoolsProductSearchApi(
+            $client,
+            $mapper,
+            $localeCreator,
+            $enabledFacetService,
+            $languages,
+            $defaultLocale
+        );
     }
 
     /**
@@ -168,15 +188,14 @@ class Commercetools extends ProductApiBase
     protected function getProductImplementation(SingleProductQuery $query): PromiseInterface
     {
         if ($query->sku) {
-            return $this
+            return $this->commercetoolsSearchApi
                 ->query(
                     new ProductQuery([
                         'skus' => [$query->sku],
                         'locale' => $query->locale,
                         'rawApiInput' => $query->rawApiInput,
                         'loadDangerousInnerData' => $query->loadDangerousInnerData,
-                    ]),
-                    self::QUERY_ASYNC
+                    ])
                 )
                 ->then(
                     function (Result $productQueryResult) use ($query) {
@@ -211,89 +230,6 @@ class Commercetools extends ProductApiBase
                     throw $exception;
                 }
             );
-    }
-
-    protected function queryImplementation(ProductQuery $query): PromiseInterface
-    {
-        $locale = $this->localeCreator->createLocaleFromString($query->locale);
-        $defaultLocale = $this->localeCreator->createLocaleFromString($this->defaultLocale);
-        $parameters = [
-            'offset' => $query->offset,
-            'limit' => $query->limit,
-            'filter' => [],
-            'filter.query' => [],
-            'filter.facets' => [],
-            'facet' => $this->mapper->facetsToRequest(
-                $this->enabledFacetService->getEnabledFacetDefinitions(),
-                $locale
-            ),
-            'priceCurrency' => $locale->currency,
-            'priceCountry' => $locale->country,
-            'fuzzy' => $query->fuzzy ? 'true' : 'false',
-        ];
-
-        if (count($query->filter) > 0) {
-            $parameters['filter.query'] = $this->mapper->prepareQueryFilter($query->filter, $defaultLocale);
-        }
-
-        if ($query->productType) {
-            $parameters['filter.query'][] = sprintf('productType.id:"%s"', $query->productType);
-        }
-        if ($query->category) {
-            $parameters['filter.query'][] = sprintf('categories.id: subtree("%s")', $query->category);
-        }
-        if ($query->query) {
-            $parameters[sprintf('text.%s', $locale->language)] = $query->query;
-        }
-        if ($query->productIds) {
-            $parameters['filter.query'][] = sprintf('id: "%s"', join('","', $query->productIds));
-        }
-        if ($query->sku) {
-            $parameters['filter.query'][] = sprintf('variants.sku:"%s"', $query->sku);
-        }
-        if ($query->skus) {
-            $parameters['filter.query'][] = sprintf('variants.sku:"%s"', join('","', $query->skus));
-        }
-
-        if ($query->sortAttributes) {
-            $parameters['sort'] = array_map(
-                function (string $direction, string $field): string {
-                    return $field . ($direction === ProductQuery::SORT_ORDER_ASCENDING ? ' asc' : ' desc');
-                },
-                $query->sortAttributes,
-                array_keys($query->sortAttributes)
-            );
-        }
-        $facetsToFilter = $this->mapper->facetsToFilter(
-            $query->facets,
-            $this->enabledFacetService->getEnabledFacetDefinitions(),
-            $locale
-        );
-        $parameters['filter'] = $facetsToFilter;
-        $parameters['filter.facets'] = $facetsToFilter;
-
-        return $this->client
-            ->fetchAsync(
-                '/product-projections/search',
-                array_filter(
-                    array_merge($query->rawApiInput, $parameters)
-                )
-            )
-            ->then(function ($result) use ($query, $locale) {
-                return new Result([
-                    'offset' => $result->offset,
-                    'total' => $result->total,
-                    'count' => $result->count,
-                    'items' => array_map(
-                        function (array $productData) use ($query, $locale) {
-                            return $this->mapper->dataToProduct($productData, $query, $locale);
-                        },
-                        $result->results
-                    ),
-                    'facets' => $this->mapper->dataToFacets($result->facets, $query),
-                    'query' => clone $query,
-                ]);
-            });
     }
 
     public function getDangerousInnerClient(): Client

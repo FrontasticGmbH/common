@@ -38,6 +38,15 @@ class CommercetoolsTest extends TestCase
             new Mapper(),
             $this->localCreatorMock,
             new EmptyEnabledFacetService(),
+            new \Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi\Commercetools(
+                $this->clientMock,
+                new Mapper(),
+                $this->localCreatorMock,
+                new EmptyEnabledFacetService(),
+                ['en_GB'],
+                'en_GB'
+            ),
+            ['en_GB'],
             'en_GB'
         );
     }

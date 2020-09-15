@@ -5,11 +5,11 @@ namespace Frontastic\Common\SprykerBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\SingleProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApiBase;
+use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi;
 use Frontastic\Common\SprykerBundle\BaseApi\ProductExpandingTrait;
 use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\SprykerBundle\Domain\Locale\SprykerLocale;
@@ -17,7 +17,6 @@ use Frontastic\Common\SprykerBundle\Domain\MapperResolver;
 use Frontastic\Common\SprykerBundle\Domain\Product\Mapper\CategoriesMapper;
 use Frontastic\Common\SprykerBundle\Domain\Product\Mapper\ProductConcreteMapper;
 use Frontastic\Common\SprykerBundle\Domain\Product\Mapper\ProductMapper;
-use Frontastic\Common\SprykerBundle\Domain\Product\Mapper\ProductResultMapper;
 use Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface;
 use Frontastic\Common\SprykerBundle\Domain\SprykerUrlAppender;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -56,11 +55,14 @@ class SprykerProductApi extends ProductApiBase
         MapperResolver $mapperResolver,
         LocaleCreator $localeCreator,
         SprykerUrlAppender $urlAppender,
+        ProductSearchApi $productSearchApi,
         ?string $defaultLanguage,
         array $productResources = SprykerProductApiExtendedConstants::SPRYKER_DEFAULT_PRODUCT_RESOURCES,
         array $queryResources = SprykerProductApiExtendedConstants::SPRYKER_PRODUCT_QUERY_RESOURCES,
         array $concreteProductResources = SprykerProductApiExtendedConstants::SPRYKER_DEFAULT_CONCRETE_PRODUCT_RESOURCES
     ) {
+        parent::__construct($productSearchApi);
+
         $this->client = $client;
         $this->mapperResolver = $mapperResolver;
         $this->localeCreator = $localeCreator;
@@ -147,52 +149,6 @@ class SprykerProductApi extends ProductApiBase
                         throw ProductApi\ProductNotFoundException::bySku($query->sku);
                     }
                     throw ProductApi\ProductNotFoundException::byProductId($query->productId);
-                }
-                throw $exception;
-            });
-    }
-
-    protected function queryImplementation(ProductQuery $query): PromiseInterface
-    {
-        $locale = $this->parseLocaleString($query->locale);
-
-        $searchQuery = CatalogSearchQuery::createFromProductQuery($query);
-
-        $url = $this->urlAppender->withIncludes("/catalog-search?{$searchQuery}", $this->queryResources);
-
-        $mapper = $this->mapperResolver->getMapper(ProductResultMapper::MAPPER_NAME);
-
-        return $this->client
-            ->forLanguage($locale->language)
-            ->get(
-                $this->urlAppender->withCurrency($url, $locale->currency),
-                [],
-                ProductApi::QUERY_ASYNC
-            )
-            ->then(function (JsonApiResponse $response) use ($mapper, $query): Result {
-                $document = $response->document();
-                $resources = $document->isSingleResourceDocument() ?
-                    [$document->primaryResource()] :
-                    $document->primaryResources();
-                if ($document->hasAnyIncludedResources()) {
-                    $resources = array_merge($resources, $document->includedResources());
-                }
-
-                $products = $mapper->mapResource($resources[0]);
-
-                if (count($products->items) && count($resources)) {
-                    $this->expandProductList($products->items, $resources);
-                }
-
-                $products->query = clone $query;
-
-                return $products;
-            })
-            ->otherwise(function (\Throwable $exception) use ($query) {
-                if ($exception instanceof RequestException && $exception->getCode() >= 500) {
-                    return new Result([
-                        'query' => clone $query,
-                    ]);
                 }
                 throw $exception;
             });
