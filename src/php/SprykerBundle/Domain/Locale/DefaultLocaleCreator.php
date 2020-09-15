@@ -12,6 +12,26 @@ class DefaultLocaleCreator extends LocaleCreator
      */
     private $projectConfigApi;
 
+    /**
+     * @var bool
+     */
+    private $projectConfigFetched = false;
+
+    /**
+     * @var string[]
+     */
+    private $locales = null;
+
+    /**
+     * @var string[]
+     */
+    private $countries = null;
+
+    /**
+     * @var string[]
+     */
+    private $currencies = null;
+
     public function __construct(SprykerProjectConfigApi $projectConfigApi)
     {
         $this->projectConfigApi = $projectConfigApi;
@@ -19,31 +39,13 @@ class DefaultLocaleCreator extends LocaleCreator
 
     public function createLocaleFromString(string $localeString): SprykerLocale
     {
-        $projectConfig = $this->fetchProjectConfig();
+        $this->fetchProjectConfig();
 
         $locale = Locale::createFromPosix($localeString);
 
-        $language = $this->pickLanguageFromProjectConfig(
-            $this->extractProjectConfigResource(
-                $projectConfig,
-                SprykerProjectConfigApi::RESOURCE_LOCALES
-            ),
-            $locale
-        );
-        $country = $this->pickCountryFromProjectConfig(
-            $this->extractProjectConfigResource(
-                $projectConfig,
-                SprykerProjectConfigApi::RESOURCE_COUNTRIES
-            ),
-            $locale
-        );
-        $currency= $this->pickCurrencyFromProjectConfig(
-            $this->extractProjectConfigResource(
-                $projectConfig,
-                SprykerProjectConfigApi::RESOURCE_CURRENCIES
-            ),
-            $locale
-        );
+        $language = $this->pickLanguage($locale);
+        $country = $this->pickCountry($locale);
+        $currency= $this->pickCurrency($locale);
 
         return new SprykerLocale([
             'language' => $language,
@@ -52,54 +54,70 @@ class DefaultLocaleCreator extends LocaleCreator
         ]);
     }
 
-    private function extractProjectConfigResource(array $projectConfig, string $resourceName): array
+    private function fetchProjectConfig(): void
     {
-        return $projectConfig[$resourceName] ?? [];
+        if ($this->projectConfigFetched) {
+            return;
+        }
+
+        $result = $this->projectConfigApi->getProjectConfig();
+
+        foreach (['locales', 'countries', 'currencies'] as $property) {
+            if (!array_key_exists($property, $result)) {
+                throw new \RuntimeException('Spryker has no ' . $property . ' configured');
+            }
+            $values = $result[$property];
+            if (!is_array($values)) {
+                throw new \RuntimeException('Invalid JSON');
+            }
+            if (empty($values)) {
+                throw new \RuntimeException('Spryker has no ' . $property . ' configured');
+            }
+
+            $this->$property = $values;
+        }
+
+        $this->projectConfigFetched = true;
     }
 
-    private function fetchProjectConfig(): array
-    {
-        return $this->projectConfigApi->getProjectConfig();
-    }
-
-    private function pickLanguageFromProjectConfig(array $projectConfigLanguages, Locale $frontasticLocale): string
+    private function pickLanguage(Locale $frontasticLocale): string
     {
         $locale = sprintf('%s_%s', $frontasticLocale->language, $frontasticLocale->territory);
 
-        foreach ($projectConfigLanguages as $projectConfigLanguage) {
+        foreach ($this->locales as $projectConfigLanguage) {
             if ($projectConfigLanguage['name'] === $locale) {
                 return $projectConfigLanguage['code'];
             }
         }
 
-        foreach ($projectConfigLanguages as $projectConfigLanguage) {
+        foreach ($this->locales as $projectConfigLanguage) {
             if ($projectConfigLanguage['code'] === $frontasticLocale->language) {
                 return $projectConfigLanguage['code'];
             }
         }
 
-        return $projectConfigLanguages[0]['code'];
+        return $this->locales[0]['code'];
     }
 
-    private function pickCountryFromProjectConfig(array $projectConfigCountries, Locale $frontasticLocale): string
+    private function pickCountry(Locale $frontasticLocale): string
     {
-        foreach ($projectConfigCountries as $projectConfigCountry) {
+        foreach ($this->countries as $projectConfigCountry) {
             if ($projectConfigCountry['iso2Code'] === $frontasticLocale->territory) {
                 return $projectConfigCountry['iso2Code'];
             }
         }
 
-        return $projectConfigCountries[0]['iso2Code'];
+        return $this->countries[0]['iso2Code'];
     }
 
-    private function pickCurrencyFromProjectConfig(array $projectConfigCurrencies, Locale $frontasticLocale): string
+    private function pickCurrency(Locale $frontasticLocale): string
     {
-        foreach ($projectConfigCurrencies as $projectConfigCurrency) {
+        foreach ($this->currencies as $projectConfigCurrency) {
             if ($projectConfigCurrency['code'] === $frontasticLocale->currency) {
                 return $projectConfigCurrency['code'];
             }
         }
 
-        return $projectConfigCurrencies[0]['code'];
+        return $this->currencies[0]['code'];
     }
 }
