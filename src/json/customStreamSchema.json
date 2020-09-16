@@ -1,0 +1,28 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://frontastic.cloud/json/customStreamSchema",
+
+    "title": "Custom Stream Schema",
+    "description": "A Frontastic custom stream definition",
+
+    "type": "object",
+
+    "properties": {
+        "customStreamType": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string"
+        },
+        "icon": {
+            "type": "string"
+        },
+        "description": {
+            "type": "string"
+        },
+        "schema": {
+            "$ref": "https://frontastic.cloud/json/library/common#/definitions/schema"
+        }
+    },
+    "required": ["customStreamType", "name", "schema"]
+}
