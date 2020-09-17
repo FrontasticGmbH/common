@@ -1,5 +1,12 @@
 # common Changelog
 
+## `1.1.11` (2020-09-17)
+
+* feat!: Use the product search API
+* feat: Add ShopifyProductSearchApi
+* feat: Call product event listeners
+* chore: Extracted common webspocket code
+
 ## `1.1.10` (2020-09-15)
 
 * Regenerated API documentation
