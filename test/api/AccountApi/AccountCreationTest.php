@@ -221,9 +221,11 @@ class AccountCreationTest extends FrontasticApiTestCase
     {
         $this->assertNotEmpty($actual->accountId);
         $this->assertSame($expected->email, $actual->email);
-        $this->assertSame($expected->salutation, $actual->salutation);
         $this->assertSame($expected->firstName, $actual->firstName);
         $this->assertSame($expected->lastName, $actual->lastName);
+        if ($actual->salutation !== null) {
+            $this->assertSame($expected->salutation, $actual->salutation);
+        }
         if ($actual->birthday !== null) {
             $this->assertSameDate($expected->birthday, $actual->birthday);
         }
