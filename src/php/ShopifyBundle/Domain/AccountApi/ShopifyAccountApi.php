@@ -30,8 +30,7 @@ class ShopifyAccountApi implements AccountApi
 
     public function confirmEmail(string $token, string $locale = null): Account
     {
-        // TODO: Implement confirmEmail() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        throw new RuntimeException('Email confirmation is not supported by the Shopify Storefront API.');
     }
 
     public function create(Account $account, ?Cart $cart = null, string $locale = null): Account
@@ -78,14 +77,65 @@ class ShopifyAccountApi implements AccountApi
 
     public function update(Account $account, string $locale = null): Account
     {
-        // TODO: Implement update() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        if (is_null($account->authToken)) {
+            $account = $this->login($account);
+        }
+
+        $mutation = "
+            mutation {
+                customerUpdate(
+                    customer: {
+                        email: \"$account->email\",
+                        password: \"{$account->getPassword()}\",
+                        firstName: \"$account->firstName\"
+                        lastName: \"$account->lastName\"
+                    },
+                    customerAccessToken: \"$account->authToken\"
+                ) {
+                    customer {
+                        id
+                        firstName
+                        lastName
+                        email
+                    }
+                    customerAccessToken {
+                        accessToken
+                        expiresAt
+                    }
+                    customerUserErrors {
+                        code
+                        field
+                        message
+                    }
+                }
+            }";
+
+        return $this->client
+            ->request($mutation, $locale)
+            ->then(function ($result) use ($account) : Account {
+                if ($result['errors']) {
+                    // TODO handle error
+                }
+
+                $updatedAccount = $this->mapDataToAccount($result['body']['data']['customerUpdate']['customer']);
+                $updatedAccount->authToken = $account->authToken;
+
+                return $updatedAccount;
+            })
+            ->wait();
     }
 
     public function updatePassword(Account $account, string $oldPassword, string $newPassword, string $locale = null): Account
     {
-        // TODO: Implement updatePassword() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        $account->setPassword($oldPassword);
+
+        if (is_null($account = $this->login($account))) {
+            // TODO handle error
+        }
+
+        $account->setPassword($newPassword);
+
+        return $this->update($account);
     }
 
     public function generatePasswordResetToken(string $email): PasswordResetToken

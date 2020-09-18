@@ -1,0 +1,109 @@
+<?php
+
+namespace Frontastic\Common\ApiTests\AccountApi;
+
+use Frontastic\Common\AccountApiBundle\Domain\Account;
+use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
+use Frontastic\Common\AccountApiBundle\Domain\Address;
+use Frontastic\Common\ApiTests\FrontasticApiTestCase;
+use Frontastic\Common\ReplicatorBundle\Domain\Project;
+
+class AccountUpdateTest extends FrontasticApiTestCase
+{
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testUpdateAccountWithInputData(Project $project, string $language): void
+    {
+        $accountApi = $this->getAccountApiForProject($project);
+        $accountData = $this->getTestAccountDataWithInputData($accountApi, $language);
+
+        // Create the account
+        $createdAccount = $accountApi->create($accountData, null, $language);
+
+        $this->assertNotEmptyString($createdAccount->accountId);
+        $this->assertSameAccountData($accountData, $createdAccount);
+
+        $updatedData = clone $createdAccount;
+        $updatedData->firstName = 'new first name';
+        $updatedData->lastName = 'new last name';
+
+        // Update te account
+        $updatedAccount = $accountApi->update($updatedData, $language);
+
+        $this->assertSameAccountData($updatedData, $updatedAccount);
+        $this->assertNotSame($updatedData->firstName, $createdAccount->firstName);
+        $this->assertNotSame($updatedData->lastName, $createdAccount->lastName);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testUpdatePasswordAccountWithInputData(Project $project, string $language): void
+    {
+        $accountApi = $this->getAccountApiForProject($project);
+        $accountData = $this->getTestAccountDataWithInputData($accountApi, $language);
+
+        // Create the account
+        $createdAccount = $accountApi->create($accountData, null, $language);
+
+        $this->assertNotEmptyString($createdAccount->accountId);
+        $this->assertSameAccountData($accountData, $createdAccount);
+
+        $newPassword = '4yCcwLR.cHAaL4Pd';
+
+        // Update te account
+        $updatedAccount = $accountApi->updatePassword($createdAccount, $accountData->getPassword(), $newPassword);
+
+        $this->assertSameAccountData($createdAccount, $updatedAccount);
+
+        // Login with old password
+        $createdAccount->setPassword($accountData->getPassword());
+        $accountLoggedInWithOldPassword = $accountApi->login($createdAccount);
+
+        $this->assertNull($accountLoggedInWithOldPassword);
+    }
+
+    private function getTestAccountDataWithInputData(AccountApi $accountApi, string $language): Account
+    {
+        $salutation = 'Frau';
+        if (($salutations = $accountApi->getSalutations($language)) !== null) {
+            $salutation = $salutations[array_rand($salutations)];
+        }
+
+        $account = Account::newWithProjectSpecificData([
+            'email' => 'integration-tests-not-exists+account-' . uniqid('', true) . '@frontastic.com',
+            'salutation' => $salutation,
+            'firstName' => 'Ashley',
+            'lastName' => 'Stoltenberg',
+            'birthday' => new \DateTimeImmutable('1961-11-6'),
+            'confirmed' => false,
+            'addresses' => [
+                Address::newWithProjectSpecificData([
+                    'salutation' => $salutation,
+                    'firstName' => 'Ashley',
+                    'lastName' => 'Stoltenberg',
+                    'streetName' => 'Test str.',
+                    'streetNumber' => '11',
+                    'additionalAddressInfo' => 'Additional addr info',
+                    'additionalStreetInfo' => 'Additional str info',
+                    'postalCode' => '123456',
+                    'city' => 'Berlin',
+                    'country' => 'Germany',
+                    'phone' => '+49 12 1234 12234',
+                ]),
+            ],
+        ]);
+        $account->setPassword('cHAaL4Pd.4yCcwLR');
+        return $account;
+    }
+
+    private function assertSameAccountData(Account $expected, Account $actual): void
+    {
+        $this->assertNotEmpty($actual->accountId);
+        $this->assertSame($expected->email, $actual->email);
+        $this->assertSame($expected->firstName, $actual->firstName);
+        $this->assertSame($expected->lastName, $actual->lastName);
+    }
+}
