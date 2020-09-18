@@ -12,6 +12,8 @@ use Frontastic\Common\ShopifyBundle\Domain\ShopifyClient;
 
 class ShopifyAccountApi implements AccountApi
 {
+    private const DEFAULT_ELEMENTS_TO_FETCH = 10;
+
     /**
      * @var ShopifyClient
      */
@@ -97,6 +99,22 @@ class ShopifyAccountApi implements AccountApi
                         firstName
                         lastName
                         email
+                        addresses(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                            edges {
+                                node {
+                                    id
+                                    address1
+                                    address2
+                                    city
+                                    country
+                                    firstName
+                                    lastName
+                                    phone
+                                    province
+                                    zip
+                                }
+                            }
+                        }
                     }
                     customerAccessToken {
                         accessToken
@@ -191,6 +209,22 @@ class ShopifyAccountApi implements AccountApi
                             email
                             firstName
                             lastName
+                            addresses(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                                edges {
+                                    node {
+                                        id
+                                        address1
+                                        address2
+                                        city
+                                        country
+                                        firstName
+                                        lastName
+                                        phone
+                                        province
+                                        zip
+                                    }
+                                }
+                            }
                         }
                     }";
 
@@ -249,8 +283,61 @@ class ShopifyAccountApi implements AccountApi
 
     public function addAddress(Account $account, Address $address, string $locale = null): Account
     {
-        // TODO: Implement addAddress() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        if (is_null($account->authToken)) {
+            $account = $this->login($account);
+        }
+
+        $mutation = "
+            mutation {
+                customerAddressCreate(
+                    address: {
+                        address1: \"$address->streetName\",
+                        address2: \"$address->streetNumber\",
+                        city: \"$address->city\",
+                        country: \"$address->country\",
+                        firstName: \"$address->firstName\",
+                        lastName: \"$address->lastName\",
+                        phone: \"$address->phone\",
+                        province: \"$address->state \",
+                        zip: \"$address->postalCode\",
+                    },
+                    customerAccessToken: \"$account->authToken\"
+                ) {
+                    customerAddress {
+                        id
+                        address1
+                        address2
+                        city
+                        country
+                        firstName
+                        lastName
+                        phone
+                        province
+                        zip
+                    }
+                    customerUserErrors {
+                        code
+                        field
+                        message
+                    }
+                }
+            }";
+
+        return $this->client
+            ->request($mutation, $locale)
+            ->then(function ($result) use ($account) : Account {
+                if ($result['errors']) {
+                    // TODO handle error
+                }
+
+                $account->addresses[] = $this->mapDataToAddress(
+                    $result['body']['data']['customerAddressCreate']['customerAddress']
+                );
+
+                return $account;
+            })
+            ->wait();
+
     }
 
     public function updateAddress(Account $account, Address $address, string $locale = null): Account
@@ -297,12 +384,42 @@ class ShopifyAccountApi implements AccountApi
 
     protected function mapDataToAccount(array $accountData): Account
     {
+        $addresses = [];
+
+        if (!empty($accountData['addresses']['edges'])) {
+            $edges = $accountData['addresses']['edges'];
+            $addresses = array_map(
+                function (array $addressData) : Address {
+                    $node = $addressData['node'];
+                    return $this->mapDataToAddress($addressData['node']);
+                },
+                $accountData['addresses']['edges']
+            );
+        }
+
         return new Account([
             'accountId' => $accountData['id'],
             'firstName' => $accountData['firstName'],
             'lastName' => $accountData['lastName'],
             'email' => $accountData['email'],
+            'addresses' => $addresses,
             'confirmed' => true,
+        ]);
+    }
+
+    protected function mapDataToAddress(array $addressData): Address
+    {
+        return new Address([
+            'addressId' => $addressData['id'],
+            'streetName' => $addressData['address1'],
+            'streetNumber' => $addressData['address2'],
+            'city' => $addressData['city'],
+            'country' => $addressData['country'],
+            'firstName' => $addressData['firstName'],
+            'lastName' => $addressData['lastName'],
+            'phone' => $addressData['phone'],
+            'state' => $addressData['province'],
+            'postalCode' => $addressData['zip'],
         ]);
     }
 }

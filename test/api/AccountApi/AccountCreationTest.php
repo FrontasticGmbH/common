@@ -129,6 +129,27 @@ class AccountCreationTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
+    public function testAddAddressToAccount(Project $project, string $language): void
+    {
+        $accountApi = $this->getAccountApiForProject($project);
+        $accountData = $this->getTestAccountDataWithInputData($accountApi, $language);
+
+        // Create the account
+        $createdAccount = $accountApi->create($accountData, null, $language);
+
+        $address = new Address($this->getTestAddressData());
+        $address->firstName = 'Judit';
+        $address->lastName = 'Benson';
+
+        // Add address
+        $accountWithNewAddress = $accountApi->addAddress($createdAccount, $address);
+
+        $this->assertEquals($address->firstName, $accountWithNewAddress->addresses[0]->firstName);
+    }
+
+        /**
+     * @dataProvider projectAndLanguage
+     */
     public function testCreateAccountWithExistingMailThrowsException(Project $project, string $language): void
     {
         $accountApi = $this->getAccountApiForProject($project);
@@ -154,21 +175,7 @@ class AccountCreationTest extends FrontasticApiTestCase
             'lastName' => 'Stoltenberg',
             'birthday' => new \DateTimeImmutable('1961-11-6'),
             'confirmed' => false,
-            'addresses' => [
-                new Address([
-                    'salutation' => $salutation,
-                    'firstName' => 'Ashley',
-                    'lastName' => 'Stoltenberg',
-                    'streetName' => 'Test str.',
-                    'streetNumber' => '11',
-                    'additionalAddressInfo' => 'Additional addr info',
-                    'additionalStreetInfo' => 'Additional str info',
-                    'postalCode' => '123456',
-                    'city' => 'Berlin',
-                    'country' => 'Germany',
-                    'phone' => '+49 12 1234 12234',
-                ]),
-            ],
+            'addresses' => [new Address($this->getTestAddressData($salutation))],
         ]);
         $account->setPassword('cHAaL4Pd.4yCcwLR');
         return $account;
@@ -188,24 +195,27 @@ class AccountCreationTest extends FrontasticApiTestCase
             'lastName' => 'Stoltenberg',
             'birthday' => new \DateTimeImmutable('1961-11-6'),
             'confirmed' => false,
-            'addresses' => [
-                Address::newWithProjectSpecificData([
-                    'salutation' => $salutation,
-                    'firstName' => 'Ashley',
-                    'lastName' => 'Stoltenberg',
-                    'streetName' => 'Test str.',
-                    'streetNumber' => '11',
-                    'additionalAddressInfo' => 'Additional addr info',
-                    'additionalStreetInfo' => 'Additional str info',
-                    'postalCode' => '123456',
-                    'city' => 'Berlin',
-                    'country' => 'Germany',
-                    'phone' => '+49 12 1234 12234',
-                ]),
-            ],
+            'addresses' => [Address::newWithProjectSpecificData($this->getTestAddressData($salutation))],
         ]);
         $account->setPassword('cHAaL4Pd.4yCcwLR');
         return $account;
+    }
+
+    private function getTestAddressData(?string $salutation = null): array
+    {
+        return [
+            'salutation' => $salutation,
+            'firstName' => 'Ashley',
+            'lastName' => 'Stoltenberg',
+            'streetName' => 'Test str.',
+            'streetNumber' => '11',
+            'additionalAddressInfo' => 'Additional addr info',
+            'additionalStreetInfo' => 'Additional str info',
+            'postalCode' => '123456',
+            'city' => 'Berlin',
+            'country' => 'Germany',
+            'phone' => '+49 12 1234 12234',
+        ];
     }
 
     private function getLoginDataFromAccount(Account $account): Account
