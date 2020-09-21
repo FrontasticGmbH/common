@@ -46,15 +46,10 @@ class ShopifyAccountApi implements AccountApi
                     lastName: \"$account->lastName\"
                 }) {
                     customer {
-                        id
-                        firstName
-                        lastName
-                        email
+                         {$this->getCustomerQueryFields()}
                     }
                     customerUserErrors {
-                        code
-                        field
-                        message
+                        {$this->getErrorsQueryFields()}
                     }
                 }
             }";
@@ -95,23 +90,11 @@ class ShopifyAccountApi implements AccountApi
                     customerAccessToken: \"$account->authToken\"
                 ) {
                     customer {
-                        id
-                        firstName
-                        lastName
-                        email
+                        {$this->getCustomerQueryFields()}
                         addresses(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                             edges {
                                 node {
-                                    id
-                                    address1
-                                    address2
-                                    city
-                                    country
-                                    firstName
-                                    lastName
-                                    phone
-                                    province
-                                    zip
+                                    {$this->getAddressQueryFields()}
                                 }
                             }
                         }
@@ -121,9 +104,7 @@ class ShopifyAccountApi implements AccountApi
                         expiresAt
                     }
                     customerUserErrors {
-                        code
-                        field
-                        message
+                        {$this->getErrorsQueryFields()}
                     }
                 }
             }";
@@ -181,9 +162,7 @@ class ShopifyAccountApi implements AccountApi
                         expiresAt
                     }
                     customerUserErrors {
-                        code
-                        field
-                        message
+                        {$this->getErrorsQueryFields()}
                     }
                 }
             }";
@@ -205,23 +184,11 @@ class ShopifyAccountApi implements AccountApi
                 $query = "
                     query {
                         customer(customerAccessToken: \"{$token['accessToken']}\") {
-                            id
-                            email
-                            firstName
-                            lastName
+                            {$this->getCustomerQueryFields()}
                             addresses(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                                 edges {
                                     node {
-                                        id
-                                        address1
-                                        address2
-                                        city
-                                        country
-                                        firstName
-                                        lastName
-                                        phone
-                                        province
-                                        zip
+                                        {$this->getAddressQueryFields()}
                                     }
                                 }
                             }
@@ -253,10 +220,7 @@ class ShopifyAccountApi implements AccountApi
         $query = "
             query {
                 customer(customerAccessToken: \"{$account->authToken}\") {
-                    id
-                    email
-                    firstName
-                    lastName
+                    {$this->getCustomerQueryFields()}
                 }
             }";
 
@@ -284,23 +248,11 @@ class ShopifyAccountApi implements AccountApi
         $query = "
             query {
                 customer(customerAccessToken: \"{$account->authToken}\") {
-                    id
-                    email
-                    firstName
-                    lastName
+                    {$this->getCustomerQueryFields()}
                     addresses(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                         edges {
                             node {
-                                id
-                                address1
-                                address2
-                                city
-                                country
-                                firstName
-                                lastName
-                                phone
-                                province
-                                zip
+                                {$this->getAddressQueryFields()}
                             }
                         }
                     }
@@ -344,21 +296,10 @@ class ShopifyAccountApi implements AccountApi
                     customerAccessToken: \"$account->authToken\"
                 ) {
                     customerAddress {
-                        id
-                        address1
-                        address2
-                        city
-                        country
-                        firstName
-                        lastName
-                        phone
-                        province
-                        zip
+                        {$this->getAddressQueryFields()}
                     }
                     customerUserErrors {
-                        code
-                        field
-                        message
+                        {$this->getErrorsQueryFields()}
                     }
                 }
             }";
@@ -403,21 +344,10 @@ class ShopifyAccountApi implements AccountApi
                     id: \"$address->addressId\"
                 ) {
                     customerAddress {
-                        id
-                        address1
-                        address2
-                        city
-                        country
-                        firstName
-                        lastName
-                        phone
-                        province
-                        zip
+                        {$this->getAddressQueryFields()}
                     }
                     customerUserErrors {
-                        code
-                        field
-                        message
+                        {$this->getErrorsQueryFields()}
                     }
                 }
             }";
@@ -499,5 +429,40 @@ class ShopifyAccountApi implements AccountApi
             'state' => $addressData['province'],
             'postalCode' => $addressData['zip'],
         ]);
+    }
+
+    protected function getCustomerQueryFields(): string
+    {
+        return '
+            id
+            firstName
+            lastName
+            email
+        ';
+    }
+
+    protected function getAddressQueryFields(): string
+    {
+        return '
+            id
+            address1
+            address2
+            city
+            country
+            firstName
+            lastName
+            phone
+            province
+            zip
+        ';
+    }
+
+    protected function getErrorsQueryFields(): string
+    {
+        return '
+            code
+            field
+            message
+        ';
     }
 }
