@@ -65,6 +65,35 @@ class AccountUpdateTest extends FrontasticApiTestCase
         $this->assertNull($accountLoggedInWithOldPassword);
     }
 
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testUpdateAddressWithInputData(Project $project, string $language): void
+    {
+        $accountApi = $this->getAccountApiForProject($project);
+        $accountData = $this->getTestAccountDataWithInputData($accountApi, $language);
+
+        // Create the account
+        $account = $accountApi->create($accountData, null, $language);
+
+        $salutation = 'Frau';
+        $address = new Address($this->getTestAddressData($salutation));
+
+        // Add address
+        $accountWithNewAddress = $accountApi->addAddress($account, $address);
+        $this->assertSameAccountAddressData($address, $accountWithNewAddress->addresses[0]);
+
+        $updatedAddress = $accountWithNewAddress->addresses[0];
+        $updatedAddress->firstName = 'Molly';
+        $updatedAddress->lastName = 'Chambers';
+        $updatedAddress->lastName = 'Chambers';
+        $updatedAddress->streetName = 'New str name';
+        $updatedAddress->postalCode = '7890';
+
+        $accountWithUpdatedAddress = $accountApi->updateAddress($account, $updatedAddress);
+        $this->assertSameAccountAddressData($updatedAddress, $accountWithUpdatedAddress->addresses[0]);
+    }
+
     private function getTestAccountDataWithInputData(AccountApi $accountApi, string $language): Account
     {
         $salutation = 'Frau';
@@ -105,5 +134,42 @@ class AccountUpdateTest extends FrontasticApiTestCase
         $this->assertSame($expected->email, $actual->email);
         $this->assertSame($expected->firstName, $actual->firstName);
         $this->assertSame($expected->lastName, $actual->lastName);
+    }
+
+    private function getTestAddressData(?string $salutation = null): array
+    {
+        return [
+            'salutation' => $salutation,
+            'firstName' => 'Ashley',
+            'lastName' => 'Stoltenberg',
+            'streetName' => 'Test str.',
+            'streetNumber' => '11',
+            'additionalAddressInfo' => 'Additional addr info',
+            'additionalStreetInfo' => 'Additional str info',
+            'postalCode' => '123456',
+            'city' => 'Berlin',
+            'country' => 'DE',
+            'phone' => '+49 12 1234 12234',
+        ];
+    }
+
+    private function assertSameAccountAddressData(Address $expected, Address $actual): void
+    {
+        $this->assertNotEmptyString($actual->addressId);
+        if ($actual->salutation !== null) {
+            $this->assertSame($expected->salutation, $actual->salutation);
+        }
+        $this->assertSame($expected->firstName, $actual->firstName);
+        $this->assertSame($expected->lastName, $actual->lastName);
+        if ($actual->streetName !== null) {
+            $this->assertSame($expected->streetName, $actual->streetName);
+        }
+        if ($actual->streetNumber !== null) {
+            $this->assertSame($expected->streetNumber, $actual->streetNumber);
+        }
+        $this->assertSame($expected->city, $actual->city);
+        $this->assertSame($expected->postalCode, $actual->postalCode);
+        $this->assertSame($expected->phone, $actual->phone);
+        $this->assertNotEmptyString($actual->country);
     }
 }

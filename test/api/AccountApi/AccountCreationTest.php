@@ -135,16 +135,57 @@ class AccountCreationTest extends FrontasticApiTestCase
         $accountData = $this->getTestAccountDataWithInputData($accountApi, $language);
 
         // Create the account
-        $createdAccount = $accountApi->create($accountData, null, $language);
+        $account = $accountApi->create($accountData, null, $language);
 
-        $address = new Address($this->getTestAddressData());
+        $salutation = 'Frau';
+        $address = new Address($this->getTestAddressData($salutation));
         $address->firstName = 'Judit';
         $address->lastName = 'Benson';
 
         // Add address
-        $accountWithNewAddress = $accountApi->addAddress($createdAccount, $address);
+        $accountWithNewAddress = $accountApi->addAddress($account, $address);
+        $this->assertSameAccountAddressData($address, $accountWithNewAddress->addresses[0]);
 
-        $this->assertEquals($address->firstName, $accountWithNewAddress->addresses[0]->firstName);
+        $address02 = new Address($this->getTestAddressData($salutation));
+        $address02->firstName = 'Molly';
+        $address02->lastName = 'Chambers';
+
+        $accountWithSecondAddress = $accountApi->addAddress($account, $address02);
+        $this->assertSameAccountAddressData($address02, $accountWithSecondAddress->addresses[1]);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testGetAddresses(Project $project, string $language): void
+    {
+        $accountApi = $this->getAccountApiForProject($project);
+        $accountData = $this->getTestAccountDataWithInputData($accountApi, $language);
+
+        // Create the account
+        $account = $accountApi->create($accountData, null, $language);
+
+        $salutation = 'Frau';
+        $address = new Address($this->getTestAddressData($salutation));
+        $address->firstName = 'Judit';
+        $address->lastName = 'Benson';
+
+        // Add first address
+        $account = $accountApi->addAddress($account, $address);
+
+        $address02 = new Address($this->getTestAddressData($salutation));
+        $address02->firstName = 'Molly';
+        $address02->lastName = 'Chambers';
+
+        // Add second address
+        $account = $accountApi->addAddress($account, $address02);
+
+        // Fetch addresses
+        $fetchedAddresses = $accountApi->getAddresses($account);
+
+        $this->assertCount(2, $fetchedAddresses);
+        $this->assertSameAccountAddressData($address, $fetchedAddresses[0]);
+        $this->assertSameAccountAddressData($address02, $fetchedAddresses[1]);
     }
 
         /**
@@ -213,7 +254,7 @@ class AccountCreationTest extends FrontasticApiTestCase
             'additionalStreetInfo' => 'Additional str info',
             'postalCode' => '123456',
             'city' => 'Berlin',
-            'country' => 'Germany',
+            'country' => 'DE',
             'phone' => '+49 12 1234 12234',
         ];
     }
@@ -253,15 +294,21 @@ class AccountCreationTest extends FrontasticApiTestCase
     private function assertSameAccountAddressData(Address $expected, Address $actual): void
     {
         $this->assertNotEmptyString($actual->addressId);
-        $this->assertSame($expected->salutation, $actual->salutation);
+        if ($actual->salutation !== null) {
+            $this->assertSame($expected->salutation, $actual->salutation);
+        }
         $this->assertSame($expected->firstName, $actual->firstName);
         $this->assertSame($expected->lastName, $actual->lastName);
-        //$this->assertSame($expected->streetName, $actual->streetName);
-        //$this->assertSame($expected->streetNumber, $actual->streetNumber);
+        if ($actual->streetName !== null) {
+            $this->assertSame($expected->streetName, $actual->streetName);
+        }
+        if ($actual->streetNumber !== null) {
+            $this->assertSame($expected->streetNumber, $actual->streetNumber);
+        }
         $this->assertSame($expected->city, $actual->city);
         $this->assertSame($expected->postalCode, $actual->postalCode);
         $this->assertSame($expected->phone, $actual->phone);
-        $this->assertSame($expected->country, $actual->country);
+        $this->assertNotEmptyString($actual->country);
     }
 
     private function assertSameDate(\DateTimeInterface $expected, $actual): void

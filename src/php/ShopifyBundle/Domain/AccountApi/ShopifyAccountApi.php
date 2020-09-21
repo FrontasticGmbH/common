@@ -277,8 +277,48 @@ class ShopifyAccountApi implements AccountApi
 
     public function getAddresses(Account $account, string $locale = null): array
     {
-        // TODO: Implement getAddresses() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        if (is_null($account->authToken)) {
+            $account = $this->login($account);
+        }
+
+        $query = "
+            query {
+                customer(customerAccessToken: \"{$account->authToken}\") {
+                    id
+                    email
+                    firstName
+                    lastName
+                    addresses(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                        edges {
+                            node {
+                                id
+                                address1
+                                address2
+                                city
+                                country
+                                firstName
+                                lastName
+                                phone
+                                province
+                                zip
+                            }
+                        }
+                    }
+                }
+            }";
+
+        return $this->client
+            ->request($query)
+            ->then(function (array $result): array {
+                if ($result['errors']) {
+                    // TODO handle error
+                }
+
+                $account = $this->mapDataToAccount($result['body']['data']['customer']);
+
+                return $account->addresses;
+            })
+            ->wait();
     }
 
     public function addAddress(Account $account, Address $address, string $locale = null): Account
@@ -337,13 +377,65 @@ class ShopifyAccountApi implements AccountApi
                 return $account;
             })
             ->wait();
-
     }
 
     public function updateAddress(Account $account, Address $address, string $locale = null): Account
     {
-        // TODO: Implement updateAddress() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        if (is_null($account->authToken)) {
+            $account = $this->login($account);
+        }
+
+        $mutation = "
+            mutation {
+                customerAddressUpdate(
+                    address: {
+                        address1: \"$address->streetName\",
+                        address2: \"$address->streetNumber\",
+                        city: \"$address->city\",
+                        country: \"$address->country\",
+                        firstName: \"$address->firstName\",
+                        lastName: \"$address->lastName\",
+                        phone: \"$address->phone\",
+                        province: \"$address->state \",
+                        zip: \"$address->postalCode\",
+                    },
+                    customerAccessToken: \"$account->authToken\"
+                    id: \"$address->addressId\"
+                ) {
+                    customerAddress {
+                        id
+                        address1
+                        address2
+                        city
+                        country
+                        firstName
+                        lastName
+                        phone
+                        province
+                        zip
+                    }
+                    customerUserErrors {
+                        code
+                        field
+                        message
+                    }
+                }
+            }";
+
+        return $this->client
+            ->request($mutation, $locale)
+            ->then(function ($result) use ($account) : Account {
+                if ($result['errors']) {
+                    // TODO handle error
+                }
+
+                $account->addresses[] = $this->mapDataToAddress(
+                    $result['body']['data']['customerAddressUpdate']['customerAddress']
+                );
+
+                return $account;
+            })
+            ->wait();
     }
 
     public function removeAddress(Account $account, string $addressId, string $locale = null): Account
@@ -352,21 +444,9 @@ class ShopifyAccountApi implements AccountApi
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function verifyEmail(string $token): Account
-    {
-        // TODO: Implement verifyEmail() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
-    }
-
     public function setDefaultShippingAddress(Account $account, string $addressId, string $locale = null): Account
     {
         // TODO: Implement setDefaultShippingAddress() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
-    }
-
-    public function get(string $email): Account
-    {
-        // TODO: Implement get() method.
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
@@ -387,10 +467,8 @@ class ShopifyAccountApi implements AccountApi
         $addresses = [];
 
         if (!empty($accountData['addresses']['edges'])) {
-            $edges = $accountData['addresses']['edges'];
             $addresses = array_map(
                 function (array $addressData) : Address {
-                    $node = $addressData['node'];
                     return $this->mapDataToAddress($addressData['node']);
                 },
                 $accountData['addresses']['edges']
