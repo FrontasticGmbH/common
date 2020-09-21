@@ -10,6 +10,8 @@ use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFacto
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapCartApi;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapDataMapper;
+use Frontastic\Common\ShopifyBundle\Domain\CartApi\ShopifyCartApi;
+use Frontastic\Common\ShopifyBundle\Domain\ShopifyClientFactory;
 use Frontastic\Common\ShopwareBundle\Domain\CartApi\ShopwareCartApi;
 use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFactory;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
@@ -109,6 +111,16 @@ class CartApiFactory
                     $project->defaultLanguage,
                     $this->container->get(ShopwareProjectConfigApiFactory::class)
                 );
+                break;
+
+            case 'shopify':
+                $clientFactory = $this->container->get(ShopifyClientFactory::class);
+                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+
+                $cartApi = new ShopifyCartApi(
+                    $client
+                );
+
                 break;
 
             case 'spryker':
