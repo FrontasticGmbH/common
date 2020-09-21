@@ -32,7 +32,7 @@ class ShopifyAccountApi implements AccountApi
 
     public function confirmEmail(string $token, string $locale = null): Account
     {
-        throw new RuntimeException('Email confirmation is not supported by the Shopify Storefront API.');
+        throw new \RuntimeException('Email confirmation is not supported by the Shopify Storefront API.');
     }
 
     public function create(Account $account, ?Cart $cart = null, string $locale = null): Account
