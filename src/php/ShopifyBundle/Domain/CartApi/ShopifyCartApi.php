@@ -9,14 +9,22 @@ use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
+use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClient;
 
 class ShopifyCartApi implements CartApi
 {
+    private const DEFAULT_ELEMENTS_TO_FETCH = 10;
+
     /**
      * @var ShopifyClient
      */
     private $client;
+
+    /**
+     * @var string
+     */
+    private $currentTransaction;
 
     public function __construct(ShopifyClient $client)
     {
@@ -41,6 +49,16 @@ class ShopifyCartApi implements CartApi
                         totalPriceV2 {
                             amount
                             currencyCode
+                        }
+                        lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                            edges {
+                                node {
+                                    {$this->getLineItemQueryFields()}
+                                    variant {
+                                        {$this->getVariantQueryFields()}
+                                    }
+                                }
+                            }
                         }
                     }
                     checkoutUserErrors {
@@ -75,6 +93,16 @@ class ShopifyCartApi implements CartApi
                         totalPriceV2 {
                             amount
                             currencyCode
+                        }
+                        lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                            edges {
+                                node {
+                                    {$this->getLineItemQueryFields()}
+                                    variant {
+                                        {$this->getVariantQueryFields()}
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -119,8 +147,52 @@ class ShopifyCartApi implements CartApi
 
     public function addToCart(Cart $cart, LineItem $lineItem, string $locale = null): Cart
     {
-        // TODO: Implement addToCart() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        $mutation = "
+            mutation {
+                checkoutLineItemsAdd(
+                    checkoutId: \"{$cart->cartId}\",
+                    lineItems: {
+                        quantity: {$lineItem->count}
+                        variantId: \"{$lineItem->variant->sku}\"
+                    }
+                ) {
+                    checkout {
+                        id
+                        createdAt
+                        email
+                        totalPriceV2 {
+                            amount
+                            currencyCode
+                        }
+                        lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                            edges {
+                                node {
+                                    {$this->getLineItemQueryFields()}
+                                    variant {
+                                        {$this->getVariantQueryFields()}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    checkoutUserErrors {
+                        code
+                        field
+                        message
+                    }
+                }
+            }";
+
+        return $this->client
+            ->request($mutation, $locale)
+            ->then(function ($result) : Cart {
+                if ($result['errors']) {
+                    // TODO handle error
+                }
+
+                return $this->mapDataToCart($result['body']['data']['checkoutLineItemsAdd']['checkout']);
+            })
+            ->wait();
     }
 
     public function updateLineItem(Cart $cart, LineItem $lineItem, int $count, ?array $custom = null, string $locale = null): Cart
@@ -215,14 +287,21 @@ class ShopifyCartApi implements CartApi
 
     public function startTransaction(Cart $cart): void
     {
-        // TODO: Implement startTransaction() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        $this->currentTransaction = $cart->cartId;
     }
 
     public function commit(string $locale = null): Cart
     {
-        // TODO: Implement commit() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        if ($this->currentTransaction === null) {
+            throw new \RuntimeException('No transaction currently in progress');
+        }
+
+        $cartId = $this->currentTransaction;
+
+        $this->currentTransaction = null;
+
+        return $this->getById($cartId, $locale);
+
     }
 
     public function getDangerousInnerClient()
@@ -246,6 +325,67 @@ class ShopifyCartApi implements CartApi
                 $cartData['totalPriceV2']['amount']
             ),
             'currency' => $cartData['totalPriceV2']['currencyCode'],
+            'lineItems' => $this->mapDataToLineItems($cartData['lineItems']['edges']),
         ]);
+    }
+
+    private function mapDataToLineItems(array $lineItemsData): array
+    {
+        $lineItems = [];
+
+        foreach ($lineItemsData as $lineItemData) {
+            $lineItems[] = new LineItem\Variant([
+                'lineItemId' => $lineItemData['node']['id'],
+                'name' => $lineItemData['node']['title'],
+                'count' => $lineItemData['node']['quantity'],
+                'price' => $lineItemData['node']['unitPrice']['amount'],
+                'variant' => new Variant([
+                    'id' => $lineItemData['node']['variant']['id'],
+                    'sku' => !empty($lineItemData['node']['variant']['sku'])
+                        ? $lineItemData['node']['variant']['sku']
+                        : $lineItemData['node']['variant']['id'],
+                    'groupId' => $lineItemData['node']['variant']['product']['id'],
+                ])
+            ]);
+        }
+
+        return $lineItems;
+    }
+
+    protected function getLineItemQueryFields(): string
+    {
+        return '
+            id
+            quantity
+            title
+            unitPrice {
+                amount
+                currencyCode
+            }
+        ';
+    }
+
+    protected function getVariantQueryFields(): string
+    {
+        return '
+            id
+            sku
+            title
+            currentlyNotInStock
+            priceV2 {
+                amount
+                currencyCode
+            }
+            product {
+                id
+            }
+            selectedOptions {
+                name
+                value
+            }
+            image {
+                originalSrc
+            }
+        ';
     }
 }
