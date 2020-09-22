@@ -37,6 +37,7 @@ class ShopifyCartApi implements CartApi
                     checkout {
                         id
                         createdAt
+                        email
                         totalPriceV2 {
                             amount
                             currencyCode
@@ -57,22 +58,39 @@ class ShopifyCartApi implements CartApi
                     // TODO handle error
                 }
 
-                return new Cart([
-                    'cartId' => $result['body']['data']['checkoutCreate']['checkout']['id'],
-                    'cartVersion' => $result['body']['data']['checkoutCreate']['checkout']['createdAt'],
-                    'sum' => $this->convertPriceToCent(
-                        $result['body']['data']['checkoutCreate']['checkout']['totalPriceV2']['amount']
-                    ),
-                    'currency' => $result['body']['data']['checkoutCreate']['checkout']['totalPriceV2']['currencyCode'],
-                ]);
+                return $this->mapDataToCart($result['body']['data']['checkoutCreate']['checkout']);
             })
             ->wait();
     }
 
     public function getById(string $cartId, string $locale = null): Cart
     {
-        // TODO: Implement getById() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        $query = "
+            query {
+                node(id: \"{$cartId}\") {
+                    ... on Checkout {
+                        id
+                        createdAt
+                        email
+                        totalPriceV2 {
+                            amount
+                            currencyCode
+                        }
+                    }
+                }
+            }
+        ";
+
+        return $this->client
+            ->request($query)
+            ->then(function (array $result): Cart {
+                if ($result['errors']) {
+                    // TODO handle error
+                }
+
+                return $this->mapDataToCart($result['body']['data']['node']);
+            })
+            ->wait();
     }
 
     public function setCustomLineItemType(array $lineItemType): void
@@ -216,5 +234,18 @@ class ShopifyCartApi implements CartApi
     private function convertPriceToCent($price): int
     {
         return (int)round($price * 100);
+    }
+
+    private function mapDataToCart(array $cartData): Cart
+    {
+        return new Cart([
+            'cartId' => $cartData['id'],
+            'cartVersion' => $cartData['createdAt'],
+            'email' => $cartData['email'],
+            'sum' => $this->convertPriceToCent(
+                $cartData['totalPriceV2']['amount']
+            ),
+            'currency' => $cartData['totalPriceV2']['currencyCode'],
+        ]);
     }
 }
