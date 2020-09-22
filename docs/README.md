@@ -117,13 +117,14 @@ Here you find the API documentation for the relevant classes:
     * [FrontasticCommonFindologicExtension](php/FindologicBundle/DependencyInjection/FrontasticCommonFindologicExtension.md)
   * Domain
     * [FindologicClient](php/FindologicBundle/Domain/FindologicClient.md)
-    * [FindologicClientConfig](php/FindologicBundle/Domain/FindologicClientConfig.md)
     * [FindologicClientFactory](php/FindologicBundle/Domain/FindologicClientFactory.md)
+    * [FindologicEndpointConfig](php/FindologicBundle/Domain/FindologicEndpointConfig.md)
     * ProductSearchApi
       * [FindologicProductSearchApi](php/FindologicBundle/Domain/ProductSearchApi/FindologicProductSearchApi.md)
       * [Mapper](php/FindologicBundle/Domain/ProductSearchApi/Mapper.md)
       * [QueryValidator](php/FindologicBundle/Domain/ProductSearchApi/QueryValidator.md)
       * [ValidationResult](php/FindologicBundle/Domain/ProductSearchApi/ValidationResult.md)
+    * [RequestProvider](php/FindologicBundle/Domain/RequestProvider.md)
     * [SearchRequest](php/FindologicBundle/Domain/SearchRequest.md)
   * Exception
     * [ServiceNotAliveException](php/FindologicBundle/Exception/ServiceNotAliveException.md)
@@ -200,9 +201,8 @@ Here you find the API documentation for the relevant classes:
   * Domain
     * [Attribute](php/ProjectApiBundle/Domain/Attribute.md)
     * [DefaultProjectApiFactory](php/ProjectApiBundle/Domain/DefaultProjectApiFactory.md)
+    * [ProductSearchProjectApi](php/ProjectApiBundle/Domain/ProductSearchProjectApi.md)
     * [ProjectApi](php/ProjectApiBundle/Domain/ProjectApi.md)
-    * ProjectApi
-      * [Commercetools](php/ProjectApiBundle/Domain/ProjectApi/Commercetools.md)
     * [ProjectApiFactory](php/ProjectApiBundle/Domain/ProjectApiFactory.md)
   * [FrontasticCommonProjectApiBundle](php/ProjectApiBundle/FrontasticCommonProjectApiBundle.md)
 * ReplicatorBundle
@@ -240,7 +240,6 @@ Here you find the API documentation for the relevant classes:
     * [SapDataMapper](php/SapCommerceCloudBundle/Domain/SapDataMapper.md)
     * [SapProductApi](php/SapCommerceCloudBundle/Domain/SapProductApi.md)
     * [SapProductSearchApi](php/SapCommerceCloudBundle/Domain/SapProductSearchApi.md)
-    * [SapProjectApi](php/SapCommerceCloudBundle/Domain/SapProjectApi.md)
     * [SapProjectConfigApi](php/SapCommerceCloudBundle/Domain/SapProjectConfigApi.md)
     * [SapRequestException](php/SapCommerceCloudBundle/Domain/SapRequestException.md)
   * [FrontasticCommonSapCommerceCloudBundle](php/SapCommerceCloudBundle/FrontasticCommonSapCommerceCloudBundle.md)
@@ -251,6 +250,8 @@ Here you find the API documentation for the relevant classes:
   * Domain
     * ProductApi
       * [ShopifyProductApi](php/ShopifyBundle/Domain/ProductApi/ShopifyProductApi.md)
+    * ProductSearchApi
+      * [ShopifyProductSearchApi](php/ShopifyBundle/Domain/ProductSearchApi/ShopifyProductSearchApi.md)
     * [ResponseAccess](php/ShopifyBundle/Domain/ResponseAccess.md)
     * [ShopifyClient](php/ShopifyBundle/Domain/ShopifyClient.md)
     * [ShopifyClientFactory](php/ShopifyBundle/Domain/ShopifyClientFactory.md)
@@ -290,8 +291,6 @@ Here you find the API documentation for the relevant classes:
       * [ShopwareProductApi](php/ShopwareBundle/Domain/ProductApi/ShopwareProductApi.md)
     * ProductSearchApi
       * [ShopwareProductSearchApi](php/ShopwareBundle/Domain/ProductSearchApi/ShopwareProductSearchApi.md)
-    * ProjectApi
-      * [ShopwareProjectApi](php/ShopwareBundle/Domain/ProjectApi/ShopwareProjectApi.md)
     * ProjectConfigApi
       * [CachedShopwareProjectConfigApi](php/ShopwareBundle/Domain/ProjectConfigApi/CachedShopwareProjectConfigApi.md)
       * [ShopwareCountry](php/ShopwareBundle/Domain/ProjectConfigApi/ShopwareCountry.md)
@@ -362,9 +361,6 @@ Here you find the API documentation for the relevant classes:
       * [SprykerSlugger](php/SprykerBundle/Domain/Product/SprykerSlugger.md)
     * ProductSearch
       * [SprykerProductSearchApi](php/SprykerBundle/Domain/ProductSearch/SprykerProductSearchApi.md)
-    * Project
-      * [SprykerProjectApi](php/SprykerBundle/Domain/Project/SprykerProjectApi.md)
-      * [SprykerProjectApiInterface](php/SprykerBundle/Domain/Project/SprykerProjectApiInterface.md)
     * ProjectConfig
       * [SprykerProjectConfigApi](php/SprykerBundle/Domain/ProjectConfig/SprykerProjectConfigApi.md)
     * Route

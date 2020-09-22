@@ -18,6 +18,7 @@ public function __construct(
     DataMapperResolver $mapperResolver,
     EnabledFacetService $enabledFacetService,
     ShopwareProjectConfigApiFactory $projectConfigApiFactory,
+    ProductSearchApi $productSearchApi,
     ?string $defaultLanguage
 ): mixed
 ```
@@ -29,6 +30,7 @@ Argument|Type|Default|Description
 `$mapperResolver`|[`DataMapperResolver`](../DataMapper/DataMapperResolver.md)||
 `$enabledFacetService`|[`EnabledFacetService`](../../../ProductApiBundle/Domain/ProductApi/EnabledFacetService.md)||
 `$projectConfigApiFactory`|[`ShopwareProjectConfigApiFactory`](../ProjectConfigApi/ShopwareProjectConfigApiFactory.md)||
+`$productSearchApi`|[`ProductSearchApi`](../../../ProductSearchApiBundle/Domain/ProductSearchApi.md)||
 `$defaultLanguage`|`?string`||
 
 Return Value: `mixed`

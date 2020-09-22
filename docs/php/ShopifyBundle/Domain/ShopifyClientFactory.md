@@ -5,6 +5,7 @@
 ## Methods
 
 * [__construct()](#__construct)
+* [factorForConfigs()](#factorforconfigs)
 * [factorForProjectAndType()](#factorforprojectandtype)
 
 ### __construct()
@@ -22,6 +23,22 @@ Argument|Type|Default|Description
 `$cache`|`\Psr\SimpleCache\CacheInterface`||
 
 Return Value: `mixed`
+
+### factorForConfigs()
+
+```php
+public function factorForConfigs(
+    object $typeSpecificConfiguration,
+    ?object $shopifyConfig = null
+): ShopifyClient
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$typeSpecificConfiguration`|`object`||
+`$shopifyConfig`|`?object`|`null`|
+
+Return Value: [`ShopifyClient`](ShopifyClient.md)
 
 ### factorForProjectAndType()
 

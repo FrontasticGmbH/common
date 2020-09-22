@@ -15,7 +15,8 @@
 public function __construct(
     SapClient $client,
     SapLocaleCreator $localeCreator,
-    SapDataMapper $dataMapper
+    SapDataMapper $dataMapper,
+    ProductSearchApi $productSearchApi
 ): mixed
 ```
 
@@ -24,6 +25,7 @@ Argument|Type|Default|Description
 `$client`|[`SapClient`](SapClient.md)||
 `$localeCreator`|[`SapLocaleCreator`](Locale/SapLocaleCreator.md)||
 `$dataMapper`|[`SapDataMapper`](SapDataMapper.md)||
+`$productSearchApi`|[`ProductSearchApi`](../../ProductSearchApiBundle/Domain/ProductSearchApi.md)||
 
 Return Value: `mixed`
 
