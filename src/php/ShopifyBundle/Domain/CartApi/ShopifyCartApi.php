@@ -10,6 +10,7 @@ use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
+use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyProductMapper;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClient;
 
 class ShopifyCartApi implements CartApi
@@ -26,9 +27,15 @@ class ShopifyCartApi implements CartApi
      */
     private $currentTransaction;
 
-    public function __construct(ShopifyClient $client)
+    /**
+     * @var ShopifyProductMapper
+     */
+    private $productMapper;
+
+    public function __construct(ShopifyClient $client, ShopifyProductMapper $productMapper)
     {
         $this->client = $client;
+        $this->productMapper = $productMapper;
     }
 
     public function getForUser(Account $account, string $locale): Cart
@@ -43,13 +50,7 @@ class ShopifyCartApi implements CartApi
             mutation {
                 checkoutCreate(input: {}) {
                     checkout {
-                        id
-                        createdAt
-                        email
-                        totalPriceV2 {
-                            amount
-                            currencyCode
-                        }
+                        {$this->getCheckoutQueryFields()}
                         lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                             edges {
                                 node {
@@ -62,9 +63,7 @@ class ShopifyCartApi implements CartApi
                         }
                     }
                     checkoutUserErrors {
-                        code
-                        field
-                        message
+                        {$this->getErrorsQueryFields()}
                     }
                 }
             }";
@@ -87,13 +86,7 @@ class ShopifyCartApi implements CartApi
             query {
                 node(id: \"{$cartId}\") {
                     ... on Checkout {
-                        id
-                        createdAt
-                        email
-                        totalPriceV2 {
-                            amount
-                            currencyCode
-                        }
+                        {$this->getCheckoutQueryFields()}
                         lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                             edges {
                                 node {
@@ -157,13 +150,7 @@ class ShopifyCartApi implements CartApi
                     }
                 ) {
                     checkout {
-                        id
-                        createdAt
-                        email
-                        totalPriceV2 {
-                            amount
-                            currencyCode
-                        }
+                        {$this->getCheckoutQueryFields()}
                         lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                             edges {
                                 node {
@@ -176,9 +163,7 @@ class ShopifyCartApi implements CartApi
                         }
                     }
                     checkoutUserErrors {
-                        code
-                        field
-                        message
+                        {$this->getErrorsQueryFields()}
                     }
                 }
             }";
@@ -310,19 +295,14 @@ class ShopifyCartApi implements CartApi
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    private function convertPriceToCent($price): int
-    {
-        return (int)round($price * 100);
-    }
-
     private function mapDataToCart(array $cartData): Cart
     {
         return new Cart([
             'cartId' => $cartData['id'],
             'cartVersion' => $cartData['createdAt'],
             'email' => $cartData['email'],
-            'sum' => $this->convertPriceToCent(
-                $cartData['totalPriceV2']['amount']
+            'sum' => $this->productMapper->mapDataToPriceValue(
+                $cartData['totalPriceV2']
             ),
             'currency' => $cartData['totalPriceV2']['currencyCode'],
             'lineItems' => $this->mapDataToLineItems($cartData['lineItems']['edges']),
@@ -339,17 +319,24 @@ class ShopifyCartApi implements CartApi
                 'name' => $lineItemData['node']['title'],
                 'count' => $lineItemData['node']['quantity'],
                 'price' => $lineItemData['node']['unitPrice']['amount'],
-                'variant' => new Variant([
-                    'id' => $lineItemData['node']['variant']['id'],
-                    'sku' => !empty($lineItemData['node']['variant']['sku'])
-                        ? $lineItemData['node']['variant']['sku']
-                        : $lineItemData['node']['variant']['id'],
-                    'groupId' => $lineItemData['node']['variant']['product']['id'],
-                ])
+                'variant' => $this->productMapper->mapDataToVariant($lineItemData['node']['variant']),
             ]);
         }
 
         return $lineItems;
+    }
+
+    protected function getCheckoutQueryFields(): string
+    {
+        return '
+            id
+            createdAt
+            email
+            totalPriceV2 {
+                amount
+                currencyCode
+            }
+        ';
     }
 
     protected function getLineItemQueryFields(): string
@@ -386,6 +373,15 @@ class ShopifyCartApi implements CartApi
             image {
                 originalSrc
             }
+        ';
+    }
+
+    protected function getErrorsQueryFields(): string
+    {
+        return '
+            code
+            field
+            message
         ';
     }
 }
