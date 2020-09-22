@@ -13,14 +13,18 @@
 ```php
 public function __construct(
     HttpClient $httpClient,
-    array $configs
+    RequestProvider $requestProvider,
+    array $endpoints,
+    array $outputAttributes = []
 ): mixed
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$httpClient`|[`HttpClient`](../../HttpClient.md)||
-`$configs`|`array`||
+`$requestProvider`|[`RequestProvider`](RequestProvider.md)||
+`$endpoints`|`array`||
+`$outputAttributes`|`array`|`[]`|
 
 Return Value: `mixed`
 
