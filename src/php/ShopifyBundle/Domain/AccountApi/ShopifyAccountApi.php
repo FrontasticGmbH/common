@@ -124,8 +124,12 @@ class ShopifyAccountApi implements AccountApi
             ->wait();
     }
 
-    public function updatePassword(Account $account, string $oldPassword, string $newPassword, string $locale = null): Account
-    {
+    public function updatePassword(
+        Account $account,
+        string $oldPassword,
+        string $newPassword,
+        string $locale = null
+    ): Account {
         $account->setPassword($oldPassword);
 
         if (is_null($account = $this->login($account))) {
