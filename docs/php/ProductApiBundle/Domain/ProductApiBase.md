@@ -6,11 +6,26 @@
 
 ## Methods
 
+* [__construct()](#__construct)
 * [getCategories()](#getcategories)
 * [queryCategories()](#querycategories)
 * [getProductTypes()](#getproducttypes)
 * [getProduct()](#getproduct)
 * [query()](#query)
+
+### __construct()
+
+```php
+public function __construct(
+    ProductSearchApi $productSearchApi
+): mixed
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$productSearchApi`|[`ProductSearchApi`](../../ProductSearchApiBundle/Domain/ProductSearchApi.md)||
+
+Return Value: `mixed`
 
 ### getCategories()
 
