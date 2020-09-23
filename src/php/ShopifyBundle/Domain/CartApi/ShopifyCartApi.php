@@ -10,6 +10,7 @@ use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
+use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyAccountMapper;
 use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyProductMapper;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClient;
 
@@ -32,10 +33,19 @@ class ShopifyCartApi implements CartApi
      */
     private $productMapper;
 
-    public function __construct(ShopifyClient $client, ShopifyProductMapper $productMapper)
-    {
+    /**
+     * @var ShopifyAccountMapper
+     */
+    private $accountMapper;
+
+    public function __construct(
+        ShopifyClient $client,
+        ShopifyProductMapper $productMapper,
+        ShopifyAccountMapper $accountMapper
+    ) {
         $this->client = $client;
         $this->productMapper = $productMapper;
+        $this->accountMapper = $accountMapper;
     }
 
     public function getForUser(Account $account, string $locale): Cart
@@ -60,6 +70,9 @@ class ShopifyCartApi implements CartApi
                                     }
                                 }
                             }
+                        }
+                        shippingAddress {
+                            {$this->getAddressQueryFields()}
                         }
                     }
                     checkoutUserErrors {
@@ -96,6 +109,9 @@ class ShopifyCartApi implements CartApi
                                     }
                                 }
                             }
+                        }
+                        shippingAddress {
+                            {$this->getAddressQueryFields()}
                         }
                     }
                 }
@@ -161,6 +177,9 @@ class ShopifyCartApi implements CartApi
                                 }
                             }
                         }
+                        shippingAddress {
+                            {$this->getAddressQueryFields()}
+                        }
                     }
                     checkoutUserErrors {
                         {$this->getErrorsQueryFields()}
@@ -203,6 +222,9 @@ class ShopifyCartApi implements CartApi
                                 }
                             }
                         }
+                        shippingAddress {
+                            {$this->getAddressQueryFields()}
+                        }
                     }
                     checkoutUserErrors {
                         {$this->getErrorsQueryFields()}
@@ -241,6 +263,9 @@ class ShopifyCartApi implements CartApi
                                     }
                                 }
                             }
+                        }
+                        shippingAddress {
+                            {$this->getAddressQueryFields()}
                         }
                     }
                     checkoutUserErrors {
@@ -287,8 +312,46 @@ class ShopifyCartApi implements CartApi
 
     public function setShippingAddress(Cart $cart, Address $address, string $locale = null): Cart
     {
-        // TODO: Implement setShippingAddress() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        $mutation = "
+            mutation {
+                 checkoutShippingAddressUpdateV2(
+                    checkoutId: \"{$cart->cartId}\",
+                    shippingAddress: {
+                        {$this->accountMapper->mapAddressToData($address)}
+                    },
+                ) {
+                    checkout {
+                        {$this->getCheckoutQueryFields()}
+                        lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                            edges {
+                                node {
+                                    {$this->getLineItemQueryFields()}
+                                    variant {
+                                        {$this->getVariantQueryFields()}
+                                    }
+                                }
+                            }
+                        }
+                        shippingAddress {
+                            {$this->getAddressQueryFields()}
+                        }
+                    }
+                    checkoutUserErrors {
+                        {$this->getErrorsQueryFields()}
+                    }
+                }
+            }";
+
+        return $this->client
+            ->request($mutation, $locale)
+            ->then(function ($result) : Cart {
+                if ($result['errors']) {
+                    // TODO handle error
+                }
+
+                return $this->mapDataToCart($result['body']['data']['checkoutShippingAddressUpdateV2']['checkout']);
+            })
+            ->wait();
     }
 
     public function setBillingAddress(Cart $cart, Address $address, string $locale = null): Cart
@@ -367,14 +430,17 @@ class ShopifyCartApi implements CartApi
     private function mapDataToCart(array $cartData): Cart
     {
         return new Cart([
-            'cartId' => $cartData['id'],
-            'cartVersion' => $cartData['createdAt'],
-            'email' => $cartData['email'],
+            'cartId' => $cartData['id'] ?? null,
+            'cartVersion' => $cartData['createdAt'] ?? null,
+            'email' => $cartData['email'] ?? null,
             'sum' => $this->productMapper->mapDataToPriceValue(
-                $cartData['totalPriceV2']
+                $cartData['totalPriceV2'] ?? []
             ),
-            'currency' => $cartData['totalPriceV2']['currencyCode'],
-            'lineItems' => $this->mapDataToLineItems($cartData['lineItems']['edges']),
+            'currency' => $cartData['totalPriceV2']['currencyCode'] ?? null,
+            'lineItems' => $this->mapDataToLineItems($cartData['lineItems']['edges'] ?? []),
+            'shippingAddress' => $this->accountMapper->mapDataToAddress(
+                $cartData['shippingAddress'] ?? []
+            ),
         ]);
     }
 
@@ -384,10 +450,10 @@ class ShopifyCartApi implements CartApi
 
         foreach ($lineItemsData as $lineItemData) {
             $lineItems[] = new LineItem\Variant([
-                'lineItemId' => $lineItemData['node']['id'],
-                'name' => $lineItemData['node']['title'],
-                'count' => $lineItemData['node']['quantity'],
-                'price' => $lineItemData['node']['unitPrice']['amount'],
+                'lineItemId' => $lineItemData['node']['id'] ?? null,
+                'name' => $lineItemData['node']['title'] ?? null,
+                'count' => $lineItemData['node']['quantity'] ?? null,
+                'price' => $lineItemData['node']['unitPrice']['amount'] ?? null,
                 'variant' => $this->productMapper->mapDataToVariant($lineItemData['node']['variant']),
             ]);
         }
@@ -442,6 +508,22 @@ class ShopifyCartApi implements CartApi
             image {
                 originalSrc
             }
+        ';
+    }
+
+    protected function getAddressQueryFields(): string
+    {
+        return '
+            id
+            address1
+            address2
+            city
+            country
+            firstName
+            lastName
+            phone
+            province
+            zip
         ';
     }
 

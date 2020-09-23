@@ -11,6 +11,7 @@ use Frontastic\Common\SapCommerceCloudBundle\Domain\SapCartApi;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapDataMapper;
 use Frontastic\Common\ShopifyBundle\Domain\CartApi\ShopifyCartApi;
+use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyAccountMapper;
 use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyProductMapper;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClientFactory;
 use Frontastic\Common\ShopwareBundle\Domain\CartApi\ShopwareCartApi;
@@ -118,10 +119,12 @@ class CartApiFactory
                 $clientFactory = $this->container->get(ShopifyClientFactory::class);
                 $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
                 $productMapper = $this->container->get(ShopifyProductMapper::class);
+                $accountMapper = $this->container->get(ShopifyAccountMapper::class);
 
                 $cartApi = new ShopifyCartApi(
                     $client,
-                    $productMapper
+                    $productMapper,
+                    $accountMapper
                 );
 
                 break;
