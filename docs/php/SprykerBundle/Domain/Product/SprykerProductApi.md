@@ -17,6 +17,7 @@ public function __construct(
     MapperResolver $mapperResolver,
     LocaleCreator $localeCreator,
     SprykerUrlAppender $urlAppender,
+    ProductSearchApi $productSearchApi,
     ?string $defaultLanguage,
     array $productResources = SprykerProductApiExtendedConstants::SPRYKER_DEFAULT_PRODUCT_RESOURCES,
     array $queryResources = SprykerProductApiExtendedConstants::SPRYKER_PRODUCT_QUERY_RESOURCES,
@@ -30,6 +31,7 @@ Argument|Type|Default|Description
 `$mapperResolver`|[`MapperResolver`](../MapperResolver.md)||
 `$localeCreator`|[`LocaleCreator`](../Locale/LocaleCreator.md)||
 `$urlAppender`|[`SprykerUrlAppender`](../SprykerUrlAppender.md)||
+`$productSearchApi`|[`ProductSearchApi`](../../../ProductSearchApiBundle/Domain/ProductSearchApi.md)||
 `$defaultLanguage`|`?string`||
 `$productResources`|`array`|`SprykerProductApiExtendedConstants::SPRYKER_DEFAULT_PRODUCT_RESOURCES`|
 `$queryResources`|`array`|`SprykerProductApiExtendedConstants::SPRYKER_PRODUCT_QUERY_RESOURCES`|
