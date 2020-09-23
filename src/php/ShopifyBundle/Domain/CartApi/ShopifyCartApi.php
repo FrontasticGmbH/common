@@ -182,14 +182,83 @@ class ShopifyCartApi implements CartApi
 
     public function updateLineItem(Cart $cart, LineItem $lineItem, int $count, ?array $custom = null, string $locale = null): Cart
     {
-        // TODO: Implement updateLineItem() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        $mutation = "
+            mutation {
+                checkoutLineItemsUpdate(
+                    checkoutId: \"{$cart->cartId}\",
+                    lineItems: {
+                        id: \"{$lineItem->lineItemId}\"
+                        quantity: {$count}
+                    }
+                ) {
+                    checkout {
+                        {$this->getCheckoutQueryFields()}
+                        lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                            edges {
+                                node {
+                                    {$this->getLineItemQueryFields()}
+                                    variant {
+                                        {$this->getVariantQueryFields()}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    checkoutUserErrors {
+                        {$this->getErrorsQueryFields()}
+                    }
+                }
+            }";
+
+        return $this->client
+            ->request($mutation, $locale)
+            ->then(function ($result) : Cart {
+                if ($result['errors']) {
+                    // TODO handle error
+                }
+
+                return $this->mapDataToCart($result['body']['data']['checkoutLineItemsUpdate']['checkout']);
+            })
+            ->wait();
     }
 
     public function removeLineItem(Cart $cart, LineItem $lineItem, string $locale = null): Cart
     {
-        // TODO: Implement removeLineItem() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        $mutation = "
+            mutation {
+                checkoutLineItemsRemove(
+                    checkoutId: \"{$cart->cartId}\",
+                    lineItemIds: \"{$lineItem->lineItemId}\"
+                ) {
+                    checkout {
+                        {$this->getCheckoutQueryFields()}
+                        lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                            edges {
+                                node {
+                                    {$this->getLineItemQueryFields()}
+                                    variant {
+                                        {$this->getVariantQueryFields()}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    checkoutUserErrors {
+                        {$this->getErrorsQueryFields()}
+                    }
+                }
+            }";
+
+        return $this->client
+            ->request($mutation, $locale)
+            ->then(function ($result) : Cart {
+                if ($result['errors']) {
+                    // TODO handle error
+                }
+
+                return $this->mapDataToCart($result['body']['data']['checkoutLineItemsRemove']['checkout']);
+            })
+            ->wait();
     }
 
     public function setEmail(Cart $cart, string $email, string $locale = null): Cart
