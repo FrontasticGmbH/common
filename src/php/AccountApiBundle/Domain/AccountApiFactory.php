@@ -10,6 +10,7 @@ use Frontastic\Common\SapCommerceCloudBundle\Domain\SapAccountApi;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapDataMapper;
 use Frontastic\Common\ShopifyBundle\Domain\AccountApi\ShopifyAccountApi;
+use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyAccountMapper;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClientFactory;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\ShopwareAccountApi;
 use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFactory;
@@ -90,9 +91,11 @@ class AccountApiFactory
             case 'shopify':
                 $clientFactory = $this->container->get(ShopifyClientFactory::class);
                 $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+                $accountMapper = $this->container->get(ShopifyAccountMapper::class);
 
                 $accountApi = new ShopifyAccountApi(
-                    $client
+                    $client,
+                    $accountMapper
                 );
 
                 break;

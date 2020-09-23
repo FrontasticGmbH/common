@@ -8,6 +8,7 @@ use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\AccountApiBundle\Domain\DuplicateAccountException;
 use Frontastic\Common\AccountApiBundle\Domain\PasswordResetToken;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
+use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyAccountMapper;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClient;
 
 class ShopifyAccountApi implements AccountApi
@@ -19,9 +20,15 @@ class ShopifyAccountApi implements AccountApi
      */
     private $client;
 
-    public function __construct(ShopifyClient $client)
+    /**
+     * @var ShopifyAccountMapper
+     */
+    private $accountMapper;
+
+    public function __construct(ShopifyClient $client, ShopifyAccountMapper $accountMapper)
     {
         $this->client = $client;
+        $this->accountMapper = $accountMapper;
     }
 
     public function getSalutations(string $locale): ?array
@@ -116,7 +123,9 @@ class ShopifyAccountApi implements AccountApi
                     // TODO handle error
                 }
 
-                $updatedAccount = $this->mapDataToAccount($result['body']['data']['customerUpdate']['customer']);
+                $updatedAccount = $this->accountMapper->mapDataToAccount(
+                    $result['body']['data']['customerUpdate']['customer']
+                );
                 $updatedAccount->authToken = $account->authToken;
 
                 return $updatedAccount;
@@ -206,7 +215,7 @@ class ShopifyAccountApi implements AccountApi
                             // TODO handle error
                         }
 
-                        $account = $this->mapDataToAccount($result['body']['data']['customer']);
+                        $account = $this->accountMapper->mapDataToAccount($result['body']['data']['customer']);
                         $account->authToken = $token['accessToken'];
 
                         return $account;
@@ -235,7 +244,7 @@ class ShopifyAccountApi implements AccountApi
                     // TODO handle error
                 }
 
-                $fetchedAccount = $this->mapDataToAccount($result['body']['data']['customer']);
+                $fetchedAccount = $this->accountMapper->mapDataToAccount($result['body']['data']['customer']);
                 $fetchedAccount->authToken = $account->authToken;
 
                 return $fetchedAccount;
@@ -270,7 +279,7 @@ class ShopifyAccountApi implements AccountApi
                     // TODO handle error
                 }
 
-                $account = $this->mapDataToAccount($result['body']['data']['customer']);
+                $account = $this->accountMapper->mapDataToAccount($result['body']['data']['customer']);
 
                 return $account->addresses;
             })
@@ -287,15 +296,7 @@ class ShopifyAccountApi implements AccountApi
             mutation {
                 customerAddressCreate(
                     address: {
-                        address1: \"$address->streetName\",
-                        address2: \"$address->streetNumber\",
-                        city: \"$address->city\",
-                        country: \"$address->country\",
-                        firstName: \"$address->firstName\",
-                        lastName: \"$address->lastName\",
-                        phone: \"$address->phone\",
-                        province: \"$address->state \",
-                        zip: \"$address->postalCode\",
+                        {$this->accountMapper->mapAddressToData($address)}
                     },
                     customerAccessToken: \"$account->authToken\"
                 ) {
@@ -315,7 +316,7 @@ class ShopifyAccountApi implements AccountApi
                     // TODO handle error
                 }
 
-                $account->addresses[] = $this->mapDataToAddress(
+                $account->addresses[] = $this->accountMapper->mapDataToAddress(
                     $result['body']['data']['customerAddressCreate']['customerAddress']
                 );
 
@@ -334,15 +335,7 @@ class ShopifyAccountApi implements AccountApi
             mutation {
                 customerAddressUpdate(
                     address: {
-                        address1: \"$address->streetName\",
-                        address2: \"$address->streetNumber\",
-                        city: \"$address->city\",
-                        country: \"$address->country\",
-                        firstName: \"$address->firstName\",
-                        lastName: \"$address->lastName\",
-                        phone: \"$address->phone\",
-                        province: \"$address->state \",
-                        zip: \"$address->postalCode\",
+                        {$this->accountMapper->mapAddressToData($address)}
                     },
                     customerAccessToken: \"$account->authToken\"
                     id: \"$address->addressId\"
@@ -363,7 +356,7 @@ class ShopifyAccountApi implements AccountApi
                     // TODO handle error
                 }
 
-                $account->addresses[] = $this->mapDataToAddress(
+                $account->addresses[] = $this->accountMapper->mapDataToAddress(
                     $result['body']['data']['customerAddressUpdate']['customerAddress']
                 );
 
@@ -394,45 +387,6 @@ class ShopifyAccountApi implements AccountApi
     {
         // TODO: Implement getDangerousInnerClient() method.
         throw new \RuntimeException(__METHOD__ . ' not implemented');
-    }
-
-    protected function mapDataToAccount(array $accountData): Account
-    {
-        $addresses = [];
-
-        if (!empty($accountData['addresses']['edges'])) {
-            $addresses = array_map(
-                function (array $addressData) : Address {
-                    return $this->mapDataToAddress($addressData['node']);
-                },
-                $accountData['addresses']['edges']
-            );
-        }
-
-        return new Account([
-            'accountId' => $accountData['id'],
-            'firstName' => $accountData['firstName'],
-            'lastName' => $accountData['lastName'],
-            'email' => $accountData['email'],
-            'addresses' => $addresses,
-            'confirmed' => true,
-        ]);
-    }
-
-    protected function mapDataToAddress(array $addressData): Address
-    {
-        return new Address([
-            'addressId' => $addressData['id'],
-            'streetName' => $addressData['address1'],
-            'streetNumber' => $addressData['address2'],
-            'city' => $addressData['city'],
-            'country' => $addressData['country'],
-            'firstName' => $addressData['firstName'],
-            'lastName' => $addressData['lastName'],
-            'phone' => $addressData['phone'],
-            'state' => $addressData['province'],
-            'postalCode' => $addressData['zip'],
-        ]);
     }
 
     protected function getCustomerQueryFields(): string

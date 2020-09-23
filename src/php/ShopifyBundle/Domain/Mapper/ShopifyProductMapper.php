@@ -10,10 +10,10 @@ class ShopifyProductMapper
     public function mapDataToProduct(array $productData): Product
     {
         return new Product([
-            'productId' => $productData['id'],
-            'name' => $productData['title'],
-            'description' => $productData['description'],
-            'slug' => $productData['handle'],
+            'productId' => $productData['id'] ?? null,
+            'name' => $productData['title'] ?? null,
+            'description' => $productData['description'] ?? null,
+            'slug' => $productData['handle'] ?? null,
             'categories' => array_map(
                 function (array $category) {
                     return $category['node']['id'];
@@ -58,16 +58,16 @@ class ShopifyProductMapper
     public function mapDataToVariant(array $variantData): Variant
     {
         return new Variant([
-            'id' => $variantData['id'],
+            'id' => $variantData['id'] ?? null,
             'sku' => !empty($variantData['sku'])
                 ? $variantData['sku']
                 : $variantData['id'],
-            'groupId' => $variantData['product']['id'],
-            'isOnStock' => !$variantData['currentlyNotInStock'],
-            'price' => $this->mapDataToPriceValue($variantData['priceV2']),
-            'currency' => $variantData['priceV2']['currencyCode'],
+            'groupId' => $variantData['product']['id'] ?? null,
+            'isOnStock' => !$variantData['currentlyNotInStock'] ?? null,
+            'price' => $this->mapDataToPriceValue($variantData['priceV2'] ?? []),
+            'currency' => $variantData['priceV2']['currencyCode'] ?? null,
             'attributes' => $this->mapDataToAttributes($variantData),
-            'images' => [$variantData['image']['originalSrc']],
+            'images' => [$variantData['image']['originalSrc']] ?? null,
             // @TODO Include dangerousInnerVariant base on locale flag
             // 'dangerousInnerVariant' => $variantData,
         ]);
