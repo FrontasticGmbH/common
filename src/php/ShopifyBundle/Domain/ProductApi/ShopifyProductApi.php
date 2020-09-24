@@ -36,8 +36,7 @@ class ShopifyProductApi extends ProductApiBase
         ShopifyClient $client,
         ProductSearchApi $productSearchApi,
         ShopifyProductMapper $productMapper
-    )
-    {
+    ) {
         parent::__construct($productSearchApi);
 
         $this->client = $client;

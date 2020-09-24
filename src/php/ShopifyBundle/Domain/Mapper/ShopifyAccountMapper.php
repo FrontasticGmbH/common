@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Frontastic\Common\ShopifyBundle\Domain\Mapper;
-
 
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Address;

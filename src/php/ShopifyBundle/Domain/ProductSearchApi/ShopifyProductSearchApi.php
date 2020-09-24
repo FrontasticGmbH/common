@@ -207,6 +207,4 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
 
         return $pageFilter;
     }
-
-
 }

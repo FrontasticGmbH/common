@@ -199,8 +199,13 @@ class ShopifyCartApi implements CartApi
             ->wait();
     }
 
-    public function updateLineItem(Cart $cart, LineItem $lineItem, int $count, ?array $custom = null, string $locale = null): Cart
-    {
+    public function updateLineItem(
+        Cart $cart,
+        LineItem $lineItem,
+        int $count,
+        ?array $custom = null,
+        string $locale = null
+    ): Cart {
         $mutation = "
             mutation {
                 checkoutLineItemsUpdate(
@@ -418,7 +423,6 @@ class ShopifyCartApi implements CartApi
         $this->currentTransaction = null;
 
         return $this->getById($cartId, $locale);
-
     }
 
     public function getDangerousInnerClient()
