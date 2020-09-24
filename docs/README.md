@@ -248,6 +248,8 @@ Here you find the API documentation for the relevant classes:
     * [Configuration](php/ShopifyBundle/DependencyInjection/Configuration.md)
     * [FrontasticCommonShopifyExtension](php/ShopifyBundle/DependencyInjection/FrontasticCommonShopifyExtension.md)
   * Domain
+    * AccountApi
+      * [ShopifyAccountApi](php/ShopifyBundle/Domain/AccountApi/ShopifyAccountApi.md)
     * ProductApi
       * [ShopifyProductApi](php/ShopifyBundle/Domain/ProductApi/ShopifyProductApi.md)
     * ProductSearchApi
