@@ -32,8 +32,12 @@ class ShopifyAccountMapper
         ]);
     }
 
-    public function mapDataToAddress(array $addressData): Address
+    public function mapDataToAddress(array $addressData): ?Address
     {
+        if (empty($addressData)) {
+            return null;
+        }
+
         return new Address([
             'addressId' => $addressData['id'] ?? null,
             'streetName' => $addressData['address1'] ?? null,
