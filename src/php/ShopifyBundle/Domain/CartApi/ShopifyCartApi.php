@@ -10,7 +10,6 @@ use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
-use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyAccountMapper;
 use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyProductMapper;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClient;
@@ -65,6 +64,7 @@ class ShopifyCartApi implements CartApi
                         lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                             edges {
                                 node {
+                                    id
                                     {$this->getLineItemQueryFields()}
                                     variant {
                                         {$this->getVariantQueryFields()}
@@ -107,6 +107,7 @@ class ShopifyCartApi implements CartApi
                         lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                             edges {
                                 node {
+                                    id
                                     {$this->getLineItemQueryFields()}
                                     variant {
                                         {$this->getVariantQueryFields()}
@@ -177,6 +178,7 @@ class ShopifyCartApi implements CartApi
                         lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                             edges {
                                 node {
+                                    id
                                     {$this->getLineItemQueryFields()}
                                     variant {
                                         {$this->getVariantQueryFields()}
@@ -230,6 +232,7 @@ class ShopifyCartApi implements CartApi
                         lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                             edges {
                                 node {
+                                    id
                                     {$this->getLineItemQueryFields()}
                                     variant {
                                         {$this->getVariantQueryFields()}
@@ -275,6 +278,7 @@ class ShopifyCartApi implements CartApi
                         lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                             edges {
                                 node {
+                                    id
                                     {$this->getLineItemQueryFields()}
                                     variant {
                                         {$this->getVariantQueryFields()}
@@ -309,8 +313,48 @@ class ShopifyCartApi implements CartApi
 
     public function setEmail(Cart $cart, string $email, string $locale = null): Cart
     {
-        // TODO: Implement setEmail() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        $mutation = "
+            mutation {
+                checkoutEmailUpdateV2(
+                    checkoutId: \"{$cart->cartId}\",
+                    email: \"{$email}\",
+                ) {
+                    checkout {
+                        {$this->getCheckoutQueryFields()}
+                        lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                            edges {
+                                node {
+                                    id
+                                    {$this->getLineItemQueryFields()}
+                                    variant {
+                                        {$this->getVariantQueryFields()}
+                                    }
+                                }
+                            }
+                        }
+                        shippingAddress {
+                            {$this->getAddressQueryFields()}
+                        }
+                        shippingLine {
+                            {$this->getShippingLineQueryFields()}
+                        }
+                    }
+                    checkoutUserErrors {
+                        {$this->getErrorsQueryFields()}
+                    }
+                }
+            }";
+
+        return $this->client
+            ->request($mutation, $locale)
+            ->then(function ($result) : Cart {
+                if ($result['errors']) {
+                    // TODO handle error
+                }
+
+                return $this->mapDataToCart($result['body']['data']['checkoutEmailUpdateV2']['checkout']);
+            })
+            ->wait();
     }
 
     public function setShippingMethod(Cart $cart, string $shippingMethod, string $locale = null): Cart
@@ -326,6 +370,7 @@ class ShopifyCartApi implements CartApi
                         lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                             edges {
                                 node {
+                                    id
                                     {$this->getLineItemQueryFields()}
                                     variant {
                                         {$this->getVariantQueryFields()}
@@ -385,6 +430,7 @@ class ShopifyCartApi implements CartApi
                         lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                             edges {
                                 node {
+                                    id
                                     {$this->getLineItemQueryFields()}
                                     variant {
                                         {$this->getVariantQueryFields()}
@@ -459,14 +505,84 @@ class ShopifyCartApi implements CartApi
 
     public function getOrder(Account $account, string $orderId, string $locale = null): Order
     {
-        // TODO: Implement getOrder() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        $query = "
+            query {
+                node(id: \"{$orderId}\") {
+                    ... on Order {
+                        {$this->getOrderQueryFields()}
+                        lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                            edges {
+                                node {
+                                    {$this->getLineItemQueryFields()}
+                                    variant {
+                                        {$this->getVariantQueryFields()}
+                                    }
+                                }
+                            }
+                        }
+                        shippingAddress {
+                            {$this->getAddressQueryFields()}
+                        }
+                    }
+                }
+            }
+        ";
+
+        return $this->client
+            ->request($query)
+            ->then(function (array $result): Cart {
+                if ($result['errors']) {
+                    // TODO handle error
+                }
+
+                return $this->mapDataToOrder($result['body']['data']['node']);
+            })
+            ->wait();
+
     }
 
     public function getOrders(Account $account, string $locale = null): array
     {
-        // TODO: Implement getOrders() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        if (is_null($account->authToken)) {
+            // TODO: Login customer or throw exception
+        }
+
+        $query = "
+            query {
+                customer(customerAccessToken: \"{$account->authToken}\") {
+                    orders(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                        edges {
+                            node {
+                                {$this->getOrderQueryFields()}
+                                lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                                    edges {
+                                        node {
+                                            {$this->getLineItemQueryFields()}
+                                            variant {
+                                                {$this->getVariantQueryFields()}
+                                            }
+                                        }
+                                    }
+                                }
+                                shippingAddress {
+                                    {$this->getAddressQueryFields()}
+                                }
+                            }
+                        }
+                    }
+                }
+            }";
+
+        return $this->client
+            ->request($query)
+            ->then(function (array $result): array {
+                if ($result['errors']) {
+                    // TODO handle error
+                }
+
+                return $this->mapDataToOrders($result['body']['data']['customer']);
+            })
+            ->wait();
     }
 
     public function startTransaction(Cart $cart): void
@@ -514,6 +630,41 @@ class ShopifyCartApi implements CartApi
         ]);
     }
 
+    private function mapDataToOrders(array $orderData): array
+    {
+        $orders = [];
+        foreach ($orderData['edges'] as $orderData) {
+            $orders[] = $this->mapDataToOrder($orderData['node']);
+        }
+
+        return $orders;
+    }
+
+    private function mapDataToOrder(array $orderData): Order
+    {
+        return new Order([
+            'orderId' => $orderData['orderNumber'],
+            'cartId' => $orderData['id'] ?? null,
+            'orderState' => $orderData['financialStatus'],
+            'createdAt' => new \DateTimeImmutable($orderData['processedAt']),
+            'email' => $orderData['email'] ?? null,
+            'lineItems' => $this->mapDataToLineItems($orderData['lineItems']['edges'] ?? []),
+            'shippingAddress' => $this->accountMapper->mapDataToAddress(
+                $orderData['shippingAddress'] ?? []
+            ),
+            'shippingMethod' => new ShippingMethod([
+                'name' => $orderData['shippingLine']['name'],
+                'price' => $orderData['shippingLine']['priceV2']['amount'],
+            ]),
+            'sum' => $this->productMapper->mapDataToPriceValue(
+                $orderData['totalPriceV2'] ?? []
+            ),
+            'currency' => $orderData['totalPriceV2']['currencyCode'] ?? null,
+            'dangerousInnerCart' => $orderData,
+            'dangerousInnerOrder' => $orderData,
+        ]);
+    }
+
     private function mapDataToLineItems(array $lineItemsData): array
     {
         $lineItems = [];
@@ -546,10 +697,24 @@ class ShopifyCartApi implements CartApi
         ';
     }
 
-    protected function getLineItemQueryFields(): string
+    protected function getOrderQueryFields(): string
     {
         return '
             id
+            email
+            orderNumber
+            processedAt
+            financialStatus
+            totalPriceV2 {
+                amount
+                currencyCode
+            }
+        ';
+    }
+
+    protected function getLineItemQueryFields(): string
+    {
+        return '
             quantity
             title
             unitPrice {

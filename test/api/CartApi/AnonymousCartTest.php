@@ -111,6 +111,25 @@ class AnonymousCartTest extends FrontasticApiTestCase
 
         $cartApi = $this->getCartApiForProject($project);
 
+        $email = 'integration-tests-not-exists+account-' . uniqid('', true) . '@frontastic.com';
+        $cartApi->startTransaction($originalCart);
+        $cartApi->setEmail($originalCart, $email, $language);
+        $updatedCart = $cartApi->commit($language);
+
+        $this->assertEquals($email, $updatedCart->email);
+        $this->assertNotEquals($email, $originalCart->email);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testSettingTheEmailOfACart(Project $project, string $language): void
+    {
+        $this->requireAnonymousCheckout($project);
+        $originalCart = $this->getAnonymousCart($project, $language);
+
+        $cartApi = $this->getCartApiForProject($project);
+
         $frontasticAddress = $this->getFrontasticAddress();
         $cartApi->startTransaction($originalCart);
         $cartApi->setShippingAddress($originalCart, $frontasticAddress, $language);
