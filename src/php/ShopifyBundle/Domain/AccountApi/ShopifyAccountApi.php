@@ -385,8 +385,7 @@ class ShopifyAccountApi implements AccountApi
 
     public function getDangerousInnerClient()
     {
-        // TODO: Implement getDangerousInnerClient() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        return $this->client;
     }
 
     protected function getCustomerQueryFields(): string
