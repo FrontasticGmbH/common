@@ -70,7 +70,6 @@ class Guzzle extends HttpClient
             $sensibleHeaders[$key] = $value;
         }
 
-        var_dump($method, $url, $body, $headers);
         return $this->guzzleClient
             ->requestAsync(
                 $method,
