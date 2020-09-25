@@ -538,7 +538,6 @@ class ShopifyCartApi implements CartApi
                 return $this->mapDataToOrder($result['body']['data']['node']);
             })
             ->wait();
-
     }
 
     public function getOrders(Account $account, string $locale = null): array
