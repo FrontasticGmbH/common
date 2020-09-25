@@ -9,6 +9,7 @@ use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
+use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyAccountMapper;
 use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyProductMapper;
@@ -74,6 +75,9 @@ class ShopifyCartApi implements CartApi
                         shippingAddress {
                             {$this->getAddressQueryFields()}
                         }
+                        shippingLine {
+                            {$this->getShippingLineQueryFields()}
+                        }
                     }
                     checkoutUserErrors {
                         {$this->getErrorsQueryFields()}
@@ -112,6 +116,9 @@ class ShopifyCartApi implements CartApi
                         }
                         shippingAddress {
                             {$this->getAddressQueryFields()}
+                        }
+                        shippingLine {
+                            {$this->getShippingLineQueryFields()}
                         }
                     }
                 }
@@ -180,6 +187,9 @@ class ShopifyCartApi implements CartApi
                         shippingAddress {
                             {$this->getAddressQueryFields()}
                         }
+                        shippingLine {
+                            {$this->getShippingLineQueryFields()}
+                        }
                     }
                     checkoutUserErrors {
                         {$this->getErrorsQueryFields()}
@@ -230,6 +240,9 @@ class ShopifyCartApi implements CartApi
                         shippingAddress {
                             {$this->getAddressQueryFields()}
                         }
+                        shippingLine {
+                            {$this->getShippingLineQueryFields()}
+                        }
                     }
                     checkoutUserErrors {
                         {$this->getErrorsQueryFields()}
@@ -272,6 +285,9 @@ class ShopifyCartApi implements CartApi
                         shippingAddress {
                             {$this->getAddressQueryFields()}
                         }
+                        shippingLine {
+                            {$this->getShippingLineQueryFields()}
+                        }
                     }
                     checkoutUserErrors {
                         {$this->getErrorsQueryFields()}
@@ -299,8 +315,47 @@ class ShopifyCartApi implements CartApi
 
     public function setShippingMethod(Cart $cart, string $shippingMethod, string $locale = null): Cart
     {
-        // TODO: Implement setShippingMethod() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        $mutation = "
+            mutation {
+                checkoutShippingLineUpdate(
+                    checkoutId: \"{$cart->cartId}\",
+                    shippingRateHandle: \"{$shippingMethod}\",
+                ) {
+                    checkout {
+                        {$this->getCheckoutQueryFields()}
+                        lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                            edges {
+                                node {
+                                    {$this->getLineItemQueryFields()}
+                                    variant {
+                                        {$this->getVariantQueryFields()}
+                                    }
+                                }
+                            }
+                        }
+                        shippingAddress {
+                            {$this->getAddressQueryFields()}
+                        }
+                        shippingLine {
+                            {$this->getShippingLineQueryFields()}
+                        }
+                    }
+                    checkoutUserErrors {
+                        {$this->getErrorsQueryFields()}
+                    }
+                }
+            }";
+
+        return $this->client
+            ->request($mutation, $locale)
+            ->then(function ($result) : Cart {
+                if ($result['errors']) {
+                    // TODO handle error
+                }
+
+                return $this->mapDataToCart($result['body']['data']['checkoutShippingLineUpdate']['checkout']);
+            })
+            ->wait();
     }
 
     public function setCustomField(Cart $cart, array $fields, string $locale = null): Cart
@@ -340,6 +395,9 @@ class ShopifyCartApi implements CartApi
                         shippingAddress {
                             {$this->getAddressQueryFields()}
                         }
+                        shippingLine {
+                            {$this->getShippingLineQueryFields()}
+                        }
                     }
                     checkoutUserErrors {
                         {$this->getErrorsQueryFields()}
@@ -361,7 +419,8 @@ class ShopifyCartApi implements CartApi
 
     public function setBillingAddress(Cart $cart, Address $address, string $locale = null): Cart
     {
-        // TODO: Implement setBillingAddress() method.
+        // Not supported by Shopify.
+        // The billing address should be set up on checkout-complete flow.
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
@@ -391,7 +450,10 @@ class ShopifyCartApi implements CartApi
 
     public function order(Cart $cart, string $locale = null): Order
     {
-        // TODO: Implement order() method.
+        // Shopify handle the checkout complete action in their side.
+        // The url where the customer should be redirected to complete this process
+        // can be found in $cart->dangerousInnerCart['webUrl'].
+
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
@@ -427,8 +489,7 @@ class ShopifyCartApi implements CartApi
 
     public function getDangerousInnerClient()
     {
-        // TODO: Implement getDangerousInnerClient() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        return $this->client;
     }
 
     private function mapDataToCart(array $cartData): Cart
@@ -445,6 +506,11 @@ class ShopifyCartApi implements CartApi
             'shippingAddress' => $this->accountMapper->mapDataToAddress(
                 $cartData['shippingAddress'] ?? []
             ),
+            'shippingMethod' => new ShippingMethod([
+                'name' => $cartData['shippingLine']['name'],
+                'price' => $cartData['shippingLine']['priceV2']['amount'],
+            ]),
+            'dangerousInnerCart' => $cartData,
         ]);
     }
 
@@ -459,6 +525,7 @@ class ShopifyCartApi implements CartApi
                 'count' => $lineItemData['node']['quantity'] ?? null,
                 'price' => $lineItemData['node']['unitPrice']['amount'] ?? null,
                 'variant' => $this->productMapper->mapDataToVariant($lineItemData['node']['variant']),
+                'dangerousInnerItem' => $lineItemData['node'],
             ]);
         }
 
@@ -471,6 +538,7 @@ class ShopifyCartApi implements CartApi
             id
             createdAt
             email
+            webUrl
             totalPriceV2 {
                 amount
                 currencyCode
@@ -528,6 +596,17 @@ class ShopifyCartApi implements CartApi
             phone
             province
             zip
+        ';
+    }
+
+    protected function getShippingLineQueryFields(): string
+    {
+        return '
+            handle
+            title
+            priceV2 {
+                amount
+            }
         ';
     }
 
