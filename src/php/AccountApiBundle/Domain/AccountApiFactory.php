@@ -9,6 +9,8 @@ use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFacto
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapAccountApi;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapDataMapper;
+use Frontastic\Common\ShopifyBundle\Domain\AccountApi\ShopifyAccountApi;
+use Frontastic\Common\ShopifyBundle\Domain\ShopifyClientFactory;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\ShopwareAccountApi;
 use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFactory;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
@@ -82,6 +84,15 @@ class AccountApiFactory
                     $client,
                     $this->container->get(DataMapperResolver::class),
                     $this->container->get(ShopwareProjectConfigApiFactory::class)
+                );
+
+                break;
+            case 'shopify':
+                $clientFactory = $this->container->get(ShopifyClientFactory::class);
+                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+
+                $accountApi = new ShopifyAccountApi(
+                    $client
                 );
 
                 break;
