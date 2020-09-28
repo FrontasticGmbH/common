@@ -50,8 +50,55 @@ class ShopifyCartApi implements CartApi
 
     public function getForUser(Account $account, string $locale): Cart
     {
-        // TODO: Implement getForUser() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        if (is_null($account->authToken)) {
+            // TODO: login user
+        }
+
+        $anonymousCart = $this->getAnonymous(uniqid(), $locale);
+
+        $mutation = "
+            mutation {
+                checkoutCustomerAssociateV2(
+                    checkoutId: \"{$anonymousCart->cartId}\",
+                    customerAccessToken: \"{$account->authToken}\"
+                ) {
+                    checkout {
+                        {$this->getCheckoutQueryFields()}
+                        lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                            edges {
+                                node {
+                                    id
+                                    {$this->getLineItemQueryFields()}
+                                    variant {
+                                        {$this->getVariantQueryFields()}
+                                    }
+                                }
+                            }
+                        }
+                        shippingAddress {
+                            {$this->getAddressQueryFields()}
+                        }
+                        shippingLine {
+                            {$this->getShippingLineQueryFields()}
+                        }
+                    }
+                    checkoutUserErrors {
+                        {$this->getErrorsQueryFields()}
+                    }
+                }
+            }";
+
+        return $this->client
+            ->request($mutation, $locale)
+            ->then(function ($result) : Cart {
+                if ($result['errors']) {
+                    // TODO handle error
+                }
+
+                return $this->mapDataToCart($result['body']['data']['checkoutCustomerAssociateV2']['checkout']);
+            })
+            ->wait();
+
     }
 
     public function getAnonymous(string $anonymousId, string $locale): Cart
