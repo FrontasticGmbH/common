@@ -1,3 +1,13 @@
+/*******************************************************************************
+ *
+ * ATTENTION: ALL CHANGES TO THE WEBSOCKET COMMUNICATION MAY BREAK OUR HACKATHON
+ *            INFRASTRUCTURE. AS THIS INFRASTRUCTURE RUNS IN THE WEB, BUT USES
+ *            A BACKSTAGE THAT THINKS IT IS IN DEVELOPMENT MODE.
+ *
+ * This comment can be removed once we migrated the hackathons to the Machine
+ * App.
+ *
+ ******************************************************************************/
 class Notifier {
     constructor (context, messageHandlers = {}) {
         this.context = {
