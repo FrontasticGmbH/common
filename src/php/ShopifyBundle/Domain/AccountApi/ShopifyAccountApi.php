@@ -65,7 +65,7 @@ class ShopifyAccountApi implements AccountApi
             ->request($mutation, $locale)
             ->then(function ($result) use ($account) : Account {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
                 if ($result['body']['data']['customerCreate']['customerUserErrors']) {
@@ -120,7 +120,7 @@ class ShopifyAccountApi implements AccountApi
             ->request($mutation, $locale)
             ->then(function ($result) use ($account) : Account {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
                 $updatedAccount = $this->accountMapper->mapDataToAccount(
@@ -142,7 +142,7 @@ class ShopifyAccountApi implements AccountApi
         $account->setPassword($oldPassword);
 
         if (is_null($account = $this->login($account))) {
-            // TODO handle error
+            throw new \RuntimeException(sprintf('Account %s is not logged in', $account->email));
         }
 
         $account->setPassword($newPassword);
@@ -184,7 +184,7 @@ class ShopifyAccountApi implements AccountApi
             ->request($mutation, $locale)
             ->then(function ($result) {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
                 return $result['body']['data']['customerAccessTokenCreate']['customerAccessToken'];
@@ -212,7 +212,7 @@ class ShopifyAccountApi implements AccountApi
                     ->request($query)
                     ->then(function (array $result) use ($token): Account {
                         if ($result['errors']) {
-                            // TODO handle error
+                            throw new \RuntimeException($result['errors'][0]['message']);
                         }
 
                         $account = $this->accountMapper->mapDataToAccount($result['body']['data']['customer']);
@@ -241,7 +241,7 @@ class ShopifyAccountApi implements AccountApi
             ->request($query)
             ->then(function (array $result) use ($account): Account {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
                 $fetchedAccount = $this->accountMapper->mapDataToAccount($result['body']['data']['customer']);
@@ -276,7 +276,7 @@ class ShopifyAccountApi implements AccountApi
             ->request($query)
             ->then(function (array $result): array {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
                 $account = $this->accountMapper->mapDataToAccount($result['body']['data']['customer']);
@@ -313,7 +313,7 @@ class ShopifyAccountApi implements AccountApi
             ->request($mutation, $locale)
             ->then(function ($result) use ($account) : Account {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
                 $account->addresses[] = $this->accountMapper->mapDataToAddress(
@@ -353,7 +353,7 @@ class ShopifyAccountApi implements AccountApi
             ->request($mutation, $locale)
             ->then(function ($result) use ($account) : Account {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
                 $account->addresses[] = $this->accountMapper->mapDataToAddress(

@@ -51,7 +51,7 @@ class ShopifyCartApi implements CartApi
     public function getForUser(Account $account, string $locale): Cart
     {
         if (is_null($account->authToken)) {
-            // TODO: login user
+            throw new \RuntimeException(sprintf('Account %s is not logged in', $account->email));
         }
 
         $anonymousCart = $this->getAnonymous(uniqid(), $locale);
@@ -92,7 +92,7 @@ class ShopifyCartApi implements CartApi
             ->request($mutation, $locale)
             ->then(function ($result) : Cart {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
                 return $this->mapDataToCart($result['body']['data']['checkoutCustomerAssociateV2']['checkout']);
@@ -135,7 +135,7 @@ class ShopifyCartApi implements CartApi
             ->request($mutation, $locale)
             ->then(function ($result) : Cart {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
                 return $this->mapDataToCart($result['body']['data']['checkoutCreate']['checkout']);
@@ -176,7 +176,7 @@ class ShopifyCartApi implements CartApi
             ->request($query)
             ->then(function (array $result): Cart {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
                 return $this->mapDataToCart($result['body']['data']['node']);
@@ -249,7 +249,7 @@ class ShopifyCartApi implements CartApi
             ->request($mutation, $locale)
             ->then(function ($result) : Cart {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
                 return $this->mapDataToCart($result['body']['data']['checkoutLineItemsAdd']['checkout']);
@@ -303,7 +303,7 @@ class ShopifyCartApi implements CartApi
             ->request($mutation, $locale)
             ->then(function ($result) : Cart {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
                 return $this->mapDataToCart($result['body']['data']['checkoutLineItemsUpdate']['checkout']);
@@ -349,7 +349,7 @@ class ShopifyCartApi implements CartApi
             ->request($mutation, $locale)
             ->then(function ($result) : Cart {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
                 return $this->mapDataToCart($result['body']['data']['checkoutLineItemsRemove']['checkout']);
@@ -395,7 +395,7 @@ class ShopifyCartApi implements CartApi
             ->request($mutation, $locale)
             ->then(function ($result) : Cart {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
                 return $this->mapDataToCart($result['body']['data']['checkoutEmailUpdateV2']['checkout']);
@@ -441,7 +441,7 @@ class ShopifyCartApi implements CartApi
             ->request($mutation, $locale)
             ->then(function ($result) : Cart {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
                 return $this->mapDataToCart($result['body']['data']['checkoutShippingLineUpdate']['checkout']);
@@ -501,7 +501,7 @@ class ShopifyCartApi implements CartApi
             ->request($mutation, $locale)
             ->then(function ($result) : Cart {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
                 return $this->mapDataToCart($result['body']['data']['checkoutShippingAddressUpdateV2']['checkout']);
@@ -578,7 +578,7 @@ class ShopifyCartApi implements CartApi
             ->request($query)
             ->then(function (array $result): Cart {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
                 return $this->mapDataToOrder($result['body']['data']['node']);
@@ -589,7 +589,7 @@ class ShopifyCartApi implements CartApi
     public function getOrders(Account $account, string $locale = null): array
     {
         if (is_null($account->authToken)) {
-            // TODO: Login customer or throw exception
+            throw new \RuntimeException(sprintf('Account %s is not logged in', $account->email));
         }
 
         $query = "
@@ -622,7 +622,7 @@ class ShopifyCartApi implements CartApi
             ->request($query)
             ->then(function (array $result): array {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
                 return $this->mapDataToOrders($result['body']['data']['customer']);
