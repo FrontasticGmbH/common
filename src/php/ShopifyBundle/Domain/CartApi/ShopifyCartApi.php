@@ -98,7 +98,6 @@ class ShopifyCartApi implements CartApi
                 return $this->mapDataToCart($result['body']['data']['checkoutCustomerAssociateV2']['checkout']);
             })
             ->wait();
-
     }
 
     public function getAnonymous(string $anonymousId, string $locale): Cart
