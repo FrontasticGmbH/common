@@ -12,5 +12,11 @@
             <argument type="service" id="cache.app.simple" />
             <tag name="frontastic.common.api_integration"/>
         </service>
+
+        <service id="Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyAccountMapper">
+        </service>
+
+        <service id="Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyProductMapper">
+        </service>
     </services>
 </container>

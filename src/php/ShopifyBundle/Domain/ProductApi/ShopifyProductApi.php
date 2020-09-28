@@ -13,6 +13,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApiBase;
 use Frontastic\Common\ProductApiBundle\Domain\ProductType;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi;
+use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyProductMapper;
 use Frontastic\Common\ShopifyBundle\Domain\ProductSearchApi\ShopifyProductSearchApi;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClient;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -31,13 +32,16 @@ class ShopifyProductApi extends ProductApiBase
      */
     private $shopifyProductSearchApi;
 
-    public function __construct(ShopifyClient $client, ProductSearchApi $productSearchApi)
-    {
+    public function __construct(
+        ShopifyClient $client,
+        ProductSearchApi $productSearchApi,
+        ShopifyProductMapper $productMapper
+    ) {
         parent::__construct($productSearchApi);
 
         $this->client = $client;
 
-        $this->shopifyProductSearchApi = new ShopifyProductSearchApi($client);
+        $this->shopifyProductSearchApi = new ShopifyProductSearchApi($client, $productMapper);
     }
 
     protected function queryCategoriesImplementation(CategoryQuery $query): Result
