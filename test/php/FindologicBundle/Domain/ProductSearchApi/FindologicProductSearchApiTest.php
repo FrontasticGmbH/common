@@ -4,7 +4,7 @@ namespace Frontastic\Common\FindologicBundle\Domain\ProductSearchApi;
 
 use Frontastic\Common\FindologicBundle\Domain\FindologicClient;
 use Frontastic\Common\FindologicBundle\Domain\FindologicEndpointConfig;
-use Frontastic\Common\FindologicBundle\Domain\RequestProvider;
+use Frontastic\Common\CoreBundle\Domain\RequestProvider;
 use Frontastic\Common\FindologicBundle\Domain\SearchRequest;
 use Frontastic\Common\FindologicBundle\Exception\ServiceNotAliveException;
 use Frontastic\Common\HttpClient;
