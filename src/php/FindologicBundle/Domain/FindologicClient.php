@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\FindologicBundle\Domain;
 
+use Frontastic\Common\CoreBundle\Domain\RequestProvider;
 use Frontastic\Common\FindologicBundle\Exception\ServiceNotAliveException;
 use Frontastic\Common\HttpClient;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;

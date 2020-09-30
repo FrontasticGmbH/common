@@ -1,6 +1,6 @@
 <?php
 
-namespace Frontastic\Common\FindologicBundle\Domain;
+namespace Frontastic\Common\CoreBundle\Domain;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;

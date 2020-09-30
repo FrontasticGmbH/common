@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\ShopifyBundle\Domain;
 
+use Frontastic\Common\CoreBundle\Domain\RequestProvider;
 use Frontastic\Common\HttpClient;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -29,14 +30,21 @@ class ShopifyClient
      */
     private $cache;
 
+    /**
+     * @var RequestProvider
+     */
+    private $requestProvider;
+
     public function __construct(
         HttpClient $httpClient,
         CacheInterface $cache,
+        RequestProvider $requestProvider,
         string $hostUrl,
         string $accessToken
     ) {
         $this->httpClient = $httpClient;
         $this->cache = $cache;
+        $this->requestProvider = $requestProvider;
         $this->hostUrl = $hostUrl;
         $this->accessToken = $accessToken;
         $this->httpClient->addDefaultHeaders([
@@ -52,6 +60,12 @@ class ShopifyClient
     {
         $body = json_encode(['query' => $query], JSON_HEX_QUOT);
         $headers = [];
+
+        $request = $this->requestProvider->getCurrentRequest();
+
+        if ($request !== null) {
+            $headers[] = sprintf('X-Forwarded-For: %s', $request->getClientIp());
+        }
 
         return $this->httpClient
             ->requestAsync('POST', $this->hostUrl, $body, $headers)
