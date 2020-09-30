@@ -8,6 +8,7 @@ use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\AccountApiBundle\Domain\DuplicateAccountException;
 use Frontastic\Common\AccountApiBundle\Domain\PasswordResetToken;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
+use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyAccountMapper;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClient;
 
 class ShopifyAccountApi implements AccountApi
@@ -19,9 +20,15 @@ class ShopifyAccountApi implements AccountApi
      */
     private $client;
 
-    public function __construct(ShopifyClient $client)
+    /**
+     * @var ShopifyAccountMapper
+     */
+    private $accountMapper;
+
+    public function __construct(ShopifyClient $client, ShopifyAccountMapper $accountMapper)
     {
         $this->client = $client;
+        $this->accountMapper = $accountMapper;
     }
 
     public function getSalutations(string $locale): ?array
@@ -58,7 +65,7 @@ class ShopifyAccountApi implements AccountApi
             ->request($mutation, $locale)
             ->then(function ($result) use ($account) : Account {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
                 if ($result['body']['data']['customerCreate']['customerUserErrors']) {
@@ -113,10 +120,12 @@ class ShopifyAccountApi implements AccountApi
             ->request($mutation, $locale)
             ->then(function ($result) use ($account) : Account {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
-                $updatedAccount = $this->mapDataToAccount($result['body']['data']['customerUpdate']['customer']);
+                $updatedAccount = $this->accountMapper->mapDataToAccount(
+                    $result['body']['data']['customerUpdate']['customer']
+                );
                 $updatedAccount->authToken = $account->authToken;
 
                 return $updatedAccount;
@@ -133,7 +142,7 @@ class ShopifyAccountApi implements AccountApi
         $account->setPassword($oldPassword);
 
         if (is_null($account = $this->login($account))) {
-            // TODO handle error
+            throw new \RuntimeException(sprintf('Account %s is not logged in', $account->email));
         }
 
         $account->setPassword($newPassword);
@@ -175,7 +184,7 @@ class ShopifyAccountApi implements AccountApi
             ->request($mutation, $locale)
             ->then(function ($result) {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
                 return $result['body']['data']['customerAccessTokenCreate']['customerAccessToken'];
@@ -203,10 +212,10 @@ class ShopifyAccountApi implements AccountApi
                     ->request($query)
                     ->then(function (array $result) use ($token): Account {
                         if ($result['errors']) {
-                            // TODO handle error
+                            throw new \RuntimeException($result['errors'][0]['message']);
                         }
 
-                        $account = $this->mapDataToAccount($result['body']['data']['customer']);
+                        $account = $this->accountMapper->mapDataToAccount($result['body']['data']['customer']);
                         $account->authToken = $token['accessToken'];
 
                         return $account;
@@ -232,10 +241,10 @@ class ShopifyAccountApi implements AccountApi
             ->request($query)
             ->then(function (array $result) use ($account): Account {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
-                $fetchedAccount = $this->mapDataToAccount($result['body']['data']['customer']);
+                $fetchedAccount = $this->accountMapper->mapDataToAccount($result['body']['data']['customer']);
                 $fetchedAccount->authToken = $account->authToken;
 
                 return $fetchedAccount;
@@ -267,10 +276,10 @@ class ShopifyAccountApi implements AccountApi
             ->request($query)
             ->then(function (array $result): array {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
-                $account = $this->mapDataToAccount($result['body']['data']['customer']);
+                $account = $this->accountMapper->mapDataToAccount($result['body']['data']['customer']);
 
                 return $account->addresses;
             })
@@ -287,15 +296,7 @@ class ShopifyAccountApi implements AccountApi
             mutation {
                 customerAddressCreate(
                     address: {
-                        address1: \"$address->streetName\",
-                        address2: \"$address->streetNumber\",
-                        city: \"$address->city\",
-                        country: \"$address->country\",
-                        firstName: \"$address->firstName\",
-                        lastName: \"$address->lastName\",
-                        phone: \"$address->phone\",
-                        province: \"$address->state \",
-                        zip: \"$address->postalCode\",
+                        {$this->accountMapper->mapAddressToData($address)}
                     },
                     customerAccessToken: \"$account->authToken\"
                 ) {
@@ -312,10 +313,10 @@ class ShopifyAccountApi implements AccountApi
             ->request($mutation, $locale)
             ->then(function ($result) use ($account) : Account {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
-                $account->addresses[] = $this->mapDataToAddress(
+                $account->addresses[] = $this->accountMapper->mapDataToAddress(
                     $result['body']['data']['customerAddressCreate']['customerAddress']
                 );
 
@@ -334,15 +335,7 @@ class ShopifyAccountApi implements AccountApi
             mutation {
                 customerAddressUpdate(
                     address: {
-                        address1: \"$address->streetName\",
-                        address2: \"$address->streetNumber\",
-                        city: \"$address->city\",
-                        country: \"$address->country\",
-                        firstName: \"$address->firstName\",
-                        lastName: \"$address->lastName\",
-                        phone: \"$address->phone\",
-                        province: \"$address->state \",
-                        zip: \"$address->postalCode\",
+                        {$this->accountMapper->mapAddressToData($address)}
                     },
                     customerAccessToken: \"$account->authToken\"
                     id: \"$address->addressId\"
@@ -360,10 +353,10 @@ class ShopifyAccountApi implements AccountApi
             ->request($mutation, $locale)
             ->then(function ($result) use ($account) : Account {
                 if ($result['errors']) {
-                    // TODO handle error
+                    throw new \RuntimeException($result['errors'][0]['message']);
                 }
 
-                $account->addresses[] = $this->mapDataToAddress(
+                $account->addresses[] = $this->accountMapper->mapDataToAddress(
                     $result['body']['data']['customerAddressUpdate']['customerAddress']
                 );
 
@@ -392,47 +385,7 @@ class ShopifyAccountApi implements AccountApi
 
     public function getDangerousInnerClient()
     {
-        // TODO: Implement getDangerousInnerClient() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
-    }
-
-    protected function mapDataToAccount(array $accountData): Account
-    {
-        $addresses = [];
-
-        if (!empty($accountData['addresses']['edges'])) {
-            $addresses = array_map(
-                function (array $addressData) : Address {
-                    return $this->mapDataToAddress($addressData['node']);
-                },
-                $accountData['addresses']['edges']
-            );
-        }
-
-        return new Account([
-            'accountId' => $accountData['id'],
-            'firstName' => $accountData['firstName'],
-            'lastName' => $accountData['lastName'],
-            'email' => $accountData['email'],
-            'addresses' => $addresses,
-            'confirmed' => true,
-        ]);
-    }
-
-    protected function mapDataToAddress(array $addressData): Address
-    {
-        return new Address([
-            'addressId' => $addressData['id'],
-            'streetName' => $addressData['address1'],
-            'streetNumber' => $addressData['address2'],
-            'city' => $addressData['city'],
-            'country' => $addressData['country'],
-            'firstName' => $addressData['firstName'],
-            'lastName' => $addressData['lastName'],
-            'phone' => $addressData['phone'],
-            'state' => $addressData['province'],
-            'postalCode' => $addressData['zip'],
-        ]);
+        return $this->client;
     }
 
     protected function getCustomerQueryFields(): string
