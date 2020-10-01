@@ -1,6 +1,6 @@
 #  RequestProvider
 
-**Fully Qualified**: [`\Frontastic\Common\FindologicBundle\Domain\RequestProvider`](../../../../src/php/FindologicBundle/Domain/RequestProvider.php)
+**Fully Qualified**: [`\Frontastic\Common\FindologicBundle\Domain\RequestProvider`](../../../../src/php/CoreBundle/Domain/RequestProvider.php)
 
 ## Methods
 

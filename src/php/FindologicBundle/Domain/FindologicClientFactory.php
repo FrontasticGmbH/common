@@ -1,9 +1,8 @@
 <?php
 namespace Frontastic\Common\FindologicBundle\Domain;
 
+use Frontastic\Common\CoreBundle\Domain\RequestProvider;
 use Frontastic\Common\HttpClient;
-use Frontastic\Common\ReplicatorBundle\Domain\Project;
-use Psr\SimpleCache\CacheInterface;
 
 class FindologicClientFactory
 {
