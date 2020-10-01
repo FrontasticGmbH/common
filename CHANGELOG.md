@@ -1,5 +1,9 @@
 # common Changelog
 
+## `1.1.12` (2020-10-01)
+
+* feat: Shopify CartApi & AccountApi
+
 ## `1.1.11` (2020-09-17)
 
 * feat!: Use the product search API
