@@ -58,7 +58,7 @@ class CategoriesMapper implements MapperInterface
     {
         $category = new Category();
         $category->name = $categoryStorage['name'];
-        $category->categoryId = $categoryStorage['nodeId'];
+        $category->categoryId = (string)$categoryStorage['nodeId'];
         $category->depth = $depth;
         $category->path = $this->buildPath($category->name, $path);
         $children = $categoryStorage['children'] ?? [];
