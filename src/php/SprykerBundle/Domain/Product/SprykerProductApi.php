@@ -121,7 +121,7 @@ class SprykerProductApi extends ProductApiBase
         return $this->client
             ->forLanguage($locale->language)
             ->get(
-                $this->urlAppender->withCurrency($url, $locale->currency),
+                $this->urlAppender->appendCurrencyToUrl($url, $locale->currency),
                 [],
                 ProductApi::QUERY_ASYNC
             )

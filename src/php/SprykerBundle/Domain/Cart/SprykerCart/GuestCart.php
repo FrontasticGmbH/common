@@ -45,7 +45,7 @@ class GuestCart extends AbstractSprykerCart
         $response = $this->client
             ->forLanguage($sprykerLocale->language)
             ->get(
-                $this->withCurrency($url, $sprykerLocale->currency),
+                $this->appendCurrencyToUrl($url, $sprykerLocale->currency),
                 $this->accountHelper->getAnonymousHeader()
             );
 
@@ -75,7 +75,7 @@ class GuestCart extends AbstractSprykerCart
         $response = $this->client
             ->forLanguage($sprykerLocale->language)
             ->get(
-                $this->withCurrency($url, $sprykerLocale->currency),
+                $this->appendCurrencyToUrl($url, $sprykerLocale->currency),
                 $this->accountHelper->getAnonymousHeader($id)
             );
 

@@ -53,7 +53,7 @@ class CustomerCart extends AbstractSprykerCart
         $response = $this->client
             ->forLanguage($sprykerLocale->language)
             ->get(
-                $this->withCurrency($url, $sprykerLocale->currency),
+                $this->appendCurrencyToUrl($url, $sprykerLocale->currency),
                 $this->getAuthHeader()
             );
 
@@ -79,7 +79,7 @@ class CustomerCart extends AbstractSprykerCart
         $response = $this->client
             ->forLanguage($sprykerLocale->language)
             ->get(
-                $this->withCurrency($url, $sprykerLocale->currency),
+                $this->appendCurrencyToUrl($url, $sprykerLocale->currency),
                 $this->getAuthHeader()
             );
 

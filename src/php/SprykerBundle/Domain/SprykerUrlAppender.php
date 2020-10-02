@@ -9,7 +9,7 @@ class SprykerUrlAppender
         return (strpos($url, '?') === false) ? '?' : '&';
     }
 
-    public function withCurrency(string $url, string $currency): string
+    public function appendCurrencyToUrl(string $url, string $currency): string
     {
         $separator = $this->getSeparator($url);
 
