@@ -9,6 +9,7 @@ use Frontastic\Common\SprykerBundle\Domain\Cart\Mapper\CustomerCartMapper;
 use Frontastic\Common\SprykerBundle\Domain\Cart\Request\CartItemRequestDataInterface;
 use Frontastic\Common\SprykerBundle\Domain\Cart\Request\CustomerCartItemRequestData;
 use Frontastic\Common\SprykerBundle\Domain\Cart\Request\CustomerCartRequestData;
+use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver;
 
@@ -26,23 +27,15 @@ class CustomerCart extends AbstractSprykerCart
      */
     private $customerCartIncludes;
 
-    /**
-     * CustomerCart constructor.
-     *
-     * @param \Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface $client
-     * @param \Frontastic\Common\SprykerBundle\Domain\MapperResolver $mapperResolver
-     * @param \Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper $accountHelper
-     * @param \Frontastic\Common\SprykerBundle\Domain\Cart\Request\CustomerCartRequestData $cartRequest
-     * @param string[] $additionalIncludes
-     */
     public function __construct(
         SprykerClientInterface $client,
         MapperResolver $mapperResolver,
+        LocaleCreator $localeCreator,
         AccountHelper $accountHelper,
         CustomerCartRequestData $cartRequest,
         array $additionalIncludes = []
     ) {
-        parent::__construct($client, $mapperResolver, $accountHelper);
+        parent::__construct($client, $mapperResolver, $localeCreator, $accountHelper);
         $this->cartRequest = $cartRequest;
         $this->customerCartIncludes = array_merge(
             SprykerCartConstants::CUSTOMER_CART_RELATIONSHIPS,
