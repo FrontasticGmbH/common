@@ -87,15 +87,18 @@ class FindologicProductSearchApi extends ProductSearchApiBase
         return $this->client->search($query->locale, $request)
             ->then(
                 function ($result) use ($query) {
+                    $totalResults = $result['body']['result']['metadata']['totalResults'];
+
                     $currentCursor = $query->cursor ?? $query->offset ?? null;
                     $previousCursor = $currentCursor - $query->limit;
+                    $nextCursor = $currentCursor + $query->limit;
 
                     return new Result(
                         [
                             'offset' => $result['body']['request']['first'],
-                            'total' => $result['body']['result']['metadata']['totalResults'],
+                            'total' => $totalResults,
                             'previousCursor' => $previousCursor < 0 ? null : $previousCursor,
-                            'nextCursor' => ($currentCursor) + $query->limit,
+                            'nextCursor' => $nextCursor >= $totalResults ? null : $nextCursor,
                             'count' => count($result['body']['result']['items']),
                             'items' => $this->mapper->dataToProducts($result['body']['result']['items'], $query),
                             'facets' => $this->mapper->dataToFacets($result['body']['result']['filters'], $query),
