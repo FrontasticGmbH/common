@@ -216,7 +216,7 @@ class ShopifyCartApi implements CartApi
                     checkoutId: \"{$cart->cartId}\",
                     lineItems: {
                         quantity: {$lineItem->count}
-                        variantId: \"{$lineItem->variant->sku}\"
+                        variantId: \"{$lineItem->variant->id}\"
                     }
                 ) {
                     checkout {
