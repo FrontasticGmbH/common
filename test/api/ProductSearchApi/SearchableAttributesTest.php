@@ -14,6 +14,8 @@ class SearchableAttributesTest extends FrontasticApiTestCase
      */
     public function testAttributesAreNotEmpty(Project $project): void
     {
+        $this->requireCategoryEndpointToHaveConsistentProductSearchData($project);
+
         $this->assertNotEmpty($this->getSearchableAttributesForProjectWithProjectSearchApi($project));
     }
 
@@ -42,6 +44,8 @@ class SearchableAttributesTest extends FrontasticApiTestCase
      */
     public function testAttributesHaveUniqueIds(Project $project): void
     {
+        $this->requireCategoryEndpointToHaveConsistentProductSearchData($project);
+
         $attributeIds = array_map(
             function (Attribute $attribute) {
                 return $attribute->attributeId;
@@ -56,6 +60,8 @@ class SearchableAttributesTest extends FrontasticApiTestCase
      */
     public function testAttributesHaveALabelForAllLanguages(Project $project)
     {
+        $this->requireCategoryEndpointToHaveConsistentProductSearchData($project);
+
         $attributes = $this->getSearchableAttributesForProjectWithProjectSearchApi($project);
         foreach ($attributes as $searchableAttribute) {
             if ($searchableAttribute->label === null) {
@@ -72,6 +78,8 @@ class SearchableAttributesTest extends FrontasticApiTestCase
      */
     public function testAttributesContainsRequiredAttributeTypesAtLeastOnce(Project $project)
     {
+        $this->requireCategoryEndpointToHaveConsistentProductSearchData($project);
+
         $attributeTypes = array_map(
             function (Attribute $attribute) {
                 return $attribute->type;
@@ -88,6 +96,8 @@ class SearchableAttributesTest extends FrontasticApiTestCase
      */
     public function testAttributesHaveValidValues(Project $project)
     {
+        $this->requireCategoryEndpointToHaveConsistentProductSearchData($project);
+
         $attributes = $this->getSearchableAttributesForProjectWithProjectSearchApi($project);
         foreach ($attributes as $searchableAttribute) {
             if ($searchableAttribute->type === Attribute::TYPE_ENUM ||
@@ -110,5 +120,10 @@ class SearchableAttributesTest extends FrontasticApiTestCase
                 $this->assertNull($searchableAttribute->values);
             }
         }
+    }
+
+    private function requireCategoryEndpointToHaveConsistentProductSearchData(Project $project): void
+    {
+        $this->requireProjectFeature($project, 'hasConsistentProductSearchData');
     }
 }
