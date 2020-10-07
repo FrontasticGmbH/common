@@ -59,9 +59,7 @@ class ShopifyProductMapper
     {
         return new Variant([
             'id' => $variantData['id'] ?? null,
-            'sku' => !empty($variantData['sku'])
-                ? $variantData['sku']
-                : $variantData['id'],
+            'sku' => $variantData['sku'] ?? null,
             'groupId' => $variantData['product']['id'] ?? null,
             'isOnStock' => !$variantData['currentlyNotInStock'] ?? null,
             'price' => $this->mapDataToPriceValue($variantData['priceV2'] ?? []),
