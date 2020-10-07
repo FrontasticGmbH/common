@@ -498,15 +498,14 @@ class Commercetools implements CartApi
      */
     public function setCustomType(Cart $cart, string $key, string $localeString = null): Cart
     {
-        $actions = [];
-        $actions[] = [
+        $cart->rawApiInput[] = [
             'action' => 'setCustomType',
             'type' => [
                 "key" => $key,
                 "typeId" => "type",
             ],
         ];
-        return $this->postCartActions($cart, $actions, $this->parseLocaleString($localeString));
+        return $this->setRawApiInput($cart, $localeString);
     }
 
     public function setShippingAddress(Cart $cart, Address $address, string $localeString = null): Cart
