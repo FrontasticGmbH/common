@@ -8,7 +8,7 @@ use Frontastic\Common\ProductApiBundle\Domain\Variant;
 
 class ShopifyProductMapper
 {
-    public function mapDataToProduct(array $productData, Query $query): Product
+    public function mapDataToProduct(array $productData, Query $query = null): Product
     {
         return new Product([
             'productId' => $productData['id'] ?? null,
@@ -23,7 +23,7 @@ class ShopifyProductMapper
             ),
             'changed' => $this->parseDate($productData['updatedAt']),
             'variants' => $this->mapDataToVariants($productData['variants']['edges'], $query),
-            'dangerousInnerProduct' => $query->loadDangerousInnerData ? $productData : null,
+            'dangerousInnerProduct' => $this->dataToDangerousInnerData($productData, $query),
         ]);
     }
 
@@ -45,7 +45,18 @@ class ShopifyProductMapper
         throw new \RuntimeException('Invalid date: ' . $string);
     }
 
-    public function mapDataToVariants(array $variantsData, Query $query): array
+    public function dataToDangerousInnerData(array $rawData, Query $query = null): ?array
+    {
+        if (is_null($query)) {
+            return null;
+        }
+        if ($query->loadDangerousInnerData) {
+            return $rawData;
+        }
+        return null;
+    }
+
+    public function mapDataToVariants(array $variantsData, Query $query = null): array
     {
         $variants = [];
         foreach ($variantsData as $variant) {
@@ -55,7 +66,7 @@ class ShopifyProductMapper
         return $variants;
     }
 
-    public function mapDataToVariant(array $variantData, Query $query): Variant
+    public function mapDataToVariant(array $variantData, Query $query = null): Variant
     {
         return new Variant([
             'id' => $variantData['id'] ?? null,
@@ -66,7 +77,7 @@ class ShopifyProductMapper
             'currency' => $variantData['priceV2']['currencyCode'] ?? null,
             'attributes' => $this->mapDataToAttributes($variantData),
             'images' => [$variantData['image']['originalSrc']] ?? null,
-            'dangerousInnerVariant' => $query->loadDangerousInnerData ? $variantData : null,
+            'dangerousInnerVariant' => $this->dataToDangerousInnerData($variantData, $query),
         ]);
     }
 
