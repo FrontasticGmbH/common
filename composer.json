@@ -12,7 +12,7 @@
         "sort-packages": true,
         "optimize-autoloader": true,
         "platform": {
-            "php": "7.4"
+            "php": "7.2"
         }
     },
     "require": {
@@ -49,7 +49,7 @@
         "phploc/phploc": "@stable",
         "phpmd/phpmd": "@stable",
         "phpstan/phpstan": "0.12.25",
-        "phpunit/phpunit": "@stable",
+        "phpunit/phpunit": "^7",
         "sebastian/phpcpd": "@stable",
         "squizlabs/php_codesniffer": "@stable",
         "symfony/swiftmailer-bundle": "^3.4"
