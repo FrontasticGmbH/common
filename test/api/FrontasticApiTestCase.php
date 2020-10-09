@@ -152,13 +152,13 @@ class FrontasticApiTestCase extends KernelTestCase
 
     protected function assertNotEmptyString($actual, string $message = ''): void
     {
-        $this->assertInternalType('string', $actual, $message);
+        $this->assertIsString($actual, $message);
         $this->assertNotEquals('', $actual, $message);
     }
 
     protected function assertIsValidTranslatedLabel(Project $project, $label): void
     {
-        $this->assertInternalType('array', $label);
+        $this->assertIsArray($label);
         $this->assertContainsOnly('string', $label);
         $this->assertEquals($project->languages, array_keys($label));
     }
@@ -174,7 +174,7 @@ class FrontasticApiTestCase extends KernelTestCase
             $this->assertNotNull($variant->price);
         }
         if ($variant->price !== null) {
-            $this->assertInternalType('integer', $variant->price);
+            $this->assertIsInt($variant->price);
             $this->assertGreaterThanOrEqual(0, $variant->price);
             $this->assertNotEmptyString($variant->currency);
         } else {
@@ -183,21 +183,21 @@ class FrontasticApiTestCase extends KernelTestCase
         }
 
         if ($variant->discountedPrice !== null) {
-            $this->assertInternalType('integer', $variant->discountedPrice);
+            $this->assertIsInt($variant->discountedPrice);
             $this->assertGreaterThanOrEqual(0, $variant->discountedPrice);
             $this->assertLessThanOrEqual($variant->price, $variant->discountedPrice);
         }
 
-        $this->assertInternalType('array', $variant->discounts);
+        $this->assertIsArray($variant->discounts);
 
-        $this->assertInternalType('array', $variant->attributes);
+        $this->assertIsArray($variant->attributes);
 
-        $this->assertInternalType('array', $variant->images);
+        $this->assertIsArray($variant->images);
         foreach ($variant->images as $image) {
             $this->assertNotEmptyString($image);
         }
 
-        $this->assertInternalType('boolean', $variant->isOnStock);
+        $this->assertIsBool($variant->isOnStock);
 
         $this->assertNull($variant->dangerousInnerVariant);
     }
