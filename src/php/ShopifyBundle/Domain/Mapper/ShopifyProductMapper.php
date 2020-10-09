@@ -3,11 +3,12 @@
 namespace Frontastic\Common\ShopifyBundle\Domain\Mapper;
 
 use Frontastic\Common\ProductApiBundle\Domain\Product;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 
 class ShopifyProductMapper
 {
-    public function mapDataToProduct(array $productData): Product
+    public function mapDataToProduct(array $productData, Query $query): Product
     {
         return new Product([
             'productId' => $productData['id'] ?? null,
@@ -21,9 +22,8 @@ class ShopifyProductMapper
                 $productData['collections']['edges']
             ),
             'changed' => $this->parseDate($productData['updatedAt']),
-            'variants' => $this->mapDataToVariants($productData['variants']['edges']),
-            // @TODO Include dangerousInnerProduct base on locale flag
-            // 'dangerousInnerProduct' => $productData,
+            'variants' => $this->mapDataToVariants($productData['variants']['edges'], $query),
+            'dangerousInnerProduct' => $query->loadDangerousInnerData ? $productData : null,
         ]);
     }
 
@@ -45,17 +45,17 @@ class ShopifyProductMapper
         throw new \RuntimeException('Invalid date: ' . $string);
     }
 
-    public function mapDataToVariants(array $variantsData): array
+    public function mapDataToVariants(array $variantsData, Query $query): array
     {
         $variants = [];
         foreach ($variantsData as $variant) {
-            $variants[] = $this->mapDataToVariant($variant['node']);
+            $variants[] = $this->mapDataToVariant($variant['node'], $query);
         }
 
         return $variants;
     }
 
-    public function mapDataToVariant(array $variantData): Variant
+    public function mapDataToVariant(array $variantData, Query $query): Variant
     {
         return new Variant([
             'id' => $variantData['id'] ?? null,
@@ -66,8 +66,7 @@ class ShopifyProductMapper
             'currency' => $variantData['priceV2']['currencyCode'] ?? null,
             'attributes' => $this->mapDataToAttributes($variantData),
             'images' => [$variantData['image']['originalSrc']] ?? null,
-            // @TODO Include dangerousInnerVariant base on locale flag
-            // 'dangerousInnerVariant' => $variantData,
+            'dangerousInnerVariant' => $query->loadDangerousInnerData ? $variantData : null,
         ]);
     }
 
