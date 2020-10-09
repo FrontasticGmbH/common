@@ -60,7 +60,7 @@ class FrontasticApiTestCase extends KernelTestCase
         self::bootKernel();
     }
 
-    public function setup()
+    public function setUp(): void
     {
         $account = new Account(['accountId' => uniqid()]);
         $session = new Session(['account' => $account, 'loggedIn' => false]);

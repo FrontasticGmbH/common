@@ -26,7 +26,7 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
      */
     private $locale;
 
-    public function setup()
+    public function setUp(): void
     {
         $this->locale = 'de_DE';
         $this->clientMock = $this->createMock(Client::class);

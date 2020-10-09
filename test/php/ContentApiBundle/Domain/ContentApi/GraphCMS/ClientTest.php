@@ -17,7 +17,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
      */
     private $client;
 
-    public function setup()
+    public function setUp(): void
     {
         $apiToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ2ZXJzaW9uIjoxLCJ0b2tlbklkIjoiMDFmNDQyNDEtNTk1ZC00OWQ2LWJjOGQtM2E2NTRjZTQ3MjVjIn0.wdAXo_KwbFDqAah7B-OW_a5SaN7M7RxFHQx8pC675r8";
         $projectId = "cjxabf0100d2101eduvwa3in4";
