@@ -13,7 +13,8 @@
 ```php
 public function __construct(
     HttpClient $httpClient,
-    \Psr\SimpleCache\CacheInterface $cache
+    \Psr\SimpleCache\CacheInterface $cache,
+    RequestProvider $requestProvider
 ): mixed
 ```
 
@@ -21,6 +22,7 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$httpClient`|[`HttpClient`](../../HttpClient.md)||
 `$cache`|`\Psr\SimpleCache\CacheInterface`||
+`$requestProvider`|[`RequestProvider`](../../CoreBundle/Domain/RequestProvider.md)||
 
 Return Value: `mixed`
 

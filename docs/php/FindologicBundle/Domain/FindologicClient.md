@@ -22,7 +22,7 @@ public function __construct(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$httpClient`|[`HttpClient`](../../HttpClient.md)||
-`$requestProvider`|[`RequestProvider`](RequestProvider.md)||
+`$requestProvider`|[`RequestProvider`](../../CoreBundle/Domain/RequestProvider.md)||
 `$endpoints`|`array`||
 `$outputAttributes`|`array`|`[]`|
 
