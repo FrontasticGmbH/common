@@ -123,7 +123,7 @@ class ShopifyProductMapper
         }
 
         if (!empty($productTags)) {
-        $attributeId = 'tag';
+            $attributeId = 'tag';
             $attributes[$attributeId] = new Attribute([
                 'attributeId' => $attributeId,
                 'type' => Attribute::TYPE_ENUM,
@@ -133,7 +133,7 @@ class ShopifyProductMapper
         }
 
         if (!empty($productTypes)) {
-        $attributeId = 'product_type';
+            $attributeId = 'product_type';
             $attributes[$attributeId] = new Attribute([
                 'attributeId' => $attributeId,
                 'type' => Attribute::TYPE_ENUM,
