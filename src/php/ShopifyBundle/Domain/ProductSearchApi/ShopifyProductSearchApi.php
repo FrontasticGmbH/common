@@ -2,11 +2,9 @@
 
 namespace Frontastic\Common\ShopifyBundle\Domain\ProductSearchApi;
 
-use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\PaginatedQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
-use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiBase;
 use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyProductMapper;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClient;
@@ -16,8 +14,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 class ShopifyProductSearchApi extends ProductSearchApiBase
 {
     private const DEFAULT_VARIANTS_TO_FETCH = 1;
-    private const DEFAULT_COLLECTIONS_TO_FETCH = 10;
-    private const DEFAULT_ATTRIBUTES_TO_FETCH = 10;
+    private const DEFAULT_ELEMENTS_TO_FETCH = 10;
 
     /**
      * @var ShopifyClient
@@ -42,11 +39,25 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
             title
             description
             handle
+            productType
+            tags
+            vendor
+            createdAt
             updatedAt
-            collections(first: " . self::DEFAULT_COLLECTIONS_TO_FETCH . ") {
+            collections(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                 edges {
                     node {
                         id
+                    }
+                }
+            }
+            metafields(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                edges {
+                    node {
+                        id
+                        key
+                        value
+                        valueType
                     }
                 }
             }
@@ -174,7 +185,8 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                 $nextCursor = null;
                 foreach ($productsData as $key => $productData) {
                     $products[] = $this->productMapper->mapDataToProduct(
-                        $productData['node'] ?? $productData
+                        $productData['node'] ?? $productData,
+                        $query
                     );
                     $nextCursor = $productData['cursor'] ?? null;
                 }
@@ -194,12 +206,12 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
     {
         $query = "
             query {
-                productTags(first: " . self::DEFAULT_ATTRIBUTES_TO_FETCH . ") {
+                productTags(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                     edges {
                         node
                     }
                 }
-                productTypes(first: " . self::DEFAULT_ATTRIBUTES_TO_FETCH . ") {
+                productTypes(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                     edges {
                         node
                     }
