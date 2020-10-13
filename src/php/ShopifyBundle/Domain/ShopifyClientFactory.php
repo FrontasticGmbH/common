@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\ShopifyBundle\Domain;
 
+use Frontastic\Common\CoreBundle\Domain\RequestProvider;
 use Frontastic\Common\HttpClient;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Psr\SimpleCache\CacheInterface;
@@ -14,10 +15,14 @@ class ShopifyClientFactory
     /** @var CacheInterface */
     private $cache;
 
-    public function __construct(HttpClient $httpClient, CacheInterface $cache)
+    /** @var RequestProvider */
+    private $requestProvider;
+
+    public function __construct(HttpClient $httpClient, CacheInterface $cache, RequestProvider $requestProvider)
     {
         $this->httpClient = $httpClient;
         $this->cache = $cache;
+        $this->requestProvider = $requestProvider;
     }
 
     public function factorForConfigs(object $typeSpecificConfiguration, ?object $shopifyConfig = null): ShopifyClient
@@ -42,6 +47,7 @@ class ShopifyClientFactory
         return new ShopifyClient(
             $this->httpClient,
             $this->cache,
+            $this->requestProvider,
             $config['hostUrl'],
             $config['storefrontAccessToken']
         );

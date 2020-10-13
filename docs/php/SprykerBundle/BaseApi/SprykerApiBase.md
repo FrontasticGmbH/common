@@ -17,8 +17,6 @@ public function __construct(
 ): mixed
 ```
 
-*SprykerApiBase constructor.*
-
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$client`|[`SprykerClientInterface`](../Domain/SprykerClientInterface.md)||

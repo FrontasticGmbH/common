@@ -28,13 +28,15 @@
 
 ```php
 public function __construct(
-    ShopifyClient $client
+    ShopifyClient $client,
+    ShopifyAccountMapper $accountMapper
 ): mixed
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$client`|[`ShopifyClient`](../ShopifyClient.md)||
+`$accountMapper`|[`ShopifyAccountMapper`](../Mapper/ShopifyAccountMapper.md)||
 
 Return Value: `mixed`
 

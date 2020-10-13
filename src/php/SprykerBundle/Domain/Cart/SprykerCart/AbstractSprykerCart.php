@@ -8,6 +8,7 @@ use Frontastic\Common\SprykerBundle\BaseApi\CartExpandingTrait;
 use Frontastic\Common\SprykerBundle\BaseApi\SprykerApiBase;
 use Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper;
 use Frontastic\Common\SprykerBundle\Domain\Cart\Request\CartItemRequestDataInterface;
+use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver;
 use WoohooLabs\Yang\JsonApi\Response\JsonApiResponse;
@@ -23,19 +24,13 @@ abstract class AbstractSprykerCart extends SprykerApiBase implements SprykerCart
      */
     protected $accountHelper;
 
-    /**
-     * AbstractSprykerCart constructor.
-     *
-     * @param \Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface $client
-     * @param \Frontastic\Common\SprykerBundle\Domain\MapperResolver $mapperResolver
-     * @param \Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper $accountHelper
-     */
     public function __construct(
         SprykerClientInterface $client,
         MapperResolver $mapperResolver,
+        LocaleCreator $localeCreator,
         AccountHelper $accountHelper
     ) {
-        parent::__construct($client, $mapperResolver);
+        parent::__construct($client, $mapperResolver, $localeCreator);
         $this->accountHelper = $accountHelper;
     }
 

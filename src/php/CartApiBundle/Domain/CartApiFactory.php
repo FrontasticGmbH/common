@@ -138,17 +138,20 @@ class CartApiFactory
                     ->get(SprykerClientFactory::class)
                     ->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
 
+                $localeCreator = $localeCreatorFactory->factor($project, $client);
+
                 $customerCartRequestData = new CustomerCartRequestData(
                     $cartConfig->priceMode,
                     $cartConfig->currency,
                     $cartConfig->shop
                 );
 
-                $guestCart = new GuestCart($client, $dataMapper, $accountHelper);
+                $guestCart = new GuestCart($client, $dataMapper, $localeCreator, $accountHelper);
 
                 $customerCart = new CustomerCart(
                     $client,
                     $dataMapper,
+                    $localeCreator,
                     $accountHelper,
                     $customerCartRequestData
                 );
@@ -159,7 +162,7 @@ class CartApiFactory
                     $accountHelper,
                     $guestCart,
                     $customerCart,
-                    $localeCreatorFactory->factor($project, $client)
+                    $localeCreator
                 );
 
                 break;

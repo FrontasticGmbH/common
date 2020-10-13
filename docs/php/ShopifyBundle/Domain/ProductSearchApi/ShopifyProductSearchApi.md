@@ -13,13 +13,15 @@
 
 ```php
 public function __construct(
-    ShopifyClient $client
+    ShopifyClient $client,
+    ShopifyProductMapper $productMapper
 ): mixed
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$client`|[`ShopifyClient`](../ShopifyClient.md)||
+`$productMapper`|[`ShopifyProductMapper`](../Mapper/ShopifyProductMapper.md)||
 
 Return Value: `mixed`
 

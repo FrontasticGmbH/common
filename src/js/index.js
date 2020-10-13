@@ -14,6 +14,7 @@ import Tastic from './domain/tastic'
 import MediaApi from './mediaApi'
 import FacetTypeSchemaMap from './facetTypeSchema/map'
 import omit from './helper/omit'
+import deprecate from './helper/deprecate'
 import debounce from './helper/debounce'
 import throttle from './helper/throttle'
 import Notifier from './notifier'
@@ -37,6 +38,7 @@ export {
     MediaApi,
     FacetTypeSchemaMap,
     omit,
+    deprecate,
     debounce,
     throttle,
     Notifier,

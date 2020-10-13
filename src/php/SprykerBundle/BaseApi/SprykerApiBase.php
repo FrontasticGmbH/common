@@ -39,14 +39,6 @@ class SprykerApiBase
      */
     private $defaultLanguage;
 
-    /**
-     * SprykerApiBase constructor.
-     *
-     * @param \Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface $client
-     * @param \Frontastic\Common\SprykerBundle\Domain\MapperResolver $mapperResolver
-     * @param LocaleCreator|null $localeCreator
-     * @param string|null $defaultLanguage
-     */
     public function __construct(
         SprykerClientInterface $client,
         MapperResolver $mapperResolver,
@@ -82,7 +74,7 @@ class SprykerApiBase
         return (strpos($url, '?') === false) ? '?' : '&';
     }
 
-    protected function withCurrency(string $url, string $currency): string
+    protected function appendCurrencyToUrl(string $url, string $currency): string
     {
         $separator = $this->getSeparator($url);
 

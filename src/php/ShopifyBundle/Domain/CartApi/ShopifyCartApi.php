@@ -216,7 +216,7 @@ class ShopifyCartApi implements CartApi
                     checkoutId: \"{$cart->cartId}\",
                     lineItems: {
                         quantity: {$lineItem->count}
-                        variantId: \"{$lineItem->variant->sku}\"
+                        variantId: \"{$lineItem->variant->id}\"
                     }
                 ) {
                     checkout {
@@ -719,7 +719,8 @@ class ShopifyCartApi implements CartApi
                 'lineItemId' => $lineItemData['node']['id'] ?? null,
                 'name' => $lineItemData['node']['title'] ?? null,
                 'count' => $lineItemData['node']['quantity'] ?? null,
-                'price' => $lineItemData['node']['unitPrice']['amount'] ?? null,
+                'price' => $price = $lineItemData['node']['unitPrice'] ?? null,
+                'currency' => $lineItemData['node']['unitPrice']['currency'] ?? null,
                 'variant' => $this->productMapper->mapDataToVariant($lineItemData['node']['variant']),
                 'dangerousInnerItem' => $lineItemData['node'],
             ]);

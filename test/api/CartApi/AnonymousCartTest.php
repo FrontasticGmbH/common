@@ -20,7 +20,6 @@ class AnonymousCartTest extends FrontasticApiTestCase
     {
         $cart = $this->getAnonymousCart($project, $language);
 
-        $this->assertNotEmptyString($cart->cartId);
         $this->assertNotEmptyString($cart->cartVersion);
 
         if ($cart->projectSpecificData !== null) {
@@ -47,7 +46,6 @@ class AnonymousCartTest extends FrontasticApiTestCase
     public function testGetCartByIdReturnsSameCart(Project $project, string $language): void
     {
         $originalCart = $this->getAnonymousCart($project, $language);
-        $this->assertNotEmptyString($originalCart->cartId);
 
         $cartById = $this->getCartApiForProject($project)->getById($originalCart->cartId, $language);
         $this->assertEquals($originalCart, $cartById);

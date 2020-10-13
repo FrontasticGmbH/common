@@ -8,6 +8,7 @@ use Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper;
 use Frontastic\Common\SprykerBundle\Domain\Cart\Mapper\GuestCartMapper;
 use Frontastic\Common\SprykerBundle\Domain\Cart\Request\CartItemRequestDataInterface;
 use Frontastic\Common\SprykerBundle\Domain\Cart\Request\GuestCartItemRequestData;
+use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver;
 
@@ -20,21 +21,14 @@ class GuestCart extends AbstractSprykerCart
      */
     private $guestCartIncludes;
 
-    /**
-     * GuestCart constructor.
-     *
-     * @param \Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface $client
-     * @param \Frontastic\Common\SprykerBundle\Domain\MapperResolver $mapperResolver
-     * @param \Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper $accountHelper
-     * @param string[] $additionalIncludes
-     */
     public function __construct(
         SprykerClientInterface $client,
         MapperResolver $mapperResolver,
+        LocaleCreator $localeCreator,
         AccountHelper $accountHelper,
         array $additionalIncludes = []
     ) {
-        parent::__construct($client, $mapperResolver, $accountHelper);
+        parent::__construct($client, $mapperResolver, $localeCreator, $accountHelper);
         $this->guestCartIncludes = array_merge(
             SprykerCartConstants::GUEST_CART_RELATIONSHIPS,
             SprykerCartConstants::COMMON_CART_RELATIONSHIPS,
@@ -51,7 +45,7 @@ class GuestCart extends AbstractSprykerCart
         $response = $this->client
             ->forLanguage($sprykerLocale->language)
             ->get(
-                $this->withCurrency($url, $sprykerLocale->currency),
+                $this->appendCurrencyToUrl($url, $sprykerLocale->currency),
                 $this->accountHelper->getAnonymousHeader()
             );
 
@@ -81,7 +75,7 @@ class GuestCart extends AbstractSprykerCart
         $response = $this->client
             ->forLanguage($sprykerLocale->language)
             ->get(
-                $this->withCurrency($url, $sprykerLocale->currency),
+                $this->appendCurrencyToUrl($url, $sprykerLocale->currency),
                 $this->accountHelper->getAnonymousHeader($id)
             );
 
@@ -89,7 +83,10 @@ class GuestCart extends AbstractSprykerCart
             return $this->mapResponseToCart($response);
         }
 
-        return new Cart();
+        return new Cart([
+            'cartVersion' => '1',
+            'currency' => $sprykerLocale->currency
+        ]);
     }
 
     /**

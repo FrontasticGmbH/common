@@ -5,7 +5,7 @@
 ## Methods
 
 * [getSeparator()](#getseparator)
-* [withCurrency()](#withcurrency)
+* [appendCurrencyToUrl()](#appendcurrencytourl)
 * [withIncludes()](#withincludes)
 
 ### getSeparator()
@@ -22,10 +22,10 @@ Argument|Type|Default|Description
 
 Return Value: `string`
 
-### withCurrency()
+### appendCurrencyToUrl()
 
 ```php
-public function withCurrency(
+public function appendCurrencyToUrl(
     string $url,
     string $currency
 ): string
