@@ -8,7 +8,6 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiBase;
 use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyProductMapper;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClient;
-use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
 
 class ShopifyProductSearchApi extends ProductSearchApiBase
@@ -95,6 +94,12 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
 
         if ($query->category) {
             $parameters[] = "$query->category";
+        }
+
+        if ($query->filter) {
+            foreach ($query->filter as $queryFilter) {
+                $parameters[] = $this->productMapper->toFilterString($queryFilter);
+            }
         }
 
         $skus = [];

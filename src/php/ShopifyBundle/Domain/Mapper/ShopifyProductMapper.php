@@ -4,6 +4,7 @@ namespace Frontastic\Common\ShopifyBundle\Domain\Mapper;
 
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\Filter;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ProjectApiBundle\Domain\Attribute;
 
@@ -195,5 +196,35 @@ class ShopifyProductMapper
         ]);
 
         return $attributes;
+    }
+
+    public function toFilterString(Filter $queryFilter): string
+    {
+        switch ($queryFilter->attributeType) {
+            case Attribute::TYPE_MONEY:
+                $filterString = sprintf(
+                    '%s:>=%s %s:<=%s',
+                    $queryFilter->handle,
+                    (float) $queryFilter->min / 100,
+                    $queryFilter->handle,
+                    (float) $queryFilter->max / 100
+                );
+                break;
+            case Attribute::TYPE_BOOLEAN:
+                $filterString = sprintf(
+                    '%s:%s',
+                    $queryFilter->handle,
+                    implode(" ", $queryFilter->terms ?? [])
+                );
+                break;
+            default:
+                $filterString = sprintf(
+                    '%s:*%s*',
+                    $queryFilter->handle,
+                    implode(" ", $queryFilter->terms ?? [])
+                );
+        }
+
+        return $filterString;
     }
 }
