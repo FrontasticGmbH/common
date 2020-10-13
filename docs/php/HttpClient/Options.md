@@ -6,6 +6,6 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`timeout` | int|float|HttpClient\timeout|HttpClient\for|HttpClient\the|HttpClient\complete|HttpClient\request|HttpClient\in|[`HttpClient`](../HttpClient.md)\seconds | `1` | - | 
+`timeout` | `int|float` | `1` | - | Timeout for the complete request in seconds
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

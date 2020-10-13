@@ -12,6 +12,7 @@ use Kore\DataObject\DataObject;
  * @property-read array $images
  * @property-read int $price
  * @property-read string $currency
+ * @type
  */
 class Product extends DataObject
 {

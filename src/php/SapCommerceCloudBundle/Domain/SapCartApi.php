@@ -10,6 +10,7 @@ use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
+use Frontastic\Common\CartApiBundle\Domain\UpdatePaymentCommand;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocale;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreator;
 
@@ -171,6 +172,11 @@ class SapCartApi implements CartApi
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
+    public function setRawApiInput(Cart $cart, string $locale = null): Cart
+    {
+        throw new \RuntimeException(__METHOD__ . ' not implemented');
+    }
+
     public function setShippingAddress(Cart $cart, Address $address, string $locale = null): Cart
     {
         list($userId, $sapCartId) = $this->splitCartId($cart->cartId);
@@ -178,7 +184,7 @@ class SapCartApi implements CartApi
         $this->client
             ->post(
                 '/rest/v2/{siteId}/users/' . $userId . '/carts/' . $sapCartId . '/addresses/delivery',
-                (array)$address,
+                $this->dataMapper->mapAddressToData($address),
                 $this->createLocaleFromString($locale)->toQueryParameters()
             )
             ->then(function (array $data): void {
@@ -197,6 +203,11 @@ class SapCartApi implements CartApi
     }
 
     public function addPayment(Cart $cart, Payment $payment, ?array $custom = null, string $locale = null): Cart
+    {
+        throw new \RuntimeException(__METHOD__ . ' not implemented');
+    }
+
+    public function updatePayment(Cart $cart, Payment $payment, string $localeString): Payment
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }

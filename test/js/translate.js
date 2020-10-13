@@ -1,4 +1,4 @@
-import { shouldFieldBeTranslated } from '../../src/js/translate'
+import translate, { shouldFieldBeTranslated } from '../../src/js/translate'
 
 describe('shouldFieldBeTranslated', () => {
     it('returns true if "translatable" is set to true', () => {
@@ -66,5 +66,47 @@ describe('shouldFieldBeTranslated', () => {
         }
 
         expect(shouldFieldBeTranslated(fieldSchema)).toBe(false)
+    })
+})
+
+describe('translate', () => {
+    test.each([
+        ['string'],
+        [23],
+        [null],
+        [undefined],
+    ])('returns input literal, when passed', (input) => {
+        expect(translate(input, 'de_DE', 'en_GB')).toEqual({ text: input, locale: 'de_DE' })
+    })
+
+    it('returns current locale if available', () => {
+        expect(translate(
+            { de_DE: 'Hallo Welt', en_GB: 'Hello World!' },
+            'de_DE',
+            'en_GB',
+        )).toEqual({ text: 'Hallo Welt', locale: 'de_DE' })
+    })
+
+    it('returns default locale if current not available', () => {
+        expect(translate(
+            { de_DE: 'Hallo Welt', en_GB: 'Hello World!' },
+            'it_IT',
+            'en_GB',
+        )).toEqual({ text: 'Hello World!', locale: 'en_GB' })
+    })
+
+    it('first value, if no translation availble', () => {
+        expect(translate(
+            { de_DE: 'Hallo Welt' },
+            'it_IT',
+            'en_GB',
+        )).toEqual({ text: 'Hallo Welt', locale: 'de_DE', translated: false })
+    })
+
+    test.each([
+        [{}],
+        [[]],
+    ])('empty text on broken input object', (input) => {
+        expect(translate(input, 'it_IT', 'en_GB')).toEqual({ text: '', locale: null, translated: false })
     })
 })

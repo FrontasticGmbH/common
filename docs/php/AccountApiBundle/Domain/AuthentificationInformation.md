@@ -6,8 +6,8 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`email` | `string` |  | - | 
-`password` | `string` |  | - | 
-`newPassword` | `string` |  | - | 
+`email` | `string` |  | *Yes* | 
+`password` | `string` |  | *Yes* | 
+`newPassword` | `string` |  | *Yes* | 
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

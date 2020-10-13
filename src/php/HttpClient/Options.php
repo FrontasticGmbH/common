@@ -4,8 +4,15 @@ namespace Frontastic\Common\HttpClient;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class Options extends DataObject
 {
-    /** @var int|float timeout for the complete request in seconds */
+    /**
+     * Timeout for the complete request in seconds
+     *
+     * @var int|float
+     */
     public $timeout = 1;
 }

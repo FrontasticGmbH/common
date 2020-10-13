@@ -30,11 +30,5 @@
     <import file="${frontastic_basedir}/paas/integration/build-commons/modules/phpmd.xml" />
     <import file="${frontastic_basedir}/paas/integration/build-commons/modules/phpstan.xml" />
     <import file="${frontastic_basedir}/paas/integration/build-commons/modules/apidocs.xml" />
-
-    <!--
-        Custom modules
-    -->
-    <!-- TODO: Move to integration -->
-    <import file="${frontastic_basedir}/paas/catwalk/src/ant/react_bootstrap.xml" />
     <import file="${basedir}/src/ant/javascript.xml" />
 </project>

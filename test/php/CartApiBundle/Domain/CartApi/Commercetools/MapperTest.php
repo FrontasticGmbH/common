@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools;
 
+use Frontastic\Common\AccountApiBundle\Domain\AccountApi\Commercetools\Mapper as AccountMapper;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\Discount;
@@ -15,6 +16,11 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper as
 class MapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
+     * @var AccountMapper
+     */
+    private $accountMapperMock;
+
+    /**
      * @var Mapper
      */
     private $mapper;
@@ -26,18 +32,9 @@ class MapperTest extends \PHPUnit\Framework\TestCase
 
     public function setUp()
     {
+        $this->accountMapperMock = $this->createMock(AccountMapper::class);
         $this->productMapperMock = $this->createMock(ProductMapper::class);
-        $this->mapper = new Mapper($this->productMapperMock);
-    }
-
-    /**
-     * @dataProvider provideMapDataToAddressExamples
-     */
-    public function testMapDataToAddress($addressFixture, $expectedAddress)
-    {
-        $actualAddress = $this->mapper->mapDataToAddress($addressFixture);
-
-        $this->assertEquals($expectedAddress, $actualAddress);
+        $this->mapper = new Mapper($this->accountMapperMock, $this->productMapperMock);
     }
 
     public function provideMapDataToAddressExamples()
@@ -50,44 +47,6 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             'Full address' => [
                 $this->getAddressFixture(),
                 $this->getAddress(),
-            ],
-        ];
-    }
-
-    /**
-     * @dataProvider provideMapAddressToDataExamples
-     */
-    public function testMapAddressToData($addressFixture, $expectedAddress)
-    {
-        $actualAddress = $this->mapper->mapAddressToData($addressFixture);
-
-        $this->assertEquals($expectedAddress, $actualAddress);
-    }
-
-    public function provideMapAddressToDataExamples()
-    {
-        return [
-            'Empty address' => [
-                new Address(),
-                [
-                    'id' => null,
-                    'salutation' => null,
-                    'firstName' => null,
-                    'lastName' => null,
-                    'streetName' => null,
-                    'streetNumber' => null,
-                    'additionalStreetInfo' => null,
-                    'additionalAddressInfo' => null,
-                    'postalCode' => null,
-                    'city' => null,
-                    'country' => null,
-                    'state' => null,
-                    'phone' => null,
-                ],
-            ],
-            'Full address' => [
-                $this->getAddress(),
-                $this->getAddressFixture(),
             ],
         ];
     }

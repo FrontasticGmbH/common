@@ -6,7 +6,7 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`loggedIn` | `bool` | `false` | - | 
+`loggedIn` | `bool` | `false` | *Yes* | 
 `account` | [`Account`](Account.md) | `null` | - | 
 `message` | `string` | `null` | - | 
 

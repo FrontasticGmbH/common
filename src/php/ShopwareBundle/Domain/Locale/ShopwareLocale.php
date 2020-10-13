@@ -4,6 +4,9 @@ namespace Frontastic\Common\ShopwareBundle\Domain\Locale;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class ShopwareLocale extends DataObject
 {
     /**

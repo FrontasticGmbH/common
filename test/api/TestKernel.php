@@ -7,9 +7,13 @@ use Frontastic\Common\CartApiBundle\FrontasticCommonCartApiBundle;
 use Frontastic\Common\CoreBundle\FrontasticCommonCoreBundle;
 use Frontastic\Common\Kernel;
 use Frontastic\Common\ProductApiBundle\FrontasticCommonProductApiBundle;
+use Frontastic\Common\ProductSearchApiBundle\FrontasticCommonProductSearchApiBundle;
 use Frontastic\Common\ProjectApiBundle\FrontasticCommonProjectApiBundle;
 use Frontastic\Common\SapCommerceCloudBundle\FrontasticCommonSapCommerceCloudBundle;
+use Frontastic\Common\FindologicBundle\FrontasticCommonFindologicBundle;
+use Frontastic\Common\ShopifyBundle\FrontasticCommonShopifyBundle;
 use Frontastic\Common\ShopwareBundle\FrontasticCommonShopwareBundle;
+use Frontastic\Common\SprykerBundle\FrontasticCommonSprykerBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
@@ -32,10 +36,14 @@ class TestKernel extends Kernel
             new FrontasticCommonAccountApiBundle(),
             new FrontasticCommonCartApiBundle(),
             new FrontasticCommonProductApiBundle(),
+            new FrontasticCommonProductSearchApiBundle(),
             new FrontasticCommonProjectApiBundle(),
 
-            new FrontasticCommonShopwareBundle(),
             new FrontasticCommonSapCommerceCloudBundle(),
+            new FrontasticCommonShopifyBundle(),
+            new FrontasticCommonShopwareBundle(),
+            new FrontasticCommonSprykerBundle(),
+            new FrontasticCommonFindologicBundle(),
         ];
     }
 }

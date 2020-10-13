@@ -5,6 +5,7 @@
 ## Methods
 
 * [__construct()](#__construct)
+* [factorForConfigs()](#factorforconfigs)
 * [factorForProjectAndType()](#factorforprojectandtype)
 
 ### __construct()
@@ -22,6 +23,22 @@ Argument|Type|Default|Description
 `$cache`|`\Psr\SimpleCache\CacheInterface`||
 
 Return Value: `mixed`
+
+### factorForConfigs()
+
+```php
+public function factorForConfigs(
+    object $typeSpecificConfiguration,
+    ?object $sapConfig = null
+): SapClient
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$typeSpecificConfiguration`|`object`||
+`$sapConfig`|`?object`|`null`|
+
+Return Value: [`SapClient`](SapClient.md)
 
 ### factorForProjectAndType()
 

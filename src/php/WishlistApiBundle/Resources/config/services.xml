@@ -8,6 +8,7 @@
         <defaults public="true" />
 
         <service id="Frontastic\Common\WishlistApiBundle\Domain\WishlistApiFactory">
+            <argument type="service" id="Psr\Container\ContainerInterface"/>
             <argument type="service" id="Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory" />
             <argument type="service" id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory" />
             <argument type="tagged" tag="wishlistApi.lifecycleEventListener" />

@@ -1,7 +1,7 @@
 {
     "name": "frontastic/common",
     "license": "None",
-    "version": "1.0.0",
+    "version": "1.1.15",
     "repositories": [
         {
             "type": "path",
@@ -29,6 +29,7 @@
         "league/oauth2-client": "^2.3",
         "myclabs/deep-copy": "^1.0",
         "qafoolabs/no-framework-bundle": "^2.6",
+        "ramsey/uuid": "^3.9",
         "seld/jsonlint": "@stable",
         "swiftmailer/swiftmailer": "^6.2",
         "symfony/config": "^4.1",
@@ -37,12 +38,14 @@
         "symfony/finder": "^4.1",
         "symfony/http-kernel": "^4.1",
         "symfony/symfony": "^4.1",
-        "symfony/yaml": "^4.1"
+        "symfony/yaml": "^4.1",
+        "woohoolabs/yang": "^2.3"
     },
     "require-dev": {
         "doctrine/common": "^2.9",
         "frontastic/apidocs": "@dev",
         "pdepend/pdepend": "@stable",
+        "phake/phake": "^3.1",
         "phploc/phploc": "@stable",
         "phpmd/phpmd": "@stable",
         "phpstan/phpstan": "0.12.25",

@@ -53,6 +53,17 @@ abstract class BaseImplementation
         return null;
     }
 
+    /*** queryCategories() **********************************************************************************************/
+    public function beforeQueryCategories(ProductApi $productApi, CategoryQuery $query): ?array
+    {
+        return null;
+    }
+
+    public function afterQueryCategories(ProductApi $productApi, ?Result $result): ?Result
+    {
+        return null;
+    }
+
     /*** getProductTypes() ********************************************************************************************/
     public function beforeGetProductTypes(ProductApi $productApi, ProductTypeQuery $query): ?array
     {

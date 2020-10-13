@@ -6,11 +6,11 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`lineItemId` | `string` |  | - | 
-`name` | `string` |  | - | 
-`type` | `string` |  | - | 
-`addedAt` | `\DateTimeImmutable` |  | - | 
-`count` | `int` |  | - | 
+`lineItemId` | `string` |  | *Yes* | 
+`name` | `string` |  | *Yes* | 
+`type` | `string` |  | *Yes* | 
+`addedAt` | `\DateTimeImmutable` |  | *Yes* | 
+`count` | `int` |  | *Yes* | 
 `dangerousInnerItem` | `mixed` |  | - | Access original object from backend
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

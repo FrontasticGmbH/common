@@ -86,13 +86,8 @@ class SearchCriteriaBuilder
         $criteria = [
             'page' => self::calculatePage($query),
             'limit' => $query->limit,
-            'filter' => [
-                // Exclude variants as they are returned in the list
-                new Filter\Equals([
-                    'field' => 'parentId',
-                    'value' => null
-                ])
-            ],
+            'total-count-mode' => true,
+            'filter' => [],
             'post-filter' => [],
             'aggregations' => [],
             'associations' => [
@@ -110,7 +105,7 @@ class SearchCriteriaBuilder
                                 'group' => [],
                             ],
                         ],
-                    ]
+                    ],
                 ],
                 'media' => [],
                 'options' => [
@@ -125,7 +120,7 @@ class SearchCriteriaBuilder
                 ],
                 'manufacturer' => [],
             ],
-//            'source' => self::PRODUCT_SOURCE_FIELDS,
+            //            'source' => self::PRODUCT_SOURCE_FIELDS,
         ];
 
         foreach ($query->filter as $filter) {
@@ -138,12 +133,19 @@ class SearchCriteriaBuilder
 
         if (!empty($query->productIds)) {
             $criteria['ids'] = $query->productIds;
+        } elseif ($query->productId !== null) {
+            $criteria['ids'] = [$query->productId];
         }
 
         if (!empty($query->skus)) {
             $criteria['filter'][] = new Filter\EqualsAny([
                 'field' => 'productNumber',
                 'value' => $query->skus,
+            ]);
+        } elseif ($query->sku !== null) {
+            $criteria['filter'][] = new Filter\Equals([
+                'field' => 'productNumber',
+                'value' => $query->sku,
             ]);
         }
 
@@ -178,7 +180,7 @@ class SearchCriteriaBuilder
             );
         }
 
-        return $criteria;
+        return array_merge($query->rawApiInput, $criteria);
     }
 
     public static function buildFromSimpleProductQuery(Query\SingleProductQuery $query): array
@@ -187,8 +189,8 @@ class SearchCriteriaBuilder
             'page' => 1,
             'limit' => 1,
             'filter' => [],
-// @TODO: uncomment if doing response optimizations
-//            'source' => self::PRODUCT_SOURCE_FIELDS,
+            // @TODO: uncomment if doing response optimizations
+            //            'source' => self::PRODUCT_SOURCE_FIELDS,
         ];
 
         if ($query->productId !== null) {
@@ -226,7 +228,7 @@ class SearchCriteriaBuilder
                     'name' => $aggregationName . '.inner',
                     'field' => $field,
                     'definition' => $definition,
-                ])
+                ]),
             ]);
 
             if (!empty($facet->terms)) {
@@ -238,7 +240,7 @@ class SearchCriteriaBuilder
         } elseif ($facet instanceof Query\RangeFacet) {
             $aggregation = new Aggregation\Stats([
                 'name' => $facet->handle,
-                'field' => $facet->handle
+                'field' => $facet->handle,
             ]);
 
             if ($facet->min !== 0 || $facet->max !== PHP_INT_MAX) {

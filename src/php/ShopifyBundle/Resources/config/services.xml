@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <defaults public="true" />
+
+        <service id="Frontastic\Common\ShopifyBundle\Domain\ShopifyClientFactory">
+            <argument type="service" id="Frontastic\Common\HttpClient" />
+            <argument type="service" id="cache.app.simple" />
+            <argument type="service" id="Frontastic\Common\CoreBundle\Domain\RequestProvider" />
+            <tag name="frontastic.common.api_integration"/>
+        </service>
+
+        <service id="Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyAccountMapper">
+        </service>
+
+        <service id="Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyProductMapper">
+        </service>
+    </services>
+</container>

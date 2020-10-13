@@ -5,6 +5,9 @@ namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Attribute;
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class ClientResult extends DataObject
 {
     /**

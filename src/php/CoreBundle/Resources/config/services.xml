@@ -7,11 +7,6 @@
     <services>
         <defaults public="true"/>
 
-        <service id="Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator">
-            <argument type="service" id="Psr\Container\ContainerInterface"/>
-            <argument type="tagged_locator" tag="frontastic.common.api_integration" index-by="id"/>
-        </service>
-
         <service id="Frontastic\Common\HttpClient">
             <factory service="Frontastic\Common\HttpClient\Factory" method="create"/>
 
@@ -48,6 +43,10 @@
             <argument type="service" id="mailer"/>
             <argument type="service" id="templating"/>
             <argument>%env(smtp_sender)%</argument>
+        </service>
+
+        <service id="Frontastic\Common\CoreBundle\Domain\RequestProvider">
+            <argument type="service" id="request_stack" />
         </service>
 
         <service id="Frontastic\Common\JsonSerializer">

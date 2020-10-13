@@ -6,14 +6,27 @@
 
 **Implements**: `\Countable`, [`\IteratorAggregate`](https://www.php.net/manual/de/class.iteratoraggregate.php)
 
+In general terms, REST APIs use offset pagination whereas GraphQL APIs use
+cursor-based pagination.
+
+Regardless the pagination implemented by your backend of choice, we highly
+recommend you to use in both cases the property $nextCursor to store the
+position where the pagination should continue.
+
+Additionally, and only for GraphQL APIs, you can use $previousCursor to store
+the position of the first element to allow backward pagination.
+
+NOTE: the property $offset will be deprecated in a further commit.
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
 `offset` | `int` |  | - | 
 `total` | `int` |  | - | 
-`count` | `int` |  | - | 
-`items` | `array` | `[]` | - | 
+`previousCursor` | `string` |  | - | 
+`nextCursor` | `string` |  | - | 
+`count` | `int` |  | *Yes* | 
+`items` | `array` | `[]` | *Yes* | 
 `facets` | [`Result`](Result.md)\Facet[] | `[]` | - | 
-`query` | [`Query`](Query.md) |  | - | The query used to generate this result (cloned)
+`query` | [`Query`](Query.md) |  | *Yes* | The query used to generate this result (cloned)
 
 ## Methods
 

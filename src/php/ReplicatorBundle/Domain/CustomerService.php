@@ -28,6 +28,7 @@ class CustomerService
         'product' => [
             'engine' => 'commercetools',
         ],
+        'productSearch' => [],
         'account' => [
             'engine' => 'commercetools',
         ],
@@ -69,7 +70,8 @@ class CustomerService
             try {
                 $customer = $this->parseCustomerFile($customerFile, true);
             } catch (\Throwable $e) {
-                if (strstr($customerFile, 'demo') !== false) {
+                if (strstr($customerFile, 'demo.frontastic.io') === false &&
+                    strstr($customerFile, 'show.frontastic.io') === false) {
                     // throw yml-problem for normal customer (but not for demo)
                     throw $e;
                 }
@@ -82,10 +84,17 @@ class CustomerService
     private function explodeConfiguration(array $values, ?array $defaults = null): array
     {
         $baseConfiguration = array_replace_recursive($defaults ?: $this->apis, $values);
-        foreach ($this->apis as $api => $defaultEngine) {
+
+        foreach (array_keys($this->apis) as $api) {
+            $engine = $baseConfiguration[$api]['engine'] ?? null;
+
+            if ($engine === null) {
+                continue;
+            }
+
             $baseConfiguration[$api] = array_replace_recursive(
                 $baseConfiguration[$api],
-                $baseConfiguration[$baseConfiguration[$api]['engine']] ?? []
+                $baseConfiguration[$engine] ?? []
             );
         }
 
@@ -116,6 +125,7 @@ class CustomerService
             'secret' => $customer['secret'],
             'edition' => $customer['edition'] ?? 'mirco',
             'hasPaasModifications' => $customer['hasPaasModifications'] ?? false,
+            'machineLimit' => $customer['machineLimit'] ?? 0,
             'features' => $customer['features'] ?? [],
             'isTransient' => $transient,
             'configuration' => $this->convertConfigurationToObjects($customerConfiguration),

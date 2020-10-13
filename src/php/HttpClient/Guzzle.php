@@ -98,6 +98,7 @@ class Guzzle extends HttpClient
                         'status' => $guzzleResponse->getStatusCode(),
                         'headers' => $headers,
                         'body' => $guzzleResponse->getBody()->getContents(),
+                        'rawApiOutput' => $guzzleResponse
                     ]);
                 },
                 function (RequestException $exception) use ($url) {

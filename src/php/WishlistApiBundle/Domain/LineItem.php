@@ -4,30 +4,38 @@ namespace Frontastic\Common\WishlistApiBundle\Domain;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class LineItem extends DataObject
 {
     /**
      * @var string
+     * @required
      */
     public $lineItemId;
 
     /**
      * @var string
+     * @required
      */
     public $name;
 
     /**
      * @var string
+     * @required
      */
     public $type;
 
     /**
      * @var \DateTimeImmutable
+     * @required
      */
     public $addedAt;
 
     /**
      * @var integer
+     * @required
      */
     public $count = 0;
 

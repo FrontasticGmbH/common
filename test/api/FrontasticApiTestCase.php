@@ -2,8 +2,12 @@
 
 namespace Frontastic\Common\ApiTests;
 
+use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
+use Frontastic\Catwalk\ApiCoreBundle\Domain\ContextService;
+use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory;
+use Frontastic\Common\AccountApiBundle\Domain\Session;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\CartApiFactory;
 use Frontastic\Common\EnvironmentResolver;
@@ -15,9 +19,13 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApiFactory;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
+use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi;
+use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiFactory;
 use Frontastic\Common\ProjectApiBundle\Domain\ProjectApiFactory;
 use Frontastic\Common\ReplicatorBundle\Domain\CustomerService;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
+use Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper;
+use Frontastic\Common\SprykerBundle\Domain\Account\SessionService;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class FrontasticApiTestCase extends KernelTestCase
@@ -32,6 +40,11 @@ class FrontasticApiTestCase extends KernelTestCase
     private $productApis = [];
 
     /**
+     * @var array<string, ProductSearchApi>
+     */
+    private $productSearchApis = [];
+
+    /**
      * @before
      */
     protected function setUpKernel(): void
@@ -44,8 +57,38 @@ class FrontasticApiTestCase extends KernelTestCase
                 __DIR__,
             ]
         );
-
         self::bootKernel();
+    }
+
+    public function setup()
+    {
+        $account = new Account(['accountId' => uniqid()]);
+        $session = new Session(['account' => $account, 'loggedIn' => false]);
+        $contextMock = $this->getMockBuilder(Context::class)->getMock();
+        $contextMock->session = $session;
+        $contextServiceMock = $this
+            ->getMockBuilder(ContextService::class)
+            ->setMethods(['createContextFromRequest'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $contextServiceMock
+            ->method('createContextFromRequest')
+            ->willReturn($contextMock);
+
+        $sessionServiceMock = $this
+            ->getMockBuilder(SessionService::class)
+            ->setMethods(['getSessionId'])
+            ->getMock();
+
+        $sessionServiceMock
+            ->method('getSessionId')
+            ->willReturn(uniqid());
+
+        self::$kernel->getContainer()
+            ->set(
+                'Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper',
+                new AccountHelper($contextServiceMock, $sessionServiceMock)
+            );
     }
 
     public function customerAndProject(): array
@@ -159,6 +202,15 @@ class FrontasticApiTestCase extends KernelTestCase
         $this->assertNull($variant->dangerousInnerVariant);
     }
 
+    protected function getSearchableAttributesForProjectWithProjectSearchApi(Project $project)
+    {
+        return self::$container
+            ->get(ProductSearchApiFactory::class)
+            ->factor($project)
+            ->getSearchableAttributes()
+            ->wait();
+    }
+
     protected function getSearchableAttributesForProject(Project $project)
     {
         return self::$container
@@ -182,17 +234,54 @@ class FrontasticApiTestCase extends KernelTestCase
         string $language,
         array $queryParameters = [],
         ?int $limit = null,
-        ?int $offset = null
+        ?int $offset = null,
+        ?string $cursor = null
     ): Result {
         $query = new ProductQuery(
             array_merge(
-                $this->buildQueryParameters($language, $limit, $offset),
+                $this->buildQueryParameters($language, $limit, $offset, $cursor),
                 $queryParameters
             )
         );
         $result = $this
             ->getProductApiForProject($project)
             ->query($query, ProductApi::QUERY_ASYNC)
+            ->wait();
+
+        $this->assertEquals($query, $result->query);
+        $this->assertNotSame($query, $result->query);
+
+        return $result;
+    }
+
+
+    protected function getProductSearchApiForProject(Project $project): ProductSearchApi
+    {
+        $key = sprintf('%s_%s', $project->customer, $project->projectId);
+        if (!array_key_exists($key, $this->productSearchApis)) {
+            $this->productSearchApis[$key] = self::$container->get(ProductSearchApiFactory::class)->factor($project);
+        }
+
+        return $this->productSearchApis[$key];
+    }
+
+    protected function queryProductsWithProductSearchApi(
+        Project $project,
+        string $language,
+        array $queryParameters = [],
+        ?int $limit = null,
+        ?int $offset = null,
+        ?string $cursor = null
+    ): Result {
+        $query = new ProductQuery(
+            array_merge(
+                $this->buildQueryParameters($language, $limit, $offset, $cursor),
+                $queryParameters
+            )
+        );
+        $result = $this
+            ->getProductSearchApiForProject($project)
+            ->query($query)
             ->wait();
 
         $this->assertEquals($query, $result->query);
@@ -208,11 +297,32 @@ class FrontasticApiTestCase extends KernelTestCase
         Project $project,
         string $language,
         ?int $limit = null,
-        ?int $offset = null
+        ?int $offset = null,
+        ?string $cursor = null
     ): array {
         return $this
             ->getProductApiForProject($project)
-            ->getCategories(new CategoryQuery($this->buildQueryParameters($language, $limit, $offset)));
+            ->getCategories(new CategoryQuery($this->buildQueryParameters($language, $limit, $offset, $cursor)));
+    }
+
+    /**
+     * @return Result
+     */
+    protected function queryCategories(
+        Project $project,
+        string $language,
+        ?int $limit = null,
+        ?int $offset = null,
+        ?string $cursor = null
+    ): object {
+        return $this
+            ->getProductApiForProject($project)
+            ->queryCategories(new CategoryQuery($this->buildQueryParameters(
+                $language,
+                $limit,
+                $offset,
+                $cursor
+            )));
     }
 
     /**
@@ -223,15 +333,42 @@ class FrontasticApiTestCase extends KernelTestCase
         $categories = [];
 
         $limit = 50;
-        $offset = 0;
+        $cursor = 0;
         do {
-            $categoriesFromCurrentStep = $this->fetchCategories($project, $language, $limit, $offset);
+            $categoriesFromCurrentStep = $this->fetchCategories($project, $language, $limit, $cursor);
             $categories = array_merge($categories, $categoriesFromCurrentStep);
 
-            $offset += $limit;
+            $cursor += $limit;
         } while (count($categoriesFromCurrentStep) === $limit);
 
         return $categories;
+    }
+
+    /**
+     * @return Category[]
+     */
+    protected function queryAllCategoriesWithCursor(Project $project, string $language): array
+    {
+        $categories = [];
+
+        $limit = 50;
+        $cursor = null;
+        do {
+            $resultFromCurrentStep = $this->queryCategories($project, $language, $limit, $cursor);
+            $categories = array_merge($categories, $resultFromCurrentStep->items);
+
+            $cursor = $resultFromCurrentStep->nextCursor;
+        } while ($resultFromCurrentStep->nextCursor !== null);
+
+        return $categories;
+    }
+
+    protected function getAProductWithProductSearchApi(Project $project, string $language): Product
+    {
+        $result = $this->queryProductsWithProductSearchApi($project, $language);
+        $this->assertNotEmpty($result->items);
+
+        return $result->items[0];
     }
 
     protected function getAProduct(Project $project, string $language): Product
@@ -256,7 +393,12 @@ class FrontasticApiTestCase extends KernelTestCase
             ->factor($project);
     }
 
-    protected function buildQueryParameters(string $language, ?int $limit = null, ?int $offset = null)
+    protected function buildQueryParameters(
+        string $language,
+        ?int $limit = null,
+        ?int $offset = null,
+        ?string $cursor = null
+    )
     {
         $parameters = [
             'locale' => $language,
@@ -267,6 +409,9 @@ class FrontasticApiTestCase extends KernelTestCase
         }
         if ($offset !== null) {
             $parameters['offset'] = $offset;
+        }
+        if ($cursor !== null) {
+            $parameters['cursor'] = $cursor;
         }
 
         return $parameters;

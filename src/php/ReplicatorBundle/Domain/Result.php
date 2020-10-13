@@ -4,15 +4,20 @@ namespace Frontastic\Common\ReplicatorBundle\Domain;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class Result extends DataObject
 {
     /**
      * @var bool
+     * @required
      */
     public $ok = true;
 
     /**
      * @var array
+     * @required
      */
     public $payload = [];
 

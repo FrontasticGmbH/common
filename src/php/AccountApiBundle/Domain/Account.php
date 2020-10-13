@@ -2,21 +2,24 @@
 
 namespace Frontastic\Common\AccountApiBundle\Domain;
 
-use InvalidArgumentException;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\Collection;
 
-use Kore\DataObject\DataObject;
-
-class Account extends DataObject implements UserInterface, \Serializable
+/**
+ * @type
+ */
+class Account extends ApiDataObject implements UserInterface, \Serializable
 {
     /**
      * @var string
+     * @required
      */
     public $accountId;
 
     /**
      * @var string
+     * @required
      */
     public $email;
 
@@ -41,17 +44,13 @@ class Account extends DataObject implements UserInterface, \Serializable
     public $birthday;
 
     /**
-     * @var array
-     */
-    public $data = [];
-
-    /**
      * @var string
      */
     private $passwordHash;
 
     /**
      * @var Group[]
+     * @required
      */
     public $groups = [];
 
@@ -72,6 +71,7 @@ class Account extends DataObject implements UserInterface, \Serializable
 
     /**
      * @var \Frontastic\Common\AccountApiBundle\Domain\Address[]
+     * @required
      */
     public $addresses = [];
 

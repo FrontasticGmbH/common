@@ -6,7 +6,7 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`ok` | `bool` | `false` | - | 
+`ok` | `bool` | `false` | *Yes* | 
 `message` | `string` |  | - | 
 `endpoint` | `string` |  | - | 
 `file` | `string` |  | - | 

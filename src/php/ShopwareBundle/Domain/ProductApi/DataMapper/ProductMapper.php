@@ -5,6 +5,7 @@ namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\ProductNotFoundException;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperInterface;
@@ -47,13 +48,16 @@ class ProductMapper extends AbstractDataMapper implements
         // Support for list with single resources as well as direct single resource
         $productData = $this->extractData($resource, $resource);
         $productData = $productData[0] ?? $productData;
+        if (empty($productData)) {
+            return null;
+        }
 
         $lastModified = $productData['updatedAt'] ?? null;
 
         $name = $this->resolveTranslatedValue($productData, 'name');
 
         return new Product([
-            'productId' => (string)$productData['id'],
+            'productId' => $productData['parentId'] ?? (string)$productData['id'],
             'changed' => ($lastModified !== null) ? $this->parseDate($lastModified) : null,
             'version' => (string)$productData['versionId'],
             'name' => $name,

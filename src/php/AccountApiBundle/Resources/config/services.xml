@@ -10,16 +10,12 @@
         <prototype namespace="Frontastic\Common\AccountApiBundle\Command\" resource="../../Command" autoconfigure="true" />
 
         <service id="Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory">
-            <argument type="service" id="Frontastic\Common\CoreBundle\Domain\Api\FactoryServiceLocator" />
+            <argument type="service" id="Psr\Container\ContainerInterface" />
             <argument type="tagged" tag="accountApi.lifecycleEventListener" />
+            <argument type="service" id="logger" />
         </service>
 
-        <service id="Frontastic\Common\AccountApiBundle\Domain\AccountApi">
-            <factory
-                service="Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory"
-                method="factor">
-            </factory>
-            <argument type="expression">service('Frontastic\\Catwalk\\ApiCoreBundle\\Domain\\Context').customer</argument>
+        <service id="Frontastic\Common\AccountApiBundle\Domain\AccountApi\Commercetools\Mapper">
         </service>
     </services>
 </container>

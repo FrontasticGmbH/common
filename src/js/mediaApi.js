@@ -1,5 +1,4 @@
 import Cloudinary from './mediaApi/cloudinary'
-import _ from 'lodash'
 
 class MediaApi {
     constructor () {
@@ -8,13 +7,21 @@ class MediaApi {
 
     getImageDimensions (media, inputWidth, inputHeight, inputCropRatio = null, factor = 1) {
         let cropRatio = this.getFloatRatio(media, inputCropRatio)
-        let width = Math.ceil(+inputWidth * factor)
-        let height = inputHeight && !inputCropRatio ? Math.ceil(+inputHeight * factor) : Math.ceil(width * cropRatio)
+        let width = inputWidth && Math.round(+inputWidth * factor)
+        let height = inputHeight && Math.round(+inputHeight * factor)
+
+        if (width && inputCropRatio) {
+            height = Math.round(width * cropRatio)
+        }
+
+        if (height && !width && inputCropRatio) {
+            width = Math.round(height / cropRatio)
+        }
 
         return [width, height]
     }
 
-    getFloatRatio (media, cropRatio = null) {
+    getFloatRatio (media = null, cropRatio = null) {
         if (!cropRatio && media && media.width && media.height) {
             return media.height / media.width
         }
@@ -49,7 +56,7 @@ class MediaApi {
             height = !options.autoHeight ? Math.ceil(width / ratio) : null
         }
 
-        if (_.isString(media)) {
+        if (typeof media === 'string') {
             return mediaApi.getFetchImageUrl(media, width, height, options)
         } else {
             return mediaApi.getImageUrl(media, width, height, options)

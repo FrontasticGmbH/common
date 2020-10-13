@@ -1,0 +1,26 @@
+---
+name: "shopify"
+secret: "secret"
+configuration:
+    test:
+        disabled: false
+        supportCursorBasedPagination: true
+        supportOffsetPagination: false
+        hasConsistentProductSearchData: true
+        supportSearchByIdentifierAndQueryParameters: true
+    shopify:
+        hostUrl: https://frontastic-demo.myshopify.com/api/2020-07/graphql.json
+        storefrontAccessToken: 1aa5b043c2b47c26495be4cdf119b77c
+    account:
+        engine: shopify
+    cart:
+        engine: shopify
+    product:
+        engine: shopify
+    whislist:
+        engine: no-wishlist
+projects:
+    -   projectId: test
+        name: Shopify Test Catwalk
+        languages: ["en_GB@GBP", "de_DE@EUR"]
+        defaultLanguage: en_GB@GBP

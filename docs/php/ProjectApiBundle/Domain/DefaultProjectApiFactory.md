@@ -13,13 +13,13 @@
 
 ```php
 public function __construct(
-    FactoryServiceLocator $serviceLocator
+    ProductSearchApiFactory $productSearchApiFactory
 ): mixed
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$serviceLocator`|[`FactoryServiceLocator`](../../CoreBundle/Domain/Api/FactoryServiceLocator.md)||
+`$productSearchApiFactory`|[`ProductSearchApiFactory`](../../ProductSearchApiBundle/Domain/ProductSearchApiFactory.md)||
 
 Return Value: `mixed`
 

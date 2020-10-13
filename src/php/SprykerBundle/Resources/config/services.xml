@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <instanceof id="Frontastic\Common\SprykerBundle\Domain\MapperInterface" autowire="true">
+            <tag name="frontastic.common.spryker.mapper"/>
+        </instanceof>
+
+        <prototype namespace="Frontastic\Common\SprykerBundle\Domain\" resource="../../Domain" autoconfigure="true"/>
+
+        <service id="Frontastic\Common\SprykerBundle\Domain\MapperResolver" public="true">
+            <argument type="tagged_iterator" tag="frontastic.common.spryker.mapper"/>
+        </service>
+
+        <service id="Frontastic\Common\SprykerBundle\Domain\SprykerUrlAppender" public="true" />
+
+        <service id="Frontastic\Common\SprykerBundle\Domain\Account\TokenDecoder" public="true" />
+
+        <service id="Frontastic\Common\SprykerBundle\Domain\Account\SessionService" public="true" />
+
+        <service id="Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper" public="true">
+            <argument type="service" id="Frontastic\Catwalk\ApiCoreBundle\Domain\ContextService" />
+            <argument type="service" id="Frontastic\Common\SprykerBundle\Domain\Account\SessionService" />
+        </service>
+
+        <service id="Frontastic\Common\SprykerBundle\Domain\Exception\ExceptionFactory"
+                 autowire="true"
+                 autoconfigure="true"
+        />
+
+        <service id="Frontastic\Common\SprykerBundle\Domain\SprykerClientFactory" public="true">
+            <argument type="service" id="Frontastic\Common\HttpClient" />
+            <argument type="service" id="Frontastic\Common\SprykerBundle\Domain\Exception\ExceptionFactory" />
+        </service>
+
+        <service id="Frontastic\Common\SprykerBundle\Domain\Locale\DefaultLocaleCreatorFactory">
+            <argument type="service" id="cache.app.simple" />
+        </service>
+
+        <service id="Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreatorFactory"
+                 alias="Frontastic\Common\SprykerBundle\Domain\Locale\DefaultLocaleCreatorFactory"
+                 public="true"
+        />
+
+        <service id="Spryker.Api.VariantUrlEncoder" class="Frontastic\Common\SprykerBundle\Domain\Route\Service\VariantUrlEncoder">
+            <argument type="service">
+                <service class="Frontastic\Common\SprykerBundle\Domain\Product\SprykerSlugger" />
+            </argument>
+        </service>
+
+        <service id="Frontastic\Common\SprykerBundle\Domain\Product\Expander\Nested\NestedVariantAttributeUrlExpander">
+            <argument type="service" id="Spryker.Api.VariantUrlEncoder" />
+        </service>
+    </services>
+</container>

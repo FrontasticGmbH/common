@@ -4,6 +4,9 @@ namespace Frontastic\Common\HttpClient;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class Configuration extends DataObject
 {
     /**

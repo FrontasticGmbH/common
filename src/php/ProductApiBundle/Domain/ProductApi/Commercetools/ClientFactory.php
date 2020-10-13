@@ -28,15 +28,8 @@ class ClientFactory
         $this->httpClient = $httpClient;
     }
 
-    /**
-     * Create a `Commercetools\Client` of the given type for the given project. The type can for example be `product`,
-     * `account`, `cart` or `wishlist`. Fo a complete list, see the `project.yml` config file.
-     */
-    public function factorForProjectAndType(Project $project, string $typeName): Client
+    public function factorForConfigs(object $typeSpecificConfiguration, ?object $commercetoolsConfig = null): Client
     {
-        $typeSpecificConfiguration = $project->getConfigurationSection($typeName);
-        $commercetoolsConfig = $project->getConfigurationSection('commercetools');
-
         $config = [];
 
         foreach ($this->getStringConfigOptions() as $option => $defaultValue) {
@@ -76,6 +69,18 @@ class ClientFactory
             (float)$config['readOperationTimeoutSeconds'],
             (float)$config['writeOperationTimeoutSeconds']
         );
+    }
+
+    /**
+     * Create a `Commercetools\Client` of the given type for the given project. The type can for example be `product`,
+     * `account`, `cart` or `wishlist`. Fo a complete list, see the `project.yml` config file.
+     */
+    public function factorForProjectAndType(Project $project, string $typeName): Client
+    {
+        $typeSpecificConfiguration = $project->getConfigurationSection($typeName);
+        $commercetoolsConfig = $project->getConfigurationSection('commercetools');
+
+        return $this->factorForConfigs($typeSpecificConfiguration, $commercetoolsConfig);
     }
 
     /**

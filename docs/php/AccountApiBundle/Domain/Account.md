@@ -2,24 +2,23 @@
 
 **Fully Qualified**: [`\Frontastic\Common\AccountApiBundle\Domain\Account`](../../../../src/php/AccountApiBundle/Domain/Account.php)
 
-**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
+**Extends**: [`ApiDataObject`](../../CoreBundle/Domain/ApiDataObject.md)
 
 **Implements**: `\Symfony\Component\Security\Core\User\UserInterface`, [`\Serializable`](https://www.php.net/manual/de/class.serializable.php)
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`accountId` | `string` |  | - | 
-`email` | `string` |  | - | 
+`accountId` | `string` |  | *Yes* | 
+`email` | `string` |  | *Yes* | 
 `salutation` | `string` |  | - | 
 `firstName` | `string` |  | - | 
 `lastName` | `string` |  | - | 
 `birthday` | `\DateTime` |  | - | 
-`data` | `array` | `[]` | - | 
-`groups` | [`Group`](Group.md)[] | `[]` | - | 
+`groups` | [`Group`](Group.md)[] | `[]` | *Yes* | 
 `confirmationToken` | `string` |  | - | 
 `confirmed` | `string` | `false` | - | 
 `tokenValidUntil` | `\DateTime` |  | - | 
-`addresses` | [`Address`](Address.md)[] | `[]` | - | 
+`addresses` | [`Address`](Address.md)[] | `[]` | *Yes* | 
 `authToken` | `string|null` |  | - | 
 `dangerousInnerAccount` | `mixed` |  | - | Access original object from backend
 

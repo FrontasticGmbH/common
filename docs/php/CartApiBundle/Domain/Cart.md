@@ -2,23 +2,22 @@
 
 **Fully Qualified**: [`\Frontastic\Common\CartApiBundle\Domain\Cart`](../../../../src/php/CartApiBundle/Domain/Cart.php)
 
-**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
+**Extends**: [`ApiDataObject`](../../CoreBundle/Domain/ApiDataObject.md)
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`cartId` | `string` |  | - | 
+`cartId` | `string` |  | *Yes* | 
 `cartVersion` | `string` |  | - | 
-`custom` | `array` | `[]` | - | 
-`lineItems` | [`LineItem`](LineItem.md)[] | `[]` | - | 
+`lineItems` | [`LineItem`](LineItem.md)[] | `[]` | *Yes* | 
 `email` | `string` |  | - | 
 `birthday` | `\DateTimeImmutable` |  | - | 
 `shippingMethod` | ?[`ShippingMethod`](ShippingMethod.md) |  | - | 
-`shippingAddress` | ?[`Address`](../../AccountApiBundle/Domain/Address.md) |  | - | 
-`billingAddress` | ?[`Address`](../../AccountApiBundle/Domain/Address.md) |  | - | 
-`sum` | `int` |  | - | 
-`currency` | `string` |  | - | 
-`payments` | [`Payment`](Payment.md)[] | `[]` | - | 
-`discountCodes` | `string[]` | `[]` | - | 
+`shippingAddress` | `?\Frontastic\Common\CartApiBundle\Domain\Address` |  | - | 
+`billingAddress` | `?\Frontastic\Common\CartApiBundle\Domain\Address` |  | - | 
+`sum` | `int` |  | *Yes* | 
+`currency` | `string` |  | *Yes* | 
+`payments` | [`Payment`](Payment.md)[] | `[]` | *Yes* | 
+`discountCodes` | `string[]` | `[]` | *Yes* | 
 `dangerousInnerCart` | `mixed` |  | - | Access original object from backend
 
 ## Methods
@@ -31,6 +30,7 @@ Property|Type|Default|Required|Description
 * [hasCompletePayments()](#hascompletepayments)
 * [isReadyForCheckout()](#isreadyforcheckout)
 * [isComplete()](#iscomplete)
+* [getPaymentById()](#getpaymentbyid)
 
 ### getPayedAmount()
 
@@ -95,5 +95,19 @@ public function isComplete(): bool
 ```
 
 Return Value: `bool`
+
+### getPaymentById()
+
+```php
+public function getPaymentById(
+    string $paymentId
+): Payment
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$paymentId`|`string`||
+
+Return Value: [`Payment`](Payment.md)
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

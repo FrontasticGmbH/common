@@ -6,11 +6,11 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`categoryId` | `string` |  | - | 
-`name` | `string` |  | - | 
-`depth` | `int` |  | - | 
-`path` | `string` |  | - | The materialized id path for this category.
-`slug` | `string` |  | - | 
+`categoryId` | `string` |  | *Yes* | 
+`name` | `string` |  | *Yes* | 
+`depth` | `int` |  | *Yes* | 
+`path` | `string` |  | *Yes* | The materialized id path for this category.
+`slug` | `string` |  | *Yes* | 
 `dangerousInnerCategory` | `mixed` |  | - | Access original object from backend
 
 ## Methods

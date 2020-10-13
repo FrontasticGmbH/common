@@ -4,6 +4,9 @@ namespace Frontastic\Common\ProjectApiBundle\Domain;
 
 use Kore\DataObject\DataObject;
 
+/**
+ * @type
+ */
 class Attribute extends DataObject
 {
     const TYPE_BOOLEAN = 'boolean';
@@ -30,6 +33,7 @@ class Attribute extends DataObject
 
     /**
      * @var string
+     * @required
      */
     public $attributeId;
 
@@ -37,6 +41,7 @@ class Attribute extends DataObject
      * TYPE_*
      *
      * @var string
+     * @required
      */
     public $type;
 

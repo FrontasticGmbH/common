@@ -1,6 +1,9 @@
 <?php
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 
+/**
+ * @type
+ */
 class RangeFilter extends Filter
 {
     /**

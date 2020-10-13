@@ -2,15 +2,11 @@
 
 **Fully Qualified**: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools`](../../../../../src/php/ProductApiBundle/Domain/ProductApi/Commercetools.php)
 
-**Implements**: [`ProductApi`](../ProductApi.md)
+**Extends**: [`ProductApiBase`](../ProductApiBase.md)
 
 ## Methods
 
 * [__construct()](#__construct)
-* [getCategories()](#getcategories)
-* [getProductTypes()](#getproducttypes)
-* [getProduct()](#getproduct)
-* [query()](#query)
 * [getDangerousInnerClient()](#getdangerousinnerclient)
 
 ### __construct()
@@ -21,6 +17,8 @@ public function __construct(
     Commercetools\Mapper $mapper,
     Commercetools\Locale\CommercetoolsLocaleCreator $localeCreator,
     EnabledFacetService $enabledFacetService,
+    ProductSearchApi $productSearchApi,
+    array $languages,
     string $defaultLocale
 ): mixed
 ```
@@ -31,69 +29,11 @@ Argument|Type|Default|Description
 `$mapper`|[`Commercetools`](Commercetools.md)\Mapper||
 `$localeCreator`|[`Commercetools`](Commercetools.md)\Locale\CommercetoolsLocaleCreator||
 `$enabledFacetService`|[`EnabledFacetService`](EnabledFacetService.md)||
+`$productSearchApi`|[`ProductSearchApi`](../../../ProductSearchApiBundle/Domain/ProductSearchApi.md)||
+`$languages`|`array`||
 `$defaultLocale`|`string`||
 
 Return Value: `mixed`
-
-### getCategories()
-
-```php
-public function getCategories(
-    Query\CategoryQuery $query
-): array
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$query`|[`Query`](Query.md)\CategoryQuery||
-
-Return Value: `array`
-
-### getProductTypes()
-
-```php
-public function getProductTypes(
-    Query\ProductTypeQuery $query
-): array
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$query`|[`Query`](Query.md)\ProductTypeQuery||
-
-Return Value: `array`
-
-### getProduct()
-
-```php
-public function getProduct(
-    mixed $originalQuery,
-    string $mode = self::QUERY_SYNC
-): ?object
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$originalQuery`|`mixed`||
-`$mode`|`string`|`self::QUERY_SYNC`|
-
-Return Value: `?object`
-
-### query()
-
-```php
-public function query(
-    Query\ProductQuery $query,
-    string $mode = self::QUERY_SYNC
-): object
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$query`|[`Query`](Query.md)\ProductQuery||
-`$mode`|`string`|`self::QUERY_SYNC`|
-
-Return Value: `object`
 
 ### getDangerousInnerClient()
 

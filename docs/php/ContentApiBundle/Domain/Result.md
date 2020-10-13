@@ -6,9 +6,9 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`offset` | `int` |  | - | 
-`total` | `int` |  | - | 
-`count` | `int` |  | - | 
-`items` | `array` |  | - | 
+`offset` | `int` |  | *Yes* | 
+`total` | `int` |  | *Yes* | 
+`count` | `int` |  | *Yes* | 
+`items` | `array` | `[]` | *Yes* | 
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

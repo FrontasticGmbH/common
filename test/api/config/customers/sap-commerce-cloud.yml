@@ -5,8 +5,12 @@ configuration:
     test:
         disabled: false
         anonymousCheckout: false
+        supportCursorBasedPagination: false
+        supportOffsetPagination: true
+        hasConsistentProductSearchData: true
+        supportSearchByIdentifierAndQueryParameters: true
     sap-commerce-cloud:
-        hostUrl: https://gdm-sap-io-1.demo.hybris.com
+        hostUrl: https://api.cjy0ke8wo2-frontasti1-d1-public.model-t.cc.commerce.ondemand.com
     account:
         engine: sap-commerce-cloud
     cart:

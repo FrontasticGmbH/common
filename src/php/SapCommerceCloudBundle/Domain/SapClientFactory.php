@@ -20,11 +20,8 @@ class SapClientFactory
         $this->cache = $cache;
     }
 
-    public function factorForProjectAndType(Project $project, string $typeName): SapClient
+    public function factorForConfigs(object $typeSpecificConfiguration, ?object $sapConfig = null): SapClient
     {
-        $typeSpecificConfiguration = $project->getConfigurationSection($typeName);
-        $sapConfig = $project->getConfigurationSection('sap-commerce-cloud');
-
         $config = [];
         foreach (['hostUrl', 'siteId', 'clientId', 'clientSecret', 'catalogId', 'catalogVersionId'] as $option) {
             $value = $typeSpecificConfiguration->$option ?? $sapConfig->$option ?? null;
@@ -52,5 +49,13 @@ class SapClientFactory
             $config['catalogId'],
             $config['catalogVersionId']
         );
+    }
+
+    public function factorForProjectAndType(Project $project, string $typeName): SapClient
+    {
+        $typeSpecificConfiguration = $project->getConfigurationSection($typeName);
+        $sapConfig = $project->getConfigurationSection('sap-commerce-cloud');
+
+        return $this->factorForConfigs($typeSpecificConfiguration, $sapConfig);
     }
 }
