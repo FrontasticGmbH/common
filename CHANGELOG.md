@@ -1,5 +1,10 @@
 # common Changelog
 
+## `1.1.15` (2020-10-13)
+
+* fix: Do not cast null values in media library to numeric
+* fix: Set whislist as not implemented for Shopify
+
 ## `1.1.14` (2020-10-07)
 
 * fix(shopify): Used only SKU values on variant.sku mapping
