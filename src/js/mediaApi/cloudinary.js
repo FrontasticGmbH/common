@@ -56,7 +56,6 @@ class Cloudinary {
                 fetch_format: media.format && media.format === 'svg' ? undefined : 'auto',
                 width: width,
                 height: height,
-                quality: 'auto',
                 secure: true,
                 ...this.getQuality(options),
                 ...this.getFetchFormat(options),
@@ -80,7 +79,6 @@ class Cloudinary {
                 type: 'fetch',
                 width: width,
                 height: height,
-                quality: 'auto',
                 secure: true,
                 ...this.getQuality(options),
                 ...this.getFetchFormat(options),
@@ -172,9 +170,7 @@ class Cloudinary {
      * @private
      */
     getFetchFormat (imageOptions) {
-        let options = {
-            fetch_format: 'auto',
-        }
+        let options = {}
 
         if (imageOptions.fetch_format) {
             options.fetch_format = imageOptions.fetch_format
