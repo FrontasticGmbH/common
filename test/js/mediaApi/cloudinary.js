@@ -9,6 +9,14 @@ test.each([
         'https://res.cloudinary.com/my-cloud/image/upload/c_fill,f_auto,g_faces:auto,h_768,q_auto,w_1024/media-id',
     ],
     [
+        [{ mediaId: 'media-id' }, null, 768],
+        'https://res.cloudinary.com/my-cloud/image/upload/c_fill,f_auto,g_faces:auto,h_768,q_auto/media-id',
+    ],
+    [
+        [{ mediaId: 'media-id' }, 1024, null],
+        'https://res.cloudinary.com/my-cloud/image/upload/c_fill,f_auto,g_faces:auto,q_auto,w_1024/media-id',
+    ],
+    [
         [{ mediaId: 'media-id', format: 'svg' }, 1024, 768],
         'https://res.cloudinary.com/my-cloud/image/upload/c_fill,g_faces:auto,h_768,q_auto,w_1024/media-id',
     ],
@@ -34,6 +42,14 @@ test.each([
     [
         ['http://k023.de/image.png', 1024, 768],
         'https://res.cloudinary.com/my-cloud/image/fetch/c_fill,f_auto,g_faces:auto,h_768,q_auto,w_1024/http://k023.de/image.png',
+    ],
+    [
+        ['http://k023.de/image.png', null, 768],
+        'https://res.cloudinary.com/my-cloud/image/fetch/c_fill,f_auto,g_faces:auto,h_768,q_auto/http://k023.de/image.png',
+    ],
+    [
+        ['http://k023.de/image.png', 1024, null],
+        'https://res.cloudinary.com/my-cloud/image/fetch/c_fill,f_auto,g_faces:auto,q_auto,w_1024/http://k023.de/image.png',
     ],
     [
         ['http://k023.de/image.png?foo=%20bar', 1024, 768],

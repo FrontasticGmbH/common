@@ -98,6 +98,7 @@ Here you find the API documentation for the relevant classes:
     * [Mailer](php/CoreBundle/Domain/Mailer.md)
     * Mailer
       * [SwiftMail](php/CoreBundle/Domain/Mailer/SwiftMail.md)
+    * [RequestProvider](php/CoreBundle/Domain/RequestProvider.md)
     * [Versioner](php/CoreBundle/Domain/Versioner.md)
   * EventListener
     * [JsonExceptionListener](php/CoreBundle/EventListener/JsonExceptionListener.md)
@@ -124,7 +125,6 @@ Here you find the API documentation for the relevant classes:
       * [Mapper](php/FindologicBundle/Domain/ProductSearchApi/Mapper.md)
       * [QueryValidator](php/FindologicBundle/Domain/ProductSearchApi/QueryValidator.md)
       * [ValidationResult](php/FindologicBundle/Domain/ProductSearchApi/ValidationResult.md)
-    * [RequestProvider](php/FindologicBundle/Domain/RequestProvider.md)
     * [SearchRequest](php/FindologicBundle/Domain/SearchRequest.md)
   * Exception
     * [ServiceNotAliveException](php/FindologicBundle/Exception/ServiceNotAliveException.md)
@@ -250,6 +250,11 @@ Here you find the API documentation for the relevant classes:
   * Domain
     * AccountApi
       * [ShopifyAccountApi](php/ShopifyBundle/Domain/AccountApi/ShopifyAccountApi.md)
+    * CartApi
+      * [ShopifyCartApi](php/ShopifyBundle/Domain/CartApi/ShopifyCartApi.md)
+    * Mapper
+      * [ShopifyAccountMapper](php/ShopifyBundle/Domain/Mapper/ShopifyAccountMapper.md)
+      * [ShopifyProductMapper](php/ShopifyBundle/Domain/Mapper/ShopifyProductMapper.md)
     * ProductApi
       * [ShopifyProductApi](php/ShopifyBundle/Domain/ProductApi/ShopifyProductApi.md)
     * ProductSearchApi

@@ -192,7 +192,7 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                 }
 
                 return new Result([
-                    // @TODO: "total" is not available in Shopify.
+                    // "total" is not available in Shopify.
                     'previousCursor' => $hasPreviousPage ? "before:\"$previousCursor\"" : null,
                     'nextCursor' => $hasNextPage ? "after:\"$nextCursor\"" : null,
                     'count' => count($products),
@@ -204,7 +204,29 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
 
     protected function getSearchableAttributesImplementation(): PromiseInterface
     {
-        return new FulfilledPromise([]);
+        $query = "
+            query {
+                productTags(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                    edges {
+                        node
+                    }
+                }
+                productTypes(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                    edges {
+                        node
+                    }
+                }
+            }";
+
+        return $this->client
+            ->request($query)
+            ->then(function (array $result): array {
+                if ($result['errors']) {
+                    throw new \RuntimeException($result['errors'][0]['message']);
+                }
+
+                return $this->productMapper->mapDataToProductAttributes($result['body']['data']);
+            });
     }
 
     public function getDangerousInnerClient()
