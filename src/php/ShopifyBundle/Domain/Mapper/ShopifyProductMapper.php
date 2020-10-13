@@ -211,6 +211,7 @@ class ShopifyProductMapper
                 );
                 break;
             case Attribute::TYPE_BOOLEAN:
+            case Attribute::TYPE_ENUM:
                 $filterString = sprintf(
                     '%s:%s',
                     $queryFilter->handle,
