@@ -183,7 +183,7 @@ class ShopifyProductMapper
         $attributeId = 'vendor';
         $attributes[$attributeId] = new Attribute([
             'attributeId' => $attributeId,
-            'type' => Attribute::TYPE_MONEY,
+            'type' => Attribute::TYPE_TEXT,
             'label' => null,
         ]);
 
