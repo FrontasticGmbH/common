@@ -92,14 +92,14 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
             $parameters[] = "$query->query";
         }
 
-        if ($query->category) {
-            $parameters[] = "$query->category";
-        }
-
         if ($query->filter) {
             foreach ($query->filter as $queryFilter) {
                 $parameters[] = $this->productMapper->toFilterString($queryFilter);
             }
+        }
+
+        if ($query->productType) {
+            $parameters[] = sprintf('product_type:%s', $query->productType);
         }
 
         $skus = [];
@@ -212,11 +212,6 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
         $query = "
             query {
                 productTags(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
-                    edges {
-                        node
-                    }
-                }
-                productTypes(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                     edges {
                         node
                     }

@@ -111,7 +111,6 @@ class ShopifyProductMapper
     {
         $attributes = [];
         $productTags = [];
-        $productTypes = [];
 
         foreach ($productAttributesData['productTags']['edges'] as $productTag) {
             if (empty($productTag['node'])) {
@@ -120,16 +119,6 @@ class ShopifyProductMapper
             $productTags[] = [
                 'key' => $productTag['node'],
                 'label' => $productTag['node'],
-            ];
-        }
-
-        foreach ($productAttributesData['productTypes']['edges'] as $productType) {
-            if (empty($productType['node'])) {
-                continue;
-            }
-            $productTypes[] = [
-                'key' => $productType['node'],
-                'label' => $productType['node'],
             ];
         }
 
@@ -143,16 +132,6 @@ class ShopifyProductMapper
             ]);
         }
 
-        if (!empty($productTypes)) {
-            $attributeId = 'product_type';
-            $attributes[$attributeId] = new Attribute([
-                'attributeId' => $attributeId,
-                'type' => Attribute::TYPE_ENUM,
-                'label' => null,
-                'values' => $productTypes,
-            ]);
-        }
-
         $attributeId = 'available_for_sale';
         $attributes[$attributeId] = new Attribute([
             'attributeId' => $attributeId,
@@ -160,19 +139,21 @@ class ShopifyProductMapper
             'label' => null,
         ]);
 
-        $attributeId = 'created_at';
-        $attributes[$attributeId] = new Attribute([
-            'attributeId' => $attributeId,
-            'type' => Attribute::TYPE_TEXT,
-            'label' => null,
-        ]);
+        /** TODO: Attributes should include a data range filter */
+        // $attributeId = 'created_at';
+        // $attributes[$attributeId] = new Attribute([
+        //    'attributeId' => $attributeId,
+        //    'type' => Attribute::TYPE_TEXT,
+        //    'label' => null,
+        // ]);
 
-        $attributeId = 'updated_at';
-        $attributes[$attributeId] = new Attribute([
-            'attributeId' => $attributeId,
-            'type' => Attribute::TYPE_TEXT,
-            'label' => null,
-        ]);
+        /** TODO: Attributes should include a data range filter */
+        // $attributeId = 'updated_at';
+        // $attributes[$attributeId] = new Attribute([
+        //    'attributeId' => $attributeId,
+        //    'type' => Attribute::TYPE_TEXT,
+        //    'label' => null,
+        //]);
 
         $attributeId = 'variants.price';
         $attributes[$attributeId] = new Attribute([
@@ -211,11 +192,17 @@ class ShopifyProductMapper
                 );
                 break;
             case Attribute::TYPE_BOOLEAN:
-            case Attribute::TYPE_ENUM:
                 $filterString = sprintf(
                     '%s:%s',
                     $queryFilter->handle,
-                    implode(" ", $queryFilter->terms ?? [])
+                    $queryFilter->terms[0] ? 'true': 'false'
+                );
+                break;
+            case Attribute::TYPE_ENUM:
+                $filterString = sprintf(
+                    '(%s:%s)',
+                    $queryFilter->handle,
+                    implode(" AND $queryFilter->handle:", $queryFilter->terms ?? [])
                 );
                 break;
             default:
