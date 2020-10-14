@@ -111,10 +111,10 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
         }
 
         if (count($skus)) {
-            $parameters = array_merge($parameters, $skus);
+            $parameters[] = "(" . implode(' OR ', $skus) .")";
         }
 
-        $queryFilter = "query:\"" . implode(' OR ', $parameters) . "\"";
+        $queryFilter = "query:\"" . implode(' AND ', $parameters) . "\"";
 
         $pageFilter = $this->buildPageFilter($query);
 
