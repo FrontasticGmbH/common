@@ -189,7 +189,7 @@ class ShopifyProductApi extends ProductApiBase
     private function buildPageFilter(PaginatedQuery $query): string
     {
         $pageFilter = strpos($query->cursor, 'before:') === 0 ? "last:" : "first:";
-        $pageFilter .= $query->limit <= self::MAX_ELEMENTS_TO_FETCH ? $query->limit : self::MAX_ELEMENTS_TO_FETCH;
+        $pageFilter .= min($query->limit, self::MAX_ELEMENTS_TO_FETCH);
         $pageFilter .= !empty($query->cursor) ? ' ' . $query->cursor : null;
 
         return $pageFilter;
