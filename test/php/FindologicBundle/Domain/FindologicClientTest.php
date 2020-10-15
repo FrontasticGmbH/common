@@ -32,6 +32,7 @@ class FindologicClientTest extends TestCase
             ->thenReturn(new FulfilledPromise(new HttpClient\Response(['body' => ''])));
 
         $options = new HttpClient\Options(['timeout' => FindologicClient::REQUEST_TIMEOUT]);
+        $searchRequest = new SearchRequest(['outputAttributes' => ['cat', 'price']]);
         $url = 'foo/index.php?shopkey=bar&outputAdapter=JSON_1.0' .
             '&outputAttrib%5B0%5D=cat&outputAttrib%5B1%5D=price' .
             '&userIp=1.2.3.4' .
@@ -39,7 +40,7 @@ class FindologicClientTest extends TestCase
             '&shopUrl=https%3A%2F%2Fmy.shop.com';
 
         $client = new FindologicClient($httpClient, $requestProvider, [$language => $endpointConfig]);
-        $client->search($language, new SearchRequest([]))->wait();
+        $client->search($language, $searchRequest)->wait();
 
         \Phake::verify($httpClient)->requestAsync('GET', $url, '', [], $options);
     }

@@ -8,7 +8,6 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiBase;
 use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyProductMapper;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClient;
-use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
 
 class ShopifyProductSearchApi extends ProductSearchApiBase
@@ -93,8 +92,14 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
             $parameters[] = "$query->query";
         }
 
-        if ($query->category) {
-            $parameters[] = "$query->category";
+        if ($query->filter) {
+            foreach ($query->filter as $queryFilter) {
+                $parameters[] = $this->productMapper->toFilterString($queryFilter);
+            }
+        }
+
+        if ($query->productType) {
+            $parameters[] = sprintf('product_type:%s', $query->productType);
         }
 
         $skus = [];
@@ -106,10 +111,10 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
         }
 
         if (count($skus)) {
-            $parameters = array_merge($parameters, $skus);
+            $parameters[] = "(" . implode(' OR ', $skus) .")";
         }
 
-        $queryFilter = "query:\"" . implode(' OR ', $parameters) . "\"";
+        $queryFilter = "query:\"" . implode(' AND ', $parameters) . "\"";
 
         $pageFilter = $this->buildPageFilter($query);
 
@@ -153,6 +158,34 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
             }";
         }
 
+        if (count($parameters) && count($productIds) && $query->category) {
+            throw new \InvalidArgumentException(
+                'Currently it is not possible to filter by category and other parameters at the same time'
+            );
+        }
+
+        if ($query->category) {
+            $query->query = "{
+                node(id: \"{$query->category}\") {
+                    id
+                    ... on Collection {
+                        products($pageFilter) {
+                            edges {
+                                cursor
+                                node {
+                                    $productQuery
+                                }
+                            }
+                            pageInfo {
+                              hasNextPage
+                              hasPreviousPage
+                            }
+                        }
+                    }
+                }
+            }";
+        }
+
         return $this->client
             ->request($query->query, $query->locale)
             ->then(function ($result) use ($query): Result {
@@ -161,6 +194,7 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
 
                 $products = [];
                 $productsData = [];
+                $pageInfoData = [];
 
                 if ($result['errors']
                     && strpos($result['errors'][0]['message'], 'Invalid global id') !== false
@@ -170,14 +204,24 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                     ]);
                 }
 
-                if (key_exists('products', $result['body']['data'])) {
-                    $productsData = $result['body']['data']['products']['edges'];
-                    $hasNextPage = $result['body']['data']['products']['pageInfo']['hasNextPage'];
-                    $hasPreviousPage = $result['body']['data']['products']['pageInfo']['hasPreviousPage'];
-                }
-
                 if (key_exists('nodes', $result['body']['data'])) {
                     $productsData = $result['body']['data']['nodes'];
+                }
+
+                if (key_exists('node', $result['body']['data']) &&
+                    key_exists('products', $result['body']['data']['node'])) {
+                    $productsData = $result['body']['data']['node']['products']['edges'];
+                    $pageInfoData = $result['body']['data']['node']['products']['pageInfo'];
+                }
+
+                if (key_exists('products', $result['body']['data'])) {
+                    $productsData = $result['body']['data']['products']['edges'];
+                    $pageInfoData = $result['body']['data']['products']['pageInfo'];
+                }
+
+                if (!empty($pageInfoData)) {
+                    $hasNextPage = $pageInfoData['hasNextPage'];
+                    $hasPreviousPage = $pageInfoData['hasPreviousPage'];
                 }
 
                 $previousCursor = $productsData[0]['cursor'] ?? null;
@@ -207,11 +251,6 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
         $query = "
             query {
                 productTags(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
-                    edges {
-                        node
-                    }
-                }
-                productTypes(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                     edges {
                         node
                     }

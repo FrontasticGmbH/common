@@ -4,6 +4,7 @@ namespace Frontastic\Common\ShopifyBundle\Domain\Mapper;
 
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\Filter;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ProjectApiBundle\Domain\Attribute;
 
@@ -110,7 +111,6 @@ class ShopifyProductMapper
     {
         $attributes = [];
         $productTags = [];
-        $productTypes = [];
 
         foreach ($productAttributesData['productTags']['edges'] as $productTag) {
             if (empty($productTag['node'])) {
@@ -119,16 +119,6 @@ class ShopifyProductMapper
             $productTags[] = [
                 'key' => $productTag['node'],
                 'label' => $productTag['node'],
-            ];
-        }
-
-        foreach ($productAttributesData['productTypes']['edges'] as $productType) {
-            if (empty($productType['node'])) {
-                continue;
-            }
-            $productTypes[] = [
-                'key' => $productType['node'],
-                'label' => $productType['node'],
             ];
         }
 
@@ -142,16 +132,6 @@ class ShopifyProductMapper
             ]);
         }
 
-        if (!empty($productTypes)) {
-            $attributeId = 'product_type';
-            $attributes[$attributeId] = new Attribute([
-                'attributeId' => $attributeId,
-                'type' => Attribute::TYPE_ENUM,
-                'label' => null,
-                'values' => $productTypes,
-            ]);
-        }
-
         $attributeId = 'available_for_sale';
         $attributes[$attributeId] = new Attribute([
             'attributeId' => $attributeId,
@@ -159,19 +139,21 @@ class ShopifyProductMapper
             'label' => null,
         ]);
 
-        $attributeId = 'created_at';
-        $attributes[$attributeId] = new Attribute([
-            'attributeId' => $attributeId,
-            'type' => Attribute::TYPE_TEXT,
-            'label' => null,
-        ]);
+        /** TODO: Attributes should include a data range filter */
+        // $attributeId = 'created_at';
+        // $attributes[$attributeId] = new Attribute([
+        //    'attributeId' => $attributeId,
+        //    'type' => Attribute::TYPE_TEXT,
+        //    'label' => null,
+        // ]);
 
-        $attributeId = 'updated_at';
-        $attributes[$attributeId] = new Attribute([
-            'attributeId' => $attributeId,
-            'type' => Attribute::TYPE_TEXT,
-            'label' => null,
-        ]);
+        /** TODO: Attributes should include a data range filter */
+        // $attributeId = 'updated_at';
+        // $attributes[$attributeId] = new Attribute([
+        //    'attributeId' => $attributeId,
+        //    'type' => Attribute::TYPE_TEXT,
+        //    'label' => null,
+        //]);
 
         $attributeId = 'variants.price';
         $attributes[$attributeId] = new Attribute([
@@ -183,7 +165,7 @@ class ShopifyProductMapper
         $attributeId = 'vendor';
         $attributes[$attributeId] = new Attribute([
             'attributeId' => $attributeId,
-            'type' => Attribute::TYPE_MONEY,
+            'type' => Attribute::TYPE_TEXT,
             'label' => null,
         ]);
 
@@ -195,5 +177,42 @@ class ShopifyProductMapper
         ]);
 
         return $attributes;
+    }
+
+    public function toFilterString(Filter $queryFilter): string
+    {
+        switch ($queryFilter->attributeType) {
+            case Attribute::TYPE_MONEY:
+                $filterString = sprintf(
+                    '%s:>=%s %s:<=%s',
+                    $queryFilter->handle,
+                    (float) $queryFilter->min / 100,
+                    $queryFilter->handle,
+                    (float) $queryFilter->max / 100
+                );
+                break;
+            case Attribute::TYPE_BOOLEAN:
+                $filterString = sprintf(
+                    '%s:%s',
+                    $queryFilter->handle,
+                    $queryFilter->terms[0] ? 'true': 'false'
+                );
+                break;
+            case Attribute::TYPE_ENUM:
+                $filterString = sprintf(
+                    '(%s:%s)',
+                    $queryFilter->handle,
+                    implode(" AND $queryFilter->handle:", $queryFilter->terms ?? [])
+                );
+                break;
+            default:
+                $filterString = sprintf(
+                    '%s:*%s*',
+                    $queryFilter->handle,
+                    implode(" ", $queryFilter->terms ?? [])
+                );
+        }
+
+        return $filterString;
     }
 }

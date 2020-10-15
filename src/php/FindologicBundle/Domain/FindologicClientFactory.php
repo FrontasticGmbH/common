@@ -56,12 +56,6 @@ class FindologicClientFactory
             $clientConfigs[$language] = new FindologicEndpointConfig($config);
         }
 
-        $outputAttributes = $typeSpecificConfig->outputAttributes ?? $findologicConfig->outputAttributes ?? [];
-
-        if (!is_array($outputAttributes)) {
-            throw new \RuntimeException('Findologic config option outputAttributes needs to be an array');
-        }
-
-        return new FindologicClient($this->httpClient, $this->requestProvider, $clientConfigs, $outputAttributes);
+        return new FindologicClient($this->httpClient, $this->requestProvider, $clientConfigs);
     }
 }

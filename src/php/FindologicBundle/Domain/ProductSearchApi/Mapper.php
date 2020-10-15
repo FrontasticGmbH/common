@@ -15,6 +15,40 @@ use Frontastic\Common\ProductApiBundle\Domain\Variant;
 
 class Mapper
 {
+    private const DEFAULT_OUTPUT_ATTRIBUTES = ['price'];
+
+    /**
+     * @var array
+     */
+    private $outputAttributes;
+
+    /**
+     * @var string|null
+     */
+    private $categoryProperty;
+
+    /**
+     * @var string|null
+     */
+    private $slugProperty;
+
+    /**
+     * @var string|null
+     */
+    private $slugRegex;
+
+    public function __construct(
+        array $outputAttributes = [],
+        ?string $categoryProperty = null,
+        ?string $slugProperty = null,
+        ?string $slugRegex = null
+    ) {
+        $this->categoryProperty = $categoryProperty;
+        $this->slugProperty = $slugProperty;
+        $this->slugRegex = $slugRegex;
+        $this->outputAttributes = $outputAttributes;
+    }
+
     public function queryToRequest(ProductQuery $query): SearchRequest
     {
         $parameters = [
@@ -23,6 +57,9 @@ class Mapper
             'count' => $query->limit,
             'order' => $this->getSortAttributesForRequest($query),
             'attributes' => $this->getAttributesForRequest($query),
+            'outputAttributes' => array_unique(
+                array_merge(self::DEFAULT_OUTPUT_ATTRIBUTES, $this->outputAttributes)
+            )
         ];
 
         return new SearchRequest($parameters);
@@ -75,9 +112,9 @@ class Mapper
                     [
                         'productId' => $item['id'],
                         'name' => $this->stripHtml($item['name']),
-                        'slug' => $this->getSlugFromUrl($item['url']),
+                        'slug' => $this->getSlug($item),
                         'description' => $this->stripHtml($item['summary']),
-                        'categories' => $item['attributes']['cat'],
+                        'categories' => $this->getCategories($item),
                         'variants' => empty($item['variants'])
                             ? $this->dataToVariants($query, [$item], $item['id'], $currency)
                             : $this->dataToVariants($query, $item['variants'], $item['id'], $currency),
@@ -183,15 +220,6 @@ class Mapper
         }
     }
 
-    private function getSlugFromUrl(string $url): string
-    {
-        $urlWithoutQueryString = strtok($url, '?');
-
-        preg_match('/[^\/]+(?=\/$|$)/', $urlWithoutQueryString, $matches);
-
-        return $matches[0];
-    }
-
     /**
      * @return Variant[]
      */
@@ -285,5 +313,61 @@ class Mapper
                 )
             )
         );
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getCategories(array $item): array
+    {
+        if ($this->categoryProperty === null) {
+            return [];
+        }
+
+        return $this->getArrayValue($item, $this->categoryProperty) ?? [];
+    }
+
+    /**
+     * @return array|mixed|null
+     */
+    private function getArrayValue(array $item, string $key)
+    {
+        $array = $item;
+        $segments = explode('.', $key);
+
+        foreach ($segments as $segment) {
+            if (!isset($array[$segment])) {
+                return null;
+            }
+
+            $array = $array[$segment];
+        }
+
+        return $array;
+    }
+
+    /**
+     * @param $item
+     * @return string
+     */
+    private function getSlug($item): string
+    {
+        if ($this->slugProperty === null) {
+            return $this->getSlugFromUrl($item['url']);
+        }
+
+        return $this->getArrayValue($item, $this->slugProperty);
+    }
+
+    private function getSlugFromUrl(string $url): string
+    {
+        $path = parse_url($url, PHP_URL_PATH);
+        $matches = [];
+
+        if ($this->slugRegex !== null) {
+            preg_match($this->slugRegex, $path, $matches);
+        }
+
+        return $matches['url'] ?? $path;
     }
 }

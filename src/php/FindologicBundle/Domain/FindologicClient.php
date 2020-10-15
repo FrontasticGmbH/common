@@ -13,11 +13,6 @@ class FindologicClient
     public const ALIVE_TIMEOUT = 1;
     public const REQUEST_TIMEOUT = 3;
 
-    private const DEFAULT_OUTPUT_ATTRIBUTES = [
-        'cat',
-        'price',
-    ];
-
     /**
      * @var HttpClient
      */
@@ -83,10 +78,6 @@ class FindologicClient
             ->then(
                 function () use ($language, $request) {
                     $parameters = $request->toArray();
-
-                    $parameters['outputAttrib'] = array_unique(
-                        array_merge(self::DEFAULT_OUTPUT_ATTRIBUTES, $this->outputAttributes)
-                    );
 
                     $request = $this->requestProvider->getCurrentRequest();
 

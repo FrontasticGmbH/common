@@ -21,6 +21,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 class ShopifyProductApi extends ProductApiBase
 {
     private const DEFAULT_PRODUCT_TYPES_TO_FETCH = 10;
+    private const MAX_ELEMENTS_TO_FETCH = 250;
 
     /**
      * @var ShopifyClient
@@ -79,6 +80,10 @@ class ShopifyProductApi extends ProductApiBase
         $hasPreviousPage = null;
         $categories = [];
 
+        if ($result['errors']) {
+            throw new \RuntimeException($result['errors'][0]['message']);
+        }
+
         if (key_exists('collections', $result['body']['data'])) {
             $collectionsData = $result['body']['data']['collections']['edges'];
             $hasNextPage = $result['body']['data']['collections']['pageInfo']['hasNextPage'];
@@ -128,7 +133,7 @@ class ShopifyProductApi extends ProductApiBase
             }
 
             $productTypes[] = new ProductType([
-                'productTypeId' => $productTypeData['cursor'],
+                'productTypeId' => $productTypeData['node'],
                 'name' => $productTypeData['node'],
                 // 'dangerousInnerProductType' => $productType,
             ]);
@@ -184,7 +189,7 @@ class ShopifyProductApi extends ProductApiBase
     private function buildPageFilter(PaginatedQuery $query): string
     {
         $pageFilter = strpos($query->cursor, 'before:') === 0 ? "last:" : "first:";
-        $pageFilter .= $query->limit;
+        $pageFilter .= min($query->limit, self::MAX_ELEMENTS_TO_FETCH);
         $pageFilter .= !empty($query->cursor) ? ' ' . $query->cursor : null;
 
         return $pageFilter;

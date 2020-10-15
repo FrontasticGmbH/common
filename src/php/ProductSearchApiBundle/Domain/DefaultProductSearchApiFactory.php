@@ -4,7 +4,6 @@ namespace Frontastic\Common\ProductSearchApiBundle\Domain;
 
 use Frontastic\Common\FindologicBundle\Domain\FindologicClientFactory;
 use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\FindologicProductSearchApi;
-use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\Mapper as FindologicDataMapper;
 use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\QueryValidator;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory as CommercetoolsClientFactory;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory;
@@ -30,6 +29,7 @@ use Frontastic\Common\SprykerBundle\Domain\ProductSearch\SprykerProductSearchApi
 use Frontastic\Common\SprykerBundle\Domain\SprykerClientFactory;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Frontastic\Common\FindologicBundle\Domain\FindologicMapperFactory;
 
 class DefaultProductSearchApiFactory implements ProductSearchApiFactory
 {
@@ -154,13 +154,14 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
                 break;
             case 'findologic':
                 $clientFactory = $this->container->get(FindologicClientFactory::class);
-                $dataMapper = $this->container->get(FindologicDataMapper::class);
+                $mapperFactory = $this->container->get(FindologicMapperFactory::class);
                 $queryValidator = $this->container->get(QueryValidator::class);
 
                 $client = $clientFactory->factorForConfigs($project->languages, $productSearchConfig, $engineConfig);
+                $dataMapper = $mapperFactory->factorForConfigs($productSearchConfig, $engineConfig);
 
                 $originalDataSourceConfig =
-                    (object) ($productSearchConfig->originalDataSource ?? $engineConfig->originalDataSource);
+                    (object)($productSearchConfig->originalDataSource ?? $engineConfig->originalDataSource);
                 $originalDataSourceVendorConfig = $project->getConfigurationSection($originalDataSourceConfig->engine);
 
                 $originalDataSource = $this->factorFromConfiguration(

@@ -318,6 +318,24 @@ class ProductsTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
+    public function testGetProductByCategoryReturnsProduct(Project $project, string $language): void
+    {
+        $categories = $this->fetchCategories($project, $language);
+        $categoryId = $categories[0]->categoryId;
+
+        $this->assertNotEmptyString($categoryId);
+        $productsByCategory = $this->queryProducts($project, $language, ['category' => $categoryId]);
+
+        $this->assertProductsAreWellFormed($project, $language, $productsByCategory->items);
+
+        foreach ($productsByCategory as $product) {
+            $this->assertArraySubset([$categoryId], $product->categories);
+        }
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
     public function testGetProductSyncByNonExistingIdThrowsException(Project $project, string $language): void
     {
         $query = ProductApi\Query\SingleProductQuery::byProductIdWithLocale(self::NON_EXISTING_PRODUCT_ID, $language);
