@@ -108,12 +108,9 @@ class MapperTest extends TestCase
                     [
                         'productId' => '131',
                         'name' => '(SW) JACKET PIZ BIANCO',
-                        'slug' => 'sw-jacket-piz-bianco',
+                        'slug' => '/mountain-air-adventure/fashion/men/131/sw-jacket-piz-bianco',
                         'description' => '',
                         'categories' => [
-                            'Mountain air & adventure_Fashion_Men',
-                            'Mountain air & adventure',
-                            'Mountain air & adventure_Fashion',
                         ],
                         'variants' => [
                             new Variant(
@@ -140,13 +137,9 @@ class MapperTest extends TestCase
                     [
                         'productId' => '133',
                         'name' => '(SW) HYBRID JACKET',
-                        'slug' => 'sw-hybrid-jacket',
+                        'slug' => '/mountain-air-adventure/fashion/women/133/sw-hybrid-jacket',
                         'description' => '',
-                        'categories' => [
-                            'Mountain air & adventure_Fashion_Women',
-                            'Mountain air & adventure',
-                            'Mountain air & adventure_Fashion',
-                        ],
+                        'categories' => [],
                         'variants' => [
                             new Variant(
                                 [
@@ -174,13 +167,9 @@ class MapperTest extends TestCase
                     [
                         'productId' => '148',
                         'name' => '(SW) HYBRID PANTS MEN',
-                        'slug' => 'sw-hybrid-pants-men',
+                        'slug' => '/mountain-air-adventure/fashion/men/148/sw-hybrid-pants-men',
                         'description' => '',
-                        'categories' => [
-                            'Mountain air & adventure_Fashion_Men',
-                            'Mountain air & adventure',
-                            'Mountain air & adventure_Fashion',
-                        ],
+                        'categories' => [],
                         'variants' => [
                             new Variant(
                                 [
@@ -208,13 +197,9 @@ class MapperTest extends TestCase
                     [
                         'productId' => '149',
                         'name' => '(SW) HYBRID PANTS WOMEN',
-                        'slug' => 'sw-hybrid-pants-women',
+                        'slug' => '/mountain-air-adventure/fashion/women/149/sw-hybrid-pants-women',
                         'description' => '',
-                        'categories' => [
-                            'Mountain air & adventure_Fashion_Women',
-                            'Mountain air & adventure',
-                            'Mountain air & adventure_Fashion',
-                        ],
+                        'categories' => [],
                         'variants' => [
                             new Variant(
                                 [
@@ -326,5 +311,78 @@ class MapperTest extends TestCase
             ],
             $result
         );
+    }
+
+    public function testGetSlugFromProperty()
+    {
+        $mapper = new Mapper([], null, 'slug');
+        $query = new ProductQuery(['locale' => 'en_GB@GBP']);
+
+        $response = json_decode(file_get_contents(__DIR__ . '/fixtures/findologicSlugFieldResponse.json'), true);
+
+        $productData = $response['result']['items'];
+
+        $result = $mapper->dataToProducts($productData, $query);
+
+        $this->assertCount(1, $result);
+        $this->assertSame('this-is-the-slug', $result[0]->slug);
+    }
+
+    public function testGetSlugFromUrl()
+    {
+        $mapper = new Mapper([], null, null, '#^/p/(?P<url>\w[\w-]+)\-(?P<identifier>\w+)$#sD');
+        $query = new ProductQuery(['locale' => 'en_GB@GBP']);
+
+        $response = json_decode(file_get_contents(__DIR__ . '/fixtures/findologicSlugUrlResponse.json'), true);
+
+        $productData = $response['result']['items'];
+
+        $result = $mapper->dataToProducts($productData, $query);
+
+        $this->assertCount(1, $result);
+        $this->assertSame('this-is-the-slug', $result[0]->slug);
+    }
+
+    public function testGetCategoriesFromAttribute()
+    {
+        $mapper = new Mapper(['customCategoryField'], 'attributes.customCategoryField');
+        $query = new ProductQuery(['locale' => 'en_GB@GBP']);
+
+        $response = json_decode(
+            file_get_contents(__DIR__ . '/fixtures/findologicCategoryAttributeResponse.json'),
+            true
+        );
+
+        $productData = $response['result']['items'];
+
+        $result = $mapper->dataToProducts($productData, $query);
+
+        $this->assertCount(1, $result);
+        $this->assertEquals(
+            [
+                "mountain_air_adventure",
+                "fashion",
+                "men",
+            ],
+            $result[0]->categories
+        );
+    }
+
+    public function testGetCategoriesWithUnknownFieldReturnsEmptyArray()
+    {
+        $mapper = new Mapper([], 'this.is.wrong');
+        $query = new ProductQuery(['locale' => 'en_GB@GBP']);
+
+        $response = json_decode(
+            file_get_contents(__DIR__ . '/fixtures/findologicCategoryAttributeResponse.json'),
+            true
+        );
+
+        $productData = $response['result']['items'];
+
+        $result = $mapper->dataToProducts($productData, $query);
+
+        $this->assertCount(1, $result);
+        $this->assertEquals([], $result[0]->categories);
     }
 }

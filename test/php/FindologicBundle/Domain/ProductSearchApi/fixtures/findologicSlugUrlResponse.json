@@ -1,0 +1,54 @@
+{
+    "request": {
+        "query": "ordernumber:SW10002 OR ordernumber:SW10132",
+        "first": 0,
+        "count": 24,
+        "serviceId": "3330286AB8B769B8C4372E89D9BEB10F",
+        "usergroup": null,
+        "order": {
+            "field": "salesfrequency",
+            "relevanceBased": true,
+            "direction": "DESC"
+        }
+    },
+    "result": {
+        "metadata": {
+            "landingpage": null,
+            "promotion": null,
+            "searchConcept": null,
+            "effectiveQuery": "ordernumber:SW10002 OR ordernumber:SW10132",
+            "totalResults": 1,
+            "currencySymbol": "€"
+        },
+        "items": [
+            {
+                "id": "131",
+                "score": 1.38629,
+                "url": "https://www.prym.de/p/this-is-the-slug-13418500",
+                "name": "(SW) JACKET PIZ BIANCO",
+                "ordernumbers": [
+                    "SW10131"
+                ],
+                "summary": "",
+                "price": 249.95,
+                "attributes": {
+                    "cat": [
+                        "Mountain air & adventure_Fashion_Men",
+                        "Mountain air & adventure",
+                        "Mountain air & adventure_Fashion"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/ose.demo.findologic.com\/media\/image\/18\/c2\/bd\/SW10131.jpg",
+                "highlightedName": "<span class=\"flEmphasis\">(SW)<\/span> JACKET PIZ BIANCO"
+            }
+        ],
+        "filters": {
+            "main": [],
+            "other": []
+        }
+    }
+}
