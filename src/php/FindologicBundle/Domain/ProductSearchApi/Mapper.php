@@ -235,7 +235,7 @@ class Mapper
                         'price' => $this->transformValueToResult($variant['price'], 'price'),
                         'currency' => $currency,
                         'attributes' => $variant['attributes'],
-                        'images' => [urldecode($variant['imageUrl'])],
+                        'images' => [$variant['imageUrl']],
                         'dangerousInnerVariant' => $query->loadDangerousInnerData ? $variant : null,
                     ]
                 );
@@ -361,9 +361,6 @@ class Mapper
 
     private function getSlugFromUrl(string $url): string
     {
-        // @TODO encoding might be removed
-        $url = urldecode($url);
-
         $path = parse_url($url, PHP_URL_PATH);
         $matches = [];
 
