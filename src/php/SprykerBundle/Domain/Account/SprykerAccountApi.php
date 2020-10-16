@@ -63,7 +63,6 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
      */
     public function confirmEmail(string $token, string $locale = null): Account
     {
-        // TODO: Implement confirmEmail() method.
         throw new \RuntimeException('Not implemented');
     }
 
@@ -91,16 +90,6 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
         }
 
         return $account;
-    }
-
-    /**
-     * @param string $token
-     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
-     */
-    public function verifyEmail(string $token): Account
-    {
-        // @TODO: To be migrated form Prym
-        throw new \RuntimeException('Not implemented');
     }
 
     /**
