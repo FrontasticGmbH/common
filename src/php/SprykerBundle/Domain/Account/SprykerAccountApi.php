@@ -152,10 +152,11 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
     {
         $request = new ForgotPasswordRequestData($email);
 
-        $response = $this->client->post('/customer-forgotten-password', [], $request->encode());
+        $this->client->post('/customer-forgotten-password', [], $request->encode());
 
-        // @TODO: Implement generatePasswordResetToken() method
-        return new PasswordResetToken();
+        return new PasswordResetToken([
+            'email' => $email,
+        ]);
     }
 
     /**
