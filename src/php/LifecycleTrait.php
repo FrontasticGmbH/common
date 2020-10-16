@@ -2,8 +2,10 @@
 
 namespace Frontastic\Common;
 
+use Frontastic\Common\ProductSearchApiBundle\Domain\LegacyLifecycleEventDecorator;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
+use phpDocumentor\Reflection\Types\Object_;
 
 /**
  * Trait LifecycleTrait
@@ -57,7 +59,7 @@ trait LifecycleTrait
             if (is_callable([$listener, $beforeEvent])) {
                 $newArguments = call_user_func_array(
                     [$listener, $beforeEvent],
-                    array_merge([$this->getAggregate()], $arguments)
+                    array_merge([$this->getAggregateForListeners()], $arguments)
                 );
 
                 if (is_array($newArguments)) {
@@ -66,7 +68,7 @@ trait LifecycleTrait
             }
         }
 
-        $rawResult = call_user_func_array([$this->getAggregate(), $method], $arguments);
+        $rawResult = call_user_func_array([$this->getAggregateForRawResult(), $method], $arguments);
         if ($rawResult instanceof PromiseInterface) {
             $resultPromise = $rawResult;
             $returnPromise = true;
@@ -79,7 +81,7 @@ trait LifecycleTrait
             $afterEvent = 'after' . ucfirst($method);
             foreach ($this->listeners as $listener) {
                 if (is_callable([$listener, $afterEvent])) {
-                    $returnValue = $listener->$afterEvent($this->getAggregate(), $result);
+                    $returnValue = $listener->$afterEvent($this->getAggregateForListeners(), $result);
 
                     // If a listerner changes the return value, for example
                     // replacing the default return object with an enriched custom
@@ -98,6 +100,22 @@ trait LifecycleTrait
             return $resultPromise;
         }
         return $resultPromise->wait();
+    }
+
+    /**
+     * Used for BC purposes in {@link LegacyLifecycleEventDecorator}.
+     */
+    protected function getAggregateForRawResult(): object
+    {
+        return $this->getAggregate();
+    }
+
+    /**
+     * Used for BC purposes in {@link LegacyLifecycleEventDecorator}.
+     */
+    protected function getAggregateForListeners(): object
+    {
+        return $this->getAggregate();
     }
 
     /**

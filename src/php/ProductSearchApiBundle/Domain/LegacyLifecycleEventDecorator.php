@@ -6,6 +6,8 @@ use Frontastic\Common\LifecycleTrait;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use GuzzleHttp\Promise\PromiseInterface;
+use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * This lifecycle event decorator calls the listeners for the old `ProductApi::query()` method.
@@ -17,9 +19,31 @@ class LegacyLifecycleEventDecorator implements ProductSearchApi
     /** @var ProductSearchApi */
     private $aggregate;
 
-    public function __construct(ProductSearchApi $aggregate, iterable $listeners = [])
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    /**
+     * @var ?ProductApi
+     */
+    private $productApi;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(
+        ProductSearchApi $aggregate,
+        ContainerInterface $container,
+        LoggerInterface $logger,
+        iterable $listeners = []
+    )
     {
         $this->aggregate = $aggregate;
+        $this->container = $container;
+        $this->logger = $logger;
 
         foreach ($listeners as $listener) {
             $this->addListener($listener);
@@ -29,6 +53,18 @@ class LegacyLifecycleEventDecorator implements ProductSearchApi
     public function getAggregate(): ProductSearchApi
     {
         return $this->aggregate;
+    }
+
+    /**
+     * This handles the actual BC case by getting the ProductAPI from Catwalk and dispatching its listeners.
+     */
+    protected function getAggregateForListeners(): ProductApi
+    {
+        $this->logger->notice('Decorating ProductApi::query() is deprecated. Migrate to ProductSearchApi::query() instead.');
+        if ($this->productApi === null) {
+            $this->productApi = $this->container->get('frontastic.catwalk.product_api');
+        }
+        return $this->productApi;
     }
 
     public function query(ProductQuery $query): PromiseInterface
