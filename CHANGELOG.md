@@ -1,5 +1,22 @@
 # common Changelog
 
+## `1.1.16` (2020-10-16)
+
+* fix(productSearchApi): Remove URL decoding for Findologic provided URLs
+* fix(productSearchApi): Remove redundant code from FindologicClientFactory
+* feat(productSearchApi): Add config options for category and slug source to Findologic Mapper
+* refactor(shopify): Improved filter limit calculation
+* feat(shopify): Implemented filter by category id
+* fix(shopify): Set default limit in product queries
+* fix(shopify): Removed product if from searchable attributes
+* fix(shopify): Especified correct operator between filters
+* fix(shopify): Handle Enum attribute as boolean
+* feat(shopify): Mapped query filters
+* fix(shopify): Set vendor attribute as text
+* fix(shopify): Removed un-used variable
+* fix: Only set fetch_format when needed
+* chore: Extracted common webspocket code
+
 ## `1.1.15` (2020-10-13)
 
 * fix: Do not cast null values in media library to numeric
