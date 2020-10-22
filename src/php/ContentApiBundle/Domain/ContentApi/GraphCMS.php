@@ -297,13 +297,11 @@ class GraphCMS implements ContentApi
             // contentType is in plural lowercase version here
             $contentsForContentType = array_map(
                 function ($e) use ($contentType, $attributes) {
-                    $contentId = $this->generateContentId(
-                        $e['id'],
-                        ucfirst(Inflector::singularize($contentType))
-                    );
+                    $contentTypeSingularized = ucfirst(Inflector::singularize($contentType));
+                    $contentId = $this->generateContentId($e['id'], $contentTypeSingularized);
                     return new Content([
                         'contentId' => $contentId,
-                        'contentTypeId' => $contentType,
+                        'contentTypeId' => $contentTypeSingularized,
                         'name' => $this->extractName($e),
                         'attributes' => $this->fillAttributesWithData(
                             $attributes[$contentType],

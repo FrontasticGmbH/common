@@ -1,0 +1,22 @@
+---
+name: "graphcmsV2"
+secret: "secret"
+configuration:
+    test:
+        disabled: false
+        supportCursorBasedPagination: true
+        supportOffsetPagination: false
+        hasConsistentProductSearchData: false
+        supportSearchByIdentifierAndQueryParameters: false
+    content:
+        engine: graphcms
+        apiToken: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImdjbXMtbWFpbi1wcm9kdWN0aW9uIn0.eyJ2ZXJzaW9uIjozLCJpYXQiOjE2MDMxMjk2MjcsImF1ZCI6WyJodHRwczovL2FwaS1ldS1jZW50cmFsLTEuZ3JhcGhjbXMuY29tL3YyL2NqeGFiZjAxMDBkMjEwMWVkdXZ3YTNpbjQvbWFzdGVyIl0sImlzcyI6Imh0dHBzOi8vbWFuYWdlbWVudC5ncmFwaGNtcy5jb20vIiwic3ViIjoiNTNjMWEzZTEtODc0Zi00NjZjLTg2NTYtYmVmNGIxOTljNmVlIiwianRpIjoiY2tnZ3R6bDVmOW5rOTAxeHA5NGJlZnpvZCJ9.xzKnT39VeQKwzF4uhnd-40NJX1heLC1KeoGtjCcVj1DCT9hpSfuLZW2N1XZj_Ha8dwo2hzpog1sLdDh5-4h8CLIxRc4KCu-r0Chbab8N5hVeUXlWNwEYjQUTBwj4APuCmftBdNsn3zXOSm38CiA5Hiy4b6Y-h_cnppk-NvSUG_CNwEiDlDU7ku2M-Wv8-wx7oznF0DCOxB7K8Qs8dMl9l5aNXjhh7izYUVJqNHgebAnZz4tq59D03c3UMxf3rhiBYBHt5-J5PUsN2r_hByS_DW7eFZo_h59CtvhRZIm1GV7R9EJsrKJ7SQuWjGPDMjsny1vR2IG5Gd7nR6dRAAFOiaJZXcyVEQSsy3GiVHk06b2ZrSyilVMeWzOyXMtT8J2YBiNsTsXcPPiBuHgRem8b7OaPK6z20CaWEqtXZToUyC5yc4inh80eCkb0FBjzUW_rHgMNh6YIvCN5C9mqyFSQZvrAAjAU-UeGq0uKQRXn-Jus11zvW9zn8XI1gDpqDKZf8DPW3yOtaxVzqBDdDQ9SN1htpcAWuRMRpN3Nx6cG-2tNuLieHwjX3CQ9BAge0WiCw_gAx9yIVY6a_-sQH12gQxRrWjw7ax4Wk8AGCoZt7cZ5DQoN-jZaWB7t6rvBNFYCngBTJmYg4CvlAE8K82cuZL9YToPy0nURcOpvYuOpbnA
+        projectId: cjxabf0100d2101eduvwa3in4
+        region: eu-central-1
+        apiVersion: v2
+        stage: master
+projects:
+    - projectId: test
+      name: GraphCMS v2 Test Catwalk
+      languages: ["en_GB@GBP", "de_DE@EUR", "fr_FR@EUR"]
+      defaultLanguage: en_GB@GBP

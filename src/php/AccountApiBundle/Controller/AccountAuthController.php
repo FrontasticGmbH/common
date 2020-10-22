@@ -4,6 +4,7 @@ namespace Frontastic\Common\AccountApiBundle\Controller;
 
 use Assert\Assertion;
 use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
+use Frontastic\Catwalk\KameleoonBundle\Domain\TrackingService;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\AccountService;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
@@ -75,6 +76,8 @@ class AccountAuthController extends Controller
         if ($account->confirmationToken !== null) {
             $this->getAccountService()->sendConfirmationMail($account);
         }
+
+        $this->get(TrackingService::class)->reachRegistration($context, $account);
 
         return $this->loginAccount($account, $request);
     }

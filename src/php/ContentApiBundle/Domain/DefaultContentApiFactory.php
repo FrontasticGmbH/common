@@ -94,6 +94,7 @@ class DefaultContentApiFactory implements ContentApiFactory
                 $client = new ContentApi\GraphCMS\Client(
                     $contentConfiguration->projectId,
                     $contentConfiguration->apiToken,
+                    $contentConfiguration->apiVersion ?? 'v1',
                     $contentConfiguration->region,
                     $contentConfiguration->stage,
                     $this->container->get(HttpClient::class),
