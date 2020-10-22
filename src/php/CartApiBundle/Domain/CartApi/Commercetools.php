@@ -446,17 +446,20 @@ class Commercetools implements CartApi
 
     public function setShippingMethod(Cart $cart, string $shippingMethod, string $localeString = null): Cart
     {
+        $action = [
+            'action' => 'setShippingMethod',
+        ];
+
+        if ($shippingMethod !== '') {
+            $action['shippingMethod'] = [
+                'typeId' => 'shipping-method',
+                'id' => $shippingMethod,
+            ];
+        }
+
         return $this->postCartActions(
             $cart,
-            [
-                [
-                    'action' => 'setShippingMethod',
-                    'shippingMethod' => [
-                        'typeId' => 'shipping-method',
-                        'id' => $shippingMethod,
-                    ],
-                ],
-            ],
+            [$action],
             $this->parseLocaleString($localeString)
         );
     }
