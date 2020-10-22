@@ -17,6 +17,11 @@ class Client
     /**
      * @var string
      */
+    private $apiVersion;
+
+    /**
+     * @var string
+     */
     private $projectId;
 
     /**
@@ -47,6 +52,7 @@ class Client
     public function __construct(
         string $projectId,
         string $apiToken,
+        string $apiVersion,
         string $region,
         string $stage,
         HttpClient $httpClient,
@@ -54,6 +60,7 @@ class Client
     ) {
         $this->projectId = $projectId;
         $this->apiToken = $apiToken;
+        $this->apiVersion = $apiVersion;
         $this->region = $region;
         $this->stage = $stage;
         $this->httpClient = $httpClient;
@@ -69,7 +76,7 @@ class Client
      */
     public function query(string $query, string $locale = null): PromiseInterface
     {
-        $url = "https://api-{$this->region}.graphcms.com/v1/{$this->projectId}/{$this->stage}";
+        $url = "https://api-{$this->region}.graphcms.com/{$this->apiVersion}/{$this->projectId}/{$this->stage}";
         $body = json_encode(['query' => $query], JSON_HEX_QUOT);
         $headers = [];
         if ($locale !== null) {
@@ -90,7 +97,7 @@ class Client
         }
 
         return $this->httpClient
-            ->requestAsync('GET', $url, $body, $headers)
+            ->requestAsync('POST', $url, $body, $headers)
             ->then(function (HttpClient\Response $result) use ($span) {
                 if (class_exists(\Tideways\Profiler::class)) {
                     $span->annotate(
@@ -182,8 +189,8 @@ class Client
     protected function attributeQueryPart(array $attributes): string
     {
         return implode(
-            $this->fetchAttributeFields($attributes, 2),
-            ','
+            ',',
+            $this->fetchAttributeFields($attributes, 2)
         );
     }
 
@@ -243,6 +250,7 @@ class Client
 
         if (!empty($attributes)) {
             return implode(
+                ',',
                 array_filter(
                     $this->fetchAttributeFields($attributes, $maxDepth, $currentDepth + 1),
                     function ($attributeName) use ($whitelistFields) {
@@ -252,8 +260,7 @@ class Client
 
                         return in_array($attributeName, $whitelistFields);
                     }
-                ),
-                ','
+                )
             );
         }
 
@@ -273,13 +280,13 @@ class Client
         $attributeString = $this->attributeQueryPart($attributes);
         $name = lcfirst(Inflector::pluralize($contentType));
         $contentIdsString = "[".implode(
+            ',',
             array_map(
                 function ($id) {
                     return "\"$id\"";
                 },
                 $contentIds
-            ),
-            ','
+            )
         )."]";
         $queryString = "query {
                 $name(where: { id_in: $contentIdsString }) {
@@ -376,9 +383,15 @@ class Client
     /** * @SuppressWarnings(PHPMD.CyclomaticComplexity) * */
     protected function hasNameOfSupplementalObject(string $name): bool
     {
-        return $name === 'Query' ||
+        return $name === 'Color' ||
+            $name === 'DocumentVersion' ||
+            $name === 'Query' ||
+            $name === 'Location' ||
             $name === 'Mutation' ||
-            $name == 'PageInfo' ||
+            $name === 'PageInfo' ||
+            $name === 'RichText' ||
+            $name === 'RGBA' ||
+            $name === 'Version' ||
             $this->startsWith($name, '__') ||
             $this->startsWith($name, 'Aggregate') ||
             $this->endsWith($name, 'Edge') ||
