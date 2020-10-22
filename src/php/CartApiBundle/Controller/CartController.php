@@ -223,13 +223,13 @@ class CartController extends CrudController
         if (!empty($payload['shipping']) || !empty($payload['billing'])) {
             $cart = $cartApi->setShippingAddress(
                 $cart,
-                Address::newWithProjectSpecificData($payload['shipping'] ?: $payload['billing']),
+                Address::newWithProjectSpecificData(($payload['shipping'] ?? []) ?: $payload['billing']),
                 $context->locale
             );
 
             $cart = $cartApi->setBillingAddress(
                 $cart,
-                Address::newWithProjectSpecificData($payload['billing'] ?: $payload['shipping']),
+                Address::newWithProjectSpecificData(($payload['billing'] ?? []) ?: $payload['shipping']),
                 $context->locale
             );
         }
