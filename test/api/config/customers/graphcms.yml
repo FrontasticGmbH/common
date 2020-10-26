@@ -1,0 +1,22 @@
+---
+name: "graphcms"
+secret: "secret"
+configuration:
+    test:
+        disabled: false
+        supportCursorBasedPagination: true
+        supportOffsetPagination: false
+        hasConsistentProductSearchData: false
+        supportSearchByIdentifierAndQueryParameters: false
+    content:
+        engine: graphcms
+        apiToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ2ZXJzaW9uIjoxLCJ0b2tlbklkIjoiMDFmNDQyNDEtNTk1ZC00OWQ2LWJjOGQtM2E2NTRjZTQ3MjVjIn0.wdAXo_KwbFDqAah7B-OW_a5SaN7M7RxFHQx8pC675r8
+        projectId: cjxabf0100d2101eduvwa3in4
+        region: euwest
+        apiVersion: v1
+        stage: master
+projects:
+    - projectId: test
+      name: GraphCMS Test Catwalk
+      languages: ["en_GB@GBP", "de_DE@EUR", "fr_FR@EUR"]
+      defaultLanguage: en_GB@GBP

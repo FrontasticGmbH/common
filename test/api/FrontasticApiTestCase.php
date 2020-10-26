@@ -10,6 +10,8 @@ use Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory;
 use Frontastic\Common\AccountApiBundle\Domain\Session;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\CartApiFactory;
+use Frontastic\Common\ContentApiBundle\Domain\ContentApi;
+use Frontastic\Common\ContentApiBundle\Domain\DefaultContentApiFactory;
 use Frontastic\Common\EnvironmentResolver;
 use Frontastic\Common\ProductApiBundle\Domain\Category;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
@@ -124,11 +126,58 @@ class FrontasticApiTestCase extends KernelTestCase
         );
     }
 
+    private function hasContentApiConfig(Project $project): bool
+    {
+        if ($project->configuration['content']->engine == 'contentful' &&
+            key_exists('accessToken', $project->configuration['content']) &&
+            key_exists('previewToken', $project->configuration['content']) &&
+            key_exists('spaceId', $project->configuration['content'])
+        ) {
+            return true;
+        }
+
+        if ($project->configuration['content']->engine == 'graphcms' &&
+            key_exists('apiToken', $project->configuration['content']) &&
+            key_exists('apiVersion', $project->configuration['content']) &&
+            key_exists('projectId', $project->configuration['content']) &&
+            key_exists('region', $project->configuration['content']) &&
+            key_exists('stage', $project->configuration['content'])
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function projectAndLanguage(): array
     {
         $projectsAndLocales = [];
 
         foreach ($this->project() as $projectDescription => [$project]) {
+            if ($this->hasContentApiConfig($project)) {
+                continue;
+            }
+
+            foreach ($project->languages as $language) {
+                $projectsAndLocales[$projectDescription . ', language: ' . $language] = [
+                    $project,
+                    $language,
+                ];
+            }
+        }
+
+        return $projectsAndLocales;
+    }
+
+    public function projectAndLanguageForContentApi(): array
+    {
+        $projectsAndLocales = [];
+
+        foreach ($this->project() as $projectDescription => [$project]) {
+            if (!$this->hasContentApiConfig($project)) {
+                continue;
+            }
+
             foreach ($project->languages as $language) {
                 $projectsAndLocales[$projectDescription . ', language: ' . $language] = [
                     $project,
@@ -390,6 +439,13 @@ class FrontasticApiTestCase extends KernelTestCase
     {
         return self::$container
             ->get(AccountApiFactory::class)
+            ->factor($project);
+    }
+
+    protected function getContentApiForProject(Project $project): ContentApi
+    {
+        return self::$container
+            ->get(DefaultContentApiFactory::class)
             ->factor($project);
     }
 
