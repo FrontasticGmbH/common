@@ -83,9 +83,9 @@ class SapCartApi implements CartApi
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function getTaxCategory(): array
+    public function getTaxCategory(): ?array
     {
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        return null;
     }
 
     public function addToCart(Cart $cart, LineItem $lineItem, string $locale = null): Cart

@@ -118,10 +118,9 @@ class ShopwareCartApi extends AbstractShopwareApi implements CartApi
         throw new RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function getTaxCategory(): array
+    public function getTaxCategory(): ?array
     {
-        // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
-        return [];
+        return null;
     }
 
     public function addToCart(Cart $cart, LineItem $lineItem, string $locale = null): Cart

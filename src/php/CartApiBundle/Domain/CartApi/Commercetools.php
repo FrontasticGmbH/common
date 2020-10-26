@@ -816,17 +816,8 @@ class Commercetools implements CartApi
         $this->taxCategory = $taxCategory;
     }
 
-    public function getTaxCategory(): array
+    public function getTaxCategory(): ?array
     {
-        if (!$this->taxCategory) {
-            throw new \RuntimeException(
-                'Before inserting custom line items into Commercetools you must
-                define (https://docs.commercetools.com/http-api-projects-taxCategories)
-                and provide a tax category for it. Use a beforeAddToCart() hook
-                to set your tax category into this API ($cartApi->setTaxCategory).'
-            );
-        }
-
         return $this->taxCategory;
     }
 
