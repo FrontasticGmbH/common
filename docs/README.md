@@ -120,6 +120,7 @@ Here you find the API documentation for the relevant classes:
     * [FindologicClient](php/FindologicBundle/Domain/FindologicClient.md)
     * [FindologicClientFactory](php/FindologicBundle/Domain/FindologicClientFactory.md)
     * [FindologicEndpointConfig](php/FindologicBundle/Domain/FindologicEndpointConfig.md)
+    * [FindologicMapperFactory](php/FindologicBundle/Domain/FindologicMapperFactory.md)
     * ProductSearchApi
       * [FindologicProductSearchApi](php/FindologicBundle/Domain/ProductSearchApi/FindologicProductSearchApi.md)
       * [Mapper](php/FindologicBundle/Domain/ProductSearchApi/Mapper.md)
