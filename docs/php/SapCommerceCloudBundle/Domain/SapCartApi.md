@@ -141,10 +141,10 @@ Return Value: `void`
 ### getTaxCategory()
 
 ```php
-public function getTaxCategory(): array
+public function getTaxCategory(): ?array
 ```
 
-Return Value: `array`
+Return Value: `?array`
 
 ### addToCart()
 

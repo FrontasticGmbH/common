@@ -29,6 +29,7 @@ use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper;
 use Frontastic\Common\SprykerBundle\Domain\Account\SessionService;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Routing\Router;
 
 class FrontasticApiTestCase extends KernelTestCase
 {
@@ -91,6 +92,13 @@ class FrontasticApiTestCase extends KernelTestCase
                 'Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper',
                 new AccountHelper($contextServiceMock, $sessionServiceMock)
             );
+
+        $routerMock = $this
+            ->getMockBuilder(Router::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        self::$kernel->getContainer()->set('router', $routerMock);
     }
 
     public function customerAndProject(): array
@@ -303,7 +311,6 @@ class FrontasticApiTestCase extends KernelTestCase
         return $result;
     }
 
-
     protected function getProductSearchApiForProject(Project $project): ProductSearchApi
     {
         $key = sprintf('%s_%s', $project->customer, $project->projectId);
@@ -454,8 +461,7 @@ class FrontasticApiTestCase extends KernelTestCase
         ?int $limit = null,
         ?int $offset = null,
         ?string $cursor = null
-    )
-    {
+    ) {
         $parameters = [
             'locale' => $language,
         ];

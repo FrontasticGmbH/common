@@ -120,9 +120,9 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
     /**
      * @return array
      */
-    public function getTaxCategory(): array
+    public function getTaxCategory(): ?array
     {
-        return [];
+        return null;
     }
 
     /**
