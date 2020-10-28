@@ -7,6 +7,9 @@ services:
         public: true
 
 #    Frontastic\Common\ApiTests\Mock\ContextServiceMock: ~
+    router:
+        class: Symfony\Component\Routing\Router
+        synthetic: true
     Frontastic\Catwalk\ApiCoreBundle\Domain\ContextService: ~
     Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper:
         arguments:

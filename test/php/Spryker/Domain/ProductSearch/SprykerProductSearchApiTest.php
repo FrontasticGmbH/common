@@ -30,7 +30,7 @@ class SprykerProductSearchApiTest extends TestCase
      */
     private $api;
 
-    public function setup()
+    public function setUp(): void
     {
         $this->clientMock = $this
             ->getMockBuilder(SprykerClient::class)

@@ -12,6 +12,7 @@
 * [mapDataToPriceValue()](#mapdatatopricevalue)
 * [mapDataToVariantAttributes()](#mapdatatovariantattributes)
 * [mapDataToProductAttributes()](#mapdatatoproductattributes)
+* [toFilterString()](#tofilterstring)
 
 ### mapDataToProduct()
 
@@ -132,5 +133,19 @@ Argument|Type|Default|Description
 `$productAttributesData`|`array`||
 
 Return Value: `array`
+
+### toFilterString()
+
+```php
+public function toFilterString(
+    Query\Filter $queryFilter
+): string
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$queryFilter`|[`Query`](../../../ProductApiBundle/Domain/ProductApi/Query.md)\Filter||
+
+Return Value: `string`
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

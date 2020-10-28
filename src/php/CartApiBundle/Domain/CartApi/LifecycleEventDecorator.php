@@ -79,7 +79,7 @@ class LifecycleEventDecorator implements CartApi
         $this->aggregate->setTaxCategory($taxCategory);
     }
 
-    public function getTaxCategory(): array
+    public function getTaxCategory(): ?array
     {
         return $this->aggregate->getTaxCategory();
     }

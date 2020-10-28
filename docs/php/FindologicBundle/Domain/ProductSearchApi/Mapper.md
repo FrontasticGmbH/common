@@ -4,12 +4,33 @@
 
 ## Methods
 
+* [__construct()](#__construct)
 * [queryToRequest()](#querytorequest)
 * [getAttributesForRequest()](#getattributesforrequest)
 * [getSortAttributesForRequest()](#getsortattributesforrequest)
 * [dataToProducts()](#datatoproducts)
 * [dataToFacets()](#datatofacets)
 * [dataToFacet()](#datatofacet)
+
+### __construct()
+
+```php
+public function __construct(
+    array $outputAttributes = [],
+    ?string $categoryProperty = null,
+    ?string $slugProperty = null,
+    ?string $slugRegex = null
+): mixed
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$outputAttributes`|`array`|`[]`|
+`$categoryProperty`|`?string`|`null`|
+`$slugProperty`|`?string`|`null`|
+`$slugRegex`|`?string`|`null`|
+
+Return Value: `mixed`
 
 ### queryToRequest()
 
