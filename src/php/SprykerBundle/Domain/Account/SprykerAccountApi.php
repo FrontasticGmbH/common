@@ -84,7 +84,6 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
             $account = $this->mapAccount($response->document()->primaryResource());
             $account->confirmed = false;
             $account->confirmationToken = null;
-
         } catch (\Exception $e) {
             if ($e->getCode() === 422) {
                 throw new DuplicateAccountException($account->email, 0);
