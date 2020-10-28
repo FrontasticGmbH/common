@@ -79,9 +79,12 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
         $headers = $this->accountHelper->getAnonymousHeader();
 
         try {
-            $this->client->post('/customers', $headers, $request->encode());
+            $response = $this->client->post('/customers', $headers, $request->encode());
 
-            $account = $this->login($account, $cart, $locale);
+            $account = $this->mapAccount($response->document()->primaryResource());
+            $account->confirmed = false;
+            $account->confirmationToken = null;
+
         } catch (\Exception $e) {
             if ($e->getCode() === 422) {
                 throw new DuplicateAccountException($account->email, 0);
