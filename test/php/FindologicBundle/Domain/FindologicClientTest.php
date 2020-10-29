@@ -1,11 +1,8 @@
 <?php
 
-namespace Frontastic\Common\FindologicBundle\Domain\ProductSearchApi;
+namespace Frontastic\Common\FindologicBundle\Domain;
 
-use Frontastic\Common\FindologicBundle\Domain\FindologicClient;
-use Frontastic\Common\FindologicBundle\Domain\FindologicEndpointConfig;
 use Frontastic\Common\CoreBundle\Domain\RequestProvider;
-use Frontastic\Common\FindologicBundle\Domain\SearchRequest;
 use Frontastic\Common\HttpClient;
 use GuzzleHttp\Promise\FulfilledPromise;
 use PHPUnit\Framework\TestCase;
