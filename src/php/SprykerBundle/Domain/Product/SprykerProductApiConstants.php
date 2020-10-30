@@ -6,6 +6,8 @@ interface SprykerProductApiConstants
 {
     public const PRODUCT_RESOURCE_PRODUCT_ABSTRACT = 'abstract-products';
 
+    public const PRODUCT_RESOURCE_PRODUCT_CONCRETE = 'concrete-products';
+
     public const PRODUCT_RESOURCE_ABSTRACT_IMAGE_SETS = 'abstract-product-image-sets';
 
     public const SPRYKER_DEFAULT_PRODUCT_RESOURCES = [
@@ -26,6 +28,7 @@ interface SprykerProductApiConstants
 
     public const SPRYKER_PRODUCT_QUERY_RESOURCES = [
         self::PRODUCT_RESOURCE_PRODUCT_ABSTRACT,
+        self::PRODUCT_RESOURCE_PRODUCT_CONCRETE,
     ];
 
     public const PRICE_WITH_DISCOUNT = 'DEFAULT';
