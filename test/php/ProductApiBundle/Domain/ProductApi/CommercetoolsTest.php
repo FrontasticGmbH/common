@@ -29,7 +29,7 @@ class CommercetoolsTest extends TestCase
      */
     private $api;
 
-    public function setup()
+    public function setUp(): void
     {
         $this->clientMock = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->getMock();
         $this->localCreatorMock = $this->createMock(CommercetoolsLocaleCreator::class);

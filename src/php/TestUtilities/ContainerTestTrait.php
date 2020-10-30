@@ -29,8 +29,7 @@ trait ContainerTestTrait
                 ));
             }
 
-            $this->assertInternalType(
-                'object',
+            $this->assertIsObject(
                 $service,
                 sprintf('Service "%" was not build as an object.', $serviceId)
             );

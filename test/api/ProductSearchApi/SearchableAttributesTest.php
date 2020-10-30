@@ -106,11 +106,11 @@ class SearchableAttributesTest extends FrontasticApiTestCase
 
                 foreach ($searchableAttribute->values as $value) {
                     $this->assertArrayHasKey('key', $value);
-                    $this->assertInternalType('string', $value['key']);
+                    $this->assertIsString($value['key']);
 
                     if ($searchableAttribute->type === Attribute::TYPE_ENUM) {
                         $this->assertArrayHasKey('label', $value);
-                        $this->assertInternalType('string', $value['label']);
+                        $this->assertIsString($value['label']);
                     } else {
                         $this->assertArrayHasKey('label', $value);
                         $this->assertIsValidTranslatedLabel($project, $value['label']);
