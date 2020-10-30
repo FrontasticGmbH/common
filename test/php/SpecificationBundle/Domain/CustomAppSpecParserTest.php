@@ -43,7 +43,7 @@ class CustomAppSpecParserTest extends \PHPUnit\Framework\TestCase
         try {
             $specParser->parse(file_get_contents(self::FIXTURE_DIR . '/unknown_field_type.json'));
         } catch (InvalidSchemaException $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 'schema[0].fields[0].type: Does not have a value in the enumeration',
                 $e->getError(),
                 'Exception error does not contain required text.'

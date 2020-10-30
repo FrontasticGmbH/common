@@ -49,7 +49,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
         $this->assertGreaterThanOrEqual(ProductApi\PaginatedQuery::DEFAULT_LIMIT, $result->count);
         $this->assertCount($result->count, $result->items);
 
-        $this->assertInternalType('array', $result->items);
+        $this->assertIsArray($result->items);
         $this->assertContainsOnlyInstancesOf(Product::class, $result->items);
     }
 
@@ -62,7 +62,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
 
         $this->assertCount($result->count, $result->items);
 
-        $this->assertInternalType('array', $result->items);
+        $this->assertIsArray($result->items);
         $this->assertContainsOnlyInstancesOf(Product::class, $result->items);
     }
 
@@ -669,20 +669,20 @@ class ProductsQueryTest extends FrontasticApiTestCase
                 )
             );
 
-            $this->assertInternalType('string', $product->description);
+            $this->assertIsString($product->description);
             $this->assertContainsNoHtml(
                 $product->description,
                 sprintf('Description of product %s (SKU %s) contains HTML', $product->productId, $product->sku)
             );
 
-            $this->assertInternalType('array', $product->categories);
+            $this->assertIsArray($product->categories);
             foreach ($product->categories as $category) {
-                $this->assertInternalType('string', $category);
+                $this->assertIsString($category);
                 $this->assertNotEmpty($category);
                 $this->assertContains($category, $existingCategoryIds);
             }
 
-            $this->assertInternalType('array', $product->variants);
+            $this->assertIsArray($product->variants);
             $this->assertNotEmpty($product->variants);
             $this->assertContainsOnlyInstancesOf(Variant::class, $product->variants);
 

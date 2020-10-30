@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class BrowserConsoleDebuggerListenerTest extends TestCase
 {
-    public static function setupBeforeClass()
+    public static function setupBeforeClass(): void
     {
         Debugger::log('Something');
     }

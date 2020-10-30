@@ -65,7 +65,7 @@ class AnonymousCartTest extends FrontasticApiTestCase
         $cartApi->addToCart($originalCart, $this->lineItemForProduct($product), $language);
         $cartWithProductAdded = $cartApi->commit($language);
 
-        $this->assertInternalType('array', $cartWithProductAdded->lineItems);
+        $this->assertIsArray($cartWithProductAdded->lineItems);
         $this->assertCount(1, $cartWithProductAdded->lineItems);
 
         $addedLineItem = $cartWithProductAdded->lineItems[0];
@@ -81,7 +81,7 @@ class AnonymousCartTest extends FrontasticApiTestCase
         $cartApi->updateLineItem($cartWithProductAdded, $addedLineItem, 3, null, $language);
         $cartWithProductCountModified = $cartApi->commit($language);
 
-        $this->assertInternalType('array', $cartWithProductCountModified->lineItems);
+        $this->assertIsArray($cartWithProductCountModified->lineItems);
         $this->assertCount(1, $cartWithProductCountModified->lineItems);
 
         $lineItemWithModifiedCount = $cartWithProductCountModified->lineItems[0];
@@ -95,7 +95,7 @@ class AnonymousCartTest extends FrontasticApiTestCase
         $cartApi->removeLineItem($cartWithProductCountModified, $lineItemWithModifiedCount, $language);
         $cartWithProductRemoved = $cartApi->commit($language);
 
-        $this->assertInternalType('array', $cartWithProductRemoved->lineItems);
+        $this->assertIsArray($cartWithProductRemoved->lineItems);
         $this->assertEmpty($cartWithProductRemoved->lineItems);
     }
 
@@ -161,7 +161,7 @@ class AnonymousCartTest extends FrontasticApiTestCase
 
         $this->assertNotEmptyString($order->orderId);
 
-        $this->assertInternalType('int', $order->orderVersion);
+        $this->assertIsInt($order->orderVersion);
         $this->assertGreaterThanOrEqual(0, $order->orderVersion);
 
         $this->assertNotEmptyString($order->orderState);

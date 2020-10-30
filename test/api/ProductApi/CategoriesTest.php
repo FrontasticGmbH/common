@@ -232,7 +232,7 @@ class CategoriesTest extends FrontasticApiTestCase
             $this->assertEquals($category->slug, $categoryBySlug->slug);
         }
 
-        $this->assertContains($category, $categoriesBySlug, '', false, false);
+        $this->assertContains($category, $categoriesBySlug, '');
     }
 
     /**
@@ -254,7 +254,7 @@ class CategoriesTest extends FrontasticApiTestCase
             $this->assertEquals($category->slug, $categoryBySlug->slug);
         }
 
-        $this->assertContains($category, $resultBySlug->items, '', false, false);
+        $this->assertContains($category, $resultBySlug->items, '');
     }
 
     /**
@@ -388,7 +388,7 @@ class CategoriesTest extends FrontasticApiTestCase
                 $this->assertRegExp(self::URI_PATH_SEGMENT_REGEX, $category->slug);
             }
 
-            $this->assertInternalType('integer', $category->depth);
+            $this->assertIsInt($category->depth);
             $this->assertEquals(count($category->getAncestorIds()), $category->depth);
 
             $this->assertNotEmptyString($category->path);

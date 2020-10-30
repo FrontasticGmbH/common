@@ -50,7 +50,7 @@
         "phploc/phploc": "@stable",
         "phpmd/phpmd": "@stable",
         "phpstan/phpstan": "0.12.25",
-        "phpunit/phpunit": "^6",
+        "phpunit/phpunit": "^7",
         "sebastian/phpcpd": "@stable",
         "squizlabs/php_codesniffer": "@stable",
         "symfony/swiftmailer-bundle": "^3.4"

@@ -16,7 +16,7 @@ class FactoryTest extends TestCase
      */
     private $factory;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->factory = new Factory(
             $this->getMockBuilder(LoggerInterface::class)->getMock()
@@ -42,10 +42,14 @@ class FactoryTest extends TestCase
 
         $signingClient = $this->getClient($aggregates, Signing::class);
 
-        self::assertAttributeEquals(
+        $class = new \ReflectionClass(get_class($signingClient));
+        $property = $class->getProperty('sharedSecret');
+        $property->setAccessible(true);
+
+
+        $this->assertEquals(
             'some_secret',
-            'sharedSecret',
-            $signingClient
+            $property->getValue($signingClient)
         );
     }
 

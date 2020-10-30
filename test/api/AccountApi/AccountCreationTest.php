@@ -20,7 +20,7 @@ class AccountCreationTest extends FrontasticApiTestCase
 
         $salutations = $accountApi->getSalutations($language);
         if ($salutations !== null) {
-            $this->assertInternalType('array', $salutations);
+            $this->assertIsArray($salutations);
             $this->assertContainsOnly('string', $salutations);
             $this->assertArrayHasDistinctValues($salutations);
         } else {
