@@ -315,7 +315,12 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
         $authToken = $account->authToken;
 
         if ($authToken === null) {
-            throw new \OutOfBoundsException('Could not refresh account');
+            // throw new \OutOfBoundsException('Could not refresh account');
+
+            // Since Spryker doesn't offer a way to GET the customer details if the customer has not confirmed
+            // their email address and is logged in, we'll return the user as a work around to
+            // don't break the functionality in AccountProvider::refreshUser
+            return $account;
         }
 
         $id = $this->getCustomerReference($authToken);
