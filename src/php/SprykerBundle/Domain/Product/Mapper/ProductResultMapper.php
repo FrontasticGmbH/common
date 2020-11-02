@@ -78,6 +78,7 @@ class ProductResultMapper implements MapperInterface
         $variant->price = $abstractProduct['price'];
         $variant->currency = $abstractProduct['prices'][0]['currency']['code'];
         $variant->images = $images;
+        // TODO: set dangerousInner base on query.loadDangerousInnerData value
         $variant->dangerousInnerVariant = $abstractProduct;
 
         $product = new Product();
@@ -85,6 +86,7 @@ class ProductResultMapper implements MapperInterface
         $product->productId = $abstractProduct['abstractSku'];
         $product->slug = SprykerSlugger::slugify($abstractProduct['abstractName']);
         $product->variants = [$variant];
+        // TODO: set dangerousInner base on query.loadDangerousInnerData value
         $product->dangerousInnerProduct = $abstractProduct;
 
         return $product;
