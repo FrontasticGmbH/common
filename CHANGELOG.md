@@ -1,5 +1,13 @@
 # common Changelog
 
+## `1.1.17` (2020-10-30)
+
+* fix(spryker): Returned orignal account if not possible to be refreshed with no authToken
+* fix: don't enforce tax category in Commercetools
+* fix: use Shopware calculated price if available
+* fix(spryker): Removed verifyEmail as non part of AccountAPI abstraction
+* fix(spryker): Returned email as part of reset account
+
 ## `1.1.16` (2020-10-16)
 
 * fix(productSearchApi): Remove URL decoding for Findologic provided URLs
