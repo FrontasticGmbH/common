@@ -28,12 +28,12 @@ class ProductResultMapper implements MapperInterface
         $result = new Result();
 
         $pagination = $resource->attribute('pagination');
+        $items = $this->mapProducts($resource);
 
         $result->total = $pagination['numFound'];
-        $result->count = $pagination['currentItemsPerPage'];
+        $result->count = count($items);
         $result->offset = max(0, $pagination['currentPage'] - 1) * $pagination['currentItemsPerPage'];
-
-        $result->items = $this->mapProducts($resource);
+        $result->items = $items;
         $result->facets = $this->mapFacets($resource);
 
         return $result;
