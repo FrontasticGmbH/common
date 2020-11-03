@@ -6,7 +6,7 @@ use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\SprykerBundle\Domain\Product\SprykerProductApiExtendedConstants;
 
 /**
- * Expands the basic product adding the description, adding the attribute values, and _label_* attributes to the variants.
+ * Expands the basic product adding the description.
  * Requires the included resource 'abstract-products'
  */
 class AbstractProductDescriptionExpander implements ProductExpanderInterface
