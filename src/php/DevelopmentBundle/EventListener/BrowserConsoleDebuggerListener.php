@@ -31,9 +31,12 @@ class BrowserConsoleDebuggerListener
         if (($headers->has('Content-Type') && $headers->get('Content-Type') === 'application/json')
             || $response instanceof JsonResponse
         ) {
-            $content = json_decode($response->getContent(), true);
-            $content['__DEBUG'] = $this->serializer->serialize(Debugger::getMessages());
-            $response->setContent(json_encode($content));
+            $jsonContent = trim($response->getContent());
+            if ($jsonContent[0] === '{') {
+                $content = json_decode($jsonContent, true);
+                $content['__DEBUG'] = $this->serializer->serialize(Debugger::getMessages());
+                $response->setContent(json_encode($content));
+            }
         }
 
         if (($headers->has('Content-Type') && preg_match('(html)', $headers->get('Content-Type')))) {
