@@ -5,6 +5,7 @@ namespace Frontastic\Common\SprykerBundle\Domain\Product;
 interface SprykerProductApiExtendedConstants extends SprykerProductApiConstants
 {
     public const PRODUCT_RESOURCE_SEARCH = 'catalog-search';
+    public const PRODUCT_RESOURCE_CONCRETE_PRODUCTS = 'concrete-products';
     public const PRODUCT_RESOURCE_EXTENDED_BRAND = 'brand';
     public const PRODUCT_RESOURCE_EXTENDED_MERCHANT = 'merchant';
     public const PRODUCT_RESOURCE_EXTENDED_BUNDLE_COMPONENTS = 'concrete-product-bundle-components';

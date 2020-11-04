@@ -3,6 +3,7 @@
 namespace Frontastic\Common\CartApiBundle\Controller;
 
 use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
+use Frontastic\Catwalk\KameleoonBundle\Domain\TrackingService;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
@@ -65,6 +66,8 @@ class CartController extends CrudController
         $cartApi->addToCart($cart, $lineItemVariant, $context->locale);
         $cart = $cartApi->commit($context->locale);
 
+        $this->get(TrackingService::class)->reachAddToBasket($context, $cart, $lineItemVariant);
+
         return [
             'cart' => $cart,
             'addedItems' => $this->getLineItems(
@@ -107,6 +110,7 @@ class CartController extends CrudController
             );
             $lineItemVariant->projectSpecificData = $this->parseProjectSpecificDataByKey($payload, 'option');
 
+            $this->get(TrackingService::class)->reachAddToBasket($context, $cart, $lineItemVariant);
             $cartApi->addToCart($cart, $lineItemVariant, $context->locale);
         }
         $cart = $cartApi->commit($context->locale);
@@ -219,15 +223,23 @@ class CartController extends CrudController
         if (!empty($payload['shipping']) || !empty($payload['billing'])) {
             $cart = $cartApi->setShippingAddress(
                 $cart,
-                Address::newWithProjectSpecificData($payload['shipping'] ?: $payload['billing']),
+                Address::newWithProjectSpecificData(($payload['shipping'] ?? []) ?: $payload['billing']),
                 $context->locale
             );
 
             $cart = $cartApi->setBillingAddress(
                 $cart,
-                Address::newWithProjectSpecificData($payload['billing'] ?: $payload['shipping']),
+                Address::newWithProjectSpecificData(($payload['billing'] ?? []) ?: $payload['shipping']),
                 $context->locale
             );
+
+            if (array_key_exists('shippingMethodName', $payload)) {
+                $cart = $cartApi->setShippingMethod(
+                    $cart,
+                    $payload['shippingMethodName'] ?? '',
+                    $context->locale
+                );
+            }
         }
 
         $cart->projectSpecificData = $this->parseProjectSpecificDataByKey($payload, 'custom');
@@ -246,6 +258,7 @@ class CartController extends CrudController
         }
 
         $order = $cartApi->order($cart, $context->locale);
+        $this->get(TrackingService::class)->reachOrder($context, $order);
 
         $symfonySession = $request->hasSession() ? $request->getSession() : null;
         if ($symfonySession !== null) {

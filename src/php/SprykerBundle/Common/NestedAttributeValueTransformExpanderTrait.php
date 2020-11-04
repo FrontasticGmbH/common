@@ -28,14 +28,7 @@ trait NestedAttributeValueTransformExpanderTrait
     protected function expandVariant(Variant $variant): Variant
     {
         foreach ($variant->attributes as $key => $value) {
-            if (strpos($key, '_label_') === 0) {
-                $realKey = str_replace('_label_', '', $key);
-                $this->attributeValueToNested($variant, $realKey);
-                $variant->attributes[$realKey]['label'] = $value;
-                unset($variant->attributes[$key]);
-            } else {
-                $this->attributeValueToNested($variant, $key);
-            }
+            $this->attributeValueToNested($variant, $key);
         }
 
         return $variant;
@@ -56,7 +49,10 @@ trait NestedAttributeValueTransformExpanderTrait
         $value = $variant->attributes[$key] ?? null;
 
         if (!is_array($value)) {
-            $variant->attributes[$key] = ['value' => $value];
+            $variant->attributes[$key] = [
+                'key' => $value,
+                'label' => $value
+            ];
         }
     }
 }

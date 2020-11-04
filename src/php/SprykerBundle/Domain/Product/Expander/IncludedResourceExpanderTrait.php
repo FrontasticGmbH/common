@@ -59,4 +59,19 @@ trait IncludedResourceExpanderTrait
 
         return null;
     }
+
+    private function getResourceIncludeByAttributeKey(
+        array $includes,
+        string $type,
+        string $attributeKey,
+        string $resourceId
+    ): ?ResourceObject {
+        foreach ($includes as $include) {
+            if ($include->type() === $type && $include->attributes()[$attributeKey] === $resourceId) {
+                return $include;
+            }
+        }
+
+        return null;
+    }
 }

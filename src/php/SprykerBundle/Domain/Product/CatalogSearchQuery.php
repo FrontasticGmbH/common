@@ -26,8 +26,29 @@ class CatalogSearchQuery
     public static function createFromProductQuery(ProductQuery $productQuery): string
     {
         $query = [];
+        $queryString = [];
 
-        $query['q'] = self::parseQuery($productQuery->query);
+        if ($productQuery->query) {
+            $queryString[] = self::parseQuery($productQuery->query);
+        }
+
+        if ($productQuery->productId) {
+            $queryString[] = $productQuery->productId;
+        }
+
+        if ($productQuery->productIds) {
+            $queryString[] = implode(' ', $productQuery->productIds);
+        }
+
+        if ($productQuery->sku) {
+            $queryString[] = $productQuery->sku;
+        }
+
+        if ($productQuery->skus) {
+            $queryString[] = implode(' ', $productQuery->skus);
+        }
+
+        $query['q'] = implode(' ', $queryString);
 
         if ($productQuery->category) {
             $query['category'] = $productQuery->category;

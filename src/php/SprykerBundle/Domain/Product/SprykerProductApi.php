@@ -14,6 +14,7 @@ use Frontastic\Common\SprykerBundle\BaseApi\ProductExpandingTrait;
 use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\SprykerBundle\Domain\Locale\SprykerLocale;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver;
+use Frontastic\Common\SprykerBundle\Domain\Product\Expander\Nested\NestedAttributeValueTransformExpander;
 use Frontastic\Common\SprykerBundle\Domain\Product\Mapper\CategoriesMapper;
 use Frontastic\Common\SprykerBundle\Domain\Product\Mapper\ProductConcreteMapper;
 use Frontastic\Common\SprykerBundle\Domain\Product\Mapper\ProductMapper;
@@ -116,6 +117,7 @@ class SprykerProductApi extends ProductApiBase
                 $this->productResources
             );
             $mapper = $this->mapperResolver->getMapper(ProductMapper::MAPPER_NAME);
+            $this->registerProductExpander(new NestedAttributeValueTransformExpander());
         }
 
         return $this->client
