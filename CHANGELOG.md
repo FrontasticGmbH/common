@@ -1,5 +1,15 @@
 # common Changelog
 
+## `1.1.18` (2020-11-04)
+
+* fix(spryker): Included abstract decription
+* fix(spryker): Counted items returned
+* feat(spryker): Included query filter by SKUs and productIds
+* fix(spryker): Replaced attribute value by key and label
+* refactor(spryker): Removed unused methods and extra comments
+* fix(spryker): Removed mapImages overwrited implementation
+* fix(spryker): Set valid variant sku
+
 ## `1.1.17` (2020-10-30)
 
 * fix(spryker): Returned orignal account if not possible to be refreshed with no authToken
