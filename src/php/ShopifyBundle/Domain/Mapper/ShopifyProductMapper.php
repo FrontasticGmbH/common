@@ -5,6 +5,9 @@ namespace Frontastic\Common\ShopifyBundle\Domain\Mapper;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\Filter;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\Facet;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\Term;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\TermFacet;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ProjectApiBundle\Domain\Attribute;
 
@@ -106,6 +109,13 @@ class ShopifyProductMapper
         );
     }
 
+    public function mapDataToFacets(array $productsData): array
+    {
+        $facets[] = $this->mapDataToTagFacet($productsData);
+        $facets[] = $this->mapDataToProductTypeFacet($productsData);
+
+        return $facets;
+    }
 
     public function mapDataToProductAttributes(array $productAttributesData): array
     {
@@ -214,5 +224,65 @@ class ShopifyProductMapper
         }
 
         return $filterString;
+    }
+
+    private function mapDataToTagFacet(array $productsData): ?Facet
+    {
+        $productTagValues = [];
+        foreach ($productsData as $productData) {
+            $productData = $productData['node'] ?? $productData;
+            foreach ($productData['tags'] as $tag) {
+                $productTagValues[] = $tag;
+            }
+        }
+
+        $tagTerms = [];
+        foreach (array_count_values($productTagValues) as $productTag => $count) {
+            $tagTerms[] = new Term([
+                'handle' => $productTag,
+                'name' => $productTag,
+                'value' => $productTag,
+                'count' => $count,
+            ]);
+        }
+
+        if (count($tagTerms)) {
+            return new TermFacet([
+                'handle' => 'tag',
+                'key' => 'tag',
+                'terms' => $tagTerms,
+            ]);
+        }
+
+        return null;
+    }
+
+    private function mapDataToProductTypeFacet(array $productsData): ?Facet
+    {
+        $productTypeValues = [];
+        foreach ($productsData as $productData) {
+            $productData = $productData['node'] ?? $productData;
+            $productTypeValues[] = $productData['productType'] ?? null;
+        }
+
+        $productTypeTerms = [];
+        foreach (array_count_values($productTypeValues) as $productType => $count) {
+            $productTypeTerms[] = new Term([
+                'handle' => $productType,
+                'name' => $productType,
+                'value' => $productType,
+                'count' => $count,
+            ]);
+        }
+
+        if (count($productTypeTerms)) {
+            return new TermFacet([
+                'handle' => 'product_type',
+                'key' => 'product_type',
+                'terms' => $productTypeTerms,
+            ]);
+        }
+
+        return null;
     }
 }
