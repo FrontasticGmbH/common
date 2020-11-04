@@ -393,8 +393,6 @@ class ProductsQueryTest extends FrontasticApiTestCase
     {
         $result = $this->queryProductsWithProductSearchApi($project, $language, ['limit' => 1]);
 
-        $total = $result->total;
-
         if (empty($result->facets)) {
             $this->markTestSkipped('This test requires facets to be returned from an empty query. Consider looking at Facets returned from your configured EnabledFacetService implementation.');
         }
@@ -432,7 +430,9 @@ class ProductsQueryTest extends FrontasticApiTestCase
                 'facets' => array_merge($termFacets, $rangeFacets),
             ]);
 
-        $this->assertLessThan($total, $facetResults->total);
+        if ($result->total) {
+            $this->assertLessThan($result->total, $facetResults->total);
+        }
         $this->assertGreaterThan(0, count($facetResults->items));
 
         $termFacets = count($resultTermFacets) === 0 ? [] : [
@@ -456,7 +456,9 @@ class ProductsQueryTest extends FrontasticApiTestCase
                 'filter' => array_merge($termFacets, $rangeFacets),
             ]);
 
-        $this->assertLessThan($total, $filterResults->total);
+        if ($result->total) {
+            $this->assertLessThan($result->total, $filterResults->total);
+        }
         $this->assertGreaterThan(0, count($filterResults->items));
     }
 

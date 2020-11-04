@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\ShopifyBundle\Domain\ProductSearchApi;
 
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Facets;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\PaginatedQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
@@ -100,6 +101,18 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
 
         if ($query->productType) {
             $parameters[] = sprintf('product_type:%s', $query->productType);
+        }
+
+        if ($query->facets) {
+            foreach ($query->facets as $facet) {
+                if ($facet->type == Facets::TYPE_TERM) {
+                    $parameters[] = sprintf(
+                        '(%s:%s)',
+                        $facet->handle,
+                        implode(" OR ", $facet->terms ?? [])
+                    );
+                }
+            }
         }
 
         $skus = [];
@@ -227,7 +240,7 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                 $previousCursor = $productsData[0]['cursor'] ?? null;
 
                 $nextCursor = null;
-                foreach ($productsData as $key => $productData) {
+                foreach ($productsData as $productData) {
                     $products[] = $this->productMapper->mapDataToProduct(
                         $productData['node'] ?? $productData,
                         $query
@@ -241,6 +254,7 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                     'nextCursor' => $hasNextPage ? "after:\"$nextCursor\"" : null,
                     'count' => count($products),
                     'items' => $products,
+                    'facets' => $this->productMapper->mapDataToFacets($productsData),
                     'query' => clone $query,
                 ]);
             });
