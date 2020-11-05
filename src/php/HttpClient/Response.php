@@ -23,7 +23,7 @@ class Response extends \Kore\DataObject\DataObject
      * @var string[]
      * @required
      */
-    public $headers;
+    public $headers = [];
 
     /**
      * Response body
