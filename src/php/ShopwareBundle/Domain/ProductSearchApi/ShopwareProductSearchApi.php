@@ -101,23 +101,24 @@ class ShopwareProductSearchApi extends ProductSearchApiBase
             $attributes[$localizedAttribute->attributeId] = $localizedAttribute;
         }
 
-        $attributeId = 'price';
-        $attributes[$attributeId] = new Attribute([
-            'attributeId' => $attributeId,
-            'type' => Attribute::TYPE_MONEY,
-        ]);
+        // Shophware 6 v2 and v3 are not accepting at the moment the following parameter. This might change in v4
+        // $attributeId = 'price';
+        // $attributes[$attributeId] = new Attribute([
+            // 'attributeId' => $attributeId,
+            // 'type' => Attribute::TYPE_MONEY,
+        // ]);
 
-        $attributeId = 'listingPrices';
-        $attributes[$attributeId] = new Attribute([
-            'attributeId' => $attributeId,
-            'type' => Attribute::TYPE_MONEY,
-        ]);
+        // $attributeId = 'listingPrices';
+        // $attributes[$attributeId] = new Attribute([
+            // 'attributeId' => $attributeId,
+            // 'type' => Attribute::TYPE_MONEY,
+        // ]);
 
-        $attributeId = 'categories.id';
-        $attributes[$attributeId] = new Attribute([
-            'attributeId' => $attributeId,
-            'type' => Attribute::TYPE_CATEGORY_ID,
-        ]);
+        // $attributeId = 'categories.id#categories.id';
+        // $attributes[$attributeId] = new Attribute([
+            // 'attributeId' => $attributeId,
+            // 'type' => Attribute::TYPE_CATEGORY_ID,
+        // ]);
 
         return promise_for($attributes->getArrayCopy());
     }
