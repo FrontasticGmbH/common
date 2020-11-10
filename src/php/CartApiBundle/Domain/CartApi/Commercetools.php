@@ -445,8 +445,11 @@ class Commercetools extends CartApiBase
         );
     }
 
-    protected function setShippingMethodImplementation(Cart $cart, string $shippingMethod, string $localeString = null): Cart
-    {
+    protected function setShippingMethodImplementation(
+        Cart $cart,
+        string $shippingMethod,
+        string $localeString = null
+    ): Cart {
         $action = [
             'action' => 'setShippingMethod',
         ];
@@ -541,8 +544,12 @@ class Commercetools extends CartApiBase
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    protected function addPaymentImplementation(Cart $cart, Payment $payment, ?array $custom = null, string $localeString = null): Cart
-    {
+    protected function addPaymentImplementation(
+        Cart $cart,
+        Payment $payment,
+        ?array $custom = null,
+        string $localeString = null
+    ): Cart {
         // For BC only.
         if (!key_exists('custom', $payment->rawApiInput) && !empty($custom)) {
             $payment->rawApiInput['custom'] = $custom;
@@ -632,8 +639,11 @@ class Commercetools extends CartApiBase
         );
     }
 
-    protected function removeDiscountCodeImplementation(Cart $cart, LineItem $discountLineItem, string $localeString = null): Cart
-    {
+    protected function removeDiscountCodeImplementation(
+        Cart $cart,
+        LineItem $discountLineItem,
+        string $localeString = null
+    ): Cart {
         return $this->postCartActions(
             $cart,
             [

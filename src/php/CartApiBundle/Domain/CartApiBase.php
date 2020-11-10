@@ -53,8 +53,7 @@ abstract class CartApiBase implements CartApi
         int $count,
         ?array $custom = null,
         string $locale = null
-    ): Cart
-    {
+    ): Cart {
         return $this->updateLineItemImplementation($cart, $lineItem, $count, $custom, $locale);
     }
 
@@ -103,7 +102,7 @@ abstract class CartApiBase implements CartApi
 
     final public function updatePayment(Cart $cart, Payment $payment, string $localeString): Payment
     {
-       return $this->updatePaymentImplementation($cart, $payment, $localeString);
+        return $this->updatePaymentImplementation($cart, $payment, $localeString);
     }
 
     final public function redeemDiscountCode(Cart $cart, string $code, string $locale = null): Cart
