@@ -7,127 +7,136 @@ use Frontastic\Common\AccountApiBundle\Domain\Address;
 
 abstract class CartApiBase implements CartApi
 {
-    public function getForUser(Account $account, string $locale): Cart
+    final public function getForUser(Account $account, string $locale): Cart
     {
         return $this->getForUserImplementation($account, $locale);
     }
 
-    public function getAnonymous(string $anonymousId, string $locale): Cart
+    final public function getAnonymous(string $anonymousId, string $locale): Cart
     {
         return $this->getAnonymousImplementation($anonymousId, $locale);
     }
 
-    public function getById(string $cartId, string $locale = null): Cart
+    final public function getById(string $cartId, string $locale = null): Cart
     {
         return $this->getByIdImplementation($cartId, $locale);
     }
 
-    public function setCustomLineItemType(array $lineItemType): void
+    final public function setCustomLineItemType(array $lineItemType): void
     {
         $this->setCustomLineItemTypeImplementation($lineItemType);
     }
 
-    public function getCustomLineItemType(): array
+    final public function getCustomLineItemType(): array
     {
         return $this->getCustomLineItemTypeImplementation();
     }
 
-    public function setTaxCategory(array $taxCategory): void
+    final public function setTaxCategory(array $taxCategory): void
     {
         $this->setTaxCategoryImplementation($taxCategory);
     }
 
-    public function getTaxCategory(): ?array
+    final public function getTaxCategory(): ?array
     {
         return $this->getTaxCategoryImplementation();
     }
 
-    public function addToCart(Cart $cart, LineItem $lineItem, string $locale = null): Cart
+    final public function addToCart(Cart $cart, LineItem $lineItem, string $locale = null): Cart
     {
         return $this->addToCartImplementation($cart, $lineItem, $locale);
     }
 
-    public function updateLineItem(Cart $cart, LineItem $lineItem, int $count, ?array $custom = null, string $locale = null): Cart
+    final public function updateLineItem(
+        Cart $cart,
+        LineItem $lineItem,
+        int $count,
+        ?array $custom = null,
+        string $locale = null
+    ): Cart
     {
         return $this->updateLineItemImplementation($cart, $lineItem, $count, $custom, $locale);
     }
 
-    public function removeLineItem(Cart $cart, LineItem $lineItem, string $locale = null): Cart
+    final public function removeLineItem(Cart $cart, LineItem $lineItem, string $locale = null): Cart
     {
         return $this->removeLineItemImplementation($cart, $lineItem, $locale);
     }
 
-    public function setEmail(Cart $cart, string $email, string $locale = null): Cart
+    final public function setEmail(Cart $cart, string $email, string $locale = null): Cart
     {
         return $this->setEmailImplementation($cart, $email, $locale);
     }
 
-    public function setShippingMethod(Cart $cart, string $shippingMethod, string $locale = null): Cart
+    final public function setShippingMethod(Cart $cart, string $shippingMethod, string $locale = null): Cart
     {
         return $this->setShippingMethodImplementation($cart, $shippingMethod, $locale);
     }
 
-    public function setCustomField(Cart $cart, array $fields, string $locale = null): Cart
+    /**
+     * @deprecated Use and implement the setRawApiInput method. This method only exists for backwards compatibility.
+     */
+    final public function setCustomField(Cart $cart, array $fields, string $locale = null): Cart
     {
         return $this->setCustomFieldImplementation($cart, $fields, $locale);
     }
 
-    public function setRawApiInput(Cart $cart, string $locale = null): Cart
+    final public function setRawApiInput(Cart $cart, string $locale = null): Cart
     {
         return $this->setRawApiInputImplementation($cart, $locale);
     }
 
-    public function setShippingAddress(Cart $cart, Address $address, string $locale = null): Cart
+    final public function setShippingAddress(Cart $cart, Address $address, string $locale = null): Cart
     {
         return $this->setShippingAddressImplementation($cart, $address, $locale);
     }
 
-    public function setBillingAddress(Cart $cart, Address $address, string $locale = null): Cart
+    final public function setBillingAddress(Cart $cart, Address $address, string $locale = null): Cart
     {
         return $this->setBillingAddressImplementation($cart, $address, $locale);
     }
 
-    public function addPayment(Cart $cart, Payment $payment, ?array $custom = null, string $locale = null): Cart
+    final public function addPayment(Cart $cart, Payment $payment, ?array $custom = null, string $locale = null): Cart
     {
         return $this->addPaymentImplementation($cart, $payment, $custom, $locale);
     }
 
-    public function updatePayment(Cart $cart, Payment $payment, string $localeString): Payment
+    final public function updatePayment(Cart $cart, Payment $payment, string $localeString): Payment
     {
        return $this->updatePaymentImplementation($cart, $payment, $localeString);
     }
 
-    public function redeemDiscountCode(Cart $cart, string $code, string $locale = null): Cart
+    final public function redeemDiscountCode(Cart $cart, string $code, string $locale = null): Cart
     {
         return $this->redeemDiscountCodeImplementation($cart, $code, $locale);
     }
 
-    public function removeDiscountCode(Cart $cart, LineItem $discountLineItem, string $locale = null): Cart
+    final public function removeDiscountCode(Cart $cart, LineItem $discountLineItem, string $locale = null): Cart
     {
         return $this->removeDiscountCodeImplementation($cart, $discountLineItem, $locale);
     }
 
-    public function order(Cart $cart, string $locale = null): Order
+    final public function order(Cart $cart, string $locale = null): Order
     {
         return $this->orderImplementation($cart, $locale);
     }
 
-    public function getOrder(Account $account, string $orderId, string $locale = null): Order
+    final public function getOrder(Account $account, string $orderId, string $locale = null): Order
     {
         return $this->getOrderImplementation($account, $orderId, $locale);
     }
 
-    public function getOrders(Account $account, string $locale = null): array
+    final public function getOrders(Account $account, string $locale = null): array
     {
         return $this->getOrdersImplementation($account, $locale);
     }
 
-    public function startTransaction(Cart $cart): void
+    final public function startTransaction(Cart $cart): void
     {
         $this->startTransactionImplementation($cart);
     }
 
-    public function commit(string $locale = null): Cart
+    final public function commit(string $locale = null): Cart
     {
         return $this->commitImplementation($locale);
     }

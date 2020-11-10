@@ -465,9 +465,6 @@ class Commercetools extends CartApiBase
         );
     }
 
-    /**
-     * @deprecated Use and implement the setRawApiInput method. This method only exists for backwards compatibility.
-     */
     protected function setCustomFieldImplementation(Cart $cart, array $fields, string $localeString = null): Cart
     {
         $this->logger
