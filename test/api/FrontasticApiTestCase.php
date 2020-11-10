@@ -137,19 +137,19 @@ class FrontasticApiTestCase extends KernelTestCase
     private function hasContentApiConfig(Project $project): bool
     {
         if ($project->configuration['content']->engine == 'contentful' &&
-            key_exists('accessToken', $project->configuration['content']) &&
-            key_exists('previewToken', $project->configuration['content']) &&
-            key_exists('spaceId', $project->configuration['content'])
+            property_exists($project->configuration['content'], 'accessToken') &&
+            property_exists($project->configuration['content'], 'previewToken') &&
+            property_exists($project->configuration['content'],'spaceId')
         ) {
             return true;
         }
 
         if ($project->configuration['content']->engine == 'graphcms' &&
-            key_exists('apiToken', $project->configuration['content']) &&
-            key_exists('apiVersion', $project->configuration['content']) &&
-            key_exists('projectId', $project->configuration['content']) &&
-            key_exists('region', $project->configuration['content']) &&
-            key_exists('stage', $project->configuration['content'])
+            property_exists($project->configuration['content'],'apiToken') &&
+            property_exists($project->configuration['content'],'apiVersion') &&
+            property_exists($project->configuration['content'],'projectId') &&
+            property_exists($project->configuration['content'],'region') &&
+            property_exists($project->configuration['content'],'stage')
         ) {
             return true;
         }
