@@ -178,7 +178,10 @@ abstract class CartApiBase implements CartApi
         string $locale = null
     ): Cart;
 
-    abstract protected function setCustomFieldImplementation(Cart $cart, array $fields, string $locale = null): Cart;
+    protected function setCustomFieldImplementation(Cart $cart, array $fields, string $locale = null): Cart
+    {
+        throw new \RuntimeException(__METHOD__ . ' not implemented');
+    }
 
     abstract protected function setRawApiInputImplementation(Cart $cart, string $locale = null): Cart;
 
