@@ -203,8 +203,12 @@ class SapCartApi extends CartApiBase
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    protected function addPaymentImplementation(Cart $cart, Payment $payment, ?array $custom = null, string $locale = null): Cart
-    {
+    protected function addPaymentImplementation(
+        Cart $cart,
+        Payment $payment,
+        ?array $custom = null,
+        string $locale = null
+    ): Cart {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
@@ -218,8 +222,11 @@ class SapCartApi extends CartApiBase
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    protected function removeDiscountCodeImplementation(Cart $cart, LineItem $discountLineItem, string $locale = null): Cart
-    {
+    protected function removeDiscountCodeImplementation(
+        Cart $cart,
+        LineItem $discountLineItem,
+        string $locale = null
+    ): Cart {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
