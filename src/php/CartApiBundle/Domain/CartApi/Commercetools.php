@@ -185,6 +185,12 @@ class Commercetools implements CartApi
         $dangerousInnerCart['country'] = $locale->country;
         $dangerousInnerCart['locale'] = $locale->language;
         $dangerousInnerCart['currency'] = $locale->currency;
+        if (!empty($dangerousInnerCart['shippingInfo']['shippingMethodName'])) {
+            $dangerousInnerCart['shippingMethod'] = [
+                'key' => $dangerousInnerCart['shippingInfo']['shippingMethodName'],
+                'type' => 'shipping-method',
+            ];
+        }
 
         // Don't serialize empty Object as Array
         if (empty($dangerousInnerCart['custom']['fields'] ?? [])) {
