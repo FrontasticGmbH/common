@@ -108,10 +108,10 @@ class CartApiFactory
                 $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
                 $cartApi = new ShopwareCartApi(
                     $client,
-                    $this->container->get(DataMapperResolver::class),
                     $localeCreatorFactory->factor($project, $client),
-                    $project->defaultLanguage,
-                    $this->container->get(ShopwareProjectConfigApiFactory::class)
+                    $this->container->get(DataMapperResolver::class),
+                    $this->container->get(ShopwareProjectConfigApiFactory::class),
+                    $project->defaultLanguage
                 );
                 break;
 
