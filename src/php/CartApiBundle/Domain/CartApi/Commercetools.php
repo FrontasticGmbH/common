@@ -186,6 +186,11 @@ class Commercetools implements CartApi
         $dangerousInnerCart['locale'] = $locale->language;
         $dangerousInnerCart['currency'] = $locale->currency;
 
+        // Don't serialize empty Object as Array
+        if (empty($dangerousInnerCart['custom']['fields'] ?? [])) {
+            unset($dangerousInnerCart['custom']['fields']);
+        }
+
         $cart = $this->cartMapper->mapDataToCart(
             $this->client->post(
                 '/carts',
