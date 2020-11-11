@@ -271,13 +271,21 @@ class Commercetools implements CartApi
      */
     public function getById(string $cartId, string $localeString = null): Cart
     {
-        return $this->cartMapper->mapDataToCart(
+        $locale = $this->parseLocaleString($localeString);
+
+        $cart = $this->cartMapper->mapDataToCart(
             $this->client->get(
                 '/carts/' . urlencode($cartId),
                 ['expand' => self::EXPAND]
             ),
-            $this->parseLocaleString($localeString)
+            $locale
         );
+
+        if ($localeString !== null) {
+            $cart = $this->assertCorrectLocale($cart, $locale);
+        }
+
+        return $cart;
     }
 
     public function addToCart(Cart $cart, LineItem $lineItem, string $localeString = null): Cart
