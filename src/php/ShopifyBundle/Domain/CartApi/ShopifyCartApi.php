@@ -667,10 +667,9 @@ class ShopifyCartApi implements CartApi
             'shippingAddress' => $this->accountMapper->mapDataToAddress(
                 $cartData['shippingAddress'] ?? []
             ),
-            'shippingMethod' => new ShippingMethod([
-                'name' => $cartData['shippingLine']['name'],
-                'price' => $cartData['shippingLine']['priceV2']['amount'],
-            ]),
+            'shippingMethod' => $this->mapDataToShippingMethod(
+                $cartData['shippingLine'] ?? []
+            ),
             'dangerousInnerCart' => $cartData,
         ]);
     }
@@ -697,10 +696,9 @@ class ShopifyCartApi implements CartApi
             'shippingAddress' => $this->accountMapper->mapDataToAddress(
                 $orderData['shippingAddress'] ?? []
             ),
-            'shippingMethod' => new ShippingMethod([
-                'name' => $orderData['shippingLine']['name'],
-                'price' => $orderData['shippingLine']['priceV2']['amount'],
-            ]),
+            'shippingMethod' => $this->mapDataToShippingMethod(
+                $orderData['shippingLine'] ?? []
+            ),
             'sum' => $this->productMapper->mapDataToPriceValue(
                 $orderData['totalPriceV2'] ?? []
             ),
@@ -727,6 +725,20 @@ class ShopifyCartApi implements CartApi
         }
 
         return $lineItems;
+    }
+
+    private function mapDataToShippingMethod(array $shippingMethodData): ?ShippingMethod
+    {
+        if (empty($shippingMethodData)) {
+            return null;
+        }
+
+        return new ShippingMethod([
+            'name' => $shippingMethodData['name'],
+            'price' => $this->productMapper->mapDataToPriceValue(
+                $shippingMethodData['priceV2'] ?? []
+            )
+        ]);
     }
 
     protected function getCheckoutQueryFields(): string

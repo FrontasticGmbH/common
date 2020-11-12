@@ -186,6 +186,17 @@ class Commercetools extends CartApiBase
         $dangerousInnerCart['country'] = $locale->country;
         $dangerousInnerCart['locale'] = $locale->language;
         $dangerousInnerCart['currency'] = $locale->currency;
+        if (!empty($dangerousInnerCart['shippingInfo']['shippingMethodName'])) {
+            $dangerousInnerCart['shippingMethod'] = [
+                'key' => $dangerousInnerCart['shippingInfo']['shippingMethodName'],
+                'type' => 'shipping-method',
+            ];
+        }
+
+        // Don't serialize empty Object as Array
+        if (empty($dangerousInnerCart['custom']['fields'] ?? [])) {
+            unset($dangerousInnerCart['custom']['fields']);
+        }
 
         $cart = $this->cartMapper->mapDataToCart(
             $this->client->post(
@@ -272,13 +283,21 @@ class Commercetools extends CartApiBase
      */
     protected function getByIdImplementation(string $cartId, string $localeString = null): Cart
     {
-        return $this->cartMapper->mapDataToCart(
+        $locale = $this->parseLocaleString($localeString);
+
+        $cart = $this->cartMapper->mapDataToCart(
             $this->client->get(
                 '/carts/' . urlencode($cartId),
                 ['expand' => self::EXPAND]
             ),
-            $this->parseLocaleString($localeString)
+            $locale
         );
+
+        if ($localeString !== null) {
+            $cart = $this->assertCorrectLocale($cart, $locale);
+        }
+
+        return $cart;
     }
 
     protected function addToCartImplementation(Cart $cart, LineItem $lineItem, string $localeString = null): Cart
