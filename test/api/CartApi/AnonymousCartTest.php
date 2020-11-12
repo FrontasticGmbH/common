@@ -186,6 +186,7 @@ class AnonymousCartTest extends FrontasticApiTestCase
     {
         return new LineItem\Variant([
             'variant' => new Variant([
+                'id' => $product->variants[0]->id,
                 'sku' => $product->variants[0]->sku,
                 'attributes' => $product->variants[0]->attributes,
             ]),

@@ -3,7 +3,7 @@ name: "SAP commerce cloud"
 secret: "secret"
 configuration:
     test:
-        disabled: true
+        disabled: false
         anonymousCheckout: false
         supportCursorBasedPagination: false
         supportOffsetPagination: true
