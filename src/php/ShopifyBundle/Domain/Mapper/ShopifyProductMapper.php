@@ -96,7 +96,7 @@ class ShopifyProductMapper
         return array_combine(
             array_map(
                 function (array $attribute): string {
-                    return $attribute['name'];
+                    return strtolower($attribute['name']);
                 },
                 $variantData['selectedOptions']
             ),
