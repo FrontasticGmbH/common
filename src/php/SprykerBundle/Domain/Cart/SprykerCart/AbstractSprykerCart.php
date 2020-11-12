@@ -28,9 +28,10 @@ abstract class AbstractSprykerCart extends SprykerApiBase implements SprykerCart
         SprykerClientInterface $client,
         MapperResolver $mapperResolver,
         LocaleCreator $localeCreator,
-        AccountHelper $accountHelper
+        AccountHelper $accountHelper,
+        ?string $defaultLanguage = null
     ) {
-        parent::__construct($client, $mapperResolver, $localeCreator);
+        parent::__construct($client, $mapperResolver, $localeCreator, $defaultLanguage);
         $this->accountHelper = $accountHelper;
     }
 

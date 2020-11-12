@@ -55,6 +55,7 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
      * @param SprykerCartInterface $customerCart
      * @param LocaleCreator $localeCreator
      * @param string[] $orderIncludes
+     * @param string|null $defaultLanguage
      */
     public function __construct(
         SprykerClientInterface $client,
@@ -63,9 +64,10 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
         SprykerCartInterface $guestCart,
         SprykerCartInterface $customerCart,
         LocaleCreator $localeCreator,
-        array $orderIncludes = []
+        array $orderIncludes = [],
+        ?string $defaultLanguage = null
     ) {
-        parent::__construct($client, $mapperResolver, $localeCreator);
+        parent::__construct($client, $mapperResolver, $localeCreator, $defaultLanguage);
         $this->accountHelper = $accountHelper;
         $this->guestCart = $guestCart;
         $this->customerCart = $customerCart;
