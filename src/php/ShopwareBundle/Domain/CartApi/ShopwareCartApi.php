@@ -254,8 +254,12 @@ class ShopwareCartApi extends CartApiBase
         throw new RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    protected function addPaymentImplementation(Cart $cart, Payment $payment, ?array $custom = null, string $locale = null): Cart
-    {
+    protected function addPaymentImplementation(
+        Cart $cart,
+        Payment $payment,
+        ?array $custom = null,
+        string $locale = null)
+    : Cart {
         // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
         throw new RuntimeException(__METHOD__ . ' not implemented');
     }
@@ -286,8 +290,11 @@ class ShopwareCartApi extends CartApiBase
             ->wait();
     }
 
-    protected function removeDiscountCodeImplementation(Cart $cart, LineItem $discountLineItem, string $locale = null): Cart
-    {
+    protected function removeDiscountCodeImplementation(
+        Cart $cart,
+        LineItem $discountLineItem,
+        string $locale = null
+    ): Cart {
         return $this->removeLineItem($cart, $discountLineItem, $locale);
     }
 
