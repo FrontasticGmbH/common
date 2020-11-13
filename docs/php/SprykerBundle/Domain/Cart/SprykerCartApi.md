@@ -47,7 +47,8 @@ public function __construct(
     \Frontastic\Common\SprykerBundle\Domain\Cart\SprykerCart\SprykerCartInterface $guestCart,
     \Frontastic\Common\SprykerBundle\Domain\Cart\SprykerCart\SprykerCartInterface $customerCart,
     LocaleCreator $localeCreator,
-    array $orderIncludes = []
+    array $orderIncludes = [],
+    ?string $defaultLanguage = null
 ): mixed
 ```
 
@@ -60,6 +61,7 @@ Argument|Type|Default|Description
 `$customerCart`|`\Frontastic\Common\SprykerBundle\Domain\Cart\SprykerCart\SprykerCartInterface`||
 `$localeCreator`|[`LocaleCreator`](../Locale/LocaleCreator.md)||
 `$orderIncludes`|`array`|`[]`|
+`$defaultLanguage`|`?string`|`null`|
 
 Return Value: `mixed`
 

@@ -11,6 +11,7 @@
 * [mapDataToVariant()](#mapdatatovariant)
 * [mapDataToPriceValue()](#mapdatatopricevalue)
 * [mapDataToVariantAttributes()](#mapdatatovariantattributes)
+* [mapDataToFacets()](#mapdatatofacets)
 * [mapDataToProductAttributes()](#mapdatatoproductattributes)
 * [toFilterString()](#tofilterstring)
 
@@ -117,6 +118,20 @@ public function mapDataToVariantAttributes(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$variantData`|`array`||
+
+Return Value: `array`
+
+### mapDataToFacets()
+
+```php
+public function mapDataToFacets(
+    array $productsData
+): array
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$productsData`|`array`||
 
 Return Value: `array`
 
