@@ -27,6 +27,7 @@ use Frontastic\Common\SprykerBundle\Domain\Cart\SprykerCart\GuestCart;
 use Frontastic\Common\SprykerBundle\Domain\Cart\SprykerCartApi;
 use Frontastic\Common\SprykerBundle\Domain\SprykerClientFactory;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver as SprykerMapperResolver;
+use Frontastic\Common\SprykerBundle\Domain\SprykerUrlAppender;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -133,6 +134,7 @@ class CartApiFactory
                 $dataMapper = $this->container->get(SprykerMapperResolver::class);
                 $localeCreatorFactory = $this->container->get(SprykerLocaleCreatorFactory::class);
                 $accountHelper = $this->container->get(AccountHelper::class);
+                $urlAppender = $this->container->get(SprykerUrlAppender::class);
 
                 $client = $this->container
                     ->get(SprykerClientFactory::class)
@@ -172,6 +174,7 @@ class CartApiFactory
                     $guestCart,
                     $customerCart,
                     $localeCreator,
+                    $urlAppender,
                     [],
                     $project->defaultLanguage
                 );
