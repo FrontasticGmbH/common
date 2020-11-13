@@ -146,14 +146,23 @@ class CartApiFactory
                     $cartConfig->shop
                 );
 
-                $guestCart = new GuestCart($client, $dataMapper, $localeCreator, $accountHelper);
+                $guestCart = new GuestCart(
+                    $client,
+                    $dataMapper,
+                    $localeCreator,
+                    $accountHelper,
+                    [],
+                    $project->defaultLanguage
+                );
 
                 $customerCart = new CustomerCart(
                     $client,
                     $dataMapper,
                     $localeCreator,
                     $accountHelper,
-                    $customerCartRequestData
+                    $customerCartRequestData,
+                    [],
+                    $project->defaultLanguage
                 );
 
                 $cartApi = new SprykerCartApi(
@@ -162,7 +171,9 @@ class CartApiFactory
                     $accountHelper,
                     $guestCart,
                     $customerCart,
-                    $localeCreator
+                    $localeCreator,
+                    [],
+                    $project->defaultLanguage
                 );
 
                 break;

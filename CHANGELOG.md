@@ -1,5 +1,21 @@
 # common Changelog
 
+## `1.1.19` (2020-11-13)
+
+* chore: Built release 2020.11.13.11.34
+* fix(shopify): Used lowecase for variant attributes
+* fix(shopify): increased number of variants retrieved
+* fix(spryker): Set default language in CartApi
+* fix: set Variant.id and enable SAP test
+* fix(shopify): Validated shippingLine data before map shipping methods
+* fix: correctly recreate carts shipping info
+* fix: don't serialize empty object as array
+* fix: assert cart locale on getById when specified
+* fix: Replaced deprecated method to valite object key
+* fix(common): flag missing required value for translatable string filed
+* fix(shopware): Commented invalid attributes for Shopware v2 and v3
+* feat(shopify): Implemented facet filters for tags and product types
+
 ## `1.1.18` (2020-11-04)
 
 * fix(spryker): Included abstract decription

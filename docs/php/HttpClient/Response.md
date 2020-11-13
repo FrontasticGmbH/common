@@ -7,7 +7,7 @@
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
 `status` | `int` |  | *Yes* | Response HTTP status code
-`headers` | `string[]` |  | *Yes* | The HTTP headers from the response as a plain array
+`headers` | `string[]` | `[]` | *Yes* | The HTTP headers from the response as a plain array
 `body` | `string` |  | - | Response body
 `rawApiOutput` | `\Psr\Http\Message\ResponseInterface` |  | - | Raw HTTP output response
 

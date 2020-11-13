@@ -26,9 +26,10 @@ class GuestCart extends AbstractSprykerCart
         MapperResolver $mapperResolver,
         LocaleCreator $localeCreator,
         AccountHelper $accountHelper,
-        array $additionalIncludes = []
+        array $additionalIncludes = [],
+        ?string $defaultLanguage = null
     ) {
-        parent::__construct($client, $mapperResolver, $localeCreator, $accountHelper);
+        parent::__construct($client, $mapperResolver, $localeCreator, $accountHelper, $defaultLanguage);
         $this->guestCartIncludes = array_merge(
             SprykerCartConstants::GUEST_CART_RELATIONSHIPS,
             SprykerCartConstants::COMMON_CART_RELATIONSHIPS,

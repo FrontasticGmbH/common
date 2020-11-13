@@ -13,7 +13,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 
 class ShopifyProductSearchApi extends ProductSearchApiBase
 {
-    private const DEFAULT_VARIANTS_TO_FETCH = 1;
+    private const DEFAULT_VARIANTS_TO_FETCH = 25;
     private const DEFAULT_ELEMENTS_TO_FETCH = 10;
 
     /**

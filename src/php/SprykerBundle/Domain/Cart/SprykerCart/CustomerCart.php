@@ -33,9 +33,10 @@ class CustomerCart extends AbstractSprykerCart
         LocaleCreator $localeCreator,
         AccountHelper $accountHelper,
         CustomerCartRequestData $cartRequest,
-        array $additionalIncludes = []
+        array $additionalIncludes = [],
+        ?string $defaultLanguage = null
     ) {
-        parent::__construct($client, $mapperResolver, $localeCreator, $accountHelper);
+        parent::__construct($client, $mapperResolver, $localeCreator, $accountHelper, $defaultLanguage);
         $this->cartRequest = $cartRequest;
         $this->customerCartIncludes = array_merge(
             SprykerCartConstants::CUSTOMER_CART_RELATIONSHIPS,
