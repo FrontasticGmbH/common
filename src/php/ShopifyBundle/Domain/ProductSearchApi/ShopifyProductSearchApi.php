@@ -38,6 +38,7 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
             id
             title
             description
+            descriptionHtml
             handle
             productType
             tags
@@ -48,6 +49,13 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                 edges {
                     node {
                         id
+                    }
+                }
+            }
+            images(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                edges {
+                    node {
+                        originalSrc
                     }
                 }
             }
