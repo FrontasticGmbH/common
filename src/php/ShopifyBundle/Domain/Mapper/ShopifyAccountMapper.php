@@ -27,6 +27,7 @@ class ShopifyAccountMapper
             'email' => $accountData['email'] ?? null,
             'addresses' => $addresses,
             'confirmed' => true,
+            'dangerousInnerAccount' => $accountData,
         ]);
     }
 
@@ -47,6 +48,7 @@ class ShopifyAccountMapper
             'phone' => $addressData['phone'] ?? null,
             'state' => $addressData['province'] ?? null,
             'postalCode' => $addressData['zip'] ?? null,
+            'dangerousInnerAddress' => $addressData,
         ]);
     }
 
