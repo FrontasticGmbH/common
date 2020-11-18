@@ -192,7 +192,7 @@ class ShopwareCartApi extends CartApiBase
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($cart->cartId)
             ->patch("/sales-channel-api/v2/checkout/cart/line-item/{$id}", [], $requestData)
-            ->then(function ($response) use ($mapper){
+            ->then(function ($response) use ($mapper) {
                 if (isset($response['data']['errors']) && !empty($response['data']['errors'])) {
                     $this->respondWithError($response['data']['errors']);
                 }
@@ -258,8 +258,8 @@ class ShopwareCartApi extends CartApiBase
         Cart $cart,
         Payment $payment,
         ?array $custom = null,
-        string $locale = null)
-    : Cart {
+        string $locale = null
+    ): Cart {
         // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
         throw new RuntimeException(__METHOD__ . ' not implemented');
     }
@@ -280,7 +280,7 @@ class ShopwareCartApi extends CartApiBase
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($cart->cartId)
             ->post("/sales-channel-api/v2/checkout/cart/code/{$code}")
-            ->then(function ($response) use ($mapper){
+            ->then(function ($response) use ($mapper) {
                 if (isset($response['data']['errors']) && !empty($response['data']['errors'])) {
                     $this->respondWithError($response['data']['errors']);
                 }
@@ -308,7 +308,7 @@ class ShopwareCartApi extends CartApiBase
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($cart->cartId)
             ->post('/sales-channel-api/v2/checkout/order')
-            ->then(function ($orderResponse) use ($mapper){
+            ->then(function ($orderResponse) use ($mapper) {
                 return $mapper->map($orderResponse);
             })
             ->wait();
@@ -385,7 +385,7 @@ class ShopwareCartApi extends CartApiBase
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($token)
             ->get('/sales-channel-api/v2/customer/order', $requestParameters)
-            ->then(function ($response) use ($mapper){
+            ->then(function ($response) use ($mapper) {
                 return $mapper->map($response);
             })
             ->wait();

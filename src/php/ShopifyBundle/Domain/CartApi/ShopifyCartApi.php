@@ -510,8 +510,12 @@ class ShopifyCartApi extends CartApiBase
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    protected function addPaymentImplementation(Cart $cart, Payment $payment, ?array $custom = null, string $locale = null): Cart
-    {
+    protected function addPaymentImplementation(
+        Cart $cart,
+        Payment $payment,
+        ?array $custom = null,
+        string $locale = null
+    ): Cart {
         // TODO: Implement addPayment() method.
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
@@ -528,8 +532,11 @@ class ShopifyCartApi extends CartApiBase
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    protected function removeDiscountCodeImplementation(Cart $cart, LineItem $discountLineItem, string $locale = null): Cart
-    {
+    protected function removeDiscountCodeImplementation(
+        Cart $cart,
+        LineItem $discountLineItem,
+        string $locale = null
+    ): Cart {
         // TODO: Implement removeDiscountCode() method.
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
