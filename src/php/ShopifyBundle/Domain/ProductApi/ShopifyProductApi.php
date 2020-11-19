@@ -29,6 +29,11 @@ class ShopifyProductApi extends ProductApiBase
     private $client;
 
     /**
+     * @var ShopifyProductMapper
+     */
+    private $productMapper;
+
+    /**
      * @var ShopifyProductSearchApi
      */
     private $shopifyProductSearchApi;
@@ -41,6 +46,7 @@ class ShopifyProductApi extends ProductApiBase
         parent::__construct($productSearchApi);
 
         $this->client = $client;
+        $this->productMapper = $productMapper;
 
         $this->shopifyProductSearchApi = new ShopifyProductSearchApi($client, $productMapper);
     }
@@ -97,6 +103,7 @@ class ShopifyProductApi extends ProductApiBase
                     'name' => $collectionData['node']['title'],
                     'slug' => $collectionData['node']['handle'],
                     'path' => '/' . $collectionData['node']['id'],
+                    'dangerousInnerCategory' => $query->loadDangerousInnerData ? $collectionData : null,
                 ]);
 
                 $nextCursor = $collectionData['cursor'] ?? null;
@@ -135,7 +142,10 @@ class ShopifyProductApi extends ProductApiBase
             $productTypes[] = new ProductType([
                 'productTypeId' => $productTypeData['node'],
                 'name' => $productTypeData['node'],
-                // 'dangerousInnerProductType' => $productType,
+                'dangerousInnerProductType' => $this->productMapper->dataToDangerousInnerData(
+                    $productTypeData,
+                    $query
+                ),
             ]);
         }
 
