@@ -102,7 +102,7 @@ class AnonymousCartTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
-    public function testSettingTheShippingAddressOfACart(Project $project, string $language): void
+    public function testSettingTheEmailOfACart(Project $project, string $language): void
     {
         $this->requireAnonymousCheckout($project);
         $originalCart = $this->getAnonymousCart($project, $language);
@@ -121,7 +121,7 @@ class AnonymousCartTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
-    public function testSettingTheEmailOfACart(Project $project, string $language): void
+    public function testSettingTheShippingAddressOfACart(Project $project, string $language): void
     {
         $this->requireAnonymousCheckout($project);
         $originalCart = $this->getAnonymousCart($project, $language);
