@@ -2,7 +2,7 @@
 
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 
-use Kore\DataObject\DataObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 
 /**
  * Class Result can be used for both, offset and cursor-based pagination.
@@ -19,7 +19,7 @@ use Kore\DataObject\DataObject;
  *
  * @type
  */
-class Result extends DataObject implements \Countable, \IteratorAggregate
+class Result extends ApiDataObject implements \Countable, \IteratorAggregate
 {
     /**
      * @var integer

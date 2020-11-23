@@ -2,7 +2,7 @@
 
 namespace Frontastic\Common\ProductApiBundle\Domain;
 
-use Kore\DataObject\DataObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 
 /**
  * Class Product
@@ -14,7 +14,7 @@ use Kore\DataObject\DataObject;
  * @property-read string $currency
  * @type
  */
-class Product extends DataObject
+class Product extends ApiDataObject
 {
     /**
      * @required

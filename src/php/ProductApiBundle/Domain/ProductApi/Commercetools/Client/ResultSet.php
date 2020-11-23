@@ -1,13 +1,13 @@
 <?php
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 
-use Kore\DataObject\DataObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 use Traversable;
 
 /**
  * @type
  */
-class ResultSet extends DataObject implements \IteratorAggregate
+class ResultSet extends ApiDataObject implements \IteratorAggregate
 {
     /**
      * @var array

@@ -1,12 +1,12 @@
 <?php
 namespace Frontastic\Common\ProductApiBundle\Domain;
 
-use Kore\DataObject\DataObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 
 /**
  * @type
  */
-class Variant extends DataObject
+class Variant extends ApiDataObject
 {
     /**
      * @required
