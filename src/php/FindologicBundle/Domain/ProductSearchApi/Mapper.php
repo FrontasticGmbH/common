@@ -62,6 +62,12 @@ class Mapper
             )
         ];
 
+        $slugPropertySegments = explode('.', $this->slugProperty);
+
+        if (count($slugPropertySegments) > 1 && $slugPropertySegments[0] === 'properties') {
+            $parameters['properties'] = [$slugPropertySegments[1]];
+        }
+
         return new SearchRequest($parameters);
     }
 
