@@ -9,7 +9,7 @@ class VersionerTest extends \PHPUnit\Framework\TestCase
      */
     private $versioner;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->versioner = new Versioner();
     }

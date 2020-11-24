@@ -39,7 +39,6 @@ class VariantMapper implements MapperInterface
         }
 
         $this->mapPrice($resource, $variant);
-        $this->mapAttributeLabels($resource, $variant);
         $variant->attributes['_super'] = $resource->attribute('superAttributesDefinition', []);
 
         return $variant;
@@ -124,22 +123,6 @@ class VariantMapper implements MapperInterface
 
         if ($resource->attribute('isNeverOutOfStock')) {
             $variant->isOnStock = true;
-        }
-    }
-
-    /**
-     * @param ResourceObject $resource
-     * @param \Frontastic\Common\ProductApiBundle\Domain\Variant $variant
-     *
-     * @return void
-     */
-    private function mapAttributeLabels(ResourceObject $resource, Variant $variant): void
-    {
-        $names = $resource->attribute('attributeNames', []);
-
-        foreach ($names as $id => $label) {
-            $key = "_label_{$id}";
-            $variant->attributes[$key] = $label;
         }
     }
 }

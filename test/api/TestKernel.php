@@ -4,6 +4,7 @@ namespace Frontastic\Common\ApiTests;
 
 use Frontastic\Common\AccountApiBundle\FrontasticCommonAccountApiBundle;
 use Frontastic\Common\CartApiBundle\FrontasticCommonCartApiBundle;
+use Frontastic\Common\ContentApiBundle\FrontasticCommonContentApiBundle;
 use Frontastic\Common\CoreBundle\FrontasticCommonCoreBundle;
 use Frontastic\Common\Kernel;
 use Frontastic\Common\ProductApiBundle\FrontasticCommonProductApiBundle;
@@ -35,6 +36,7 @@ class TestKernel extends Kernel
             new FrontasticCommonCoreBundle(),
             new FrontasticCommonAccountApiBundle(),
             new FrontasticCommonCartApiBundle(),
+            new FrontasticCommonContentApiBundle(),
             new FrontasticCommonProductApiBundle(),
             new FrontasticCommonProductSearchApiBundle(),
             new FrontasticCommonProjectApiBundle(),

@@ -45,16 +45,6 @@ class VariantMapperExtended extends VariantMapper
     }
 
     /**
-     * @param \WoohooLabs\Yang\JsonApi\Schema\Resource\ResourceObject $concreteProductResource
-     *
-     * @return array
-     */
-    protected function mapImages(ResourceObject $concreteProductResource): array
-    {
-        return [];
-    }
-
-    /**
      * @param \Frontastic\Common\ProductApiBundle\Domain\Variant $variant
      * @param \WoohooLabs\Yang\JsonApi\Schema\Resource\ResourceObject $resource
      *

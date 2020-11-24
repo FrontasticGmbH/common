@@ -11,13 +11,15 @@
 
 ```php
 public function __construct(
-    HttpClient $httpClient
+    HttpClient $httpClient,
+    RequestProvider $requestProvider
 ): mixed
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$httpClient`|[`HttpClient`](../../HttpClient.md)||
+`$requestProvider`|[`RequestProvider`](../../CoreBundle/Domain/RequestProvider.md)||
 
 Return Value: `mixed`
 

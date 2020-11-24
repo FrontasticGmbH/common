@@ -1,19 +1,21 @@
 <?php
-
 namespace Frontastic\Common\FindologicBundle\Domain;
 
+use Frontastic\Common\CoreBundle\Domain\RequestProvider;
 use Frontastic\Common\HttpClient;
-use Frontastic\Common\ReplicatorBundle\Domain\Project;
-use Psr\SimpleCache\CacheInterface;
 
 class FindologicClientFactory
 {
     /** @var HttpClient */
     private $httpClient;
 
-    public function __construct(HttpClient $httpClient)
+    /** @var RequestProvider */
+    private $requestProvider;
+
+    public function __construct(HttpClient $httpClient, RequestProvider $requestProvider)
     {
         $this->httpClient = $httpClient;
+        $this->requestProvider = $requestProvider;
     }
 
     public function factorForConfigs(
@@ -34,7 +36,7 @@ class FindologicClientFactory
 
                 if ($value === null) {
                     throw new \RuntimeException(
-                        'Findologic config option ' . $option . ' is not set for language' . $language
+                        'Findologic config option ' . $option . ' is not set for language ' . $language
                     );
                 }
                 if (!is_string($value)) {
@@ -44,16 +46,16 @@ class FindologicClientFactory
                 }
                 if ($value === '') {
                     throw new \RuntimeException(
-                        'Findologic config option ' . $option . ' is empty for language' . $language
+                        'Findologic config option ' . $option . ' is empty for language ' . $language
                     );
                 }
 
                 $config[$option] = $value;
             }
 
-            $clientConfigs[$language] = new FindologicClientConfig($config);
+            $clientConfigs[$language] = new FindologicEndpointConfig($config);
         }
 
-        return new FindologicClient($this->httpClient, $clientConfigs);
+        return new FindologicClient($this->httpClient, $this->requestProvider, $clientConfigs);
     }
 }

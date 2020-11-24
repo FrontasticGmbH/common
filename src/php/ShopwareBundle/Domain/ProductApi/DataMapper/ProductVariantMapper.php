@@ -66,7 +66,9 @@ class ProductVariantMapper extends AbstractDataMapper implements
             'id' => $variantId,
             'sku' => $variantData['productNumber'],
             'groupId' => $variantData['parentId'] ?? $variantId,
-            'price' => $this->convertPriceToCent($variantData['price'][0]['gross']),
+            'price' => $this->convertPriceToCent(
+                $variantData['calculatedPrice']['totalPrice'] ?? $variantData['price'][0]['gross']
+            ),
             'currency' => $this->resolveCurrencyCodeFromLocale(),
             'attributes' => $this->mapDataToAttributes($variantData),
             'images' => $this->mapDataToImages($variantData),

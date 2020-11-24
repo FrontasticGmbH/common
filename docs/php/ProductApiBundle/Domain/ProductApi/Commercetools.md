@@ -17,6 +17,8 @@ public function __construct(
     Commercetools\Mapper $mapper,
     Commercetools\Locale\CommercetoolsLocaleCreator $localeCreator,
     EnabledFacetService $enabledFacetService,
+    ProductSearchApi $productSearchApi,
+    array $languages,
     string $defaultLocale
 ): mixed
 ```
@@ -27,6 +29,8 @@ Argument|Type|Default|Description
 `$mapper`|[`Commercetools`](Commercetools.md)\Mapper||
 `$localeCreator`|[`Commercetools`](Commercetools.md)\Locale\CommercetoolsLocaleCreator||
 `$enabledFacetService`|[`EnabledFacetService`](EnabledFacetService.md)||
+`$productSearchApi`|[`ProductSearchApi`](../../../ProductSearchApiBundle/Domain/ProductSearchApi.md)||
+`$languages`|`array`||
 `$defaultLocale`|`string`||
 
 Return Value: `mixed`

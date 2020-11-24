@@ -48,6 +48,7 @@ interface ProductApi
      * @param ProductQuery $query
      * @param string $mode One of the QUERY_* connstants. Execute the query synchronously or asynchronously?
      * @return Result|PromiseInterface A result when the mode is sync and a promise if the mode is async.
+     * @deprecated Use the `ProductSearchApi` instead.
      */
     public function query(ProductQuery $query, string $mode = self::QUERY_SYNC): object;
 

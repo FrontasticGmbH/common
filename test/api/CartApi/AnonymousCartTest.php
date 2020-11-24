@@ -20,7 +20,6 @@ class AnonymousCartTest extends FrontasticApiTestCase
     {
         $cart = $this->getAnonymousCart($project, $language);
 
-        $this->assertNotEmptyString($cart->cartId);
         $this->assertNotEmptyString($cart->cartVersion);
 
         if ($cart->projectSpecificData !== null) {
@@ -47,7 +46,6 @@ class AnonymousCartTest extends FrontasticApiTestCase
     public function testGetCartByIdReturnsSameCart(Project $project, string $language): void
     {
         $originalCart = $this->getAnonymousCart($project, $language);
-        $this->assertNotEmptyString($originalCart->cartId);
 
         $cartById = $this->getCartApiForProject($project)->getById($originalCart->cartId, $language);
         $this->assertEquals($originalCart, $cartById);
@@ -67,7 +65,7 @@ class AnonymousCartTest extends FrontasticApiTestCase
         $cartApi->addToCart($originalCart, $this->lineItemForProduct($product), $language);
         $cartWithProductAdded = $cartApi->commit($language);
 
-        $this->assertInternalType('array', $cartWithProductAdded->lineItems);
+        $this->assertIsArray($cartWithProductAdded->lineItems);
         $this->assertCount(1, $cartWithProductAdded->lineItems);
 
         $addedLineItem = $cartWithProductAdded->lineItems[0];
@@ -83,7 +81,7 @@ class AnonymousCartTest extends FrontasticApiTestCase
         $cartApi->updateLineItem($cartWithProductAdded, $addedLineItem, 3, null, $language);
         $cartWithProductCountModified = $cartApi->commit($language);
 
-        $this->assertInternalType('array', $cartWithProductCountModified->lineItems);
+        $this->assertIsArray($cartWithProductCountModified->lineItems);
         $this->assertCount(1, $cartWithProductCountModified->lineItems);
 
         $lineItemWithModifiedCount = $cartWithProductCountModified->lineItems[0];
@@ -97,8 +95,27 @@ class AnonymousCartTest extends FrontasticApiTestCase
         $cartApi->removeLineItem($cartWithProductCountModified, $lineItemWithModifiedCount, $language);
         $cartWithProductRemoved = $cartApi->commit($language);
 
-        $this->assertInternalType('array', $cartWithProductRemoved->lineItems);
+        $this->assertIsArray($cartWithProductRemoved->lineItems);
         $this->assertEmpty($cartWithProductRemoved->lineItems);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testSettingTheEmailOfACart(Project $project, string $language): void
+    {
+        $this->requireAnonymousCheckout($project);
+        $originalCart = $this->getAnonymousCart($project, $language);
+
+        $cartApi = $this->getCartApiForProject($project);
+
+        $email = 'integration-tests-not-exists+account-' . uniqid('', true) . '@frontastic.com';
+        $cartApi->startTransaction($originalCart);
+        $cartApi->setEmail($originalCart, $email, $language);
+        $updatedCart = $cartApi->commit($language);
+
+        $this->assertEquals($email, $updatedCart->email);
+        $this->assertNotEquals($email, $originalCart->email);
     }
 
     /**
@@ -111,12 +128,17 @@ class AnonymousCartTest extends FrontasticApiTestCase
 
         $cartApi = $this->getCartApiForProject($project);
 
+        $frontasticAddress = $this->getFrontasticAddress();
         $cartApi->startTransaction($originalCart);
-        $cartApi->setShippingAddress($originalCart, $this->getFrontasticAddress(), $language);
+        $cartApi->setShippingAddress($originalCart, $frontasticAddress, $language);
         $updatedCart = $cartApi->commit($language);
 
         $this->assertInstanceOf(Address::class, $updatedCart->shippingAddress);
-        $this->assertEquals($this->getFrontasticAddress(), $updatedCart->shippingAddress);
+        $this->assertEquals($frontasticAddress->lastName, $updatedCart->shippingAddress->lastName);
+        $this->assertEquals($frontasticAddress->streetName, $updatedCart->shippingAddress->streetName);
+        $this->assertEquals($frontasticAddress->streetNumber, $updatedCart->shippingAddress->streetNumber);
+        $this->assertEquals($frontasticAddress->postalCode, $updatedCart->shippingAddress->postalCode);
+        $this->assertEquals($frontasticAddress->city, $updatedCart->shippingAddress->city);
     }
 
     /**
@@ -139,7 +161,7 @@ class AnonymousCartTest extends FrontasticApiTestCase
 
         $this->assertNotEmptyString($order->orderId);
 
-        $this->assertInternalType('int', $order->orderVersion);
+        $this->assertIsInt($order->orderVersion);
         $this->assertGreaterThanOrEqual(0, $order->orderVersion);
 
         $this->assertNotEmptyString($order->orderState);
@@ -164,6 +186,7 @@ class AnonymousCartTest extends FrontasticApiTestCase
     {
         return new LineItem\Variant([
             'variant' => new Variant([
+                'id' => $product->variants[0]->id,
                 'sku' => $product->variants[0]->sku,
                 'attributes' => $product->variants[0]->attributes,
             ]),

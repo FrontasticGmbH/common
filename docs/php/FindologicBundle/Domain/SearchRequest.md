@@ -9,7 +9,7 @@ Property|Type|Default|Required|Description
 `query` | `string` |  | - | 
 `identifier` | `null|string` |  | - | 
 `attributes` | `array` |  | - | 
-`outputAttributes` | `string[]` |  | - | 
+`outputAttributes` | `array` |  | - | 
 `order` | `array` |  | - | 
 `count` | `int` |  | - | 
 `first` | `int` |  | - | 

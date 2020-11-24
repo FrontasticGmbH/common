@@ -7,11 +7,13 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFac
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper as CommercetoolsDataMapper;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService;
+use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiFactory;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapDataMapper;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapProductApi;
+use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyProductMapper;
 use Frontastic\Common\ShopifyBundle\Domain\ProductApi\ShopifyProductApi;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClientFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFactory;
@@ -20,10 +22,9 @@ use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory as Shopw
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\ShopwareProductApi;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
 use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreatorFactory as SprykerLocaleCreatorFactory;
-use Frontastic\Common\SprykerBundle\Domain\Product\SprykerProductApi;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver as SprykerMapperResolver;
+use Frontastic\Common\SprykerBundle\Domain\Product\SprykerProductApi;
 use Frontastic\Common\SprykerBundle\Domain\SprykerClientFactory;
-
 use Frontastic\Common\SprykerBundle\Domain\SprykerUrlAppender;
 use Psr\Container\ContainerInterface;
 
@@ -35,14 +36,19 @@ class DefaultProductApiFactory implements ProductApiFactory
     private const CONFIGURATION_TYPE_NAME = 'product';
 
     /**
-     * @var \Psr\Container\ContainerInterface
+     * @var ContainerInterface
      */
     private $container;
 
     /**
-     * @var \Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService
+     * @var EnabledFacetService
      */
     private $enabledFacetService;
+
+    /**
+     * @var ProductSearchApiFactory
+     */
+    private $productSearchApiFactory;
 
     /**
      * @var array
@@ -52,16 +58,19 @@ class DefaultProductApiFactory implements ProductApiFactory
     public function __construct(
         ContainerInterface $container,
         EnabledFacetService $enabledFacetService,
+        ProductSearchApiFactory $productSearchApiFactory,
         iterable $decorators = []
     ) {
         $this->container = $container;
         $this->enabledFacetService = $enabledFacetService;
+        $this->productSearchApiFactory = $productSearchApiFactory;
         $this->decorators = $decorators;
     }
 
     public function factor(Project $project): ProductApi
     {
         $productConfig = $project->getConfigurationSection(self::CONFIGURATION_TYPE_NAME);
+        $productSearchApi = $this->productSearchApiFactory->factor($project);
 
         switch ($productConfig->engine) {
             case 'commercetools':
@@ -76,6 +85,8 @@ class DefaultProductApiFactory implements ProductApiFactory
                     $dataMapper,
                     $localeCreatorFactory->factor($project, $client),
                     $this->enabledFacetService,
+                    $productSearchApi,
+                    $project->languages,
                     $project->defaultLanguage
                 );
                 break;
@@ -87,7 +98,8 @@ class DefaultProductApiFactory implements ProductApiFactory
                 $productApi = new SapProductApi(
                     $client,
                     $localeCreatorFactory->factor($project, $client),
-                    new SapDataMapper($client)
+                    new SapDataMapper($client),
+                    $productSearchApi
                 );
                 break;
             case 'shopware':
@@ -103,15 +115,19 @@ class DefaultProductApiFactory implements ProductApiFactory
                     $dataMapper,
                     $this->enabledFacetService,
                     $this->container->get(ShopwareProjectConfigApiFactory::class),
+                    $productSearchApi,
                     $project->defaultLanguage
                 );
                 break;
             case 'shopify':
                 $clientFactory = $this->container->get(ShopifyClientFactory::class);
                 $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+                $productMapper = $this->container->get(ShopifyProductMapper::class);
 
                 $productApi = new ShopifyProductApi(
-                    $client
+                    $client,
+                    $productSearchApi,
+                    $productMapper
                 );
 
                 break;
@@ -128,6 +144,7 @@ class DefaultProductApiFactory implements ProductApiFactory
                     $dataMapper,
                     $localeCreatorFactory->factor($project, $client),
                     $urlAppender,
+                    $productSearchApi,
                     $project->defaultLanguage
                 );
 

@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\FindologicBundle\Domain;
 
+use Frontastic\Common\CoreBundle\Domain\RequestProvider;
 use Frontastic\Common\FindologicBundle\Exception\ServiceNotAliveException;
 use Frontastic\Common\HttpClient;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
@@ -9,8 +10,8 @@ use GuzzleHttp\Promise\PromiseInterface;
 
 class FindologicClient
 {
-    private const ALIVE_TIMEOUT = 1;
-    private const REQUEST_TIMEOUT = 3;
+    public const ALIVE_TIMEOUT = 1;
+    public const REQUEST_TIMEOUT = 3;
 
     /**
      * @var HttpClient
@@ -18,17 +19,34 @@ class FindologicClient
     private $httpClient;
 
     /**
-     * @var array<string, FindologicClientConfig> An array of client configs keyed by language
+     * @var RequestProvider
      */
-    private $configs;
+    private $requestProvider;
 
     /**
-     * @param array<string, FindologicClientConfig> $configs
+     * @var array<string, FindologicEndpointConfig> An array of endpoint configs keyed by language
      */
-    public function __construct(HttpClient $httpClient, array $configs)
-    {
+    private $endpoints;
+
+    /**
+     * @var string[]
+     */
+    private $outputAttributes;
+
+    /**
+     * @param array<string, FindologicEndpointConfig> $endpoints
+     * @param string[] $outputAttributes
+     */
+    public function __construct(
+        HttpClient $httpClient,
+        RequestProvider $requestProvider,
+        array $endpoints,
+        array $outputAttributes = []
+    ) {
         $this->httpClient = $httpClient;
-        $this->configs = $configs;
+        $this->requestProvider = $requestProvider;
+        $this->endpoints = $endpoints;
+        $this->outputAttributes = $outputAttributes;
     }
 
     public function isAlive(string $language): PromiseInterface
@@ -59,7 +77,23 @@ class FindologicClient
         return $this->isAlive($language)
             ->then(
                 function () use ($language, $request) {
-                    $url = $this->buildQueryUrl($language, 'index.php', $request->toArray());
+                    $parameters = $request->toArray();
+
+                    $request = $this->requestProvider->getCurrentRequest();
+
+                    if ($request !== null) {
+                        $parameters['userIp'] = $request->getClientIp();
+
+                        if ($request->headers->has('Referer')) {
+                            $referer = $request->headers->get('Referer');
+                            $urlParts = parse_url($referer);
+
+                            $parameters['referer'] = $referer;
+                            $parameters['shopUrl'] = sprintf('%s://%s', $urlParts['scheme'], $urlParts['host']);
+                        }
+                    }
+
+                    $url = $this->buildQueryUrl($language, 'index.php', $parameters);
                     $options = new HttpClient\Options(['timeout' => self::REQUEST_TIMEOUT]);
 
                     return $this->httpClient
@@ -79,15 +113,15 @@ class FindologicClient
 
     private function buildQueryUrl(string $language, string $route, array $parameters = null)
     {
-        if (!isset($this->configs[$language])) {
+        if (!isset($this->endpoints[$language])) {
             throw new \RuntimeException('No Findologic backend configured for requested language "' . $language . '".');
         }
 
         return sprintf(
-            '%s/%s?shopkey=%s&outputAdapter=JSON_1.0&outputAttrib[]=cat%s',
-            $this->configs[$language]->hostUrl,
+            '%s/%s?shopkey=%s&outputAdapter=JSON_1.0%s',
+            $this->endpoints[$language]->hostUrl,
             $route,
-            $this->configs[$language]->shopkey,
+            $this->endpoints[$language]->shopkey,
             empty($parameters) ? '' : '&' . http_build_query($parameters)
         );
     }

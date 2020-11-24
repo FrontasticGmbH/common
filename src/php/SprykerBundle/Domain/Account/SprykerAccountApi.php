@@ -63,7 +63,6 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
      */
     public function confirmEmail(string $token, string $locale = null): Account
     {
-        // TODO: Implement confirmEmail() method.
         throw new \RuntimeException('Not implemented');
     }
 
@@ -80,9 +79,11 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
         $headers = $this->accountHelper->getAnonymousHeader();
 
         try {
-            $this->client->post('/customers', $headers, $request->encode());
+            $response = $this->client->post('/customers', $headers, $request->encode());
 
-            $account = $this->login($account, $cart, $locale);
+            $account = $this->mapAccount($response->document()->primaryResource());
+            $account->confirmed = false;
+            $account->confirmationToken = null;
         } catch (\Exception $e) {
             if ($e->getCode() === 422) {
                 throw new DuplicateAccountException($account->email, 0);
@@ -91,16 +92,6 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
         }
 
         return $account;
-    }
-
-    /**
-     * @param string $token
-     * @return \Frontastic\Common\AccountApiBundle\Domain\Account
-     */
-    public function verifyEmail(string $token): Account
-    {
-        // @TODO: To be migrated form Prym
-        throw new \RuntimeException('Not implemented');
     }
 
     /**
@@ -152,10 +143,11 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
     {
         $request = new ForgotPasswordRequestData($email);
 
-        $response = $this->client->post('/customer-forgotten-password', [], $request->encode());
+        $this->client->post('/customer-forgotten-password', [], $request->encode());
 
-        // @TODO: Implement generatePasswordResetToken() method
-        return new PasswordResetToken();
+        return new PasswordResetToken([
+            'email' => $email,
+        ]);
     }
 
     /**
@@ -323,7 +315,12 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
         $authToken = $account->authToken;
 
         if ($authToken === null) {
-            throw new \OutOfBoundsException('Could not refresh account');
+            // throw new \OutOfBoundsException('Could not refresh account');
+
+            // Since Spryker doesn't offer a way to GET the customer details if the customer has not confirmed
+            // their email address and is logged in, we'll return the user as a work around to
+            // don't break the functionality in AccountProvider::refreshUser
+            return $account;
         }
 
         $id = $this->getCustomerReference($authToken);

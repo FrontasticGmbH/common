@@ -5,23 +5,41 @@ namespace Frontastic\Common\SprykerBundle\Domain\Cart;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
-use Frontastic\Common\CartApiBundle\Domain\CartApi;
+use Frontastic\Common\CartApiBundle\Domain\CartApiBase;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
-use Frontastic\Common\SprykerBundle\BaseApi\SprykerApiBase;
+use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
 use Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper;
 use Frontastic\Common\SprykerBundle\Domain\Cart\Mapper\CheckoutMapper;
 use Frontastic\Common\SprykerBundle\Domain\Cart\Mapper\OrderMapper;
 use Frontastic\Common\SprykerBundle\Domain\Cart\Request\CheckoutRequestData;
 use Frontastic\Common\SprykerBundle\Domain\Cart\SprykerCart\SprykerCartInterface;
 use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreator;
+use Frontastic\Common\SprykerBundle\Domain\Locale\SprykerLocale;
 use Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface;
 use Frontastic\Common\SprykerBundle\Domain\MapperInterface;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver;
+use Frontastic\Common\SprykerBundle\Domain\SprykerUrlAppender;
+use WoohooLabs\Yang\JsonApi\Response\JsonApiResponse;
 
-class SprykerCartApi extends SprykerApiBase implements CartApi
+class SprykerCartApi extends CartApiBase
 {
+    /**
+     * @var SprykerClientInterface
+     */
+    protected $client;
+
+    /**
+     * @var LocaleCreator
+     */
+    protected $localeCreator;
+
+    /**
+     * @var DataMapperResolver
+     */
+    protected $mapperResolver;
+
     /**
      * @var AccountHelper
      */
@@ -43,9 +61,19 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
     protected $checkoutRequest;
 
     /**
+     * @var SprykerUrlAppender
+     */
+    private $urlAppender;
+
+    /**
      * @var string[]
      */
     protected $orderIncludes;
+
+    /**
+     * @var string|null
+     */
+    private $defaultLanguage;
 
     /**
      * @param SprykerClientInterface $client
@@ -54,7 +82,9 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
      * @param SprykerCartInterface $guestCart
      * @param SprykerCartInterface $customerCart
      * @param LocaleCreator $localeCreator
+     * @param SprykerUrlAppender $urlAppender
      * @param string[] $orderIncludes
+     * @param string|null $defaultLanguage
      */
     public function __construct(
         SprykerClientInterface $client,
@@ -63,14 +93,20 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
         SprykerCartInterface $guestCart,
         SprykerCartInterface $customerCart,
         LocaleCreator $localeCreator,
-        array $orderIncludes = []
+        SprykerUrlAppender $urlAppender,
+        array $orderIncludes = [],
+        ?string $defaultLanguage = null
     ) {
-        parent::__construct($client, $mapperResolver, $localeCreator);
+        $this->client = $client;
+        $this->mapperResolver = $mapperResolver;
+        $this->localeCreator = $localeCreator;
+        $this->urlAppender = $urlAppender;
         $this->accountHelper = $accountHelper;
         $this->guestCart = $guestCart;
         $this->customerCart = $customerCart;
         $this->checkoutRequest = new CheckoutRequestData();
         $this->orderIncludes = $orderIncludes;
+        $this->defaultLanguage = $defaultLanguage;
     }
 
     /**
@@ -78,7 +114,7 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
      * @param string $locale
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function getForUser(Account $account, string $locale): Cart
+    protected function getForUserImplementation(Account $account, string $locale): Cart
     {
         return $this->customerCart->getCart($account->authToken, $locale);
     }
@@ -88,16 +124,26 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
      * @param string $locale
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function getAnonymous(string $anonymousId, string $locale): Cart
+    protected function getAnonymousImplementation(string $anonymousId, string $locale): Cart
     {
         return $this->guestCart->getCart($anonymousId, $locale);
+    }
+
+    /**
+     * @param string $cartId
+     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
+     * @throws \RuntimeExcption if cart with $cartId was not found
+     */
+    protected function getByIdImplementation(string $cartId, string $locale = null): Cart
+    {
+        return $this->getResolvedCart()->getById($cartId, $locale);
     }
 
     /**
      * @param array $lineItemType
      * @fixme Is this a hard CT dependency?
      */
-    public function setCustomLineItemType(array $lineItemType): void
+    protected function setCustomLineItemTypeImplementation(array $lineItemType): void
     {
     }
 
@@ -105,7 +151,7 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
      * @return array
      * @fixme Is this a hard CT dependency?
      */
-    public function getCustomLineItemType(): array
+    protected function getCustomLineItemTypeImplementation(): array
     {
         return [];
     }
@@ -113,16 +159,17 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
     /**
      * @param array $taxCategory
      */
-    public function setTaxCategory(array $taxCategory): void
+    protected function setTaxCategoryImplementation(array $taxCategory): void
     {
+        throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
     /**
      * @return array
      */
-    public function getTaxCategory(): array
+    protected function getTaxCategoryImplementation(): ?array
     {
-        return [];
+        return null;
     }
 
     /**
@@ -130,7 +177,7 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
      * @param \Frontastic\Common\CartApiBundle\Domain\LineItem $lineItem
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function addToCart(Cart $cart, LineItem $lineItem, string $locale = null): Cart
+    protected function addToCartImplementation(Cart $cart, LineItem $lineItem, string $locale = null): Cart
     {
         return $this->getResolvedCart()->addLineItemToCart($cart, $lineItem);
     }
@@ -142,7 +189,7 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
      * @param array|null $custom
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function updateLineItem(
+    protected function updateLineItemImplementation(
         Cart $cart,
         LineItem $lineItem,
         int $count,
@@ -157,7 +204,7 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
      * @param \Frontastic\Common\CartApiBundle\Domain\LineItem $lineItem
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function removeLineItem(Cart $cart, LineItem $lineItem, string $locale = null): Cart
+    protected function removeLineItemImplementation(Cart $cart, LineItem $lineItem, string $locale = null): Cart
     {
         return $this->getResolvedCart()->removeLineItem($cart, $lineItem);
     }
@@ -167,7 +214,7 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
      * @param string $email
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function setEmail(Cart $cart, string $email, string $locale = null): Cart
+    protected function setEmailImplementation(Cart $cart, string $email, string $locale = null): Cart
     {
         throw new \RuntimeException('Do not use this method, use "setAccount" method');
     }
@@ -189,7 +236,7 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
      * @param string $shippingMethod
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function setShippingMethod(Cart $cart, string $shippingMethod, string $locale = null): Cart
+    protected function setShippingMethodImplementation(Cart $cart, string $shippingMethod, string $locale = null): Cart
     {
         $this->checkoutRequest->setShipmentMethod((int)$shippingMethod);
 
@@ -201,7 +248,12 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
      * @param array $fields
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function setCustomField(Cart $cart, array $fields, string $locale = null): Cart
+    protected function setCustomFieldImplementation(Cart $cart, array $fields, string $locale = null): Cart
+    {
+        return $cart;
+    }
+
+    protected function setRawApiInputImplementation(Cart $cart, string $locale = null): Cart
     {
         return $cart;
     }
@@ -211,7 +263,7 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
      * @param Address $address
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function setShippingAddress(Cart $cart, Address $address, string $locale = null): Cart
+    protected function setShippingAddressImplementation(Cart $cart, Address $address, string $locale = null): Cart
     {
         $this->checkoutRequest->setShippingAddress($address);
 
@@ -223,7 +275,7 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
      * @param Address $address
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function setBillingAddress(Cart $cart, Address $address, string $locale = null): Cart
+    protected function setBillingAddressImplementation(Cart $cart, Address $address, string $locale = null): Cart
     {
         $this->checkoutRequest->setBillingAddress($address);
 
@@ -235,15 +287,28 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
      * @param \Frontastic\Common\CartApiBundle\Domain\Payment $payment
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function addPayment(Cart $cart, Payment $payment, ?array $custom = null, string $locale = null): Cart
-    {
+    protected function addPaymentImplementation(
+        Cart $cart,
+        Payment $payment,
+        ?array $custom = null,
+        string $locale = null
+    ): Cart {
         $this->checkoutRequest->setPayment($payment);
 
         return $cart;
     }
 
-    public function updatePayment(Cart $cart, Payment $payment, string $localeString): Payment
+    protected function updatePaymentImplementation(Cart $cart, Payment $payment, string $localeString): Payment
     {
+        throw new \RuntimeException(__METHOD__ . ' not implemented');
+    }
+
+    protected function removeDiscountCodeImplementation(
+        Cart $cart,
+        LineItem $discountLineItem,
+        string $locale = null
+    ): Cart {
+        // TODO: Implement removeDiscountCode() method.
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
@@ -253,7 +318,7 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
      * @param string|null $locale
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function redeemDiscountCode(Cart $cart, string $code, string $locale = null): Cart
+    protected function redeemDiscountCodeImplementation(Cart $cart, string $code, string $locale = null): Cart
     {
         return $cart;
     }
@@ -263,7 +328,7 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
      * @param string|null $locale
      * @return \Frontastic\Common\CartApiBundle\Domain\Order
      */
-    public function order(Cart $cart, string $locale = null): Order
+    protected function orderImplementation(Cart $cart, string $locale = null): Order
     {
         $sprykerLocale = $this->parseLocaleString($locale);
 
@@ -283,14 +348,14 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
      * @param string|null $locale
      * @return \Frontastic\Common\CartApiBundle\Domain\Order
      */
-    public function getOrder(Account $account, string $orderId, string $locale = null): Order
+    protected function getOrderImplementation(Account $account, string $orderId, string $locale = null): Order
     {
         $sprykerLocale = $this->parseLocaleString($locale);
 
         $response = $this->client
             ->forLanguage($sprykerLocale->language)
             ->get(
-                $this->withIncludes("/orders/{$orderId}", $this->orderIncludes),
+                $this->urlAppender->withIncludes("/orders/{$orderId}", $this->orderIncludes),
                 $this->getAuthHeader()
             );
 
@@ -302,7 +367,7 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
      * @param string|null $locale
      * @return \Frontastic\Common\CartApiBundle\Domain\Order[]
      */
-    public function getOrders(Account $account, string $locale = null): array
+    protected function getOrdersImplementation(Account $account, string $locale = null): array
     {
         $response = $this->client->get(sprintf('/orders'), $this->getAuthHeader());
 
@@ -320,14 +385,14 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
     /**
      * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
      */
-    public function startTransaction(Cart $cart): void
+    protected function startTransactionImplementation(Cart $cart): void
     {
     }
 
     /**
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function commit(string $locale = null): Cart
+    protected function commitImplementation(string $locale = null): Cart
     {
         return $this->getResolvedCart()->getCart(null, $locale);
     }
@@ -388,25 +453,26 @@ class SprykerCartApi extends SprykerApiBase implements CartApi
         return $this->mapperResolver->getMapper(CheckoutMapper::MAPPER_NAME);
     }
 
+    private function parseLocaleString(string $localeString): SprykerLocale
+    {
+        return $this->localeCreator->createLocaleFromString($localeString ?? $this->defaultLanguage);
+    }
+
     /**
-     * @param string $cartId
-     * @return \Frontastic\Common\CartApiBundle\Domain\Cart
-     * @throws \RuntimeExcption if cart with $cartId was not found
+     * @param JsonApiResponse $response
+     * @param string $mapperName
+     *
+     * @return mixed
      */
-    public function getById(string $cartId, string $locale = null): Cart
+    protected function mapResponseResource(JsonApiResponse $response, string $mapperName)
     {
-        return $this->getResolvedCart()->getById($cartId, $locale);
-    }
+        $document = $response->document();
+        $mapper = $this->mapperResolver->getMapper($mapperName);
 
-    public function setRawApiInput(Cart $cart, string $locale = null): Cart
-    {
-        // TODO: Implement setRawApiInput() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
-    }
+        if ($document->isSingleResourceDocument()) {
+            return $mapper->mapResource($document->primaryResource());
+        }
 
-    public function removeDiscountCode(Cart $cart, LineItem $discountLineItem, string $locale = null): Cart
-    {
-        // TODO: Implement removeDiscountCode() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        return $mapper->mapResource($document->primaryResources()[0]);
     }
 }

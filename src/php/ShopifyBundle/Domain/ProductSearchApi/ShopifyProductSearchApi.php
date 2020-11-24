@@ -2,29 +2,34 @@
 
 namespace Frontastic\Common\ShopifyBundle\Domain\ProductSearchApi;
 
-use Frontastic\Common\ProductApiBundle\Domain\Product;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Facets;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\PaginatedQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
-use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiBase;
+use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyProductMapper;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClient;
-use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
 
 class ShopifyProductSearchApi extends ProductSearchApiBase
 {
-    private const DEFAULT_VARIANTS_TO_FETCH = 1;
-    private const DEFAULT_COLLECTIONS_TO_FETCH = 10;
+    private const DEFAULT_VARIANTS_TO_FETCH = 25;
+    private const DEFAULT_ELEMENTS_TO_FETCH = 10;
 
     /**
      * @var ShopifyClient
      */
     private $client;
 
-    public function __construct(ShopifyClient $client)
+    /**
+     * @var ShopifyProductMapper
+     */
+    private $productMapper;
+
+    public function __construct(ShopifyClient $client, ShopifyProductMapper $productMapper)
     {
         $this->client = $client;
+        $this->productMapper = $productMapper;
     }
 
     protected function queryImplementation(ProductQuery $query): PromiseInterface
@@ -33,12 +38,34 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
             id
             title
             description
+            descriptionHtml
             handle
+            productType
+            tags
+            vendor
+            createdAt
             updatedAt
-            collections(first: " . self::DEFAULT_COLLECTIONS_TO_FETCH . ") {
+            collections(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                 edges {
                     node {
                         id
+                    }
+                }
+            }
+            images(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                edges {
+                    node {
+                        originalSrc
+                    }
+                }
+            }
+            metafields(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                edges {
+                    node {
+                        id
+                        key
+                        value
+                        valueType
                     }
                 }
             }
@@ -74,8 +101,26 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
             $parameters[] = "$query->query";
         }
 
-        if ($query->category) {
-            $parameters[] = "$query->category";
+        if ($query->filter) {
+            foreach ($query->filter as $queryFilter) {
+                $parameters[] = $this->productMapper->toFilterString($queryFilter);
+            }
+        }
+
+        if ($query->productType) {
+            $parameters[] = sprintf('product_type:%s', $query->productType);
+        }
+
+        if ($query->facets) {
+            foreach ($query->facets as $facet) {
+                if ($facet->type == Facets::TYPE_TERM) {
+                    $parameters[] = sprintf(
+                        '(%s:%s)',
+                        $facet->handle,
+                        implode(" OR ", $facet->terms ?? [])
+                    );
+                }
+            }
         }
 
         $skus = [];
@@ -87,10 +132,10 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
         }
 
         if (count($skus)) {
-            $parameters = array_merge($parameters, $skus);
+            $parameters[] = "(" . implode(' OR ', $skus) .")";
         }
 
-        $queryFilter = "query:\"" . implode(' OR ', $parameters) . "\"";
+        $queryFilter = "query:\"" . implode(' AND ', $parameters) . "\"";
 
         $pageFilter = $this->buildPageFilter($query);
 
@@ -134,6 +179,34 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
             }";
         }
 
+        if (count($parameters) && count($productIds) && $query->category) {
+            throw new \InvalidArgumentException(
+                'Currently it is not possible to filter by category and other parameters at the same time'
+            );
+        }
+
+        if ($query->category) {
+            $query->query = "{
+                node(id: \"{$query->category}\") {
+                    id
+                    ... on Collection {
+                        products($pageFilter) {
+                            edges {
+                                cursor
+                                node {
+                                    $productQuery
+                                }
+                            }
+                            pageInfo {
+                              hasNextPage
+                              hasPreviousPage
+                            }
+                        }
+                    }
+                }
+            }";
+        }
+
         return $this->client
             ->request($query->query, $query->locale)
             ->then(function ($result) use ($query): Result {
@@ -142,6 +215,7 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
 
                 $products = [];
                 $productsData = [];
+                $pageInfoData = [];
 
                 if ($result['errors']
                     && strpos($result['errors'][0]['message'], 'Invalid global id') !== false
@@ -151,30 +225,44 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                     ]);
                 }
 
-                if (key_exists('products', $result['body']['data'])) {
-                    $productsData = $result['body']['data']['products']['edges'];
-                    $hasNextPage = $result['body']['data']['products']['pageInfo']['hasNextPage'];
-                    $hasPreviousPage = $result['body']['data']['products']['pageInfo']['hasPreviousPage'];
-                }
-
                 if (key_exists('nodes', $result['body']['data'])) {
                     $productsData = $result['body']['data']['nodes'];
+                }
+
+                if (key_exists('node', $result['body']['data']) &&
+                    key_exists('products', $result['body']['data']['node'])) {
+                    $productsData = $result['body']['data']['node']['products']['edges'];
+                    $pageInfoData = $result['body']['data']['node']['products']['pageInfo'];
+                }
+
+                if (key_exists('products', $result['body']['data'])) {
+                    $productsData = $result['body']['data']['products']['edges'];
+                    $pageInfoData = $result['body']['data']['products']['pageInfo'];
+                }
+
+                if (!empty($pageInfoData)) {
+                    $hasNextPage = $pageInfoData['hasNextPage'];
+                    $hasPreviousPage = $pageInfoData['hasPreviousPage'];
                 }
 
                 $previousCursor = $productsData[0]['cursor'] ?? null;
 
                 $nextCursor = null;
-                foreach ($productsData as $key => $productData) {
-                    $products[] = $this->mapDataToProduct($productData['node'] ?? $productData);
+                foreach ($productsData as $productData) {
+                    $products[] = $this->productMapper->mapDataToProduct(
+                        $productData['node'] ?? $productData,
+                        $query
+                    );
                     $nextCursor = $productData['cursor'] ?? null;
                 }
 
                 return new Result([
-                    // @TODO: "total" is not available in Shopify.
+                    // "total" is not available in Shopify.
                     'previousCursor' => $hasPreviousPage ? "before:\"$previousCursor\"" : null,
                     'nextCursor' => $hasNextPage ? "after:\"$nextCursor\"" : null,
                     'count' => count($products),
                     'items' => $products,
+                    'facets' => $this->productMapper->mapDataToFacets($productsData),
                     'query' => clone $query,
                 ]);
             });
@@ -182,7 +270,24 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
 
     protected function getSearchableAttributesImplementation(): PromiseInterface
     {
-        return new FulfilledPromise([]);
+        $query = "
+            query {
+                productTags(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                    edges {
+                        node
+                    }
+                }
+            }";
+
+        return $this->client
+            ->request($query)
+            ->then(function (array $result): array {
+                if ($result['errors']) {
+                    throw new \RuntimeException($result['errors'][0]['message']);
+                }
+
+                return $this->productMapper->mapDataToProductAttributes($result['body']['data']);
+            });
     }
 
     public function getDangerousInnerClient()
@@ -197,94 +302,5 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
         $pageFilter .= !empty($query->cursor) ? ' ' . $query->cursor : null;
 
         return $pageFilter;
-    }
-
-    private function mapDataToProduct(array $productData): Product
-    {
-        return new Product([
-            'productId' => $productData['id'],
-            'name' => $productData['title'],
-            'description' => $productData['description'],
-            'slug' => $productData['handle'],
-            'categories' => array_map(
-                function (array $category) {
-                    return $category['node']['id'];
-                },
-                $productData['collections']['edges']
-            ),
-            'changed' => $this->parseDate($productData['updatedAt']),
-            'variants' => $this->mapDataToVariants($productData['variants']['edges']),
-            // @TODO Include dangerousInnerProduct base on locale flag
-            // 'dangerousInnerProduct' => $productData,
-        ]);
-    }
-
-    private function parseDate(string $string): \DateTimeImmutable
-    {
-        $formats = [
-            'Y-m-d\TH:i:s.uP',
-            \DateTimeInterface::RFC3339,
-            \DateTimeInterface::RFC3339_EXTENDED,
-        ];
-
-        foreach ($formats as $format) {
-            $date = \DateTimeImmutable::createFromFormat($format, $string);
-            if ($date !== false) {
-                return $date;
-            }
-        }
-
-        throw new \RuntimeException('Invalid date: ' . $string);
-    }
-
-    private function mapDataToVariants(array $variantsData): array
-    {
-        $variants = [];
-        foreach ($variantsData as $variant) {
-            $variants[] = $this->mapDataToVariant($variant['node']);
-        }
-
-        return $variants;
-    }
-
-    private function mapDataToVariant(array $variantData): Variant
-    {
-        return new Variant([
-            'id' => $variantData['id'],
-            'sku' => !empty($variantData['sku'])
-                ? $variantData['sku']
-                : $variantData['id'],
-            'groupId' => $variantData['product']['id'],
-            'isOnStock' => !$variantData['currentlyNotInStock'],
-            'price' => $this->mapDataToPriceValue($variantData['priceV2']),
-            'currency' => $variantData['priceV2']['currencyCode'],
-            'attributes' => $this->mapDataToAttributes($variantData),
-            'images' => [$variantData['image']['originalSrc']],
-            // @TODO Include dangerousInnerVariant base on locale flag
-            // 'dangerousInnerVariant' => $variantData,
-        ]);
-    }
-
-    private function mapDataToPriceValue(array $data): int
-    {
-        return (int)round($data['amount'] * 100);
-    }
-
-    private function mapDataToAttributes(array $variantData): array
-    {
-        return array_combine(
-            array_map(
-                function (array $attribute): string {
-                    return $attribute['name'];
-                },
-                $variantData['selectedOptions']
-            ),
-            array_map(
-                function (array $attribute) {
-                    return $attribute['value'];
-                },
-                $variantData['selectedOptions']
-            )
-        );
     }
 }

@@ -5,7 +5,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\Mapper" public="true">
+        <service id="Frontastic\Common\FindologicBundle\Domain\FindologicMapperFactory" public="true">
+            <argument type="service" id="router" />
         </service>
 
         <service id="Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\QueryValidator" public="true">
@@ -13,6 +14,7 @@
 
         <service id="Frontastic\Common\FindologicBundle\Domain\FindologicClientFactory" public="true">
             <argument type="service" id="Frontastic\Common\HttpClient" />
+            <argument type="service" id="Frontastic\Common\CoreBundle\Domain\RequestProvider" />
             <tag name="frontastic.common.api_integration"/>
         </service>
     </services>

@@ -11,7 +11,6 @@
 * [__construct()](#__construct)
 * [confirmEmail()](#confirmemail)
 * [create()](#create)
-* [verifyEmail()](#verifyemail)
 * [update()](#update)
 * [updatePassword()](#updatepassword)
 * [generatePasswordResetToken()](#generatepasswordresettoken)
@@ -82,20 +81,6 @@ Argument|Type|Default|Description
 `$account`|[`Account`](../../../AccountApiBundle/Domain/Account.md)||
 `$cart`|?[`Cart`](../../../CartApiBundle/Domain/Cart.md)|`null`|
 `$locale`|`string`|`null`|
-
-Return Value: [`Account`](../../../AccountApiBundle/Domain/Account.md)
-
-### verifyEmail()
-
-```php
-public function verifyEmail(
-    string $token
-): Account
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$token`|`string`||
 
 Return Value: [`Account`](../../../AccountApiBundle/Domain/Account.md)
 

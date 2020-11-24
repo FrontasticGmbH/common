@@ -10,6 +10,10 @@ use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFacto
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapCartApi;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapDataMapper;
+use Frontastic\Common\ShopifyBundle\Domain\CartApi\ShopifyCartApi;
+use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyAccountMapper;
+use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyProductMapper;
+use Frontastic\Common\ShopifyBundle\Domain\ShopifyClientFactory;
 use Frontastic\Common\ShopwareBundle\Domain\CartApi\ShopwareCartApi;
 use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFactory;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
@@ -23,6 +27,7 @@ use Frontastic\Common\SprykerBundle\Domain\Cart\SprykerCart\GuestCart;
 use Frontastic\Common\SprykerBundle\Domain\Cart\SprykerCartApi;
 use Frontastic\Common\SprykerBundle\Domain\SprykerClientFactory;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver as SprykerMapperResolver;
+use Frontastic\Common\SprykerBundle\Domain\SprykerUrlAppender;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -104,21 +109,38 @@ class CartApiFactory
                 $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
                 $cartApi = new ShopwareCartApi(
                     $client,
-                    $this->container->get(DataMapperResolver::class),
                     $localeCreatorFactory->factor($project, $client),
-                    $project->defaultLanguage,
-                    $this->container->get(ShopwareProjectConfigApiFactory::class)
+                    $this->container->get(DataMapperResolver::class),
+                    $this->container->get(ShopwareProjectConfigApiFactory::class),
+                    $project->defaultLanguage
                 );
+                break;
+
+            case 'shopify':
+                $clientFactory = $this->container->get(ShopifyClientFactory::class);
+                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+                $productMapper = $this->container->get(ShopifyProductMapper::class);
+                $accountMapper = $this->container->get(ShopifyAccountMapper::class);
+
+                $cartApi = new ShopifyCartApi(
+                    $client,
+                    $productMapper,
+                    $accountMapper
+                );
+
                 break;
 
             case 'spryker':
                 $dataMapper = $this->container->get(SprykerMapperResolver::class);
                 $localeCreatorFactory = $this->container->get(SprykerLocaleCreatorFactory::class);
                 $accountHelper = $this->container->get(AccountHelper::class);
+                $urlAppender = $this->container->get(SprykerUrlAppender::class);
 
                 $client = $this->container
                     ->get(SprykerClientFactory::class)
                     ->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+
+                $localeCreator = $localeCreatorFactory->factor($project, $client);
 
                 $customerCartRequestData = new CustomerCartRequestData(
                     $cartConfig->priceMode,
@@ -126,13 +148,23 @@ class CartApiFactory
                     $cartConfig->shop
                 );
 
-                $guestCart = new GuestCart($client, $dataMapper, $accountHelper);
+                $guestCart = new GuestCart(
+                    $client,
+                    $dataMapper,
+                    $localeCreator,
+                    $accountHelper,
+                    [],
+                    $project->defaultLanguage
+                );
 
                 $customerCart = new CustomerCart(
                     $client,
                     $dataMapper,
+                    $localeCreator,
                     $accountHelper,
-                    $customerCartRequestData
+                    $customerCartRequestData,
+                    [],
+                    $project->defaultLanguage
                 );
 
                 $cartApi = new SprykerCartApi(
@@ -141,7 +173,10 @@ class CartApiFactory
                     $accountHelper,
                     $guestCart,
                     $customerCart,
-                    $localeCreatorFactory->factor($project, $client)
+                    $localeCreator,
+                    $urlAppender,
+                    [],
+                    $project->defaultLanguage
                 );
 
                 break;

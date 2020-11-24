@@ -6,12 +6,12 @@ use Frontastic\Common\ProductApiBundle\Domain\Category;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\SingleProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApiBase;
 use Frontastic\Common\ProductApiBundle\Domain\ProductType;
+use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreator;
 use GuzzleHttp\Promise\PromiseInterface;
 
@@ -26,8 +26,14 @@ class SapProductApi extends ProductApiBase
     /** @var SapDataMapper */
     private $dataMapper;
 
-    public function __construct(SapClient $client, SapLocaleCreator $localeCreator, SapDataMapper $dataMapper)
-    {
+    public function __construct(
+        SapClient $client,
+        SapLocaleCreator $localeCreator,
+        SapDataMapper $dataMapper,
+        ProductSearchApi $productSearchApi
+    ) {
+        parent::__construct($productSearchApi);
+
         $this->client = $client;
         $this->localeCreator = $localeCreator;
         $this->dataMapper = $dataMapper;
@@ -129,82 +135,8 @@ class SapProductApi extends ProductApiBase
             });
     }
 
-    protected function queryImplementation(ProductQuery $query): PromiseInterface
-    {
-        $sapLocale = $this->localeCreator->createLocaleFromString($query->locale);
-
-        $queryFilter = [];
-
-        $codes = [];
-        if ($query->sku !== null) {
-            $codes[] = $query->sku;
-        }
-        if ($query->skus !== null) {
-            $codes = array_merge($codes, $query->skus);
-        }
-        if ($query->productId !== null) {
-            $codes[] = $query->productId;
-        }
-        if ($query->productIds !== null) {
-            $codes = array_merge($codes, $query->productIds);
-        }
-        $codes = array_unique($codes);
-        if (count($codes) === 1) {
-            $queryFilter['code'] = reset($codes);
-        } elseif (count($codes) > 1) {
-            throw new \InvalidArgumentException('Can currently only search for a single code');
-        }
-
-        if ($query->category !== null) {
-            $queryFilter['allCategories'] = $query->category;
-        }
-
-        $parameters = array_merge(
-            $query->rawApiInput,
-            $sapLocale->toQueryParameters(),
-            [
-                'currentPage' => $query->offset / $query->limit,
-                'pageSize' => $query->limit,
-                'fields' => 'FULL',
-                'query' => sprintf(
-                    '%s:relevance:%s',
-                    $query->query,
-                    $this->encodeFilterString($queryFilter)
-                ),
-            ]
-        );
-
-        return $this->client
-            ->get('/rest/v2/{siteId}/products/search', $parameters)
-            ->then(function (array $result) use ($query): ProductApi\Result {
-                $products = array_map([$this->dataMapper, 'mapDataToProduct'], $result['products']);
-
-                return new ProductApi\Result([
-                    'offset' => $result['pagination']['currentPage'] * $result['pagination']['pageSize'],
-                    'total' => $result['pagination']['totalResults'],
-                    'count' => count($products),
-                    'items' => $products,
-                    'query' => clone $query,
-                ]);
-            });
-    }
-
     public function getDangerousInnerClient()
     {
         return $this->client;
-    }
-
-    private function encodeFilterString(array $filter): string
-    {
-        $elements = [];
-
-        foreach ($filter as $key => $value) {
-            foreach ((array)$value as $item) {
-                $elements[] = $key;
-                $elements[] = $item;
-            }
-        }
-
-        return implode(':', $elements);
     }
 }

@@ -4,7 +4,7 @@ namespace Frontastic\Common\FindologicBundle\Domain;
 
 use Kore\DataObject\DataObject;
 
-class FindologicClientConfig extends DataObject
+class FindologicEndpointConfig extends DataObject
 {
     /**
      * @var string

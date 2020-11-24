@@ -29,7 +29,7 @@ class CommercetoolsTest extends TestCase
      */
     private $api;
 
-    public function setup()
+    public function setUp(): void
     {
         $this->clientMock = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->getMock();
         $this->localCreatorMock = $this->createMock(CommercetoolsLocaleCreator::class);
@@ -38,6 +38,15 @@ class CommercetoolsTest extends TestCase
             new Mapper(),
             $this->localCreatorMock,
             new EmptyEnabledFacetService(),
+            new \Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi\Commercetools(
+                $this->clientMock,
+                new Mapper(),
+                $this->localCreatorMock,
+                new EmptyEnabledFacetService(),
+                ['en_GB'],
+                'en_GB'
+            ),
+            ['en_GB'],
             'en_GB'
         );
     }

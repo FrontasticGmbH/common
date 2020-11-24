@@ -1,34 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit backupGlobals="false"
-         backupStaticAttributes="false"
-         bootstrap="vendor/autoload.php"
-         colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         processIsolation="false"
-         stopOnFailure="false">
-
-    <php>
-        <server name="KERNEL_DIR" value="./app"/>
-    </php>
-
-    <testsuites>
-        <testsuite name="Common Library Test Suite">
-            <directory>test/php/</directory>
-        </testsuite>
-    </testsuites>
-
-    <groups>
-        <exclude>
-            <group>integration</group>
-            <group>functional</group>
-        </exclude>
-    </groups>
-
-    <filter>
-        <whitelist addUncoveredFilesFromWhitelist="true">
-            <directory>src/php/</directory>
-        </whitelist>
-    </filter>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" backupGlobals="false" backupStaticAttributes="false" bootstrap="vendor/autoload.php" colors="true" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true" processIsolation="false" stopOnFailure="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage includeUncoveredFiles="true">
+    <include>
+      <directory>src/php/</directory>
+    </include>
+  </coverage>
+  <php>
+    <server name="KERNEL_DIR" value="./app"/>
+  </php>
+  <testsuites>
+    <testsuite name="Common Library Test Suite">
+      <directory>test/php/</directory>
+    </testsuite>
+  </testsuites>
+  <groups>
+    <exclude>
+      <group>integration</group>
+      <group>functional</group>
+    </exclude>
+  </groups>
 </phpunit>

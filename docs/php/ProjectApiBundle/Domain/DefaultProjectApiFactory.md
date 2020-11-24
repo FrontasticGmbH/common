@@ -13,13 +13,13 @@
 
 ```php
 public function __construct(
-    \Psr\Container\ContainerInterface $container
+    ProductSearchApiFactory $productSearchApiFactory
 ): mixed
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$container`|`\Psr\Container\ContainerInterface`||
+`$productSearchApiFactory`|[`ProductSearchApiFactory`](../../ProductSearchApiBundle/Domain/ProductSearchApiFactory.md)||
 
 Return Value: `mixed`
 

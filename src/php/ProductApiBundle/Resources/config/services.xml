@@ -45,6 +45,8 @@
             <argument type="service" id="Psr\Container\ContainerInterface"/>
             <argument type="service"
                       id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService"/>
+            <argument type="service"
+                      id="Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiFactory"/>
             <argument type="tagged" tag="productApi.lifecycleEventListener"/>
         </service>
     </services>

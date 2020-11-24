@@ -3,7 +3,8 @@
 namespace Frontastic\Common\FindologicBundle\Domain\ProductSearchApi;
 
 use Frontastic\Common\FindologicBundle\Domain\FindologicClient;
-use Frontastic\Common\FindologicBundle\Domain\FindologicClientConfig;
+use Frontastic\Common\FindologicBundle\Domain\FindologicEndpointConfig;
+use Frontastic\Common\CoreBundle\Domain\RequestProvider;
 use Frontastic\Common\FindologicBundle\Domain\SearchRequest;
 use Frontastic\Common\FindologicBundle\Exception\ServiceNotAliveException;
 use Frontastic\Common\HttpClient;
@@ -22,11 +23,12 @@ class FindologicProductSearchApiTest extends TestCase
         $locale = 'en_GB@GBP';
         $query = new ProductQuery(['locale' => $locale]);
         $searchRequest = new SearchRequest();
-        $clientConfig = new FindologicClientConfig(['hostUrl' => 'foo', 'shopkey' => 'bar']);
+        $clientConfig = new FindologicEndpointConfig(['hostUrl' => 'foo', 'shopkey' => 'bar']);
 
         $client = \Phake::partialMock(
             FindologicClient::class,
             \Phake::mock(HttpClient::class),
+            \Phake::mock(RequestProvider::class),
             [$locale => $clientConfig]
         );
 

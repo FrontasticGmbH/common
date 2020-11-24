@@ -4,7 +4,6 @@ namespace Frontastic\Common\ProductSearchApiBundle\Domain;
 
 use Frontastic\Common\FindologicBundle\Domain\FindologicClientFactory;
 use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\FindologicProductSearchApi;
-use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\Mapper as FindologicDataMapper;
 use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\QueryValidator;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory as CommercetoolsClientFactory;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory;
@@ -16,6 +15,7 @@ use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreatorFacto
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapClientFactory;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapDataMapper;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\SapProductSearchApi;
+use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyProductMapper;
 use Frontastic\Common\ShopifyBundle\Domain\ProductSearchApi\ShopifyProductSearchApi;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClientFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFactory;
@@ -29,6 +29,7 @@ use Frontastic\Common\SprykerBundle\Domain\ProductSearch\SprykerProductSearchApi
 use Frontastic\Common\SprykerBundle\Domain\SprykerClientFactory;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Frontastic\Common\FindologicBundle\Domain\FindologicMapperFactory;
 
 class DefaultProductSearchApiFactory implements ProductSearchApiFactory
 {
@@ -128,9 +129,11 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
             case 'shopify':
                 $clientFactory = $this->container->get(ShopifyClientFactory::class);
                 $client = $clientFactory->factorForConfigs($productSearchConfig, $engineConfig);
+                $productMapper = $this->container->get(ShopifyProductMapper::class);
 
                 $productSearchApi = new ShopifyProductSearchApi(
-                    $client
+                    $client,
+                    $productMapper
                 );
 
                 break;
@@ -151,12 +154,14 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
                 break;
             case 'findologic':
                 $clientFactory = $this->container->get(FindologicClientFactory::class);
-                $dataMapper = $this->container->get(FindologicDataMapper::class);
+                $mapperFactory = $this->container->get(FindologicMapperFactory::class);
                 $queryValidator = $this->container->get(QueryValidator::class);
 
                 $client = $clientFactory->factorForConfigs($project->languages, $productSearchConfig, $engineConfig);
+                $dataMapper = $mapperFactory->factorForConfigs($productSearchConfig, $engineConfig);
 
-                $originalDataSourceConfig = (object)$productSearchConfig->originalDataSource;
+                $originalDataSourceConfig =
+                    (object)($productSearchConfig->originalDataSource ?? $engineConfig->originalDataSource);
                 $originalDataSourceVendorConfig = $project->getConfigurationSection($originalDataSourceConfig->engine);
 
                 $originalDataSource = $this->factorFromConfiguration(

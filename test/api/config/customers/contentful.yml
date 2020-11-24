@@ -1,0 +1,20 @@
+---
+name: "contentful"
+secret: "secret"
+configuration:
+    test:
+        disabled: false
+        supportCursorBasedPagination: true
+        supportOffsetPagination: false
+        hasConsistentProductSearchData: false
+        supportSearchByIdentifierAndQueryParameters: false
+    content:
+        accessToken: 3d50038afea30f11997a73f887c4aa12d7d411d9da6825dabcc250b78623a530
+        engine: contentful
+        previewToken: 7391f414d8febe45caf58672ddb65ae62b2c37d525c10205669ba57c6f47bfa6
+        spaceId: 2yke74xvylnq
+projects:
+    - projectId: test
+      name: Contentful Test Catwalk
+      languages: ["en_GB@GBP", "de_DE@EUR", "fr_FR@EUR"]
+      defaultLanguage: en_GB@GBP

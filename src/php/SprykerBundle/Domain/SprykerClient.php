@@ -231,7 +231,7 @@ class SprykerClient implements SprykerClientInterface
             $errorData->errors = array_reverse($errorData->errors);
             foreach ($errorData->errors as $error) {
                 $exception = new RequestException(
-                    $error->message ?? 'Unknown error',
+                    $error->message ?? $error->detail ?? 'Unknown error',
                     $response->status ?? 503,
                     $exception
                 );

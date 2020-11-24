@@ -10,6 +10,8 @@ use Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory;
 use Frontastic\Common\AccountApiBundle\Domain\Session;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\CartApiFactory;
+use Frontastic\Common\ContentApiBundle\Domain\ContentApi;
+use Frontastic\Common\ContentApiBundle\Domain\DefaultContentApiFactory;
 use Frontastic\Common\EnvironmentResolver;
 use Frontastic\Common\ProductApiBundle\Domain\Category;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
@@ -27,6 +29,7 @@ use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper;
 use Frontastic\Common\SprykerBundle\Domain\Account\SessionService;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Routing\Router;
 
 class FrontasticApiTestCase extends KernelTestCase
 {
@@ -60,7 +63,7 @@ class FrontasticApiTestCase extends KernelTestCase
         self::bootKernel();
     }
 
-    public function setup()
+    public function setUp(): void
     {
         $account = new Account(['accountId' => uniqid()]);
         $session = new Session(['account' => $account, 'loggedIn' => false]);
@@ -89,6 +92,13 @@ class FrontasticApiTestCase extends KernelTestCase
                 'Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper',
                 new AccountHelper($contextServiceMock, $sessionServiceMock)
             );
+
+        $routerMock = $this
+            ->getMockBuilder(Router::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        self::$kernel->getContainer()->set('router', $routerMock);
     }
 
     public function customerAndProject(): array
@@ -124,11 +134,58 @@ class FrontasticApiTestCase extends KernelTestCase
         );
     }
 
+    private function hasContentApiConfig(Project $project): bool
+    {
+        if ($project->configuration['content']->engine == 'contentful' &&
+            property_exists($project->configuration['content'], 'accessToken') &&
+            property_exists($project->configuration['content'], 'previewToken') &&
+            property_exists($project->configuration['content'],'spaceId')
+        ) {
+            return true;
+        }
+
+        if ($project->configuration['content']->engine == 'graphcms' &&
+            property_exists($project->configuration['content'],'apiToken') &&
+            property_exists($project->configuration['content'],'apiVersion') &&
+            property_exists($project->configuration['content'],'projectId') &&
+            property_exists($project->configuration['content'],'region') &&
+            property_exists($project->configuration['content'],'stage')
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function projectAndLanguage(): array
     {
         $projectsAndLocales = [];
 
         foreach ($this->project() as $projectDescription => [$project]) {
+            if ($this->hasContentApiConfig($project)) {
+                continue;
+            }
+
+            foreach ($project->languages as $language) {
+                $projectsAndLocales[$projectDescription . ', language: ' . $language] = [
+                    $project,
+                    $language,
+                ];
+            }
+        }
+
+        return $projectsAndLocales;
+    }
+
+    public function projectAndLanguageForContentApi(): array
+    {
+        $projectsAndLocales = [];
+
+        foreach ($this->project() as $projectDescription => [$project]) {
+            if (!$this->hasContentApiConfig($project)) {
+                continue;
+            }
+
             foreach ($project->languages as $language) {
                 $projectsAndLocales[$projectDescription . ', language: ' . $language] = [
                     $project,
@@ -152,13 +209,13 @@ class FrontasticApiTestCase extends KernelTestCase
 
     protected function assertNotEmptyString($actual, string $message = ''): void
     {
-        $this->assertInternalType('string', $actual, $message);
+        $this->assertIsString($actual, $message);
         $this->assertNotEquals('', $actual, $message);
     }
 
     protected function assertIsValidTranslatedLabel(Project $project, $label): void
     {
-        $this->assertInternalType('array', $label);
+        $this->assertIsArray($label);
         $this->assertContainsOnly('string', $label);
         $this->assertEquals($project->languages, array_keys($label));
     }
@@ -174,7 +231,7 @@ class FrontasticApiTestCase extends KernelTestCase
             $this->assertNotNull($variant->price);
         }
         if ($variant->price !== null) {
-            $this->assertInternalType('integer', $variant->price);
+            $this->assertIsInt($variant->price);
             $this->assertGreaterThanOrEqual(0, $variant->price);
             $this->assertNotEmptyString($variant->currency);
         } else {
@@ -183,21 +240,21 @@ class FrontasticApiTestCase extends KernelTestCase
         }
 
         if ($variant->discountedPrice !== null) {
-            $this->assertInternalType('integer', $variant->discountedPrice);
+            $this->assertIsInt($variant->discountedPrice);
             $this->assertGreaterThanOrEqual(0, $variant->discountedPrice);
             $this->assertLessThanOrEqual($variant->price, $variant->discountedPrice);
         }
 
-        $this->assertInternalType('array', $variant->discounts);
+        $this->assertIsArray($variant->discounts);
 
-        $this->assertInternalType('array', $variant->attributes);
+        $this->assertIsArray($variant->attributes);
 
-        $this->assertInternalType('array', $variant->images);
+        $this->assertIsArray($variant->images);
         foreach ($variant->images as $image) {
             $this->assertNotEmptyString($image);
         }
 
-        $this->assertInternalType('boolean', $variant->isOnStock);
+        $this->assertIsBool($variant->isOnStock);
 
         $this->assertNull($variant->dangerousInnerVariant);
     }
@@ -253,7 +310,6 @@ class FrontasticApiTestCase extends KernelTestCase
 
         return $result;
     }
-
 
     protected function getProductSearchApiForProject(Project $project): ProductSearchApi
     {
@@ -393,13 +449,19 @@ class FrontasticApiTestCase extends KernelTestCase
             ->factor($project);
     }
 
+    protected function getContentApiForProject(Project $project): ContentApi
+    {
+        return self::$container
+            ->get(DefaultContentApiFactory::class)
+            ->factor($project);
+    }
+
     protected function buildQueryParameters(
         string $language,
         ?int $limit = null,
         ?int $offset = null,
         ?string $cursor = null
-    )
-    {
+    ) {
         $parameters = [
             'locale' => $language,
         ];

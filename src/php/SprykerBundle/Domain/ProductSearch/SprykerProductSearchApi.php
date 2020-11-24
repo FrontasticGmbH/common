@@ -12,6 +12,8 @@ use Frontastic\Common\SprykerBundle\BaseApi\ProductExpandingTrait;
 use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver;
 use Frontastic\Common\SprykerBundle\Domain\Product\CatalogSearchQuery;
+use Frontastic\Common\SprykerBundle\Domain\Product\Expander\AbstractProductDescriptionExpander;
+use Frontastic\Common\SprykerBundle\Domain\Product\Expander\ProductVariantSkuExpander;
 use Frontastic\Common\SprykerBundle\Domain\Product\Mapper\ProductResultMapper;
 use Frontastic\Common\SprykerBundle\Domain\Product\SprykerProductApiExtendedConstants;
 use Frontastic\Common\SprykerBundle\Domain\Project\Mapper\ProductSearchableAttributesMapper;
@@ -51,6 +53,15 @@ class SprykerProductSearchApi extends ProductSearchApiBase
         $this->localeCreator = $localeCreator;
         $this->projectLanguages = $projectLanguages;
         $this->queryResources = $queryResources;
+
+        $this->extendNestedAttributes();
+    }
+
+    protected function extendNestedAttributes(): void
+    {
+        $this
+            ->registerProductExpander(new ProductVariantSkuExpander())
+            ->registerProductExpander(new AbstractProductDescriptionExpander());
     }
 
     protected function queryImplementation(ProductQuery $query): PromiseInterface

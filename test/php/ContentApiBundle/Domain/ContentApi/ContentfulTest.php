@@ -16,7 +16,7 @@ class ContentfulTest extends TestCase
      */
     private $api;
 
-    public function setUp()
+    public function setUp(): void
     {
         $testAccessToken = 'lf7mvelTkEFNMXTzSKRev4NmdsOzeRVN8xXR6ayyJOk';
         $testSpaceId = 'cho9or523rqg';

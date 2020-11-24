@@ -12,7 +12,7 @@ configuration:
     searchIncludesAllVariants: false
   shopware:
     apiKey: SWSCBHFSNTVMAWNZDNFKSHLAYW
-    endpoint: https://frontastic-test.shopwaredemo.store
+    endpoint: https://frontastic-test.shopware.store
   account:
     engine: shopware
   cart:

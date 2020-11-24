@@ -60,7 +60,7 @@ class ProductsTest extends FrontasticApiTestCase
         $this->assertGreaterThanOrEqual(ProductApi\PaginatedQuery::DEFAULT_LIMIT, $result->count);
         $this->assertCount($result->count, $result->items);
 
-        $this->assertInternalType('array', $result->items);
+        $this->assertIsArray($result->items);
         $this->assertContainsOnlyInstancesOf(Product::class, $result->items);
     }
 
@@ -73,7 +73,7 @@ class ProductsTest extends FrontasticApiTestCase
 
         $this->assertCount($result->count, $result->items);
 
-        $this->assertInternalType('array', $result->items);
+        $this->assertIsArray($result->items);
         $this->assertContainsOnlyInstancesOf(Product::class, $result->items);
     }
 
@@ -313,6 +313,24 @@ class ProductsTest extends FrontasticApiTestCase
 
         $this->assertProductsAreWellFormed($project, $language, [$productById]);
         $this->assertSameProduct($product, $productById);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testGetProductByCategoryReturnsProduct(Project $project, string $language): void
+    {
+        $categories = $this->fetchCategories($project, $language);
+        $categoryId = $categories[0]->categoryId;
+
+        $this->assertNotEmptyString($categoryId);
+        $productsByCategory = $this->queryProducts($project, $language, ['category' => $categoryId]);
+
+        $this->assertProductsAreWellFormed($project, $language, $productsByCategory->items);
+
+        foreach ($productsByCategory as $product) {
+            $this->assertArraySubset([$categoryId], $product->categories);
+        }
     }
 
     /**
@@ -790,20 +808,20 @@ class ProductsTest extends FrontasticApiTestCase
                 )
             );
 
-            $this->assertInternalType('string', $product->description);
+            $this->assertIsString($product->description);
             $this->assertContainsNoHtml(
                 $product->description,
                 sprintf('Description of product %s (SKU %s) contains HTML', $product->productId, $product->sku)
             );
 
-            $this->assertInternalType('array', $product->categories);
+            $this->assertIsArray($product->categories);
             foreach ($product->categories as $category) {
-                $this->assertInternalType('string', $category);
+                $this->assertIsString($category);
                 $this->assertNotEmpty($category);
                 $this->assertContains($category, $existingCategoryIds);
             }
 
-            $this->assertInternalType('array', $product->variants);
+            $this->assertIsArray($product->variants);
             $this->assertNotEmpty($product->variants);
             $this->assertContainsOnlyInstancesOf(Variant::class, $product->variants);
 

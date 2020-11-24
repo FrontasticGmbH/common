@@ -1,5 +1,248 @@
 # common Changelog
 
+## `1.1.19` (2020-11-13)
+
+* chore: Built release 2020.11.13.11.34
+* fix(shopify): Used lowecase for variant attributes
+* fix(shopify): increased number of variants retrieved
+* fix(spryker): Set default language in CartApi
+* fix: set Variant.id and enable SAP test
+* fix(shopify): Validated shippingLine data before map shipping methods
+* fix: correctly recreate carts shipping info
+* fix: don't serialize empty object as array
+* fix: assert cart locale on getById when specified
+* fix: Replaced deprecated method to valite object key
+* fix(common): flag missing required value for translatable string filed
+* fix(shopware): Commented invalid attributes for Shopware v2 and v3
+* feat(shopify): Implemented facet filters for tags and product types
+
+## `1.1.18` (2020-11-04)
+
+* fix(spryker): Included abstract decription
+* fix(spryker): Counted items returned
+* feat(spryker): Included query filter by SKUs and productIds
+* fix(spryker): Replaced attribute value by key and label
+* refactor(spryker): Removed unused methods and extra comments
+* fix(spryker): Removed mapImages overwrited implementation
+* fix(spryker): Set valid variant sku
+
+## `1.1.17` (2020-10-30)
+
+* fix(spryker): Returned orignal account if not possible to be refreshed with no authToken
+* fix: don't enforce tax category in Commercetools
+* fix: use Shopware calculated price if available
+* fix(spryker): Removed verifyEmail as non part of AccountAPI abstraction
+* fix(spryker): Returned email as part of reset account
+
+## `1.1.16` (2020-10-16)
+
+* fix(productSearchApi): Remove URL decoding for Findologic provided URLs
+* fix(productSearchApi): Remove redundant code from FindologicClientFactory
+* feat(productSearchApi): Add config options for category and slug source to Findologic Mapper
+* refactor(shopify): Improved filter limit calculation
+* feat(shopify): Implemented filter by category id
+* fix(shopify): Set default limit in product queries
+* fix(shopify): Removed product if from searchable attributes
+* fix(shopify): Especified correct operator between filters
+* fix(shopify): Handle Enum attribute as boolean
+* feat(shopify): Mapped query filters
+* fix(shopify): Set vendor attribute as text
+* fix(shopify): Removed un-used variable
+* fix: Only set fetch_format when needed
+* chore: Extracted common webspocket code
+
+## `1.1.15` (2020-10-13)
+
+* fix: Do not cast null values in media library to numeric
+* fix: Set whislist as not implemented for Shopify
+
+## `1.1.14` (2020-10-07)
+
+* fix(shopify): Used only SKU values on variant.sku mapping
+* fix: Import deprecate helper in a way it also works in tests
+* fix(shopify): Used variant Id instead of SKU to add product to the cart
+* fix(productSearchApi): Skip SearchableAttributes integration tests for Findologic
+* fix(ProductSearchApi): Set nextCursor to null if it exceeds total results
+* fix: Removed cartId validation on testAPI
+* chore: Refactored withCurrency method as appendCurrencyToUrl
+* fix: Passed LocalCreator into Guest and Customer Cart
+* fix: Casting categoryId as sting
+* fix: Set right RequestProvider path on Findologic tests
+* fix: Set whislist as not implemented for Shopify
+* feat(shopify rate limits): Moved RequestProvider to CoreBundle and used in ShopifyClient
+* feat(shopify CartApi): Throwed exception on error responses
+* feat(shopify CartApi): Implemented getForUser
+* feat(shopify CartApi): Implemented setEmail, getOrder and getOrders methods
+* feat(shopify CartApi): Implemented ShippingAddress method
+* feat(shopify CartApi): Returned Client as DangerourInnerClient
+* chore(shopify CartApi): Validated empty address before mapping
+* feat(shopify CartApi): Implemented setShippingAddress
+* refactor(shopify CartApi): Extrated Account mapper
+* feat(shopify CartApi): Implemented update and remove LineItem
+* refactor(shopify CartApi): Used product variant mapper
+* refactor(shopify CartApi): Extracted product mapper
+* feat(shopify CartApi): Implemented addToCart
+* feat(shopify CartApi): Implemented initial integration for getById
+* feat(shopify CartApi): Implemented CartApi skeleton along with basic getAnonymous implementation
+* chore(shopify AccountApi): Added missing method notation
+* chore(shopify AccountApi): Refactored query fields building
+* feat(shopify AccountApi): Implemented update and get address
+* feat(shopify AccountApi): Implement add address
+* feat(shopify AccountApi): Implement update account and password
+* feat(shopify AccountApi): Implement create, login and refresh account
+* feat: call product search API directly
+* feat(productSearchApi): Include label facet type in result mapping and remove image as it is not available
+* refactor(productSearchApi): Move parameter building to only include client parameters in search
+* feat(productSearchApi): Add test for findologic client request parameters
+* feat(productSearchApi): Add client request parameters to findologic requests
+* feat(productSearchApi): Strip HTML entities and tags from findologic names and summaries
+* fix(productSearchApi): Apply Findologic data source config from engine section
+* feat(productSearchApi): Make Findologic result attributes configurable
+* feat!: use the product search API
+* feat: add ShopifyProductSearchApi
+* fix: unwrap promise in test
+* feat(productSearch): call product event listeners
+* chore: Import notifier from compiled build to make jest happy
+* refactor(productSearchApi): Up the async by not unwrapping promises within getSearchableAttributes
+* fix(productSearchApi): Fix condition check in Findologic implementation
+* feat(productSearchApi): Throw on unknown language requested
+* chore: Extracted common webspocket code
+* misc: Tagged release 1.1.10 for common
+* chore: Regenerated API documentation
+* Merge pull request #317 from FrontasticGmbH/kore/typescript-types
+* feat(shopware): use parent ID as product ID
+* feat(shopware): don't exclude variants from product search
+* chore: coding style
+* fix(api tests): add some assertions
+* feat(shopware): don't test product search returns all variants
+* feat(shopware): support legacy filter options
+* feat(shopware): use proper total calculation
+* fix(spryker searchableAttributes): Refactor test to use SprykerProductSearchApi
+* chore: Added @required to data objects in common, too
+* feat(spryker searcheableAttributes): Copied implementation in ProductSearchApi
+* feat(spryker searchableAttributes): Improved Localization to store required values
+* fix(spryker searchableAttributes): Removed unused mapper
+* feat(spryker searchableAttributes): Implemented searchable attributes logic
+* chore: Updated type definitions
+* chore: Added note about autogenerated files
+* chore: Also reverted newly added docs
+* chore: Revert docs changes to reduce diff size
+* fix: Import under "full name" to reduce naming conflicts
+* feat: Correctly import referenced types
+* feat: Created TypeScript types for common domain objects
+* chore: Started generating non namespaced types in file tree
+* chore: Generated additional docs for new bundles
+* chore: Updated API doc overview
+* chore: Removed TypeScript types using namespaces
+* chore: Regenerated docs
+* fix(productSearchApi): Fix Findologic fallback test after refactoring
+* feat(productSearchApi): Support SKU search via fallback for Findologic
+* fix(productSearchApi): Fix Findologic getSearchableAttributes request
+* fix: Change namespace for two misplaced tests
+* feat(productSearchApi): Add support for multiple Findologic backends by locale
+* misc: Remove unused Findologic Client Factory method
+* feat(productSearchApi): Add simple SearchableAttributes implementation for Findologic
+* refactor(productSearchApi): Make getSearchableAttributes async
+* Ensure type renaming works again
+* Generated TypeScript types for catwalk & common domain models
+* Fixed type hint
+* Flagged types
+
+## `1.1.13` (2020-10-02)
+
+* fix: Removed cartId validation on testAPI
+* chore: Refactored withCurrency method as appendCurrencyToUrl
+* fix: Passed LocalCreator into Guest and Customer Cart
+* fix: Casting categoryId as sting
+* fix: Set right RequestProvider path on Findologic tests
+* fix: Set whislist as not implemented for Shopify
+* feat(shopify rate limits): Moved RequestProvider to CoreBundle and used in ShopifyClient
+* feat(shopify CartApi): Throwed exception on error responses
+* feat(shopify CartApi): Implemented getForUser
+* feat(shopify CartApi): Implemented setEmail, getOrder and getOrders methods
+* feat(shopify CartApi): Implemented ShippingAddress method
+* feat(shopify CartApi): Returned Client as DangerourInnerClient
+* chore(shopify CartApi): Validated empty address before mapping
+* feat(shopify CartApi): Implemented setShippingAddress
+* refactor(shopify CartApi): Extrated Account mapper
+* feat(shopify CartApi): Implemented update and remove LineItem
+* refactor(shopify CartApi): Used product variant mapper
+* refactor(shopify CartApi): Extracted product mapper
+* feat(shopify CartApi): Implemented addToCart
+* feat(shopify CartApi): Implemented initial integration for getById
+* feat(shopify CartApi): Implemented CartApi skeleton along with basic getAnonymous implementation
+* chore(shopify AccountApi): Added missing method notation
+* chore(shopify AccountApi): Refactored query fields building
+* feat(shopify AccountApi): Implemented update and get address
+* feat(shopify AccountApi): Implement add address
+* feat(shopify AccountApi): Implement update account and password
+* feat(shopify AccountApi): Implement create, login and refresh account
+* feat: call product search API directly
+* feat(productSearchApi): Include label facet type in result mapping and remove image as it is not available
+* refactor(productSearchApi): Move parameter building to only include client parameters in search
+* feat(productSearchApi): Add test for findologic client request parameters
+* feat(productSearchApi): Add client request parameters to findologic requests
+* feat(productSearchApi): Strip HTML entities and tags from findologic names and summaries
+* fix(productSearchApi): Apply Findologic data source config from engine section
+* feat(productSearchApi): Make Findologic result attributes configurable
+* feat!: use the product search API
+* feat: add ShopifyProductSearchApi
+* fix: unwrap promise in test
+* feat(productSearch): call product event listeners
+* chore: Import notifier from compiled build to make jest happy
+* refactor(productSearchApi): Up the async by not unwrapping promises within getSearchableAttributes
+* fix(productSearchApi): Fix condition check in Findologic implementation
+* feat(productSearchApi): Throw on unknown language requested
+* chore: Extracted common webspocket code
+* chore: Regenerated API documentation
+* feat(shopware): use parent ID as product ID
+* feat(shopware): don't exclude variants from product search
+* fix(api tests): add some assertions
+* feat(shopware): don't test product search returns all variants
+* feat(shopware): support legacy filter options
+* feat(shopware): use proper total calculation
+* fix(spryker searchableAttributes): Refactor test to use SprykerProductSearchApi
+* feat(spryker searcheableAttributes): Copied implementation in ProductSearchApi
+* feat(spryker searchableAttributes): Improved Localization to store required values
+* fix(spryker searchableAttributes): Removed unused mapper
+* feat(spryker searchableAttributes): Implemented searchable attributes logic
+* chore: Updated type definitions
+* chore: Added note about autogenerated files
+* chore: Also reverted newly added docs
+* chore: Revert docs changes to reduce diff size
+* fix: Import under "full name" to reduce naming conflicts
+* feat: Correctly import referenced types
+* feat: Created TypeScript types for common domain objects
+* chore: Started generating non namespaced types in file tree
+* chore: Generated additional docs for new bundles
+* chore: Updated API doc overview
+* chore: Removed TypeScript types using namespaces
+* chore: Regenerated docs
+* fix(productSearchApi): Fix Findologic fallback test after refactoring
+* feat(productSearchApi): Support SKU search via fallback for Findologic
+* fix(productSearchApi): Fix Findologic getSearchableAttributes request
+* fix: Change namespace for two misplaced tests
+* feat(productSearchApi): Add support for multiple Findologic backends by locale
+* misc: Remove unused Findologic Client Factory method
+* feat(productSearchApi): Add simple SearchableAttributes implementation for Findologic
+* refactor(productSearchApi): Make getSearchableAttributes async
+* misc: Clean up test
+* Ensure type renaming works again
+* Generated TypeScript types for catwalk & common domain models
+* Fixed type hint
+* Flagged types
+
+## `1.1.12` (2020-10-01)
+
+* feat: Shopify CartApi & AccountApi
+
+## `1.1.11` (2020-09-17)
+
+* feat!: Use the product search API
+* feat: Add ShopifyProductSearchApi
+* feat: Call product event listeners
+* chore: Extracted common webspocket code
+
 ## `1.1.10` (2020-09-15)
 
 * Regenerated API documentation
