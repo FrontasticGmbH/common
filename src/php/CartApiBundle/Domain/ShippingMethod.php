@@ -2,12 +2,12 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain;
 
-use Kore\DataObject\DataObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 
 /**
  * @type
  */
-class ShippingMethod extends DataObject
+class ShippingMethod extends ApiDataObject
 {
     /**
      * @var string

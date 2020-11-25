@@ -2,12 +2,12 @@
 
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale;
 
-use Kore\DataObject\DataObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 
 /**
  * @type
  */
-class CommercetoolsLocale extends DataObject
+class CommercetoolsLocale extends ApiDataObject
 {
     /**
      * @var string

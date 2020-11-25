@@ -2,12 +2,12 @@
 
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 
-use Kore\DataObject\DataObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 
 /**
  * @type
  */
-class Filter extends DataObject
+class Filter extends ApiDataObject
 {
     /**
      * @var string

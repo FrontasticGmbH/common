@@ -2,12 +2,12 @@
 
 namespace Frontastic\Common\ContentApiBundle\Domain;
 
-use Kore\DataObject\DataObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 
 /**
  * @type
  */
-class AttributeFilter extends DataObject
+class AttributeFilter extends ApiDataObject
 {
     /**
      * @var string

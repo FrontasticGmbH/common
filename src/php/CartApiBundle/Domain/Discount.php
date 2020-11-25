@@ -2,13 +2,13 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain;
 
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 use Frontastic\Common\Translatable;
-use Kore\DataObject\DataObject;
 
 /**
  * @type
  */
-class Discount extends DataObject
+class Discount extends ApiDataObject
 {
     /**
      * @var string

@@ -3,12 +3,12 @@
 namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS;
 
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Attribute;
-use Kore\DataObject\DataObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 
 /**
  * @type
  */
-class ClientResult extends DataObject
+class ClientResult extends ApiDataObject
 {
     /**
      * JSON-string containing the result of the query.
