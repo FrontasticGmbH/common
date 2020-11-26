@@ -12,7 +12,7 @@ parameters:
         - '#invalid typehint type Frontastic\\Catwalk\\ApiCoreBundle\\Domain\\Context#'
         - '#Frontastic\\Catwalk\\ApiCoreBundle\\Domain\\Context#'
         - '#Frontastic\\Catwalk\\ApiCoreBundle\\Domain\\Context not found#'
-        - '#Class Frontastic\\Catwalk\\KameleoonBundle\\Domain\\TrackingService not found#'
+        - '#Class Frontastic\\Catwalk\\TrackingBundle\\Domain\\TrackingService not found#'
         - '#Result of method Kore\\DataObject\\DataObject::__get\(\) \(void\) is used.#'
         - '#Function debug not found.*#'
     reportUnmatchedIgnoredErrors: false
