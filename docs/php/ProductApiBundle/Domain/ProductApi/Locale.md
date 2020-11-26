@@ -2,7 +2,7 @@
 
 **Fully Qualified**: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale`](../../../../../src/php/ProductApiBundle/Domain/ProductApi/Locale.php)
 
-**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
+**Extends**: [`ApiDataObject`](../../../CoreBundle/Domain/ApiDataObject.md)
 
 language[_territory[.codeset]][@modifier]
 

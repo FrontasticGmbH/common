@@ -10,6 +10,7 @@ Property|Type|Default|Required|Description
 `identifier` | `null|string` |  | - | 
 `attributes` | `array` |  | - | 
 `outputAttributes` | `array` |  | - | 
+`properties` | `array` |  | - | 
 `order` | `array` |  | - | 
 `count` | `int` |  | - | 
 `first` | `int` |  | - | 

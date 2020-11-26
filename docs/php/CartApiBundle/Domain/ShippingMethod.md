@@ -2,7 +2,7 @@
 
 **Fully Qualified**: [`\Frontastic\Common\CartApiBundle\Domain\ShippingMethod`](../../../../src/php/CartApiBundle/Domain/ShippingMethod.php)
 
-**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
+**Extends**: [`ApiDataObject`](../../CoreBundle/Domain/ApiDataObject.md)
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------

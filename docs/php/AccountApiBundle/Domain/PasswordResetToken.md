@@ -2,7 +2,7 @@
 
 **Fully Qualified**: [`\Frontastic\Common\AccountApiBundle\Domain\PasswordResetToken`](../../../../src/php/AccountApiBundle/Domain/PasswordResetToken.php)
 
-**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
+**Extends**: [`ApiDataObject`](../../CoreBundle/Domain/ApiDataObject.md)
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
