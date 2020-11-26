@@ -2,12 +2,12 @@
 
 namespace Frontastic\Common\AccountApiBundle\Domain;
 
-use Kore\DataObject\DataObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 
 /**
  * @type
  */
-class Session extends DataObject
+class Session extends ApiDataObject
 {
     /**
      * Flags a session as stateless

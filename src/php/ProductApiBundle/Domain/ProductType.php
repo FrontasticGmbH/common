@@ -2,12 +2,12 @@
 
 namespace Frontastic\Common\ProductApiBundle\Domain;
 
-use Kore\DataObject\DataObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 
 /**
  * @type
  */
-class ProductType extends DataObject
+class ProductType extends ApiDataObject
 {
     /**
      * @var string

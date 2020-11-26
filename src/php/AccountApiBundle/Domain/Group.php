@@ -2,12 +2,12 @@
 
 namespace Frontastic\Common\AccountApiBundle\Domain;
 
-use Kore\DataObject\DataObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 
 /**
  * @type
  */
-class Group extends DataObject
+class Group extends ApiDataObject
 {
     const GROUP_NAME_ALL = '__SYSTEM_ALL';
 

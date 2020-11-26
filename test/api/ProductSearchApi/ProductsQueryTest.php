@@ -21,7 +21,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
-    public function testQueryAsyncReturnsPromiseToResult(Project $project, string $language): void
+    public function testQueryReturnsPromiseToResult(Project $project, string $language): void
     {
         $promise = $this->getProductSearchApiForProject($project)
             ->query(new ProductQuery($this->buildQueryParameters($language)));

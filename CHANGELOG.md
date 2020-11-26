@@ -1,5 +1,12 @@
 # common Changelog
 
+## `1.1.20` (2020-11-26)
+
+* fix: Correct bundle references
+* refactor: removed duplicated tests
+* [FT-442] Migrate DataObjects to ApiDataObjects
+* fix: set right test name on AnonymousCart
+
 ## `1.1.19` (2020-11-13)
 
 * chore: Built release 2020.11.13.11.34

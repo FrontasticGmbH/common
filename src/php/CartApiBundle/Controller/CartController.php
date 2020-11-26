@@ -3,7 +3,7 @@
 namespace Frontastic\Common\CartApiBundle\Controller;
 
 use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
-use Frontastic\Catwalk\KameleoonBundle\Domain\TrackingService;
+use Frontastic\Catwalk\TrackingBundle\Domain\TrackingService;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;

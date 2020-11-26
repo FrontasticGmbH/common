@@ -1,12 +1,12 @@
 <?php
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 
-use Kore\DataObject\DataObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 
 /**
  * @type
  */
-class Term extends DataObject
+class Term extends ApiDataObject
 {
     /**
      * Internal identifier. Depending on the backend it maybe equal to $name.

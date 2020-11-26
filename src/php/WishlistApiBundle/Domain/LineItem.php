@@ -2,12 +2,12 @@
 
 namespace Frontastic\Common\WishlistApiBundle\Domain;
 
-use Kore\DataObject\DataObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 
 /**
  * @type
  */
-class LineItem extends DataObject
+class LineItem extends ApiDataObject
 {
     /**
      * @var string
