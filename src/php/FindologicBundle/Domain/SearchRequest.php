@@ -57,6 +57,7 @@ class SearchRequest extends DataObject
             'order' => $this->order,
             'attrib' => $this->attributes,
             'outputAttrib' => $this->outputAttributes,
+            'properties' => $this->properties,
         ];
     }
 }
