@@ -20,12 +20,17 @@ class SearchRequest extends DataObject
     /**
      * @var array
      */
-
     public $attributes;
+
     /**
      * @var array
      */
     public $outputAttributes;
+
+    /**
+     * @var array
+     */
+    public $properties;
 
     /**
      * @var array
