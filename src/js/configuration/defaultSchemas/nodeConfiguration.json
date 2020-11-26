@@ -1,16 +1,16 @@
 {
     "schema": [
         {
-            "name": "Display Properties",
+            "name": "Display properties",
             "fields": [
                 {
-                    "label": "Highlight Menu Item",
+                    "label": "Highlight menu item",
                     "field": "displayHighlightMenuItem",
                     "type": "boolean",
                     "default": false
                 },
                 {
-                    "label": "Highlight Category Tag",
+                    "label": "Highlight category tag",
                     "field": "displayHighlightCategoryTag",
                     "type": "boolean",
                     "default": false
@@ -22,7 +22,7 @@
                     "translatable": true
                 },
                 {
-                    "label": "Custom CSS Class",
+                    "label": "Custom CSS class",
                     "field": "displayClassname",
                     "type": "string",
                     "translatable": false
