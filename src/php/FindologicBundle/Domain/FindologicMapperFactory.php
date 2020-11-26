@@ -26,7 +26,7 @@ class FindologicMapperFactory
         $productRoute = null;
 
         $routeCollection = $this->router->getRouteCollection();
-        if ($productRoute !== null) {
+        if ($routeCollection !== null) {
             $productRoute = $routeCollection->get('Frontastic.Frontend.Master.Product.view');
         }
 
