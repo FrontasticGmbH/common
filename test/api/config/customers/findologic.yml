@@ -23,6 +23,7 @@ configuration:
             engine: commercetools
         outputAttributes:
             - Color
+        slugProperty: properties.productslug
     productSearch:
         engine: findologic
 projects:
