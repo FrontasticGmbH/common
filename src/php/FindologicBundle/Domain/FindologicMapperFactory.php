@@ -23,8 +23,12 @@ class FindologicMapperFactory
         $categoryProperty = $typeSpecificConfig->categoryProperty ?? $findologicConfig->categoryProperty ?? null;
         $slugProperty = $typeSpecificConfig->slugProperty ?? $findologicConfig->slugProperty ?? null;
         $slugRegex = null;
+        $productRoute = null;
 
-        $productRoute = $this->router->getRouteCollection()->get('Frontastic.Frontend.Master.Product.view');
+        $routeCollection = $this->router->getRouteCollection();
+        if ($productRoute !== null) {
+            $productRoute = $routeCollection->get('Frontastic.Frontend.Master.Product.view');
+        }
 
         if ($productRoute !== null) {
             $slugRegex = $productRoute->compile()->getRegex();
