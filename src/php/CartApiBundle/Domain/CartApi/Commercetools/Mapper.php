@@ -11,6 +11,8 @@ use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\CartApiBundle\Domain\ShippingInfo;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
+use Frontastic\Common\CartApiBundle\Domain\Tax;
+use Frontastic\Common\CartApiBundle\Domain\TaxPortion;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper as ProductMapper;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
@@ -67,7 +69,6 @@ class Mapper
          * [ ] Map delivery costs / properties
          * [ ] Map product discounts
          * [ ] Map discount codes
-         * [ ] Map tax information
          * [ ] Map discount text locales to our scheme
          */
         return new Cart([
@@ -83,6 +84,7 @@ class Mapper
             'currency' => $cartData['totalPrice']['currencyCode'],
             'payments' => $this->mapDataToPayments($cartData),
             'discountCodes' => $this->mapDataToDiscounts($cartData),
+            'taxed' => $this->mapDataToTax($cartData),
             'dangerousInnerCart' => $cartData,
         ]);
     }
@@ -188,7 +190,6 @@ class Mapper
          * [ ] Map delivery costs / properties
          * [ ] Map product discounts
          * [ ] Map discount codes
-         * [ ] Map tax information
          * [ ] Map delivery status
          * [ ] Map order status
          */
@@ -207,6 +208,7 @@ class Mapper
             'sum' => $orderData['totalPrice']['centAmount'],
             'payments' => $this->mapDataToPayments($orderData),
             'discountCodes' => $this->mapDataToDiscounts($orderData),
+            'taxed' => $this->mapDataToTax($orderData),
             'dangerousInnerCart' => $orderData,
             'dangerousInnerOrder' => $orderData,
             'currency' => $orderData['totalPrice']['currencyCode'],
@@ -307,6 +309,29 @@ class Mapper
             'description' => $this->productMapper->getLocalizedValue(
                 $locale,
                 $shippingMethodData['localizedDescription'] ?? []
+            ),
+        ]);
+    }
+
+    public function mapDataToTax(array $cartData): ?Tax
+    {
+        if (empty($cartData['taxedPrice'])) {
+            return null;
+        }
+
+        return new Tax([
+            'amount' => $cartData['taxedPrice']['totalNet']['centAmount'],
+            'currency' => $cartData['taxedPrice']['totalNet']['currencyCode'],
+            'taxPortions' => array_map(
+                function ($taxPortionData): TaxPortion {
+                    return new TaxPortion([
+                        'amount' => $taxPortionData['amount']['centAmount'],
+                        'currency' => $taxPortionData['amount']['currencyCode'],
+                        'name' => $taxPortionData['name'],
+                        'rate' => $taxPortionData['rate'],
+                    ]);
+                },
+                $cartData['taxedPrice']['taxPortions']
             ),
         ]);
     }

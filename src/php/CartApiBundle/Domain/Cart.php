@@ -83,6 +83,11 @@ class Cart extends ApiDataObject
     public $discountCodes = [];
 
     /**
+     * @var ?Tax
+     */
+    public $taxed;
+
+    /**
      * Access original object from backend
      *
      * This should only be used if you need very specific features
