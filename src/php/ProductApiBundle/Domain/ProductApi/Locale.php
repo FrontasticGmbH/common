@@ -1,7 +1,7 @@
 <?php
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 
-use Kore\DataObject\DataObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 
 /**
  * Simple utility class to handle locales:
@@ -13,7 +13,7 @@ use Kore\DataObject\DataObject;
  *
  * @type
  */
-class Locale extends DataObject
+class Locale extends ApiDataObject
 {
     /**
      * A two or three letter identifier for the language, e.g. fr, de, en …

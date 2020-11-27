@@ -2,7 +2,7 @@
 
 **Fully Qualified**: [`\Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result`](../../../../../src/php/ProductApiBundle/Domain/ProductApi/Result.php)
 
-**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
+**Extends**: [`ApiDataObject`](../../../CoreBundle/Domain/ApiDataObject.md)
 
 **Implements**: `\Countable`, [`\IteratorAggregate`](https://www.php.net/manual/de/class.iteratoraggregate.php)
 

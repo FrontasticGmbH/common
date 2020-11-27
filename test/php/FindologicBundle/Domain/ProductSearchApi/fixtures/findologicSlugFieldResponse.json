@@ -29,7 +29,6 @@
                 "ordernumbers": [
                     "SW10131"
                 ],
-                "slug": "this-is-the-slug",
                 "summary": "",
                 "price": 249.95,
                 "attributes": {
@@ -40,7 +39,9 @@
                     ]
                 },
                 "matchingOrdernumber": "",
-                "properties": {},
+                "properties": {
+                    "productslug": "this-is-the-slug"
+                },
                 "productPlacement": null,
                 "pushRules": [],
                 "imageUrl": "https:\/\/ose.demo.findologic.com\/media\/image\/18\/c2\/bd\/SW10131.jpg",

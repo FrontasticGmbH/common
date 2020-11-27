@@ -2,7 +2,7 @@
 
 **Fully Qualified**: [`\Frontastic\Common\AccountApiBundle\Domain\AuthentificationInformation`](../../../../src/php/AccountApiBundle/Domain/AuthentificationInformation.php)
 
-**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
+**Extends**: [`ApiDataObject`](../../CoreBundle/Domain/ApiDataObject.md)
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------

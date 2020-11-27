@@ -62,6 +62,12 @@ class Mapper
             )
         ];
 
+        $slugPropertySegments = explode('.', $this->slugProperty);
+
+        if (count($slugPropertySegments) > 1 && $slugPropertySegments[0] === 'properties') {
+            $parameters['properties'] = [$slugPropertySegments[1]];
+        }
+
         return new SearchRequest($parameters);
     }
 
@@ -352,11 +358,14 @@ class Mapper
      */
     private function getSlug($item): string
     {
-        if ($this->slugProperty === null) {
-            return $this->getSlugFromUrl($item['url']);
+        if ($this->slugProperty !== null) {
+            $slug = $this->getArrayValue($item, $this->slugProperty);
+            if ($slug !== null) {
+                return $slug;
+            }
         }
 
-        return $this->getArrayValue($item, $this->slugProperty);
+        return $this->getSlugFromUrl($item['url']);
     }
 
     private function getSlugFromUrl(string $url): string

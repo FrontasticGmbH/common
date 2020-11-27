@@ -315,7 +315,7 @@ class MapperTest extends TestCase
 
     public function testGetSlugFromProperty()
     {
-        $mapper = new Mapper([], null, 'slug');
+        $mapper = new Mapper([], null, 'properties.productslug');
         $query = new ProductQuery(['locale' => 'en_GB@GBP']);
 
         $response = json_decode(file_get_contents(__DIR__ . '/fixtures/findologicSlugFieldResponse.json'), true);

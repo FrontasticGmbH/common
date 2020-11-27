@@ -2,7 +2,7 @@
 
 **Fully Qualified**: [`\Frontastic\Common\ProductApiBundle\Domain\ProductType`](../../../../src/php/ProductApiBundle/Domain/ProductType.php)
 
-**Extends**: [`\Kore\DataObject\DataObject`](https://github.com/kore/DataObject)
+**Extends**: [`ApiDataObject`](../../CoreBundle/Domain/ApiDataObject.md)
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------

@@ -14,15 +14,16 @@ configuration:
         clientSecret: tUrh_yyjWn7RcVY0MRXMbe6h7S9MPiz0
     findologic:
         hostUrl: https://service.findologic.com/ps/centralized-frontend
-        shopkey: 3330286AB8B769B8C4372E89D9BEB10F
+        shopkey: 34ACACE7B02F05CA48E8B0488A7B9ACD
         languages:
             de_DE@EUR:
                 hostUrl: https://service.findologic.com/ps/centralized-frontend
-                shopkey: 3330286AB8B769B8C4372E89D9BEB10F
+                shopkey: 34ACACE7B02F05CA48E8B0488A7B9ACD
         originalDataSource:
             engine: commercetools
         outputAttributes:
             - Color
+        slugProperty: properties.productslugs
     productSearch:
         engine: findologic
 projects:

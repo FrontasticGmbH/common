@@ -2,12 +2,12 @@
 
 namespace Frontastic\Common\ProjectApiBundle\Domain;
 
-use Kore\DataObject\DataObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 
 /**
  * @type
  */
-class Attribute extends DataObject
+class Attribute extends ApiDataObject
 {
     const TYPE_BOOLEAN = 'boolean';
     const TYPE_NUMBER = 'number';

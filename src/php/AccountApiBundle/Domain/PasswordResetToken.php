@@ -2,12 +2,12 @@
 
 namespace Frontastic\Common\AccountApiBundle\Domain;
 
-use Kore\DataObject\DataObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 
 /**
  * @type
  */
-class PasswordResetToken extends DataObject
+class PasswordResetToken extends ApiDataObject
 {
     /**
      * @var string

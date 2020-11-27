@@ -47,6 +47,7 @@ Here you find the API documentation for the relevant classes:
       * [Commercetools](php/CartApiBundle/Domain/CartApi/Commercetools.md)
       * [Exception](php/CartApiBundle/Domain/CartApi/Exception.md)
       * [LifecycleEventDecorator](php/CartApiBundle/Domain/CartApi/LifecycleEventDecorator.md)
+    * [CartApiBase](php/CartApiBundle/Domain/CartApiBase.md)
     * [CartApiFactory](php/CartApiBundle/Domain/CartApiFactory.md)
     * [Discount](php/CartApiBundle/Domain/Discount.md)
     * [LineItem](php/CartApiBundle/Domain/LineItem.md)
