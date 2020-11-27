@@ -38,6 +38,12 @@ class Cart extends ApiDataObject
     public $birthday;
 
     /**
+     * @var ?ShippingInfo
+     */
+    public $shippingInfo;
+
+    /**
+     * @deprecated use `shippingInfo` instead
      * @var ?ShippingMethod
      */
     public $shippingMethod;

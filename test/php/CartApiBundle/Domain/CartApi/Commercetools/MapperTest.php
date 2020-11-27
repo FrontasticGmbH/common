@@ -9,6 +9,7 @@ use Frontastic\Common\CartApiBundle\Domain\Discount;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
+use Frontastic\Common\CartApiBundle\Domain\ShippingInfo;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper as ProductMapper;
@@ -370,27 +371,27 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideMapDataToShippingExamples
      */
-    public function testMapDataToShippingMethod($shippingFixture, $expectedShippingMethod)
+    public function testMapDataToShippingInfo($shippingFixture, $expectedShippingInfo)
     {
-        $actualShippingMethod = $this->mapper->mapDataToShippingMethod($shippingFixture);
+        $actualShippingInfo = $this->mapper->mapDataToShippingInfo($shippingFixture);
 
-        $this->assertEquals($expectedShippingMethod, $actualShippingMethod);
+        $this->assertEquals($expectedShippingInfo, $actualShippingInfo);
     }
 
     public function provideMapDataToShippingExamples()
     {
         return [
-            'Empty shipping method' => [
+            'Empty shipping info' => [
                 [],
                 null,
             ],
-            'Empty shippingMethodName' => [
+            'Empty shippingInfoName' => [
                 [
                     'price' => [
                         'centAmount' => 0,
                     ],
                 ],
-                new ShippingMethod([
+                new ShippingInfo([
                     'price' => 0,
                 ]),
             ],
@@ -398,20 +399,88 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 [
                     'shippingMethodName' => 'Versand an Lieferadresse',
                 ],
-                new ShippingMethod([
+                new ShippingInfo([
                     'name' => 'Versand an Lieferadresse',
                 ]),
             ],
-            'Completed shipping method' => [
+            'Completed shipping info' => [
                 [
                     'shippingMethodName' => 'Versand an Lieferadresse',
                     'price' => [
                         'centAmount' => 0,
                     ],
                 ],
-                new ShippingMethod([
+                new ShippingInfo([
                     'name' => 'Versand an Lieferadresse',
                     'price' => 0,
+                ]),
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provideMapDataToShippingMethodExamples
+     */
+    public function testMapDataToShippingMethod($shippingMethodFixture, $expectedShippingMethod)
+    {
+        $this->productMapperMock
+            ->expects($this->any())
+            ->method('getLocalizedValue')
+            ->willReturn($shippingMethodFixture['localizedDescription']['de']);
+
+        $actualShippingMethod = $this->mapper->mapDataToShippingMethod(
+            $shippingMethodFixture,
+            new CommercetoolsLocale([
+                    'language' => 'de',
+                    'country' => 'DE',
+                    'currency' => 'EUR',
+                ]
+            )
+        );
+
+        $this->assertEquals($expectedShippingMethod, $actualShippingMethod);
+    }
+
+    public function provideMapDataToShippingMethodExamples()
+    {
+        return [
+            'Empty name' => [
+                [
+                    'id' => '111',
+                    'localizedDescription' => [
+                        'de' => 'standard shipping',
+                    ],
+                ],
+                new ShippingMethod([
+                    'shippingMethodId' => '111',
+                    'description' => 'standard shipping'
+                ]),
+            ],
+            'Empty description' => [
+                [
+                    'id' => '111',
+                    'name' => 'standard',
+                    'localizedDescription' => [
+                        'de' => null,
+                    ],
+                ],
+                new ShippingMethod([
+                    'shippingMethodId' => '111',
+                    'name' => 'standard',
+                ]),
+            ],
+            'Completed shipping method' => [
+                [
+                    'id' => '111',
+                    'name' => 'standard',
+                    'localizedDescription' => [
+                        'de' => 'standard shipping',
+                    ],
+                ],
+                new ShippingMethod([
+                    'shippingMethodId' => '111',
+                    'name' => 'standard',
+                    'description' => 'standard shipping',
                 ]),
             ],
         ];

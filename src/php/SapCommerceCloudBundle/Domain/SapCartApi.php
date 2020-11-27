@@ -264,6 +264,18 @@ class SapCartApi extends CartApiBase
         return $this->fetchCart($userId, $sapCartId, $sapLocale);
     }
 
+    public function getAvailableShippingMethodsImplementation(Cart $cart, string $localeString): array
+    {
+        // TODO: Implement getAvailableShippingMethods() method.
+        throw new \RuntimeException(__METHOD__ . ' not implemented');
+    }
+
+    public function getShippingMethodsImplementation(string $localeString, bool $onlyMatching = false): array
+    {
+        // TODO: Implement getShippingMethods() method.
+        throw new \RuntimeException(__METHOD__ . ' not implemented');
+    }
+
     public function getDangerousInnerClient()
     {
         return $this->client;

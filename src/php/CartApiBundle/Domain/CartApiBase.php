@@ -140,6 +140,16 @@ abstract class CartApiBase implements CartApi
         return $this->commitImplementation($locale);
     }
 
+    final public function getAvailableShippingMethods(Cart $cart, string $localeString): array
+    {
+        return $this->getAvailableShippingMethodsImplementation($cart, $localeString);
+    }
+
+    final public function getShippingMethods(string $localeString, bool $onlyMatching = false): array
+    {
+        return $this->getShippingMethodsImplementation($localeString, $onlyMatching);
+    }
+
     abstract protected function getForUserImplementation(Account $account, string $locale): Cart;
 
     abstract protected function getAnonymousImplementation(string $anonymousId, string $locale): Cart;
@@ -227,4 +237,16 @@ abstract class CartApiBase implements CartApi
     abstract protected function startTransactionImplementation(Cart $cart): void;
 
     abstract protected function commitImplementation(string $locale = null): Cart;
+
+    protected function getAvailableShippingMethodsImplementation(Cart $cart, string $localeString): array
+    {
+        throw new \RuntimeException(__METHOD__ . ' not implemented');
+    }
+
+    protected function getShippingMethodsImplementation(
+        string $localeString,
+        bool $onlyMatching = false
+    ): array {
+        throw new \RuntimeException(__METHOD__ . ' not implemented');
+    }
 }

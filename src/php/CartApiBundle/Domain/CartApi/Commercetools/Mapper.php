@@ -9,6 +9,7 @@ use Frontastic\Common\CartApiBundle\Domain\Discount;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
+use Frontastic\Common\CartApiBundle\Domain\ShippingInfo;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper as ProductMapper;
@@ -74,7 +75,8 @@ class Mapper
             'cartVersion' => (string)$cartData['version'],
             'lineItems' => $this->mapDataToLineItems($cartData, $locale),
             'email' => $cartData['customerEmail'] ?? null,
-            'shippingMethod' => $this->mapDataToShippingMethod($cartData['shippingInfo'] ?? []),
+            'shippingInfo' => $this->mapDataToShippingInfo($cartData['shippingInfo'] ?? []),
+            'shippingMethod' => $this->mapDataToShippingInfo($cartData['shippingInfo'] ?? []),
             'shippingAddress' => $this->mapDataToAddress($cartData['shippingAddress'] ?? []),
             'billingAddress' => $this->mapDataToAddress($cartData['billingAddress'] ?? []),
             'sum' => $cartData['totalPrice']['centAmount'],
@@ -198,7 +200,8 @@ class Mapper
             'orderVersion' => $orderData['version'],
             'lineItems' => $this->mapDataToLineItems($orderData, $locale),
             'email' => $orderData['customerEmail'] ?? null,
-            'shippingMethod' => $this->mapDataToShippingMethod($orderData['shippingInfo'] ?? []),
+            'shippingInfo' => $this->mapDataToShippingInfo($orderData['shippingInfo'] ?? []),
+            'shippingMethod' => $this->mapDataToShippingInfo($orderData['shippingInfo'] ?? []),
             'shippingAddress' => $this->mapDataToAddress($orderData['shippingAddress'] ?? []),
             'billingAddress' => $this->mapDataToAddress($orderData['billingAddress'] ?? []),
             'sum' => $orderData['totalPrice']['centAmount'],
@@ -284,15 +287,27 @@ class Mapper
         );
     }
 
-    public function mapDataToShippingMethod(array $shippingData): ?ShippingMethod
+    public function mapDataToShippingInfo(array $shippingInfoData): ?ShippingInfo
     {
-        if (!count($shippingData)) {
+        if (!count($shippingInfoData)) {
             return null;
         }
 
+        return new ShippingInfo([
+            'name' => $shippingInfoData['shippingMethodName'] ?? null,
+            'price' => $shippingInfoData['price']['centAmount'] ?? null,
+        ]);
+    }
+
+    public function mapDataToShippingMethod(array $shippingMethodData, CommercetoolsLocale $locale): ShippingMethod
+    {
         return new ShippingMethod([
-            'name' => $shippingData['shippingMethodName'] ?? null,
-            'price' => $shippingData['price']['centAmount'] ?? null,
+            'shippingMethodId' => $shippingMethodData['id'],
+            'name' => $shippingMethodData['name'] ?? null,
+            'description' => $this->productMapper->getLocalizedValue(
+                $locale,
+                $shippingMethodData['localizedDescription'] ?? []
+            ),
         ]);
     }
 }

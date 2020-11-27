@@ -7,6 +7,7 @@ use Frontastic\Common\ApiTests\FrontasticApiTestCase;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
+use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
@@ -177,6 +178,28 @@ class AnonymousCartTest extends FrontasticApiTestCase
         );
     }
 
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testGetShippingMethods(Project $project, string $language): void
+    {
+        $this->requireAnonymousCheckout($project);
+        $cartApi = $this->getCartApiForProject($project);
+        $shippingMethods = $cartApi->getShippingMethods($language);
+
+        $this->assertContainsOnlyInstancesOf(ShippingMethod::class, $shippingMethods);
+        foreach ($shippingMethods as $shippingMethod) {
+            $this->assertNotEmptyString($shippingMethod->shippingMethodId);
+        }
+
+        $shippingMethodsForMatchingLocation = $cartApi->getShippingMethods($language, true);
+
+        $this->assertContainsOnlyInstancesOf(ShippingMethod::class, $shippingMethodsForMatchingLocation);
+        foreach ($shippingMethodsForMatchingLocation as $shippingMethod) {
+            $this->assertNotEmptyString($shippingMethod->shippingMethodId);
+        }
+    }
+
     private function getAnonymousCart(Project $project, string $language): Cart
     {
         return $this->getCartApiForProject($project)->getAnonymous(uniqid(), $language);
@@ -191,18 +214,6 @@ class AnonymousCartTest extends FrontasticApiTestCase
                 'attributes' => $product->variants[0]->attributes,
             ]),
             'count' => $count,
-        ]);
-    }
-
-    private function getFrontasticAddress(): Address
-    {
-        return new Address([
-            'lastName' => 'FRONTASTIC GmbH',
-            'streetName' => 'Hafenweg',
-            'streetNumber' => '16',
-            'postalCode' => '48155',
-            'city' => 'Münster',
-            'country' => 'DE',
         ]);
     }
 

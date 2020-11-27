@@ -396,6 +396,18 @@ class SprykerCartApi extends CartApiBase
     {
         return $this->getResolvedCart()->getCart(null, $locale);
     }
+    
+    public function getAvailableShippingMethodsImplementation(Cart $cart, string $localeString): array
+    {
+        // TODO: Implement getAvailableShippingMethods() method.
+        throw new \RuntimeException(__METHOD__ . ' not implemented');
+    }
+
+    public function getShippingMethodsImplementation(string $localeString, bool $onlyMatching = false): array
+    {
+        // TODO: Implement getShippingMethods() method.
+        throw new \RuntimeException(__METHOD__ . ' not implemented');
+    }
 
     /**
      * @return SprykerClientInterface

@@ -9,6 +9,7 @@ use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
+use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 use Frontastic\Common\CartApiBundle\Domain\UpdatePaymentCommand;
 use Frontastic\Common\LifecycleTrait;
 
@@ -189,6 +190,16 @@ class LifecycleEventDecorator implements CartApi
     }
 
     public function commit(string $locale = null): Cart
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
+    public function getAvailableShippingMethods(Cart $cart, string $localeString): array
+    {
+        return $this->dispatch(__FUNCTION__, func_get_args());
+    }
+
+    public function getShippingMethods(string $localeString, bool $onlyMatching = false): array
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }

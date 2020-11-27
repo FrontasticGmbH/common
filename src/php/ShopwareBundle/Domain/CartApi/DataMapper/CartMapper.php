@@ -3,7 +3,7 @@
 namespace Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper;
 
 use Frontastic\Common\CartApiBundle\Domain\Cart;
-use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
+use Frontastic\Common\CartApiBundle\Domain\ShippingInfo;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\AddressMapper;
 use Frontastic\Common\ShopwareBundle\Domain\CartApi\ShopwareCartApi;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
@@ -58,7 +58,8 @@ class CartMapper extends AbstractDataMapper implements
             'currency' => $this->resolveCurrencyCodeFromLocale(),
             'lineItems' => $lineItems,
             'shippingAddress' => empty($locationData) ? null : $this->addressMapper->map($locationData),
-            'shippingMethod' => empty($shippingMethodData) ? null : $this->mapDataToShippingMethod($shippingMethodData),
+            'shippingInfo' => empty($shippingMethodData) ? null : $this->mapDataToShippingInfo($shippingMethodData),
+            'shippingMethod' => empty($shippingMethodData) ? null : $this->mapDataToShippingInfo($shippingMethodData),
             'discountCodes' => $this->extractDiscountCodesFromLineItems($lineItems),
             // @TODO: resolve billing address?
         ]);
@@ -103,13 +104,13 @@ class CartMapper extends AbstractDataMapper implements
         return $this->getLineItemsMapper()->map($lineItemsData);
     }
 
-    private function mapDataToShippingMethod(array $shippingMethodData): ?ShippingMethod
+    private function mapDataToShippingInfo(array $shippingMethodData): ?ShippingInfo
     {
         if (empty($shippingMethodData)) {
             return null;
         }
 
-        return new ShippingMethod([
+        return new ShippingInfo([
             'name' => $shippingMethodData['name'] ?? null,
             'price' => $this->convertPriceToCent($shippingMethodData['prices'][0]['price'] ?? 0),
         ]);

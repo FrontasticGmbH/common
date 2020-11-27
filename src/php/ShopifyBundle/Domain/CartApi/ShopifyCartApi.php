@@ -9,7 +9,7 @@ use Frontastic\Common\CartApiBundle\Domain\CartApiBase;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
-use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
+use Frontastic\Common\CartApiBundle\Domain\ShippingInfo;
 use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyAccountMapper;
 use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyProductMapper;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClient;
@@ -649,6 +649,18 @@ class ShopifyCartApi extends CartApiBase
         return $this->getById($cartId, $locale);
     }
 
+    public function getAvailableShippingMethodsImplementation(Cart $cart, string $locale): array
+    {
+        // TODO: Implement getAvailableShippingMethods() method.
+        throw new \RuntimeException(__METHOD__ . ' not implemented');
+    }
+
+    public function getShippingMethodsImplementation(string $locale, bool $onlyMatching = false): array
+    {
+        // TODO: Implement getShippingMethods() method.
+        throw new \RuntimeException(__METHOD__ . ' not implemented');
+    }
+
     public function getDangerousInnerClient()
     {
         return $this->client;
@@ -668,7 +680,10 @@ class ShopifyCartApi extends CartApiBase
             'shippingAddress' => $this->accountMapper->mapDataToAddress(
                 $cartData['shippingAddress'] ?? []
             ),
-            'shippingMethod' => $this->mapDataToShippingMethod(
+            'shippingInfo' => $this->mapDataToShippingInfo(
+                $cartData['shippingLine'] ?? []
+            ),
+            'shippingMethod' => $this->mapDataToShippingInfo(
                 $cartData['shippingLine'] ?? []
             ),
             'dangerousInnerCart' => $cartData,
@@ -697,7 +712,7 @@ class ShopifyCartApi extends CartApiBase
             'shippingAddress' => $this->accountMapper->mapDataToAddress(
                 $orderData['shippingAddress'] ?? []
             ),
-            'shippingMethod' => $this->mapDataToShippingMethod(
+            'shippingMethod' => $this->mapDataToShippingInfo(
                 $orderData['shippingLine'] ?? []
             ),
             'sum' => $this->productMapper->mapDataToPriceValue(
@@ -728,13 +743,13 @@ class ShopifyCartApi extends CartApiBase
         return $lineItems;
     }
 
-    private function mapDataToShippingMethod(array $shippingMethodData): ?ShippingMethod
+    private function mapDataToShippingInfo(array $shippingMethodData): ?ShippingInfo
     {
         if (empty($shippingMethodData)) {
             return null;
         }
 
-        return new ShippingMethod([
+        return new ShippingInfo([
             'name' => $shippingMethodData['name'],
             'price' => $this->productMapper->mapDataToPriceValue(
                 $shippingMethodData['priceV2'] ?? []

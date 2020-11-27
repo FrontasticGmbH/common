@@ -91,6 +91,27 @@ interface CartApi
     public function commit(string $locale = null): Cart;
 
     /**
+     * Returns the available shipping methods for the given $cart.
+     *
+     * @param Cart $cart
+     * @param string $localeString
+     * @return ShippingMethod[]
+     */
+    public function getAvailableShippingMethods(Cart $cart, string $localeString): array;
+
+    /**
+     * Returns all shipping methods.
+     *
+     * If $onlyMatching = true, only such shipping methods are returned
+     * which are eligible for the territory of the $locale.
+     *
+     * @param string $localeString
+     * @param bool $onlyMatching
+     * @return ShippingMethod[]
+     */
+    public function getShippingMethods(string $localeString, bool $onlyMatching = false): array;
+
+    /**
      * Get *dangerous* inner client
      *
      * This method exists to enable you to use features which are not yet part
