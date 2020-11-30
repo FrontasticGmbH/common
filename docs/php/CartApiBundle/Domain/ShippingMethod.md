@@ -6,7 +6,11 @@
 
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`name` | `string` |  | *Yes* | 
-`price` | `int` |  | *Yes* | 
+`shippingMethodId` | `string` |  | - | 
+`name` | `string` |  | - | 
+`price` | `int` |  | - | 
+`description` | `string` |  | - | Localized description of the shipping method.
+`rates` | ?[`ShippingRate`](ShippingRate.md)[] |  | - | 
+`dangerousInnerShippingMethod` | `?mixed` |  | - | 
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

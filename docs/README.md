@@ -58,7 +58,12 @@ Here you find the API documentation for the relevant classes:
     * OrderIdGenerator
       * [Random](php/CartApiBundle/Domain/OrderIdGenerator/Random.md)
     * [Payment](php/CartApiBundle/Domain/Payment.md)
+    * [ShippingInfo](php/CartApiBundle/Domain/ShippingInfo.md)
+    * [ShippingLocation](php/CartApiBundle/Domain/ShippingLocation.md)
     * [ShippingMethod](php/CartApiBundle/Domain/ShippingMethod.md)
+    * [ShippingRate](php/CartApiBundle/Domain/ShippingRate.md)
+    * [Tax](php/CartApiBundle/Domain/Tax.md)
+    * [TaxPortion](php/CartApiBundle/Domain/TaxPortion.md)
   * [FrontasticCommonCartApiBundle](php/CartApiBundle/FrontasticCommonCartApiBundle.md)
 * ContentApiBundle
   * Controller

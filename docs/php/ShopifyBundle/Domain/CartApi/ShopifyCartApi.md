@@ -7,6 +7,8 @@
 ## Methods
 
 * [__construct()](#__construct)
+* [getAvailableShippingMethodsImplementation()](#getavailableshippingmethodsimplementation)
+* [getShippingMethodsImplementation()](#getshippingmethodsimplementation)
 * [getDangerousInnerClient()](#getdangerousinnerclient)
 
 ### __construct()
@@ -26,6 +28,38 @@ Argument|Type|Default|Description
 `$accountMapper`|[`ShopifyAccountMapper`](../Mapper/ShopifyAccountMapper.md)||
 
 Return Value: `mixed`
+
+### getAvailableShippingMethodsImplementation()
+
+```php
+public function getAvailableShippingMethodsImplementation(
+    Cart $cart,
+    string $locale
+): array
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$cart`|[`Cart`](../../../CartApiBundle/Domain/Cart.md)||
+`$locale`|`string`||
+
+Return Value: `array`
+
+### getShippingMethodsImplementation()
+
+```php
+public function getShippingMethodsImplementation(
+    string $locale,
+    bool $onlyMatching = false
+): array
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$locale`|`string`||
+`$onlyMatching`|`bool`|`false`|
+
+Return Value: `array`
 
 ### getDangerousInnerClient()
 

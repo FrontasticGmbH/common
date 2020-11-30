@@ -8,6 +8,8 @@
 
 * [__construct()](#__construct)
 * [setAccount()](#setaccount)
+* [getAvailableShippingMethodsImplementation()](#getavailableshippingmethodsimplementation)
+* [getShippingMethodsImplementation()](#getshippingmethodsimplementation)
 * [getDangerousInnerClient()](#getdangerousinnerclient)
 
 ### __construct()
@@ -55,6 +57,38 @@ Argument|Type|Default|Description
 `$account`|[`Account`](../../../AccountApiBundle/Domain/Account.md)||
 
 Return Value: [`Cart`](../../../CartApiBundle/Domain/Cart.md)
+
+### getAvailableShippingMethodsImplementation()
+
+```php
+public function getAvailableShippingMethodsImplementation(
+    Cart $cart,
+    string $localeString
+): array
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$cart`|[`Cart`](../../../CartApiBundle/Domain/Cart.md)||
+`$localeString`|`string`||
+
+Return Value: `array`
+
+### getShippingMethodsImplementation()
+
+```php
+public function getShippingMethodsImplementation(
+    string $localeString,
+    bool $onlyMatching = false
+): array
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$localeString`|`string`||
+`$onlyMatching`|`bool`|`false`|
+
+Return Value: `array`
 
 ### getDangerousInnerClient()
 
