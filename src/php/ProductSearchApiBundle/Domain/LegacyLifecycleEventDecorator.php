@@ -39,8 +39,7 @@ class LegacyLifecycleEventDecorator implements ProductSearchApi
         ContainerInterface $container,
         LoggerInterface $logger,
         iterable $listeners = []
-    )
-    {
+    ) {
         $this->aggregate = $aggregate;
         $this->container = $container;
         $this->logger = $logger;
@@ -60,7 +59,9 @@ class LegacyLifecycleEventDecorator implements ProductSearchApi
      */
     protected function getAggregateForListeners(): ProductApi
     {
-        $this->logger->notice('Decorating ProductApi::query() is deprecated. Migrate to ProductSearchApi::query() instead.');
+        $this->logger->notice(
+            'Decorating ProductApi::query() is deprecated. Migrate to ProductSearchApi::query() instead.'
+        );
         if ($this->productApi === null) {
             $this->productApi = $this->container->get('frontastic.catwalk.product_api');
         }
