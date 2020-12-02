@@ -16,6 +16,8 @@
 ```php
 public function __construct(
     ProductSearchApi $aggregate,
+    \Psr\Container\ContainerInterface $container,
+    \Psr\Log\LoggerInterface $logger,
     iterable $listeners = []
 ): mixed
 ```
@@ -23,6 +25,8 @@ public function __construct(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$aggregate`|[`ProductSearchApi`](ProductSearchApi.md)||
+`$container`|`\Psr\Container\ContainerInterface`||
+`$logger`|`\Psr\Log\LoggerInterface`||
 `$listeners`|`iterable`|`[]`|
 
 Return Value: `mixed`
