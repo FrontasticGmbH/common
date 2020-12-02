@@ -154,6 +154,7 @@ class CustomerService
                         'languages' => $project['languages'] ?? [$project['defaultLanguage'] ?? 'eng_GB'],
                         'defaultLanguage' => $project['defaultLanguage'] ?? 'eng_GB',
                         'projectSpecific' => $project['projectSpecific'] ?? [],
+                        'data' => array_merge_recursive($customer['data'] ?? [], $project['data'] ?? []),
                         'endpoints' => array_map(
                             function (array $endpoint): Endpoint {
                                 return new Endpoint([

@@ -12,6 +12,7 @@ use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
+use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreator;
@@ -800,6 +801,55 @@ class Commercetools extends CartApiBase
         $this->actions = [];
 
         return $cart;
+    }
+
+    public function getAvailableShippingMethodsImplementation(Cart $cart, string $localeString): array
+    {
+        $locale = $this->localeCreator->createLocaleFromString($localeString);
+
+        try {
+            $result = $this->client->get(
+                '/shipping-methods/matching-cart',
+                ['cartId' => $cart->cartId]
+            );
+
+            return array_map(
+                function (array $shippingMethodData) use ($locale): ShippingMethod {
+                    return $this->cartMapper->mapDataToShippingMethod($shippingMethodData, $locale);
+                },
+                $result['results']
+            );
+        } catch (RequestException $e) {
+            throw $e;
+        }
+    }
+
+    public function getShippingMethodsImplementation(string $localeString, bool $onlyMatching = false): array
+    {
+        $locale = $this->localeCreator->createLocaleFromString($localeString);
+
+        $uri = '/shipping-methods';
+        $params = [];
+
+        if ($onlyMatching) {
+            $uri .= '/matching-location';
+            $params = [
+                'country' => $locale->country,
+            ];
+        }
+
+        try {
+            $result = $this->client->get($uri, $params);
+
+            return array_map(
+                function (array $shippingMethodData) use ($locale): ShippingMethod {
+                    return $this->cartMapper->mapDataToShippingMethod($shippingMethodData, $locale);
+                },
+                $result['results']
+            );
+        } catch (RequestException $e) {
+            throw $e;
+        }
     }
 
     /**

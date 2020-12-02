@@ -7,6 +7,9 @@ use Frontastic\Common\ApiTests\FrontasticApiTestCase;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
+use Frontastic\Common\CartApiBundle\Domain\Tax;
+use Frontastic\Common\CartApiBundle\Domain\TaxPortion;
+use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
@@ -144,6 +147,31 @@ class AnonymousCartTest extends FrontasticApiTestCase
     /**
      * @dataProvider projectAndLanguage
      */
+    public function testTaxOfACart(Project $project, string $language): void
+    {
+        $this->requireAnonymousCheckout($project);
+        $cart = $this->getAnonymousCart($project, $language);
+        $products = $this->queryProducts($project, $language);
+        $frontasticAddress = $this->getFrontasticAddress();
+
+        $cartApi = $this->getCartApiForProject($project);
+
+        $cartApi->startTransaction($cart);
+        $cartApi->addToCart($cart, $this->lineItemForProduct($products->items[0]), $language);
+        $cartApi->addToCart($cart, $this->lineItemForProduct($products->items[1]), $language);
+        $cartApi->setShippingAddress($cart, $frontasticAddress, $language);
+        $cart = $cartApi->commit($language);
+
+        $this->assertInstanceOf(LineItem\Variant::class, $cart->lineItems[0]);
+
+        if ($cart->taxed) {
+            $this->assertTaxIsWellFormed($cart->taxed);
+        }
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
     public function testOrderSingleProduct(Project $project, string $language): void
     {
         $this->requireAnonymousCheckout($project);
@@ -175,6 +203,32 @@ class AnonymousCartTest extends FrontasticApiTestCase
             (new \DateTimeImmutable())->add(new \DateInterval('PT2H')),
             $order->createdAt
         );
+
+        if ($cart->taxed) {
+            $this->assertTaxIsWellFormed($cart->taxed);
+        }
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testGetShippingMethods(Project $project, string $language): void
+    {
+        $this->requireAnonymousCheckout($project);
+        $cartApi = $this->getCartApiForProject($project);
+        $shippingMethods = $cartApi->getShippingMethods($language);
+
+        $this->assertContainsOnlyInstancesOf(ShippingMethod::class, $shippingMethods);
+        foreach ($shippingMethods as $shippingMethod) {
+            $this->assertNotEmptyString($shippingMethod->shippingMethodId);
+        }
+
+        $shippingMethodsForMatchingLocation = $cartApi->getShippingMethods($language, true);
+
+        $this->assertContainsOnlyInstancesOf(ShippingMethod::class, $shippingMethodsForMatchingLocation);
+        foreach ($shippingMethodsForMatchingLocation as $shippingMethod) {
+            $this->assertNotEmptyString($shippingMethod->shippingMethodId);
+        }
     }
 
     private function getAnonymousCart(Project $project, string $language): Cart
@@ -194,20 +248,31 @@ class AnonymousCartTest extends FrontasticApiTestCase
         ]);
     }
 
-    private function getFrontasticAddress(): Address
-    {
-        return new Address([
-            'lastName' => 'FRONTASTIC GmbH',
-            'streetName' => 'Hafenweg',
-            'streetNumber' => '16',
-            'postalCode' => '48155',
-            'city' => 'Münster',
-            'country' => 'DE',
-        ]);
-    }
-
     private function requireAnonymousCheckout(Project $project): void
     {
         $this->requireProjectFeature($project, 'anonymousCheckout');
+    }
+
+    private function assertTaxIsWellFormed(Tax $tax): void
+    {
+        $this->assertInstanceOf(Tax::class, $tax);
+        $this->assertIsInt($tax->amount);
+        $this->assertGreaterThanOrEqual(0, $tax->amount);
+        $this->assertNotEmptyString($tax->currency);
+
+        foreach ($tax->taxPortions as $portion) {
+            $this->assertInstanceOf(TaxPortion::class, $portion);
+            $this->assertIsInt($portion->amount);
+            $this->assertGreaterThanOrEqual(0, $portion->amount);
+            $this->assertNotEmptyString($portion->currency);
+
+            if ($portion->name) {
+                $this->assertIsString($portion->name);
+            }
+
+            if ($portion->rate) {
+                $this->assertIsFloat($portion->rate);
+            }
+        }
     }
 }

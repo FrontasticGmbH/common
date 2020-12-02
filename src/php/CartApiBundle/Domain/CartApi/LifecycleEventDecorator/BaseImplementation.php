@@ -185,7 +185,7 @@ abstract class BaseImplementation
         return $this->mapReturnedCart($cart);
     }
 
-    /*** updatePayment() *************************************************************************************************/
+    /*** updatePayment() **********************************************************************************************/
     public function beforeUpdatePayment(
         CartApi $cartApi,
         Cart $cart,
@@ -276,6 +276,31 @@ abstract class BaseImplementation
     public function afterCommit(CartApi $cartApi, Cart $cart): ?Cart
     {
         return $this->mapReturnedCart($cart);
+    }
+
+    /*** getAvailableShippingMethods() ********************************************************************************/
+    public function beforeGetAvailableShippingMethods(CartApi $cartApi, Cart $cart, string $localeString): ?array
+    {
+        return null;
+    }
+
+    public function afterGetAvailableShippingMethods(CartApi $cartApi, array $availableShippingMethods):  ?array
+    {
+        return null;
+    }
+
+    /*** getShippingMethods() *****************************************************************************************/
+    public function beforeGetShippingMethods(
+        CartApi $cartApi,
+        string $localeString,
+        bool $onlyMatching = false
+    ): ?array {
+        return null;
+    }
+
+    public function afterGetShippingMethods(CartApi $cartApi, array $shippingMethods): ?array
+    {
+        return null;
     }
 
     public function mapReturnedCart(Cart $cart): ?Cart

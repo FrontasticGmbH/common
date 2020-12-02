@@ -5,6 +5,7 @@ namespace Frontastic\Common\ApiTests\CartApi;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\ApiTests\FrontasticApiTestCase;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
+use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 
 class CartTest extends FrontasticApiTestCase
@@ -45,6 +46,25 @@ class CartTest extends FrontasticApiTestCase
         $account->setPassword('cHAaL4Pd.4yCcwLR');
 
         return $this->getAccountApiForProject($project)->create($account, null, $language);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testGetAvailableShippingMethods(Project $project, string $language): void
+    {
+        $account = $this->getAccount($project, $language);
+        $cart = $this->getCart($project, $account, $language);
+
+        $cartApi = $this->getCartApiForProject($project);
+        $cart = $cartApi->setShippingAddress($cart, $this->getFrontasticAddress(), $language);
+
+        $shippingMethods = $cartApi->getAvailableShippingMethods($cart, $language);
+
+        $this->assertContainsOnlyInstancesOf(ShippingMethod::class, $shippingMethods);
+        foreach ($shippingMethods as $shippingMethod) {
+            $this->assertNotEmptyString($shippingMethod->shippingMethodId);
+        }
     }
 
     private function getCart(Project $project, Account $account, string $language): Cart

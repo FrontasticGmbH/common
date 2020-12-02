@@ -352,6 +352,18 @@ class ShopwareCartApi extends CartApiBase
         return $this->getById($token, $locale);
     }
 
+    public function getAvailableShippingMethodsImplementation(Cart $cart, string $localeString): array
+    {
+        // TODO: Implement getAvailableShippingMethods() method.
+        throw new \RuntimeException(__METHOD__ . ' not implemented');
+    }
+
+    public function getShippingMethodsImplementation(string $localeString, bool $onlyMatching = false): array
+    {
+        // TODO: Implement getShippingMethods() method.
+        throw new \RuntimeException(__METHOD__ . ' not implemented');
+    }
+
     public function getDangerousInnerClient(): ClientInterface
     {
         return $this->client;

@@ -7,9 +7,11 @@ use Frontastic\Catwalk\ApiCoreBundle\Domain\ContextService;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory;
+use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\AccountApiBundle\Domain\Session;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\CartApiFactory;
+use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 use Frontastic\Common\ContentApiBundle\Domain\DefaultContentApiFactory;
 use Frontastic\Common\EnvironmentResolver;
@@ -489,5 +491,17 @@ class FrontasticApiTestCase extends KernelTestCase
         if (!$this->hasProjectFeature($project, $featureName)) {
             $this->markTestSkipped($featureName . ' is required for this test');
         }
+    }
+
+    protected function getFrontasticAddress(): Address
+    {
+        return new Address([
+            'lastName' => 'FRONTASTIC GmbH',
+            'streetName' => 'Hafenweg',
+            'streetNumber' => '16',
+            'postalCode' => '48155',
+            'city' => 'Münster',
+            'country' => 'DE',
+        ]);
     }
 }

@@ -33,6 +33,8 @@
 * [getNewOrders()](#getneworders)
 * [startTransaction()](#starttransaction)
 * [commit()](#commit)
+* [getAvailableShippingMethods()](#getavailableshippingmethods)
+* [getShippingMethods()](#getshippingmethods)
 
 ### __construct()
 
@@ -470,5 +472,37 @@ Argument|Type|Default|Description
 `$locale`|`string`|`null`|
 
 Return Value: [`Cart`](../Cart.md)
+
+### getAvailableShippingMethods()
+
+```php
+public function getAvailableShippingMethods(
+    Cart $cart,
+    string $localeString
+): array
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$cart`|[`Cart`](../Cart.md)||
+`$localeString`|`string`||
+
+Return Value: `array`
+
+### getShippingMethods()
+
+```php
+public function getShippingMethods(
+    string $localeString,
+    bool $onlyMatching = false
+): array
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$localeString`|`string`||
+`$onlyMatching`|`bool`|`false`|
+
+Return Value: `array`
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

@@ -11,13 +11,34 @@ class ShippingMethod extends ApiDataObject
 {
     /**
      * @var string
-     * @required
+     */
+    public $shippingMethodId;
+
+    /**
+     * @var string
      */
     public $name;
 
     /**
+     * @deprecated use `ShippingInfo.price` instead
      * @var integer
-     * @required
      */
     public $price = 0;
+
+    /**
+     * Localized description of the shipping method.
+     *
+     * @var string
+     */
+    public $description;
+
+    /**
+     * @var ?ShippingRate[]
+     */
+    public $rates;
+
+    /**
+     * @var ?mixed
+     */
+    public $dangerousInnerShippingMethod;
 }

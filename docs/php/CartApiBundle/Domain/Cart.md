@@ -11,6 +11,7 @@ Property|Type|Default|Required|Description
 `lineItems` | [`LineItem`](LineItem.md)[] | `[]` | *Yes* | 
 `email` | `string` |  | - | 
 `birthday` | `\DateTimeImmutable` |  | - | 
+`shippingInfo` | ?[`ShippingInfo`](ShippingInfo.md) |  | - | 
 `shippingMethod` | ?[`ShippingMethod`](ShippingMethod.md) |  | - | 
 `shippingAddress` | `?\Frontastic\Common\CartApiBundle\Domain\Address` |  | - | 
 `billingAddress` | `?\Frontastic\Common\CartApiBundle\Domain\Address` |  | - | 
@@ -18,6 +19,7 @@ Property|Type|Default|Required|Description
 `currency` | `string` |  | *Yes* | 
 `payments` | [`Payment`](Payment.md)[] | `[]` | *Yes* | 
 `discountCodes` | `string[]` | `[]` | *Yes* | 
+`taxed` | ?[`Tax`](Tax.md) |  | - | 
 `dangerousInnerCart` | `mixed` |  | - | Access original object from backend
 
 ## Methods

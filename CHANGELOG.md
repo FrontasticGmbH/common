@@ -1,5 +1,29 @@
 # common Changelog
 
+## `2.0.0` (2020-11-27)
+
+* feat(tax): included tax class and implementation fro Commercetools
+* feat!(ShippingMethod): API enhancement for fetching shipping methods. (#420)
+* Built assets for release 2020.11.26.17.12
+* fix(findologic): copy&paste error
+* fix(findologic): use differnet shop for tests
+* fix(findologic): include properties in query
+* fix(findologic): use slugProperty in API tests
+* fix(findologic): add missing property
+* fix(findologic): only use slug property if present
+* fix(findologic): handle missing route collection
+* fix: Copy improvements
+* fix: Ignore TrackingService from catwalk
+* feat(shopify): increased the default number of variants to fetch
+* fix: Correct bundle references
+* refactor: removed duplicated tests
+* [FT-442] Migrate DataObjects to
+* feat(Findologic Product Search): Implement Slug Parsing from configured Findologic property field
+* fix: set right test name on AnonymousCart
+* fix(shopify): set dangerousInner* on missing objects
+* feat(shopify): included descriptionHtml and images to Product query
+* feat(ApiBase): implemented CartApiBase on Spryker
+
 ## `1.1.20` (2020-11-26)
 
 * fix: Correct bundle references
