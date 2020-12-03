@@ -324,6 +324,7 @@ Here you find the API documentation for the relevant classes:
     * [CellSpecParser](php/SpecificationBundle/Domain/CellSpecParser.md)
     * [ConfigurationSchema](php/SpecificationBundle/Domain/ConfigurationSchema.md)
     * [CustomAppSpecParser](php/SpecificationBundle/Domain/CustomAppSpecParser.md)
+    * [CustomStreamSpecParser](php/SpecificationBundle/Domain/CustomStreamSpecParser.md)
     * [DefaultSchemaLoader](php/SpecificationBundle/Domain/DefaultSchemaLoader.md)
     * [InvalidSchemaException](php/SpecificationBundle/Domain/InvalidSchemaException.md)
     * [JsonSchemaValidator](php/SpecificationBundle/Domain/JsonSchemaValidator.md)
