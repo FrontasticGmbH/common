@@ -10,7 +10,7 @@ Property|Type|Default|Required|Description
 `secret` | `string` |  | *Yes* | 
 `edition` | `string` | `'micro'` | *Yes* | 
 `hasPaasModifications` | `bool` | `false` | *Yes* | 
-`machineLimit` | `int` |  | *Yes* | Number of available Frontastic Machines
+`machineLimit` | `int` | `3` | *Yes* | Number of available Frontastic Machines
 `features` | `array` | `[]` | *Yes* | 
 `isTransient` | `bool` | `false` | *Yes* | Used to indicate this customer is only "half" configured or similar.
 `configuration` | `array` | `[]` | *Yes* | 

@@ -101,6 +101,11 @@ Here you find the API documentation for the relevant classes:
     * [ApiDataObject](php/CoreBundle/Domain/ApiDataObject.md)
     * [DateTimeConverter](php/CoreBundle/Domain/DateTimeConverter.md)
     * [ErrorResult](php/CoreBundle/Domain/ErrorResult.md)
+    * Json
+      * [InvalidJsonDecodeException](php/CoreBundle/Domain/Json/InvalidJsonDecodeException.md)
+      * [InvalidJsonEncodeException](php/CoreBundle/Domain/Json/InvalidJsonEncodeException.md)
+      * [Json](php/CoreBundle/Domain/Json/Json.md)
+      * [JsonInterface](php/CoreBundle/Domain/Json/JsonInterface.md)
     * [Mailer](php/CoreBundle/Domain/Mailer.md)
     * Mailer
       * [SwiftMail](php/CoreBundle/Domain/Mailer/SwiftMail.md)
