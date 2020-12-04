@@ -33,13 +33,17 @@ class LineItem extends ApiDataObject
     public $count = 0;
 
     /**
+     * Price of a single item
+     *
      * @var integer
      * @required
      */
     public $price = 0;
 
     /**
-     * @var integer
+     * Discounted price per item
+     *
+     * @var ?integer
      */
     public $discountedPrice;
 
@@ -51,6 +55,8 @@ class LineItem extends ApiDataObject
     public $discountTexts = [];
 
     /**
+     * Total price, basically $price * $count, also discounted
+     *
      * @var integer
      * @required
      */

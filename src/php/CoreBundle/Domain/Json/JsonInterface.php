@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Frontastic\Common\CoreBundle\Domain\Json;
-
 
 interface JsonInterface
 {

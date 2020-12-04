@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Frontastic\Common\CoreBundle\Domain\Json;
-
 
 class Json implements JsonInterface
 {
@@ -33,8 +31,13 @@ class Json implements JsonInterface
      * @return mixed
      * @throws InvalidJsonDecodeException
      */
-    public static function decode($data, $associative = false, int $depth = 512, int $flags = 0, $useNativeDecoder = false)
-    {
+    public static function decode(
+        $data,
+        $associative = false,
+        int $depth = 512,
+        int $flags = 0,
+        $useNativeDecoder = false
+    ) {
         if (!$useNativeDecoder && function_exists('simdjson_decode')) {
             try {
                 return simdjson_decode($data, $associative, $depth);
