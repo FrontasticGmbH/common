@@ -3,12 +3,14 @@
 namespace Frontastic\Common\SprykerBundle\Domain\Cart\SprykerCart;
 
 use Frontastic\Common\CartApiBundle\Domain\Cart;
+use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\LineItem\Variant;
 use Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper;
 use Frontastic\Common\SprykerBundle\Domain\Cart\Mapper\CustomerCartMapper;
 use Frontastic\Common\SprykerBundle\Domain\Cart\Request\CartItemRequestDataInterface;
 use Frontastic\Common\SprykerBundle\Domain\Cart\Request\CustomerCartItemRequestData;
 use Frontastic\Common\SprykerBundle\Domain\Cart\Request\CustomerCartRequestData;
+use Frontastic\Common\SprykerBundle\Domain\Cart\Request\VoucherRedeemRequestData;
 use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver;
@@ -147,6 +149,47 @@ class CustomerCart extends AbstractSprykerCart
         );
 
         return $this->getCart();
+    }
+
+    public function redeemDiscount(Cart $cart, string $code, string $locale = null): Cart
+    {
+        $sprykerLocale = $this->parseLocaleString($locale);
+
+        $url = $this->withIncludes(
+            "/carts/{$cart->cartId}/vouchers",
+            $this->customerCartIncludes,
+        );
+
+        $request = new VoucherRedeemRequestData($code);
+
+        $response = $this->client
+            ->forLanguage($sprykerLocale->language)
+            ->post(
+                $this->appendCurrencyToUrl($url, $sprykerLocale->currency),
+                $this->getAuthHeader(),
+                $request->encode()
+            );
+
+        return $this->mapResponseToCart($response);
+    }
+
+    public function removeDiscount(Cart $cart, LineItem $discountLineItem, string $locale = null): Cart
+    {
+        $sprykerLocale = $this->parseLocaleString($locale);
+
+        $url = $this->withIncludes(
+            "/carts/{$cart->cartId}/vouchers/{$discountLineItem->lineItemId}",
+            $this->customerCartIncludes,
+        );
+
+        $this->client
+            ->forLanguage($sprykerLocale->language)
+            ->delete(
+                $this->appendCurrencyToUrl($url, $sprykerLocale->currency),
+                $this->getAuthHeader()
+            );
+
+        return $this->getById($cart->cartId, $locale);
     }
 
     /**

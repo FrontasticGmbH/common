@@ -12,6 +12,8 @@ interface SprykerCartConstants
         'concrete-product-image-sets',
         'concrete-product-prices',
         'concrete-product-availabilities',
+        'cart-rules',
+        'vouchers',
     ];
 
     public const CUSTOMER_CART_RELATIONSHIPS = [

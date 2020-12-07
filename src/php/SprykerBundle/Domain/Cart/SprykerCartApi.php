@@ -303,15 +303,6 @@ class SprykerCartApi extends CartApiBase
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    protected function removeDiscountCodeImplementation(
-        Cart $cart,
-        LineItem $discountLineItem,
-        string $locale = null
-    ): Cart {
-        // TODO: Implement removeDiscountCode() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
-    }
-
     /**
      * @param \Frontastic\Common\CartApiBundle\Domain\Cart $cart
      * @param string $code
@@ -320,7 +311,15 @@ class SprykerCartApi extends CartApiBase
      */
     protected function redeemDiscountCodeImplementation(Cart $cart, string $code, string $locale = null): Cart
     {
-        return $cart;
+        return $this->getResolvedCart()->redeemDiscount($cart, $code, $locale);
+    }
+
+    protected function removeDiscountCodeImplementation(
+        Cart $cart,
+        LineItem $discountLineItem,
+        string $locale = null
+    ): Cart {
+        return $this->getResolvedCart()->removeDiscount($cart, $discountLineItem, $locale);
     }
 
     /**
@@ -396,7 +395,7 @@ class SprykerCartApi extends CartApiBase
     {
         return $this->getResolvedCart()->getCart(null, $locale);
     }
-    
+
     public function getAvailableShippingMethodsImplementation(Cart $cart, string $localeString): array
     {
         // TODO: Implement getAvailableShippingMethods() method.

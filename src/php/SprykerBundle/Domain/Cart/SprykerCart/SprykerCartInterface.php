@@ -3,6 +3,7 @@
 namespace Frontastic\Common\SprykerBundle\Domain\Cart\SprykerCart;
 
 use Frontastic\Common\CartApiBundle\Domain\Cart;
+use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\LineItem\Variant;
 
 interface SprykerCartInterface
@@ -39,4 +40,8 @@ interface SprykerCartInterface
      * @return Cart
      */
     public function removeLineItem(Cart $cart, Variant $lineItem): Cart;
+
+    public function redeemDiscount(Cart $cart, string $code, string $locale = null): Cart;
+
+    public function removeDiscount( Cart $cart, LineItem $discountLineItem, string $locale = null): Cart;
 }
