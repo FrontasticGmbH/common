@@ -43,5 +43,5 @@ interface SprykerCartInterface
 
     public function redeemDiscount(Cart $cart, string $code, string $locale = null): Cart;
 
-    public function removeDiscount( Cart $cart, LineItem $discountLineItem, string $locale = null): Cart;
+    public function removeDiscount(Cart $cart, LineItem $discountLineItem, string $locale = null): Cart;
 }
