@@ -7,6 +7,7 @@ use Seld\JsonLint\JsonParser;
 use JsonSchema\Constraints\Factory;
 use JsonSchema\SchemaStorage;
 use JsonSchema\Validator;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class JsonSchemaValidator
 {
@@ -20,7 +21,7 @@ class JsonSchemaValidator
         $validator =  $this->createValidator($schemaLibraryFiles);
         $validator->validate(
             $toValidate,
-            json_decode(file_get_contents($this->schemaFilePath($schemaFile)))
+            Json::decode(file_get_contents($this->schemaFilePath($schemaFile)))
         );
 
         if ($validator->isValid()) {
@@ -40,7 +41,7 @@ class JsonSchemaValidator
             );
         }
 
-        $object = json_decode($toParse);
+        $object = Json::decode($toParse);
         if (!is_object($object)) {
             throw new InvalidSchemaException(
                 "JSON does not follow schema.",
@@ -76,7 +77,7 @@ class JsonSchemaValidator
         $schemaStorage = new SchemaStorage();
 
         foreach ($schemaLibraryFiles as $schemaFile) {
-            $schemaJson = json_decode(file_get_contents(
+            $schemaJson = Json::decode(file_get_contents(
                 $this->schemaFilePath($schemaFile)
             ));
 

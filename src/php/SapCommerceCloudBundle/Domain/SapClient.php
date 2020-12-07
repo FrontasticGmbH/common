@@ -10,6 +10,7 @@ use League\OAuth2\Client\Grant\Password;
 use League\OAuth2\Client\Provider\GenericProvider;
 use League\OAuth2\Client\Token\AccessTokenInterface;
 use Psr\SimpleCache\CacheInterface;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class SapClient
 {
@@ -133,7 +134,7 @@ class SapClient
         $headers = [];
 
         if ($payload !== null) {
-            $body = json_encode($payload);
+            $body = Json::encode($payload);
             if ($body === false) {
                 throw new \RuntimeException('Invalid JSON payload');
             }
@@ -190,7 +191,7 @@ class SapClient
             return null;
         }
 
-        $data = json_decode($response->body, true);
+        $data = Json::decode($response->body, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new RequestException(
                 'JSON error: ' . json_last_error_msg(),

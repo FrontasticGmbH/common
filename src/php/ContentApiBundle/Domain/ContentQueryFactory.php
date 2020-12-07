@@ -3,6 +3,7 @@
 namespace Frontastic\Common\ContentApiBundle\Domain;
 
 use Symfony\Component\HttpFoundation\Request;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class ContentQueryFactory
 {
@@ -23,6 +24,6 @@ class ContentQueryFactory
      */
     public static function queryFromRequest(Request $request): Query
     {
-        return Query::fromArray(json_decode($request->getContent(), true), true);
+        return Query::fromArray(Json::decode($request->getContent(), true), true);
     }
 }

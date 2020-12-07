@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\HttpClient;
 
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 use Frontastic\Common\HttpClient;
 use GuzzleHttp\Promise\PromiseInterface;
 
@@ -35,13 +36,12 @@ class LogstashJson extends HttpClient
         Options $options = null
     ): PromiseInterface {
         $start = microtime(true);
-
         return $this->aggregate
             ->requestAsync($method, $url, $body, $headers, $options)
             ->then(function ($response) use ($start, $method, $url) {
                 file_put_contents(
                     '/var/log/frontastic/responses_json.log',
-                    json_encode(
+                    Json::encode(
                         [
                             'date' => date('r'),
                             'host' => parse_url($url, PHP_URL_HOST),

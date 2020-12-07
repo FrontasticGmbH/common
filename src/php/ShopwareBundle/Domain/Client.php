@@ -10,6 +10,7 @@ use Frontastic\Common\ShopwareBundle\Domain\Exception\ResourceNotFoundException;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\UriInterface;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class Client implements ClientInterface
 {
@@ -103,7 +104,7 @@ class Client implements ClientInterface
         $defaultTimeout = (int)getenv('http_client_timeout');
 
         if ($body !== null && is_array($body)) {
-            $body = json_encode($body);
+            $body = Json::encode($body);
         }
 
         return $this->httpClient
@@ -129,7 +130,7 @@ class Client implements ClientInterface
                     return $response;
                 }
 
-                $data = json_decode($response->body, true);
+                $data = Json::decode($response->body, true);
                 if (JSON_ERROR_NONE === json_last_error()) {
                     return $data;
                 }
@@ -148,7 +149,7 @@ class Client implements ClientInterface
 
     protected function prepareException(Response $response): Exception
     {
-        $errorData = json_decode($response->body);
+        $errorData = Json::decode($response->body);
         $exception = new RequestException(
             $errorData->message ?? $response->body ?? 'Internal Server Error',
             (int)($response->status ?? 503)

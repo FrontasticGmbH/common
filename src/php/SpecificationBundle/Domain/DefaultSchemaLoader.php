@@ -3,6 +3,7 @@
 namespace Frontastic\Common\SpecificationBundle\Domain;
 
 use \InvalidArgumentException;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class DefaultSchemaLoader
 {
@@ -21,6 +22,6 @@ class DefaultSchemaLoader
             );
         }
 
-        return json_decode(file_get_contents($schemaFile));
+        return Json::decode(file_get_contents($schemaFile));
     }
 }

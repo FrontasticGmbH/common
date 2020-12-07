@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class SearchController extends Controller
 {
@@ -17,7 +18,7 @@ class SearchController extends Controller
         /** @var Domain\ContentApi $contentApi */
         $contentApi = $contentApiFactory->factor($context->project);
 
-        $requestParameters = json_decode($request->getContent(), true);
+        $requestParameters = Json::decode($request->getContent(), true);
         if (isset($requestParameters['contentId'])) {
             $contentId = $requestParameters['contentId'];
             $result = $contentApi->getContent($contentId, $context->locale);

@@ -18,6 +18,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\Co
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreator;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use Psr\Log\LoggerInterface;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to implementation of CartApi
@@ -117,7 +118,7 @@ class Commercetools extends CartApiBase
                     '/carts',
                     ['expand' => self::EXPAND],
                     [],
-                    json_encode([
+                    Json::encode([
                         'country' => $locale->country,
                         'currency' => $locale->currency,
 
@@ -204,7 +205,7 @@ class Commercetools extends CartApiBase
                 '/carts',
                 ['expand' => self::EXPAND],
                 [],
-                \json_encode($dangerousInnerCart)
+                Json::encode($dangerousInnerCart)
             ),
             $locale
         );
@@ -266,7 +267,7 @@ class Commercetools extends CartApiBase
                 '/carts',
                 ['expand' => self::EXPAND],
                 [],
-                json_encode([
+                Json::encode([
                     'country' => $locale->country,
                     'currency' => $locale->currency,
                     'locale' => $locale->language,
@@ -586,7 +587,7 @@ class Commercetools extends CartApiBase
             '/payments',
             [],
             [],
-            json_encode($this->cartMapper->mapPaymentToData($payment))
+            Json::encode($this->cartMapper->mapPaymentToData($payment))
         );
 
         return $this->postCartActions(
@@ -626,7 +627,7 @@ class Commercetools extends CartApiBase
         $actions[] = [
             'action' => 'setCustomField',
             'name' => 'frontasticPaymentDetails',
-            'value' => json_encode($payment->paymentDetails),
+            'value' => Json::encode($payment->paymentDetails),
         ];
 
         return $this->cartMapper->mapDataToPayment(
@@ -634,7 +635,7 @@ class Commercetools extends CartApiBase
                 '/payments/key=' . $payment->id,
                 [],
                 [],
-                json_encode([
+                Json::encode([
                     'version' => (int)$originalPayment->version,
                     'actions' => array_merge(
                         $payment->rawApiInput,
@@ -690,7 +691,7 @@ class Commercetools extends CartApiBase
                 '/orders',
                 ['expand' => self::EXPAND],
                 [],
-                json_encode([
+                Json::encode([
                     'id' => $cart->cartId,
                     'version' => (int)$cart->cartVersion,
                     'orderNumber' => $this->orderIdGenerator->getOrderId($cart),
@@ -772,7 +773,7 @@ class Commercetools extends CartApiBase
                 '/carts/' . $cart->cartId,
                 ['expand' => self::EXPAND],
                 [],
-                json_encode([
+                Json::encode([
                     'version' => (int)$cart->cartVersion,
                     'actions' => array_merge(
                         $cart->rawApiInput,
@@ -907,7 +908,7 @@ class Commercetools extends CartApiBase
             'payments/key=' . $payment->id,
             [],
             [],
-            json_encode(
+            Json::encode(
                 [
                     'version' => $payment->version,
                     'actions' => [
@@ -941,7 +942,7 @@ class Commercetools extends CartApiBase
             'payments/key=' . $payment->id,
             [],
             [],
-            json_encode(
+            Json::encode(
                 [
                     'version' => $payment->version,
                     'actions' => [
@@ -999,7 +1000,7 @@ class Commercetools extends CartApiBase
             '/types',
             [],
             [],
-            json_encode([
+            Json::encode([
                 'key' => CartApi\Commercetools\Mapper::CUSTOM_PAYMENT_FIELDS_KEY,
                 'name' => ['en' => 'Frontastic payment fields'],
                 'description' => ['en' => 'Additional fields from Frontastic for the payment'],

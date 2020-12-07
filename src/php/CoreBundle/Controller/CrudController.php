@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\CoreBundle\Controller;
 
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 use Frontastic\Common\CoreBundle\Domain\Versioner;
 use Kore\DataObject\DataObject;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -16,7 +17,7 @@ abstract class CrudController extends Controller
     protected function getJsonContent(Request $request)
     {
         if (!$request->getContent() ||
-            ($body = json_decode($request->getContent(), true)) === null) {
+            ($body = Json::decode($request->getContent(), true)) === null) {
             throw new \InvalidArgumentException("Invalid data passed: " . $request->getContent());
         }
 

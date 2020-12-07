@@ -16,6 +16,7 @@ use Commercetools\Core\Model\Common\Context;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Psr\SimpleCache\CacheInterface;
 use Psr\Container\ContainerInterface;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -68,7 +69,7 @@ class DefaultContentApiFactory implements ContentApiFactory
     public function factor(Project $project): ContentApi
     {
         // make sure the config is an object, not an array
-        $contentConfiguration = json_decode(json_encode($project->configuration['content']), false);
+        $contentConfiguration = Json::decode(Json::encode($project->configuration['content']), false);
 
         switch ($contentConfiguration->engine) {
             case 'contentful':

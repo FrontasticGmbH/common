@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class AccountAuthController extends Controller
 {
@@ -167,7 +168,7 @@ class AccountAuthController extends Controller
     protected function getJsonBody(Request $request): array
     {
         if (!$request->getContent() ||
-            !($body = json_decode($request->getContent(), true))) {
+            !($body = Json::decode($request->getContent(), true))) {
             throw new \InvalidArgumentException('Invalid data passed: ' . $request->getContent());
         }
 

@@ -13,6 +13,7 @@ use Frontastic\Common\WishlistApiBundle\Domain\WishlistApi;
 use Frontastic\Common\WishlistApiBundle\Domain\Wishlist;
 use Frontastic\Common\WishlistApiBundle\Domain\LineItem;
 use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class WishlistController extends CrudController
 {
@@ -214,7 +215,7 @@ class WishlistController extends CrudController
     protected function getJsonContent(Request $request)
     {
         if (!$request->getContent() ||
-            !($body = json_decode($request->getContent(), true))) {
+            !($body = Json::decode($request->getContent(), true))) {
             throw new \InvalidArgumentException("Invalid data passed: " . $request->getContent());
         }
 

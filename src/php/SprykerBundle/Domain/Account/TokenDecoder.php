@@ -2,6 +2,8 @@
 
 namespace Frontastic\Common\SprykerBundle\Domain\Account;
 
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
+
 class TokenDecoder
 {
     /**
@@ -14,7 +16,7 @@ class TokenDecoder
 
         list($header, $payload, $signature) = explode('.', $token);
 
-        $decode = json_decode(base64_decode($payload), true);
+        $decode = Json::decode(base64_decode($payload), true);
 
         return $decode;
     }

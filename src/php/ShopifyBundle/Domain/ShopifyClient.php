@@ -7,6 +7,7 @@ use Frontastic\Common\HttpClient;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\SimpleCache\CacheInterface;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class ShopifyClient
 {
@@ -58,7 +59,7 @@ class ShopifyClient
      */
     public function request(string $query, string $locale = null): PromiseInterface
     {
-        $body = json_encode(['query' => $query], JSON_HEX_QUOT);
+        $body = Json::encode(['query' => $query], JSON_HEX_QUOT);
         $headers = [];
 
         $request = $this->requestProvider->getCurrentRequest();
@@ -85,7 +86,7 @@ class ShopifyClient
         }
 
         $body = new ResponseAccess([
-            'container' => json_decode($response->body, true)
+            'container' => Json::decode($response->body, true)
         ]);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
@@ -105,7 +106,7 @@ class ShopifyClient
 
     protected function prepareException(HttpClient\Response $response): \Exception
     {
-        $errorData = json_decode($response->body);
+        $errorData = Json::decode($response->body);
         $exception = new RequestException(
             ($errorData->message ?? $response->body) ?: 'Internal Server Error',
             $response->status ?? 503

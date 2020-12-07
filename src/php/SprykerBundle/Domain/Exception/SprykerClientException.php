@@ -3,6 +3,7 @@
 namespace Frontastic\Common\SprykerBundle\Domain\Exception;
 
 use GuzzleHttp\Exception\ClientException;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class SprykerClientException extends \RuntimeException
 {
@@ -20,7 +21,7 @@ class SprykerClientException extends \RuntimeException
             ? (string) $clientException->getResponse()->getBody()
             : $clientException->getMessage();
 
-        $extendedMessage = json_encode([
+        $extendedMessage = Json::encode([
             'message' => $message,
             'endpoint' => $endpoint,
         ]);

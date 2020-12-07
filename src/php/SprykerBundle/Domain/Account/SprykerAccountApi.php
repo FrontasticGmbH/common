@@ -22,6 +22,7 @@ use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver;
 use WoohooLabs\Yang\JsonApi\Schema\Resource\ResourceObject;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class SprykerAccountApi extends SprykerApiBase implements AccountApi
 {
@@ -398,7 +399,7 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
     {
         $data = $this->tokenDecoder->decode($token);
 
-        $sub = json_decode($data['sub'], true);
+        $sub = Json::decode($data['sub'], true);
 
         return $sub['customer_reference'];
     }

@@ -57,7 +57,7 @@ class Response extends \Kore\DataObject\DataObject
             '%s',
             $this->status,
             implode("\n", $formattedHeaders),
-            is_string($this->body) ? $this->body : json_encode($this->body, JSON_PRETTY_PRINT)
+            is_string($this->body) ? $this->body : Json::encode($this->body, JSON_PRETTY_PRINT)
         );
     }
 }
