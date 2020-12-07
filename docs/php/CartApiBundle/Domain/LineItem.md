@@ -10,10 +10,10 @@ Property|Type|Default|Required|Description
 `name` | `string` |  | - | 
 `type` | `string` |  | *Yes* | 
 `count` | `int` |  | *Yes* | 
-`price` | `int` |  | *Yes* | 
-`discountedPrice` | `int` |  | - | 
+`price` | `int` |  | *Yes* | Price of a single item
+`discountedPrice` | `?int` |  | - | Discounted price per item
 `discountTexts` | `array` | `[]` | - | Translatable discount texts, if any are applied
-`totalPrice` | `int` |  | *Yes* | 
+`totalPrice` | `int` |  | *Yes* | Total price, basically $price * $count, also discounted
 `currency` | `string` |  | *Yes* | 
 `isGift` | `bool` | `false` | *Yes* | 
 `dangerousInnerItem` | `mixed` |  | - | Access original object from backend

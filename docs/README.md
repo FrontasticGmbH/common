@@ -101,6 +101,11 @@ Here you find the API documentation for the relevant classes:
     * [ApiDataObject](php/CoreBundle/Domain/ApiDataObject.md)
     * [DateTimeConverter](php/CoreBundle/Domain/DateTimeConverter.md)
     * [ErrorResult](php/CoreBundle/Domain/ErrorResult.md)
+    * Json
+      * [InvalidJsonDecodeException](php/CoreBundle/Domain/Json/InvalidJsonDecodeException.md)
+      * [InvalidJsonEncodeException](php/CoreBundle/Domain/Json/InvalidJsonEncodeException.md)
+      * [Json](php/CoreBundle/Domain/Json/Json.md)
+      * [JsonInterface](php/CoreBundle/Domain/Json/JsonInterface.md)
     * [Mailer](php/CoreBundle/Domain/Mailer.md)
     * Mailer
       * [SwiftMail](php/CoreBundle/Domain/Mailer/SwiftMail.md)
@@ -324,6 +329,7 @@ Here you find the API documentation for the relevant classes:
     * [CellSpecParser](php/SpecificationBundle/Domain/CellSpecParser.md)
     * [ConfigurationSchema](php/SpecificationBundle/Domain/ConfigurationSchema.md)
     * [CustomAppSpecParser](php/SpecificationBundle/Domain/CustomAppSpecParser.md)
+    * [CustomStreamSpecParser](php/SpecificationBundle/Domain/CustomStreamSpecParser.md)
     * [DefaultSchemaLoader](php/SpecificationBundle/Domain/DefaultSchemaLoader.md)
     * [InvalidSchemaException](php/SpecificationBundle/Domain/InvalidSchemaException.md)
     * [JsonSchemaValidator](php/SpecificationBundle/Domain/JsonSchemaValidator.md)
