@@ -17,7 +17,7 @@ class DiscountMapper implements MapperInterface
             'code' => $resource->attribute('code', null),
             'state' => null,
             'name' => $resource->attribute('displayName', null),
-            'description' => $resource->attribute('displayName', null),
+            'description' => null,
             'dangerousInnerDiscount' => $resource,
         ]);
     }
