@@ -291,6 +291,26 @@ class CartController extends CrudController
         ];
     }
 
+    public function getAvailableShippingMethodsAction(Context $context, Request $request): array
+    {
+        return [
+            'shippingMethods' => $this->getCartApi($context)->getAvailableShippingMethods(
+                $this->getCart($context, $request),
+                $context->locale
+            ),
+        ];
+    }
+
+    public function getShippingMethodsAction(Context $context, Request $request): array
+    {
+        return [
+            'shippingMethods' => $this->getCartApi($context)->getShippingMethods(
+                $context->locale,
+                $request->query->getBoolean('onlyMatching')
+            ),
+        ];
+    }
+
     protected function getCartApi(Context $context): CartApi
     {
         if ($this->cartApi) {
