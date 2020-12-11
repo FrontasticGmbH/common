@@ -240,13 +240,13 @@ abstract class CartApiBase implements CartApi
 
     protected function getAvailableShippingMethodsImplementation(Cart $cart, string $localeString): array
     {
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        return [];
     }
 
     protected function getShippingMethodsImplementation(
         string $localeString,
         bool $onlyMatching = false
     ): array {
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        return [];
     }
 }

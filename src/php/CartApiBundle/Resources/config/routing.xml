@@ -36,10 +36,6 @@
         <default key="_controller">Frontastic\Common\CartApiBundle\Controller\CartController::removeDiscountAction</default>
     </route>
 
-    <route id="Frontastic.CartApi.Cart.getAvailableShippingMethods" path="/cart/shipping-methods">
-        <default key="_controller">Frontastic\Common\CartApiBundle\Controller\CartController::getAvailableShippingMethodsAction</default>
-    </route>
-
     <route id="Frontastic.CartApi.Cart.getShippingMethods" path="/shipping-methods">
         <default key="_controller">Frontastic\Common\CartApiBundle\Controller\CartController::getShippingMethodsAction</default>
     </route>

@@ -22,8 +22,13 @@ class CartController extends CrudController
 
     public function getAction(Context $context, Request $request): array
     {
+        $cart = $this->getCart($context, $request);
         return [
-            'cart' => $this->getCart($context, $request),
+            'cart' => $cart,
+            'availableShippingMethods' => $this->getCartApi($context)->getAvailableShippingMethods(
+                $cart,
+                $context->locale
+            ),
         ];
     }
 
@@ -77,6 +82,10 @@ class CartController extends CrudController
                     $beforeItemIds
                 )
             ),
+            'availableShippingMethods' => $cartApi->getAvailableShippingMethods(
+                $cart,
+                $context->locale
+            ),
         ];
     }
 
@@ -124,6 +133,10 @@ class CartController extends CrudController
                     $beforeItemIds
                 )
             ),
+            'availableShippingMethods' => $cartApi->getAvailableShippingMethods(
+                $cart,
+                $context->locale
+            ),
         ];
     }
 
@@ -148,6 +161,10 @@ class CartController extends CrudController
 
         return [
             'cart' => $cart,
+            'availableShippingMethods' => $cartApi->getAvailableShippingMethods(
+                $cart,
+                $context->locale
+            ),
         ];
     }
 
@@ -169,6 +186,10 @@ class CartController extends CrudController
         return [
             'cart' => $cart,
             'removedItems' => [$item],
+            'availableShippingMethods' => $cartApi->getAvailableShippingMethods(
+                $cart,
+                $context->locale
+            ),
         ];
     }
 
@@ -245,7 +266,13 @@ class CartController extends CrudController
         $cart->projectSpecificData = $this->parseProjectSpecificDataByKey($payload, 'custom');
         $cart = $cartApi->setRawApiInput($cart, $context->locale);
 
-        return ['cart' => $cartApi->commit($context->locale)];
+        return [
+            'cart' => $cartApi->commit($context->locale),
+            'availableShippingMethods' => $cartApi->getAvailableShippingMethods(
+                $cart,
+                $context->locale
+            ),
+        ];
     }
 
     public function checkoutAction(Context $context, Request $request): array
@@ -275,27 +302,28 @@ class CartController extends CrudController
     public function redeemDiscountAction(Context $context, Request $request, string $code): array
     {
         $cartApi = $this->getCartApi($context);
+        $cart = $cartApi->redeemDiscountCode($this->getCart($context, $request), $code, $context->locale);
         return [
-            'cart' => $cartApi->redeemDiscountCode($this->getCart($context, $request), $code, $context->locale),
+            'cart' => $cart,
+            'availableShippingMethods' => $cartApi->getAvailableShippingMethods(
+                $cart,
+                $context->locale
+            ),
         ];
     }
 
     public function removeDiscountAction(Context $context, Request $request): array
     {
+        $cartApi = $this->getCartApi($context);
         $payload = $this->getJsonContent($request);
+        $cart = $cartApi->removeDiscountCode(
+            $this->getCart($context, $request),
+            new LineItem(['lineItemId' => $payload['discountId']])
+        );
         return [
-            'cart' => $this->getCartApi($context)->removeDiscountCode(
-                $this->getCart($context, $request),
-                new LineItem(['lineItemId' => $payload['discountId']])
-            ),
-        ];
-    }
-
-    public function getAvailableShippingMethodsAction(Context $context, Request $request): array
-    {
-        return [
-            'shippingMethods' => $this->getCartApi($context)->getAvailableShippingMethods(
-                $this->getCart($context, $request),
+            'cart' => $cart,
+            'availableShippingMethods' => $cartApi->getAvailableShippingMethods(
+                $cart,
                 $context->locale
             ),
         ];
