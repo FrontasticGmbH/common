@@ -805,6 +805,11 @@ class Commercetools extends CartApiBase
 
     public function getAvailableShippingMethodsImplementation(Cart $cart, string $localeString): array
     {
+        // Commectetools requires a shipping address in order to return the available shipping methods
+        if (!$cart->shippingAddress instanceof Address) {
+            return [];
+        }
+
         $locale = $this->localeCreator->createLocaleFromString($localeString);
 
         try {

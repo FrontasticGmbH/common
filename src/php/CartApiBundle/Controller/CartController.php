@@ -265,9 +265,10 @@ class CartController extends CrudController
 
         $cart->projectSpecificData = $this->parseProjectSpecificDataByKey($payload, 'custom');
         $cart = $cartApi->setRawApiInput($cart, $context->locale);
+        $cart = $cartApi->commit($context->locale);
 
         return [
-            'cart' => $cartApi->commit($context->locale),
+            'cart' => $cart,
             'availableShippingMethods' => $cartApi->getAvailableShippingMethods(
                 $cart,
                 $context->locale

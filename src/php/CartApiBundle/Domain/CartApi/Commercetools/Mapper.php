@@ -310,6 +310,7 @@ class Mapper
                 $locale,
                 $shippingMethodData['localizedDescription'] ?? []
             ),
+            'price' => $this->getShippingMethodPrice($shippingMethodData),
         ]);
     }
 
@@ -334,5 +335,29 @@ class Mapper
                 $cartData['taxedPrice']['taxPortions']
             ),
         ]);
+    }
+
+    private function getShippingMethodPrice(array $shippingMethodData): int
+    {
+        $price = 0;
+
+        $shippingRates = array_map(
+            function ($zoneRate) {
+                return $zoneRate['shippingRates'];
+            },
+            $shippingMethodData['zoneRates'] ?? []
+        );
+
+        if (!empty($shippingRates)) {
+            $shippingRates = array_filter(
+                array_merge(...$shippingRates),
+                function ($shippingRate) {
+                    return (bool)($shippingRate['isMatching'] ?? false);
+                }
+            );
+            $price = array_pop($shippingRates)['price']['centAmount'] ?? 0;
+        }
+
+        return $price;
     }
 }
