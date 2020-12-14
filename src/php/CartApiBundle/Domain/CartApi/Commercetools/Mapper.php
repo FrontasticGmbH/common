@@ -349,13 +349,15 @@ class Mapper
         );
 
         if (!empty($shippingRates)) {
-            $shippingRates = array_filter(
-                array_merge(...$shippingRates),
+            $shippingRates = array_merge(...$shippingRates);
+            $matchingShippingRates = array_filter(
+                $shippingRates,
                 function ($shippingRate) {
                     return (bool)($shippingRate['isMatching'] ?? false);
                 }
             );
-            $price = array_pop($shippingRates)['price']['centAmount'] ?? 0;
+            $price = array_pop($matchingShippingRates)['price']['centAmount'] ??
+                $shippingRates[0]['price']['centAmount'] ?? 0;
         }
 
         return $price;
