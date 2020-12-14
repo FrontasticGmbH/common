@@ -14,6 +14,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestExcept
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Psr\Log\LoggerInterface;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Central API entry point is OK to have many public methods.
@@ -61,7 +62,7 @@ class Commercetools implements AccountApi
                 '/customers/email/confirm',
                 [],
                 [],
-                json_encode([
+                Json::encode([
                     'tokenValue' => $token,
                 ])
             ));
@@ -80,7 +81,7 @@ class Commercetools implements AccountApi
                 '/customers',
                 [],
                 [],
-                json_encode(
+                Json::encode(
                     array_merge(
                         (array)$account->rawApiInput,
                         [
@@ -111,7 +112,7 @@ class Commercetools implements AccountApi
                 '/customers/email-token',
                 [],
                 [],
-                json_encode([
+                Json::encode([
                     'id' => $account->accountId,
                     'ttlMinutes' => 2 * 7 * 24 * 60,
                 ])
@@ -149,7 +150,7 @@ class Commercetools implements AccountApi
             '/customers/' . $account->accountId,
             [],
             [],
-            json_encode([
+            Json::encode([
                 'version' => $accountVersion['version'],
                 'actions' => array_merge(
                     (array)$account->rawApiInput,
@@ -204,7 +205,7 @@ class Commercetools implements AccountApi
             '/customers/password',
             [],
             [],
-            json_encode([
+            Json::encode([
                 'id' => $account->accountId,
                 'version' => $accountData['version'],
                 'currentPassword' => $this->sanitizePassword($oldPassword),
@@ -223,7 +224,7 @@ class Commercetools implements AccountApi
             '/customers/password-token',
             [],
             [],
-            json_encode([
+            Json::encode([
                 'email' => $email,
                 'ttlMinutes' => 2 * 24 * 60,
             ])
@@ -246,7 +247,7 @@ class Commercetools implements AccountApi
             '/customers/password/reset',
             [],
             [],
-            json_encode([
+            Json::encode([
                 'tokenValue' => $token,
                 'newPassword' => $this->sanitizePassword($newPassword),
             ])
@@ -260,7 +261,7 @@ class Commercetools implements AccountApi
                 '/login',
                 [],
                 [],
-                json_encode([
+                Json::encode([
                     // @TODO: We should pass existing anonymous cart IDs so
                     // that this cart is merged into the users cart.
                     'email' => $account->email,
@@ -353,7 +354,7 @@ class Commercetools implements AccountApi
             '/customers/' . $account->accountId,
             [],
             [],
-            json_encode([
+            Json::encode([
                 'version' => $accountData['version'],
                 'actions' => array_merge(
                     [
@@ -404,7 +405,7 @@ class Commercetools implements AccountApi
             '/customers/' . $account->accountId,
             [],
             [],
-            json_encode([
+            Json::encode([
                 'version' => $accountData['version'],
                 'actions' => $actions,
             ])
@@ -422,7 +423,7 @@ class Commercetools implements AccountApi
             '/customers/' . $account->accountId,
             [],
             [],
-            json_encode([
+            Json::encode([
                 'version' => $accountData['version'],
                 'actions' => [
                     [
@@ -445,7 +446,7 @@ class Commercetools implements AccountApi
             '/customers/' . $account->accountId,
             [],
             [],
-            json_encode([
+            Json::encode([
                 'version' => $accountData['version'],
                 'actions' => [
                     [
@@ -468,7 +469,7 @@ class Commercetools implements AccountApi
             '/customers/' . $account->accountId,
             [],
             [],
-            json_encode([
+            Json::encode([
                 'version' => $accountData['version'],
                 'actions' => [
                     [

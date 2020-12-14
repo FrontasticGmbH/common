@@ -6,6 +6,7 @@ use Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 use Frontastic\Common\ContentApiBundle\Domain\Query;
 use GuzzleHttp\Promise;
 use Psr\SimpleCache\CacheInterface;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class CachingContentApi implements ContentApi
 {
@@ -162,7 +163,7 @@ class CachingContentApi implements ContentApi
      */
     private function generateCacheKeyForQuery(Query $query, string $locale): string
     {
-        $cacheKey = 'frontastic.content.query.' . md5(json_encode($query)) . '.' . md5($locale);
+        $cacheKey = 'frontastic.content.query.' . md5(Json::encode($query)) . '.' . md5($locale);
         return $cacheKey;
     }
 }

@@ -7,6 +7,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQueryFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class SearchController extends Controller
 {
@@ -16,7 +17,7 @@ class SearchController extends Controller
 
         $query = ProductQueryFactory::queryFromParameters(
             ['locale' => $context->locale],
-            json_decode($request->getContent(), true)
+            Json::decode($request->getContent(), true)
         );
 
         return [

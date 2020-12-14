@@ -9,6 +9,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Promise\PromiseInterface;
 use WoohooLabs\Yang\JsonApi\Response\JsonApiResponse;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class SprykerClient implements SprykerClientInterface
 {
@@ -221,7 +222,7 @@ class SprykerClient implements SprykerClientInterface
 
     protected function prepareException(HttpClient\Response $response): \Exception
     {
-        $errorData = json_decode($response->body);
+        $errorData = Json::decode($response->body);
         $exception = new RequestException(
             ($errorData->message ?? $response->body) ?: 'Internal Server Error',
             $response->status ?? 503

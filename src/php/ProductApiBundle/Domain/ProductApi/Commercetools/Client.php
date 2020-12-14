@@ -11,6 +11,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestExcept
 use GuzzleHttp\Promise\PromiseInterface;
 use League\OAuth2\Client\Grant\ClientCredentials;
 use League\OAuth2\Client\Token\AccessTokenInterface;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class Client
 {
@@ -189,7 +190,7 @@ class Client
                     throw $this->prepareException($response);
                 }
 
-                $data = json_decode($response->body, true);
+                $data = Json::decode($response->body, true);
                 if (JSON_ERROR_NONE === json_last_error()) {
                     return $data;
                 }
@@ -203,7 +204,7 @@ class Client
 
     protected function prepareException(Response $response): \Exception
     {
-        $errorData = json_decode($response->body);
+        $errorData = Json::decode($response->body);
         $exception = new RequestException(
             ($errorData->message ?? $response->body) ?: 'Internal Server Error',
             $response->status ?? 503

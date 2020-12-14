@@ -4,6 +4,7 @@ namespace Frontastic\Common\SapCommerceCloudBundle\Domain;
 
 use Frontastic\Common\HttpClient\Response;
 use Throwable;
+use Frontastic\Common\CoreBundle\Domain\Json;
 
 class SapRequestException extends \RuntimeException
 {
@@ -30,7 +31,7 @@ class SapRequestException extends \RuntimeException
 
         $errorMessages = [];
         $errorTypes = [];
-        $errorData = json_decode($response->body, true);
+        $errorData = Json::decode($response->body, true);
         if (is_array($errorData) && is_array($errorData['errors'] ?? null)) {
             foreach ($errorData['errors'] as $errorItem) {
                 $type = $errorItem['type'] ?? 'Unknown';

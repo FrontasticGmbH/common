@@ -32,9 +32,11 @@
             <arg value="build" />
         </exec>
 
-        <exec executable="git" failonerror="true" dir="${basedir}">
-            <arg value="add" />
-            <arg value="${basedir}/src/js/frontastic-common.js" />
-        </exec>
+        <retry retrycount="3" retrydelay="1000">
+            <exec executable="git" failonerror="true" dir="${basedir}">
+                <arg value="add" />
+                <arg value="${basedir}/src/js/frontastic-common.js" />
+            </exec>
+        </retry>
     </target>
 </project>

@@ -16,6 +16,7 @@ use Frontastic\Common\CartApiBundle\Domain\TaxPortion;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper as ProductMapper;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class Mapper
 {
@@ -236,7 +237,7 @@ class Mapper
         $frontasticPaymentDetails = $paymentData['custom']['fields']['frontasticPaymentDetails'] ?? null;
         $paymentDetails = null;
         if (is_string($frontasticPaymentDetails)) {
-            $paymentDetails = json_decode($frontasticPaymentDetails, true);
+            $paymentDetails = Json::decode($frontasticPaymentDetails, true);
         }
 
         return new Payment(
@@ -247,7 +248,7 @@ class Mapper
                 'paymentMethod' => $paymentData['paymentMethodInfo']['method'] ?? null,
                 'amount' => $paymentData['amountPlanned']['centAmount'] ?? null,
                 'currency' => $paymentData['amountPlanned']['currencyCode'] ?? null,
-                'debug' => json_encode($paymentData),
+                'debug' => Json::encode($paymentData),
                 'paymentStatus' => $paymentData['paymentStatus']['interfaceCode'] ?? null,
                 'paymentDetails' => $paymentDetails,
                 'version' => $paymentData['version'] ?? 0,
@@ -259,7 +260,7 @@ class Mapper
     {
         $customFields = $payment->rawApiInput['custom']['fields'] ?? [];
         if ($payment->paymentDetails !== null) {
-            $customFields['frontasticPaymentDetails'] = json_encode($payment->paymentDetails);
+            $customFields['frontasticPaymentDetails'] = Json::encode($payment->paymentDetails);
         }
 
         return array_merge(

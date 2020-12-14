@@ -6,6 +6,7 @@ use Frontastic\Common\DevelopmentBundle\Debugger;
 use Frontastic\Common\JsonSerializer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class BrowserConsoleDebuggerListener
 {
@@ -33,9 +34,9 @@ class BrowserConsoleDebuggerListener
         ) {
             $jsonContent = trim($response->getContent());
             if ($jsonContent[0] === '{') {
-                $content = json_decode($jsonContent, true);
+                $content = Json::decode($jsonContent, true);
                 $content['__DEBUG'] = $this->serializer->serialize(Debugger::getMessages());
-                $response->setContent(json_encode($content));
+                $response->setContent(Json::encode($content));
             }
         }
 
@@ -43,7 +44,7 @@ class BrowserConsoleDebuggerListener
             $content = $response->getContent();
             $debugProp = 'data-debug="' .
                 htmlspecialchars(addcslashes(
-                    json_encode(
+                    Json::encode(
                         $this->serializer->serialize(Debugger::getMessages()),
                         JSON_UNESCAPED_SLASHES | JSON_HEX_QUOT
                     ),

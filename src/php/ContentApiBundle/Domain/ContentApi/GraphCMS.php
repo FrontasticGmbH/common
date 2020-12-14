@@ -10,6 +10,7 @@ use Frontastic\Common\ContentApiBundle\Domain\Query;
 use Frontastic\Common\ContentApiBundle\Domain\Result;
 use GuzzleHttp\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class GraphCMS implements ContentApi
 {
@@ -194,7 +195,7 @@ class GraphCMS implements ContentApi
     {
         $name = lcfirst(Inflector::pluralize($contentType));
 
-        $data = json_decode($clientResult->queryResultJson, true);
+        $data = Json::decode($clientResult->queryResultJson, true);
 
         return $data['data'][$name][0] ?? [];
     }
@@ -245,7 +246,7 @@ class GraphCMS implements ContentApi
         return $this->client->getAll($query->contentType, $this->frontasticToGraphCmsLocale($locale))
             ->then(function ($clientResult) use ($query, $mode) {
                 $name = lcfirst(Inflector::pluralize($query->contentType));
-                $data = json_decode($clientResult->queryResultJson, true);
+                $data = Json::decode($clientResult->queryResultJson, true);
                 if (!isset($data['data'])) {
                     $exception = new \InvalidArgumentException('invalid search parameters');
 
@@ -290,7 +291,7 @@ class GraphCMS implements ContentApi
         ContentApi\GraphCMS\ClientResult $clientResult,
         Query $query
     ): array {
-        $data = json_decode($clientResult->queryResultJson, true);
+        $data = Json::decode($clientResult->queryResultJson, true);
         $attributes = $clientResult->attributes;
         $contents = [];
         foreach ($data['data'] as $contentType => $items) {

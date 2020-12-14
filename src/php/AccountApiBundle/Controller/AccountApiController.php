@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class AccountApiController extends Controller
 {
@@ -89,7 +90,7 @@ class AccountApiController extends Controller
     private function getJsonBody(Request $request): array
     {
         if (!$request->getContent() ||
-            !($body = json_decode($request->getContent(), true))) {
+            !($body = Json::decode($request->getContent(), true))) {
             throw new \InvalidArgumentException("Invalid data passed: " . $request->getContent());
         }
 

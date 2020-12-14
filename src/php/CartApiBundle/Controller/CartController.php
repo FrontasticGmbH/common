@@ -9,6 +9,7 @@ use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CoreBundle\Controller\CrudController;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -395,7 +396,7 @@ class CartController extends CrudController
     protected function getJsonContent(Request $request)
     {
         if (!$request->getContent() ||
-            !($body = json_decode($request->getContent(), true))) {
+            !($body = Json::decode($request->getContent(), true))) {
             throw new \InvalidArgumentException("Invalid data passed: " . $request->getContent());
         }
 

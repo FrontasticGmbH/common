@@ -6,6 +6,7 @@ use Doctrine\Common\Cache\Cache;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Attribute;
 use Frontastic\Common\HttpClient;
 use GuzzleHttp\Promise\PromiseInterface;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class Client
 {
@@ -77,7 +78,7 @@ class Client
     public function query(string $query, string $locale = null): PromiseInterface
     {
         $url = "https://api-{$this->region}.graphcms.com/{$this->apiVersion}/{$this->projectId}/{$this->stage}";
-        $body = json_encode(['query' => $query], JSON_HEX_QUOT);
+        $body = Json::encode(['query' => $query], JSON_HEX_QUOT);
         $headers = [];
         if ($locale !== null) {
             $headers[] = 'gcms-locale:'.$locale;
@@ -155,7 +156,7 @@ class Client
         ";
 
         return $this->query($query)->then(function (string $result) use ($cacheId) {
-            $json = json_decode($result, true);
+            $json = Json::decode($result, true);
 
             $attributes = $json['data']['__type']['fields'] ?? [];
 
@@ -403,7 +404,7 @@ class Client
 
     public function getContentTypes(): array
     {
-        $allTypes = json_decode(
+        $allTypes = Json::decode(
             $this->query(
                 "{
                      __schema {

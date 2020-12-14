@@ -13,6 +13,7 @@ use Frontastic\Common\WishlistApiBundle\Domain\Category;
 use Frontastic\Common\WishlistApiBundle\Domain\Wishlist;
 use Frontastic\Common\WishlistApiBundle\Domain\LineItem;
 use Frontastic\Common\WishlistApiBundle\Domain\WishlistApi;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class Commercetools implements WishlistApi
 {
@@ -129,7 +130,7 @@ class Commercetools implements WishlistApi
             '/shopping-lists',
             ['expand' => self::EXPAND_VARIANTS],
             [],
-            json_encode([
+            Json::encode([
                 'name' => $wishlist->name,
                 'customer' => $wishlist->accountId ? ['typeId' => 'customer', 'id' => $wishlist->accountId] : null,
                 'anonymousId' => $wishlist->anonymousId ?: null,
@@ -171,7 +172,7 @@ class Commercetools implements WishlistApi
                 '/shopping-lists/' . $wishlist->wishlistId,
                 ['expand' => self::EXPAND_VARIANTS],
                 [],
-                json_encode([
+                Json::encode([
                     'version' => $wishlist->wishlistVersion,
                     'actions' => $actions,
                 ])
@@ -233,7 +234,7 @@ class Commercetools implements WishlistApi
                 '/shopping-lists/' . $wishlist->wishlistId,
                 ['expand' => self::EXPAND_VARIANTS],
                 [],
-                json_encode([
+                Json::encode([
                     'version' => $wishlist->wishlistVersion,
                     'actions' => [
                         [
@@ -249,7 +250,7 @@ class Commercetools implements WishlistApi
                 '/shopping-lists/' . $wishlist->wishlistId,
                 ['expand' => self::EXPAND_VARIANTS],
                 [],
-                json_encode([
+                Json::encode([
                     'version' => $wishlist->wishlistVersion,
                     'actions' => [
                         [
@@ -278,7 +279,7 @@ class Commercetools implements WishlistApi
                 '/shopping-lists/' . $wishlist->wishlistId,
                 ['expand' => self::EXPAND_VARIANTS],
                 [],
-                json_encode([
+                Json::encode([
                     'version' => $wishlist->wishlistVersion,
                     'actions' => [
                         [
@@ -293,7 +294,7 @@ class Commercetools implements WishlistApi
                 '/shopping-lists/' . $wishlist->wishlistId,
                 ['expand' => self::EXPAND_VARIANTS],
                 [],
-                json_encode([
+                Json::encode([
                     'version' => $wishlist->wishlistVersion,
                     'actions' => [
                         [

@@ -7,6 +7,7 @@ use Frontastic\Common\FindologicBundle\Exception\ServiceNotAliveException;
 use Frontastic\Common\HttpClient;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class FindologicClient
 {
@@ -132,7 +133,7 @@ class FindologicClient
             return null;
         }
 
-        $body = json_decode($response->body, true);
+        $body = Json::decode($response->body, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new RequestException(
@@ -150,7 +151,7 @@ class FindologicClient
 
     protected function prepareException(HttpClient\Response $response): \Exception
     {
-        $errorData = json_decode($response->body);
+        $errorData = Json::decode($response->body);
         $exception = new RequestException(
             ($errorData->message ?? $response->body) ?: 'Internal Server Error',
             $response->status ?? 503

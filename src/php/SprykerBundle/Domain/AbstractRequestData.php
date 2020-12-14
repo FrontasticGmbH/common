@@ -2,6 +2,8 @@
 
 namespace Frontastic\Common\SprykerBundle\Domain;
 
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
+
 abstract class AbstractRequestData
 {
     /**
@@ -26,6 +28,6 @@ abstract class AbstractRequestData
             ]
         ];
 
-        return json_encode($data);
+        return Json::encode($data);
     }
 }
