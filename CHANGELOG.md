@@ -1,5 +1,25 @@
 # common Changelog
 
+## `2.1.0` (2020-12-14)
+
+* Fix missing namespace
+* Update json calls around wrapper
+* feat(FT-519): returned first zone rate price if not matching
+* fix(FT-519): mapped shipping method price
+* fix: Default for machineLimit is actually set during parsing.
+* fix(FT-519): removed available shipping controller and use method as part of cart info
+* fix: Wrap all commands modifying the git index into <retry>
+* feat(FT-519): implemented shipping methods controllers
+* fix(spryker): removed name mapping from decription
+* feat(spryker): implemented redem and remove discount code
+* chore: Ignore simdjson_decode not found build failure
+* feat: Allow min. 3 Machines per customer.
+* [FT-357] Install SIMDjson
+* fix: BC mechanism for extraction of ProductSearchApi.
+* fix: Pass on data section into projects
+* fix: Remaining dependencies to work with common 2.0
+* fix: Set composer platform to PHP 7.4
+
 ## `2.0.0` (2020-11-27)
 
 * feat(tax): included tax class and implementation fro Commercetools
