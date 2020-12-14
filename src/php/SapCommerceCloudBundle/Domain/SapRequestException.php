@@ -4,7 +4,7 @@ namespace Frontastic\Common\SapCommerceCloudBundle\Domain;
 
 use Frontastic\Common\HttpClient\Response;
 use Throwable;
-use Frontastic\Common\CoreBundle\Domain\Json;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class SapRequestException extends \RuntimeException
 {
