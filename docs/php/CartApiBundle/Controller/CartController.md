@@ -16,6 +16,7 @@
 * [checkoutAction()](#checkoutaction)
 * [redeemDiscountAction()](#redeemdiscountaction)
 * [removeDiscountAction()](#removediscountaction)
+* [getShippingMethodsAction()](#getshippingmethodsaction)
 
 ### getAction()
 
@@ -169,6 +170,22 @@ Return Value: `array`
 
 ```php
 public function removeDiscountAction(
+    \Frontastic\Catwalk\ApiCoreBundle\Domain\Context $context,
+    \Symfony\Component\HttpFoundation\Request $request
+): array
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$context`|`\Frontastic\Catwalk\ApiCoreBundle\Domain\Context`||
+`$request`|`\Symfony\Component\HttpFoundation\Request`||
+
+Return Value: `array`
+
+### getShippingMethodsAction()
+
+```php
+public function getShippingMethodsAction(
     \Frontastic\Catwalk\ApiCoreBundle\Domain\Context $context,
     \Symfony\Component\HttpFoundation\Request $request
 ): array
