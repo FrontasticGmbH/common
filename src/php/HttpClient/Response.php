@@ -3,6 +3,7 @@
 namespace Frontastic\Common\HttpClient;
 
 use Psr\Http\Message\ResponseInterface;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 /**
  * @type
