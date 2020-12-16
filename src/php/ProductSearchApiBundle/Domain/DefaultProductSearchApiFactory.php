@@ -153,7 +153,8 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
                     $client,
                     $dataMapper,
                     $localeCreatorFactory->factor($project, $client),
-                    $project->languages
+                    $project->languages,
+                    $project->defaultLanguage
                 );
 
                 break;

@@ -10,6 +10,7 @@ use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiBase;
 use Frontastic\Common\ProjectApiBundle\Domain\Attribute;
 use Frontastic\Common\SprykerBundle\BaseApi\ProductExpandingTrait;
 use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreator;
+use Frontastic\Common\SprykerBundle\Domain\Locale\SprykerLocale;
 use Frontastic\Common\SprykerBundle\Domain\MapperResolver;
 use Frontastic\Common\SprykerBundle\Domain\Product\CatalogSearchQuery;
 use Frontastic\Common\SprykerBundle\Domain\Product\Expander\AbstractProductDescriptionExpander;
@@ -41,11 +42,15 @@ class SprykerProductSearchApi extends ProductSearchApiBase
     /** @var string[] */
     private $projectLanguages;
 
+    /** @var string|null */
+    private $defaultLanguage;
+
     public function __construct(
         SprykerClientInterface $client,
         MapperResolver $mapperResolver,
         LocaleCreator $localeCreator,
         array $projectLanguages,
+        ?string $defaultLanguage,
         array $queryResources = SprykerProductApiExtendedConstants::SPRYKER_PRODUCT_QUERY_RESOURCES
     ) {
         $this->client = $client;
@@ -53,6 +58,7 @@ class SprykerProductSearchApi extends ProductSearchApiBase
         $this->localeCreator = $localeCreator;
         $this->projectLanguages = $projectLanguages;
         $this->queryResources = $queryResources;
+        $this->defaultLanguage = $defaultLanguage;
 
         $this->extendNestedAttributes();
     }
@@ -67,10 +73,11 @@ class SprykerProductSearchApi extends ProductSearchApiBase
     protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
         $searchQuery = CatalogSearchQuery::createFromProductQuery($query);
-
+        $locale = $this->parseLocaleString($query->locale);
         $mapper = $this->mapperResolver->getMapper(ProductResultMapper::MAPPER_NAME);
 
         $response = $this->client
+            ->forLanguage($locale->language)
             ->get(
                 $this->withIncludes("/catalog-search?{$searchQuery}", $this->queryResources),
                 [],
@@ -157,7 +164,7 @@ class SprykerProductSearchApi extends ProductSearchApiBase
     {
         $localizedResult = [];
         foreach ($this->projectLanguages as $language) {
-            $locale = $this->localeCreator->createLocaleFromString($language);
+            $locale = $this->parseLocaleString($language);
             $localizedResult[$language] =
                 $localizedStrings[$locale->language . '_' . $locale->country] ??
                 (reset($localizedStrings) ?: '');
@@ -189,5 +196,10 @@ class SprykerProductSearchApi extends ProductSearchApiBase
         ]);
 
         return $attributes;
+    }
+
+    private function parseLocaleString(string $localeString): SprykerLocale
+    {
+        return $this->localeCreator->createLocaleFromString($localeString ?? $this->defaultLanguage);
     }
 }
