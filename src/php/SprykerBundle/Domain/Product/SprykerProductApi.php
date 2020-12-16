@@ -48,7 +48,7 @@ class SprykerProductApi extends ProductApiBase
     /** @var array */
     protected $concreteProductResources;
 
-    /** @var string|null */
+    /** @var string */
     private $defaultLanguage;
 
     public function __construct(
@@ -57,7 +57,7 @@ class SprykerProductApi extends ProductApiBase
         LocaleCreator $localeCreator,
         SprykerUrlAppender $urlAppender,
         ProductSearchApi $productSearchApi,
-        ?string $defaultLanguage,
+        string $defaultLanguage,
         array $productResources = SprykerProductApiExtendedConstants::SPRYKER_DEFAULT_PRODUCT_RESOURCES,
         array $queryResources = SprykerProductApiExtendedConstants::SPRYKER_PRODUCT_QUERY_RESOURCES,
         array $concreteProductResources = SprykerProductApiExtendedConstants::SPRYKER_DEFAULT_CONCRETE_PRODUCT_RESOURCES
@@ -200,7 +200,7 @@ class SprykerProductApi extends ProductApiBase
         return array_merge($resources, $response->document()->includedResources());
     }
 
-    private function parseLocaleString(string $localeString): SprykerLocale
+    private function parseLocaleString(?string $localeString): SprykerLocale
     {
         return $this->localeCreator->createLocaleFromString($localeString ?? $this->defaultLanguage);
     }

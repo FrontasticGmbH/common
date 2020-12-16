@@ -42,7 +42,7 @@ class SprykerProductSearchApi extends ProductSearchApiBase
     /** @var string[] */
     private $projectLanguages;
 
-    /** @var string|null */
+    /** @var string */
     private $defaultLanguage;
 
     public function __construct(
@@ -50,7 +50,7 @@ class SprykerProductSearchApi extends ProductSearchApiBase
         MapperResolver $mapperResolver,
         LocaleCreator $localeCreator,
         array $projectLanguages,
-        ?string $defaultLanguage,
+        string $defaultLanguage,
         array $queryResources = SprykerProductApiExtendedConstants::SPRYKER_PRODUCT_QUERY_RESOURCES
     ) {
         $this->client = $client;
@@ -198,7 +198,7 @@ class SprykerProductSearchApi extends ProductSearchApiBase
         return $attributes;
     }
 
-    private function parseLocaleString(string $localeString): SprykerLocale
+    private function parseLocaleString(?string $localeString): SprykerLocale
     {
         return $this->localeCreator->createLocaleFromString($localeString ?? $this->defaultLanguage);
     }
