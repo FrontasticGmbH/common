@@ -9,7 +9,13 @@
 
         <prototype namespace="Frontastic\Common\AccountApiBundle\Command\" resource="../../Command" autoconfigure="true" />
 
-        <service id="Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory">
+        <service
+            id="Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory"
+            alias="Frontastic\Common\AccountApiBundle\Domain\DefaultAccountApiFactory"
+        />
+
+        <service id="Frontastic\Common\AccountApiBundle\Domain\DefaultAccountApiFactory"
+                 class="Frontastic\Common\AccountApiBundle\Domain\DefaultAccountApiFactory">
             <argument type="service" id="Psr\Container\ContainerInterface" />
             <argument type="tagged" tag="accountApi.lifecycleEventListener" />
             <argument type="service" id="logger" />
