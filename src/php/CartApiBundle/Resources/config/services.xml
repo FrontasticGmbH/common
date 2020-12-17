@@ -18,7 +18,14 @@
             <argument type="service" id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper"/>
         </service>
 
-        <service id="Frontastic\Common\CartApiBundle\Domain\CartApiFactory">
+        <service
+            id="Frontastic\Common\CartApiBundle\Domain\CartApiFactory"
+            alias="Frontastic\Common\CartApiBundle\Domain\DefaultCartApiFactory"
+        />
+
+        <service
+            id="Frontastic\Common\CartApiBundle\Domain\DefaultCartApiFactory"
+            class="Frontastic\Common\CartApiBundle\Domain\DefaultCartApiFactory">
             <argument type="service" id="Psr\Container\ContainerInterface"/>
             <argument type="service" id="frontastic.order-id-generator"/>
             <argument type="tagged" tag="cartApi.lifecycleEventListener"/>
