@@ -42,7 +42,8 @@ class SprykerProductSearchApiTest extends TestCase
             $this->clientMock,
             new SprykerMapperResolver([$productSearchableAttributesMapper]),
             $this->localCreatorMock,
-            ['en_GB@GBP']
+            ['en_GB@GBP'],
+            'en_GB'
         );
     }
 
