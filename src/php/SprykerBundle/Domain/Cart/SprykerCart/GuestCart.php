@@ -144,7 +144,7 @@ class GuestCart extends AbstractSprykerCart
 
         $url = $this->withIncludes(
             "/guest-carts/{$cart->cartId}/vouchers",
-            $this->guestCartIncludes,
+            $this->guestCartIncludes
         );
 
         $request = new VoucherRedeemRequestData($code);
@@ -166,7 +166,7 @@ class GuestCart extends AbstractSprykerCart
 
         $url = $this->withIncludes(
             "/guest-carts/{$cart->cartId}/vouchers/{$discountLineItem->lineItemId}",
-            $this->guestCartIncludes,
+            $this->guestCartIncludes
         );
 
         $this->client
