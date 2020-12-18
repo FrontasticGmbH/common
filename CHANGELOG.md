@@ -1,5 +1,14 @@
 # common Changelog
 
+## `2.2.0` (2020-12-18)
+
+* fix: added missing default language
+* feat(FT-532): extracted Wishlist Api interface
+* feat(FT-532): extracted Cart Api interface
+* feat(FT-532): extracted Account Api interface
+* fix(FT-540): make defaultLanguage in Spryker Product Search API bundle non-nullable, but make localeString in parseLocaleString nullable
+* fix(FT-540): Fix SprykerProductSearchApi, add usage of forLanguage to have locale included into products search
+
 ## `2.1.0` (2020-12-14)
 
 * Fix missing namespace
