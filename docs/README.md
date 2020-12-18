@@ -28,6 +28,7 @@ Here you find the API documentation for the relevant classes:
     * [AccountService](php/AccountApiBundle/Domain/AccountService.md)
     * [Address](php/AccountApiBundle/Domain/Address.md)
     * [AuthentificationInformation](php/AccountApiBundle/Domain/AuthentificationInformation.md)
+    * [DefaultAccountApiFactory](php/AccountApiBundle/Domain/DefaultAccountApiFactory.md)
     * [DuplicateAccountException](php/AccountApiBundle/Domain/DuplicateAccountException.md)
     * [Group](php/AccountApiBundle/Domain/Group.md)
     * [MetaData](php/AccountApiBundle/Domain/MetaData.md)
@@ -49,6 +50,7 @@ Here you find the API documentation for the relevant classes:
       * [LifecycleEventDecorator](php/CartApiBundle/Domain/CartApi/LifecycleEventDecorator.md)
     * [CartApiBase](php/CartApiBundle/Domain/CartApiBase.md)
     * [CartApiFactory](php/CartApiBundle/Domain/CartApiFactory.md)
+    * [DefaultCartApiFactory](php/CartApiBundle/Domain/DefaultCartApiFactory.md)
     * [Discount](php/CartApiBundle/Domain/Discount.md)
     * [LineItem](php/CartApiBundle/Domain/LineItem.md)
     * LineItem
@@ -401,6 +403,7 @@ Here you find the API documentation for the relevant classes:
   * DependencyInjection
     * [FrontasticCommonWishlistApiExtension](php/WishlistApiBundle/DependencyInjection/FrontasticCommonWishlistApiExtension.md)
   * Domain
+    * [DefaultWishlistApiFactory](php/WishlistApiBundle/Domain/DefaultWishlistApiFactory.md)
     * [LineItem](php/WishlistApiBundle/Domain/LineItem.md)
     * LineItem
       * [Variant](php/WishlistApiBundle/Domain/LineItem/Variant.md)
