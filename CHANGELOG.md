@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.2.1` (2020-12-18)
+
+* fix: removed extra comma at the end of parameter list
+
 ## `2.2.0` (2020-12-18)
 
 * fix: added missing default language
