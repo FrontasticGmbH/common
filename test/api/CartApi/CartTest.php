@@ -5,7 +5,10 @@ namespace Frontastic\Common\ApiTests\CartApi;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\ApiTests\FrontasticApiTestCase;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
+use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
+use Frontastic\Common\ProductApiBundle\Domain\Product;
+use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 
 class CartTest extends FrontasticApiTestCase
@@ -55,8 +58,10 @@ class CartTest extends FrontasticApiTestCase
     {
         $account = $this->getAccount($project, $language);
         $cart = $this->getCart($project, $account, $language);
+        $product = $this->getAProduct($project, $language);
 
         $cartApi = $this->getCartApiForProject($project);
+        $cart = $cartApi->addToCart($cart, $this->getLineItemForProduct($product), $language);
         $cart = $cartApi->setShippingAddress($cart, $this->getFrontasticAddress(), $language);
 
         $shippingMethods = $cartApi->getAvailableShippingMethods($cart, $language);

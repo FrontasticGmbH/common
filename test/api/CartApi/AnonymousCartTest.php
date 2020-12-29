@@ -65,7 +65,7 @@ class AnonymousCartTest extends FrontasticApiTestCase
         $cartApi = $this->getCartApiForProject($project);
 
         $cartApi->startTransaction($originalCart);
-        $cartApi->addToCart($originalCart, $this->lineItemForProduct($product), $language);
+        $cartApi->addToCart($originalCart, $this->getLineItemForProduct($product), $language);
         $cartWithProductAdded = $cartApi->commit($language);
 
         $this->assertIsArray($cartWithProductAdded->lineItems);
@@ -157,8 +157,8 @@ class AnonymousCartTest extends FrontasticApiTestCase
         $cartApi = $this->getCartApiForProject($project);
 
         $cartApi->startTransaction($cart);
-        $cartApi->addToCart($cart, $this->lineItemForProduct($products->items[0]), $language);
-        $cartApi->addToCart($cart, $this->lineItemForProduct($products->items[1]), $language);
+        $cartApi->addToCart($cart, $this->getLineItemForProduct($products->items[0]), $language);
+        $cartApi->addToCart($cart, $this->getLineItemForProduct($products->items[1]), $language);
         $cartApi->setShippingAddress($cart, $frontasticAddress, $language);
         $cart = $cartApi->commit($language);
 
@@ -179,7 +179,7 @@ class AnonymousCartTest extends FrontasticApiTestCase
         $cartApi = $this->getCartApiForProject($project);
 
         $cartApi->startTransaction($cart);
-        $cartApi->addToCart($cart, $this->lineItemForProduct($this->getAProduct($project, $language)), $language);
+        $cartApi->addToCart($cart, $this->getLineItemForProduct($this->getAProduct($project, $language)), $language);
         $cartApi->setShippingAddress($cart, $this->getFrontasticAddress(), $language);
         $cart = $cartApi->commit($language);
 
@@ -234,18 +234,6 @@ class AnonymousCartTest extends FrontasticApiTestCase
     private function getAnonymousCart(Project $project, string $language): Cart
     {
         return $this->getCartApiForProject($project)->getAnonymous(uniqid(), $language);
-    }
-
-    private function lineItemForProduct(Product $product, int $count = 1): LineItem
-    {
-        return new LineItem\Variant([
-            'variant' => new Variant([
-                'id' => $product->variants[0]->id,
-                'sku' => $product->variants[0]->sku,
-                'attributes' => $product->variants[0]->attributes,
-            ]),
-            'count' => $count,
-        ]);
     }
 
     private function requireAnonymousCheckout(Project $project): void
