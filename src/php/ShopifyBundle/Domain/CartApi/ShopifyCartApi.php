@@ -804,7 +804,8 @@ class ShopifyCartApi extends CartApiBase
             id
             sku
             title
-            currentlyNotInStock
+            availableForSale
+            quantityAvailable
             priceV2 {
                 amount
                 currencyCode

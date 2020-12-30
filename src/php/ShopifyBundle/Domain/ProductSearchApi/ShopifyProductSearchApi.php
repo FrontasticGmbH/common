@@ -75,7 +75,8 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                         id
                         sku
                         title
-                        currentlyNotInStock
+                        availableForSale
+                        quantityAvailable
                         priceV2 {
                             amount
                             currencyCode

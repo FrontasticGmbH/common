@@ -77,7 +77,7 @@ class ShopifyProductMapper
             'id' => $variantData['id'] ?? null,
             'sku' => $variantData['sku'] ?? null,
             'groupId' => $variantData['product']['id'] ?? null,
-            'isOnStock' => !$variantData['currentlyNotInStock'] ?? null,
+            'isOnStock' => $variantData['quantityAvailable'] && $variantData['quantityAvailable'] > 0,
             'price' => $this->mapDataToPriceValue($variantData['priceV2'] ?? []),
             'currency' => $variantData['priceV2']['currencyCode'] ?? null,
             'attributes' => $this->mapDataToVariantAttributes($variantData),
