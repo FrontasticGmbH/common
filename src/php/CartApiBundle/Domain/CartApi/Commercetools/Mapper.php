@@ -296,9 +296,15 @@ class Mapper
             return null;
         }
 
+        $price = $shippingInfoData['price']['centAmount'] ?? null;
+
+        if (key_exists('discountedPrice', $shippingInfoData)) {
+            $price = $shippingInfoData['discountedPrice']['value']['centAmount'] ?? null;
+        }
+
         return new ShippingInfo([
             'name' => $shippingInfoData['shippingMethodName'] ?? null,
-            'price' => $shippingInfoData['price']['centAmount'] ?? null,
+            'price' => $price,
         ]);
     }
 
