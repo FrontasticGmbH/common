@@ -81,7 +81,7 @@ class ShopifyProductMapper
             'price' => $this->mapDataToPriceValue($variantData['priceV2'] ?? []),
             'currency' => $variantData['priceV2']['currencyCode'] ?? null,
             'attributes' => $this->mapDataToVariantAttributes($variantData),
-            'images' => [$variantData['image']['originalSrc']] ?? null,
+            'images' => $this->mapDataToVariantImages($variantData),
             'dangerousInnerVariant' => $this->dataToDangerousInnerData($variantData, $query),
         ]);
     }
@@ -284,5 +284,26 @@ class ShopifyProductMapper
         }
 
         return null;
+    }
+
+    private function mapDataToVariantImages(array $variantData): array
+    {
+        $variantImages = [];
+        $productImages = [];
+
+        if ($variantData['image'] !== null && key_exists('originalSrc', $variantData['image'])) {
+            $variantImages = [$variantData['image']['originalSrc']] ?? [];
+        }
+
+        if (key_exists('node', $variantData['product']['images']['edges'])) {
+            $productImages = array_map(
+                function (array $image): string {
+                    return $image['node']['originalSrc'];
+                },
+                $variantData['product']['images']['edges']
+            );
+        }
+
+        return array_unique(array_merge($variantImages, $productImages));
     }
 }

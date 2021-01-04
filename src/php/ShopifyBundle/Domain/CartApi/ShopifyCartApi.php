@@ -800,7 +800,7 @@ class ShopifyCartApi extends CartApiBase
 
     protected function getVariantQueryFields(): string
     {
-        return '
+        return "
             id
             sku
             title
@@ -812,6 +812,13 @@ class ShopifyCartApi extends CartApiBase
             }
             product {
                 id
+                images(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                    edges {
+                        node {
+                            originalSrc
+                        }
+                    }
+                }
             }
             selectedOptions {
                 name
@@ -820,7 +827,7 @@ class ShopifyCartApi extends CartApiBase
             image {
                 originalSrc
             }
-        ';
+        ";
     }
 
     protected function getAddressQueryFields(): string
