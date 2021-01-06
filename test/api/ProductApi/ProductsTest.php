@@ -326,14 +326,11 @@ class ProductsTest extends FrontasticApiTestCase
      */
     public function testQueryByNonExistingCategoryReturnsEmptyResult(Project $project, string $language): void
     {
-        $products = [];
-        if ($project->customer === "spryker") {
-            // Spryker expects category to be only of type integer
-            $products = $this->queryProducts($project, $language, ['category' => 1010100011]);
-        } else {
-            // Shopware expects category to be only of type string
-            $products = $this->queryProducts($project, $language, ['category' => self::NON_EXISTING_CATEGORY]);
+        $category = self::NON_EXISTING_CATEGORY;
+        if (property_exists($project->configuration['test'], 'NON_EXISTING_CATEGORY')) {
+            $category = $project->configuration['test']->NON_EXISTING_CATEGORY;
         }
+        $products = $this->queryProducts($project, $language, ['category' => $category]);
         $this->assertEmptyResult($products);
     }
 
