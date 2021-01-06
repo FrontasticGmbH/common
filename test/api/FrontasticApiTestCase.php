@@ -11,6 +11,7 @@ use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\AccountApiBundle\Domain\Session;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\CartApiFactory;
+use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 use Frontastic\Common\ContentApiBundle\Domain\DefaultContentApiFactory;
@@ -435,6 +436,18 @@ class FrontasticApiTestCase extends KernelTestCase
         $this->assertNotEmpty($result->items);
 
         return $result->items[0];
+    }
+
+    protected function getLineItemForProduct(Product $product, int $count = 1): LineItem
+    {
+        return new LineItem\Variant([
+            'variant' => new Variant([
+                'id' => $product->variants[0]->id,
+                'sku' => $product->variants[0]->sku,
+                'attributes' => $product->variants[0]->attributes,
+            ]),
+            'count' => $count,
+        ]);
     }
 
     protected function getCartApiForProject(Project $project): CartApi

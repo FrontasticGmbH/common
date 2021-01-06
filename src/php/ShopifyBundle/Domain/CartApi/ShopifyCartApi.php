@@ -220,7 +220,7 @@ class ShopifyCartApi extends CartApiBase
                     }
                 ) {
                     checkout {
-                        {$this->getCheckoutQueryFields()}
+                        {$this->getCheckoutQueryFields($cart)}
                         lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                             edges {
                                 node {
@@ -274,7 +274,7 @@ class ShopifyCartApi extends CartApiBase
                     }
                 ) {
                     checkout {
-                        {$this->getCheckoutQueryFields()}
+                        {$this->getCheckoutQueryFields($cart)}
                         lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                             edges {
                                 node {
@@ -320,7 +320,7 @@ class ShopifyCartApi extends CartApiBase
                     lineItemIds: \"{$lineItem->lineItemId}\"
                 ) {
                     checkout {
-                        {$this->getCheckoutQueryFields()}
+                        {$this->getCheckoutQueryFields($cart)}
                         lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                             edges {
                                 node {
@@ -366,7 +366,7 @@ class ShopifyCartApi extends CartApiBase
                     email: \"{$email}\",
                 ) {
                     checkout {
-                        {$this->getCheckoutQueryFields()}
+                        {$this->getCheckoutQueryFields($cart)}
                         lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                             edges {
                                 node {
@@ -412,7 +412,7 @@ class ShopifyCartApi extends CartApiBase
                     shippingRateHandle: \"{$shippingMethod}\",
                 ) {
                     checkout {
-                        {$this->getCheckoutQueryFields()}
+                        {$this->getCheckoutQueryFields($cart)}
                         lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                             edges {
                                 node {
@@ -466,7 +466,7 @@ class ShopifyCartApi extends CartApiBase
                     },
                 ) {
                     checkout {
-                        {$this->getCheckoutQueryFields()}
+                        {$this->getCheckoutQueryFields($cart)}
                         lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                             edges {
                                 node {
@@ -651,8 +651,45 @@ class ShopifyCartApi extends CartApiBase
 
     public function getAvailableShippingMethodsImplementation(Cart $cart, string $locale): array
     {
-        // TODO: Implement getAvailableShippingMethods() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        if (key_exists('availableShippingRates', $cart->dangerousInnerCart)) {
+            return array_map(
+                function (array $shippingMethodData): ShippingInfo {
+                    return $this->mapDataToShippingInfo($shippingMethodData);
+                },
+                $cart->dangerousInnerCart['availableShippingRates']['shippingRates']
+            );
+        }
+
+        $query = "
+            query {
+                node(id: \"{$cart->cartId}\") {
+                    ... on Checkout {
+                        {$this->getCheckoutQueryFields()}
+                    }
+                }
+            }
+        ";
+
+        return $this->client
+            ->request($query)
+            ->then(function (array $result): array {
+                if ($result['errors']) {
+                    throw new \RuntimeException($result['errors'][0]['message']);
+                }
+
+                $cartData = $result['body']['data']['node'];
+                if (!key_exists('availableShippingRates', $cartData)) {
+                    return [];
+                }
+
+                return array_map(
+                    function (array $shippingMethodData): ShippingInfo {
+                        return $this->mapDataToShippingInfo($shippingMethodData);
+                    },
+                    $cartData['availableShippingRates']['shippingRates']
+                );
+            })
+            ->wait();
     }
 
     public function getShippingMethodsImplementation(string $locale, bool $onlyMatching = false): array
@@ -750,25 +787,42 @@ class ShopifyCartApi extends CartApiBase
         }
 
         return new ShippingInfo([
-            'name' => $shippingMethodData['name'],
+            'shippingMethodId' => $shippingMethodData['handle'] ?? null,
+            'name' => $shippingMethodData['title'] ?? null,
             'price' => $this->productMapper->mapDataToPriceValue(
                 $shippingMethodData['priceV2'] ?? []
             )
         ]);
     }
 
-    protected function getCheckoutQueryFields(): string
+    protected function getCheckoutQueryFields(?Cart $cart = null): string
     {
-        return '
+        $checkoutQueryFields = '
             id
             createdAt
             email
             webUrl
+            requiresShipping
             totalPriceV2 {
                 amount
                 currencyCode
             }
         ';
+
+        if (!isset($cart)) {
+            return $checkoutQueryFields;
+        }
+
+        // Shopify requires a shipping address and the flag requiresShipping
+        // in order to return the available shipping methods
+        if ($cart->shippingAddress instanceof Address &&
+            key_exists('requiresShipping', $cart->dangerousInnerCart) &&
+            $cart->dangerousInnerCart['requiresShipping'] !== false
+        ) {
+            $checkoutQueryFields .= $this->getAvailableShippingRatesQueryFields();
+        }
+
+        return $checkoutQueryFields;
     }
 
     protected function getOrderQueryFields(): string
@@ -844,6 +898,17 @@ class ShopifyCartApi extends CartApiBase
             province
             zip
         ';
+    }
+
+    protected function getAvailableShippingRatesQueryFields(): string
+    {
+        return "
+            availableShippingRates {
+                shippingRates {
+                    {$this->getShippingLineQueryFields()}
+                }
+            }
+        ";
     }
 
     protected function getShippingLineQueryFields(): string
