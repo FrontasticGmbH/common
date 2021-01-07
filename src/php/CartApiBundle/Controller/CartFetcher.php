@@ -5,7 +5,6 @@ namespace Frontastic\Common\CartApiBundle\Controller;
 use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -30,22 +29,26 @@ class CartFetcher
     public function fetchCart(Context $context, Request $request): Cart
     {
         if ($context->session->loggedIn) {
-            return $this->cartApi->getForUser($context->session->account->accountId, $context->locale);
+            return $this->cartApi->getForUser($context->session->account, $context->locale);
         } else {
             $symfonySession = $request->hasSession() ? $request->getSession() : null;
-            if ($symfonySession !== null && $symfonySession->has('cart_id')) {
+
+            if ($symfonySession !== null &&
+                $symfonySession->has('cart_id') &&
+                $symfonySession->get('cart_id') !== null
+            ) {
                 $cartId = $symfonySession->get('cart_id');
                 try {
-                    //return $this->cartApi->getById($cartId, $context->locale);
-                    return $this->cartApi->getAnonymous($symfonySession->getId(), $context->locale);
-                } catch (RequestException $exception) {
-                    $this->logger->info(
-                        'Error fetching anonymous cart {cartId}, creating new one',
-                        [
-                            'cartId' => $cartId,
-                            'exception' => $exception,
-                        ]
-                    );
+                    return $this->cartApi->getById($cartId, $context->locale);
+                } catch (\Exception $exception) {
+                    $this->get('logger')
+                        ->info(
+                            'Error fetching anonymous cart {cartId}, creating new one',
+                            [
+                                'cartId' => $cartId,
+                                'exception' => $exception,
+                            ]
+                        );
                 }
             }
 
