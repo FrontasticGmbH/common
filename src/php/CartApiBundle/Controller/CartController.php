@@ -11,6 +11,7 @@ use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CoreBundle\Controller\CrudController;
 use Frontastic\Common\CoreBundle\Domain\Json\Json;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -20,6 +21,11 @@ class CartController extends CrudController
      * @var CartApi
      */
     protected $cartApi;
+
+    /**
+     * @var CartFetcher
+     */
+    private $cartFetcher;
 
     public function getAction(Context $context, Request $request): array
     {
@@ -354,38 +360,15 @@ class CartController extends CrudController
 
     protected function getCart(Context $context, Request $request): Cart
     {
-        $cartApi = $this->getCartApi($context);
+        return $this->getCartFetcher($context)->fetchCart($context, $request);
+    }
 
-        if ($context->session->loggedIn) {
-            return $cartApi->getForUser($context->session->account, $context->locale);
-        } else {
-            $symfonySession = $request->hasSession() ? $request->getSession() : null;
-
-            if ($symfonySession !== null &&
-                $symfonySession->has('cart_id') &&
-                $symfonySession->get('cart_id') !== null
-            ) {
-                $cartId = $symfonySession->get('cart_id');
-                try {
-                    return $cartApi->getById($cartId, $context->locale);
-                } catch (\Exception $exception) {
-                    $this->get('logger')
-                        ->info(
-                            'Error fetching anonymous cart {cartId}, creating new one',
-                            [
-                                'cartId' => $cartId,
-                                'exception' => $exception,
-                            ]
-                        );
-                }
-            }
-
-            $cart = $cartApi->getAnonymous(session_id(), $context->locale);
-            if ($symfonySession !== null) {
-                $symfonySession->set('cart_id', $cart->cartId);
-            }
-            return $cart;
+    private function getCartFetcher(Context $context): CartFetcher
+    {
+        if (!isset($this->cartFetcher)) {
+            $this->cartFetcher = new CartFetcher($this->getCartApi($context), $this->get(LoggerInterface::class));
         }
+        return $this->cartFetcher;
     }
 
     /**
