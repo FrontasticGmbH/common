@@ -8,6 +8,7 @@ configuration:
         supportOffsetPagination: true
         hasConsistentProductSearchData: true
         supportSearchByIdentifierAndQueryParameters: true
+        NON_EXISTING_CATEGORY: 1001002009
     spryker:
         endpoint: https://glue.de.b2c.demo-spryker.com
         projectKey: DE

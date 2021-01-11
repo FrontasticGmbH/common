@@ -1,5 +1,11 @@
 # common Changelog
 
+## `2.3.0` (2021-01-06)
+
+* feat(FT-544): implemented cart available shipping methods
+* fix(shopify): mapped variant stock from quantityAvailable and included availableForSale
+* feat(FT-470): Mapped shipping discounted price when present
+
 ## `2.2.1` (2020-12-18)
 
 * fix: removed extra comma at the end of parameter list
