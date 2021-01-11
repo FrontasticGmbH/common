@@ -6,6 +6,7 @@ use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
+use Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools\Options;
 use Frontastic\Common\CartApiBundle\Domain\CartApiBase;
 use Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools\Mapper as CartMapper;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
@@ -53,6 +54,16 @@ class Commercetools extends CartApiBase
     private $orderIdGenerator;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var CartApi\Commercetools\Options
+     */
+    private $options;
+
+    /**
      * @var ?Cart
      */
     private $inTransaction = null;
@@ -72,23 +83,21 @@ class Commercetools extends CartApiBase
      */
     private $taxCategory = null;
 
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
     public function __construct(
         Client $client,
         CartMapper $cartMapper,
         CommercetoolsLocaleCreator $localeCreator,
         OrderIdGenerator $orderIdGenerator,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ?Options $options = null
     ) {
         $this->client = $client;
         $this->cartMapper = $cartMapper;
         $this->localeCreator = $localeCreator;
         $this->orderIdGenerator = $orderIdGenerator;
         $this->logger = $logger;
+
+        $this->options = $options ?? new Options();
     }
 
     /**
@@ -118,14 +127,15 @@ class Commercetools extends CartApiBase
                     '/carts',
                     ['expand' => self::EXPAND],
                     [],
-                    Json::encode([
-                        'country' => $locale->country,
-                        'currency' => $locale->currency,
-
-                        'customerId' => $account->accountId,
-                        'state' => 'Active',
-                        'inventoryMode' => 'ReserveOnOrder',
-                    ])
+                    Json::encode(array_merge(
+                        $this->options->cartDefaults,
+                        [
+                            'country' => $locale->country,
+                            'currency' => $locale->currency,
+                            'customerId' => $account->accountId,
+                            'state' => 'Active',
+                        ]
+                    ))
                 ),
                 $locale
             );
@@ -267,14 +277,16 @@ class Commercetools extends CartApiBase
                 '/carts',
                 ['expand' => self::EXPAND],
                 [],
-                Json::encode([
-                    'country' => $locale->country,
-                    'currency' => $locale->currency,
-                    'locale' => $locale->language,
-                    'anonymousId' => $anonymousId,
-                    'state' => 'Active',
-                    'inventoryMode' => 'ReserveOnOrder',
-                ])
+                Json::encode(array_merge(
+                    $this->options->cartDefaults,
+                    [
+                        'country' => $locale->country,
+                        'currency' => $locale->currency,
+                        'locale' => $locale->language,
+                        'anonymousId' => $anonymousId,
+                        'state' => 'Active',
+                    ]
+                ))
             ),
             $locale
         );
