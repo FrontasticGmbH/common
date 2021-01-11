@@ -487,7 +487,7 @@ class Commercetools extends CartApiBase
             'action' => 'setShippingMethod',
         ];
 
-        if ($shippingMethod !== '') {
+        if ($shippingMethod !== null && $shippingMethod !== '') {
             $action['shippingMethod'] = [
                 'typeId' => 'shipping-method',
                 'id' => $shippingMethod,
