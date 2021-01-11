@@ -3,6 +3,7 @@
 namespace Frontastic\Common\CartApiBundle\Domain;
 
 use Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools\Mapper as CommercetoolsCartMapper;
+use Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools\Options;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory as CommercetoolsClientFactoryAlias;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreatorFactory;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
@@ -85,7 +86,8 @@ class DefaultCartApiFactory implements CartApiFactory
                     $this->container->get(CommercetoolsCartMapper::class),
                     $localeCreatorFactory->factor($project, $client),
                     $this->orderIdGenerator,
-                    $this->logger
+                    $this->logger,
+                    (isset($cartConfig->options) ? new Options($cartConfig->options) : null)
                 );
                 break;
 
