@@ -41,7 +41,7 @@ class CartFetcher
                 try {
                     return $this->cartApi->getById($cartId, $context->locale);
                 } catch (\Exception $exception) {
-                    $this->get('logger')
+                    $this->logger
                         ->info(
                             'Error fetching anonymous cart {cartId}, creating new one',
                             [
@@ -59,5 +59,4 @@ class CartFetcher
             return $cart;
         }
     }
-
 }
