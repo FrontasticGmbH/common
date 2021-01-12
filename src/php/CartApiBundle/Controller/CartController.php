@@ -124,7 +124,8 @@ class CartController extends CrudController
                     ]
                 )
             );
-            $lineItemVariant->projectSpecificData = $this->parseProjectSpecificDataByKey($payload, 'option');
+            // BC
+            $lineItemVariant->projectSpecificData = $this->parseProjectSpecificDataByKey($lineItemData, 'option');
 
             $this->get(TrackingService::class)->reachAddToBasket($context, $cart, $lineItemVariant);
             $cartApi->addToCart($cart, $lineItemVariant, $context->locale);
