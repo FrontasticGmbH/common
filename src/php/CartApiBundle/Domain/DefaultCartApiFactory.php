@@ -45,7 +45,7 @@ class DefaultCartApiFactory implements CartApiFactory
     private $container;
 
     /**
-     * @var OrderIdGenerator
+     * @var OrderIdGeneratorV2|OrderIdGenerator
      */
     private $orderIdGenerator;
 
@@ -59,16 +59,23 @@ class DefaultCartApiFactory implements CartApiFactory
      */
     private $decorators = [];
 
+    /**
+     * @param ContainerInterface $container
+     * @param OrderIdGeneratorV2|OrderIdGenerator $orderIdGenerator
+     * @param iterable $decorators
+     * @param LoggerInterface $logger
+     */
     public function __construct(
         ContainerInterface $container,
-        OrderIdGenerator $orderIdGenerator,
+        object $orderIdGenerator, // BC for OrderIdGenerator
         iterable $decorators,
         LoggerInterface $logger
     ) {
         $this->container = $container;
-        $this->orderIdGenerator = $orderIdGenerator;
         $this->decorators = $decorators;
         $this->logger = $logger;
+
+        $this->setOrderIdGenerator($orderIdGenerator);
     }
 
     public function factor(Project $project): CartApi
@@ -191,5 +198,18 @@ class DefaultCartApiFactory implements CartApiFactory
         }
 
         return new CartApi\LifecycleEventDecorator($cartApi, $this->decorators);
+    }
+
+    private function setOrderIdGenerator(object $orderIdGenerator): void
+    {
+        if ($orderIdGenerator instanceof OrderIdGenerator) {
+            $orderIdGenerator = new OrderIdGeneratorV2Adapter($orderIdGenerator);
+        }
+
+        if (!($orderIdGenerator instanceof OrderIdGeneratorV2)) {
+            throw new \TypeError('orderIdGenerator is not an instance of ' . OrderIdGeneratorV2::class);
+        }
+
+        $this->orderIdGenerator = $orderIdGenerator;
     }
 }
