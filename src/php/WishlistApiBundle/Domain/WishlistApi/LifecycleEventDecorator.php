@@ -41,7 +41,7 @@ class LifecycleEventDecorator implements WishlistApi
     /**
      * @return \Frontastic\Common\WishlistApiBundle\Domain\WishlistApi
      */
-    protected function getAggregate(): object
+    public function getAggregate(): object
     {
         return $this->aggregate;
     }

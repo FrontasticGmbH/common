@@ -33,7 +33,7 @@ class LifecycleEventDecorator implements AccountApi
     /**
      * @return AccountApi
      */
-    protected function getAggregate(): object
+    public function getAggregate(): object
     {
         return $this->aggregate;
     }

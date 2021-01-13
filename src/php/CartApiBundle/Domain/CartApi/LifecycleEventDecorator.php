@@ -45,7 +45,7 @@ class LifecycleEventDecorator implements CartApi
     /**
      * @return CartApi
      */
-    protected function getAggregate(): object
+    public function getAggregate(): object
     {
         return $this->aggregate;
     }
