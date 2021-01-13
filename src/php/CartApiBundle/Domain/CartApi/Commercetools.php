@@ -890,6 +890,36 @@ class Commercetools extends CartApiBase
         return $this->client;
     }
 
+    /**
+     * Get *dangerous* inner mapper
+     *
+     * This method exists to enable you to use features which are not yet part
+     * of the abstraction layer.
+     *
+     * Be aware that any usage of this method might seriously hurt backwards
+     * compatibility and the future abstractions might differ a lot from the
+     * vendor provided abstraction.
+     */
+    public function getDangerousInnerMapper(): CartApi\Commercetools\Mapper
+    {
+        return $this->cartMapper;
+    }
+
+    /**
+     * Get *dangerous* inner locale creator
+     *
+     * This method exists to enable you to use features which are not yet part
+     * of the abstraction layer.
+     *
+     * Be aware that any usage of this method might seriously hurt backwards
+     * compatibility and the future abstractions might differ a lot from the
+     * vendor provided abstraction.
+     */
+    public function getDangerousInnerLocaleCreator(): CommercetoolsLocaleCreator
+    {
+        return $this->localeCreator;
+    }
+
     protected function setCustomLineItemTypeImplementation(array $lineItemType): void
     {
         $this->lineItemType = $lineItemType;
