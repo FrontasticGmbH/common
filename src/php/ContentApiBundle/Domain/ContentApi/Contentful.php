@@ -165,6 +165,8 @@ class Contentful implements ContentApi
         $fieldContentTypes = $entry !== null ? $entry->getContentType()->getFields() : [];
 
         foreach ($contents as $key => $value) {
+            $contentType = null;
+
             if ($value instanceof Asset) {
                 $value = (object)[
                     'url' => 'https:' . $value->getFile()->getUrl(),
@@ -178,6 +180,7 @@ class Contentful implements ContentApi
             }
 
             if ($value instanceof Entry) {
+                $contentType = $value->getContentType()->getId();
                 $value = $this->convertContent($value, $value->all());
             }
 
@@ -194,6 +197,7 @@ class Contentful implements ContentApi
                 'attributeId' => $key,
                 'content' => $value,
                 'type' => $type,
+                'contentType' => $contentType,
             ];
         }
 
