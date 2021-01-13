@@ -77,7 +77,7 @@ class Cart extends ApiDataObject
     public $payments = [];
 
     /**
-     * @var string[]
+     * @var Discount[]
      * @required
      */
     public $discountCodes = [];
