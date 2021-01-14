@@ -1,5 +1,13 @@
 # common Changelog
 
+## `2.4.0` (2021-01-14)
+
+* feat(cart-defaults): Options for CommerceTools cart defaults.
+* feat(FT-506): implemented setEmail for Spryker
+* fix(FT-457): reset index key on unique images
+* fix(FT-563): add if-else condition depending on current customer to change behavior for Spryker
+* feat(FT-457): included Shopify product images to each variant
+
 ## `2.3.0` (2021-01-06)
 
 * feat(FT-544): implemented cart available shipping methods
