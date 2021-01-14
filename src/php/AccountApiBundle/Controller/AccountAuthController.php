@@ -67,7 +67,7 @@ class AccountAuthController extends Controller
         try {
             $account = $this->getAccountService()->create(
                 $account,
-                $this->get('frontastic.catwalk.cart_api')->getAnonymous(session_id(), $context->locale),
+                $this->get('frontastic.catwalk.cart_fetcher')->fetchCart($context, $request),
                 $context->locale
             );
         } catch (DuplicateAccountException $exception) {
