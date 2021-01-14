@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\InvalidQueryException;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\PaginatedQuery;
 
@@ -70,6 +71,10 @@ class ProductQuery extends PaginatedQuery
 
     /**
      * Map of sort attributes => sort order
+     *
+     * All APIs support {@link ProductQuery::SORT_ORDER_ASCENDING} and {@link ProductQuery::SORT_ORDER_DESCENDING}.
+     * Dedicated APIs might support additional values. If you use one of those, your code will not be portable to
+     * other API implementations anymore (project specific).
      *
      * @var string[]
      */

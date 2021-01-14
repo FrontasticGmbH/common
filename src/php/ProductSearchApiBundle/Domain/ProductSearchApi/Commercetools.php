@@ -16,6 +16,11 @@ use function GuzzleHttp\Promise\promise_for;
 
 class Commercetools extends ProductSearchApiBase
 {
+    public const SORT_ORDER_ASCENDING_MIN = 'ascending_min';
+    public const SORT_ORDER_ASCENDING_MAX = 'ascending_max';
+    public const SORT_ORDER_DESCENDING_MIN = 'descending_min';
+    public const SORT_ORDER_DESCENDING_MAX = 'descending_max';
+
     private const TYPE_MAP = [
         'lenum' => Attribute::TYPE_LOCALIZED_ENUM,
         'ltext' => Attribute::TYPE_LOCALIZED_TEXT,
@@ -112,12 +117,32 @@ class Commercetools extends ProductSearchApiBase
         if ($query->sortAttributes) {
             $parameters['sort'] = array_map(
                 function (string $direction, string $field): string {
-                    return $field . ($direction === ProductQuery::SORT_ORDER_ASCENDING ? ' asc' : ' desc');
+                    switch ($direction) {
+                        case ProductQuery::SORT_ORDER_ASCENDING:
+                            $direction = 'asc';
+                            break;
+                        case self::SORT_ORDER_ASCENDING_MIN:
+                            $direction = 'asc.min';
+                            break;
+                        case self::SORT_ORDER_ASCENDING_MAX:
+                            $direction = 'asc.max';
+                            break;
+                        case self::SORT_ORDER_DESCENDING_MIN:
+                            $direction = 'desc.min';
+                            break;
+                        case self::SORT_ORDER_DESCENDING_MAX:
+                            $direction = 'desc.max';
+                            break;
+                        default:
+                            $direction = 'desc';
+                    }
+                    return "$field $direction";
                 },
                 $query->sortAttributes,
                 array_keys($query->sortAttributes)
             );
         }
+
         $facetsToFilter = $this->mapper->facetsToFilter(
             $query->facets,
             $this->enabledFacetService->getEnabledFacetDefinitions(),
