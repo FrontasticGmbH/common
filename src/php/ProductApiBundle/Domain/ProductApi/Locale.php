@@ -65,7 +65,7 @@ class Locale extends ApiDataObject
      */
     public function toString(): string
     {
-        return sprintf('%s_%s', $this->language, $this->territory);
+        return sprintf('%s_%s.UTF-8@%s', $this->language, $this->territory, $this->currency);
     }
 
     /**
