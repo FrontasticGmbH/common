@@ -11,7 +11,7 @@ use Frontastic\Common\CartApiBundle\Domain\CartApiBase;
 use Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools\Mapper as CartMapper;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
-use Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator;
+use Frontastic\Common\CartApiBundle\Domain\OrderIdGeneratorV2;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
@@ -49,7 +49,7 @@ class Commercetools extends CartApiBase
     private $localeCreator;
 
     /**
-     * @var OrderIdGenerator
+     * @var OrderIdGeneratorV2
      */
     private $orderIdGenerator;
 
@@ -87,7 +87,7 @@ class Commercetools extends CartApiBase
         Client $client,
         CartMapper $cartMapper,
         CommercetoolsLocaleCreator $localeCreator,
-        OrderIdGenerator $orderIdGenerator,
+        OrderIdGeneratorV2 $orderIdGenerator,
         LoggerInterface $logger,
         ?Options $options = null
     ) {

@@ -9,7 +9,7 @@ use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\CartApiBase;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
-use Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator;
+use Frontastic\Common\CartApiBundle\Domain\OrderIdGeneratorV2;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\CartApiBundle\Domain\UpdatePaymentCommand;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocale;
@@ -26,7 +26,7 @@ class SapCartApi extends CartApiBase
     /** @var SapDataMapper */
     private $dataMapper;
 
-    /** @var OrderIdGenerator */
+    /** @var OrderIdGeneratorV2 */
     private $orderIdGenerator;
 
     /** @var ?array */
@@ -36,7 +36,7 @@ class SapCartApi extends CartApiBase
         SapClient $client,
         SapDataMapper $dataMapper,
         SapLocaleCreator $localeCreator,
-        OrderIdGenerator $orderIdGenerator
+        OrderIdGeneratorV2 $orderIdGenerator
     ) {
         $this->client = $client;
         $this->localeCreator = $localeCreator;
