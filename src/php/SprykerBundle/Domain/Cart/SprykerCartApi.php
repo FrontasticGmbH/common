@@ -216,7 +216,9 @@ class SprykerCartApi extends CartApiBase
      */
     protected function setEmailImplementation(Cart $cart, string $email, string $locale = null): Cart
     {
-        throw new \RuntimeException('Do not use this method, use "setAccount" method');
+        $this->checkoutRequest->setCustomer(new Account(['email' => $email]));
+
+        return $cart;
     }
 
     /**

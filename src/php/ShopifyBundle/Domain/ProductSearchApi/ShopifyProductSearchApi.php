@@ -52,13 +52,6 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                     }
                 }
             }
-            images(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
-                edges {
-                    node {
-                        originalSrc
-                    }
-                }
-            }
             metafields(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                 edges {
                     node {
@@ -83,6 +76,13 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                         }
                         product {
                             id
+                            images(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                                edges {
+                                    node {
+                                        originalSrc
+                                    }
+                                }
+                            }
                         }
                         selectedOptions {
                             name
