@@ -55,10 +55,7 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
             metafields(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                 edges {
                     node {
-                        id
-                        key
-                        value
-                        valueType
+                        {$this->getMetafieldQueryFields()}
                     }
                 }
             }
@@ -70,6 +67,13 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                         title
                         availableForSale
                         quantityAvailable
+                        metafields(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                            edges {
+                                node {
+                                    {$this->getMetafieldQueryFields()}
+                                }
+                            }
+                        }
                         priceV2 {
                             amount
                             currencyCode
@@ -303,5 +307,15 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
         $pageFilter .= !empty($query->cursor) ? ' ' . $query->cursor : null;
 
         return $pageFilter;
+    }
+
+    private function getMetafieldQueryFields(): string
+    {
+        return '
+            id
+            key
+            value
+            valueType
+        ';
     }
 }
