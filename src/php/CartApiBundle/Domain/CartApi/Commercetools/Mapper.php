@@ -10,7 +10,9 @@ use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\CartApiBundle\Domain\ShippingInfo;
+use Frontastic\Common\CartApiBundle\Domain\ShippingLocation;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
+use Frontastic\Common\CartApiBundle\Domain\ShippingRate;
 use Frontastic\Common\CartApiBundle\Domain\Tax;
 use Frontastic\Common\CartApiBundle\Domain\TaxPortion;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocale;
@@ -317,7 +319,7 @@ class Mapper
                 $locale,
                 $shippingMethodData['localizedDescription'] ?? []
             ),
-            'price' => $this->getShippingMethodPrice($shippingMethodData),
+            'rates' => $this->mapDataToShippingRates($shippingMethodData['zoneRates'] ?? []),
         ]);
     }
 
@@ -344,29 +346,56 @@ class Mapper
         ]);
     }
 
-    private function getShippingMethodPrice(array $shippingMethodData): int
+    private function mapDataToShippingRates(array $zoneRatesData): ?array
     {
-        $price = 0;
-
-        $shippingRates = array_map(
-            function ($zoneRate) {
-                return $zoneRate['shippingRates'];
-            },
-            $shippingMethodData['zoneRates'] ?? []
-        );
-
-        if (!empty($shippingRates)) {
-            $shippingRates = array_merge(...$shippingRates);
-            $matchingShippingRates = array_filter(
-                $shippingRates,
-                function ($shippingRate) {
-                    return (bool)($shippingRate['isMatching'] ?? false);
-                }
-            );
-            $price = array_pop($matchingShippingRates)['price']['centAmount'] ??
-                $shippingRates[0]['price']['centAmount'] ?? 0;
+        if (!count($zoneRatesData)) {
+            return null;
         }
 
-        return $price;
+        $shippingRates = [];
+
+        foreach ($zoneRatesData as $zoneRateData) {
+            $zoneId = $zoneRateData['zone']['id'];
+            $name = $zoneRateData['zone']['name'] ?? null;
+            $locations = array_map(
+                function ($location) {
+                    return new ShippingLocation([
+                        'country' => $location['country'],
+                        'state' => $location['state'],
+                    ]);
+                },
+                $zoneRateData['zone']['locations'] ?? []
+            );
+
+            $matchingShippingRates = array_filter(
+                $zoneRateData['shippingRates'],
+                function ($shippingRate) {
+                    return (bool)($shippingRate['isMatching'] ?? true);
+                }
+            );
+
+            if (!count($matchingShippingRates)) {
+                continue;
+            }
+
+            $shippingRates = array_merge($shippingRates, array_map(
+                function ($shippingRate) use ($zoneId, $name, $locations) {
+                    if (key_exists('isMatching', $shippingRate) && $shippingRate['isMatching'] === false) {
+                        return [];
+                    }
+
+                    return new ShippingRate([
+                        'zoneId' => $zoneId,
+                        'name' => $name,
+                        'locations' => $locations,
+                        'currency' => $shippingRate['price']['currencyCode'],
+                        'price' => $shippingRate['price']['centAmount'],
+                    ]);
+                },
+                $matchingShippingRates ?? []
+            ));
+        }
+
+        return $shippingRates;
     }
 }
