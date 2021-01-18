@@ -1,5 +1,22 @@
 # common Changelog
 
+## `2.5.0` (2021-01-18)
+
+* fix(563): revert change to tests and add typecasting into Spryker CatalogSearchQuery to ensure that categoryId will be an int
+* feat: included metafields on Shopify product variants
+* feat(FT-581): mapped rates and locations on ShippingRates for Commercetools
+* fix: Consistency for toString() methods on ProductApi\Locale.
+* feat: Allow advanced CommerceTools sort orders for ProductSearch.
+* feat: Map Contentful content type information.
+* feat: Allow access to Mapper & LocaleCreator on CT CartApi implementation.
+* fix: Type hint Cart->discounts to be instances of Discount.
+* feat: Make remainder getAggregate() methods on Event Decorators public.
+* feat: OrderIdGeneratorV2.
+* fix: Properly parse BC `option` from lineItems.
+* fix: Avoid sending empty shipping method to CommerceTools.
+* feat(cart-defaults): Options for CommerceTools cart defaults.
+* feat(CartFetcher): CartFetcher as unified entrance to loading a cart.
+
 ## `2.4.0` (2021-01-14)
 
 * feat(cart-defaults): Options for CommerceTools cart defaults.
