@@ -367,7 +367,7 @@ class CartController extends CrudController
     private function getCartFetcher(Context $context): CartFetcher
     {
         if (!isset($this->cartFetcher)) {
-            $this->cartFetcher = new CartFetcher($this->getCartApi($context), $this->get(LoggerInterface::class));
+            $this->cartFetcher = new CartFetcher($this->getCartApi($context), $this->get('logger'));
         }
         return $this->cartFetcher;
     }
