@@ -18,7 +18,7 @@ public function __construct(
     SapClient $client,
     SapDataMapper $dataMapper,
     SapLocaleCreator $localeCreator,
-    OrderIdGenerator $orderIdGenerator
+    OrderIdGeneratorV2 $orderIdGenerator
 ): mixed
 ```
 
@@ -27,7 +27,7 @@ Argument|Type|Default|Description
 `$client`|[`SapClient`](SapClient.md)||
 `$dataMapper`|[`SapDataMapper`](SapDataMapper.md)||
 `$localeCreator`|[`SapLocaleCreator`](Locale/SapLocaleCreator.md)||
-`$orderIdGenerator`|[`OrderIdGenerator`](../../CartApiBundle/Domain/OrderIdGenerator.md)||
+`$orderIdGenerator`|[`OrderIdGeneratorV2`](../../CartApiBundle/Domain/OrderIdGeneratorV2.md)||
 
 Return Value: `mixed`
 

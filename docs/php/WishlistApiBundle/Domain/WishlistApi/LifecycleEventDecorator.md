@@ -7,6 +7,7 @@
 ## Methods
 
 * [__construct()](#__construct)
+* [getAggregate()](#getaggregate)
 * [getWishlist()](#getwishlist)
 * [getAnonymous()](#getanonymous)
 * [getWishlists()](#getwishlists)
@@ -33,6 +34,14 @@ Argument|Type|Default|Description
 `$listeners`|`iterable`|`[]`|
 
 Return Value: `mixed`
+
+### getAggregate()
+
+```php
+public function getAggregate(): object
+```
+
+Return Value: `object`
 
 ### getWishlist()
 

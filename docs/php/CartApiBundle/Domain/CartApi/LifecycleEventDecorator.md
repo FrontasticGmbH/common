@@ -7,6 +7,7 @@
 ## Methods
 
 * [__construct()](#__construct)
+* [getAggregate()](#getaggregate)
 * [getForUser()](#getforuser)
 * [getById()](#getbyid)
 * [getAnonymous()](#getanonymous)
@@ -53,6 +54,14 @@ Argument|Type|Default|Description
 `$listeners`|`iterable`|`[]`|
 
 Return Value: `mixed`
+
+### getAggregate()
+
+```php
+public function getAggregate(): object
+```
+
+Return Value: `object`
 
 ### getForUser()
 

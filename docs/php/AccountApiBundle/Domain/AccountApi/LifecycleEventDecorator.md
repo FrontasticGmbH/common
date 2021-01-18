@@ -7,6 +7,7 @@
 ## Methods
 
 * [__construct()](#__construct)
+* [getAggregate()](#getaggregate)
 * [getSalutations()](#getsalutations)
 * [confirmEmail()](#confirmemail)
 * [create()](#create)
@@ -38,6 +39,14 @@ Argument|Type|Default|Description
 `$listeners`|`iterable`|`[]`|
 
 Return Value: `mixed`
+
+### getAggregate()
+
+```php
+public function getAggregate(): object
+```
+
+Return Value: `object`
 
 ### getSalutations()
 

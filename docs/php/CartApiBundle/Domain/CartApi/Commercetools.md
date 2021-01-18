@@ -11,6 +11,8 @@
 * [getAvailableShippingMethodsImplementation()](#getavailableshippingmethodsimplementation)
 * [getShippingMethodsImplementation()](#getshippingmethodsimplementation)
 * [getDangerousInnerClient()](#getdangerousinnerclient)
+* [getDangerousInnerMapper()](#getdangerousinnermapper)
+* [getDangerousInnerLocaleCreator()](#getdangerousinnerlocalecreator)
 * [updatePaymentStatus()](#updatepaymentstatus)
 * [getPayment()](#getpayment)
 * [updatePaymentInterfaceId()](#updatepaymentinterfaceid)
@@ -22,7 +24,7 @@ public function __construct(
     Commercetools\Client $client,
     Commercetools\Mapper $cartMapper,
     Commercetools\Locale\CommercetoolsLocaleCreator $localeCreator,
-    OrderIdGenerator $orderIdGenerator,
+    OrderIdGeneratorV2 $orderIdGenerator,
     \Psr\Log\LoggerInterface $logger,
     ?Commercetools\Options $options = null
 ): mixed
@@ -33,7 +35,7 @@ Argument|Type|Default|Description
 `$client`|[`Commercetools`](../../../ProductApiBundle/Domain/ProductApi/Commercetools.md)\Client||
 `$cartMapper`|[`Commercetools`](Commercetools.md)\Mapper||
 `$localeCreator`|[`Commercetools`](../../../ProductApiBundle/Domain/ProductApi/Commercetools.md)\Locale\CommercetoolsLocaleCreator||
-`$orderIdGenerator`|[`OrderIdGenerator`](../OrderIdGenerator.md)||
+`$orderIdGenerator`|[`OrderIdGeneratorV2`](../OrderIdGeneratorV2.md)||
 `$logger`|`\Psr\Log\LoggerInterface`||
 `$options`|?[`Commercetools`](Commercetools.md)\Options|`null`|
 
@@ -112,6 +114,40 @@ Use this with care for features necessary in your customer and talk with
 Frontastic about provising an abstraction.
 
 Return Value: `mixed`
+
+### getDangerousInnerMapper()
+
+```php
+public function getDangerousInnerMapper(): Commercetools\Mapper
+```
+
+*Get *dangerous* inner mapper*
+
+This method exists to enable you to use features which are not yet part
+of the abstraction layer.
+
+Be aware that any usage of this method might seriously hurt backwards
+compatibility and the future abstractions might differ a lot from the
+vendor provided abstraction.
+
+Return Value: [`Commercetools`](Commercetools.md)\Mapper
+
+### getDangerousInnerLocaleCreator()
+
+```php
+public function getDangerousInnerLocaleCreator(): Commercetools\Locale\CommercetoolsLocaleCreator
+```
+
+*Get *dangerous* inner locale creator*
+
+This method exists to enable you to use features which are not yet part
+of the abstraction layer.
+
+Be aware that any usage of this method might seriously hurt backwards
+compatibility and the future abstractions might differ a lot from the
+vendor provided abstraction.
+
+Return Value: [`Commercetools`](../../../ProductApiBundle/Domain/ProductApi/Commercetools.md)\Locale\CommercetoolsLocaleCreator
 
 ### updatePaymentStatus()
 

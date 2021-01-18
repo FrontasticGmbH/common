@@ -39,6 +39,7 @@ Here you find the API documentation for the relevant classes:
 * CartApiBundle
   * Controller
     * [CartController](php/CartApiBundle/Controller/CartController.md)
+    * [CartFetcher](php/CartApiBundle/Controller/CartFetcher.md)
   * DependencyInjection
     * [FrontasticCommonCartApiExtension](php/CartApiBundle/DependencyInjection/FrontasticCommonCartApiExtension.md)
   * Domain
@@ -59,6 +60,8 @@ Here you find the API documentation for the relevant classes:
     * [OrderIdGenerator](php/CartApiBundle/Domain/OrderIdGenerator.md)
     * OrderIdGenerator
       * [Random](php/CartApiBundle/Domain/OrderIdGenerator/Random.md)
+    * [OrderIdGeneratorV2](php/CartApiBundle/Domain/OrderIdGeneratorV2.md)
+    * [OrderIdGeneratorV2Adapter](php/CartApiBundle/Domain/OrderIdGeneratorV2Adapter.md)
     * [Payment](php/CartApiBundle/Domain/Payment.md)
     * [ShippingInfo](php/CartApiBundle/Domain/ShippingInfo.md)
     * [ShippingLocation](php/CartApiBundle/Domain/ShippingLocation.md)

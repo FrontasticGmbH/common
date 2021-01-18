@@ -18,7 +18,7 @@ Property|Type|Default|Required|Description
 `sum` | `int` |  | *Yes* | 
 `currency` | `string` |  | *Yes* | 
 `payments` | [`Payment`](Payment.md)[] | `[]` | *Yes* | 
-`discountCodes` | `string[]` | `[]` | *Yes* | 
+`discountCodes` | [`Discount`](Discount.md)[] | `[]` | *Yes* | 
 `taxed` | ?[`Tax`](Tax.md) |  | - | 
 `dangerousInnerCart` | `mixed` |  | - | Access original object from backend
 

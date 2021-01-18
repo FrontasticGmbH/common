@@ -14,7 +14,7 @@
 ```php
 public function __construct(
     \Psr\Container\ContainerInterface $container,
-    OrderIdGenerator $orderIdGenerator,
+    object $orderIdGenerator,
     iterable $decorators,
     \Psr\Log\LoggerInterface $logger
 ): mixed
@@ -23,7 +23,7 @@ public function __construct(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$container`|`\Psr\Container\ContainerInterface`||
-`$orderIdGenerator`|[`OrderIdGenerator`](OrderIdGenerator.md)||
+`$orderIdGenerator`|`object`||
 `$decorators`|`iterable`||
 `$logger`|`\Psr\Log\LoggerInterface`||
 

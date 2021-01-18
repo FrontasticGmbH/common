@@ -1,8 +1,6 @@
-#  Random
+# `interface`  OrderIdGeneratorV2
 
-**Fully Qualified**: [`\Frontastic\Common\CartApiBundle\Domain\OrderIdGenerator\Random`](../../../../../src/php/CartApiBundle/Domain/OrderIdGenerator/Random.php)
-
-**Implements**: [`OrderIdGeneratorV2`](../OrderIdGeneratorV2.md)
+**Fully Qualified**: [`\Frontastic\Common\CartApiBundle\Domain\OrderIdGeneratorV2`](../../../../src/php/CartApiBundle/Domain/OrderIdGeneratorV2.php)
 
 ## Methods
 
@@ -19,8 +17,8 @@ public function getOrderId(
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$cartApi`|[`CartApi`](../CartApi.md)||
-`$cart`|[`Cart`](../Cart.md)||
+`$cartApi`|[`CartApi`](CartApi.md)||
+`$cart`|[`Cart`](Cart.md)||
 
 Return Value: `string`
 
