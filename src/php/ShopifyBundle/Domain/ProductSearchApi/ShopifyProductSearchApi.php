@@ -59,6 +59,10 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                     }
                 }
             }
+            seo {
+                description
+                title
+            }
             variants(first: " . self::DEFAULT_VARIANTS_TO_FETCH . ") {
                 edges {
                     node {
