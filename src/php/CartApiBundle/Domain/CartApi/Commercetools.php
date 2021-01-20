@@ -706,7 +706,7 @@ class Commercetools extends CartApiBase
                 Json::encode([
                     'id' => $cart->cartId,
                     'version' => (int)$cart->cartVersion,
-                    'orderNumber' => $this->orderIdGenerator->getOrderId($cart),
+                    'orderNumber' => $this->orderIdGenerator->getOrderId($this, $cart),
                 ])
             ),
             $this->parseLocaleString($locale)
