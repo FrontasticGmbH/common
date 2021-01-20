@@ -1,5 +1,10 @@
 # common Changelog
 
+## `2.5.1` (2021-01-20)
+
+* fix: Missed adaption to OrderIdGeneratorV2.
+* feat(FT-590): upgrade Shopify version on API test and include SEO fields on product
+
 ## `2.5.0` (2021-01-18)
 
 * fix(563): revert change to tests and add typecasting into Spryker CatalogSearchQuery to ensure that categoryId will be an int
