@@ -13,7 +13,9 @@ use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
 use Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper;
 use Frontastic\Common\SprykerBundle\Domain\Cart\Mapper\CheckoutMapper;
 use Frontastic\Common\SprykerBundle\Domain\Cart\Mapper\OrderMapper;
+use Frontastic\Common\SprykerBundle\Domain\Cart\Mapper\ShipmentMethodsMapper;
 use Frontastic\Common\SprykerBundle\Domain\Cart\Request\CheckoutRequestData;
+use Frontastic\Common\SprykerBundle\Domain\Cart\Request\CheckoutDataRequestData;
 use Frontastic\Common\SprykerBundle\Domain\Cart\SprykerCart\SprykerCartInterface;
 use Frontastic\Common\SprykerBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\SprykerBundle\Domain\Locale\SprykerLocale;
@@ -400,8 +402,23 @@ class SprykerCartApi extends CartApiBase
 
     public function getAvailableShippingMethodsImplementation(Cart $cart, string $localeString): array
     {
-        // TODO: Implement getAvailableShippingMethods() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        // If this is a guest cart, Spryker only generates a cart id when the first line item is added
+        if (!$cart->cartId) {
+            return [];
+        }
+
+        $sprykerLocale = $this->parseLocaleString($localeString);
+        $request = new CheckoutDataRequestData($cart->cartId);
+
+        $response = $this->client
+            ->forLanguage($sprykerLocale->language)
+            ->post(
+                $this->urlAppender->withIncludes("/checkout-data?include=shipment-methods", []),
+                $this->getClientHeader(),
+                $request->encode()
+            );
+
+        return $this->mapResponseResource($response, ShipmentMethodsMapper::MAPPER_NAME);
     }
 
     public function getShippingMethodsImplementation(string $localeString, bool $onlyMatching = false): array
