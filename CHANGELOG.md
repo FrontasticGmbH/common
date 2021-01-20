@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.6.0` (2021-01-20)
+
+* feat(FT-545): implemented shipping methods for a given cart on Spryker
+
 ## `2.5.1` (2021-01-20)
 
 * fix: Missed adaption to OrderIdGeneratorV2.
