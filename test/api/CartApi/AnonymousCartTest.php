@@ -214,12 +214,15 @@ class AnonymousCartTest extends FrontasticApiTestCase
      */
     public function testGetAvailableShippingMethods(Project $project, string $language): void
     {
+        $product = $this->getAProduct($project, $language);
+        $frontasticAddress = $this->getFrontasticAddress();
+
         $cart = $this->getAnonymousCart($project, $language);
         $cartApi = $this->getCartApiForProject($project);
 
-        $frontasticAddress = $this->getFrontasticAddress();
         $cartApi->startTransaction($cart);
         $cartApi->setShippingAddress($cart, $frontasticAddress, $language);
+        $cartApi->addToCart($cart, $this->getLineItemForProduct($product), $language);
         $cart = $cartApi->commit($language);
 
         $availableShippingMethods = $cartApi->getAvailableShippingMethods($cart, $language);
