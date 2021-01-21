@@ -10,6 +10,8 @@ use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\CartApiBundle\Domain\ShippingInfo;
+use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
+use Frontastic\Common\CartApiBundle\Domain\ShippingRate;
 use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyAccountMapper;
 use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyProductMapper;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClient;
@@ -653,8 +655,8 @@ class ShopifyCartApi extends CartApiBase
     {
         if (key_exists('availableShippingRates', $cart->dangerousInnerCart)) {
             return array_map(
-                function (array $shippingMethodData): ShippingInfo {
-                    return $this->mapDataToShippingInfo($shippingMethodData);
+                function (array $shippingMethodData): ShippingMethod {
+                    return $this->mapDataToShippingMethod($shippingMethodData);
                 },
                 $cart->dangerousInnerCart['availableShippingRates']['shippingRates']
             );
@@ -664,7 +666,7 @@ class ShopifyCartApi extends CartApiBase
             query {
                 node(id: \"{$cart->cartId}\") {
                     ... on Checkout {
-                        {$this->getCheckoutQueryFields()}
+                        {$this->getCheckoutQueryFields($cart)}
                     }
                 }
             }
@@ -683,8 +685,8 @@ class ShopifyCartApi extends CartApiBase
                 }
 
                 return array_map(
-                    function (array $shippingMethodData): ShippingInfo {
-                        return $this->mapDataToShippingInfo($shippingMethodData);
+                    function (array $shippingMethodData): ShippingMethod {
+                        return $this->mapDataToShippingMethod($shippingMethodData);
                     },
                     $cartData['availableShippingRates']['shippingRates']
                 );
@@ -749,6 +751,9 @@ class ShopifyCartApi extends CartApiBase
             'shippingAddress' => $this->accountMapper->mapDataToAddress(
                 $orderData['shippingAddress'] ?? []
             ),
+            'shippingInfo' => $this->mapDataToShippingInfo(
+                $orderData['shippingLine'] ?? []
+            ),
             'shippingMethod' => $this->mapDataToShippingInfo(
                 $orderData['shippingLine'] ?? []
             ),
@@ -791,7 +796,27 @@ class ShopifyCartApi extends CartApiBase
             'name' => $shippingMethodData['title'] ?? null,
             'price' => $this->productMapper->mapDataToPriceValue(
                 $shippingMethodData['priceV2'] ?? []
-            )
+            ),
+            'dangerousInnerShippingInfo' => $shippingMethodData,
+        ]);
+    }
+
+    private function mapDataToShippingMethod(array $shippingMethodData): ?ShippingMethod
+    {
+        if (empty($shippingMethodData)) {
+            return null;
+        }
+
+        return new ShippingMethod([
+            'shippingMethodId' => $shippingMethodData['handle'] ?? null,
+            'name' => $shippingMethodData['title'] ?? null,
+            'rates' => [
+                new ShippingRate([
+                    'price' => $this->productMapper->mapDataToPriceValue($shippingMethodData['priceV2'] ?? []),
+                    'currency' => $shippingMethodData['priceV2']['currencyCode'] ?? null,
+                ])
+            ],
+            'dangerousInnerShippingMethod' => $shippingMethodData,
         ]);
     }
 
@@ -918,6 +943,7 @@ class ShopifyCartApi extends CartApiBase
             title
             priceV2 {
                 amount
+                currencyCode
             }
         ';
     }
