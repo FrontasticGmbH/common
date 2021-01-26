@@ -261,14 +261,14 @@ class CartController extends CrudController
                 Address::newWithProjectSpecificData(($payload['billing'] ?? []) ?: $payload['shipping']),
                 $context->locale
             );
-
-            if (array_key_exists('shippingMethodName', $payload)) {
-                $cart = $cartApi->setShippingMethod(
-                    $cart,
-                    $payload['shippingMethodName'] ?? '',
-                    $context->locale
-                );
-            }
+        }
+        
+        if (array_key_exists('shippingMethodName', $payload)) {
+            $cart = $cartApi->setShippingMethod(
+                $cart,
+                $payload['shippingMethodName'] ?? '',
+                $context->locale
+            );
         }
 
         $cart->projectSpecificData = $this->parseProjectSpecificDataByKey($payload, 'custom');
