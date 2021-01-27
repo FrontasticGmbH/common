@@ -1,5 +1,10 @@
 # common Changelog
 
+## `2.6.1` (2021-01-27)
+
+* fix: removed shipping or billing fields dependency to set shippingMethodName
+* fix(FP-150): returned ShippingMethod in getAvailableShippingMethods for Shopify
+
 ## `2.6.0` (2021-01-20)
 
 * feat(FT-545): implemented shipping methods for a given cart on Spryker
