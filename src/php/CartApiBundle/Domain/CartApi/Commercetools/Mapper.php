@@ -305,6 +305,7 @@ class Mapper
         }
 
         return new ShippingInfo([
+            'shippingMethodId' => $shippingInfoData['shippingMethod']['id'] ?? null,
             'name' => $shippingInfoData['shippingMethodName'] ?? null,
             'price' => $price,
         ]);
