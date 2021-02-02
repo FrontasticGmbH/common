@@ -1,5 +1,10 @@
 # common Changelog
 
+## `2.7.0` (2021-02-02)
+
+* !feat(fp-90) catwalk controllers (#580)
+* feat: included shipping info id for CommerceTools
+
 ## `2.6.1` (2021-01-27)
 
 * fix: removed shipping or billing fields dependency to set shippingMethodName
