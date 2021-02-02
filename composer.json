@@ -15,6 +15,9 @@
             "php": "7.4"
         }
     },
+    "conflict": {
+        "frontastic/catwalk": "<1.7"
+    },
     "require": {
         "ext-json": "*",
         "beberlei/assert": "^3.2",
