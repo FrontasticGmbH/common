@@ -13,8 +13,8 @@ Here you find the API documentation for the relevant classes:
   * Command
     * [CreateAccountCommand](php/AccountApiBundle/Command/CreateAccountCommand.md)
   * Controller
-    * [AccountApiController](php/AccountApiBundle/Controller/AccountApiController.md)
-    * [AccountAuthController](php/AccountApiBundle/Controller/AccountAuthController.md)
+    * [LegacyAccountApiController](php/AccountApiBundle/Controller/LegacyAccountApiController.md)
+    * [LegacyAccountAuthController](php/AccountApiBundle/Controller/LegacyAccountAuthController.md)
   * DependencyInjection
     * [FrontasticCommonAccountApiExtension](php/AccountApiBundle/DependencyInjection/FrontasticCommonAccountApiExtension.md)
   * Domain
@@ -38,8 +38,8 @@ Here you find the API documentation for the relevant classes:
   * [FrontasticCommonAccountApiBundle](php/AccountApiBundle/FrontasticCommonAccountApiBundle.md)
 * CartApiBundle
   * Controller
-    * [CartController](php/CartApiBundle/Controller/CartController.md)
-    * [CartFetcher](php/CartApiBundle/Controller/CartFetcher.md)
+    * [LegacyCartController](php/CartApiBundle/Controller/LegacyCartController.md)
+    * [LegacyCartFetcher](php/CartApiBundle/Controller/LegacyCartFetcher.md)
   * DependencyInjection
     * [FrontasticCommonCartApiExtension](php/CartApiBundle/DependencyInjection/FrontasticCommonCartApiExtension.md)
   * Domain
@@ -72,9 +72,9 @@ Here you find the API documentation for the relevant classes:
   * [FrontasticCommonCartApiBundle](php/CartApiBundle/FrontasticCommonCartApiBundle.md)
 * ContentApiBundle
   * Controller
-    * [ContentIdController](php/ContentApiBundle/Controller/ContentIdController.md)
-    * [ContentTypeController](php/ContentApiBundle/Controller/ContentTypeController.md)
-    * [SearchController](php/ContentApiBundle/Controller/SearchController.md)
+    * [LegacyContentIdController](php/ContentApiBundle/Controller/LegacyContentIdController.md)
+    * [LegacyContentTypeController](php/ContentApiBundle/Controller/LegacyContentTypeController.md)
+    * [LegacySearchController](php/ContentApiBundle/Controller/LegacySearchController.md)
   * DependencyInjection
     * [FrontasticCommonContentApiExtension](php/ContentApiBundle/DependencyInjection/FrontasticCommonContentApiExtension.md)
   * Domain
@@ -104,6 +104,7 @@ Here you find the API documentation for the relevant classes:
     * [FrontasticCommonCoreExtension](php/CoreBundle/DependencyInjection/FrontasticCommonCoreExtension.md)
   * Domain
     * [ApiDataObject](php/CoreBundle/Domain/ApiDataObject.md)
+    * [ClassToCatwalkPackageMigrationHandler](php/CoreBundle/Domain/ClassToCatwalkPackageMigrationHandler.md)
     * [DateTimeConverter](php/CoreBundle/Domain/DateTimeConverter.md)
     * [ErrorResult](php/CoreBundle/Domain/ErrorResult.md)
     * Json
@@ -168,9 +169,9 @@ Here you find the API documentation for the relevant classes:
 * [Kernel](php/Kernel.md)
 * ProductApiBundle
   * Controller
-    * [CategoryController](php/ProductApiBundle/Controller/CategoryController.md)
-    * [ProductTypeController](php/ProductApiBundle/Controller/ProductTypeController.md)
-    * [SearchController](php/ProductApiBundle/Controller/SearchController.md)
+    * [LegacyCategoryController](php/ProductApiBundle/Controller/LegacyCategoryController.md)
+    * [LegacyProductTypeController](php/ProductApiBundle/Controller/LegacyProductTypeController.md)
+    * [LegacySearchController](php/ProductApiBundle/Controller/LegacySearchController.md)
   * DependencyInjection
     * [FrontasticCommonProductApiExtension](php/ProductApiBundle/DependencyInjection/FrontasticCommonProductApiExtension.md)
   * Domain
@@ -212,7 +213,7 @@ Here you find the API documentation for the relevant classes:
   * [FrontasticCommonProductSearchApiBundle](php/ProductSearchApiBundle/FrontasticCommonProductSearchApiBundle.md)
 * ProjectApiBundle
   * Controller
-    * [AttributesController](php/ProjectApiBundle/Controller/AttributesController.md)
+    * [LegacyAttributesController](php/ProjectApiBundle/Controller/LegacyAttributesController.md)
   * DependencyInjection
     * [FrontasticCommonProjectApiExtension](php/ProjectApiBundle/DependencyInjection/FrontasticCommonProjectApiExtension.md)
   * Domain
@@ -402,7 +403,7 @@ Here you find the API documentation for the relevant classes:
 * [Translatable](php/Translatable.md)
 * WishlistApiBundle
   * Controller
-    * [WishlistController](php/WishlistApiBundle/Controller/WishlistController.md)
+    * [LegacyWishlistController](php/WishlistApiBundle/Controller/LegacyWishlistController.md)
   * DependencyInjection
     * [FrontasticCommonWishlistApiExtension](php/WishlistApiBundle/DependencyInjection/FrontasticCommonWishlistApiExtension.md)
   * Domain
