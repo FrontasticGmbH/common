@@ -54,7 +54,7 @@ function getFieldValue (schema, configuration) {
     }
 
     if (schema.type === 'group') {
-        let values = value.slice(0, schema.max)
+        let values = (value || []).slice(0, schema.max)
         for (let i = values.length; i < schema.min; ++i) {
             values[i] = {}
         }
