@@ -355,13 +355,17 @@ class ShopwareCartApi extends CartApiBase
     public function getAvailableShippingMethodsImplementation(Cart $cart, string $localeString): array
     {
         // TODO: Implement getAvailableShippingMethods() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        // throw new \RuntimeException(__METHOD__ . ' not implemented');
+        // To unblock the customer until it's implemented
+        return [];
     }
 
     public function getShippingMethodsImplementation(string $localeString, bool $onlyMatching = false): array
     {
         // TODO: Implement getShippingMethods() method.
-        throw new \RuntimeException(__METHOD__ . ' not implemented');
+        // throw new \RuntimeException(__METHOD__ . ' not implemented');
+        // To unblock the customer until it's implemented
+        return [];
     }
 
     public function getDangerousInnerClient(): ClientInterface
