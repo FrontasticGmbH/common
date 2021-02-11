@@ -81,6 +81,10 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                         priceV2 {
                             amount
                             currencyCode
+                        }                        
+                        compareAtPriceV2 {
+                            amount
+                            currencyCode
                         }
                         product {
                             id

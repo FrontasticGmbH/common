@@ -889,6 +889,10 @@ class ShopifyCartApi extends CartApiBase
                 amount
                 currencyCode
             }
+            compareAtPriceV2 {
+                amount
+                currencyCode
+            }            
             product {
                 id
                 images(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
