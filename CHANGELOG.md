@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.7.2` (2021-02-11)
+
+* fix: Return empty array to unblock the customer
+
 ## `2.7.1` (2021-02-02)
 
 * chore: included the conflict version with catwalk on common/composer.json
