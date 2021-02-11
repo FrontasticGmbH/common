@@ -1,5 +1,10 @@
 # common Changelog
 
+## `2.8.0` (2021-02-11)
+
+* feat: Update ShopifyCartApi.php
+* feat: add compareAtPriceV2 on Shopify product variants
+
 ## `2.7.2` (2021-02-11)
 
 * fix: Return empty array to unblock the customer
