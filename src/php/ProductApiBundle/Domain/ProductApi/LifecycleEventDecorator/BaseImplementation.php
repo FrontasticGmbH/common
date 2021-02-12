@@ -95,6 +95,7 @@ abstract class BaseImplementation
     }
 
     /*** query() ******************************************************************************************************/
+    /** @deprecated use "Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi\LifecycleEventDecorator\BaseImplementation::beforeQuery" instead.  */
     public function beforeQuery(
         ProductApi $productApi,
         ProductQuery $query,
@@ -103,6 +104,7 @@ abstract class BaseImplementation
         return null;
     }
 
+    /** @deprecated use "Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi\LifecycleEventDecorator\BaseImplementation::afterQuery" instead.  */
     public function afterQuery(ProductApi $productApi, ?Result $result): ?Result
     {
         return null;
