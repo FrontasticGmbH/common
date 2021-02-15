@@ -2,30 +2,23 @@
 
 namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 
-use Contentful\Delivery\Client;
-use Contentful\Delivery\DynamicEntry;
-use Contentful\Delivery\ContentType as ContentfulContentType;
-
 use Frontastic\Common\LifecycleTrait;
-
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi;
-use Frontastic\Common\ContentApiBundle\Domain\ContentType;
 use Frontastic\Common\ContentApiBundle\Domain\Query;
-use Frontastic\Common\ContentApiBundle\Domain\Result;
 
 class LifecycleEventDecorator implements ContentApi
 {
     use LifecycleTrait;
 
     /**
-     * @var \Frontastic\Common\WishlistApiBundle\Domain\WishlistApi
+     * @var ContentApi
      */
     private $aggregate;
 
     /**
      * LifecycleEventDecorator constructor.
      *
-     * @param \Frontastic\Common\WishlistApiBundle\Domain\WishlistApi $aggregate
+     * @param ContentApi $aggregate
      * @param iterable $listeners
      */
     public function __construct(ContentApi $aggregate, iterable $listeners = [])
