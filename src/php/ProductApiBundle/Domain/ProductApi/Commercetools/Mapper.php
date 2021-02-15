@@ -258,19 +258,25 @@ class Mapper
             return [
                 $variantData['scopedPrice']['value']['centAmount'],
                 $variantData['scopedPrice']['value']['currencyCode'],
-                ($variantData['scopedPriceDiscounted']
+                (isset($variantData['scopedPrice']['discounted'])
                     ? $variantData['scopedPrice']['discounted']['value']['centAmount']
                     : null),
             ];
         }
 
         if (isset($variantData['price'])) {
+            if (isset($variantData['discountedPrice'])) {
+                $discountedPrice = $variantData['discountedPrice']['value']['centAmount'];
+            } else {
+                $discountedPrice = (isset($variantData['price']['discounted']['value']['centAmount'])
+                    ? $variantData['price']['discounted']['value']['centAmount'] ?? null
+                    : null);
+            }
+
             return [
                 $variantData['price']['value']['centAmount'],
                 $variantData['price']['value']['currencyCode'],
-                (isset($variantData['price']['discounted']['value']['centAmount'])
-                    ? $variantData['price']['discounted']['value']['centAmount'] ?? null
-                    : null),
+                $discountedPrice,
             ];
         }
 
