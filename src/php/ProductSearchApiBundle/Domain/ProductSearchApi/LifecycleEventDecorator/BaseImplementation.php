@@ -39,11 +39,7 @@ abstract class BaseImplementation
         return null;
     }
 
-    /**
-     * @param ProductSearchApi $productSearchApi
-     * @return ?Attribute[]
-     */
-    public function afterGetSearchableAttributes(ProductSearchApi $productSearchApi): ?array
+    public function afterGetSearchableAttributes(ProductSearchApi $productSearchApi, ?array $attributes): ?array
     {
         return null;
     }
