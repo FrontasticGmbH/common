@@ -3,11 +3,11 @@
 namespace Frontastic\Common\WishlistApiBundle\Domain\WishlistApi;
 
 use Frontastic\Common\LifecycleTrait;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
 use Frontastic\Common\WishlistApiBundle\Domain\WishlistApi;
 use Frontastic\Common\WishlistApiBundle\Domain\Wishlist;
-use Frontastic\Common\WishlistApiBundle\Domain\Payment;
 use Frontastic\Common\WishlistApiBundle\Domain\LineItem;
+use Frontastic\Common\WishlistApiBundle\Domain\WishlistApi\LifecycleEventDecorator\BaseImplementation;
+use Frontastic\Common\WishlistApiBundle\Domain\WishlistApi\LifecycleEventDecorator\BaseImplementationAdapterV2;
 
 /**
  * Class LifecycleEventDecorator
@@ -34,6 +34,9 @@ class LifecycleEventDecorator implements WishlistApi
         $this->aggregate = $aggregate;
 
         foreach ($listeners as $listener) {
+            if ($listener instanceof BaseImplementation) {
+                $listener = new BaseImplementationAdapterV2($listener);
+            }
             $this->addListener($listener);
         }
     }

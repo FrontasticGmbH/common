@@ -7,9 +7,6 @@ use Frontastic\Common\WishlistApiBundle\Domain\Wishlist;
 use Frontastic\Common\WishlistApiBundle\Domain\WishlistApi;
 
 /**
- * @deprecated use Frontastic\Common\WishlistApiBundle\Domain\WishlistApi\LifecycleEventDecorator\BaseImplementationV2
- * instead.
- *
  * Base implementation of the WishlistApi LifecycleDecorator, which should be used when writing own LifecycleDecorators
  * as base class for future type-safety and convenience reasons, as it will provide the needed function naming as well
  * as parameter type-hinting.
@@ -19,7 +16,7 @@ use Frontastic\Common\WishlistApiBundle\Domain\WishlistApi;
  * manipulate the handed over parameters by simply manipulating it.
  * These methods doesn't return anything.
  *
- * The after* Methods will be oviously called *after* the orignal method is executed and will get the unwrapped result
+ * The after* Methods will be obviously called *after* the original method is executed and will get the unwrapped result
  * from the original method handed over. So if the original methods returns a Promise, the resolved value will be
  * handed over to this function here.
  * Overwriting this method could be useful if you want to manipulate the result.
@@ -33,11 +30,12 @@ use Frontastic\Common\WishlistApiBundle\Domain\WishlistApi;
  * <tag name="wishlistApi.lifecycleEventListener" />
  * ```
  */
-abstract class BaseImplementation
+abstract class BaseImplementationV2
 {
     /*** getWishlist() ************************************************************************************************/
-    public function beforeGetWishlist(WishlistApi $wishlistApi, string $wishlistId, string $locale): void
+    public function beforeGetWishlist(WishlistApi $wishlistApi, string $wishlistId, string $locale): ?array
     {
+        return null;
     }
 
     public function afterGetWishlist(WishlistApi $wishlistApi, Wishlist $wishlist): ?Wishlist
@@ -46,8 +44,9 @@ abstract class BaseImplementation
     }
 
     /*** getAnonymous() ***********************************************************************************************/
-    public function beforeGetAnonymous(WishlistApi $wishlistApi, string $anonymousId, string $locale): void
+    public function beforeGetAnonymous(WishlistApi $wishlistApi, string $anonymousId, string $locale): ?array
     {
+        return null;
     }
 
     public function afterGetAnonymous(WishlistApi $wishlistApi, Wishlist $wishlist): ?Wishlist
@@ -56,8 +55,9 @@ abstract class BaseImplementation
     }
 
     /*** getWishlists() ***********************************************************************************************/
-    public function beforeGetWishlists(WishlistApi $wishlistApi, string $accountId, string $locale): void
+    public function beforeGetWishlists(WishlistApi $wishlistApi, string $accountId, string $locale): ?array
     {
+        return null;
     }
 
     /**
@@ -71,8 +71,9 @@ abstract class BaseImplementation
     }
 
     /*** create() *****************************************************************************************************/
-    public function beforeCreate(WishlistApi $wishlistApi, Wishlist $wishlist, string $locale): void
+    public function beforeCreate(WishlistApi $wishlistApi, Wishlist $wishlist, string $locale): ?array
     {
+        return null;
     }
 
     public function afterCreate(WishlistApi $wishlistApi, Wishlist $wishlist): ?Wishlist
@@ -86,7 +87,8 @@ abstract class BaseImplementation
         Wishlist $wishlist,
         LineItem $lineItem,
         string $locale
-    ): void {
+    ): ?array {
+        return null;
     }
 
     public function afterAddToWishlist(WishlistApi $wishlistApi, Wishlist $wishlist): ?Wishlist
@@ -100,7 +102,8 @@ abstract class BaseImplementation
         Wishlist $wishlist,
         array $lineItems,
         string $locale
-    ): void {
+    ): ?array {
+        return null;
     }
 
     public function afterAddMultipleToWishlist(WishlistApi $wishlistApi, Wishlist $wishlist): ?Wishlist
@@ -115,8 +118,10 @@ abstract class BaseImplementation
         LineItem $lineItem,
         int $count,
         string $locale
-    ): void {
+    ): ?array {
+        return null;
     }
+
     public function afterUpdateLineItem(WishlistApi $wishlistApi, Wishlist $wishlist): ?Wishlist
     {
         return null;
@@ -128,7 +133,8 @@ abstract class BaseImplementation
         Wishlist $wishlist,
         LineItem $lineItem,
         string $locale
-    ): void {
+    ): ?array {
+        return null;
     }
 
     public function afterRemoveLineItem(WishlistApi $wishlistApi, Wishlist $wishlist): ?Wishlist

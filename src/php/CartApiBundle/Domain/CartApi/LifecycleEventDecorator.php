@@ -6,6 +6,8 @@ use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
+use Frontastic\Common\CartApiBundle\Domain\CartApi\LifecycleEventDecorator\BaseImplementation;
+use Frontastic\Common\CartApiBundle\Domain\CartApi\LifecycleEventDecorator\BaseImplementationAdapterV2;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
@@ -38,6 +40,9 @@ class LifecycleEventDecorator implements CartApi
         $this->aggregate = $aggregate;
 
         foreach ($listeners as $listener) {
+            if ($listener instanceof BaseImplementation) {
+                $listener = new BaseImplementationAdapterV2($listener);
+            }
             $this->addListener($listener);
         }
     }

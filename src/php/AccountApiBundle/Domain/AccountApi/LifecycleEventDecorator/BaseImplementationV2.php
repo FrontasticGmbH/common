@@ -9,9 +9,6 @@ use Frontastic\Common\AccountApiBundle\Domain\PasswordResetToken;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 
 /**
- * @deprecated use Frontastic\Common\AccountApiBundle\Domain\AccountApi\LifecycleEventDecorator\BaseImplementationV2
- * instead.
- *
  * Base implementation of the AccountApi LifecycleDecorator, which should be used when writing own LifecycleDecorators
  * as base class for future type-safety and convenience reasons, as it will provide the needed function naming as well
  * as parameter type-hinting.
@@ -35,11 +32,12 @@ use Frontastic\Common\CartApiBundle\Domain\Cart;
  * <tag name="accountApi.lifecycleEventListener" />
  * ```
  */
-abstract class BaseImplementation
+abstract class BaseImplementationV2
 {
     /*** getSalutations() *********************************************************************************************/
-    public function beforeGetSalutations(AccountApi $accountApi, string $locale): void
+    public function beforeGetSalutations(AccountApi $accountApi, string $locale): ?array
     {
+        return null;
     }
 
     public function afterGetSalutations(AccountApi $accountApi, ?array $salutations): ?array
@@ -48,8 +46,9 @@ abstract class BaseImplementation
     }
 
     /*** confirmEmail() ***********************************************************************************************/
-    public function beforeConfirmEmail(AccountApi $accountApi, string $token, string $locale = null): void
+    public function beforeConfirmEmail(AccountApi $accountApi, string $token, string $locale = null): ?array
     {
+        return null;
     }
 
     public function afterConfirmEmail(AccountApi $accountApi, Account $account): ?Account
@@ -63,7 +62,8 @@ abstract class BaseImplementation
         Account $account,
         ?Cart $cart = null,
         string $locale = null
-    ): void {
+    ): ?array {
+        return null;
     }
 
     public function afterCreate(AccountApi $accountApi, Account $account): ?Account
@@ -72,8 +72,9 @@ abstract class BaseImplementation
     }
 
     /*** update() *****************************************************************************************************/
-    public function beforeUpdate(AccountApi $accountApi, Account $account, string $locale = null): void
+    public function beforeUpdate(AccountApi $accountApi, Account $account, string $locale = null): ?array
     {
+        return null;
     }
 
     public function afterUpdate(AccountApi $accountApi, Account $account): ?Account
@@ -88,7 +89,8 @@ abstract class BaseImplementation
         string $oldPassword,
         string $newPassword,
         string $locale = null
-    ): void {
+    ): ?array {
+        return null;
     }
 
     public function afterUpdatePassword(AccountApi $accountApi, Account $account): ?Account
@@ -97,8 +99,9 @@ abstract class BaseImplementation
     }
 
     /*** generatePasswordResetToken() *********************************************************************************/
-    public function beforeGeneratePasswordResetToken(AccountApi $accountApi, string $email): void
+    public function beforeGeneratePasswordResetToken(AccountApi $accountApi, string $email): ?array
     {
+        return null;
     }
 
     public function afterGeneratePasswordResetToken(
@@ -114,7 +117,8 @@ abstract class BaseImplementation
         string $token,
         string $newPassword,
         string $locale = null
-    ): void {
+    ): ?array {
+        return null;
     }
 
     public function afterResetPassword(AccountApi $accountApi, Account $account): ?Account
@@ -128,7 +132,8 @@ abstract class BaseImplementation
         Account $account,
         ?Cart $cart = null,
         string $locale = null
-    ): void {
+    ): ?array {
+        return null;
     }
 
     public function afterLogin(AccountApi $accountApi, ?Account $account = null): ?Account
@@ -140,8 +145,9 @@ abstract class BaseImplementation
     }
 
     /*** refreshAccount() *********************************************************************************************/
-    public function beforeRefreshAccount(AccountApi $accountApi, Account $account, string $locale = null): void
+    public function beforeRefreshAccount(AccountApi $accountApi, Account $account, string $locale = null): ?array
     {
+        return null;
     }
 
     public function afterRefreshAccount(AccountApi $accountApi, Account $account): ?Account
@@ -150,8 +156,9 @@ abstract class BaseImplementation
     }
 
     /*** getAddresses() ***********************************************************************************************/
-    public function beforeGetAddresses(AccountApi $accountApi, Account $account, string $locale = null): void
+    public function beforeGetAddresses(AccountApi $accountApi, Account $account, string $locale = null): ?array
     {
+        return null;
     }
 
     /**
@@ -170,7 +177,8 @@ abstract class BaseImplementation
         Account $account,
         Address $address,
         string $locale = null
-    ): void {
+    ): ?array {
+        return null;
     }
 
     public function afterAddAddress(AccountApi $accountApi, Account $account): ?Account
@@ -184,7 +192,8 @@ abstract class BaseImplementation
         Account $account,
         Address $address,
         string $locale = null
-    ): void {
+    ): ?array {
+        return null;
     }
 
     public function afterUpdateAddress(AccountApi $accountApi, Account $account): ?Account
@@ -198,7 +207,8 @@ abstract class BaseImplementation
         Account $account,
         string $addressId,
         string $locale = null
-    ): void {
+    ): ?array {
+        return null;
     }
 
     public function afterRemoveAddress(AccountApi $accountApi, Account $account): ?Account
@@ -212,7 +222,8 @@ abstract class BaseImplementation
         Account $account,
         string $addressId,
         string $locale = null
-    ): void {
+    ): ?array {
+        return null;
     }
 
     public function afterSetDefaultBillingAddress(AccountApi $accountApi, Account $account): ?Account
@@ -226,7 +237,8 @@ abstract class BaseImplementation
         Account $account,
         string $addressId,
         string $locale = null
-    ): void {
+    ): ?array {
+        return null;
     }
 
     public function afterSetDefaultShippingAddress(AccountApi $accountApi, Account $account): ?Account

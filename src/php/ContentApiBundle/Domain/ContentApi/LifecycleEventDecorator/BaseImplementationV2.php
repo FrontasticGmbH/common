@@ -9,9 +9,6 @@ use Frontastic\Common\ContentApiBundle\Domain\Query;
 use Frontastic\Common\ContentApiBundle\Domain\Result;
 
 /**
- * @deprecated use Frontastic\Common\ContentApiBundle\Domain\ContentApi\LifecycleEventDecorator\BaseImplementationV2
- * instead.
- *
  * Base implementation of the ContentApi LifecycleDecorator, which should be used when writing own LifecycleDecorators
  * as base class for future type-safety and convenience reasons, as it will provide the needed function naming as well
  * as parameter type-hinting.
@@ -21,7 +18,7 @@ use Frontastic\Common\ContentApiBundle\Domain\Result;
  * manipulate the handed over parameters by simply manipulating it.
  * These methods doesn't return anything.
  *
- * The after* Methods will be oviously called *after* the orignal method is executed and will get the unwrapped result
+ * The after* Methods will be obviously called *after* the original method is executed and will get the unwrapped result
  * from the original method handed over. So if the original methods returns a Promise, the resolved value will be
  * handed over to this function here.
  * Overwriting this method could be useful if you want to manipulate the result.
@@ -35,11 +32,12 @@ use Frontastic\Common\ContentApiBundle\Domain\Result;
  * <tag name="contentApi.lifecycleEventListener" />
  * ```
  */
-abstract class BaseImplementation
+abstract class BaseImplementationV2
 {
     /*** getContentTypes() ********************************************************************************************/
-    public function beforeGetContentTypes(ContentApi $contentApi): void
+    public function beforeGetContentTypes(ContentApi $contentApi): ?array
     {
+        return null;
     }
 
     /**
@@ -58,7 +56,8 @@ abstract class BaseImplementation
         string $contentId,
         string $locale = null,
         string $mode = ContentApi::QUERY_SYNC
-    ): void {
+    ): ?array {
+        return null;
     }
 
     public function afterGetContent(ContentApi $contentApi, ?Content $content): ?Content
@@ -72,7 +71,8 @@ abstract class BaseImplementation
         Query $query,
         string $locale = null,
         string $mode = ContentApi::QUERY_SYNC
-    ): void {
+    ): ?array {
+        return null;
     }
 
     public function afterQuery(ContentApi $contentApi, ?Result $result): ?Result

@@ -4,6 +4,8 @@ namespace Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
+use Frontastic\Common\AccountApiBundle\Domain\AccountApi\LifecycleEventDecorator\BaseImplementation;
+use Frontastic\Common\AccountApiBundle\Domain\AccountApi\LifecycleEventDecorator\BaseImplementationAdapterV2;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\AccountApiBundle\Domain\PasswordResetToken;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
@@ -26,6 +28,9 @@ class LifecycleEventDecorator implements AccountApi
         $this->aggregate = $aggregate;
 
         foreach ($listeners as $listener) {
+            if ($listener instanceof BaseImplementation) {
+                $listener = new BaseImplementationAdapterV2($listener);
+            }
             $this->addListener($listener);
         }
     }
