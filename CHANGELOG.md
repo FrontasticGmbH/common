@@ -1,5 +1,13 @@
 # common Changelog
 
+## `2.9.0` (2021-02-16)
+
+* fix(FP-323): mapped discount for product discounts
+* fix: added attributes response on after event for getSearchableAttributes
+* feat: implemented BaseImplementation v2 and adapter for AccountApi (#605)
+* fix: used ContentApi instead of WishlistApi as aggreageted on LifecycleEventDecorator
+* feat: included BaseImplementation for ProductSearchApi and deprecated duplicated methods in ProductApi
+
 ## `2.8.0` (2021-02-11)
 
 * feat: Update ShopifyCartApi.php
