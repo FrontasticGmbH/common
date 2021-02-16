@@ -7,6 +7,7 @@
 * [__construct()](#__construct)
 * [addEnhancer()](#addenhancer)
 * [serialize()](#serialize)
+* [deserialize()](#deserialize)
 
 ### __construct()
 
@@ -42,6 +43,27 @@ Return Value: `void`
 
 ```php
 public function serialize(
+    mixed $item,
+    mixed $visitedIds = array()
+): mixed
+```
+
+*Prepares an object for json serialization. Does *not* actually encode it as JSON.*
+
+Is there a sensible refactoring to reduce this methods compleixty?
+Otherwise we consider it fine, since its tested anyways:
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$item`|`mixed`||
+`$visitedIds`|`mixed`|`array()`|
+
+Return Value: `mixed`
+
+### deserialize()
+
+```php
+public function deserialize(
     mixed $item,
     mixed $visitedIds = array()
 ): mixed
