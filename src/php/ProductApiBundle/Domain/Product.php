@@ -27,8 +27,9 @@ class Product extends ApiDataObject
      * date is unknown.
      *
      * @var ?\DateTimeImmutable
+     * // TODO: Do we want to start typing properties now that we're on 7.4?
      */
-    public $changed;
+    public ?\DateTimeImmutable $changed;
 
     /**
      * @var ?string

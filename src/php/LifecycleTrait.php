@@ -2,10 +2,8 @@
 
 namespace Frontastic\Common;
 
-use Frontastic\Common\ProductSearchApiBundle\Domain\LegacyLifecycleEventDecorator;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
-use phpDocumentor\Reflection\Types\Object_;
 
 /**
  * Trait LifecycleTrait
@@ -20,11 +18,24 @@ trait LifecycleTrait
     private $listeners = [];
 
     /**
+     * @var array
+     */
+    private $events = [];
+
+    /**
      * @param mixed $listener
      */
     protected function addListener($listener): void
     {
         $this->listeners[] = $listener;
+    }
+
+    /**
+     * @param array $events
+     */
+    protected function addEvents(array $events): void
+    {
+        $this->events = $events;
     }
 
     /**
@@ -54,6 +65,22 @@ trait LifecycleTrait
      */
     protected function dispatch(string $method, array $arguments)
     {
+        $arguments = $this->before($method, $arguments);
+
+        list($resultPromise, $returnPromise) = $this->call($method, $arguments);
+
+        $resultPromise = $this->after($resultPromise, $method);
+
+        return $returnPromise ? $resultPromise : $resultPromise->wait();
+    }
+
+    /**
+     * @param string $method
+     * @param array $arguments
+     * @return array
+     */
+    protected function before(string $method, array $arguments): array
+    {
         $beforeEvent = 'before' . ucfirst($method);
         foreach ($this->listeners as $listener) {
             if (is_callable([$listener, $beforeEvent])) {
@@ -68,7 +95,17 @@ trait LifecycleTrait
             }
         }
 
-        $rawResult = call_user_func_array([$this->getAggregateForRawResult(), $method], $arguments);
+        return $arguments;
+    }
+
+    /**
+     * @param string $method
+     * @param array $arguments
+     * @return array
+     */
+    protected function call(string $method, array $arguments): array
+    {
+        $rawResult = call_user_func_array([$this->getAggregate(), $method], $arguments);
         if ($rawResult instanceof PromiseInterface) {
             $resultPromise = $rawResult;
             $returnPromise = true;
@@ -76,7 +113,16 @@ trait LifecycleTrait
             $resultPromise = new FulfilledPromise($rawResult);
             $returnPromise = false;
         }
+        return array($resultPromise, $returnPromise);
+    }
 
+    /**
+     * @param $resultPromise
+     * @param string $method
+     * @return mixed
+     */
+    protected function after(PromiseInterface $resultPromise, string $method)
+    {
         $resultPromise = $resultPromise->then(function ($result) use ($method) {
             $afterEvent = 'after' . ucfirst($method);
             foreach ($this->listeners as $listener) {
@@ -96,10 +142,7 @@ trait LifecycleTrait
             return $result;
         });
 
-        if ($returnPromise) {
-            return $resultPromise;
-        }
-        return $resultPromise->wait();
+        return $resultPromise;
     }
 
     /**
