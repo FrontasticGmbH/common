@@ -118,6 +118,10 @@ class Commercetools implements WishlistApi
     }
 
     /**
+     * You can send all fields which are part of the ShoppingList specification of Commercetools
+     * as $wishlist->rawApiInput.
+     * @see https://docs.commercetools.com/api/projects/shoppingLists#create-shoppinglist
+     *
      * @param \Frontastic\Common\WishlistApiBundle\Domain\Wishlist $wishlist
      * @param string $locale
      * @return \Frontastic\Common\WishlistApiBundle\Domain\Wishlist
@@ -130,12 +134,17 @@ class Commercetools implements WishlistApi
             '/shopping-lists',
             ['expand' => self::EXPAND_VARIANTS],
             [],
-            Json::encode([
-                'name' => $wishlist->name,
-                'customer' => $wishlist->accountId ? ['typeId' => 'customer', 'id' => $wishlist->accountId] : null,
-                'anonymousId' => $wishlist->anonymousId ?: null,
-                'deleteDaysAfterLastModification' => $wishlist->anonymousId ? 31 : null,
-            ])
+            Json::encode(
+                array_merge(
+                    (array)$wishlist->rawApiInput,
+                    [
+                        'name' => $wishlist->name,
+                        'customer' => $wishlist->accountId ? ['typeId' => 'customer', 'id' => $wishlist->accountId] : null,
+                        'anonymousId' => $wishlist->anonymousId ?: null,
+                        'deleteDaysAfterLastModification' => $wishlist->anonymousId ? 31 : null,
+                    ]
+                )
+            )
         ), Locale::createFromPosix($locale));
     }
 
