@@ -72,6 +72,11 @@ class Commercetools extends ProductSearchApiBase
         $this->enabledFacetService = $enabledFacetService;
     }
 
+    /**
+     * You can send all query fields which are part of the Search Product Projections specification of Commercetools
+     * as $query>rawApiInput.
+     * @see https://docs.commercetools.com/api/projects/products-search#search-productprojections
+     */
     protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
         $locale = $this->localeCreator->createLocaleFromString($query->locale);

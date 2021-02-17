@@ -314,6 +314,12 @@ class Commercetools extends CartApiBase
         return $cart;
     }
 
+    /**
+     * You can send all fields which are part of the LineItem or CustomLineItem specification of Commercetools
+     * as $lineItem->rawApiInput.
+     * @see https://docs.commercetools.com/api/projects/carts#add-lineitem
+     * @see https://docs.commercetools.com/api/projects/carts#add-customlineitem
+     */
     protected function addToCartImplementation(Cart $cart, LineItem $lineItem, string $localeString = null): Cart
     {
         $locale = $this->parseLocaleString($localeString);
@@ -386,6 +392,12 @@ class Commercetools extends CartApiBase
         );
     }
 
+    /**
+     * You can send all fields which are part of the Change LineItem Quantity or Change CustomLineItem Quantity
+     * specification of Commercetools as $lineItem->rawApiInput.
+     * @see https://docs.commercetools.com/api/projects/carts#change-lineitem-quantity
+     * @see https://docs.commercetools.com/api/projects/carts#change-customlineitem-quantity
+     */
     protected function updateLineItemImplementation(
         Cart $cart,
         LineItem $lineItem,
@@ -574,6 +586,9 @@ class Commercetools extends CartApiBase
     }
 
     /**
+     * You can send all fields which are part of the Payment specification of Commercetools as $payment->rawApiInput.
+     * @see https://docs.commercetools.com/api/projects/carts#add-payment
+     *
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
@@ -617,6 +632,11 @@ class Commercetools extends CartApiBase
         );
     }
 
+    /**
+     * You can send all fields which are part of the Payment Update Actions specification of Commercetools
+     * as $payment->rawApiInput.
+     * @see https://docs.commercetools.com/api/projects/payments#update-actions
+     */
     protected function updatePaymentImplementation(Cart $cart, Payment $payment, string $localeString): Payment
     {
         $originalPayment = $cart->getPaymentById($payment->id);
@@ -763,6 +783,10 @@ class Commercetools extends CartApiBase
     }
 
     /**
+     * You can send all fields which are part of the Cart Update Actions specification of Commercetools
+     * as $cart->rawApiInput.
+     * @see https://docs.commercetools.com/api/projects/carts#update-actions
+     *
      * @throws RequestException
      */
     protected function postCartActions(Cart $cart, array $actions, CommercetoolsLocale $locale): Cart

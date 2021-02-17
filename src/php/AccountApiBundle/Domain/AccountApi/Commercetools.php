@@ -72,6 +72,9 @@ class Commercetools implements AccountApi
     }
 
     /**
+     * You can send all fields which are part of the Customer specification of Commercetools  as $account->rawApiInput.
+     * @see https://docs.commercetools.com/api/projects/customers#create-customer-sign-up
+     *
      * @todo Should we catch the RequestException here?
      */
     public function create(Account $account, ?Cart $cart = null, string $locale = null): Account
@@ -139,6 +142,10 @@ class Commercetools implements AccountApi
     }
 
     /**
+     * You can send all fields which are part of the Customer Update Actions specification of Commercetools
+     * as $account->rawApiInput.
+     * @see https://docs.commercetools.com/api/projects/customers#update-customer-by-id
+     *
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
@@ -321,6 +328,10 @@ class Commercetools implements AccountApi
     }
 
     /**
+     * You can send all fields which are part of the Address specification of Commercetools
+     * as $address->rawApiInput.
+     * @see https://docs.commercetools.com/api/projects/customers#add-address
+     *
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
@@ -370,6 +381,11 @@ class Commercetools implements AccountApi
     }
 
     /**
+     * You can send all fields which are part of the Change LineItem Quantity or Change CustomLineItem Quantity
+     * specification of Commercetools as $lineItem->rawApiInput.
+     * @see https://docs.commercetools.com/api/projects/carts#change-lineitem-quantity
+     * @see https://docs.commercetools.com/api/projects/carts#change-customlineitem-quantity
+     *
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */

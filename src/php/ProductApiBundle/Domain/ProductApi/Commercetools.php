@@ -185,6 +185,12 @@ class Commercetools extends ProductApiBase
         );
     }
 
+    /**
+     * You can send all query fields which are part of the Search Product Projections or Product specification
+     * of Commercetools as $query>rawApiInput.
+     * @see https://docs.commercetools.com/api/projects/products-search#search-productprojections
+     * @see https://docs.commercetools.com/api/projects/products#get-product-by-id
+     */
     protected function getProductImplementation(SingleProductQuery $query): PromiseInterface
     {
         if ($query->sku) {
