@@ -72,7 +72,7 @@ class Commercetools implements AccountApi
     }
 
     /**
-     * You can send all fields which are part of the Customer specification of Commercetools  as $account->rawApiInput.
+     * You can send all fields which are part of the Customer specification of Commercetools as $account->rawApiInput.
      * @see https://docs.commercetools.com/api/projects/customers#create-customer-sign-up
      *
      * @todo Should we catch the RequestException here?
