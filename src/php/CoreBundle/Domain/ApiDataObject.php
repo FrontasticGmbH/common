@@ -10,38 +10,6 @@ use Kore\DataObject\DataObject;
 abstract class ApiDataObject extends DataObject
 {
     /**
-     * Creates a new instance of the class called on
-     */
-    public static function newWithProjectSpecificData(array $values): self
-    {
-        // @phpstan-ignore-next-line
-        $dataObject = new static($values, true);
-        $dataObject->rawApiInput = [];
-        //@TODO: un-comment the following line after refactor dangerousInner* to a common name
-        //$dataObject->rawApiOutput = null;
-
-        return $dataObject;
-    }
-
-    /**
-     * Updates instance of the class called on
-     */
-    public function updateWithProjectSpecificData(array $values): self
-    {
-        foreach ($this as $key => $value) {
-            if (key_exists($key, $values)) {
-                $this->{$key} = $values[$key];
-            }
-        }
-
-        $this->rawApiInput = [];
-        //@TODO: un-comment the following line after refactor dangerousInner* to a common name
-        //$this->rawApiOutput = null;
-
-        return $this;
-    }
-
-    /**
      * Raw api data from client to backend.
      *
      * This property should not be filled by Frontastic itself, but if can be done only to allow backward compatibility.
@@ -74,4 +42,36 @@ abstract class ApiDataObject extends DataObject
      * @var mixed
      */
     public $projectSpecificData = [];
+
+    /**
+     * Creates a new instance of the class called on
+     */
+    public static function newWithProjectSpecificData(array $values): self
+    {
+        // @phpstan-ignore-next-line
+        $dataObject = new static($values, true);
+        $dataObject->rawApiInput = [];
+        //@TODO: un-comment the following line after refactor dangerousInner* to a common name
+        //$dataObject->rawApiOutput = null;
+
+        return $dataObject;
+    }
+
+    /**
+     * Updates instance of the class called on
+     */
+    public function updateWithProjectSpecificData(array $values): self
+    {
+        foreach ($this as $key => $value) {
+            if (key_exists($key, $values)) {
+                $this->{$key} = $values[$key];
+            }
+        }
+
+        $this->rawApiInput = [];
+        //@TODO: un-comment the following line after refactor dangerousInner* to a common name
+        //$this->rawApiOutput = null;
+
+        return $this;
+    }
 }
