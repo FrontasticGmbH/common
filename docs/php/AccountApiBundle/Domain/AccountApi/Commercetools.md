@@ -82,6 +82,8 @@ public function create(
 ): Account
 ```
 
+*You can send all fields which are part of the Customer specification of Commercetools  as $account->rawApiInput.*
+
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$account`|[`Account`](../Account.md)||
@@ -98,6 +100,9 @@ public function update(
     string $locale = null
 ): Account
 ```
+
+*You can send all fields which are part of the Customer Update Actions specification of Commercetools
+as $account->rawApiInput.*
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
@@ -218,6 +223,9 @@ public function addAddress(
 ): Account
 ```
 
+*You can send all fields which are part of the Address specification of Commercetools
+as $address->rawApiInput.*
+
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$account`|[`Account`](../Account.md)||
@@ -235,6 +243,9 @@ public function updateAddress(
     string $locale = null
 ): Account
 ```
+
+*You can send all fields which are part of the Change LineItem Quantity or Change CustomLineItem Quantity
+specification of Commercetools as $lineItem->rawApiInput.*
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
