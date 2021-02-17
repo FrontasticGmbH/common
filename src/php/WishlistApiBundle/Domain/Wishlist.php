@@ -2,7 +2,7 @@
 
 namespace Frontastic\Common\WishlistApiBundle\Domain;
 
-use Kore\DataObject\DataObject;
+use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 
 /**
  * Class Wishlist
@@ -10,7 +10,7 @@ use Kore\DataObject\DataObject;
  * @package Frontastic\Common\WishlistApiBundle\Domain
  * @type
  */
-class Wishlist extends DataObject
+class Wishlist extends ApiDataObject
 {
     /**
      * @var string
