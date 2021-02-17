@@ -139,7 +139,9 @@ class Commercetools implements WishlistApi
                     (array)$wishlist->rawApiInput,
                     [
                         'name' => $wishlist->name,
-                        'customer' => $wishlist->accountId ? ['typeId' => 'customer', 'id' => $wishlist->accountId] : null,
+                        'customer' => $wishlist->accountId
+                            ? ['typeId' => 'customer', 'id' => $wishlist->accountId]
+                            : null,
                         'anonymousId' => $wishlist->anonymousId ?: null,
                         'deleteDaysAfterLastModification' => $wishlist->anonymousId ? 31 : null,
                     ]
