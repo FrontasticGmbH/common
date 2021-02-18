@@ -7,6 +7,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\PaginatedQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiBase;
+use Frontastic\Common\ShopifyBundle\Domain\Exception\QueryException;
 use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyProductMapper;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClient;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -230,12 +231,8 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                 $productsData = [];
                 $pageInfoData = [];
 
-                if ($result['errors']
-                    && strpos($result['errors'][0]['message'], 'Invalid global id') !== false
-                ) {
-                    return new Result([
-                        'query' => clone $query,
-                    ]);
+                if (!is_array($result['body'])) {
+                    throw new \Exception('Empty body response');
                 }
 
                 if (key_exists('nodes', $result['body']['data'])) {
@@ -278,6 +275,16 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                     'facets' => $this->productMapper->mapDataToFacets($productsData),
                     'query' => clone $query,
                 ]);
+            })
+            ->otherwise(function (\Exception $exception) use ($query) {
+                if ($exception instanceof QueryException &&
+                    (strpos($exception->getMessage(), 'Invalid global id') !== false)
+                ) {
+                    return new Result([
+                        'query' => clone $query,
+                    ]);
+                }
+                throw $exception;
             });
     }
 
@@ -295,10 +302,6 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
         return $this->client
             ->request($query)
             ->then(function (array $result): array {
-                if ($result['errors']) {
-                    throw new \RuntimeException($result['errors'][0]['message']);
-                }
-
                 return $this->productMapper->mapDataToProductAttributes($result['body']['data']);
             });
     }

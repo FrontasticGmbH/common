@@ -86,10 +86,6 @@ class ShopifyProductApi extends ProductApiBase
         $hasPreviousPage = null;
         $categories = [];
 
-        if ($result['errors']) {
-            throw new \RuntimeException($result['errors'][0]['message']);
-        }
-
         if (key_exists('collections', $result['body']['data'])) {
             $collectionsData = $result['body']['data']['collections']['edges'];
             $hasNextPage = $result['body']['data']['collections']['pageInfo']['hasNextPage'];
