@@ -13,7 +13,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 
 class ShopifyProductSearchApi extends ProductSearchApiBase
 {
-    private const DEFAULT_VARIANTS_TO_FETCH = 250;
+    private const MAX_ELEMENTS_TO_FETCH = 250;
     private const DEFAULT_ELEMENTS_TO_FETCH = 10;
 
     /**
@@ -34,7 +34,7 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
 
     protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
-        $productQuery = "
+        $productQueryFields = "
             id
             title
             description
@@ -63,7 +63,7 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                 description
                 title
             }
-            variants(first: " . self::DEFAULT_VARIANTS_TO_FETCH . ") {
+            variants(first: " . self::MAX_ELEMENTS_TO_FETCH . ") {
                 edges {
                     node {
                         id
@@ -81,7 +81,7 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                         priceV2 {
                             amount
                             currencyCode
-                        }                        
+                        }
                         compareAtPriceV2 {
                             amount
                             currencyCode
@@ -152,12 +152,12 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
 
         $pageFilter = $this->buildPageFilter($query);
 
-        $query->query = "{
+        $queryString = "{
             products($pageFilter $queryFilter) {
                 edges {
                     cursor
                     node {
-                        $productQuery
+                        $productQueryFields
                     }
                 }
                 pageInfo {
@@ -182,11 +182,11 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
         }
 
         if (count($productIds)) {
-            $query->query = "{
+            $queryString = "{
                 nodes(ids: [\"" . implode("\",\"", $productIds) . "\"]) {
                     id
                     ... on Product {
-                        $productQuery
+                        $productQueryFields
                     }
                 }
             }";
@@ -199,7 +199,7 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
         }
 
         if ($query->category) {
-            $query->query = "{
+            $queryString = "{
                 node(id: \"{$query->category}\") {
                     id
                     ... on Collection {
@@ -207,7 +207,7 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                             edges {
                                 cursor
                                 node {
-                                    $productQuery
+                                    $productQueryFields
                                 }
                             }
                             pageInfo {
@@ -221,7 +221,7 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
         }
 
         return $this->client
-            ->request($query->query, $query->locale)
+            ->request($queryString, $query->locale)
             ->then(function ($result) use ($query): Result {
                 $hasNextPage = null;
                 $hasPreviousPage = null;
@@ -311,7 +311,7 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
     private function buildPageFilter(PaginatedQuery $query): string
     {
         $pageFilter = strpos($query->cursor, 'before:') === 0 ? "last:" : "first:";
-        $pageFilter .= $query->limit;
+        $pageFilter .= min($query->limit, self::MAX_ELEMENTS_TO_FETCH);
         $pageFilter .= !empty($query->cursor) ? ' ' . $query->cursor : null;
 
         return $pageFilter;
