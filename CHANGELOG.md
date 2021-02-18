@@ -1,5 +1,7 @@
 # common Changelog
 
+## `1.9.5` (2021-02-18)
+
 ## `2.9.0` (2021-02-16)
 
 * fix(FP-323): mapped discount for product discounts
