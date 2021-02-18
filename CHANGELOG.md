@@ -1,5 +1,12 @@
 # common Changelog
 
+## `2.10.0` (2021-02-18)
+
+* feat(FP-81): included documentation of rawApiInput fields from Commercetools on Wishlist
+* fix(FP-335): extended Wishlist from ApiDataObject
+* feat(FP-81): included documentation of rawApiInput fields from Commercetools
+* Feat: JavaScript based Decorators
+
 ## `1.9.5` (2021-02-18)
 
 ## `2.9.0` (2021-02-16)
