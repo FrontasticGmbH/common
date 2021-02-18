@@ -82,7 +82,7 @@ public function create(
 ): Account
 ```
 
-*You can send all fields which are part of the Customer specification of Commercetools  as $account->rawApiInput.*
+*You can send all fields which are part of the Customer specification of Commercetools as $account->rawApiInput.*
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
