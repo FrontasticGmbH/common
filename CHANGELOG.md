@@ -1,5 +1,10 @@
 # common Changelog
 
+## `2.10.1` (2021-02-19)
+
+* fix(FP-364): fixed unit test inlcuding dangerousInnerShippingMethod to expected data
+* fix(FP-364): extended shipping method query and map localization zone
+
 ## `2.10.0` (2021-02-18)
 
 * feat(FP-81): included documentation of rawApiInput fields from Commercetools on Wishlist
