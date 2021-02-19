@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.10.2` (2021-02-19)
+
+* fix: removed cartApi extra argument from BaseImplementationAdapterV2
+
 ## `2.10.1` (2021-02-19)
 
 * fix(FP-364): fixed unit test inlcuding dangerousInnerShippingMethod to expected data
