@@ -852,7 +852,10 @@ class Commercetools extends CartApiBase
         try {
             $result = $this->client->get(
                 '/shipping-methods/matching-cart',
-                ['cartId' => $cart->cartId]
+                [
+                    'cartId' => $cart->cartId,
+                    'expand' => 'zoneRates[*].zone',
+                ]
             );
 
             return array_map(
@@ -871,7 +874,9 @@ class Commercetools extends CartApiBase
         $locale = $this->localeCreator->createLocaleFromString($localeString);
 
         $uri = '/shipping-methods';
-        $params = [];
+        $params = [
+            'expand' => 'zoneRates[*].zone',
+        ];
 
         if ($onlyMatching) {
             $uri .= '/matching-location';

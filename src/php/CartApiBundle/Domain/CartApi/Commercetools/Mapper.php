@@ -321,6 +321,7 @@ class Mapper
                 $shippingMethodData['localizedDescription'] ?? []
             ),
             'rates' => $this->mapDataToShippingRates($shippingMethodData['zoneRates'] ?? []),
+            'dangerousInnerShippingMethod' => $shippingMethodData,
         ]);
     }
 
@@ -357,15 +358,15 @@ class Mapper
 
         foreach ($zoneRatesData as $zoneRateData) {
             $zoneId = $zoneRateData['zone']['id'];
-            $name = $zoneRateData['zone']['name'] ?? null;
+            $name = $zoneRateData['zone']['obj']['name'] ?? null;
             $locations = array_map(
                 function ($location) {
                     return new ShippingLocation([
-                        'country' => $location['country'],
-                        'state' => $location['state'],
+                        'country' => $location['country'] ?? null,
+                        'state' => $location['state'] ?? null,
                     ]);
                 },
-                $zoneRateData['zone']['locations'] ?? []
+                $zoneRateData['zone']['obj']['locations'] ?? []
             );
 
             $matchingShippingRates = array_filter(
