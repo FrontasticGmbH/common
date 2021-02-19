@@ -453,7 +453,13 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 ],
                 new ShippingMethod([
                     'shippingMethodId' => '111',
-                    'description' => 'standard shipping'
+                    'description' => 'standard shipping',
+                    'dangerousInnerShippingMethod' => [
+                        'id' => '111',
+                        'localizedDescription' => [
+                            'de' => 'standard shipping',
+                        ]
+                    ],
                 ]),
             ],
             'Empty description' => [
@@ -467,6 +473,13 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 new ShippingMethod([
                     'shippingMethodId' => '111',
                     'name' => 'standard',
+                    'dangerousInnerShippingMethod' => [
+                        'id' => '111',
+                        'name' => 'standard',
+                        'localizedDescription' => [
+                            'de' => null,
+                        ],
+                    ],
                 ]),
             ],
             'Completed shipping method' => [
@@ -481,6 +494,13 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     'shippingMethodId' => '111',
                     'name' => 'standard',
                     'description' => 'standard shipping',
+                    'dangerousInnerShippingMethod' => [
+                        'id' => '111',
+                        'name' => 'standard',
+                        'localizedDescription' => [
+                            'de' => 'standard shipping',
+                        ],
+                    ],
                 ]),
             ],
         ];
