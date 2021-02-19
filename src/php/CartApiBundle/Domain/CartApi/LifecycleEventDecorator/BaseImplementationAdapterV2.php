@@ -47,7 +47,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
     public function beforeGetById(CartApi $cartApi, string $cartId, string $locale = null): ?array
     {
         $this->baseImplementation->beforeGetById($cartApi, $cartId, $locale);
-        return [$cartApi, $cartId, $locale];
+        return [$cartId, $locale];
     }
 
     public function afterGetById(CartApi $cartApi, Cart $cart): ?Cart
