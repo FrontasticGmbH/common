@@ -42,16 +42,13 @@ class Json implements JsonInterface
             try {
                 return simdjson_decode($data, $associative, $depth);
             } catch (\Exception $e) {
-                throw new InvalidJsonDecodeException($e->getMessage(), $e->getCode());
+                // TODO: modify Json::decode calls to handle exceptions
+                // throw new InvalidJsonDecodeException($e->getMessage(), $e->getCode());
+
+                // Ignore errors decoding data since body could be not Json
+                return json_decode($data, $associative, $depth, $flags);
             }
         }
-
-        $result = json_decode($data, $associative, $depth, $flags);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new InvalidJsonDecodeException(json_last_error());
-        }
-
-        return $result;
+        return json_decode($data, $associative, $depth, $flags);
     }
 }
