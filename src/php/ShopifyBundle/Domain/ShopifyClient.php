@@ -5,6 +5,7 @@ namespace Frontastic\Common\ShopifyBundle\Domain;
 use Frontastic\Common\CoreBundle\Domain\RequestProvider;
 use Frontastic\Common\HttpClient;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Exception\RequestException;
+use Frontastic\Common\ShopifyBundle\Domain\Exception\QueryException;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\SimpleCache\CacheInterface;
 use Frontastic\Common\CoreBundle\Domain\Json\Json;
@@ -96,8 +97,11 @@ class ShopifyClient
             );
         }
 
+        if ($body->hasErrors()) {
+            throw QueryException::createFromErrors($body->getErrors());
+        }
+
         return [
-            'errors' => $body->hasErrors() ? $body->getErrors() : false,
             'response' => $response,
             'status' => $response->status,
             'body' => $body->container,

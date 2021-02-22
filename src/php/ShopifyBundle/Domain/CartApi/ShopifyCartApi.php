@@ -93,10 +93,6 @@ class ShopifyCartApi extends CartApiBase
         return $this->client
             ->request($mutation, $locale)
             ->then(function ($result) : Cart {
-                if ($result['errors']) {
-                    throw new \RuntimeException($result['errors'][0]['message']);
-                }
-
                 return $this->mapDataToCart($result['body']['data']['checkoutCustomerAssociateV2']['checkout']);
             })
             ->wait();
@@ -136,10 +132,6 @@ class ShopifyCartApi extends CartApiBase
         return $this->client
             ->request($mutation, $locale)
             ->then(function ($result) : Cart {
-                if ($result['errors']) {
-                    throw new \RuntimeException($result['errors'][0]['message']);
-                }
-
                 return $this->mapDataToCart($result['body']['data']['checkoutCreate']['checkout']);
             })
             ->wait();
@@ -177,10 +169,6 @@ class ShopifyCartApi extends CartApiBase
         return $this->client
             ->request($query)
             ->then(function (array $result): Cart {
-                if ($result['errors']) {
-                    throw new \RuntimeException($result['errors'][0]['message']);
-                }
-
                 return $this->mapDataToCart($result['body']['data']['node']);
             })
             ->wait();
@@ -250,10 +238,6 @@ class ShopifyCartApi extends CartApiBase
         return $this->client
             ->request($mutation, $locale)
             ->then(function ($result) : Cart {
-                if ($result['errors']) {
-                    throw new \RuntimeException($result['errors'][0]['message']);
-                }
-
                 return $this->mapDataToCart($result['body']['data']['checkoutLineItemsAdd']['checkout']);
             })
             ->wait();
@@ -304,10 +288,6 @@ class ShopifyCartApi extends CartApiBase
         return $this->client
             ->request($mutation, $locale)
             ->then(function ($result) : Cart {
-                if ($result['errors']) {
-                    throw new \RuntimeException($result['errors'][0]['message']);
-                }
-
                 return $this->mapDataToCart($result['body']['data']['checkoutLineItemsUpdate']['checkout']);
             })
             ->wait();
@@ -350,10 +330,6 @@ class ShopifyCartApi extends CartApiBase
         return $this->client
             ->request($mutation, $locale)
             ->then(function ($result) : Cart {
-                if ($result['errors']) {
-                    throw new \RuntimeException($result['errors'][0]['message']);
-                }
-
                 return $this->mapDataToCart($result['body']['data']['checkoutLineItemsRemove']['checkout']);
             })
             ->wait();
@@ -396,10 +372,6 @@ class ShopifyCartApi extends CartApiBase
         return $this->client
             ->request($mutation, $locale)
             ->then(function ($result) : Cart {
-                if ($result['errors']) {
-                    throw new \RuntimeException($result['errors'][0]['message']);
-                }
-
                 return $this->mapDataToCart($result['body']['data']['checkoutEmailUpdateV2']['checkout']);
             })
             ->wait();
@@ -442,10 +414,6 @@ class ShopifyCartApi extends CartApiBase
         return $this->client
             ->request($mutation, $locale)
             ->then(function ($result) : Cart {
-                if ($result['errors']) {
-                    throw new \RuntimeException($result['errors'][0]['message']);
-                }
-
                 return $this->mapDataToCart($result['body']['data']['checkoutShippingLineUpdate']['checkout']);
             })
             ->wait();
@@ -496,10 +464,6 @@ class ShopifyCartApi extends CartApiBase
         return $this->client
             ->request($mutation, $locale)
             ->then(function ($result) : Cart {
-                if ($result['errors']) {
-                    throw new \RuntimeException($result['errors'][0]['message']);
-                }
-
                 return $this->mapDataToCart($result['body']['data']['checkoutShippingAddressUpdateV2']['checkout']);
             })
             ->wait();
@@ -580,10 +544,6 @@ class ShopifyCartApi extends CartApiBase
         return $this->client
             ->request($query)
             ->then(function (array $result): Cart {
-                if ($result['errors']) {
-                    throw new \RuntimeException($result['errors'][0]['message']);
-                }
-
                 return $this->mapDataToOrder($result['body']['data']['node']);
             })
             ->wait();
@@ -624,10 +584,6 @@ class ShopifyCartApi extends CartApiBase
         return $this->client
             ->request($query)
             ->then(function (array $result): array {
-                if ($result['errors']) {
-                    throw new \RuntimeException($result['errors'][0]['message']);
-                }
-
                 return $this->mapDataToOrders($result['body']['data']['customer']);
             })
             ->wait();
@@ -675,10 +631,6 @@ class ShopifyCartApi extends CartApiBase
         return $this->client
             ->request($query)
             ->then(function (array $result): array {
-                if ($result['errors']) {
-                    throw new \RuntimeException($result['errors'][0]['message']);
-                }
-
                 $cartData = $result['body']['data']['node'];
                 if (!key_exists('availableShippingRates', $cartData)) {
                     return [];
@@ -892,7 +844,7 @@ class ShopifyCartApi extends CartApiBase
             compareAtPriceV2 {
                 amount
                 currencyCode
-            }            
+            }
             product {
                 id
                 images(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
