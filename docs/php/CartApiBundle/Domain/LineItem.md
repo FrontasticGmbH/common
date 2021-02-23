@@ -13,6 +13,7 @@ Property|Type|Default|Required|Description
 `price` | `int` |  | *Yes* | Price of a single item
 `discountedPrice` | `?int` |  | - | Discounted price per item
 `discountTexts` | `array` | `[]` | - | Translatable discount texts, if any are applied
+`discounts` | [`Discount`](Discount.md)[] | `[]` | - | 
 `totalPrice` | `int` |  | *Yes* | Total price, basically $price * $count, also discounted
 `currency` | `string` |  | *Yes* | 
 `isGift` | `bool` | `false` | *Yes* | 

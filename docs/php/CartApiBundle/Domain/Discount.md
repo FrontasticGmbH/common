@@ -11,6 +11,7 @@ Property|Type|Default|Required|Description
 `state` | `string` |  | *Yes* | 
 `name` | [`Translatable`](../../Translatable.md) |  | *Yes* | 
 `description` | [`Translatable`](../../Translatable.md) |  | - | 
+`discountedAmount` | `?int` |  | - | Amount discounted.
 `dangerousInnerDiscount` | `mixed` |  | - | Access original object from backend
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).
