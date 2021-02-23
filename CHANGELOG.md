@@ -1,5 +1,10 @@
 # common Changelog
 
+## `2.10.3` (2021-02-23)
+
+* fix(FP-389): included discounts on LineItems and mapped data for Commercetools
+* fix: removed decoded exceptions in favor of fallback on php native decoder
+
 ## `2.10.2` (2021-02-19)
 
 * fix: removed cartApi extra argument from BaseImplementationAdapterV2
