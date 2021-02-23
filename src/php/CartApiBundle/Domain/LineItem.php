@@ -55,6 +55,11 @@ class LineItem extends ApiDataObject
     public $discountTexts = [];
 
     /**
+     * @var Discount[]
+     */
+    public $discounts = [];
+
+    /**
      * Total price, basically $price * $count, also discounted
      *
      * @var integer

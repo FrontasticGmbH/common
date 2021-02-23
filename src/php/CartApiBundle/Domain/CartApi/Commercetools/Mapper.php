@@ -99,23 +99,39 @@ class Mapper
         }
 
         $discounts = [];
-        foreach ($cartData['discountCodes'] as $discount) {
-            // Get the state from the $discount and save it in $discountCodeState variable
-            // before assigning $discount['discountCode'] to $discount.
-            $discountCodeState = $discount['state'] ?? null;
-            $discount = $discount['discountCode'] ?? [];
-            $discount = isset($discount['obj']) ? $discount['obj'] : $discount;
-            $discounts[] = new Discount([
-                'discountId' => $discount['id'] ?? 'undefined',
-                'name' => $discount['name'] ?? null,
-                'code' => $discount['code'] ?? null,
-                'description' => $discount['description'] ?? null,
-                'state' => $discountCodeState,
-                'dangerousInnerDiscount' => $discount,
-            ]);
+        foreach ($cartData['discountCodes'] as $discountData) {
+            $discount = $this->mapDataToDiscount(
+                $discountData['discountCode']['obj'] ?? $discountData['discountCode'] ?? []
+            );
+            $discount->state = $discountData['state'] ?? null;
+            $discounts[] = $discount;
         }
 
         return $discounts;
+    }
+
+    public function mapDataToDiscount(array $discountData): Discount
+    {
+        return new Discount([
+            'discountId' => $discountData['id'] ?? 'undefined',
+            'code' => $discountData['code'] ?? null,
+            'name' => $discountData['name'] ?? null,
+            'description' => $discountData['description'] ?? null,
+            'dangerousInnerDiscount' => $discountData,
+        ]);
+    }
+
+    public function mapDataToLineItemDiscounts(array $lineItemDiscountsData): array
+    {
+        return array_map(
+            function ($discountData): Discount {
+                $discount = $this->mapDataToDiscount($discountData['discount']['obj'] ?? []);
+                $discount->discountedAmount = $discountData['discountedAmount']['centAmount'] ?? null;
+
+                return $discount;
+            },
+            ($lineItemDiscountsData['includedDiscounts'] ?? [])
+        );
     }
 
     /**
@@ -148,6 +164,7 @@ class Mapper
                                 : []
                             )
                         ),
+                        'discounts' => $this->mapDataToLineItemDiscounts($lineItemData['discountedPrice'] ?? []),
                         'totalPrice' => $lineItemData['totalPrice']['centAmount'],
                         'currency' => $currency,
                         'isGift' => ($lineItemData['lineItemMode'] === 'GiftLineItem'),
@@ -176,6 +193,7 @@ class Mapper
                                 : []
                             )
                         ),
+                        'discounts' => $this->mapDataToLineItemDiscounts($lineItemData['discountedPrice'] ?? []),
                         'totalPrice' => $lineItemData['totalPrice']['centAmount'],
                         'dangerousInnerItem' => $lineItemData,
                     ]);

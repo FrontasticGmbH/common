@@ -40,6 +40,16 @@ class Discount extends ApiDataObject
     public $description;
 
     /**
+     * Amount discounted.
+     *
+     * On Cart, the amount discounted in the cart.
+     * On LineItem, the amount discounted per single line item.
+     *
+     * @var ?integer
+     */
+    public $discountedAmount;
+
+    /**
      * Access original object from backend
      *
      * This should only be used if you need very specific features
