@@ -60,7 +60,7 @@ class Account extends ApiDataObject implements UserInterface, \Serializable
     public $confirmationToken;
 
     /**
-     * @var string
+     * @var bool
      */
     public $confirmed = false;
 
