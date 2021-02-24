@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain;
 
+use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
