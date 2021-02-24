@@ -16,7 +16,7 @@ Property|Type|Default|Required|Description
 `birthday` | `\DateTime` |  | - | 
 `groups` | [`Group`](Group.md)[] | `[]` | *Yes* | 
 `confirmationToken` | `string` |  | - | 
-`confirmed` | `string` | `false` | - | 
+`confirmed` | `bool` | `false` | - | 
 `tokenValidUntil` | `\DateTime` |  | - | 
 `addresses` | [`Address`](Address.md)[] | `[]` | *Yes* | 
 `authToken` | `string|null` |  | - | 
