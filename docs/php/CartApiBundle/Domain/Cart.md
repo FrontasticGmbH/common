@@ -13,8 +13,8 @@ Property|Type|Default|Required|Description
 `birthday` | `\DateTimeImmutable` |  | - | 
 `shippingInfo` | ?[`ShippingInfo`](ShippingInfo.md) |  | - | 
 `shippingMethod` | ?[`ShippingMethod`](ShippingMethod.md) |  | - | 
-`shippingAddress` | `?\Frontastic\Common\CartApiBundle\Domain\Address` |  | - | 
-`billingAddress` | `?\Frontastic\Common\CartApiBundle\Domain\Address` |  | - | 
+`shippingAddress` | ?[`Address`](../../AccountApiBundle/Domain/Address.md) |  | - | 
+`billingAddress` | ?[`Address`](../../AccountApiBundle/Domain/Address.md) |  | - | 
 `sum` | `int` |  | *Yes* | 
 `currency` | `string` |  | *Yes* | 
 `payments` | [`Payment`](Payment.md)[] | `[]` | *Yes* | 
