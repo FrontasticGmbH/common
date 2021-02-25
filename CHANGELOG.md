@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.10.4` (2021-02-25)
+
+* fix: stan errors
+
 ## `2.10.3` (2021-02-23)
 
 * fix(FP-389): included discounts on LineItems and mapped data for Commercetools
