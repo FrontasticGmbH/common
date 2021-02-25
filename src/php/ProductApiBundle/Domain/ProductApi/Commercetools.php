@@ -204,8 +204,8 @@ class Commercetools extends ProductApiBase
                     ])
                 )
                 ->then(
-                    function (Result $productQueryResult) use ($query) {
-                        if (count($productQueryResult->items) === 0) {
+                    function (?Result $productQueryResult) use ($query) {
+                        if ($productQueryResult == null || count($productQueryResult->items) === 0) {
                             throw ProductNotFoundException::bySku($query->sku);
                         }
                         return reset($productQueryResult->items);
