@@ -9,6 +9,7 @@ use Frontastic\Common\FindologicBundle\Domain\SearchRequest;
 use Frontastic\Common\FindologicBundle\Exception\ServiceNotAliveException;
 use Frontastic\Common\HttpClient;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\RejectedPromise;
@@ -39,7 +40,7 @@ class FindologicProductSearchApiTest extends TestCase
         \Phake::when($client)->isAlive($locale)->thenReturn($serviceDeadResult);
         \Phake::when($validator)->isSupported($query)->thenReturn(ValidationResult::createValid());
         \Phake::when($mapper)->queryToRequest($query)->thenReturn($searchRequest);
-        \Phake::when($originalDataSource)->query($query)->thenReturn(new FulfilledPromise('result'));
+        \Phake::when($originalDataSource)->query($query)->thenReturn(new FulfilledPromise(new Result()));
 
         $api = new FindologicProductSearchApi(
             $client,

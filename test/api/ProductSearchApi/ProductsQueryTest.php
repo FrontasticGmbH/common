@@ -71,12 +71,10 @@ class ProductsQueryTest extends FrontasticApiTestCase
      */
     public function testQueryCursorBasedPaginatedProductsReturnsProducts(Project $project, string $language): void
     {
-        $this->requireCategoryEndpointToSupportCursorBasedPagination($project);
-
         $firstResult = $this->queryProductsWithProductSearchApi(
             $project,
             $language,
-            [],
+            $this->sortReproducibly(),
             1,
             null,
             null
@@ -88,7 +86,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
         $secondResult = $this->queryProductsWithProductSearchApi(
             $project,
             $language,
-            [],
+            $this->sortReproducibly(),
             1,
             null,
             $firstResult->nextCursor
@@ -101,7 +99,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
         $thirdResult = $this->queryProductsWithProductSearchApi(
             $project,
             $language,
-            [],
+            $this->sortReproducibly(),
             1,
             null,
             $secondResult->nextCursor
@@ -114,7 +112,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
         $secondResultPreviousCursor = $this->queryProductsWithProductSearchApi(
             $project,
             $language,
-            [],
+            $this->sortReproducibly(),
             1,
             null,
             $thirdResult->previousCursor
@@ -268,8 +266,6 @@ class ProductsQueryTest extends FrontasticApiTestCase
         Project $project,
         string $language
     ): void {
-        $this->requireCategoryEndpointToSupportCursorBasedPagination($project);
-
         $limit = 24;
         $productsQueriedOneStep =
             $this->queryProductsWithProductSearchApi($project, $language, $this->sortReproducibly(), $limit);
@@ -715,11 +711,6 @@ class ProductsQueryTest extends FrontasticApiTestCase
     private function assertContainsNoHtml(string $actual, string $message = null): void
     {
         $this->assertEquals($actual, strip_tags($actual), $message ?? 'The string may not contain HTML tags.');
-    }
-
-    private function requireCategoryEndpointToSupportCursorBasedPagination(Project $project): void
-    {
-        $this->requireProjectFeature($project, 'supportCursorBasedPagination');
     }
 
     private function requireCategoryEndpointToSupportOffsetPagination(Project $project): void
