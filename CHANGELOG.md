@@ -1,5 +1,10 @@
 # common Changelog
 
+## `2.10.5` (2021-03-01)
+
+* fix(FP-395): implemented build query for next page and calculate last (#623)
+* fix: fix E_NOTICE on product not found
+
 ## `2.10.4` (2021-02-25)
 
 * fix: stan errors
