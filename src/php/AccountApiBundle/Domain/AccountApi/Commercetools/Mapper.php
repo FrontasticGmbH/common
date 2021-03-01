@@ -2,7 +2,9 @@
 
 namespace Frontastic\Common\AccountApiBundle\Domain\AccountApi\Commercetools;
 
+use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
+use Ramsey\Uuid\Uuid;
 
 class Mapper
 {
@@ -26,5 +28,44 @@ class Mapper
                 'phone' => $address->phone,
             ]
         );
+    }
+
+    public function mapAddressesToData(Account $account): array
+    {
+        $addressesData = null;
+        $defaultBillingAddress = null;
+        $defaultShippingAddress = null;
+        $billingAddresses = null;
+        $shippingAddresses = null;
+
+        foreach ($account->addresses as $index => $address) {
+            $addressData = $this->mapAddressToData($address);
+            unset($addressData['id']);
+            if ($address->isDefaultBillingAddress || $address->isDefaultShippingAddress) {
+                if (($addressData['key'] ?? null) === null) {
+                    $addressData['key'] = Uuid::uuid4()->toString();
+                }
+            }
+
+            if ($address->isDefaultBillingAddress) {
+                $defaultBillingAddress = $defaultBillingAddress ?? $index;
+                $billingAddresses[] = $index;
+            }
+
+            if ($address->isDefaultShippingAddress) {
+                $defaultShippingAddress = $defaultShippingAddress ?? $index;
+                $shippingAddresses[] = $index;
+            }
+
+            $addressesData[] = $addressData;
+        }
+
+        return [
+            $addressesData,
+            $defaultBillingAddress,
+            $defaultShippingAddress,
+            $billingAddresses,
+            $shippingAddresses
+        ];
     }
 }

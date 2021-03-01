@@ -79,6 +79,14 @@ class Commercetools implements AccountApi
      */
     public function create(Account $account, ?Cart $cart = null, string $locale = null): Account
     {
+        list(
+            $addressesData,
+            $defaultBillingAddress,
+            $defaultShippingAddress,
+            $billingAddresses,
+            $shippingAddresses
+            ) = $this->accountMapper->mapAddressesToData($account);
+
         try {
             $account = $this->mapAccount($this->client->post(
                 '/customers',
@@ -95,6 +103,11 @@ class Commercetools implements AccountApi
                             'dateOfBirth' => $account->birthday ? $account->birthday->format('Y-m-d') : null,
                             'password' => $this->sanitizePassword($account->getPassword()),
                             'isEmailVerified' => $account->confirmed,
+                            'addresses' => $addressesData,
+                            'defaultBillingAddress' => $defaultBillingAddress,
+                            'billingAddresses' => $billingAddresses,
+                            'defaultShippingAddress' => $defaultShippingAddress,
+                            'shippingAddresses' => $shippingAddresses,
                             /** @TODO: To guarantee BC only!
                              * This data should be mapped on the corresponding EventDecorator
                              * Remove the commented lines below if the data is already handle in MapAccountDataDecorator

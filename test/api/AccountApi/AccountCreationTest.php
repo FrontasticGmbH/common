@@ -216,7 +216,9 @@ class AccountCreationTest extends FrontasticApiTestCase
             'lastName' => 'Stoltenberg',
             'birthday' => new \DateTimeImmutable('1961-11-6'),
             'confirmed' => false,
-            'addresses' => [new Address($this->getTestAddressData($salutation))],
+            'addresses' => [
+                new Address($this->getTestAddressData($salutation)),
+            ],
         ]);
         $account->setPassword('cHAaL4Pd.4yCcwLR');
         return $account;
@@ -256,6 +258,8 @@ class AccountCreationTest extends FrontasticApiTestCase
             'city' => 'Berlin',
             'country' => 'DE',
             'phone' => '+49 12 1234 12234',
+            'isDefaultBillingAddress' => true,
+            'isDefaultShippingAddress' => true,
         ];
     }
 
@@ -285,9 +289,9 @@ class AccountCreationTest extends FrontasticApiTestCase
         }
         $this->assertEquals($expected->groups, $actual->groups);
 
-        if (count($actual->addresses) > 0) {
-            $this->assertCount(count($expected->addresses), $actual->addresses);
-            $this->assertSameAccountAddressData($expected->addresses[0], $actual->addresses[0]);
+        $this->assertCount(count($expected->addresses), $actual->addresses);
+        foreach ($expected->addresses as $index => $expectedAddress) {
+            $this->assertSameAccountAddressData($expectedAddress, $actual->addresses[$index]);
         }
     }
 
