@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.10.6` (2021-03-02)
+
+* fix(FP-249): added address on account creation for Commercetools
+
 ## `2.10.5` (2021-03-01)
 
 * fix(FP-395): implemented build query for next page and calculate last (#623)
