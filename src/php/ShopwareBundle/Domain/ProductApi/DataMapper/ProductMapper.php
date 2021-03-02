@@ -59,11 +59,11 @@ class ProductMapper extends AbstractDataMapper implements
         return new Product([
             'productId' => $productData['parentId'] ?? (string)$productData['id'],
             'changed' => ($lastModified !== null) ? $this->parseDate($lastModified) : null,
-            'version' => (string)$productData['versionId'],
+            'version' => $productData['versionId'] ? (string)$productData['versionId'] : null,
             'name' => $name,
             'slug' => Slugger::slugify($name),
             'description' => strip_tags($this->resolveTranslatedValue($productData, 'description')),
-            'categories' => $productData['categoryTree'],
+            'categories' => $productData['categoryTree'] ?? null,
             'variants' => $this->mapDataToVariants($productData),
             'dangerousInnerProduct' => $this->mapDangerousInnerData($productData),
         ]);
