@@ -1,5 +1,10 @@
 # common Changelog
 
+## `2.10.7` (2021-03-04)
+
+* fix(FP-447): cart regenerated if is already completed on Shopify
+* fix: validate version and category index before map
+
 ## `2.10.6` (2021-03-02)
 
 * fix(FP-249): added address on account creation for Commercetools
