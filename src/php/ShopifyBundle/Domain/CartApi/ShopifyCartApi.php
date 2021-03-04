@@ -168,7 +168,15 @@ class ShopifyCartApi extends CartApiBase
 
         return $this->client
             ->request($query)
-            ->then(function (array $result): Cart {
+            ->then(function (array $result) use ($locale): Cart {
+                // Shopify does not clear the cart after checkout(cart) is completed.
+                // The following statement prevent to use the same checkout(cart) if it's already completed.
+                if (isset($result['body']['data']['node']['completedAt']) &&
+                    $result['body']['data']['node']['completedAt'] !== null
+                ) {
+                    // TODO: we should handle also logged in users.
+                    return $this->getAnonymous(uniqid(), $locale);
+                }
                 return $this->mapDataToCart($result['body']['data']['node']);
             })
             ->wait();
@@ -777,6 +785,7 @@ class ShopifyCartApi extends CartApiBase
         $checkoutQueryFields = '
             id
             createdAt
+            completedAt
             email
             webUrl
             requiresShipping
