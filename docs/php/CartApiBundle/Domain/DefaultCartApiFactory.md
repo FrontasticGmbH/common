@@ -14,6 +14,7 @@
 ```php
 public function __construct(
     \Psr\Container\ContainerInterface $container,
+    AccountApiFactory $accountApiFactory,
     object $orderIdGenerator,
     iterable $decorators,
     \Psr\Log\LoggerInterface $logger
@@ -23,6 +24,7 @@ public function __construct(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$container`|`\Psr\Container\ContainerInterface`||
+`$accountApiFactory`|[`AccountApiFactory`](../../AccountApiBundle/Domain/AccountApiFactory.md)||
 `$orderIdGenerator`|`object`||
 `$decorators`|`iterable`||
 `$logger`|`\Psr\Log\LoggerInterface`||
