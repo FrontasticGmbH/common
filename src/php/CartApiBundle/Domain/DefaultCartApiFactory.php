@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\CartApiBundle\Domain;
 
+use Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory;
 use Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools\Mapper as CommercetoolsCartMapper;
 use Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools\Options;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory as CommercetoolsClientFactoryAlias;
@@ -45,6 +46,11 @@ class DefaultCartApiFactory implements CartApiFactory
     private $container;
 
     /**
+     * @var AccountApiFactory
+     */
+    private $accountApiFactory;
+
+    /**
      * @var OrderIdGeneratorV2|OrderIdGenerator
      */
     private $orderIdGenerator;
@@ -61,17 +67,20 @@ class DefaultCartApiFactory implements CartApiFactory
 
     /**
      * @param ContainerInterface $container
+     * @param AccountApiFactory $accountApiFactory
      * @param OrderIdGeneratorV2|OrderIdGenerator $orderIdGenerator
      * @param iterable $decorators
      * @param LoggerInterface $logger
      */
     public function __construct(
         ContainerInterface $container,
+        AccountApiFactory $accountApiFactory,
         object $orderIdGenerator, // BC for OrderIdGenerator
         iterable $decorators,
         LoggerInterface $logger
     ) {
         $this->container = $container;
+        $this->accountApiFactory = $accountApiFactory;
         $this->decorators = $decorators;
         $this->logger = $logger;
 
@@ -128,11 +137,13 @@ class DefaultCartApiFactory implements CartApiFactory
             case 'shopify':
                 $clientFactory = $this->container->get(ShopifyClientFactory::class);
                 $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+                $accountApi = $this->accountApiFactory->factor($project);
                 $productMapper = $this->container->get(ShopifyProductMapper::class);
                 $accountMapper = $this->container->get(ShopifyAccountMapper::class);
 
                 $cartApi = new ShopifyCartApi(
                     $client,
+                    $accountApi,
                     $productMapper,
                     $accountMapper
                 );

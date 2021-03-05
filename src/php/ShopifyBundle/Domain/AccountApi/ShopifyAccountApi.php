@@ -364,6 +364,9 @@ class ShopifyAccountApi implements AccountApi
             firstName
             lastName
             email
+            lastIncompleteCheckout {
+                id
+            }
         ';
     }
 

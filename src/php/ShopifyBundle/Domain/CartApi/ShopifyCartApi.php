@@ -3,6 +3,7 @@
 namespace Frontastic\Common\ShopifyBundle\Domain\CartApi;
 
 use Frontastic\Common\AccountApiBundle\Domain\Account;
+use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\CartApiBase;
@@ -31,6 +32,10 @@ class ShopifyCartApi extends CartApiBase
     private $currentTransaction;
 
     /**
+     * @var AccountApi
+     */
+    private $accountApi;
+    /**
      * @var ShopifyProductMapper
      */
     private $productMapper;
@@ -42,10 +47,12 @@ class ShopifyCartApi extends CartApiBase
 
     public function __construct(
         ShopifyClient $client,
+        AccountApi $accountApi,
         ShopifyProductMapper $productMapper,
         ShopifyAccountMapper $accountMapper
     ) {
         $this->client = $client;
+        $this->accountApi = $accountApi;
         $this->productMapper = $productMapper;
         $this->accountMapper = $accountMapper;
     }
@@ -54,6 +61,10 @@ class ShopifyCartApi extends CartApiBase
     {
         if (is_null($account->authToken)) {
             throw new \RuntimeException(sprintf('Account %s is not logged in', $account->email));
+        }
+
+        if ($incompleteCheckout = $this->getLastIncompleteCheckout($account, $locale)) {
+            return $this->getById($incompleteCheckout, $locale);
         }
 
         $anonymousCart = $this->getAnonymous(uniqid(), $locale);
@@ -174,9 +185,9 @@ class ShopifyCartApi extends CartApiBase
                 if (isset($result['body']['data']['node']['completedAt']) &&
                     $result['body']['data']['node']['completedAt'] !== null
                 ) {
-                    // TODO: we should handle also logged in users.
                     return $this->getAnonymous(uniqid(), $locale);
                 }
+
                 return $this->mapDataToCart($result['body']['data']['node']);
             })
             ->wait();
@@ -663,6 +674,19 @@ class ShopifyCartApi extends CartApiBase
     public function getDangerousInnerClient()
     {
         return $this->client;
+    }
+
+    private function getLastIncompleteCheckout(Account $account, string $locale): ?string
+    {
+        if (isset($account->dangerousInnerAccount['lastIncompleteCheckout']['id']) &&
+            $account->dangerousInnerAccount['lastIncompleteCheckout']['id'] !== null
+        ) {
+            return $account->dangerousInnerAccount['lastIncompleteCheckout']['id'];
+        }
+
+        $account = $this->accountApi->refreshAccount($account, $locale);
+
+        return $account->dangerousInnerAccount['lastIncompleteCheckout']['id'] ?? null;
     }
 
     private function mapDataToCart(array $cartData): Cart
