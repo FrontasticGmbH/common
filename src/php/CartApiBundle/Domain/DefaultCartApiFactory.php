@@ -145,7 +145,8 @@ class DefaultCartApiFactory implements CartApiFactory
                     $client,
                     $accountApi,
                     $productMapper,
-                    $accountMapper
+                    $accountMapper,
+                    $this->logger,
                 );
 
                 break;

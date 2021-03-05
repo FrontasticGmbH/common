@@ -6,6 +6,7 @@ use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
+use Frontastic\Common\CartApiBundle\Domain\CartApi\Exception\CartNotActiveException;
 use Frontastic\Common\CartApiBundle\Domain\CartApiBase;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
@@ -16,6 +17,7 @@ use Frontastic\Common\CartApiBundle\Domain\ShippingRate;
 use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyAccountMapper;
 use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyProductMapper;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClient;
+use Psr\Log\LoggerInterface;
 
 class ShopifyCartApi extends CartApiBase
 {
@@ -45,16 +47,23 @@ class ShopifyCartApi extends CartApiBase
      */
     private $accountMapper;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     public function __construct(
         ShopifyClient $client,
         AccountApi $accountApi,
         ShopifyProductMapper $productMapper,
-        ShopifyAccountMapper $accountMapper
+        ShopifyAccountMapper $accountMapper,
+        LoggerInterface $logger
     ) {
         $this->client = $client;
         $this->accountApi = $accountApi;
         $this->productMapper = $productMapper;
         $this->accountMapper = $accountMapper;
+        $this->logger = $logger;
     }
 
     protected function getForUserImplementation(Account $account, string $locale): Cart
@@ -64,7 +73,18 @@ class ShopifyCartApi extends CartApiBase
         }
 
         if ($incompleteCheckout = $this->getLastIncompleteCheckout($account, $locale)) {
-            return $this->getById($incompleteCheckout, $locale);
+            try {
+                return $this->getById($incompleteCheckout, $locale);
+            } catch (CartNotActiveException $exception) {
+                $this->logger
+                    ->info(
+                        'Error fetching active cart for account {accountEmail}, creating new one',
+                        [
+                            'accountEmail' => $account->email,
+                            'exception' => $exception,
+                        ]
+                    );
+            }
         }
 
         $anonymousCart = $this->getAnonymous(uniqid(), $locale);
@@ -179,13 +199,13 @@ class ShopifyCartApi extends CartApiBase
 
         return $this->client
             ->request($query)
-            ->then(function (array $result) use ($locale): Cart {
+            ->then(function (array $result) use ($cartId): Cart {
                 // Shopify does not clear the cart after checkout(cart) is completed.
                 // The following statement prevent to use the same checkout(cart) if it's already completed.
                 if (isset($result['body']['data']['node']['completedAt']) &&
                     $result['body']['data']['node']['completedAt'] !== null
                 ) {
-                    return $this->getAnonymous(uniqid(), $locale);
+                    throw new CartNotActiveException(sprintf('Cart %s is not active', $cartId));
                 }
 
                 return $this->mapDataToCart($result['body']['data']['node']);
