@@ -115,6 +115,7 @@ Here you find the API documentation for the relevant classes:
     * [Mailer](php/CoreBundle/Domain/Mailer.md)
     * Mailer
       * [SwiftMail](php/CoreBundle/Domain/Mailer/SwiftMail.md)
+    * [PaginationAdapter](php/CoreBundle/Domain/PaginationAdapter.md)
     * [RequestProvider](php/CoreBundle/Domain/RequestProvider.md)
     * [Versioner](php/CoreBundle/Domain/Versioner.md)
   * EventListener
@@ -270,6 +271,8 @@ Here you find the API documentation for the relevant classes:
       * [ShopifyAccountApi](php/ShopifyBundle/Domain/AccountApi/ShopifyAccountApi.md)
     * CartApi
       * [ShopifyCartApi](php/ShopifyBundle/Domain/CartApi/ShopifyCartApi.md)
+    * Exception
+      * [QueryException](php/ShopifyBundle/Domain/Exception/QueryException.md)
     * Mapper
       * [ShopifyAccountMapper](php/ShopifyBundle/Domain/Mapper/ShopifyAccountMapper.md)
       * [ShopifyProductMapper](php/ShopifyBundle/Domain/Mapper/ShopifyProductMapper.md)

@@ -16,6 +16,7 @@
 ```php
 public function __construct(
     ShopifyClient $client,
+    AccountApi $accountApi,
     ShopifyProductMapper $productMapper,
     ShopifyAccountMapper $accountMapper
 ): mixed
@@ -24,6 +25,7 @@ public function __construct(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$client`|[`ShopifyClient`](../ShopifyClient.md)||
+`$accountApi`|[`AccountApi`](../../../AccountApiBundle/Domain/AccountApi.md)||
 `$productMapper`|[`ShopifyProductMapper`](../Mapper/ShopifyProductMapper.md)||
 `$accountMapper`|[`ShopifyAccountMapper`](../Mapper/ShopifyAccountMapper.md)||
 

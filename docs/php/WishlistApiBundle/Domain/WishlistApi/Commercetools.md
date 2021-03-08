@@ -92,6 +92,9 @@ public function create(
 ): Wishlist
 ```
 
+*You can send all fields which are part of the ShoppingList specification of Commercetools
+as $wishlist->rawApiInput.*
+
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$wishlist`|[`Wishlist`](../Wishlist.md)||

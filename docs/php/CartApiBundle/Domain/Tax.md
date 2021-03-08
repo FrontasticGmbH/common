@@ -8,6 +8,6 @@ Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
 `amount` | `int` |  | *Yes* | Net amount in cent
 `currency` | `string` |  | *Yes* | 
-`taxPortions` | `` |  | - | 
+`taxPortions` | [`TaxPortion`](TaxPortion.md)[] |  | - | 
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).
