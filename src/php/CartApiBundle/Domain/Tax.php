@@ -24,7 +24,7 @@ class Tax extends ApiDataObject
     public $currency;
 
     /**
-     * @var TaxPortion[];
+     * @var TaxPortion[]
      */
     public $taxPortions;
 }
