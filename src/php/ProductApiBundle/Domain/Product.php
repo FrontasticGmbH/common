@@ -26,8 +26,9 @@ class Product extends ApiDataObject
      * The date and time when this product was last changed or `null` if the
      * date is unknown.
      *
-     * @var ?\DateTimeImmutable
      * // TODO: Do we want to start typing properties now that we're on 7.4?
+     *
+     * @var ?\DateTimeImmutable
      */
     public ?\DateTimeImmutable $changed;
 
