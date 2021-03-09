@@ -18,9 +18,12 @@ class PaginationAdapter
         return $query;
     }
 
-    public static function resultOffsetToCursor(Result $result): Result
+    public static function resultOffsetToCursor(Result $result, PaginatedQuery $query): Result
     {
-        if ($result->nextCursor === null && ($result->offset + $result->count) < $result->total) {
+        if ($result->nextCursor === null &&
+            ($result->offset < $query->maxOffset) &&
+            ($result->offset + $result->count) < $result->total
+        ) {
             $result->nextCursor = self::OFFSET_TAG . (string) ($result->offset + $result->count);
         }
 

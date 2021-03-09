@@ -2,17 +2,17 @@
 
 namespace Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi;
 
+use Frontastic\Common\CoreBundle\Domain\PaginationAdapter;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreator;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\PaginatedQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiBase;
 use Frontastic\Common\ProjectApiBundle\Domain\Attribute;
-use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
-use function GuzzleHttp\Promise\promise_for;
 
 class Commercetools extends ProductSearchApiBase
 {
@@ -82,7 +82,7 @@ class Commercetools extends ProductSearchApiBase
         $locale = $this->localeCreator->createLocaleFromString($query->locale);
         $defaultLocale = $this->localeCreator->createLocaleFromString($this->defaultLocale);
         $parameters = [
-            'offset' => $query->offset,
+            'offset' => min($query->offset, $query->maxOffset),
             'limit' => $query->limit,
             'filter' => [],
             'filter.query' => [],
