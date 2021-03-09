@@ -18,7 +18,8 @@ public function __construct(
     ShopifyClient $client,
     AccountApi $accountApi,
     ShopifyProductMapper $productMapper,
-    ShopifyAccountMapper $accountMapper
+    ShopifyAccountMapper $accountMapper,
+    \Psr\Log\LoggerInterface $logger
 ): mixed
 ```
 
@@ -28,6 +29,7 @@ Argument|Type|Default|Description
 `$accountApi`|[`AccountApi`](../../../AccountApiBundle/Domain/AccountApi.md)||
 `$productMapper`|[`ShopifyProductMapper`](../Mapper/ShopifyProductMapper.md)||
 `$accountMapper`|[`ShopifyAccountMapper`](../Mapper/ShopifyAccountMapper.md)||
+`$logger`|`\Psr\Log\LoggerInterface`||
 
 Return Value: `mixed`
 
