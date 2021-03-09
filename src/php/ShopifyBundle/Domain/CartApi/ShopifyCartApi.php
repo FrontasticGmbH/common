@@ -72,14 +72,15 @@ class ShopifyCartApi extends CartApiBase
             throw new \RuntimeException(sprintf('Account %s is not logged in', $account->email));
         }
 
-        if ($incompleteCheckout = $this->getLastIncompleteCheckout($account, $locale)) {
+        if ($cartId = $this->getLastIncompleteCheckout($account, $locale)) {
             try {
-                return $this->getById($incompleteCheckout, $locale);
+                return $this->getById($cartId, $locale);
             } catch (CartNotActiveException $exception) {
                 $this->logger
                     ->info(
-                        'Error fetching active cart for account {accountEmail}, creating new one',
+                        'The cart {cartId} is not active for account {accountEmail}, creating new one',
                         [
+                            'cartId' => $cartId,
                             'accountEmail' => $account->email,
                             'exception' => $exception,
                         ]
