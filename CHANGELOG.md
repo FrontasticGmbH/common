@@ -1,5 +1,11 @@
 # common Changelog
 
+## `2.10.8` (2021-03-09)
+
+* chore(FP-447): improved documentation and log messages
+* fix(FP-447): throw and handle Cart not active exception
+* fix(FP-447): get existing cart for logged in customer in Shopify
+
 ## `2.10.7` (2021-03-04)
 
 * fix(FP-447): cart regenerated if is already completed on Shopify
