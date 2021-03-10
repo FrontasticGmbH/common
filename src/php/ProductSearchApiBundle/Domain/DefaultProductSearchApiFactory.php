@@ -99,7 +99,7 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
                     $this->enabledFacetService,
                     $project->languages,
                     $project->defaultLanguage,
-                    $project->maxQueryOffset ?? null
+                    $engineConfig->maxQueryOffset ?? null
                 );
                 break;
             case 'sap-commerce-cloud':

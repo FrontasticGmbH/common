@@ -26,7 +26,7 @@ class Commercetools extends ProductSearchApiBase
     ];
 
     // Commercetools defines a default maximum offset of 10000, https://docs.commercetools.com/api/contract#queries.
-    // This can be edit from project.yml using the property maxQueryOffset.
+    // This can be edit from project.yml using the property maxQueryOffset within the engine configuration.
     private const DEFAULT_MAX_QUERY_OFFSET = 10000;
 
     /**
@@ -95,7 +95,9 @@ class Commercetools extends ProductSearchApiBase
         if ($query->offset > $this->maxQueryOffset) {
             $promise = new Promise();
 
-            $promise->resolve(new Result());
+            $promise->resolve(new Result([
+                'query' => clone $query,
+            ]));
 
             return $promise;
         }
