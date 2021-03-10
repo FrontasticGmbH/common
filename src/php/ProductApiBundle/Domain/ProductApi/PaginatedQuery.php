@@ -22,8 +22,6 @@ class PaginatedQuery extends Query
      */
     const DEFAULT_LIMIT = 24;
 
-    const DEFAULT_MAX_OFFSET = 10000;
-
     /**
      * Optional limit, the default value is <b>24</b>, because it is divisible
      * by 2, 3, 4 & 6 – which are common numbers or products per row in
@@ -39,13 +37,6 @@ class PaginatedQuery extends Query
      * @var integer
      */
     public $offset = 0;
-
-    /**
-     * Optional maximum offset, default is <b>10000</b>.
-     *
-     * @var integer
-     */
-    public $maxOffset = self::DEFAULT_MAX_OFFSET;
 
     /**
      * Optional item reference where the pagination should start.
