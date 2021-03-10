@@ -98,7 +98,8 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
                     $localeCreatorFactory->factor($project, $client),
                     $this->enabledFacetService,
                     $project->languages,
-                    $project->defaultLanguage
+                    $project->defaultLanguage,
+                    $project->maxQueryOffset ?? null
                 );
                 break;
             case 'sap-commerce-cloud':

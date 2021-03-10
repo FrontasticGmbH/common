@@ -15,8 +15,8 @@ abstract class ProductSearchApiBase implements ProductSearchApi
         $query = PaginationAdapter::queryCursorToOffset($query);
 
         return $this->queryImplementation($query)
-            ->then(function (Result $result) use ($query): Result {
-                return PaginationAdapter::resultOffsetToCursor($result, $query);
+            ->then(function (Result $result): Result {
+                return PaginationAdapter::resultOffsetToCursor($result);
             });
     }
 

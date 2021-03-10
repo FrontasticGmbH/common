@@ -87,6 +87,11 @@ class Project extends DataObject
     public $defaultLanguage;
 
     /**
+     * @var int
+     */
+    public $maxQueryOffset;
+
+    /**
      * @var string[]
      * @required
      */

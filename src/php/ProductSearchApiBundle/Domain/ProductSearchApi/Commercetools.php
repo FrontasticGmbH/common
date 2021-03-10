@@ -2,16 +2,15 @@
 
 namespace Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi;
 
-use Frontastic\Common\CoreBundle\Domain\PaginationAdapter;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\CommercetoolsLocaleCreator;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\PaginatedQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiBase;
 use Frontastic\Common\ProjectApiBundle\Domain\Attribute;
+use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
 
 class Commercetools extends ProductSearchApiBase
@@ -25,6 +24,10 @@ class Commercetools extends ProductSearchApiBase
         'lenum' => Attribute::TYPE_LOCALIZED_ENUM,
         'ltext' => Attribute::TYPE_LOCALIZED_TEXT,
     ];
+
+    // Commercetools defines a default maximum offset of 10000, https://docs.commercetools.com/api/contract#queries.
+    // This can be edit from project.yml using the property maxQueryOffset.
+    private const DEFAULT_MAX_QUERY_OFFSET = 10000;
 
     /**
      * @var Client
@@ -56,13 +59,19 @@ class Commercetools extends ProductSearchApiBase
      */
     private $defaultLocale;
 
+    /**
+     * @var string
+     */
+    private $maxQueryOffset;
+
     public function __construct(
         Client $client,
         Mapper $mapper,
         CommercetoolsLocaleCreator $localeCreator,
         EnabledFacetService $enabledFacetService,
         array $languages,
-        string $defaultLocale
+        string $defaultLocale,
+        ?int $maxQueryOffset = null
     ) {
         $this->client = $client;
         $this->mapper = $mapper;
@@ -70,6 +79,7 @@ class Commercetools extends ProductSearchApiBase
         $this->defaultLocale = $defaultLocale;
         $this->languages = $languages;
         $this->enabledFacetService = $enabledFacetService;
+        $this->maxQueryOffset = $maxQueryOffset ?? self::DEFAULT_MAX_QUERY_OFFSET;
     }
 
     /**
@@ -81,8 +91,17 @@ class Commercetools extends ProductSearchApiBase
     {
         $locale = $this->localeCreator->createLocaleFromString($query->locale);
         $defaultLocale = $this->localeCreator->createLocaleFromString($this->defaultLocale);
+
+        if ($query->offset > $this->maxQueryOffset) {
+            $promise = new Promise();
+
+            $promise->resolve(new Result());
+
+            return $promise;
+        }
+
         $parameters = [
-            'offset' => min($query->offset, $query->maxOffset),
+            'offset' => $query->offset,
             'limit' => $query->limit,
             'filter' => [],
             'filter.query' => [],
