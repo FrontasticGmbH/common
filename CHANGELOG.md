@@ -1,5 +1,12 @@
 # common Changelog
 
+## `2.10.9` (2021-03-10)
+
+* fix(FP-458): used config from engine and include query as part of Result
+* chore(FP-458): removed unused max offset
+* fix(FP-458): exposed max offset in project.yml and validated before query
+* fix(FP-458): created maximum offset and validate Product queries againts it on Commercetools
+
 ## `2.10.8` (2021-03-09)
 
 * chore(FP-447): improved documentation and log messages
