@@ -18,7 +18,8 @@ public function __construct(
     Commercetools\Locale\CommercetoolsLocaleCreator $localeCreator,
     EnabledFacetService $enabledFacetService,
     array $languages,
-    string $defaultLocale
+    string $defaultLocale,
+    ?int $maxQueryOffset = null
 ): mixed
 ```
 
@@ -30,6 +31,7 @@ Argument|Type|Default|Description
 `$enabledFacetService`|[`EnabledFacetService`](../../../ProductApiBundle/Domain/ProductApi/EnabledFacetService.md)||
 `$languages`|`array`||
 `$defaultLocale`|`string`||
+`$maxQueryOffset`|`?int`|`null`|
 
 Return Value: `mixed`
 

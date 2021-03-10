@@ -14,7 +14,7 @@ where the pagination should start.
 NOTE: the property $offset will be deprecated in a further commit.
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
-`limit` | `int` | `self::DEFAULT_LIMIT` | - | Optional limit, the default value is <b>24</b>, because it is divisble by 2, 3, 4 & 6 – which are common numbers or products per row in frontends.
+`limit` | `int` | `self::DEFAULT_LIMIT` | - | Optional limit, the default value is <b>24</b>, because it is divisible by 2, 3, 4 & 6 – which are common numbers or products per row in frontends.
 `offset` | `int` |  | - | Optional start offset, default is <b>0</b>.
 `cursor` | `string` |  | - | Optional item reference where the pagination should start.
 
