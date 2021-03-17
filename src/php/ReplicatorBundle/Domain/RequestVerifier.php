@@ -3,6 +3,7 @@
 namespace Frontastic\Common\ReplicatorBundle\Domain;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class RequestVerifier
 {
@@ -18,7 +19,7 @@ class RequestVerifier
     public function ensure(Request $request, string $secret)
     {
         if (!$this->isValid($request, $secret)) {
-            throw new \DomainException(
+            throw new AccessDeniedException(
                 \Frontastic\Common\Kernel::getDebug() ?
                     "Request did not validate against shared secret: $secret" :
                     "Request did not validate against shared secret."
