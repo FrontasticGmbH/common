@@ -26,6 +26,7 @@ class FacetHandleParser
 
         if ($name === null) {
             $field = $id;
+            $definition = $id;
             $id = null;
         } elseif ($field === null) {
             $field = $id;
