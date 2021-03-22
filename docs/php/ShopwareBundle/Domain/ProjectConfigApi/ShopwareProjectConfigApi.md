@@ -14,7 +14,6 @@
 * [getProjectConfig()](#getprojectconfig)
 * [getSalutation()](#getsalutation)
 * [getSalutations()](#getsalutations)
-* [getShippingMethods()](#getshippingmethods)
 
 ### getCountryByCriteria()
 
@@ -85,14 +84,6 @@ public function getSalutations(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$criteria`|`?string`|`null`|
-
-Return Value: `array`
-
-### getShippingMethods()
-
-```php
-public function getShippingMethods(): array
-```
 
 Return Value: `array`
 
