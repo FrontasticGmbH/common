@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php
 
 namespace Frontastic\Common\ShopwareBundle\Domain\CartApi;
 
@@ -14,6 +14,7 @@ use Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper\CartItemRequestDa
 use Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper\CartMapper;
 use Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper\OrderMapper;
 use Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper\OrdersMapper;
+use Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper\ShippingMethodsMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
@@ -354,18 +355,51 @@ class ShopwareCartApi extends CartApiBase
 
     public function getAvailableShippingMethodsImplementation(Cart $cart, string $localeString): array
     {
-        // TODO: Implement getAvailableShippingMethods() method.
-        // throw new \RuntimeException(__METHOD__ . ' not implemented');
-        // To unblock the customer until it's implemented
-        return [];
+        $shopwareLocale = $this->parseLocaleString($localeString);
+        $mapper = $this->buildMapper(ShippingMethodsMapper::MAPPER_NAME, $shopwareLocale);
+
+        $requestData = [
+            'onlyAvailable' => true,
+            'associations' => [
+                "prices" => []
+            ]
+        ];
+
+        return $this->client
+            ->forCurrency($shopwareLocale->currencyId)
+            ->forLanguage($shopwareLocale->languageId)
+            ->withContextToken($cart->cartId)
+            ->post('/sales-channel-api/v2/shipping-method', [], $requestData)
+            ->then(function ($response) use ($mapper) {
+                return $mapper->map($response);
+            })
+            ->wait();
     }
 
     public function getShippingMethodsImplementation(string $localeString, bool $onlyMatching = false): array
     {
-        // TODO: Implement getShippingMethods() method.
-        // throw new \RuntimeException(__METHOD__ . ' not implemented');
-        // To unblock the customer until it's implemented
-        return [];
+        $shopwareLocale = $this->parseLocaleString($localeString);
+        $mapper = $this->buildMapper(ShippingMethodsMapper::MAPPER_NAME, $shopwareLocale);
+
+        $requestData = [
+            'associations' => [
+                "prices" => []
+            ]
+        ];
+
+        $client = $this->client;
+        if ($onlyMatching) {
+            $client = $client
+                ->forCurrency($shopwareLocale->currencyId)
+                ->forLanguage($shopwareLocale->languageId);
+        }
+
+        return $client
+            ->post('/sales-channel-api/v2/shipping-method', [], $requestData)
+            ->then(function ($response) use ($mapper) {
+                return $mapper->map($response);
+            })
+            ->wait();
     }
 
     public function getDangerousInnerClient(): ClientInterface

@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php
 
 namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi;
 
@@ -9,7 +9,6 @@ interface ShopwareProjectConfigApiInterface
     public const RESOURCE_LANGUAGES = 'languages';
     public const RESOURCE_PAYMENT_METHODS = 'payment-methods';
     public const RESOURCE_SALUTATIONS = 'salutations';
-    public const RESOURCE_SHIPPING_METHODS = 'shipping-methods';
 
     /**
      * @param string $criteria - can be ISO2 country code, ISO3 country code, or country name
@@ -33,9 +32,4 @@ interface ShopwareProjectConfigApiInterface
      * @return \Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareSalutation
      */
     public function getSalutations(?string $criteria = null): array;
-
-    /**
-     * @return \Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareShippingMethod[]
-     */
-    public function getShippingMethods(): array;
 }

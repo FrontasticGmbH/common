@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php
 
 namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi;
 
@@ -9,7 +9,6 @@ use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper\CountryM
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper\CurrenciesMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper\PaymentMethodsMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper\SalutationsMapper;
-use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper\ShippingMethodsMapper;
 use GuzzleHttp\Promise\EachPromise;
 
 class ShopwareProjectConfigApi extends AbstractShopwareApi implements ShopwareProjectConfigApiInterface
@@ -132,18 +131,6 @@ class ShopwareProjectConfigApi extends AbstractShopwareApi implements ShopwarePr
             ->get('/sales-channel-api/v2/salutation', $parameters)
             ->then(function ($response) {
                 return $this->mapResponse($response, SalutationsMapper::MAPPER_NAME);
-            })->wait();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getShippingMethods(): array
-    {
-        return $this->client
-            ->get('/sales-channel-api/v2/shipping-method?associations[media][]')
-            ->then(function ($response) {
-                return $this->mapResponse($response, ShippingMethodsMapper::MAPPER_NAME);
             })->wait();
     }
 
