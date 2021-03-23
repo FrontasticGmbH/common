@@ -1,5 +1,11 @@
 # common Changelog
 
+## `2.10.10` (2021-03-23)
+
+* fix(FP-96): migrated and updated implementation for shipping methods on Shopware
+* fix(FP-84): used alias on category facet and set missing definition
+* fix: Use proper AccessDeniedException
+
 ## `2.10.9` (2021-03-10)
 
 * fix(FP-458): used config from engine and include query as part of Result
