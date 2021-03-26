@@ -29,7 +29,33 @@ class AccountUpdateTest extends FrontasticApiTestCase
         $updatedData->firstName = 'new first name';
         $updatedData->lastName = 'new last name';
 
-        // Update te account
+        // Update account
+        $updatedAccount = $accountApi->update($updatedData, $language);
+
+        $this->assertSameAccountData($updatedData, $updatedAccount);
+        $this->assertNotSame($updatedData->firstName, $createdAccount->firstName);
+        $this->assertNotSame($updatedData->lastName, $createdAccount->lastName);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testUpdateAccountWithInputDataWithoutAddress(Project $project, string $language): void
+    {
+        $accountApi = $this->getAccountApiForProject($project);
+        $accountData = $this->getTestAccountDataWithInputDataWithoutAddress($accountApi, $language);
+
+        // Create the account
+        $createdAccount = $accountApi->create($accountData, null, $language);
+
+        $this->assertNotEmptyString($createdAccount->accountId);
+        $this->assertSameAccountData($accountData, $createdAccount);
+
+        $updatedData = clone $createdAccount;
+        $updatedData->firstName = 'new first name';
+        $updatedData->lastName = 'new last name';
+
+        // Update account
         $updatedAccount = $accountApi->update($updatedData, $language);
 
         $this->assertSameAccountData($updatedData, $updatedAccount);
@@ -73,24 +99,21 @@ class AccountUpdateTest extends FrontasticApiTestCase
         $accountApi = $this->getAccountApiForProject($project);
         $accountData = $this->getTestAccountDataWithInputData($accountApi, $language);
 
-        // Create the account
+        // Create an account
         $account = $accountApi->create($accountData, null, $language);
 
-        $salutation = 'Frau';
-        $address = new Address($this->getTestAddressData($salutation));
 
-        // Add address
-        $accountWithNewAddress = $accountApi->addAddress($account, $address);
-        $this->assertSameAccountAddressData($address, $accountWithNewAddress->addresses[0]);
-
-        $updatedAddress = $accountWithNewAddress->addresses[0];
+        //Prepare update data
+        $updatedAddress = $account->addresses[0];
         $updatedAddress->firstName = 'Molly';
-        $updatedAddress->lastName = 'Chambers';
         $updatedAddress->lastName = 'Chambers';
         $updatedAddress->streetName = 'New str name';
         $updatedAddress->postalCode = '7890';
 
+        //Update account
         $accountWithUpdatedAddress = $accountApi->updateAddress($account, $updatedAddress);
+
+        //Assertions
         $this->assertSameAccountAddressData($updatedAddress, $accountWithUpdatedAddress->addresses[0]);
     }
 
@@ -123,6 +146,26 @@ class AccountUpdateTest extends FrontasticApiTestCase
                     'phone' => '+49 12 1234 12234',
                 ]),
             ],
+        ]);
+        $account->setPassword('cHAaL4Pd.4yCcwLR');
+        return $account;
+    }
+
+    private function getTestAccountDataWithInputDataWithoutAddress(AccountApi $accountApi, string $language): Account
+    {
+        $salutation = 'Frau';
+        if (($salutations = $accountApi->getSalutations($language)) !== null) {
+            $salutation = $salutations[array_rand($salutations)];
+        }
+
+        $account = Account::newWithProjectSpecificData([
+            'email' => 'integration-tests-not-exists+account-' . uniqid('', true) . '@frontastic.com',
+            'salutation' => $salutation,
+            'firstName' => 'Ashley',
+            'lastName' => 'Stoltenberg',
+            'birthday' => new \DateTimeImmutable('1961-11-6'),
+            'confirmed' => false,
+            'addresses' => [],
         ]);
         $account->setPassword('cHAaL4Pd.4yCcwLR');
         return $account;

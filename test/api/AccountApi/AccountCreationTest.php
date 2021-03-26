@@ -68,7 +68,7 @@ class AccountCreationTest extends FrontasticApiTestCase
 
         // re-fetch the account data
         $refreshedAccount = $accountApi->refreshAccount($fetchedAccount, $language);
-        $this->assertEquals($fetchedAccount, $refreshedAccount);
+        $this->assertSameAccountData($fetchedAccount, $refreshedAccount);
 
         // log in with wrong password returns null
         $loginDataWithWrongPassword = $this->getLoginDataFromAccount($accountData);
@@ -117,7 +117,56 @@ class AccountCreationTest extends FrontasticApiTestCase
 
         // re-fetch the account data
         $refreshedAccount = $accountApi->refreshAccount($fetchedAccount, $language);
-        $this->assertEquals($fetchedAccount, $refreshedAccount);
+        $this->assertSameAccountData($fetchedAccount, $refreshedAccount);
+
+        // log in with wrong password returns null
+        $loginDataWithWrongPassword = $this->getLoginDataFromAccount($accountData);
+        $loginDataWithWrongPassword->setPassword('This is the wrong password for this account');
+        $accountWithWrongPassword = $accountApi->login($loginDataWithWrongPassword, null, $language);
+        $this->assertNull($accountWithWrongPassword);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testCreateNewAccountWithInputDataWithoutAddress(Project $project, string $language): void
+    {
+        $accountApi = $this->getAccountApiForProject($project);
+        $accountData = $this->getTestAccountDataWithInputDataWithoutAddress($accountApi, $language);
+
+        // create the account
+        $createdAccount = $accountApi->create($accountData, null, $language);
+
+        $this->assertNotEmptyString($createdAccount->accountId);
+        $this->assertSameAccountData($accountData, $createdAccount);
+
+        // confirm account
+        if ($createdAccount->confirmationToken !== null) {
+            $this->assertNotEmptyString($createdAccount->confirmationToken);
+            $this->assertInstanceOf(\DateTimeInterface::class, $createdAccount->tokenValidUntil);
+            $this->assertGreaterThan(new \DateTimeImmutable('+10 minutes'), $createdAccount->tokenValidUntil);
+            $this->assertFalse($createdAccount->confirmed);
+
+            // confirm the email address
+            $confirmedAccount = $accountApi->confirmEmail($createdAccount->confirmationToken, $language);
+            $this->assertSame($createdAccount->accountId, $confirmedAccount->accountId);
+            $this->assertSameAccountData($accountData, $confirmedAccount);
+            $this->assertTrue($confirmedAccount->confirmed);
+        } else {
+            $this->assertTrue($createdAccount->confirmed);
+            $this->assertNull($createdAccount->tokenValidUntil);
+        }
+
+        // log in to the just created account
+        $fetchedAccount = $accountApi->login($this->getLoginDataFromAccount($accountData), null, $language);
+        $this->assertNotNull($fetchedAccount);
+        $this->assertSame($createdAccount->accountId, $fetchedAccount->accountId);
+        $this->assertSameAccountData($accountData, $fetchedAccount);
+        $this->assertTrue($fetchedAccount->confirmed);
+
+        // re-fetch the account data
+        $refreshedAccount = $accountApi->refreshAccount($fetchedAccount, $language);
+        $this->assertSameAccountData($fetchedAccount, $refreshedAccount);
 
         // log in with wrong password returns null
         $loginDataWithWrongPassword = $this->getLoginDataFromAccount($accountData);
@@ -132,7 +181,7 @@ class AccountCreationTest extends FrontasticApiTestCase
     public function testAddAddressToAccount(Project $project, string $language): void
     {
         $accountApi = $this->getAccountApiForProject($project);
-        $accountData = $this->getTestAccountDataWithInputData($accountApi, $language);
+        $accountData = $this->getTestAccountDataWithInputDataWithoutAddress($accountApi, $language);
 
         // Create the account
         $account = $accountApi->create($accountData, null, $language);
@@ -166,26 +215,29 @@ class AccountCreationTest extends FrontasticApiTestCase
         $account = $accountApi->create($accountData, null, $language);
 
         $salutation = 'Frau';
-        $address = new Address($this->getTestAddressData($salutation));
-        $address->firstName = 'Judit';
-        $address->lastName = 'Benson';
-
-        // Add first address
-        $account = $accountApi->addAddress($account, $address);
+        $address01 = Address::newWithProjectSpecificData($this->getTestAddressData($salutation));
 
         $address02 = new Address($this->getTestAddressData($salutation));
-        $address02->firstName = 'Molly';
-        $address02->lastName = 'Chambers';
+        $address02->firstName = 'Judit';
+        $address02->lastName = 'Benson';
+
+        // Add first address
+        $account = $accountApi->addAddress($account, $address02);
+
+        $address03 = new Address($this->getTestAddressData($salutation));
+        $address03->firstName = 'Molly';
+        $address03->lastName = 'Chambers';
 
         // Add second address
-        $account = $accountApi->addAddress($account, $address02);
+        $account = $accountApi->addAddress($account, $address03);
 
         // Fetch addresses
         $fetchedAddresses = $accountApi->getAddresses($account);
 
-        $this->assertCount(2, $fetchedAddresses);
-        $this->assertSameAccountAddressData($address, $fetchedAddresses[0]);
+        $this->assertCount(3, $fetchedAddresses);
+        $this->assertSameAccountAddressData($address01, $fetchedAddresses[0]);
         $this->assertSameAccountAddressData($address02, $fetchedAddresses[1]);
+        $this->assertSameAccountAddressData($address03, $fetchedAddresses[2]);
     }
 
         /**
@@ -239,6 +291,26 @@ class AccountCreationTest extends FrontasticApiTestCase
             'birthday' => new \DateTimeImmutable('1961-11-6'),
             'confirmed' => false,
             'addresses' => [Address::newWithProjectSpecificData($this->getTestAddressData($salutation))],
+        ]);
+        $account->setPassword('cHAaL4Pd.4yCcwLR');
+        return $account;
+    }
+
+    private function getTestAccountDataWithInputDataWithoutAddress(AccountApi $accountApi, string $language): Account
+    {
+        $salutation = 'Frau';
+        if (($salutations = $accountApi->getSalutations($language)) !== null) {
+            $salutation = $salutations[array_rand($salutations)];
+        }
+
+        $account = Account::newWithProjectSpecificData([
+            'email' => 'integration-tests-not-exists+account-' . uniqid('', true) . '@frontastic.com',
+            'salutation' => $salutation,
+            'firstName' => 'Ashley',
+            'lastName' => 'Stoltenberg',
+            'birthday' => new \DateTimeImmutable('1961-11-6'),
+            'confirmed' => false,
+            'addresses' => [],
         ]);
         $account->setPassword('cHAaL4Pd.4yCcwLR');
         return $account;
