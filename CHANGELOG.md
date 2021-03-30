@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.10.11` (2021-03-30)
+
+* fix: Remove phpcpd from all projects
+
 ## `2.10.10` (2021-03-23)
 
 * fix(FP-96): migrated and updated implementation for shipping methods on Shopware
