@@ -54,13 +54,6 @@ class ShopifyAccountApi implements AccountApi
                 }) {
                     customer {
                          {$this->getCustomerQueryFields()}
-                         addresses(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
-                            edges {
-                                node {
-                                    {$this->getAddressQueryFields()}
-                                }
-                            }
-                        }
                     }
                     customerUserErrors {
                         {$this->getErrorsQueryFields()}
@@ -81,11 +74,13 @@ class ShopifyAccountApi implements AccountApi
                     return $this->login($account);
                 }
 
-                foreach ($account->addresses as $address) {
-                    $updatedAccount = $this->addAddress($account, $address);
+                $addresses = $account->addresses;
+
+                foreach ($addresses as $address) {
+                    $account = $this->addAddress($account, $address);
                 }
 
-                return $updatedAccount;
+                return $account;
             })
             ->wait();
     }
