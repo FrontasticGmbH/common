@@ -1,5 +1,11 @@
 # common Changelog
 
+## `2.10.12` (2021-04-08)
+
+* fix(FP-567): handle client exceptions and skip Union types
+* fix(FP-363): Shopify API, use existing account with token and remove returned address on create
+* fix(FP-363): API to add address on customer create and unit tests for create update adjustment
+
 ## `2.10.11` (2021-03-30)
 
 * fix: Remove phpcpd from all projects
