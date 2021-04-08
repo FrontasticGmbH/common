@@ -283,7 +283,7 @@ class Client
         $contentKind = $attributeType['kind'];
 
         if ($contentKind == 'UNION') {
-            // TODO: When the attribute kind is an union, we need first get the objets that form this union
+            // TODO: When the attribute kind is an union, we need first get the objects that form this union
             // and then get the attributes for each of those objects.
             // https://grandstack.io/docs/graphql-interface-union-types/#union-types
 
