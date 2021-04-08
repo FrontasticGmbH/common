@@ -146,7 +146,8 @@ class GraphCMS implements ContentApi
             function (Attribute $attribute) use ($fields): Attribute {
                 $newAttribute = clone $attribute;
 
-                $attributeContent = $fields[(string)$attribute->attributeId];
+                $attributeContent = isset($fields[(string)$attribute->attributeId]) ?
+                    $fields[(string)$attribute->attributeId] : null;
                 if ($attribute->type === 'Text') {
                     $attributeContent = $attributeContent['html'];
                 }
@@ -218,6 +219,9 @@ class GraphCMS implements ContentApi
                     'offset' => 0,
                     'items' => $contents,
                 ]);
+            })
+            ->otherwise(function (\Exception $exception) {
+                throw $exception;
             });
     }
 

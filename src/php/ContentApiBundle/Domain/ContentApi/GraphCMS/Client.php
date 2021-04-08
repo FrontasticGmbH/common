@@ -110,8 +110,34 @@ class Client
                     $span->finish();
                 }
 
+                if ($result->status >= 400) {
+                    throw $this->prepareException($result);
+                }
+
                 return $result->body;
             });
+    }
+
+    protected function prepareException(HttpClient\Response $response): \Exception
+    {
+        $errorData = Json::decode($response->body);
+        $exception = new \Exception(
+            ($errorData->message ?? $response->body) ?: 'Internal Server Error',
+            $response->status ?? 503
+        );
+
+        if (isset($errorData->errors)) {
+            $errorData->errors = array_reverse($errorData->errors);
+            foreach ($errorData->errors as $error) {
+                $exception = new \Exception(
+                    $error->message ?? 'Unknown error',
+                    $response->status ?? 503,
+                    $exception
+                );
+            }
+        }
+
+        return $exception;
     }
 
     /**
@@ -178,7 +204,8 @@ class Client
 
     protected function isReference(array $attribute): bool
     {
-        return $this->determineAttributeType($attribute)['kind'] === 'OBJECT';
+        return $this->determineAttributeType($attribute)['kind'] === 'OBJECT' ||
+            $this->determineAttributeType($attribute)['kind'] === 'UNION';
     }
 
     protected function isNoReference(array $attribute): bool
@@ -215,7 +242,7 @@ class Client
             $this->getAttributeNames($simpleAttributes),
             array_map(
                 function ($e) use ($maxDepth, $currentDepth) {
-                    if ($e['type']['name'] == 'Asset') {
+                    if (isset($e['type']['name']) && $e['type']['name'] == 'Asset') {
                         $queryAttributesString = $this->getAdditionalAttributes(
                             $e,
                             $maxDepth,
@@ -225,10 +252,16 @@ class Client
                         );
 
                         return "{$e['name']} { $queryAttributesString }";
-                    } elseif ($e['type']['name'] == 'RichText' || $e['type']['ofType']['name'] == 'RichText') {
+                    } elseif (isset($e['type']['name']) && $e['type']['name'] == 'RichText' ||
+                        isset($e['type']['ofType']['name']) && $e['type']['ofType']['name'] == 'RichText'
+                    ) {
                         return "{$e['name']} { html }";
                     } else {
                         $queryAttributesString = $this->getAdditionalAttributes($e, $maxDepth, $currentDepth, 'id');
+
+                        if (empty($queryAttributesString)) {
+                            return '';
+                        }
 
                         return "{$e['name']} { $queryAttributesString }";
                     }
@@ -245,7 +278,18 @@ class Client
         string $defaultAttributes = '',
         array $whitelistFields = []
     ): string {
-        $contentType = $this->determineAttributeType($referenceField)['type'];
+        $attributeType = $this->determineAttributeType($referenceField);
+        $contentType = $attributeType['type'];
+        $contentKind = $attributeType['kind'];
+
+        if ($contentKind == 'UNION') {
+            // TODO: When the attribute kind is an union, we need first get the objects that form this union
+            // and then get the attributes for each of those objects.
+            // https://grandstack.io/docs/graphql-interface-union-types/#union-types
+
+            // Skipping the UNIONs kind
+            return '';
+        }
 
         $attributes = $this->getAttributes($contentType);
 
