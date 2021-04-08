@@ -99,7 +99,7 @@ class Client
 
         return $this->httpClient
             ->requestAsync('POST', $url, $body, $headers)
-            ->then(function (HttpClient\Response $result) use ($span, $url, $body, $headers, $query) {
+            ->then(function (HttpClient\Response $result) use ($span) {
                 if (class_exists(\Tideways\Profiler::class)) {
                     $span->annotate(
                         [
