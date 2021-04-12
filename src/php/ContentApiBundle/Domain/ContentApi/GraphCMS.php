@@ -149,7 +149,7 @@ class GraphCMS implements ContentApi
                 $attributeContent = isset($fields[(string)$attribute->attributeId]) ?
                     $fields[(string)$attribute->attributeId] : null;
                 if ($attribute->type === 'Text') {
-                    $attributeContent = $attributeContent['html'];
+                    $attributeContent = $attributeContent['html'] ?? null;
                 }
 
                 $newAttribute->content = $attributeContent;
