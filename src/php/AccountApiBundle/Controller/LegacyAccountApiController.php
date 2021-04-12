@@ -3,7 +3,7 @@
 namespace Frontastic\Common\AccountApiBundle\Controller;
 
 use Frontastic\Catwalk\ApiCoreBundle\Domain\Context;
-use Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory;
+use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,11 +15,11 @@ use Frontastic\Common\CoreBundle\Domain\Json\Json;
  */
 class LegacyAccountApiController
 {
-    private AccountApiFactory $accountApiFactory;
+    private AccountApi $accountApi;
 
-    public function __construct(AccountApiFactory $accountApiFactory)
+    public function __construct(AccountApi $accountApi)
     {
-        $this->accountApiFactory = $accountApiFactory;
+        $this->accountApi = $accountApi;
     }
 
     public function addAddressAction(Request $request, Context $context): JsonResponse
@@ -28,7 +28,7 @@ class LegacyAccountApiController
             throw new AuthenticationException('Not logged in.');
         }
 
-        $accountApi = $this->accountApiFactory;
+        $accountApi = $this->accountApi;
         $address = Address::newWithProjectSpecificData($this->getJsonBody($request));
         $account = $accountApi->addAddress($context->session->account, $address);
 
@@ -41,7 +41,7 @@ class LegacyAccountApiController
             throw new AuthenticationException('Not logged in.');
         }
 
-        $accountApi = $this->accountApiFactory;
+        $accountApi = $this->accountApi;
         $address = Address::newWithProjectSpecificData($this->getJsonBody($request));
         $account = $accountApi->updateAddress($context->session->account, $address);
 
@@ -54,7 +54,7 @@ class LegacyAccountApiController
             throw new AuthenticationException('Not logged in.');
         }
 
-        $accountApi = $this->accountApiFactory;
+        $accountApi = $this->accountApi;
         $address = Address::newWithProjectSpecificData($this->getJsonBody($request));
         $accountApi->removeAddress($context->session->account, $address->addressId);
 
@@ -67,7 +67,7 @@ class LegacyAccountApiController
             throw new AuthenticationException('Not logged in.');
         }
 
-        $accountApi = $this->accountApiFactory;
+        $accountApi = $this->accountApi;
         $address = Address::newWithProjectSpecificData($this->getJsonBody($request));
         $account = $accountApi->setDefaultBillingAddress($context->session->account, $address->addressId);
 
@@ -80,7 +80,7 @@ class LegacyAccountApiController
             throw new AuthenticationException('Not logged in.');
         }
 
-        $accountApi = $this->accountApiFactory;
+        $accountApi = $this->accountApi;
         $address = Address::newWithProjectSpecificData($this->getJsonBody($request));
         $account = $accountApi->setDefaultShippingAddress($context->session->account, $address->addressId);
 
