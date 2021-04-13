@@ -28,9 +28,8 @@ class LegacyAccountApiController
             throw new AuthenticationException('Not logged in.');
         }
 
-        $accountApi = $this->accountApi;
         $address = Address::newWithProjectSpecificData($this->getJsonBody($request));
-        $account = $accountApi->addAddress($context->session->account, $address);
+        $account = $this->accountApi->addAddress($context->session->account, $address);
 
         return new JsonResponse($account, 200);
     }
@@ -41,9 +40,8 @@ class LegacyAccountApiController
             throw new AuthenticationException('Not logged in.');
         }
 
-        $accountApi = $this->accountApi;
         $address = Address::newWithProjectSpecificData($this->getJsonBody($request));
-        $account = $accountApi->updateAddress($context->session->account, $address);
+        $account = $this->accountApi->updateAddress($context->session->account, $address);
 
         return new JsonResponse($account, 200);
     }
@@ -54,9 +52,8 @@ class LegacyAccountApiController
             throw new AuthenticationException('Not logged in.');
         }
 
-        $accountApi = $this->accountApi;
         $address = Address::newWithProjectSpecificData($this->getJsonBody($request));
-        $accountApi->removeAddress($context->session->account, $address->addressId);
+        $this->accountApi->removeAddress($context->session->account, $address->addressId);
 
         return new JsonResponse([], 200);
     }
@@ -67,9 +64,8 @@ class LegacyAccountApiController
             throw new AuthenticationException('Not logged in.');
         }
 
-        $accountApi = $this->accountApi;
         $address = Address::newWithProjectSpecificData($this->getJsonBody($request));
-        $account = $accountApi->setDefaultBillingAddress($context->session->account, $address->addressId);
+        $account = $this->accountApi->setDefaultBillingAddress($context->session->account, $address->addressId);
 
         return new JsonResponse($account, 200);
     }
@@ -80,9 +76,8 @@ class LegacyAccountApiController
             throw new AuthenticationException('Not logged in.');
         }
 
-        $accountApi = $this->accountApi;
         $address = Address::newWithProjectSpecificData($this->getJsonBody($request));
-        $account = $accountApi->setDefaultShippingAddress($context->session->account, $address->addressId);
+        $account = $this->accountApi->setDefaultShippingAddress($context->session->account, $address->addressId);
 
         return new JsonResponse($account, 200);
     }
