@@ -60,6 +60,7 @@ class ClientFactory
         }
 
         return new Client(
+            $config['authUrl'],
             $config['clientId'],
             $config['clientSecret'],
             $config['projectKey'],
@@ -89,10 +90,11 @@ class ClientFactory
     private function getStringConfigOptions(): array
     {
         return [
+            'authUrl' => 'https://auth.sphere.io/oauth/token', // provide a default value to keep BC
             'clientId' => null,
             'clientSecret' => null,
-            'projectKey' => null,
             'hostUrl' => 'https://api.sphere.io', // provide a default value to keep BC
+            'projectKey' => null,
         ];
     }
 

@@ -30,6 +30,11 @@ class Client
     /**
      * @var string
      */
+    private $authUrl;
+
+    /**
+     * @var string
+     */
     private $hostUrl;
 
     /** @var float HTTP timeout for read operations (GET and HEAD requests) in seconds */
@@ -39,6 +44,7 @@ class Client
     private $writeOperationTimeout;
 
     public function __construct(
+        string $authUrl,
         string $clientId,
         string $sclientSecret,
         string $projectKey,
@@ -48,6 +54,7 @@ class Client
         float $readOperationTimeout = null,
         float $writeOperationTimeout = null
     ) {
+        $this->authUrl = $authUrl;
         $this->clientId = $clientId;
         $this->clientSecret = $sclientSecret;
         $this->projectKey = $projectKey;
@@ -266,11 +273,14 @@ class Client
     {
         // Scopes: "view_products" or "manage_project"
 
-        $provider = new AccessTokenProvider([
-            'clientId' => $this->clientId,
-            'clientSecret' => $this->clientSecret,
-            'scope' => sprintf('manage_project:%s', $this->projectKey),
-        ]);
+        $provider = new AccessTokenProvider(
+            $this->authUrl,
+            [
+                'clientId' => $this->clientId,
+                'clientSecret' => $this->clientSecret,
+                'scope' => sprintf('manage_project:%s', $this->projectKey),
+            ]
+        );
 
         return $provider->getAccessToken(new ClientCredentials());
     }
