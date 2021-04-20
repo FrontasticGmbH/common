@@ -2,7 +2,7 @@
 
 **Fully Qualified**: [`\Frontastic\Common\CoreBundle\Controller\SystemController`](../../../../src/php/CoreBundle/Controller/SystemController.php)
 
-**Extends**: `\Symfony\Bundle\FrameworkBundle\Controller\Controller`
+**Extends**: `\Symfony\Bundle\FrameworkBundle\Controller\AbstractController`
 
 ## Methods
 
