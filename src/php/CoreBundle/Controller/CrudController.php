@@ -5,10 +5,10 @@ namespace Frontastic\Common\CoreBundle\Controller;
 use Frontastic\Common\CoreBundle\Domain\Json\Json;
 use Frontastic\Common\CoreBundle\Domain\Versioner;
 use Kore\DataObject\DataObject;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
-abstract class CrudController extends Controller
+abstract class CrudController extends AbstractController
 {
     /**
      * @param Request $request
