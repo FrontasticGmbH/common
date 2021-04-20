@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.11.0` (2021-04-20)
+
+* feat(FP-617): exposed authorization url on project config for commercetools
+
 ## `2.10.13` (2021-04-13)
 
 * fix: fixed unit test for Content
