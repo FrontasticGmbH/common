@@ -21,10 +21,8 @@ class ClassToCatwalkPackageMigrationHandler
             class_alias($newClass, $originalClass);
         } else {
             if (!self::isProductionEnvironment()) {
-                trigger_error(
-                    'You are running a version of common library that requires an update of catwalk.
-                    Please update to the latest catwalk version!'
-                );
+                // phpcs:ignore
+                trigger_error("$newClass can not be found. You might be running a version of common library that requires an update of catwalk. Please update to the latest catwalk version!");
             }
             class_alias($legacyClass, $originalClass);
         }
