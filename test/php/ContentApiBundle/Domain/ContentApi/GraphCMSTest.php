@@ -37,7 +37,7 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
     {
         $contentType =  'Ingredient';
         $contentId = 'cjxac52hychgy0910j313jdyq';
-        $jsonContent = '{"data":{"ingredients":[{"status":"PUBLISHED","updatedAt":"2019-07-09T10:01:19.803Z","createdAt":"2019-06-24T12:06:28.582Z","id":"cjxac52hychgy0910j313jdyq","name":"Mehl","description":null,"season":["Winter","Fall"],"price":3,"recipes":[{"id":"cjxac6bziccie0941viedjs7x"}],"image":{"handle":"BA4Ao48KQHOiNukP58n1"}}]}}';
+        $jsonContent = '{"data":{"ingredients":[{"status":"PUBLISHED","updatedAt":"2019-07-09T10:01:19.803Z","createdAt":"2019-06-24T12:06:28.582Z","id":"cjxac52hychgy0910j313jdyq","name":"Mehl","slug":"mehl","description":null,"season":["Winter","Fall"],"price":3,"recipes":[{"id":"cjxac6bziccie0941viedjs7x"}],"image":{"handle":"BA4Ao48KQHOiNukP58n1"}}]}}';
         $clientResult = new ClientResult([
             'queryResultJson' => $jsonContent,
             'attributes' => [
@@ -63,6 +63,7 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
             'contentId' => $combinedContentId,
             'contentTypeId' => $contentType,
             'name' => 'Mehl',
+            'slug' => 'mehl',
             'attributes' => [
                 new Attribute(['attributeId' => 'status', 'type' => 'Status', 'content' => 'PUBLISHED']),
                 new Attribute(['attributeId' => 'updatedAt', 'type' => 'DateTime', 'content' => '2019-07-09T10:01:19.803Z']),

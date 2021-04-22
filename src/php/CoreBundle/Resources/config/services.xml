@@ -32,6 +32,10 @@
             <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" priority="0"/>
         </service>
 
+        <service id="Frontastic\Common\CoreBundle\Controller\SystemController">
+            <argument>%env%</argument>
+        </service>
+
         <service id="Frontastic\Common\CoreBundle\EventListener\JsonViewListener">
             <argument type="service" id="Frontastic\Common\JsonSerializer"/>
 

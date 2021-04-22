@@ -2,15 +2,28 @@
 
 **Fully Qualified**: [`\Frontastic\Common\AccountApiBundle\Controller\LegacyAccountApiController`](../../../../src/php/AccountApiBundle/Controller/LegacyAccountApiController.php)
 
-**Extends**: `\Symfony\Bundle\FrameworkBundle\Controller\Controller`
-
 ## Methods
 
+* [__construct()](#__construct)
 * [addAddressAction()](#addaddressaction)
 * [updateAddressAction()](#updateaddressaction)
 * [removeAddressAction()](#removeaddressaction)
 * [setDefaultBillingAddressAction()](#setdefaultbillingaddressaction)
 * [setDefaultShippingAddressAction()](#setdefaultshippingaddressaction)
+
+### __construct()
+
+```php
+public function __construct(
+    AccountApi $accountApi
+): mixed
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$accountApi`|[`AccountApi`](../Domain/AccountApi.md)||
+
+Return Value: `mixed`
 
 ### addAddressAction()
 

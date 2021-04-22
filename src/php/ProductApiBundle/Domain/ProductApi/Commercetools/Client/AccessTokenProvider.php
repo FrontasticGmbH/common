@@ -9,20 +9,30 @@ use Psr\Http\Message\ResponseInterface;
 
 class AccessTokenProvider extends AbstractProvider
 {
-    const TOKEN_URL = 'https://auth.sphere.io/oauth/token';
-
     const RESOURCE_OWNER_ID = 'id';
 
     const RESPONSE_ERROR_KEY = 'error';
 
+    /**
+     * @var string
+     */
+    private $authToken;
+
+    public function __construct(string $authToken, array $options = [], array $collaborators = [])
+    {
+        parent::__construct($options, $collaborators);
+
+        $this->authToken = $authToken;
+    }
+
     public function getBaseAuthorizationUrl(): string
     {
-        return self::TOKEN_URL;
+        return $this->authToken;
     }
 
     public function getBaseAccessTokenUrl(array $params): string
     {
-        return self::TOKEN_URL;
+        return $this->authToken;
     }
 
     public function getResourceOwnerDetailsUrl(AccessToken $token)

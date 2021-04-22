@@ -97,10 +97,13 @@ class GraphCMS implements ContentApi
                     return Promise\rejection_for($exception);
                 }
 
+                $name = $this->extractName($attributes);
+
                 return new Content([
                     'contentId' => $this->generateContentId($attributes['id'], $contentType),
                     'contentTypeId' => $contentType,
-                    'name' => $this->extractName($attributes),
+                    'name' => $name,
+                    'slug' => $attributes['slug'] ?? Inflector::slug($name),
                     'attributes' => $this->fillAttributesWithData($clientResult->attributes, $attributes),
                     'dangerousInnerContent' => $clientResult->queryResultJson,
                 ]);
@@ -149,7 +152,7 @@ class GraphCMS implements ContentApi
                 $attributeContent = isset($fields[(string)$attribute->attributeId]) ?
                     $fields[(string)$attribute->attributeId] : null;
                 if ($attribute->type === 'Text') {
-                    $attributeContent = $attributeContent['html'];
+                    $attributeContent = $attributeContent['html'] ?? null;
                 }
 
                 $newAttribute->content = $attributeContent;
@@ -259,12 +262,15 @@ class GraphCMS implements ContentApi
                     }
                     return Promise\rejection_for($exception);
                 }
-                $contents = array_map(
+                return array_map(
                     function ($e) use ($clientResult, $query) {
+                        $name = $this->extractName($e);
+
                         return new Content([
                             'contentId' => $this->generateContentId($e['id'], $query->contentType),
                             'contentTypeId' => $query->contentType,
-                            'name' => $this->extractName($e),
+                            'name' => $name,
+                            'slug' => $e['slug'] ?? Inflector::slug($name),
                             'attributes' => $this->fillAttributesWithData(
                                 $clientResult->attributes,
                                 $e
@@ -274,7 +280,6 @@ class GraphCMS implements ContentApi
                     },
                     $data['data'][$name]
                 );
-                return $contents;
             })
             ->then(function ($contents) {
                 return new Result([
@@ -304,10 +309,12 @@ class GraphCMS implements ContentApi
                 function ($e) use ($contentType, $attributes) {
                     $contentTypeSingularized = ucfirst(Inflector::singularize($contentType));
                     $contentId = $this->generateContentId($e['id'], $contentTypeSingularized);
+                    $name = $this->extractName($e);
                     return new Content([
                         'contentId' => $contentId,
                         'contentTypeId' => $contentTypeSingularized,
-                        'name' => $this->extractName($e),
+                        'name' => $name,
+                        'slug' => $e['slug'] ?? Inflector::slug($name),
                         'attributes' => $this->fillAttributesWithData(
                             $attributes[$contentType],
                             $e

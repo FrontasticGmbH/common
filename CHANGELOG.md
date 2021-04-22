@@ -1,5 +1,16 @@
 # common Changelog
 
+## `2.11.0` (2021-04-20)
+
+* feat(FP-617): exposed authorization url on project config for commercetools
+
+## `2.10.13` (2021-04-13)
+
+* fix: fixed unit test for Content
+* fix(606): included Content slug on GraphCMS
+* fix(606): validate content attribute key before fetch
+* misc: included API test to place order for logged in user
+
 ## `2.10.12` (2021-04-08)
 
 * fix(FP-567): handle client exceptions and skip Union types
