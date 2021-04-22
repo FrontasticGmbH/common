@@ -6,7 +6,22 @@
 
 ## Methods
 
+* [__construct()](#__construct)
 * [versionAction()](#versionaction)
+
+### __construct()
+
+```php
+public function __construct(
+    string $env
+): mixed
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$env`|`string`||
+
+Return Value: `mixed`
 
 ### versionAction()
 
