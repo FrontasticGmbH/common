@@ -33,7 +33,6 @@
         </service>
 
         <service id="Frontastic\Common\CoreBundle\Controller\SystemController">
-            <argument>%version%</argument>
             <argument>%env%</argument>
         </service>
 

@@ -12,19 +12,17 @@ use Frontastic\UserBundle\Domain\MetaData;
 
 class SystemController extends AbstractController
 {
-    private string $version;
     private string $env;
 
-    public function __construct(string $version, string $env)
+    public function __construct(string $env)
     {
-        $this->version = $version;
         $this->env = $env;
     }
 
     public function versionAction(): JsonResponse
     {
         return new JsonResponse([
-            'version' => getenv('version') ?: $this->version,
+            'version' => $this->container->getParameter('version'),
             'environment' => $this->env,
         ]);
     }
