@@ -4,25 +4,21 @@ namespace Frontastic\Common\ContentApiBundle\Domain;
 
 use Contentful\RichText\Renderer;
 use Doctrine\Common\Cache\Cache;
+use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful\ContentfulClientFactory;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful\ContentfulLocaleMapper;
 use Frontastic\Common\HttpClient;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\CachingContentApi;
-use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful\NoopLocaleMapper;
-use Frontastic\Common\HttpClient\Guzzle;
-
-use Commercetools\Core\Client;
-use Commercetools\Core\Config;
-use Commercetools\Core\Model\Common\Context;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use Psr\SimpleCache\CacheInterface;
 use Psr\Container\ContainerInterface;
-use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DefaultContentApiFactory implements ContentApiFactory
 {
+    private const CONFIGURATION_TYPE_NAME = 'content';
+
     /**
      * @var ContainerInterface
      */
@@ -68,15 +64,12 @@ class DefaultContentApiFactory implements ContentApiFactory
 
     public function factor(Project $project): ContentApi
     {
-        // make sure the config is an object, not an array
-        $contentConfiguration = Json::decode(Json::encode($project->configuration['content']), false);
+        $contentConfiguration = $project->getConfigurationSection(self::CONFIGURATION_TYPE_NAME);
 
         switch ($contentConfiguration->engine) {
             case 'contentful':
-                $client = new \Contentful\Delivery\Client(
-                    $contentConfiguration->accessToken,
-                    $contentConfiguration->spaceId
-                );
+                $clientFactory = $this->container->get(ContentfulClientFactory::class);
+                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
 
                 if ($this->container->has($this->contentfulLocaleMapperId)) {
                     $localeMapper = $this->container->get($this->contentfulLocaleMapperId);
@@ -91,6 +84,7 @@ class DefaultContentApiFactory implements ContentApiFactory
                     $project->defaultLanguage
                 );
                 break;
+
             case 'graphcms':
                 $client = new ContentApi\GraphCMS\Client(
                     $contentConfiguration->projectId,
