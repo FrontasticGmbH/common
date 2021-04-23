@@ -21,8 +21,19 @@ class SystemController extends AbstractController
 
     public function versionAction(): JsonResponse
     {
+        $version = false;
+        $dir = __DIR__;
+        do {
+            if (file_exists($dir . '/environment') &&
+                $version = parse_ini_file($dir . '/environment')['version'] ?? false) {
+                break;
+            }
+
+            $dir = dirname($dir);
+        } while (!$version && $dir);
+
         return new JsonResponse([
-            'version' => $this->container->getParameter('version'),
+            'version' => $version,
             'environment' => $this->env,
         ]);
     }
