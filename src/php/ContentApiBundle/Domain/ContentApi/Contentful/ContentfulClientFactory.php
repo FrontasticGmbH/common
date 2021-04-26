@@ -5,7 +5,6 @@ namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful;
 use Contentful\Delivery\ClientOptions;
 use GuzzleHttp\Client as HttpClient;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
-use Contentful\Delivery\Client as ContentfulClient;
 use Psr\Log\LoggerInterface;
 
 class ContentfulClientFactory
@@ -23,7 +22,7 @@ class ContentfulClientFactory
     public function factorForConfigs(
         object $typeSpecificConfiguration,
         ?object $contentfulConfig = null
-    ): ContentfulClient {
+    ): Client {
         $config = [];
         foreach (['accessToken', 'spaceId'] as $option) {
             $value = $typeSpecificConfiguration->$option ?? $contentfulConfig->$option ?? null;
@@ -47,7 +46,7 @@ class ContentfulClientFactory
             'timeout'  => max(2, (int)getenv('http_client_timeout')),
         ]));
 
-        return new ContentfulClient(
+        return new Client(
             $config['accessToken'],
             $config['spaceId'],
             $config['environment'] ?? 'master',
@@ -55,7 +54,7 @@ class ContentfulClientFactory
         );
     }
 
-    public function factorForProjectAndType(Project $project, string $typeName): ContentfulClient
+    public function factorForProjectAndType(Project $project, string $typeName): Client
     {
         $typeSpecificConfiguration = $project->getConfigurationSection($typeName);
         $contentfulConfig = $project->getConfigurationSection('contentful');
