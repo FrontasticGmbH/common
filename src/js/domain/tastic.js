@@ -8,28 +8,28 @@ class Tastic {
         this.configuration = tastic.configuration || {}
         let mergedSchema = [
             {
-                name: 'General',
+                name: 'Component settings',
                 folded: true,
                 fields: [
                     {
-                        label: 'Name',
+                        label: 'Component name',
                         field: 'name',
                         type: 'string',
                     },
                     {
-                        label: 'Show on Mobile',
+                        label: 'Show on mobile',
                         field: 'mobile',
                         type: 'boolean',
                         default: true,
                     },
                     {
-                        label: 'Show on Tablet',
+                        label: 'Show on tablet',
                         field: 'tablet',
                         type: 'boolean',
                         default: true,
                     },
                     {
-                        label: 'Show on Desktop',
+                        label: 'Show on desktop',
                         field: 'desktop',
                         type: 'boolean',
                         default: true,
