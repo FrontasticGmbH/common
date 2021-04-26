@@ -50,7 +50,7 @@ class ContentfulClientFactory
         return new ContentfulClient(
             $config['accessToken'],
             $config['spaceId'],
-            'master',
+            $config['environment'] ?? 'master',
             $options
         );
     }
