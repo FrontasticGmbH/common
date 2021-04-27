@@ -21,6 +21,10 @@
             <argument type="tagged" tag="contentApi.lifecycleEventListener" />
         </service>
 
+        <service id="Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful\ContentfulClientFactory">
+            <argument type="service" id="logger" />
+        </service>
+
         <service id="Contentful\RichText\Renderer" />
     </services>
 </container>

@@ -1,5 +1,10 @@
 # common Changelog
 
+## `2.11.1` (2021-04-22)
+
+* fix: Fix the /api/version SystemController to use version parameter bag
+* fix: Fix the /api/version SystemController parameter bag
+
 ## `2.11.0` (2021-04-20)
 
 * feat(FP-617): exposed authorization url on project config for commercetools
