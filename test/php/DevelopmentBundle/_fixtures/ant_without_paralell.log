@@ -1,0 +1,1296 @@
+Buildfile: /var/www/frontastic/build.xml
+
+test:
+     [exec] yarn install v1.22.10
+     [exec] [1/4] Resolving packages...
+     [exec] success Already up-to-date.
+     [exec] Done in 2.30s.
+   [concat] -announce:name:
+   [concat]      [exec]  _____                _            _   _      
+   [concat]      [exec] |  ___| __ ___  _ __ | |_ __ _ ___| |_(_) ___ 
+   [concat]      [exec] | |_ | '__/ _ \| '_ \| __/ _` / __| __| |/ __|
+   [concat]      [exec] |  _|| | | (_) | | | | || (_| \__ \ |_| | (__ 
+   [concat]      [exec] |_|  |_|  \___/|_| |_|\__\__,_|___/\__|_|\___|
+   [concat]      [exec]                                               
+   [concat]      [exec]     _          _     _                
+   [concat]      [exec]    / \   _ __ (_) __| | ___   ___ ___ 
+   [concat]      [exec]   / _ \ | '_ \| |/ _` |/ _ \ / __/ __|
+   [concat]      [exec]  / ___ \| |_) | | (_| | (_) | (__\__ \
+   [concat]      [exec] /_/   \_\ .__/|_|\__,_|\___/ \___|___/
+   [concat]      [exec]         |_|                           
+   [concat] -clean:before~hook:
+   [concat] -clean:main:
+   [concat]    [delete] Deleting directory /var/www/frontastic/paas/libraries/apidocs/build
+   [concat] -clean:after~hook:
+   [concat] clean:
+   [concat] -initialize:before~hook:
+   [concat] -initialize:main:
+   [concat]     [mkdir] Created dir: /var/www/frontastic/paas/libraries/apidocs/build
+   [concat]     [mkdir] Created dir: /var/www/frontastic/paas/libraries/apidocs/build/log
+   [concat] -initialize:main~hook:
+   [concat] -initialize:after~hook:
+   [concat] initialize:
+   [concat] -composer:exists:
+   [concat] -composer:install:
+   [concat] -composer:self-update:
+   [concat]      [exec] You are already using the latest available Composer version 2.0.12 (stable channel).
+   [concat] -composer:install-or-update:
+   [concat] -composer:remove-non-tracked-lock-file:
+   [concat] composer:install:
+   [concat]      [exec] Installing dependencies from lock file (including require-dev)
+   [concat]      [exec] Verifying lock file contents can be installed on current platform.
+   [concat]      [exec] Nothing to install, update or remove
+   [concat]      [exec] Package phpunit/php-token-stream is abandoned, you should avoid using it. No replacement was suggested.
+   [concat]      [exec] Package sebastian/finder-facade is abandoned, you should avoid using it. No replacement was suggested.
+   [concat]      [exec] Generating autoload files
+   [concat]      [exec] composer/package-versions-deprecated: Generating version class...
+   [concat]      [exec] composer/package-versions-deprecated: ...done generating version class
+   [concat]      [exec] 48 packages you are using are looking for funding.
+   [concat]      [exec] Use the `composer fund` command to find out more!
+   [concat]      [exec] Generating autoload files
+   [concat]      [exec] composer/package-versions-deprecated: Generating version class...
+   [concat]      [exec] composer/package-versions-deprecated: ...done generating version class
+   [concat]      [exec] Generated autoload files
+   [concat] -prepare:before~hook:
+   [concat] -prepare:main~hook:
+   [concat] -prepare:after~hook:
+   [concat] prepare:
+   [concat] -test-unit:before~hook:
+   [concat] -phpunit:check:
+   [concat] phpunit:
+   [concat]      [exec] PHPUnit 7.5.20 by Sebastian Bergmann and contributors.
+   [concat]      [exec] 
+   [concat]      [exec] .............................                                     29 / 29 (100%)
+   [concat]      [exec] 
+   [concat]      [exec] Time: 132 ms, Memory: 4.00 MB
+   [concat]      [exec] 
+   [concat]      [exec] OK (29 tests, 54 assertions)
+   [concat] -test-unit:main~hook:
+   [concat] -test-unit:after~hook:
+   [concat] test-unit:
+   [concat] -test-spec:before~hook:
+   [concat] -test-spec:main~hook:
+   [concat] -test-spec:after~hook:
+   [concat] test-spec:
+   [concat] -test-feature:before~hook:
+   [concat] -test-feature:main~hook:
+   [concat] -test-feature:after~hook:
+   [concat] test-feature:
+   [concat] test-dynamic:
+   [concat] -test-static:before~hook:
+   [concat] checkstyle:
+   [concat] pdepend:
+   [concat]      [exec] PDepend 2.9.0
+   [concat]      [exec] 
+   [concat]      [exec] Parsing source files:
+   [concat]      [exec] .....................................                           37
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Dependency metrics:
+   [concat]      [exec] .......                                                        154
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Cyclomatic Complexity metrics:
+   [concat]      [exec] .............                                                  262
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Node Loc metrics:
+   [concat]      [exec] .........                                                      193
+   [concat]      [exec] 
+   [concat]      [exec] Calculating NPath Complexity metrics:
+   [concat]      [exec] .............                                                  262
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Inheritance metrics:
+   [concat]      [exec] ..                                                              50
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Node Count metrics:
+   [concat]      [exec] .......                                                        148
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Hierarchy metrics:
+   [concat]      [exec] ..........                                                     218
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Code Rank metrics:
+   [concat]      [exec] ....................................                           728
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Coupling metrics:
+   [concat]      [exec] .............                                                  262
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Class Level metrics:
+   [concat]      [exec] ...........                                                    222
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Cohesion metrics:
+   [concat]      [exec] ....................                                           411
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Halstead metrics:
+   [concat]      [exec] .............                                                  262
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Maintainability Index metrics:
+   [concat]      [exec] .............                                                  262
+   [concat]      [exec] 
+   [concat]      [exec] Generating pdepend log files, this may take a moment.
+   [concat]      [exec] 
+   [concat]      [exec] Time: 0:00:07; Memory: 20.00Mb
+   [concat] phpmd.run:
+   [concat]      [exec] Result: 2
+   [concat] phpmd.output:
+   [concat]      [echo] <?xml version="1.0" encoding="UTF-8" ?>
+   [concat]      [echo] <pmd version="@package_version@" timestamp="2021-04-20T09:10:22+02:00">
+   [concat]      [echo]   <file name="/var/www/frontastic/paas/libraries/apidocs/src/php/PhpDoc.php">
+   [concat]      [echo]     <violation beginline="18" endline="430" rule="ExcessiveClassComplexity" ruleset="Code Size Rules" package="Frontastic\Apidocs" externalInfoUrl="https://phpmd.org/rules/codesize.html#excessiveclasscomplexity" class="PhpDoc" priority="3">
+   [concat]      [echo]       The class PhpDoc has an overall complexity of 76 which is very high. The configured complexity threshold is 50.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]     <violation beginline="18" endline="430" rule="CouplingBetweenObjects" ruleset="Design Rules" package="Frontastic\Apidocs" externalInfoUrl="https://phpmd.org/rules/design.html#couplingbetweenobjects" class="PhpDoc" priority="2">
+   [concat]      [echo]       The class PhpDoc has a coupling between objects value of 19. Consider to reduce the number of dependencies under 13.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]     <violation beginline="75" endline="195" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="Frontastic\Apidocs" externalInfoUrl="https://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="PhpDoc" method="render" priority="3">
+   [concat]      [echo]       The method render() has a Cyclomatic Complexity of 19. The configured cyclomatic complexity threshold is 10.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]     <violation beginline="75" endline="195" rule="NPathComplexity" ruleset="Code Size Rules" package="Frontastic\Apidocs" externalInfoUrl="https://phpmd.org/rules/codesize.html#npathcomplexity" class="PhpDoc" method="render" priority="3">
+   [concat]      [echo]       The method render() has an NPath complexity of 5950. The configured NPath complexity threshold is 200.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]     <violation beginline="75" endline="195" rule="ExcessiveMethodLength" ruleset="Code Size Rules" package="Frontastic\Apidocs" externalInfoUrl="https://phpmd.org/rules/codesize.html#excessivemethodlength" class="PhpDoc" method="render" priority="3">
+   [concat]      [echo]       The method render() has 121 lines of code. Current threshold is set to 100. Avoid really long methods.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]     <violation beginline="120" endline="120" rule="ExitExpression" ruleset="Design Rules" externalInfoUrl="https://phpmd.org/rules/design.html#exitexpression" priority="1">
+   [concat]      [echo]       The method render() contains an exit expression.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]     <violation beginline="248" endline="296" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="Frontastic\Apidocs" externalInfoUrl="https://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="PhpDoc" method="getProperties" priority="3">
+   [concat]      [echo]       The method getProperties() has a Cyclomatic Complexity of 11. The configured cyclomatic complexity threshold is 10.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]     <violation beginline="298" endline="380" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="Frontastic\Apidocs" externalInfoUrl="https://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="PhpDoc" method="getMethods" priority="3">
+   [concat]      [echo]       The method getMethods() has a Cyclomatic Complexity of 20. The configured cyclomatic complexity threshold is 10.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]     <violation beginline="382" endline="411" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="Frontastic\Apidocs" externalInfoUrl="https://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="PhpDoc" method="prepareEntity" priority="3">
+   [concat]      [echo]       The method prepareEntity() has a Cyclomatic Complexity of 11. The configured cyclomatic complexity threshold is 10.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]   </file>
+   [concat]      [echo]   <file name="/var/www/frontastic/paas/libraries/apidocs/src/php/RestDoc.php">
+   [concat]      [echo]     <violation beginline="19" endline="293" rule="CouplingBetweenObjects" ruleset="Design Rules" package="Frontastic\Apidocs" externalInfoUrl="https://phpmd.org/rules/design.html#couplingbetweenobjects" class="RestDoc" priority="2">
+   [concat]      [echo]       The class RestDoc has a coupling between objects value of 18. Consider to reduce the number of dependencies under 13.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]     <violation beginline="69" endline="172" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="Frontastic\Apidocs" externalInfoUrl="https://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="RestDoc" method="render" priority="3">
+   [concat]      [echo]       The method render() has a Cyclomatic Complexity of 13. The configured cyclomatic complexity threshold is 10.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]     <violation beginline="69" endline="172" rule="ExcessiveMethodLength" ruleset="Code Size Rules" package="Frontastic\Apidocs" externalInfoUrl="https://phpmd.org/rules/codesize.html#excessivemethodlength" class="RestDoc" method="render" priority="3">
+   [concat]      [echo]       The method render() has 104 lines of code. Current threshold is set to 100. Avoid really long methods.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]     <violation beginline="108" endline="108" rule="ExitExpression" ruleset="Design Rules" externalInfoUrl="https://phpmd.org/rules/design.html#exitexpression" priority="1">
+   [concat]      [echo]       The method render() contains an exit expression.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]     <violation beginline="193" endline="233" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="Frontastic\Apidocs" externalInfoUrl="https://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="RestDoc" method="getPaths" priority="3">
+   [concat]      [echo]       The method getPaths() has a Cyclomatic Complexity of 10. The configured cyclomatic complexity threshold is 10.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]   </file>
+   [concat]      [echo]   <file name="/var/www/frontastic/paas/libraries/apidocs/src/php/RestDoc/Formatter/TypedJson.php">
+   [concat]      [echo]     <violation beginline="47" endline="158" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="Frontastic\Apidocs\RestDoc\Formatter" externalInfoUrl="https://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="TypedJson" method="visitTypeForSwagger" priority="3">
+   [concat]      [echo]       The method visitTypeForSwagger() has a Cyclomatic Complexity of 18. The configured cyclomatic complexity threshold is 10.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]     <violation beginline="47" endline="158" rule="ExcessiveMethodLength" ruleset="Code Size Rules" package="Frontastic\Apidocs\RestDoc\Formatter" externalInfoUrl="https://phpmd.org/rules/codesize.html#excessivemethodlength" class="TypedJson" method="visitTypeForSwagger" priority="3">
+   [concat]      [echo]       The method visitTypeForSwagger() has 112 lines of code. Current threshold is set to 100. Avoid really long methods.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]   </file>
+   [concat]      [echo]   <file name="/var/www/frontastic/paas/libraries/apidocs/src/php/RestDoc/Template.php">
+   [concat]      [echo]     <violation beginline="23" endline="94" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="Frontastic\Apidocs\RestDoc" externalInfoUrl="https://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="Template" method="renderType" priority="3">
+   [concat]      [echo]       The method renderType() has a Cyclomatic Complexity of 16. The configured cyclomatic complexity threshold is 10.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]   </file>
+   [concat]      [echo]   <file name="/var/www/frontastic/paas/libraries/apidocs/src/php/TypeParser.php">
+   [concat]      [echo]     <violation beginline="54" endline="92" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="Frontastic\Apidocs" externalInfoUrl="https://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="TypeParser" method="resolveTypes" priority="3">
+   [concat]      [echo]       The method resolveTypes() has a Cyclomatic Complexity of 10. The configured cyclomatic complexity threshold is 10.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]     <violation beginline="54" endline="92" rule="NPathComplexity" ruleset="Code Size Rules" package="Frontastic\Apidocs" externalInfoUrl="https://phpmd.org/rules/codesize.html#npathcomplexity" class="TypeParser" method="resolveTypes" priority="3">
+   [concat]      [echo]       The method resolveTypes() has an NPath complexity of 288. The configured NPath complexity threshold is 200.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]   </file>
+   [concat]      [echo]   <file name="/var/www/frontastic/paas/libraries/apidocs/src/php/TypeParser/Node.php">
+   [concat]      [echo]     <violation beginline="7" endline="15" rule="NumberOfChildren" ruleset="Design Rules" package="Frontastic\Apidocs\TypeParser" externalInfoUrl="https://phpmd.org/rules/design.html#numberofchildren" class="Node" priority="2">
+   [concat]      [echo]       The class Node has 15 children. Consider to rebalance this class hierarchy to keep number of children under 15.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]   </file>
+   [concat]      [echo]   <file name="/var/www/frontastic/paas/libraries/apidocs/src/php/TypeParser/Parser.php">
+   [concat]      [echo]     <violation beginline="5" endline="441" rule="ExcessiveClassComplexity" ruleset="Code Size Rules" package="Frontastic\Apidocs\TypeParser" externalInfoUrl="https://phpmd.org/rules/codesize.html#excessiveclasscomplexity" class="Parser" priority="3">
+   [concat]      [echo]       The class Parser has an overall complexity of 62 which is very high. The configured complexity threshold is 50.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]     <violation beginline="5" endline="441" rule="CouplingBetweenObjects" ruleset="Design Rules" package="Frontastic\Apidocs\TypeParser" externalInfoUrl="https://phpmd.org/rules/design.html#couplingbetweenobjects" class="Parser" priority="2">
+   [concat]      [echo]       The class Parser has a coupling between objects value of 17. Consider to reduce the number of dependencies under 13.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]     <violation beginline="132" endline="202" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="Frontastic\Apidocs\TypeParser" externalInfoUrl="https://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="Parser" method="parse" priority="3">
+   [concat]      [echo]       The method parse() has a Cyclomatic Complexity of 16. The configured cyclomatic complexity threshold is 10.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]     <violation beginline="132" endline="202" rule="NPathComplexity" ruleset="Code Size Rules" package="Frontastic\Apidocs\TypeParser" externalInfoUrl="https://phpmd.org/rules/codesize.html#npathcomplexity" class="Parser" method="parse" priority="3">
+   [concat]      [echo]       The method parse() has an NPath complexity of 771. The configured NPath complexity threshold is 200.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]   </file>
+   [concat]      [echo]   <file name="/var/www/frontastic/paas/libraries/apidocs/src/php/TypeScriptTypes.php">
+   [concat]      [echo]     <violation beginline="117" endline="176" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="Frontastic\Apidocs" externalInfoUrl="https://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="TypeScriptTypes" method="getInclude" priority="3">
+   [concat]      [echo]       The method getInclude() has a Cyclomatic Complexity of 11. The configured cyclomatic complexity threshold is 10.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]     <violation beginline="133" endline="136" rule="CountInLoopExpression" ruleset="Design Rules" externalInfoUrl="https://phpmd.org/rules/design.html#countinloopexpression" priority="2">
+   [concat]      [echo]       Avoid using Frontastic\Apidocs\count() function in while loops.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]     <violation beginline="138" endline="140" rule="CountInLoopExpression" ruleset="Design Rules" externalInfoUrl="https://phpmd.org/rules/design.html#countinloopexpression" priority="2">
+   [concat]      [echo]       Avoid using Frontastic\Apidocs\count() function in for loops.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]     <violation beginline="197" endline="243" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="Frontastic\Apidocs" externalInfoUrl="https://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="TypeScriptTypes" method="visitType" priority="3">
+   [concat]      [echo]       The method visitType() has a Cyclomatic Complexity of 10. The configured cyclomatic complexity threshold is 10.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]   </file>
+   [concat]      [echo] </pmd>
+   [concat] phpmd.fail:
+   [concat] phpmd:
+   [concat] phpstan.run:
+   [concat]      [exec] 
+   [concat]      [exec] ⚠️  You're running a really old version of PHPStan.️
+   [concat]      [exec] 
+   [concat]      [exec] The last release in the 0.11.x series with new features
+   [concat]      [exec] and bugfixes was released on October 22nd 2019,
+   [concat]      [exec] that's 546 days ago.
+   [concat]      [exec] 
+   [concat]      [exec] Since then more than 50 new PHPStan versions were released
+   [concat]      [exec] with hundreds of new features, bugfixes, and other
+   [concat]      [exec] quality of life improvements.
+   [concat]      [exec] 
+   [concat]      [exec] To learn about what you're missing out on, check out
+   [concat]      [exec] this blog with articles about the latest major releases:
+   [concat]      [exec] https://phpstan.org/blog
+   [concat]      [exec] 
+   [concat]      [exec] Historically, the main two blockers preventing
+   [concat]      [exec] people from upgrading were:
+   [concat]      [exec] 1) Composer conflicts with other dependencies.
+   [concat]      [exec] 2) Errors discovered by the new PHPStan version and no time
+   [concat]      [exec]    to fix them to get to a green build again.
+   [concat]      [exec] 
+   [concat]      [exec] Today, neither of them is a problem anymore thanks to:
+   [concat]      [exec] 1) phpstan/phpstan package having zero external dependencies.
+   [concat]      [exec] 2) Baseline feature letting you use the latest release
+   [concat]      [exec]    right away even with pre-existing errors.
+   [concat]      [exec]    Read more about it here: https://phpstan.org/user-guide/baseline
+   [concat]      [exec] 
+   [concat]      [exec] Upgrade today to PHPStan 0.12 by using
+   [concat]      [exec] "phpstan/phpstan": "^0.12" in your composer.json.
+   [concat]      [exec] 
+   [concat]      [exec] 
+   [concat]      [exec] ⚠️  You're running a really old version of PHPStan.️
+   [concat]      [exec] 
+   [concat]      [exec] The last release in the 0.11.x series with new features
+   [concat]      [exec] and bugfixes was released on October 22nd 2019,
+   [concat]      [exec] that's 546 days ago.
+   [concat]      [exec] 
+   [concat]      [exec] Since then more than 50 new PHPStan versions were released
+   [concat]      [exec] with hundreds of new features, bugfixes, and other
+   [concat]      [exec] quality of life improvements.
+   [concat]      [exec] 
+   [concat]      [exec] To learn about what you're missing out on, check out
+   [concat]      [exec] this blog with articles about the latest major releases:
+   [concat]      [exec] https://phpstan.org/blog
+   [concat]      [exec] 
+   [concat]      [exec] Historically, the main two blockers preventing
+   [concat]      [exec] people from upgrading were:
+   [concat]      [exec] 1) Composer conflicts with other dependencies.
+   [concat]      [exec] 2) Errors discovered by the new PHPStan version and no time
+   [concat]      [exec]    to fix them to get to a green build again.
+   [concat]      [exec] 
+   [concat]      [exec] Today, neither of them is a problem anymore thanks to:
+   [concat]      [exec] 1) phpstan/phpstan package having zero external dependencies.
+   [concat]      [exec] 2) Baseline feature letting you use the latest release
+   [concat]      [exec]    right away even with pre-existing errors.
+   [concat]      [exec]    Read more about it here: https://phpstan.org/user-guide/baseline
+   [concat]      [exec] 
+   [concat]      [exec] Upgrade today to PHPStan 0.12 by using
+   [concat]      [exec] "phpstan/phpstan": "^0.12" in your composer.json.
+   [concat]      [exec] 
+   [concat]      [exec] Note: Using configuration file /var/www/frontastic/paas/libraries/apidocs/phpstan.neon.
+   [concat] phpstan.output:
+   [concat] phpstan.fail:
+   [concat] phpstan:
+   [concat] -test-static:main~hook:
+   [concat] -test-static:after~hook:
+   [concat] test-static:
+   [concat] test:
+     [echo] [/COMPONENT /var/www/frontastic/paas/libraries/apidocs/build.xml SUCCESSFULL]
+     [echo] [COMPONENT /var/www/frontastic/paas/libraries/common/build.xml]
+     [echo] [/COMPONENT /var/www/frontastic/paas/libraries/common/build.xml FAILED]
+     [echo] [COMPONENT /var/www/frontastic/paas/themes/frontastic/boost/build.xml]
+     [echo] [/COMPONENT /var/www/frontastic/paas/themes/frontastic/boost/build.xml SUCCESSFULL]
+     [echo] [COMPONENT /var/www/frontastic/paas/libraries/payment/adyen/build.xml]
+     [echo] [/COMPONENT /var/www/frontastic/paas/libraries/payment/adyen/build.xml FAILED]
+     [echo] [COMPONENT /var/www/frontastic/paas/automation/build.xml]
+     [echo] [/COMPONENT /var/www/frontastic/paas/automation/build.xml SUCCESSFULL]
+     [echo] [COMPONENT /var/www/frontastic/paas/catwalk/build.xml]
+     [echo] [/COMPONENT /var/www/frontastic/paas/catwalk/build.xml SUCCESSFULL]
+     [echo] [COMPONENT /var/www/frontastic/paas/landingpage/build.xml]
+     [echo] [/COMPONENT /var/www/frontastic/paas/landingpage/build.xml SUCCESSFULL]
+     [echo] [COMPONENT /var/www/frontastic/paas/replicator/build.xml]
+     [echo] [/COMPONENT /var/www/frontastic/paas/replicator/build.xml FAILED]
+     [echo] [COMPONENT /var/www/frontastic/saas/backstage/build.xml]
+     [echo] [/COMPONENT /var/www/frontastic/saas/backstage/build.xml FAILED]
+     [echo] [COMPONENT /var/www/frontastic/saas/ci/build.xml]
+   [concat] -announce:name:
+   [concat]      [exec]  _____                _            _   _      
+   [concat]      [exec] |  ___| __ ___  _ __ | |_ __ _ ___| |_(_) ___ 
+   [concat]      [exec] | |_ | '__/ _ \| '_ \| __/ _` / __| __| |/ __|
+   [concat]      [exec] |  _|| | | (_) | | | | || (_| \__ \ |_| | (__ 
+   [concat]      [exec] |_|  |_|  \___/|_| |_|\__\__,_|___/\__|_|\___|
+   [concat]      [exec]                                               
+   [concat]      [exec]   ____            _   _                             
+   [concat]      [exec]  / ___|___  _ __ | |_(_)_ __  _   _  ___  _   _ ___ 
+   [concat]      [exec] | |   / _ \| '_ \| __| | '_ \| | | |/ _ \| | | / __|
+   [concat]      [exec] | |__| (_) | | | | |_| | | | | |_| | (_) | |_| \__ \
+   [concat]      [exec]  \____\___/|_| |_|\__|_|_| |_|\__,_|\___/ \__,_|___/
+   [concat]      [exec]                                                     
+   [concat]      [exec]  ___       _                       _   _             
+   [concat]      [exec] |_ _|_ __ | |_ ___  __ _ _ __ __ _| |_(_) ___  _ __  
+   [concat]      [exec]  | || '_ \| __/ _ \/ _` | '__/ _` | __| |/ _ \| '_ \ 
+   [concat]      [exec]  | || | | | ||  __/ (_| | | | (_| | |_| | (_) | | | |
+   [concat]      [exec] |___|_| |_|\__\___|\__, |_|  \__,_|\__|_|\___/|_| |_|
+   [concat]      [exec]                    |___/                             
+   [concat] -clean:before~hook:
+   [concat] -clean:main:
+   [concat]    [delete] Deleting directory /var/www/frontastic/saas/ci/build
+   [concat] -clean:after~hook:
+   [concat] clean:
+   [concat] -initialize:before~hook:
+   [concat] -initialize:main:
+   [concat]     [mkdir] Created dir: /var/www/frontastic/saas/ci/build
+   [concat]     [mkdir] Created dir: /var/www/frontastic/saas/ci/build/log
+   [concat] -initialize:main~hook:
+   [concat] -initialize:after~hook:
+   [concat] initialize:
+   [concat] -composer:exists:
+   [concat] -composer:install:
+   [concat] -composer:self-update:
+   [concat]      [exec] You are already using the latest available Composer version 2.0.12 (stable channel).
+   [concat] -composer:install-or-update:
+   [concat] -composer:remove-non-tracked-lock-file:
+   [concat] composer:install:
+   [concat]      [exec] Installing dependencies from lock file (including require-dev)
+   [concat]      [exec] Verifying lock file contents can be installed on current platform.
+   [concat]      [exec] Nothing to install, update or remove
+   [concat]      [exec] Package phpunit/php-token-stream is abandoned, you should avoid using it. No replacement was suggested.
+   [concat]      [exec] Package phpunit/phpunit-mock-objects is abandoned, you should avoid using it. No replacement was suggested.
+   [concat]      [exec] Package sebastian/finder-facade is abandoned, you should avoid using it. No replacement was suggested.
+   [concat]      [exec] Generating autoload files
+   [concat]      [exec] composer/package-versions-deprecated: Generating version class...
+   [concat]      [exec] composer/package-versions-deprecated: ...done generating version class
+   [concat]      [exec] 2 packages you are using are looking for funding.
+   [concat]      [exec] Use the `composer fund` command to find out more!
+   [concat]      [exec] Generating autoload files
+   [concat]      [exec] composer/package-versions-deprecated: Generating version class...
+   [concat]      [exec] composer/package-versions-deprecated: ...done generating version class
+   [concat]      [exec] Generated autoload files
+   [concat] -prepare:before~hook:
+   [concat] -prepare:main~hook:
+   [concat] -prepare:after~hook:
+   [concat] prepare:
+   [concat] -test-unit:before~hook:
+   [concat] -test-unit:main~hook:
+   [concat] -test-unit:after~hook:
+   [concat] test-unit:
+   [concat] -test-spec:before~hook:
+   [concat] -test-spec:main~hook:
+   [concat] -test-spec:after~hook:
+   [concat] test-spec:
+   [concat] -test-feature:before~hook:
+   [concat] -test-feature:main~hook:
+   [concat] -test-feature:after~hook:
+   [concat] test-feature:
+   [concat] test-dynamic:
+   [concat] -test-static:before~hook:
+   [concat] checkstyle:
+   [concat] phpstan.run:
+   [concat]      [exec] Note: Using configuration file /var/www/frontastic/saas/ci/phpstan.neon.
+   [concat] phpstan.output:
+   [concat] phpstan.fail:
+   [concat] phpstan:
+   [concat] -test-static:main~hook:
+   [concat] -test-static:after~hook:
+   [concat] test-static:
+   [concat] test:
+     [echo] [/COMPONENT /var/www/frontastic/saas/ci/build.xml SUCCESSFULL]
+     [echo] [COMPONENT /var/www/frontastic/saas/frontastic-cli/build.xml]
+   [concat] Duplicated project name in import. Project Frontastic CLI defined first in /var/www/frontastic/saas/frontastic-cli/build.xml and again in /var/www/frontastic/saas/frontastic-cli/src/ant/go.xml
+   [concat]      [exec] The command attribute is deprecated.
+   [concat]      [exec] Please use the executable attribute and nested arg elements.
+   [concat] -announce:name:
+   [concat]      [exec]  _____                _            _   _         ____ _     ___ 
+   [concat]      [exec] |  ___| __ ___  _ __ | |_ __ _ ___| |_(_) ___   / ___| |   |_ _|
+   [concat]      [exec] | |_ | '__/ _ \| '_ \| __/ _` / __| __| |/ __| | |   | |    | | 
+   [concat]      [exec] |  _|| | | (_) | | | | || (_| \__ \ |_| | (__  | |___| |___ | | 
+   [concat]      [exec] |_|  |_|  \___/|_| |_|\__\__,_|___/\__|_|\___|  \____|_____|___|
+   [concat]      [exec]                                                                 
+   [concat] -clean:before~hook:
+   [concat] -clean:main:
+   [concat]    [delete] Deleting directory /var/www/frontastic/saas/frontastic-cli/build
+   [concat] cli:cleanup:
+   [concat] -clean:after~hook:
+   [concat] clean:
+   [concat] -initialize:before~hook:
+   [concat] -initialize:main:
+   [concat]     [mkdir] Created dir: /var/www/frontastic/saas/frontastic-cli/build
+   [concat]     [mkdir] Created dir: /var/www/frontastic/saas/frontastic-cli/build/log
+   [concat] -react:yarn-manually-disabled:
+   [concat] -react:should-yarn-install:
+   [concat]      [echo] DISABLE_YARN_INSTALL: ${env.DISABLE_YARN_INSTALL}
+   [concat] react:bootstrap:
+   [concat]      [echo] Executing global yarn install for all workspaces
+   [concat]      [echo] That might take some time, but its the only yarn install we need now
+   [concat]      [echo] Please hang on and maybe get cold beverage ...
+   [concat]      [exec] yarn install v1.22.10
+   [concat]      [exec] warning Waiting for the other yarn instance to finish (1173416)
+   [concat]      [exec] warning Waiting for the other yarn instance to finish (1173457)
+   [concat]      [exec] [1/4] Resolving packages...
+   [concat]      [exec] success Already up-to-date.
+   [concat]      [exec] Done in 13.43s.
+   [concat] -initialize:main~hook:
+   [concat] -initialize:after~hook:
+   [concat] initialize:
+   [concat] go:generate:
+   [concat] go:prepare:
+   [concat] -react:message-no-yarn-install:
+   [concat] -prepare:before~hook:
+   [concat] -prepare:main~hook:
+   [concat] go:format:
+   [concat] -prepare:after~hook:
+   [concat] prepare:
+   [concat] -test-unit:before~hook:
+   [concat] go:test:
+   [concat]      [exec] go version go1.16.2 linux/amd64
+   [concat]      [exec] go: downloading github.com/onsi/gomega v1.10.4
+   [concat]      [exec] go: downloading github.com/onsi/ginkgo v1.12.1
+   [concat]      [exec] go: downloading gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15
+   [concat]      [exec] go: downloading github.com/kr/pretty v0.1.0
+   [concat]      [exec] go: downloading github.com/kr/text v0.1.0
+   [concat]      [exec] go: downloading golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
+   [concat]      [exec] go: downloading github.com/nxadm/tail v1.4.4
+   [concat]      [exec] go: downloading gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7
+   [concat]      [exec] ?   	github.com/FrontasticGmbH/frontastic/saas/frontastic-cli	[no test files]
+   [concat]      [exec] ?   	github.com/FrontasticGmbH/frontastic/saas/frontastic-cli/src/go/cmd	[no test files]
+   [concat]      [exec] ?   	github.com/FrontasticGmbH/frontastic/saas/frontastic-cli/src/go/internal/checks	[no test files]
+   [concat]      [exec] ?   	github.com/FrontasticGmbH/frontastic/saas/frontastic-cli/src/go/internal/config	[no test files]
+   [concat]      [exec] ?   	github.com/FrontasticGmbH/frontastic/saas/frontastic-cli/src/go/internal/errors	[no test files]
+   [concat]      [exec] ok  	github.com/FrontasticGmbH/frontastic/saas/frontastic-cli/src/go/internal/filesync	0.122s
+   [concat]      [exec] ?   	github.com/FrontasticGmbH/frontastic/saas/frontastic-cli/src/go/internal/generate	[no test files]
+   [concat]      [exec] ?   	github.com/FrontasticGmbH/frontastic/saas/frontastic-cli/src/go/internal/helpers	[no test files]
+   [concat]      [exec] ok  	github.com/FrontasticGmbH/frontastic/saas/frontastic-cli/src/go/internal/hostsfile	0.043s
+   [concat]      [exec] ?   	github.com/FrontasticGmbH/frontastic/saas/frontastic-cli/src/go/internal/logger	[no test files]
+   [concat]      [exec] ?   	github.com/FrontasticGmbH/frontastic/saas/frontastic-cli/src/go/internal/spawn	[no test files]
+   [concat]      [exec] ?   	github.com/FrontasticGmbH/frontastic/saas/frontastic-cli/src/go/internal/ssh	[no test files]
+   [concat]      [exec] ok  	github.com/FrontasticGmbH/frontastic/saas/frontastic-cli/src/go/internal/ssrproxy	0.079s
+   [concat]      [exec] ?   	github.com/FrontasticGmbH/frontastic/saas/frontastic-cli/src/go/internal/sysutil	[no test files]
+   [concat]      [exec] ?   	github.com/FrontasticGmbH/frontastic/saas/frontastic-cli/src/go/internal/testhelper	[no test files]
+   [concat]      [exec] ?   	github.com/FrontasticGmbH/frontastic/saas/frontastic-cli/src/go/internal/traefik	[no test files]
+   [concat]      [exec] ?   	github.com/FrontasticGmbH/frontastic/saas/frontastic-cli/src/go/internal/tui	[no test files]
+   [concat] react:test:
+   [concat]      [exec] yarn run v1.22.10
+   [concat]      [exec] warning package.json: License should be a valid SPDX license expression
+   [concat]      [exec] $ jest --env node
+   [concat]      [exec] PASS test/ts/extensions/String.test.ts (7.445s)
+   [concat]      [exec] PASS test/ts/common/Imports.test.ts (9.036s)
+   [concat]      [exec] PASS test/ts/common/Objects.test.ts
+   [concat]      [exec] PASS test/ts/models/ModifyTasticsJs.test.ts (6.69s)
+   [concat]      [exec] PASS test/ts/common/File.test.ts (12.447s)
+   [concat]      [exec] PASS test/ts/extensions/Array.test.ts
+   [concat]      [exec] PASS test/ts/extensions/Number.test.ts
+   [concat]      [exec] PASS test/ts/utilities/Guid.test.ts (8.371s)
+   [concat]      [exec] 
+   [concat]      [exec] Test Suites: 8 passed, 8 total
+   [concat]      [exec] Tests:       61 passed, 61 total
+   [concat]      [exec] Snapshots:   0 total
+   [concat]      [exec] Time:        48.378s
+   [concat]      [exec] Ran all test suites.
+   [concat]      [exec] Done in 52.15s.
+   [concat] -test-unit:main~hook:
+   [concat] -test-unit:after~hook:
+   [concat] test-unit:
+   [concat] -test-spec:before~hook:
+   [concat] -test-spec:main~hook:
+   [concat] -test-spec:after~hook:
+   [concat] test-spec:
+   [concat] -test-feature:before~hook:
+   [concat] -test-feature:main~hook:
+   [concat] -test-feature:after~hook:
+   [concat] test-feature:
+   [concat] test-dynamic:
+   [concat] -test-static:before~hook:
+   [concat] react:check:
+   [concat]      [exec] yarn run v1.22.10
+   [concat]      [exec] warning package.json: License should be a valid SPDX license expression
+   [concat]      [exec] $ ../../node_modules/.bin/tsc --noEmit
+   [concat]      [exec] Done in 9.46s.
+   [concat]      [exec] yarn run v1.22.10
+   [concat]      [exec] warning package.json: License should be a valid SPDX license expression
+   [concat]      [exec] $ echo "Currently no eslint, needs adding on further development"
+   [concat]      [exec] Currently no eslint, needs adding on further development
+   [concat]      [exec] Done in 0.53s.
+   [concat] -test-static:main~hook:
+   [concat] -test-static:after~hook:
+   [concat] test-static:
+   [concat] test:
+     [echo] [/COMPONENT /var/www/frontastic/saas/frontastic-cli/build.xml SUCCESSFULL]
+     [echo] [COMPONENT /var/www/frontastic/saas/infrastructure/build.xml]
+   [concat] -announce:name:
+   [concat]      [exec]  _____                _            _   _      
+   [concat]      [exec] |  ___| __ ___  _ __ | |_ __ _ ___| |_(_) ___ 
+   [concat]      [exec] | |_ | '__/ _ \| '_ \| __/ _` / __| __| |/ __|
+   [concat]      [exec] |  _|| | | (_) | | | | || (_| \__ \ |_| | (__ 
+   [concat]      [exec] |_|  |_|  \___/|_| |_|\__\__,_|___/\__|_|\___|
+   [concat]      [exec]                                               
+   [concat]      [exec]  ___        __               _                   _                  
+   [concat]      [exec] |_ _|_ __  / _|_ __ __ _ ___| |_ _ __ _   _  ___| |_ _   _ _ __ ___ 
+   [concat]      [exec]  | || '_ \| |_| '__/ _` / __| __| '__| | | |/ __| __| | | | '__/ _ \
+   [concat]      [exec]  | || | | |  _| | | (_| \__ \ |_| |  | |_| | (__| |_| |_| | | |  __/
+   [concat]      [exec] |___|_| |_|_| |_|  \__,_|___/\__|_|   \__,_|\___|\__|\__,_|_|  \___|
+   [concat]      [exec]                                                                     
+   [concat] -clean:before~hook:
+   [concat] -clean:main:
+   [concat]    [delete] Deleting directory /var/www/frontastic/saas/infrastructure/build
+   [concat] -clean:after~hook:
+   [concat] clean:
+   [concat] -initialize:before~hook:
+   [concat] -initialize:main:
+   [concat]     [mkdir] Created dir: /var/www/frontastic/saas/infrastructure/build
+   [concat]     [mkdir] Created dir: /var/www/frontastic/saas/infrastructure/build/log
+   [concat] -initialize:main~hook:
+   [concat] -initialize:after~hook:
+   [concat] initialize:
+   [concat] -composer:exists:
+   [concat] -composer:install:
+   [concat] -composer:self-update:
+   [concat]      [exec] You are already using the latest available Composer version 2.0.12 (stable channel).
+   [concat] -composer:install-or-update:
+   [concat] -composer:remove-non-tracked-lock-file:
+   [concat] composer:install:
+   [concat]      [exec] Installing dependencies from lock file (including require-dev)
+   [concat]      [exec] Verifying lock file contents can be installed on current platform.
+   [concat]      [exec] Nothing to install, update or remove
+   [concat]      [exec] Package jeremeamia/superclosure is abandoned, you should avoid using it. Use opis/closure instead.
+   [concat]      [exec] Package mtdowling/cron-expression is abandoned, you should avoid using it. Use dragonmantank/cron-expression instead.
+   [concat]      [exec] Generating autoload files
+   [concat]      [exec] composer/package-versions-deprecated: Generating version class...
+   [concat]      [exec] composer/package-versions-deprecated: ...done generating version class
+   [concat]      [exec] 18 packages you are using are looking for funding.
+   [concat]      [exec] Use the `composer fund` command to find out more!
+   [concat]      [exec] Generating autoload files
+   [concat]      [exec] composer/package-versions-deprecated: Generating version class...
+   [concat]      [exec] composer/package-versions-deprecated: ...done generating version class
+   [concat]      [exec] Generated autoload files
+   [concat] -prepare:before~hook:
+   [concat] -prepare:main~hook:
+   [concat] -prepare:after~hook:
+   [concat] prepare:
+   [concat] -test-unit:before~hook:
+   [concat] -test-unit:main~hook:
+   [concat] -test-unit:after~hook:
+   [concat] test-unit:
+   [concat] -test-spec:before~hook:
+   [concat] -test-spec:main~hook:
+   [concat] -test-spec:after~hook:
+   [concat] test-spec:
+   [concat] -test-feature:before~hook:
+   [concat] -test-feature:main~hook:
+   [concat] -test-feature:after~hook:
+   [concat] test-feature:
+   [concat] test-dynamic:
+   [concat] -test-static:before~hook:
+   [concat] -test-static:main~hook:
+   [concat] -test-static:after~hook:
+   [concat] test-static:
+   [concat] test:
+     [echo] [/COMPONENT /var/www/frontastic/saas/infrastructure/build.xml SUCCESSFULL]
+     [echo] [COMPONENT /var/www/frontastic/saas/loadtest/build.xml]
+   [concat] -announce:name:
+   [concat]      [exec]  _                    _   _____         _   
+   [concat]      [exec] | |    ___   __ _  __| | |_   _|__  ___| |_ 
+   [concat]      [exec] | |   / _ \ / _` |/ _` |   | |/ _ \/ __| __|
+   [concat]      [exec] | |__| (_) | (_| | (_| |   | |  __/\__ \ |_ 
+   [concat]      [exec] |_____\___/ \__,_|\__,_|   |_|\___||___/\__|
+   [concat]      [exec]                                             
+   [concat] -clean:before~hook:
+   [concat] -clean:main:
+   [concat]    [delete] Deleting directory /var/www/frontastic/saas/loadtest/build
+   [concat] -clean:after~hook:
+   [concat] clean:
+   [concat] -initialize:before~hook:
+   [concat] -initialize:main:
+   [concat]     [mkdir] Created dir: /var/www/frontastic/saas/loadtest/build
+   [concat]     [mkdir] Created dir: /var/www/frontastic/saas/loadtest/build/log
+   [concat] -initialize:main~hook:
+   [concat] -initialize:after~hook:
+   [concat] initialize:
+   [concat] -prepare:before~hook:
+   [concat] -prepare:main~hook:
+   [concat] composer:install:
+   [concat]      [exec] Installing dependencies from lock file (including require-dev)
+   [concat]      [exec] Verifying lock file contents can be installed on current platform.
+   [concat]      [exec] Nothing to install, update or remove
+   [concat]      [exec] Generating autoload files
+   [concat] -prepare:after~hook:
+   [concat] prepare:
+   [concat] -test-unit:before~hook:
+   [concat] -test-unit:main~hook:
+   [concat] -test-unit:after~hook:
+   [concat] test-unit:
+   [concat] -test-spec:before~hook:
+   [concat] -test-spec:main~hook:
+   [concat] -test-spec:after~hook:
+   [concat] test-spec:
+   [concat] -test-feature:before~hook:
+   [concat] -test-feature:main~hook:
+   [concat] -test-feature:after~hook:
+   [concat] test-feature:
+   [concat] test-dynamic:
+   [concat] -test-static:before~hook:
+   [concat] -test-static:main~hook:
+   [concat] -test-static:after~hook:
+   [concat] test-static:
+   [concat] test:
+     [echo] [/COMPONENT /var/www/frontastic/saas/loadtest/build.xml SUCCESSFULL]
+     [echo] [COMPONENT /var/www/frontastic/saas/machine-broker/build.xml]
+     [echo] [/COMPONENT /var/www/frontastic/saas/machine-broker/build.xml FAILED]
+     [echo] [COMPONENT /var/www/frontastic/saas/managementconsole/build.xml]
+   [concat] -announce:name:
+   [concat]      [exec]  _____                _            _   _      
+   [concat]      [exec] |  ___| __ ___  _ __ | |_ __ _ ___| |_(_) ___ 
+   [concat]      [exec] | |_ | '__/ _ \| '_ \| __/ _` / __| __| |/ __|
+   [concat]      [exec] |  _|| | | (_) | | | | || (_| \__ \ |_| | (__ 
+   [concat]      [exec] |_|  |_|  \___/|_| |_|\__\__,_|___/\__|_|\___|
+   [concat]      [exec]                                               
+   [concat]      [exec]  __  __                                                   _   
+   [concat]      [exec] |  \/  | __ _ _ __   __ _  __ _  ___ _ __ ___   ___ _ __ | |_ 
+   [concat]      [exec] | |\/| |/ _` | '_ \ / _` |/ _` |/ _ \ '_ ` _ \ / _ \ '_ \| __|
+   [concat]      [exec] | |  | | (_| | | | | (_| | (_| |  __/ | | | | |  __/ | | | |_ 
+   [concat]      [exec] |_|  |_|\__,_|_| |_|\__,_|\__, |\___|_| |_| |_|\___|_| |_|\__|
+   [concat]      [exec]                           |___/                               
+   [concat]      [exec]   ____                      _      
+   [concat]      [exec]  / ___|___  _ __  ___  ___ | | ___ 
+   [concat]      [exec] | |   / _ \| '_ \/ __|/ _ \| |/ _ \
+   [concat]      [exec] | |__| (_) | | | \__ \ (_) | |  __/
+   [concat]      [exec]  \____\___/|_| |_|___/\___/|_|\___|
+   [concat]      [exec]                                    
+   [concat] -clean:before~hook:
+   [concat] -clean:main:
+   [concat]    [delete] Deleting directory /var/www/frontastic/saas/managementconsole/build
+   [concat] -clean:after~hook:
+   [concat] clean:
+   [concat] -initialize:before~hook:
+   [concat] -initialize:main:
+   [concat]     [mkdir] Created dir: /var/www/frontastic/saas/managementconsole/build
+   [concat]     [mkdir] Created dir: /var/www/frontastic/saas/managementconsole/build/log
+   [concat] -initialize:main~hook:
+   [concat] -initialize:after~hook:
+   [concat] initialize:
+   [concat] -composer:exists:
+   [concat] -composer:install:
+   [concat] -composer:self-update:
+   [concat]      [exec] You are already using the latest available Composer version 2.0.12 (stable channel).
+   [concat] -composer:install-or-update:
+   [concat] -composer:remove-non-tracked-lock-file:
+   [concat] composer:install:
+   [concat]      [exec] Installing dependencies from lock file (including require-dev)
+   [concat]      [exec] Verifying lock file contents can be installed on current platform.
+   [concat]      [exec] Nothing to install, update or remove
+   [concat]      [exec] Package phpunit/php-token-stream is abandoned, you should avoid using it. No replacement was suggested.
+   [concat]      [exec] Package sebastian/finder-facade is abandoned, you should avoid using it. No replacement was suggested.
+   [concat]      [exec] Generating autoload files
+   [concat]      [exec] composer/package-versions-deprecated: Generating version class...
+   [concat]      [exec] composer/package-versions-deprecated: ...done generating version class
+   [concat]      [exec] 41 packages you are using are looking for funding.
+   [concat]      [exec] Use the `composer fund` command to find out more!
+   [concat]      [exec] Generating autoload files
+   [concat]      [exec] composer/package-versions-deprecated: Generating version class...
+   [concat]      [exec] composer/package-versions-deprecated: ...done generating version class
+   [concat]      [exec] Generated autoload files
+   [concat] -prepare:before~hook:
+   [concat] -prepare:main~hook:
+   [concat] -prepare:after~hook:
+   [concat] prepare:
+   [concat] -test-unit:before~hook:
+   [concat] -phpunit:check:
+   [concat] phpunit:
+   [concat] -test-unit:main~hook:
+   [concat] -test-unit:after~hook:
+   [concat] test-unit:
+   [concat] -test-spec:before~hook:
+   [concat] -test-spec:main~hook:
+   [concat] -test-spec:after~hook:
+   [concat] test-spec:
+   [concat] -test-feature:before~hook:
+   [concat] -test-feature:main~hook:
+   [concat] -test-feature:after~hook:
+   [concat] test-feature:
+   [concat] test-dynamic:
+   [concat] -test-static:before~hook:
+   [concat] checkstyle:
+   [concat] pdepend:
+   [concat]      [exec] PDepend 2.8.0
+   [concat]      [exec] 
+   [concat]      [exec] Parsing source files:
+   [concat]      [exec] .......................................                         39
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Dependency metrics:
+   [concat]      [exec] ..........                                                     204
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Cyclomatic Complexity metrics:
+   [concat]      [exec] ...............                                                303
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Node Loc metrics:
+   [concat]      [exec] ............                                                   244
+   [concat]      [exec] 
+   [concat]      [exec] Calculating NPath Complexity metrics:
+   [concat]      [exec] ...............                                                303
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Inheritance metrics:
+   [concat]      [exec] ...                                                             67
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Node Count metrics:
+   [concat]      [exec] ..........                                                     204
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Hierarchy metrics:
+   [concat]      [exec] .............                                                  271
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Code Rank metrics:
+   [concat]      [exec] ..........................................                     859
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Coupling metrics:
+   [concat]      [exec] ...............                                                312
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Class Level metrics:
+   [concat]      [exec] .............                                                  264
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Cohesion metrics:
+   [concat]      [exec] .........................                                      501
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Halstead metrics:
+   [concat]      [exec] ...............                                                303
+   [concat]      [exec] 
+   [concat]      [exec] Calculating Maintainability Index metrics:
+   [concat]      [exec] ...............                                                303
+   [concat]      [exec] 
+   [concat]      [exec] Generating pdepend log files, this may take a moment.
+   [concat]      [exec] 
+   [concat]      [exec] Time: 0:00:08; Memory: 22.00Mb
+   [concat] phpmd.run:
+   [concat]      [exec] Result: 2
+   [concat] phpmd.output:
+   [concat]      [echo] <?xml version="1.0" encoding="UTF-8" ?>
+   [concat]      [echo] <pmd version="@package_version@" timestamp="2021-04-20T09:10:25+02:00">
+   [concat]      [echo]   <file name="/var/www/frontastic/saas/managementconsole/src/php/Domain/CustomerCreator.php">
+   [concat]      [echo]     <violation beginline="11" endline="612" rule="TooManyMethods" ruleset="Code Size Rules" package="App\Domain" externalInfoUrl="https://phpmd.org/rules/codesize.html#toomanymethods" class="CustomerCreator" priority="3">
+   [concat]      [echo]       The class CustomerCreator has 27 non-getter- and setter-methods. Consider refactoring CustomerCreator to keep number of methods under 25.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]   </file>
+   [concat]      [echo]   <file name="/var/www/frontastic/saas/managementconsole/src/php/Domain/OrganisationBasedGithubService.php">
+   [concat]      [echo]     <violation beginline="7" endline="193" rule="TooManyPublicMethods" ruleset="Code Size Rules" package="App\Domain" externalInfoUrl="https://phpmd.org/rules/codesize.html#toomanypublicmethods" class="OrganisationBasedGithubService" priority="3">
+   [concat]      [echo]       The class OrganisationBasedGithubService has 11 public methods. Consider refactoring OrganisationBasedGithubService to keep number of public methods under 10.
+   [concat]      [echo]     </violation>
+   [concat]      [echo]   </file>
+   [concat]      [echo] </pmd>
+   [concat] phpmd.fail:
+   [concat] phpmd:
+   [concat] -test-static:main~hook:
+   [concat] -test-static:after~hook:
+   [concat] test-static:
+   [concat] test:
+     [echo] [/COMPONENT /var/www/frontastic/saas/managementconsole/build.xml SUCCESSFULL]
+     [echo] [COMPONENT /var/www/frontastic/saas/monitor/build.xml]
+   [concat] -announce:name:
+   [concat]      [exec]  _____                _            _   _      
+   [concat]      [exec] |  ___| __ ___  _ __ | |_ __ _ ___| |_(_) ___ 
+   [concat]      [exec] | |_ | '__/ _ \| '_ \| __/ _` / __| __| |/ __|
+   [concat]      [exec] |  _|| | | (_) | | | | || (_| \__ \ |_| | (__ 
+   [concat]      [exec] |_|  |_|  \___/|_| |_|\__\__,_|___/\__|_|\___|
+   [concat]      [exec]                                               
+   [concat]      [exec]  __  __             _ _               ____                      
+   [concat]      [exec] |  \/  | ___  _ __ (_) |_ ___  _ __  |  _ \ _ __ _____  ___   _ 
+   [concat]      [exec] | |\/| |/ _ \| '_ \| | __/ _ \| '__| | |_) | '__/ _ \ \/ / | | |
+   [concat]      [exec] | |  | | (_) | | | | | || (_) | |    |  __/| | | (_) >  <| |_| |
+   [concat]      [exec] |_|  |_|\___/|_| |_|_|\__\___/|_|    |_|   |_|  \___/_/\_\\__, |
+   [concat]      [exec]                                                           |___/ 
+   [concat] -clean:before~hook:
+   [concat] -clean:main:
+   [concat]    [delete] Deleting directory /var/www/frontastic/saas/monitor/build
+   [concat] -clean:after~hook:
+   [concat] clean:
+   [concat] -initialize:before~hook:
+   [concat] -initialize:main:
+   [concat]     [mkdir] Created dir: /var/www/frontastic/saas/monitor/build
+   [concat]     [mkdir] Created dir: /var/www/frontastic/saas/monitor/build/log
+   [concat] -initialize:main~hook:
+   [concat] -initialize:after~hook:
+   [concat] initialize:
+   [concat] -composer:exists:
+   [concat] -composer:install:
+   [concat] -composer:self-update:
+   [concat]      [exec] You are already using the latest available Composer version 2.0.12 (stable channel).
+   [concat] -composer:install-or-update:
+   [concat] -composer:remove-non-tracked-lock-file:
+   [concat] composer:install:
+   [concat]      [exec] Installing dependencies from lock file (including require-dev)
+   [concat]      [exec] Verifying lock file contents can be installed on current platform.
+   [concat]      [exec] Nothing to install, update or remove
+   [concat]      [exec] Generating autoload files
+   [concat]      [exec] composer/package-versions-deprecated: Generating version class...
+   [concat]      [exec] composer/package-versions-deprecated: ...done generating version class
+   [concat]      [exec] 22 packages you are using are looking for funding.
+   [concat]      [exec] Use the `composer fund` command to find out more!
+   [concat]      [exec] Generating autoload files
+   [concat]      [exec] composer/package-versions-deprecated: Generating version class...
+   [concat]      [exec] composer/package-versions-deprecated: ...done generating version class
+   [concat]      [exec] Generated autoload files
+   [concat] -prepare:before~hook:
+   [concat] -prepare:main~hook:
+   [concat] -prepare:after~hook:
+   [concat] prepare:
+   [concat] -test-unit:before~hook:
+   [concat] -test-unit:main~hook:
+   [concat] -test-unit:after~hook:
+   [concat] test-unit:
+   [concat] -test-spec:before~hook:
+   [concat] -test-spec:main~hook:
+   [concat] -test-spec:after~hook:
+   [concat] test-spec:
+   [concat] -test-feature:before~hook:
+   [concat] -test-feature:main~hook:
+   [concat] -test-feature:after~hook:
+   [concat] test-feature:
+   [concat] test-dynamic:
+   [concat] -test-static:before~hook:
+   [concat] -test-static:main~hook:
+   [concat] -test-static:after~hook:
+   [concat] test-static:
+   [concat] test:
+     [echo] [/COMPONENT /var/www/frontastic/saas/monitor/build.xml SUCCESSFULL]
+     [echo] [COMPONENT /var/www/frontastic/saas/notifier/build.xml]
+   [concat] -announce:name:
+   [concat]      [exec]  _____                _            _   _         ____       
+   [concat]      [exec] |  ___| __ ___  _ __ | |_ __ _ ___| |_(_) ___   / ___| ___  
+   [concat]      [exec] | |_ | '__/ _ \| '_ \| __/ _` / __| __| |/ __| | |  _ / _ \ 
+   [concat]      [exec] |  _|| | | (_) | | | | || (_| \__ \ |_| | (__  | |_| | (_) |
+   [concat]      [exec] |_|  |_|  \___/|_| |_|\__\__,_|___/\__|_|\___|  \____|\___/ 
+   [concat]      [exec]                                                             
+   [concat]      [exec]  _   _       _   _  __ _           
+   [concat]      [exec] | \ | | ___ | |_(_)/ _(_) ___ _ __ 
+   [concat]      [exec] |  \| |/ _ \| __| | |_| |/ _ \ '__|
+   [concat]      [exec] | |\  | (_) | |_| |  _| |  __/ |   
+   [concat]      [exec] |_| \_|\___/ \__|_|_| |_|\___|_|   
+   [concat]      [exec]                                    
+   [concat] -clean:before~hook:
+   [concat] -clean:main:
+   [concat]    [delete] Deleting directory /var/www/frontastic/saas/notifier/build
+   [concat] -clean:after~hook:
+   [concat] clean:
+   [concat] -initialize:before~hook:
+   [concat] -initialize:main:
+   [concat]     [mkdir] Created dir: /var/www/frontastic/saas/notifier/build
+   [concat]     [mkdir] Created dir: /var/www/frontastic/saas/notifier/build/log
+   [concat] -initialize:main~hook:
+   [concat] -initialize:after~hook:
+   [concat] initialize:
+   [concat] go:prepare:
+   [concat] -prepare:before~hook:
+   [concat] -prepare:main~hook:
+   [concat] go:format:
+   [concat] -prepare:after~hook:
+   [concat] prepare:
+   [concat] -test-unit:before~hook:
+   [concat] -test-unit:main~hook:
+   [concat] -test-unit:after~hook:
+   [concat] test-unit:
+   [concat] -test-spec:before~hook:
+   [concat] -test-spec:main~hook:
+   [concat] -test-spec:after~hook:
+   [concat] test-spec:
+   [concat] -test-feature:before~hook:
+   [concat] -test-feature:main~hook:
+   [concat] -test-feature:after~hook:
+   [concat] test-feature:
+   [concat] test-dynamic:
+   [concat] -test-static:before~hook:
+   [concat] -test-static:main~hook:
+   [concat] -test-static:after~hook:
+   [concat] test-static:
+   [concat] test:
+     [echo] [/COMPONENT /var/www/frontastic/saas/notifier/build.xml SUCCESSFULL]
+     [echo] [COMPONENT /var/www/frontastic/saas/slack/build.xml]
+   [concat] -announce:name:
+   [concat]      [exec]  _____                _            _   _        ____  _            _    
+   [concat]      [exec] |  ___| __ ___  _ __ | |_ __ _ ___| |_(_) ___  / ___|| | __ _  ___| | __
+   [concat]      [exec] | |_ | '__/ _ \| '_ \| __/ _` / __| __| |/ __| \___ \| |/ _` |/ __| |/ /
+   [concat]      [exec] |  _|| | | (_) | | | | || (_| \__ \ |_| | (__   ___) | | (_| | (__|   < 
+   [concat]      [exec] |_|  |_|  \___/|_| |_|\__\__,_|___/\__|_|\___| |____/|_|\__,_|\___|_|\_\
+   [concat]      [exec]                                                                         
+   [concat]      [exec]   ____ _ _            _   
+   [concat]      [exec]  / ___| (_) ___ _ __ | |_ 
+   [concat]      [exec] | |   | | |/ _ \ '_ \| __|
+   [concat]      [exec] | |___| | |  __/ | | | |_ 
+   [concat]      [exec]  \____|_|_|\___|_| |_|\__|
+   [concat]      [exec]                           
+   [concat] -clean:before~hook:
+   [concat] -clean:main:
+   [concat]    [delete] Deleting directory /var/www/frontastic/saas/slack/build
+   [concat] -clean:after~hook:
+   [concat] clean:
+   [concat] -initialize:before~hook:
+   [concat] -initialize:main:
+   [concat]     [mkdir] Created dir: /var/www/frontastic/saas/slack/build
+   [concat]     [mkdir] Created dir: /var/www/frontastic/saas/slack/build/log
+   [concat] -initialize:main~hook:
+   [concat] -initialize:after~hook:
+   [concat] initialize:
+   [concat] -composer:exists:
+   [concat] -composer:install:
+   [concat] -composer:self-update:
+   [concat]      [exec] You are already using the latest available Composer version 2.0.12 (stable channel).
+   [concat] -composer:install-or-update:
+   [concat] -composer:remove-non-tracked-lock-file:
+   [concat] composer:install:
+   [concat]      [exec] Installing dependencies from lock file (including require-dev)
+   [concat]      [exec] Verifying lock file contents can be installed on current platform.
+   [concat]      [exec] Nothing to install, update or remove
+   [concat]      [exec] Package coderstephen/slack-client is abandoned, you should avoid using it. No replacement was suggested.
+   [concat]      [exec] Package container-interop/container-interop is abandoned, you should avoid using it. Use psr/container instead.
+   [concat]      [exec] Package devristo/phpws is abandoned, you should avoid using it. No replacement was suggested.
+   [concat]      [exec] Package react/socket-client is abandoned, you should avoid using it. Use react/socket instead.
+   [concat]      [exec] Package zendframework/zend-escaper is abandoned, you should avoid using it. Use laminas/laminas-escaper instead.
+   [concat]      [exec] Package zendframework/zend-http is abandoned, you should avoid using it. Use laminas/laminas-http instead.
+   [concat]      [exec] Package zendframework/zend-loader is abandoned, you should avoid using it. Use laminas/laminas-loader instead.
+   [concat]      [exec] Package zendframework/zend-log is abandoned, you should avoid using it. Use laminas/laminas-log instead.
+   [concat]      [exec] Package zendframework/zend-servicemanager is abandoned, you should avoid using it. Use laminas/laminas-servicemanager instead.
+   [concat]      [exec] Package zendframework/zend-stdlib is abandoned, you should avoid using it. Use laminas/laminas-stdlib instead.
+   [concat]      [exec] Package zendframework/zend-uri is abandoned, you should avoid using it. Use laminas/laminas-uri instead.
+   [concat]      [exec] Package zendframework/zend-validator is abandoned, you should avoid using it. Use laminas/laminas-validator instead.
+   [concat]      [exec] Package phpunit/php-token-stream is abandoned, you should avoid using it. No replacement was suggested.
+   [concat]      [exec] Package sebastian/finder-facade is abandoned, you should avoid using it. No replacement was suggested.
+   [concat]      [exec] Generating autoload files
+   [concat]      [exec] 27 packages you are using are looking for funding.
+   [concat]      [exec] Use the `composer fund` command to find out more!
+   [concat]      [exec] composer/package-versions-deprecated: Generating version class...
+   [concat]      [exec] composer/package-versions-deprecated: ...done generating version class
+   [concat]      [exec] Generating autoload files
+   [concat]      [exec] composer/package-versions-deprecated: Generating version class...
+   [concat]      [exec] composer/package-versions-deprecated: ...done generating version class
+   [concat]      [exec] Generated autoload files
+   [concat] -prepare:before~hook:
+   [concat] -prepare:main~hook:
+   [concat] -prepare:after~hook:
+   [concat] prepare:
+   [concat] -test-unit:before~hook:
+   [concat] -test-unit:main~hook:
+   [concat] -test-unit:after~hook:
+   [concat] test-unit:
+   [concat] -test-spec:before~hook:
+   [concat] -test-spec:main~hook:
+   [concat] -test-spec:after~hook:
+   [concat] test-spec:
+   [concat] -test-feature:before~hook:
+   [concat] -test-feature:main~hook:
+   [concat] -test-feature:after~hook:
+   [concat] test-feature:
+   [concat] test-dynamic:
+   [concat] -test-static:before~hook:
+   [concat] -test-static:main~hook:
+   [concat] -test-static:after~hook:
+   [concat] test-static:
+   [concat] test:
+     [echo] [/COMPONENT /var/www/frontastic/saas/slack/build.xml SUCCESSFULL]
+     [echo] [COMPONENT /var/www/frontastic/demo_english/build.xml]
+     [echo] [/COMPONENT /var/www/frontastic/demo_english/build.xml SUCCESSFULL]
+     [echo] [COMPONENT /var/www/frontastic/demo_swiss/build.xml]
+   [concat] -announce:name:
+   [concat]      [exec]     _    ____ ___   _   _       _            _                      
+   [concat]      [exec]    / \  |  _ \_ _| | | | |_   _| |__ _    __| | ___ _ __ ___   ___  
+   [concat]      [exec]   / _ \ | |_) | |  | |_| | | | | '_ (_)  / _` |/ _ \ '_ ` _ \ / _ \ 
+   [concat]      [exec]  / ___ \|  __/| |  |  _  | |_| | |_) |  | (_| |  __/ | | | | | (_) |
+   [concat]      [exec] /_/   \_\_|  |___| |_| |_|\__,_|_.__(_)  \__,_|\___|_| |_| |_|\___/ 
+   [concat]      [exec]                                                                     
+   [concat]      [exec]  ____          _            ____      _                 _ _    
+   [concat]      [exec] / ___|_      _(_)___ ___   / ___|__ _| |___      ____ _| | | __
+   [concat]      [exec] \___ \ \ /\ / / / __/ __| | |   / _` | __\ \ /\ / / _` | | |/ /
+   [concat]      [exec]  ___) \ V  V /| \__ \__ \ | |__| (_| | |_ \ V  V / (_| | |   < 
+   [concat]      [exec] |____/ \_/\_/ |_|___/___/  \____\__,_|\__| \_/\_/ \__,_|_|_|\_\
+   [concat]      [exec]                                                                
+   [concat] -clean:before~hook:
+   [concat] -clean:main:
+   [concat]    [delete] Deleting directory /var/www/frontastic/demo_swiss/build
+   [concat] -clean:after~hook:
+   [concat] clean:
+   [concat] -initialize:before~hook:
+   [concat] -initialize:main:
+   [concat]     [mkdir] Created dir: /var/www/frontastic/demo_swiss/build
+   [concat]     [mkdir] Created dir: /var/www/frontastic/demo_swiss/build/log
+   [concat] -react:yarn-manually-disabled:
+   [concat] -react:should-yarn-install:
+   [concat]      [echo] DISABLE_YARN_INSTALL: ${env.DISABLE_YARN_INSTALL}
+   [concat] react:bootstrap:
+   [concat]      [echo] Executing global yarn install for all workspaces
+   [concat]      [echo] That might take some time, but its the only yarn install we need now
+   [concat]      [echo] Please hang on and maybe get cold beverage ...
+   [concat]      [exec] yarn install v1.22.10
+   [concat]      [exec] warning Waiting for the other yarn instance to finish (1173416)
+   [concat]      [exec] warning Waiting for the other yarn instance to finish (1173457)
+   [concat]      [exec] warning Waiting for the other yarn instance to finish (1173438)
+   [concat]      [exec] [1/4] Resolving packages...
+   [concat]      [exec] success Already up-to-date.
+   [concat]      [exec] Done in 21.55s.
+   [concat] -initialize:main~hook:
+   [concat] -initialize:after~hook:
+   [concat] initialize:
+   [concat] -composer:exists:
+   [concat] -composer:install:
+   [concat] -composer:self-update:
+   [concat]      [exec] You are already using the latest available Composer version 2.0.12 (stable channel).
+   [concat] -composer:install-or-update:
+   [concat] -composer:remove-non-tracked-lock-file:
+   [concat] composer:install:
+   [concat]      [exec] Installing dependencies from lock file (including require-dev)
+   [concat]      [exec] Verifying lock file contents can be installed on current platform.
+   [concat]      [exec] Nothing to install, update or remove
+   [concat]      [exec] Package doctrine/doctrine-cache-bundle is abandoned, you should avoid using it. No replacement was suggested.
+   [concat]      [exec] Package doctrine/reflection is abandoned, you should avoid using it. Use roave/better-reflection instead.
+   [concat]      [exec] Package mtdowling/cron-expression is abandoned, you should avoid using it. Use dragonmantank/cron-expression instead.
+   [concat]      [exec] Package qafoolabs/no-framework-bundle is abandoned, you should avoid using it. No replacement was suggested.
+   [concat]      [exec] Generating autoload files
+   [concat]      [exec] composer/package-versions-deprecated: Generating version class...
+   [concat]      [exec] composer/package-versions-deprecated: ...done generating version class
+   [concat]      [exec] 37 packages you are using are looking for funding.
+   [concat]      [exec] Use the `composer fund` command to find out more!
+   [concat]      [exec] Generating autoload files
+   [concat]      [exec] composer/package-versions-deprecated: Generating version class...
+   [concat]      [exec] composer/package-versions-deprecated: ...done generating version class
+   [concat]      [exec] Generated autoload files
+   [concat] -react:message-no-yarn-install:
+   [concat] -prepare:before~hook:
+   [concat] -prepare:main~hook:
+   [concat] dbdeploy:
+   [concat] -dbdeploy:has-dbdeploy:
+   [concat] -dbdeploy:download-dbdeploy:
+   [concat]       [get] Getting: https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/dbdeploy/dbdeploy-dist-3.0M3-distribution.zip
+   [concat]       [get] To: /var/www/frontastic/demo_swiss/build/download.zip
+   [concat]     [mkdir] Created dir: /var/www/frontastic/demo_swiss/build/archive
+   [concat]     [unzip] Expanding: /var/www/frontastic/demo_swiss/build/download.zip into /var/www/frontastic/demo_swiss/build/archive
+   [concat]      [move] Moving 1 file to /var/www/frontastic/paas/integration/build-commons/downloads
+   [concat] -dbdeploy:has-mysql:
+   [concat] -dbdeploy:download-mysql:
+   [concat]    [delete] Deleting directory /var/www/frontastic/demo_swiss/build/archive
+   [concat]       [get] Getting: https://cdn.mysql.com//Downloads/Connector-J/mysql-connector-java-8.0.22.zip
+   [concat]       [get] To: /var/www/frontastic/demo_swiss/build/download.zip
+   [concat]     [mkdir] Created dir: /var/www/frontastic/demo_swiss/build/archive
+   [concat]     [unzip] Expanding: /var/www/frontastic/demo_swiss/build/download.zip into /var/www/frontastic/demo_swiss/build/archive
+   [concat]      [move] Moving 1 file to /var/www/frontastic/paas/integration/build-commons/downloads
+   [concat] -dbdeploy:init:
+   [concat] [dbdeploy:init] Executing resource: /var/www/frontastic/paas/integration/build-commons/modules/dbdeploy/mysql.sql
+   [concat] [dbdeploy:init] 1 of 1 SQL statements executed successfully
+   [concat] -dbdeploy:generate:
+   [concat] [dbdeploy:generate] dbdeploy 3.0M3
+   [concat] [dbdeploy:generate] Reading change scripts from directory /var/www/frontastic/paas/catwalk/src/schema...
+   [concat] [dbdeploy:generate] Changes currently applied to database:
+   [concat] [dbdeploy:generate]   1709050721, 1709051033, 1709181401, 1709181513, 1709191403, 1709280655, 1801191647, 1801291028, 1801291045, 1802051006, 1803121422, 1803160916, 1804200908, 1804201631, 1806011007, 1807311441, 1811271538, 1811281446, 1811291658, 1903121225, 1903291130, 1904021630, 1904051050, 1904051240, 1909301430, 1910090920, 1911181600, 1911270729, 1912171300, 1912171500, 2003220800, 2009280800
+   [concat] [dbdeploy:generate] Scripts available:
+   [concat] [dbdeploy:generate]   1709050721, 1709051033, 1709181401, 1709181513, 1709191403, 1709280655, 1801191647, 1801291028, 1801291045, 1802051006, 1803121422, 1803160916, 1804200908, 1804201631, 1806011007, 1807311441, 1811271538, 1811281446, 1811291658, 1903121225, 1903291130, 1904021630, 1904051050, 1904051240, 1909301430, 1910090920, 1911181600, 1911270729, 1912171300, 1912171500, 2003220800, 2009280800
+   [concat] [dbdeploy:generate] To be applied:
+   [concat] [dbdeploy:generate]   (none)
+   [concat] [dbdeploy:generate] Generating undo scripts...
+   [concat] -dbdeploy:migrate:
+   [concat] [dbdeploy:migrate] Executing resource: /var/www/frontastic/demo_swiss/build/dbdeploy-migrate.sql
+   [concat] [dbdeploy:migrate] 0 of 0 SQL statements executed successfully
+   [concat] symfony:bootstrap:
+   [concat]      [exec] 
+   [concat]      [exec]  // Clearing the cache for the dev environment with debug                       
+   [concat]      [exec]  // true                                                                        
+   [concat]      [exec] 
+   [concat]      [exec]  [OK] Cache for the "dev" environment (debug=true) was successfully cleared.    
+   [concat]      [exec] 
+   [concat] -prepare:after~hook:
+   [concat] prepare:
+   [concat] -test-unit:before~hook:
+   [concat] -phpunit:check:
+   [concat] phpunit:
+   [concat] react:test:
+   [concat]      [exec] yarn run v1.22.10
+   [concat]      [exec] $ node ../node_modules/@frontastic/catwalk/bin/test.js --env=jsdom --passWithNoTests
+   [concat]      [exec] PASS test/js/dummy.js (17.716 s)
+   [concat]      [exec]   ✓ tests nothing (2 ms)
+   [concat]      [exec] 
+   [concat]      [exec] Test Suites: 1 passed, 1 total
+   [concat]      [exec] Tests:       1 passed, 1 total
+   [concat]      [exec] Snapshots:   0 total
+   [concat]      [exec] Time:        27.516 s
+   [concat]      [exec] Ran all test suites.
+   [concat]      [exec] Done in 34.22s.
+   [concat] -test-unit:main~hook:
+   [concat] -test-unit:after~hook:
+   [concat] test-unit:
+   [concat] -test-spec:before~hook:
+   [concat] -test-spec:main~hook:
+   [concat] -test-spec:after~hook:
+   [concat] test-spec:
+   [concat] -test-feature:before~hook:
+   [concat] -test-feature:main~hook:
+   [concat] -test-feature:after~hook:
+   [concat] test-feature:
+   [concat] test-dynamic:
+   [concat] -test-static:before~hook:
+   [concat] react:check:
+   [concat]      [exec] yarn run v1.22.10
+   [concat]      [exec] $ if [ `find src/js -name "*.tsx" | wc -l` -gt 0 ]; then ../node_modules/.bin/tsc --noEmit ; fi
+   [concat]      [exec] Done in 0.60s.
+   [concat]      [exec] yarn run v1.22.10
+   [concat]      [exec] $ eslint --ext .js --ext .jsx -c ../paas/integration/eslint.config.json src/js/ test/js/
+   [concat]      [exec] Done in 10.96s.
+   [concat] -test-static:main~hook:
+   [concat] -test-static:after~hook:
+   [concat] test-static:
+   [concat] test:
+     [echo] [/COMPONENT /var/www/frontastic/demo_swiss/build.xml SUCCESSFULL]
+     [echo] [COMPONENT /var/www/frontastic/demo_apollo/build.xml]
+   [concat] -announce:name:
+   [concat]      [exec]     _    ____ ___   _   _       _            _                      
+   [concat]      [exec]    / \  |  _ \_ _| | | | |_   _| |__ _    __| | ___ _ __ ___   ___  
+   [concat]      [exec]   / _ \ | |_) | |  | |_| | | | | '_ (_)  / _` |/ _ \ '_ ` _ \ / _ \ 
+   [concat]      [exec]  / ___ \|  __/| |  |  _  | |_| | |_) |  | (_| |  __/ | | | | | (_) |
+   [concat]      [exec] /_/   \_\_|  |___| |_| |_|\__,_|_.__(_)  \__,_|\___|_| |_| |_|\___/ 
+   [concat]      [exec]                                                                     
+   [concat]      [exec]                    _ _           _      
+   [concat]      [exec]   __ _ _ __   ___ | | | ___   __| | ___ 
+   [concat]      [exec]  / _` | '_ \ / _ \| | |/ _ \ / _` |/ _ \
+   [concat]      [exec] | (_| | |_) | (_) | | | (_) | (_| |  __/
+   [concat]      [exec]  \__,_| .__/ \___/|_|_|\___(_)__,_|\___|
+   [concat]      [exec]       |_|                               
+   [concat] -clean:before~hook:
+   [concat] -clean:main:
+   [concat]    [delete] Deleting directory /var/www/frontastic/demo_apollo/build
+   [concat] -clean:after~hook:
+   [concat] clean:
+   [concat] -initialize:before~hook:
+   [concat] -initialize:main:
+   [concat]     [mkdir] Created dir: /var/www/frontastic/demo_apollo/build
+   [concat]     [mkdir] Created dir: /var/www/frontastic/demo_apollo/build/log
+   [concat] -react:yarn-manually-disabled:
+   [concat] -react:should-yarn-install:
+   [concat]      [echo] DISABLE_YARN_INSTALL: ${env.DISABLE_YARN_INSTALL}
+   [concat] react:bootstrap:
+   [concat]      [echo] Executing global yarn install for all workspaces
+   [concat]      [echo] That might take some time, but its the only yarn install we need now
+   [concat]      [echo] Please hang on and maybe get cold beverage ...
+   [concat]      [exec] yarn install v1.22.10
+   [concat]      [exec] warning Waiting for the other yarn instance to finish (1173416)
+   [concat]      [exec] [1/4] Resolving packages...
+   [concat]      [exec] success Already up-to-date.
+   [concat]      [exec] Done in 8.09s.
+   [concat] -initialize:main~hook:
+   [concat] -initialize:after~hook:
+   [concat] initialize:
+   [concat] -composer:exists:
+   [concat] -composer:install:
+   [concat] -composer:self-update:
+   [concat]      [exec] You are already using the latest available Composer version 2.0.12 (stable channel).
+   [concat] -composer:install-or-update:
+   [concat] -composer:remove-non-tracked-lock-file:
+   [concat] composer:install:
+   [concat]      [exec] Installing dependencies from lock file (including require-dev)
+   [concat]      [exec] Verifying lock file contents can be installed on current platform.
+   [concat]      [exec] Nothing to install, update or remove
+   [concat]      [exec] Package doctrine/doctrine-cache-bundle is abandoned, you should avoid using it. No replacement was suggested.
+   [concat]      [exec] Package doctrine/reflection is abandoned, you should avoid using it. Use roave/better-reflection instead.
+   [concat]      [exec] Package mtdowling/cron-expression is abandoned, you should avoid using it. Use dragonmantank/cron-expression instead.
+   [concat]      [exec] Package qafoolabs/no-framework-bundle is abandoned, you should avoid using it. No replacement was suggested.
+   [concat]      [exec] Generating autoload files
+   [concat]      [exec] composer/package-versions-deprecated: Generating version class...
+   [concat]      [exec] composer/package-versions-deprecated: ...done generating version class
+   [concat]      [exec] 37 packages you are using are looking for funding.
+   [concat]      [exec] Use the `composer fund` command to find out more!
+   [concat]      [exec] Generating autoload files
+   [concat]      [exec] composer/package-versions-deprecated: Generating version class...
+   [concat]      [exec] composer/package-versions-deprecated: ...done generating version class
+   [concat]      [exec] Generated autoload files
+   [concat] -react:message-no-yarn-install:
+   [concat] -prepare:before~hook:
+   [concat] -prepare:main~hook:
+   [concat] dbdeploy:
+   [concat] -dbdeploy:has-dbdeploy:
+   [concat] -dbdeploy:download-dbdeploy:
+   [concat]       [get] Getting: https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/dbdeploy/dbdeploy-dist-3.0M3-distribution.zip
+   [concat]       [get] To: /var/www/frontastic/demo_apollo/build/download.zip
+   [concat]     [mkdir] Created dir: /var/www/frontastic/demo_apollo/build/archive
+   [concat]     [unzip] Expanding: /var/www/frontastic/demo_apollo/build/download.zip into /var/www/frontastic/demo_apollo/build/archive
+   [concat]      [move] Moving 1 file to /var/www/frontastic/paas/integration/build-commons/downloads
+   [concat] -dbdeploy:has-mysql:
+   [concat] -dbdeploy:download-mysql:
+   [concat]    [delete] Deleting directory /var/www/frontastic/demo_apollo/build/archive
+   [concat]       [get] Getting: https://cdn.mysql.com//Downloads/Connector-J/mysql-connector-java-8.0.22.zip
+   [concat]       [get] To: /var/www/frontastic/demo_apollo/build/download.zip
+   [concat]     [mkdir] Created dir: /var/www/frontastic/demo_apollo/build/archive
+   [concat]     [unzip] Expanding: /var/www/frontastic/demo_apollo/build/download.zip into /var/www/frontastic/demo_apollo/build/archive
+   [concat]      [move] Moving 1 file to /var/www/frontastic/paas/integration/build-commons/downloads
+   [concat] -dbdeploy:init:
+   [concat] [dbdeploy:init] Executing resource: /var/www/frontastic/paas/integration/build-commons/modules/dbdeploy/mysql.sql
+   [concat] [dbdeploy:init] 1 of 1 SQL statements executed successfully
+   [concat] -dbdeploy:generate:
+   [concat] [dbdeploy:generate] dbdeploy 3.0M3
+   [concat] [dbdeploy:generate] Reading change scripts from directory /var/www/frontastic/paas/catwalk/src/schema...
+   [concat] [dbdeploy:generate] Changes currently applied to database:
+   [concat] [dbdeploy:generate]   1709050721, 1709051033, 1709181401, 1709181513, 1709191403, 1709280655, 1801191647, 1801291028, 1801291045, 1802051006, 1803121422, 1803160916, 1804200908, 1804201631, 1806011007, 1807311441, 1811271538, 1811281446, 1811291658, 1903121225, 1903291130, 1904021630, 1904051050, 1904051240, 1909301430, 1910090920, 1911181600, 1911270729, 1912171300, 1912171500, 2003220800, 2009280800
+   [concat] [dbdeploy:generate] Scripts available:
+   [concat] [dbdeploy:generate]   1709050721, 1709051033, 1709181401, 1709181513, 1709191403, 1709280655, 1801191647, 1801291028, 1801291045, 1802051006, 1803121422, 1803160916, 1804200908, 1804201631, 1806011007, 1807311441, 1811271538, 1811281446, 1811291658, 1903121225, 1903291130, 1904021630, 1904051050, 1904051240, 1909301430, 1910090920, 1911181600, 1911270729, 1912171300, 1912171500, 2003220800, 2009280800
+   [concat] [dbdeploy:generate] To be applied:
+   [concat] [dbdeploy:generate]   (none)
+   [concat] [dbdeploy:generate] Generating undo scripts...
+   [concat] -dbdeploy:migrate:
+   [concat] [dbdeploy:migrate] Executing resource: /var/www/frontastic/demo_apollo/build/dbdeploy-migrate.sql
+   [concat] [dbdeploy:migrate] 0 of 0 SQL statements executed successfully
+   [concat] symfony:bootstrap:
+   [concat]      [exec] 
+   [concat]      [exec]  // Clearing the cache for the dev environment with debug                       
+   [concat]      [exec]  // true                                                                        
+   [concat]      [exec] 
+   [concat]      [exec]  [OK] Cache for the "dev" environment (debug=true) was successfully cleared.    
+   [concat]      [exec] 
+   [concat] -prepare:after~hook:
+   [concat] prepare:
+   [concat] -test-unit:before~hook:
+   [concat] -phpunit:check:
+   [concat] phpunit:
+   [concat] react:test:
+   [concat]      [exec] yarn run v1.22.10
+   [concat]      [exec] $ node ../node_modules/@frontastic/catwalk/bin/test.js --env=jsdom --passWithNoTests
+   [concat]      [exec] PASS test/js/dummy.js (15.46 s)
+   [concat]      [exec]   ✓ tests nothing (13 ms)
+   [concat]      [exec] 
+   [concat]      [exec] Test Suites: 1 passed, 1 total
+   [concat]      [exec] Tests:       1 passed, 1 total
+   [concat]      [exec] Snapshots:   0 total
+   [concat]      [exec] Time:        26.197 s
+   [concat]      [exec] Ran all test suites.
+   [concat]      [exec] Done in 35.70s.
+   [concat] -test-unit:main~hook:
+   [concat] -test-unit:after~hook:
+   [concat] test-unit:
+   [concat] -test-spec:before~hook:
+   [concat] -test-spec:main~hook:
+   [concat] -test-spec:after~hook:
+   [concat] test-spec:
+   [concat] -test-feature:before~hook:
+   [concat] -test-feature:main~hook:
+   [concat] -test-feature:after~hook:
+   [concat] test-feature:
+   [concat] test-dynamic:
+   [concat] -test-static:before~hook:
+   [concat] react:check:
+   [concat]      [exec] yarn run v1.22.10
+   [concat]      [exec] $ if [ `find src/js -name "*.tsx" | wc -l` -gt 0 ]; then ../node_modules/.bin/tsc --noEmit ; fi
+   [concat]      [exec] Done in 0.43s.
+   [concat]      [exec] yarn run v1.22.10
+   [concat]      [exec] $ eslint --ext .js --ext .jsx -c ../paas/integration/eslint.config.json src/js/ test/js/
+   [concat]      [exec] Done in 20.84s.
+   [concat] -test-static:main~hook:
+   [concat] -test-static:after~hook:
+   [concat] test-static:
+   [concat] test:
+     [echo] [/COMPONENT /var/www/frontastic/demo_apollo/build.xml SUCCESSFULL]
+
+BUILD FAILED
+/var/www/frontastic/build.xml:212: The following error occurred while executing this line:
+/var/www/frontastic/build.xml:128: * Component /var/www/frontastic/paas/libraries/payment/adyen/build.xml failed.
+* Component /var/www/frontastic/paas/replicator/build.xml failed.
+* Component /var/www/frontastic/saas/machine-broker/build.xml failed.
+* Component /var/www/frontastic/paas/libraries/common/build.xml failed.
+* Component /var/www/frontastic/saas/backstage/build.xml failed.
+
+Total time: 6 minutes 38 seconds
