@@ -29,9 +29,12 @@ class Client extends ContentfulClient
 
         $apiResponse = parent::callApi($method, $uri, $options);
 
+        // We are calculating here the time that takes the whole parent::callApi method.
+        // To get only the request time, we could use: end($messages)->getDuration();
         $time = microtime(true) - $start;
 
-        $host = parse_url($uri, PHP_URL_HOST);
+        $messages = $this->getMessages();
+        $host = $this->getHost();
         $this->frontasticLogger->info(
             sprintf(
                 'Request against %s took %dms',
@@ -44,6 +47,7 @@ class Client extends ContentfulClient
                     'path' => parse_url($uri, PHP_URL_PATH),
                     'method' => $method,
                     'responseTime' => $time,
+                    'statusCode' => end($messages)->getResponse()->getStatusCode(),
                 ],
             ]
         );
