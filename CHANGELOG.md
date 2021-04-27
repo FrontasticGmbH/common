@@ -1,5 +1,13 @@
 # common Changelog
 
+## `2.11.2` (2021-04-27)
+
+* fix(FP-645): included host and status code to Contentful logs
+* fix(FP-645): decorated Contentful client to enhance logger
+* fix: allow config environment for Contentful client
+* fix(FP-645): set default timeout and logger on Contentful client
+* fix: Find version manually
+
 ## `2.11.1` (2021-04-22)
 
 * fix: Fix the /api/version SystemController to use version parameter bag
