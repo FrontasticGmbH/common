@@ -123,6 +123,7 @@ Here you find the API documentation for the relevant classes:
     * [JsonViewListener](php/CoreBundle/EventListener/JsonViewListener.md)
   * [FrontasticCommonCoreBundle](php/CoreBundle/FrontasticCommonCoreBundle.md)
 * DevelopmentBundle
+  * [BuildLogTools](php/DevelopmentBundle/BuildLogTools.md)
   * [Debugger](php/DevelopmentBundle/Debugger.md)
   * DependencyInjection
     * [FrontasticCommonDevelopmentExtension](php/DevelopmentBundle/DependencyInjection/FrontasticCommonDevelopmentExtension.md)
