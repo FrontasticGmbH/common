@@ -1,0 +1,28 @@
+---
+name: "test"
+secret: "secret"
+edition: "enterprise"
+configuration:
+  commercetools:
+    projectKey: frontastic-1
+    clientId: xQIEJY3is0ETFY-7lSf-fAUc
+    clientSecret: YjGgixzob0YJ6_H98Az9sqkhWp0bzZ-3
+  contentful:
+    spaceId: 2yke74xvylnq
+    accessToken: 3d50038afea30f11997a73f887c4aa12d7d411d9da6825dabcc250b78623a530
+    previewToken: 7391f414d8febe45caf58672ddb65ae62b2c37d525c10205669ba57c6f47bfa6
+  cloudinary:
+    cloudName: dlwdq84ig
+    apiKey: 183832318368184
+    apiSecret: 93R2n-_itjETBA3o1OSN0X-w56g
+    autoTaggingService: "" # "google_tagging" "imagga_tagging" "aws_rek_tagging"
+    autoTaggingMinConfidence: 0.8
+projects:
+  - projectId: english
+    name: English Test Catwalk
+    languages: ["en_GB"]
+    defaultLanguage: en_GB
+  - projectId: developer
+    name: Test Developer Catwalk
+    languages: ["en_GB"]
+    defaultLanguage: en_GB
