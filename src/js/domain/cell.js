@@ -11,7 +11,7 @@ class Cell {
         this.customConfiguration = cell.customConfiguration || {}
         this.schema = new ConfigurationSchema([
             {
-                name: 'Responsive',
+                name: 'General',
                 folded: true,
                 fields: [
                     {
