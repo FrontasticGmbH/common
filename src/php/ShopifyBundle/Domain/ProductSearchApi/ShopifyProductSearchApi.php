@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\ShopifyBundle\Domain\ProductSearchApi;
 
+use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Facets;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\PaginatedQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
@@ -266,8 +267,8 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
 
                     // Shopify might return products that has the SKU string as part of other fields so we need to
                     // make sure that skip any product that does not contain the given SKUs, if any.
-                    if ($skus && !$product->hasAnyVariantWithSkus($skus)) {
-                        // Skip product if does not contain any of the SKUs to be filtered by
+                    if ($skus && !$this->hasProductAnyVariantWithSkus($product, $skus)) {
+                        // Skip product if does not contain any of the SKUs to be filtered by.
                         continue;
                     }
 
@@ -337,5 +338,16 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
             value
             valueType
         ';
+    }
+
+    private function hasProductAnyVariantWithSkus(Product $product, array $skus): bool
+    {
+        foreach ($product->variants as $variant) {
+            if (in_array($variant->sku, $skus)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

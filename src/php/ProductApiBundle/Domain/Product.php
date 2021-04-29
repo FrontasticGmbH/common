@@ -102,15 +102,4 @@ class Product extends ApiDataObject
         }
         return parent::__get($name);
     }
-
-    public function hasAnyVariantWithSkus(array $skus): bool
-    {
-        foreach ($this->variants as $variant) {
-            if (in_array($variant->sku, $skus)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }
