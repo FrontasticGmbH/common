@@ -15,7 +15,7 @@ class Cell {
                 folded: true,
                 fields: [
                     {
-                        label: 'Layout element with',
+                        label: 'Layout element width',
                         field: 'size',
                         type: 'enum',
                         values: cellDimensions && cellDimensions.map(
