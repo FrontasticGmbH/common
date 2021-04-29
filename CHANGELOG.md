@@ -1,5 +1,14 @@
 # common Changelog
 
+## `2.11.4` (2021-04-29)
+
+* fix(FP-624): moved variant SKU method to Shopify integration
+* fix(FP-624): validated product returned when filtered by SKUs in Shopify
+
+## `2.11.3` (2021-04-29)
+
+* misc: Tests for CustomerService.
+
 ## `2.11.2` (2021-04-27)
 
 * fix(FP-645): included host and status code to Contentful logs
