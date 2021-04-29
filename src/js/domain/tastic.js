@@ -8,11 +8,11 @@ class Tastic {
         this.configuration = tastic.configuration || {}
         let mergedSchema = [
             {
-                name: 'Component settings',
+                name: 'General settings',
                 folded: true,
                 fields: [
                     {
-                        label: 'Component name',
+                        label: 'Name',
                         field: 'name',
                         type: 'string',
                     },
