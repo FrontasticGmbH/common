@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.11.3` (2021-04-29)
+
+* misc: Tests for CustomerService.
+
 ## `2.11.2` (2021-04-27)
 
 * fix(FP-645): included host and status code to Contentful logs
