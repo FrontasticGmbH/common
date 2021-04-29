@@ -14,19 +14,19 @@ class Region {
                 folded: true,
                 fields: [
                     {
-                        label: 'Show on Mobile',
+                        label: 'Show on mobile',
                         field: 'mobile',
                         type: 'boolean',
                         default: true,
                     },
                     {
-                        label: 'Show on Tablet',
+                        label: 'Show on tablet',
                         field: 'tablet',
                         type: 'boolean',
                         default: true,
                     },
                     {
-                        label: 'Show on Desktop',
+                        label: 'Show on desktop',
                         field: 'desktop',
                         type: 'boolean',
                         default: true,
@@ -37,7 +37,7 @@ class Region {
                 name: 'Layout',
                 fields: [
                     {
-                        label: 'Cell Direction',
+                        label: 'Cell direction',
                         field: 'flexDirection',
                         type: 'enum',
                         default: 'row',
@@ -61,23 +61,23 @@ class Region {
                         ],
                     },
                     {
-                        label: 'Cell Wrapping',
+                        label: 'Cell wrapping',
                         field: 'flexWrap',
                         type: 'enum',
                         default: 'wrap',
                         values: [
                             {
                                 value: 'nowrap',
-                                name: 'No Wrapping',
+                                name: 'No wrapping',
                             },
                             {
                                 value: 'wrap',
-                                name: 'Wrap Cells',
+                                name: 'Wrap cells',
                             },
                         ],
                     },
                     {
-                        label: 'Justify Cells',
+                        label: 'Justify cells',
                         field: 'justifyContent',
                         type: 'enum',
                         default: 'space-between',
@@ -96,20 +96,20 @@ class Region {
                             },
                             {
                                 value: 'space-between',
-                                name: 'Space between Cells',
+                                name: 'Space between cells',
                             },
                             {
                                 value: 'space-around',
-                                name: 'Space around Cells',
+                                name: 'Space around cells',
                             },
                             {
                                 value: 'space-even',
-                                name: 'Evenly spaced Cells',
+                                name: 'Evenly spaced cells',
                             },
                         ],
                     },
                     {
-                        label: 'Cell Alignment',
+                        label: 'Cell alignment',
                         field: 'alignItems',
                         type: 'enum',
                         default: 'stretch',
@@ -124,11 +124,11 @@ class Region {
                             },
                             {
                                 value: 'center',
-                                name: 'Center Cells',
+                                name: 'Center cells',
                             },
                             {
                                 value: 'stretch',
-                                name: 'Stretch Cells',
+                                name: 'Stretch cells',
                             },
                             {
                                 value: 'baseline',
@@ -137,7 +137,7 @@ class Region {
                         ],
                     },
                     {
-                        label: 'Align multiple Cell rows',
+                        label: 'Align multiple cell rows',
                         field: 'alignContent',
                         type: 'enum',
                         default: 'space-between',

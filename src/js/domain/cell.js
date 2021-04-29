@@ -11,11 +11,11 @@ class Cell {
         this.customConfiguration = cell.customConfiguration || {}
         this.schema = new ConfigurationSchema([
             {
-                name: 'General',
+                name: 'General settings',
                 folded: true,
                 fields: [
                     {
-                        label: 'Cell Width',
+                        label: 'Layout element with',
                         field: 'size',
                         type: 'enum',
                         values: cellDimensions && cellDimensions.map(
@@ -29,19 +29,19 @@ class Cell {
                         default: 12,
                     },
                     {
-                        label: 'Show on Mobile',
+                        label: 'Show on mobile',
                         field: 'mobile',
                         type: 'boolean',
                         default: true,
                     },
                     {
-                        label: 'Show on Tablet',
+                        label: 'Show on tablet',
                         field: 'tablet',
                         type: 'boolean',
                         default: true,
                     },
                     {
-                        label: 'Show on Desktop',
+                        label: 'Show on desktop',
                         field: 'desktop',
                         type: 'boolean',
                         default: true,
@@ -77,7 +77,7 @@ class Cell {
             }
         }
 
-        throw new Error('Could not find tastic with ID ' + tasticId)
+        throw new Error('Could not find component with ID ' + tasticId)
     }
 
     getTasticCount () {
