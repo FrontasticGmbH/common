@@ -13,7 +13,7 @@ export interface Account extends CoreApiDataObject {
      birthday?: any /* \DateTime */;
      groups: Group[];
      confirmationToken?: string;
-     confirmed?: string;
+     confirmed?: boolean;
      tokenValidUntil?: any /* \DateTime */;
      addresses: Address[];
      authToken?: string | null;
@@ -39,30 +39,30 @@ export interface Address extends CoreApiDataObject {
      dangerousInnerAddress?: any;
 }
 
-export interface AuthentificationInformation {
+export interface AuthentificationInformation extends CoreApiDataObject {
      email: string;
      password: string;
      newPassword: string;
 }
 
-export interface Group {
+export interface Group extends CoreApiDataObject {
      groupId: string;
      name: string;
      permissions: string[];
 }
 
-export interface MetaData {
+export interface MetaData extends CoreApiDataObject {
      author: string;
      changed: any /* \DateTimeImmutable */;
 }
 
-export interface PasswordResetToken {
+export interface PasswordResetToken extends CoreApiDataObject {
      email: string;
      confirmationToken?: string | null;
      tokenValidUntil?: any /* \DateTime */ | null;
 }
 
-export interface Session {
+export interface Session extends CoreApiDataObject {
      loggedIn: boolean;
      account?: Account;
      message?: string;

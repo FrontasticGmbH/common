@@ -4,12 +4,12 @@ import {
     ApiDataObject as CoreApiDataObject,
 } from '../../core/'
 
-export interface FacetDefinition {
+export interface FacetDefinition extends CoreApiDataObject {
      attributeType: string;
      attributeId: string;
 }
 
-export interface Locale {
+export interface Locale extends CoreApiDataObject {
      language: string;
      territory: string;
      country: string;
@@ -28,7 +28,7 @@ export interface Query extends CoreApiDataObject {
      loadDangerousInnerData?: boolean;
 }
 
-export interface Result {
+export interface Result extends CoreApiDataObject {
      offset?: number;
      total?: number;
      previousCursor?: string;

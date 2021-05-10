@@ -5,6 +5,10 @@ import {
 } from '../core/'
 
 import {
+    Address as AccountAddress,
+} from '../account/'
+
+import {
     Translatable as Translatable,
 } from '../'
 
@@ -14,22 +18,25 @@ export interface Cart extends CoreApiDataObject {
      lineItems: LineItem[];
      email?: string;
      birthday?: any /* \DateTimeImmutable */;
+     shippingInfo?: null | ShippingInfo;
      shippingMethod?: null | ShippingMethod;
-     shippingAddress?: null | any /* \Frontastic\Common\CartApiBundle\Domain\Address */;
-     billingAddress?: null | any /* \Frontastic\Common\CartApiBundle\Domain\Address */;
+     shippingAddress?: null | AccountAddress;
+     billingAddress?: null | AccountAddress;
      sum: number;
      currency: string;
      payments: Payment[];
-     discountCodes: string[];
+     discountCodes: Discount[];
+     taxed?: null | Tax;
      dangerousInnerCart?: any;
 }
 
-export interface Discount {
+export interface Discount extends CoreApiDataObject {
      discountId: string;
      code: string;
      state: string;
      name: Translatable;
      description?: Translatable;
+     discountedAmount?: null | number;
      dangerousInnerDiscount?: any;
 }
 
@@ -39,8 +46,9 @@ export interface LineItem extends CoreApiDataObject {
      type: string;
      count: number;
      price: number;
-     discountedPrice?: number;
+     discountedPrice?: null | number;
      discountTexts?: any;
+     discounts?: Discount[];
      totalPrice: number;
      currency: string;
      isGift: boolean;
@@ -68,7 +76,24 @@ export interface Payment extends CoreApiDataObject {
      paymentDetails?: any | null;
 }
 
-export interface ShippingMethod {
-     name: string;
-     price: number;
+export interface ShippingMethod extends CoreApiDataObject {
+     shippingMethodId?: string;
+     name?: string;
+     price?: number;
+     description?: string;
+     rates?: null | ShippingRate[];
+     dangerousInnerShippingMethod?: null | any;
+}
+
+export interface Tax extends CoreApiDataObject {
+     amount: number;
+     currency: string;
+     taxPortions?: TaxPortion[];
+}
+
+export interface TaxPortion extends CoreApiDataObject {
+     amount?: number;
+     currency?: string;
+     name?: string;
+     rate?: number;
 }
