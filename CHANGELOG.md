@@ -1,5 +1,14 @@
 # common Changelog
 
+## `2.11.5` (2021-05-11)
+
+* fix(FP-695): validated empty nodes before access data in Shopify
+* feat(backstage): latest terminology typo fix
+* feat(backstage): latest terminology updates
+* fix(backstage): test update
+* feat(backstage): latest copy updates
+* feat: tastics term in studio
+
 ## `2.11.4` (2021-04-29)
 
 * fix(FP-624): moved variant SKU method to Shopify integration
