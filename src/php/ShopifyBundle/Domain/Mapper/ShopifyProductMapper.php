@@ -114,7 +114,7 @@ class ShopifyProductMapper
         $facets[] = $this->mapDataToTagFacet($productsData);
         $facets[] = $this->mapDataToProductTypeFacet($productsData);
 
-        return $facets;
+        return array_filter($facets);
     }
 
     public function mapDataToProductAttributes(array $productAttributesData): array
@@ -231,9 +231,17 @@ class ShopifyProductMapper
         $productTagValues = [];
         foreach ($productsData as $productData) {
             $productData = $productData['node'] ?? $productData;
+            if (!is_array($productData) || !key_exists('tags', $productData)) {
+                continue;
+            }
+
             foreach ($productData['tags'] as $tag) {
                 $productTagValues[] = $tag;
             }
+        }
+
+        if (empty($productTagValues)) {
+            return null;
         }
 
         $tagTerms = [];
@@ -262,7 +270,15 @@ class ShopifyProductMapper
         $productTypeValues = [];
         foreach ($productsData as $productData) {
             $productData = $productData['node'] ?? $productData;
-            $productTypeValues[] = $productData['productType'] ?? null;
+            if (!is_array($productData) || !key_exists('productType', $productData)) {
+                continue;
+            }
+
+            $productTypeValues[] = $productData['productType'] ?? [];
+        }
+
+        if (empty($productTypeValues)) {
+            return null;
         }
 
         $productTypeTerms = [];

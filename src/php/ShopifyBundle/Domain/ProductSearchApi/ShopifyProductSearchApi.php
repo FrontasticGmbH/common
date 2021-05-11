@@ -260,6 +260,10 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
 
                 $nextCursor = null;
                 foreach ($productsData as $productData) {
+                    if (!is_array($productData)) {
+                        continue;
+                    }
+
                     $product = $this->productMapper->mapDataToProduct(
                         $productData['node'] ?? $productData,
                         $query
@@ -286,7 +290,7 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                     'query' => clone $query,
                 ]);
             })
-            ->otherwise(function (\Exception $exception) use ($query) {
+            ->otherwise(function (\Throwable $exception) use ($query) {
                 if ($exception instanceof QueryException &&
                     (strpos($exception->getMessage(), 'Invalid global id') !== false)
                 ) {
