@@ -11,6 +11,7 @@
 * [getContent()](#getcontent)
 * [query()](#query)
 * [getDangerousInnerClient()](#getdangerousinnerclient)
+* [queryByContentIds()](#querybycontentids)
 
 ### __construct()
 
@@ -79,5 +80,21 @@ public function getDangerousInnerClient(): mixed
 ```
 
 Return Value: `mixed`
+
+### queryByContentIds()
+
+```php
+public function queryByContentIds(
+    Query $query,
+    string $locale
+): \GuzzleHttp\Promise\PromiseInterface
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$query`|[`Query`](../Query.md)||
+`$locale`|`string`||
+
+Return Value: `\GuzzleHttp\Promise\PromiseInterface`
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).
