@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.11.6` (2021-05-13)
+
+* fix(FP-691): returned empty response if content by id is query on GraphCMS
+
 ## `2.11.5` (2021-05-11)
 
 * fix(FP-695): validated empty nodes before access data in Shopify
