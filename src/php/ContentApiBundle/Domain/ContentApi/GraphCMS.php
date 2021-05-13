@@ -126,9 +126,9 @@ class GraphCMS implements ContentApi
             $promise = $this->queryByContentTypeAndSearchString($query, $locale);
         } elseif (!$searchStringGiven && $contentTypeGiven) {
             $promise = $this->queryByContentType($query, $locale, $mode);
-        // } elseif ($contentIdsGiven && $contentTypeGiven) {
-            // Method does not exist yet:
-            // $promise = $this->queryContentIds($query, $locale);
+        } elseif ($contentIdsGiven) {
+            // Mock query method to prevent exception if only contentIds provided
+            $promise = $this->queryByContentIds($query, $locale);
         } else {
             $promise = Promise\rejection_for(
                 new \InvalidArgumentException('provide a ContentType and/or a search text')
@@ -289,6 +289,15 @@ class GraphCMS implements ContentApi
                     'items' => $contents,
                 ]);
             });
+    }
+
+    public function queryByContentIds(Query $query, string $locale): PromiseInterface
+    {
+        $promise = new Promise\Promise();
+
+        $promise->resolve(new Result());
+
+        return $promise;
     }
 
     /**
