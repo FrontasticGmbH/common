@@ -4,7 +4,7 @@ secret: "secret"
 configuration:
     test:
         disabled: false
-        anonymousCheckout: false
+        anonymousCheckout: true
         supportCursorBasedPagination: false
         supportOffsetPagination: true
         hasConsistentProductSearchData: true

@@ -218,7 +218,9 @@ class SprykerCartApi extends CartApiBase
      */
     protected function setEmailImplementation(Cart $cart, string $email, string $locale = null): Cart
     {
+        // Spryker only allows set email when the order is been placed
         $this->checkoutRequest->setCustomer(new Account(['email' => $email]));
+        $cart->email = $email;
 
         return $cart;
     }
@@ -269,7 +271,9 @@ class SprykerCartApi extends CartApiBase
      */
     protected function setShippingAddressImplementation(Cart $cart, Address $address, string $locale = null): Cart
     {
+        // Spryker only allows set Shipping Address when the order is been placed
         $this->checkoutRequest->setShippingAddress($address);
+        $cart->shippingAddress = $address;
 
         return $cart;
     }
@@ -281,7 +285,9 @@ class SprykerCartApi extends CartApiBase
      */
     protected function setBillingAddressImplementation(Cart $cart, Address $address, string $locale = null): Cart
     {
+        // Spryker only allows set Billing Address when the order is been placed
         $this->checkoutRequest->setBillingAddress($address);
+        $cart->billingAddress = $address;
 
         return $cart;
     }
