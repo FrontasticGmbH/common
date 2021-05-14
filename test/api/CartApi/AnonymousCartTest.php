@@ -10,7 +10,6 @@ use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\Tax;
 use Frontastic\Common\CartApiBundle\Domain\TaxPortion;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
-use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 
@@ -109,16 +108,15 @@ class AnonymousCartTest extends FrontasticApiTestCase
     {
         $this->requireAnonymousCheckout($project);
         $originalCart = $this->getAnonymousCart($project, $language);
+        $originalEmail = $originalCart->email;
 
         $cartApi = $this->getCartApiForProject($project);
 
         $email = 'integration-tests-not-exists+account-' . uniqid('', true) . '@frontastic.com';
-        $cartApi->startTransaction($originalCart);
-        $cartApi->setEmail($originalCart, $email, $language);
-        $updatedCart = $cartApi->commit($language);
+        $updatedCart = $cartApi->setEmail($originalCart, $email, $language);
 
         $this->assertEquals($email, $updatedCart->email);
-        $this->assertNotEquals($email, $originalCart->email);
+        $this->assertNotEquals($email, $originalEmail);
     }
 
     /**
@@ -132,9 +130,7 @@ class AnonymousCartTest extends FrontasticApiTestCase
         $cartApi = $this->getCartApiForProject($project);
 
         $frontasticAddress = $this->getFrontasticAddress();
-        $cartApi->startTransaction($originalCart);
-        $cartApi->setShippingAddress($originalCart, $frontasticAddress, $language);
-        $updatedCart = $cartApi->commit($language);
+        $updatedCart = $cartApi->setShippingAddress($originalCart, $frontasticAddress, $language);
 
         $this->assertInstanceOf(Address::class, $updatedCart->shippingAddress);
         $this->assertEquals($frontasticAddress->lastName, $updatedCart->shippingAddress->lastName);
@@ -142,6 +138,27 @@ class AnonymousCartTest extends FrontasticApiTestCase
         $this->assertEquals($frontasticAddress->streetNumber, $updatedCart->shippingAddress->streetNumber);
         $this->assertEquals($frontasticAddress->postalCode, $updatedCart->shippingAddress->postalCode);
         $this->assertEquals($frontasticAddress->city, $updatedCart->shippingAddress->city);
+    }
+
+    /**
+     * @dataProvider projectAndLanguage
+     */
+    public function testSettingTheBillingAddressOfACart(Project $project, string $language): void
+    {
+        $this->requireAnonymousCheckout($project);
+        $originalCart = $this->getAnonymousCart($project, $language);
+
+        $cartApi = $this->getCartApiForProject($project);
+
+        $frontasticAddress = $this->getFrontasticAddress();
+        $updatedCart = $cartApi->setBillingAddress($originalCart, $frontasticAddress, $language);
+
+        $this->assertInstanceOf(Address::class, $updatedCart->billingAddress);
+        $this->assertEquals($frontasticAddress->lastName, $updatedCart->billingAddress->lastName);
+        $this->assertEquals($frontasticAddress->streetName, $updatedCart->billingAddress->streetName);
+        $this->assertEquals($frontasticAddress->streetNumber, $updatedCart->billingAddress->streetNumber);
+        $this->assertEquals($frontasticAddress->postalCode, $updatedCart->billingAddress->postalCode);
+        $this->assertEquals($frontasticAddress->city, $updatedCart->billingAddress->city);
     }
 
     /**
@@ -177,10 +194,14 @@ class AnonymousCartTest extends FrontasticApiTestCase
         $this->requireAnonymousCheckout($project);
         $cart = $this->getAnonymousCart($project, $language);
         $cartApi = $this->getCartApiForProject($project);
+        $email = 'integration-tests-' . uniqid('', true) . '@frontastic.com';
 
+        $product = $this->getAProduct($project, $language);
         $cartApi->startTransaction($cart);
         $cartApi->addToCart($cart, $this->getLineItemForProduct($this->getAProduct($project, $language)), $language);
+        $cartApi->setEmail($cart, $email, $language);
         $cartApi->setShippingAddress($cart, $this->getFrontasticAddress(), $language);
+        $cartApi->setBillingAddress($cart, $this->getFrontasticAddress(), $language);
         $cart = $cartApi->commit($language);
 
         $order = $cartApi->order($cart);

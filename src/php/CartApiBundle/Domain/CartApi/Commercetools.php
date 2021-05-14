@@ -718,6 +718,10 @@ class Commercetools extends CartApiBase
      */
     protected function orderImplementation(Cart $cart, string $locale = null): Order
     {
+        if (!$cart->isReadyForCheckout()) {
+            throw new \DomainException('Cart not complete yet.');
+        }
+
         $order = $this->cartMapper->mapDataToOrder(
             $this->client->post(
                 '/orders',
