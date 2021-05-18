@@ -1,5 +1,11 @@
 # common Changelog
 
+## `2.11.7` (2021-05-18)
+
+* fix(FP-709): moved cart validation to Shopware integration
+* fix(FP-709): included addresses and email into cart on Spryker
+* fix(FP-709): moved cart validation to Commercetools integration
+
 ## `2.11.6` (2021-05-13)
 
 * fix(FP-691): returned empty response if content by id is query on GraphCMS
