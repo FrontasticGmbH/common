@@ -301,6 +301,10 @@ class ShopwareCartApi extends CartApiBase
 
     protected function orderImplementation(Cart $cart, string $locale = null): Order
     {
+        if (!$cart->isReadyForCheckout()) {
+            throw new \DomainException('Cart not complete yet.');
+        }
+
         $shopwareLocale = $this->parseLocaleString($locale);
         $mapper = $this->buildMapper(OrderMapper::MAPPER_NAME, $shopwareLocale);
 
