@@ -241,7 +241,7 @@ class ShopwareCartApi extends CartApiBase
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($cart->cartId)
             ->patch("/sales-channel-api/v2/context", [], $requestData)
-            ->then(static function ($response) {
+            ->then(function ($response) {
                 if (isset($response['data']['errors']) && !empty($response['data']['errors'])) {
                     $this->respondWithError($response['data']['errors']);
                 }
