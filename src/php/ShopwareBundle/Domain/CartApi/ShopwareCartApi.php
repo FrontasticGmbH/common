@@ -231,8 +231,25 @@ class ShopwareCartApi extends CartApiBase
 
     protected function setShippingMethodImplementation(Cart $cart, string $shippingMethod, string $locale = null): Cart
     {
-        // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
-        throw new RuntimeException(__METHOD__ . ' not implemented');
+        $shopwareLocale = $this->parseLocaleString($locale);
+        $requestData = [
+            'shippingMethodId' => $shippingMethod,
+        ];
+
+        return $this->client
+            ->forCurrency($shopwareLocale->currencyId)
+            ->forLanguage($shopwareLocale->languageId)
+            ->withContextToken($cart->cartId)
+            ->patch("/sales-channel-api/v2/context", [], $requestData)
+            ->then(static function ($response) {
+                if (isset($response['data']['errors']) && !empty($response['data']['errors'])) {
+                    $this->respondWithError($response['data']['errors']);
+                }
+                return $response['sw-context-token'];
+            })->then(function ($token) use ($locale) {
+                return $this->getById($token, $locale);
+            })
+            ->wait();
     }
 
     protected function setRawApiInputImplementation(Cart $cart, string $locale = null): Cart
@@ -386,19 +403,19 @@ class ShopwareCartApi extends CartApiBase
         $mapper = $this->buildMapper(ShippingMethodsMapper::MAPPER_NAME, $shopwareLocale);
 
         $requestData = [
+            'onlyAvailable' => true,
             'associations' => [
                 "prices" => []
             ]
         ];
 
-        $client = $this->client;
         if ($onlyMatching) {
-            $client = $client
+            $this->client
                 ->forCurrency($shopwareLocale->currencyId)
                 ->forLanguage($shopwareLocale->languageId);
         }
 
-        return $client
+        return $this->client
             ->post('/sales-channel-api/v2/shipping-method', [], $requestData)
             ->then(function ($response) use ($mapper) {
                 return $mapper->map($response);

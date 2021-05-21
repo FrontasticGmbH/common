@@ -35,6 +35,8 @@ class ShippingMethodsMapper extends AbstractDataMapper
         $shippingMethod->description = $this->resolveTranslatedValue($shippingMethodData, 'description');
         $shippingMethod->dangerousInnerShippingMethod = $shippingMethodData;
 
+        // Shopware returns multiple shipping rates depending on different rules. Since there is no way
+        // to get the final shipping price for a given cart, we are returning all rates.
         foreach ($shippingMethodData['prices'] as $price) {
             $shippingMethod->rates[] = new ShippingRate([
                 'zoneId' => $price['id'] ?? null,

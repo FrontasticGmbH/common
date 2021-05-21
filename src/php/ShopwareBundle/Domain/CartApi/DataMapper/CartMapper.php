@@ -111,8 +111,13 @@ class CartMapper extends AbstractDataMapper implements
         }
 
         return new ShippingInfo([
+            'shippingMethodId' => $shippingMethodData['id'] ?? null,
             'name' => $shippingMethodData['name'] ?? null,
-            'price' => $this->convertPriceToCent($shippingMethodData['prices'][0]['price'] ?? 0),
+            'price' => $this->convertPriceToCent(
+                $shippingMethodData['prices'][0]['currencyPrice'][0]['gross'] ??
+                $shippingMethodData['prices'][0]['price'] ??
+                0
+            ),
         ]);
     }
 

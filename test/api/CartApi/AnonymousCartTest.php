@@ -257,6 +257,9 @@ class AnonymousCartTest extends FrontasticApiTestCase
         $this->assertContainsOnlyInstancesOf(ShippingMethod::class, $availableShippingMethods);
         foreach ($availableShippingMethods as $shippingMethod) {
             $this->assertNotEmptyString($shippingMethod->shippingMethodId);
+
+            $cart = $cartApi->setShippingMethod($cart, $shippingMethod->shippingMethodId, $language);
+            $this->assertEquals($cart->shippingInfo->shippingMethodId, $shippingMethod->shippingMethodId);
         }
     }
 
