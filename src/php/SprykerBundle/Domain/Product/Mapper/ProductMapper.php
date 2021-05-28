@@ -62,8 +62,10 @@ class ProductMapper implements MapperInterface
     {
         $variants = [];
 
-        foreach ($resource->relationship('concrete-products')->resources() as $concreteProductResource) {
-            $variants[] = $this->variantMapper->mapResource($concreteProductResource);
+        if ($resource->hasRelationship('concrete-products')) {
+            foreach ($resource->relationship('concrete-products')->resources() as $concreteProductResource) {
+                $variants[] = $this->variantMapper->mapResource($concreteProductResource);
+            }
         }
 
         return $variants;

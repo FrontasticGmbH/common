@@ -76,7 +76,9 @@ class WishlistMapper implements ExtendedMapperInterface
 
         if ($resource->hasRelationship(self::RELATIONSHIP)) {
             foreach ($resource->relationship(self::RELATIONSHIP)->resources() as $item) {
-                $lineItems[] = $this->lineItemMapper->mapResource($item);
+                if ($item->hasRelationship($this->lineItemMapper->getRelationship())) {
+                    $lineItems[] = $this->lineItemMapper->mapResource($item);
+                }
             }
         }
 

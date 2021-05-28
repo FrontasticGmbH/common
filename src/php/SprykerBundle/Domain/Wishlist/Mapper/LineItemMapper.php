@@ -57,11 +57,19 @@ class LineItemMapper implements MapperInterface
     }
 
     /**
+     * @return string
+     */
+    public function getRelationship(): string
+    {
+        return 'concrete-products';
+    }
+
+    /**
      * @param ResourceObject $resource
      * @return ResourceObject
      */
     private function getConcreteProductResource(ResourceObject $resource): ResourceObject
     {
-        return $resource->relationship('concrete-products')->resources()[0];
+        return $resource->relationship($this->getRelationship())->resources()[0];
     }
 }

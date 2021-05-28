@@ -57,7 +57,9 @@ abstract class AbstractCartMapper implements MapperInterface
 
         if ($resource->hasRelationship($this->getRelationship())) {
             foreach ($resource->relationship($this->getRelationship())->resources() as $item) {
-                $lineItems[] = $this->lineItemMapper->mapResource($item);
+                if ($item->hasRelationship($this->lineItemMapper->getRelationship())) {
+                    $lineItems[] = $this->lineItemMapper->mapResource($item);
+                }
             }
         }
 
