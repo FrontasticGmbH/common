@@ -1,5 +1,11 @@
 # common Changelog
 
+## `2.11.8` (2021-05-28)
+
+* fix: validated relations before map them in Spryker
+* fix: remove scope from client call
+* fix: implemented CartApi::setShippingMethod on Shopware integration
+
 ## `2.11.7` (2021-05-18)
 
 * fix(FP-709): moved cart validation to Shopware integration
