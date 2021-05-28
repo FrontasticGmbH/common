@@ -18,6 +18,7 @@ class Mapper
 {
     public function dataToProduct(array $productData, Query $query, CommercetoolsLocale $locale): Product
     {
+        $originalData = $productData;
         $version = (string)$productData['version'] ?? '0';
 
         $lastModified = $productData['lastModifiedAt'] ?? null;
@@ -48,7 +49,14 @@ class Mapper
                 $productData['categories']
             ),
             'variants' => $this->dataToVariants($productData, $query, $locale),
-            'dangerousInnerProduct' => $this->dataToDangerousInnerData($productData, $query),
+            'dangerousInnerProduct' => $this->dataToDangerousInnerData(
+                // To prevent BC break, merge both arrays so the keys will be preserved
+                array_merge(
+                    $originalData,
+                    $productData
+                ),
+                $query
+            ),
         ]);
     }
 
