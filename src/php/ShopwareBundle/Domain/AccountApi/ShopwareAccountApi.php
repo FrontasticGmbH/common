@@ -39,7 +39,9 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
 
     public function getSalutations(string $locale): ?array
     {
-        return null;
+        $shopwareSalutations = $this->projectConfigApi->getSalutations();
+
+        return array_column($shopwareSalutations, 'displayName');
     }
 
     public function confirmEmail(string $token, string $locale = null): Account
