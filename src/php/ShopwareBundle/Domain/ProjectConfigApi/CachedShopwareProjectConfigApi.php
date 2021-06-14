@@ -119,12 +119,12 @@ class CachedShopwareProjectConfigApi implements ShopwareProjectConfigApiInterfac
     /**
      * @inheritDoc
      */
-    public function getSalutations(?string $criteria = null): array
+    public function getSalutations(?string $criteria = null, ?string $locale = null): array
     {
         $cacheKey = $this->buildCacheKey(__FUNCTION__, $criteria ?? '_empty_');
 
         if ($this->debug || false === ($result = $this->cache->get($cacheKey, false))) {
-            $result = $this->aggregate->getSalutations($criteria);
+            $result = $this->aggregate->getSalutations($criteria, $locale);
             $this->cache->set($cacheKey, $result, $this->cacheTtl);
         }
 

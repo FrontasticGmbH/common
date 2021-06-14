@@ -4,6 +4,7 @@ namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi;
 
 use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
+use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
 use Psr\SimpleCache\CacheInterface;
 
 class ShopwareProjectConfigApiFactory
@@ -33,12 +34,15 @@ class ShopwareProjectConfigApiFactory
     /**
      * @inheritDoc
      */
-    public function factor(ClientInterface $client): ShopwareProjectConfigApiInterface
-    {
+    public function factor(
+        ClientInterface $client,
+        ?LocaleCreator $localeCreator = null
+    ): ShopwareProjectConfigApiInterface {
         return new CachedShopwareProjectConfigApi(
             new ShopwareProjectConfigApi(
                 $client,
-                $this->dataMapperResolver
+                $this->dataMapperResolver,
+                $localeCreator
             ),
             $this->cache,
             $this->debug

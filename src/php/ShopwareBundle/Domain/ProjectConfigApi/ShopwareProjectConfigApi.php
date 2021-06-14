@@ -115,7 +115,7 @@ class ShopwareProjectConfigApi extends AbstractShopwareApi implements ShopwarePr
     /**
      * @inheritDoc
      */
-    public function getSalutations(?string $criteria = null): array
+    public function getSalutations(?string $criteria = null, ?string $locale = null): array
     {
         $parameters = [];
 
@@ -127,7 +127,10 @@ class ShopwareProjectConfigApi extends AbstractShopwareApi implements ShopwarePr
             }
         }
 
+        $locale = $this->parseLocaleString($locale);
+
         return $this->client
+            ->forLanguage($locale->languageId)
             ->get('/sales-channel-api/v2/salutation', $parameters)
             ->then(function ($response) {
                 return $this->mapResponse($response, SalutationsMapper::MAPPER_NAME);

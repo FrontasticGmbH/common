@@ -31,5 +31,5 @@ interface ShopwareProjectConfigApiInterface
     /**
      * @return \Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareSalutation
      */
-    public function getSalutations(?string $criteria = null): array;
+    public function getSalutations(?string $criteria = null, ?string $locale = null): array;
 }

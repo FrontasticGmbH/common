@@ -17,7 +17,9 @@ use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
+use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareSalutation;
 use RuntimeException;
 
 class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
@@ -29,17 +31,25 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
 
     public function __construct(
         ClientInterface $client,
+        LocaleCreator $localeCreator,
         DataMapperResolver $mapperResolver,
         ShopwareProjectConfigApiFactory $projectConfigApiFactory
     ) {
-        parent::__construct($client, $mapperResolver);
+        parent::__construct($client, $mapperResolver, $localeCreator);
 
-        $this->projectConfigApi = $projectConfigApiFactory->factor($this->client);
+        $this->projectConfigApi = $projectConfigApiFactory->factor($this->client, $this->localeCreator);
     }
 
     public function getSalutations(string $locale): ?array
     {
-        return null;
+        $shopwareSalutations = $this->projectConfigApi->getSalutations(null, $locale);
+
+        return array_map(
+            function (ShopwareSalutation $shopwareSalutation): string {
+                return $shopwareSalutation->displayName;
+            },
+            $shopwareSalutations
+        );
     }
 
     public function confirmEmail(string $token, string $locale = null): Account
