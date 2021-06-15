@@ -153,6 +153,9 @@ Here you find the API documentation for the relevant classes:
 * [Functions](php/Functions.md)
 * [HttpClient](php/HttpClient.md)
 * HttpClient
+  * [CircuitBreaker](php/HttpClient/CircuitBreaker.md)
+  * CircuitBreaker
+    * [StorageKeys](php/HttpClient/CircuitBreaker/StorageKeys.md)
   * [Configuration](php/HttpClient/Configuration.md)
   * [Factory](php/HttpClient/Factory.md)
   * [Guzzle](php/HttpClient/Guzzle.md)

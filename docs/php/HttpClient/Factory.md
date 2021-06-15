@@ -12,6 +12,7 @@
 ```php
 public function __construct(
     \Psr\Log\LoggerInterface $httpClientLogger,
+    \Redis $redis = null,
     Options $defaultOptions = null
 ): mixed
 ```
@@ -19,6 +20,7 @@ public function __construct(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$httpClientLogger`|`\Psr\Log\LoggerInterface`||
+`$redis`|`\Redis`|`null`|
 `$defaultOptions`|[`Options`](Options.md)|`null`|
 
 Return Value: `mixed`
