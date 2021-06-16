@@ -39,7 +39,9 @@ class AddressMapper extends AbstractDataMapper implements ProjectConfigApiAwareD
 
     private function resolveCountry(array $addressData): ?string
     {
-        $resolveTranslatedName = $this->resolveTranslatedValue($addressData['country'], 'name');
+        $resolveTranslatedName = $addressData['country'] ?
+            $this->resolveTranslatedValue($addressData['country'], 'name') :
+            null;
 
         if ($resolveTranslatedName === null && isset($addressData['countryId'])) {
             $shopwareCountry = $this->getProjectConfigApi()->getCountryByCriteria($addressData['countryId']);

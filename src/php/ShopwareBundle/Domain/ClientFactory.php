@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain;
 
+use Doctrine\Common\Cache\Cache;
 use Frontastic\Common\HttpClient;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
 use RuntimeException;
@@ -16,6 +17,8 @@ class ClientFactory
     private $requiredConfigOptions = [
         'apiKey',
         'endpoint',
+        'clientId',
+        'clientSecret',
     ];
 
     /**
@@ -23,9 +26,15 @@ class ClientFactory
      */
     private $httpClient;
 
-    public function __construct(HttpClient $httpClient)
+    /**
+     * @var Cache
+     */
+    private $cache;
+
+    public function __construct(HttpClient $httpClient, Cache $cache)
     {
         $this->httpClient = $httpClient;
+        $this->cache = $cache;
     }
 
     public function factorForConfigs(object $typeSpecificConfiguration, ?object $genericConfiguration = null): Client
@@ -34,8 +43,11 @@ class ClientFactory
 
         return new Client(
             $this->httpClient,
+            $this->cache,
             $config['apiKey'],
-            $config['endpoint']
+            $config['endpoint'],
+            $config['clientId'],
+            $config['clientSecret'],
         );
     }
 

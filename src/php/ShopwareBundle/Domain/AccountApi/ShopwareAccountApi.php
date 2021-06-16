@@ -7,6 +7,7 @@ use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\AccountApiBundle\Domain\PasswordResetToken;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 use Frontastic\Common\ShopwareBundle\Domain\AbstractShopwareApi;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\AccountMapper;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\AddressCreateRequestDataMapper;
@@ -17,6 +18,7 @@ use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
+use Frontastic\Common\ShopwareBundle\Domain\Exception\RequestException;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareSalutation;
@@ -33,11 +35,16 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         ClientInterface $client,
         LocaleCreator $localeCreator,
         DataMapperResolver $mapperResolver,
-        ShopwareProjectConfigApiFactory $projectConfigApiFactory
+        ShopwareProjectConfigApiFactory $projectConfigApiFactory,
+        ?string $defaultLanguage = null
     ) {
-        parent::__construct($client, $mapperResolver, $localeCreator);
+        parent::__construct($client, $mapperResolver, $localeCreator, $defaultLanguage);
 
-        $this->projectConfigApi = $projectConfigApiFactory->factor($this->client, $this->localeCreator);
+        $this->projectConfigApi = $projectConfigApiFactory->factor(
+            $this->client,
+            $this->localeCreator,
+            $defaultLanguage
+        );
     }
 
     public function getSalutations(string $locale): ?array
@@ -54,7 +61,26 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
 
     public function confirmEmail(string $token, string $locale = null): Account
     {
-        throw new RuntimeException('Email confirmation is not supported by the Shopware account API.');
+        try {
+            $requestData = Json::decode($token, true);
+
+            return $this->client
+                ->post('/store-api/v3/account/register-confirm', [], $requestData)
+                ->then(function ($response) {
+                    /** @var Account $account */
+                    $account = $this->mapResponse($response, AccountMapper::MAPPER_NAME);
+                    $account->confirmed = true;
+                    $account->confirmationToken = null;
+                    $account->authToken = isset($response['headers']['sw-context-token']) ?
+                        explode(',', $response['headers']['sw-context-token'])[0] :
+                        null;
+
+                    return $account;
+                })
+                ->wait();
+        } catch (RequestException $e) {
+            throw new \OutOfBoundsException('Could not find account with confirmation token ' . $token, 0, $e);
+        }
     }
 
     public function create(Account $account, ?Cart $cart = null, string $locale = null): Account
@@ -64,7 +90,20 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         return $this->client
             ->post('/sales-channel-api/v2/customer', [], $requestData)
             ->then(function ($response) use ($account) {
-                return $this->login($account, null);
+                // If the "Double opt-in on sign-up" option is not enabled in Shopware, login will not be possible
+                // until the customer emails is been confirmed through AccountApi::confirmEmail
+                $createdAccount = $this->login($account);
+                if ($createdAccount instanceof Account) {
+                    return $createdAccount;
+                }
+
+                return $this->client
+                    ->withAccessToken()
+                    ->get("/api/customer/{$response['data']}")
+                    ->then(function ($response): Account {
+                        return $this->mapResponse($response, AccountMapper::MAPPER_NAME);
+                    })
+                    ->wait();
             })
             ->wait();
     }

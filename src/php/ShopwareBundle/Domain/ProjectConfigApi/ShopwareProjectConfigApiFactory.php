@@ -36,13 +36,15 @@ class ShopwareProjectConfigApiFactory
      */
     public function factor(
         ClientInterface $client,
-        ?LocaleCreator $localeCreator = null
+        ?LocaleCreator $localeCreator = null,
+        ?string $defaultLanguage = null
     ): ShopwareProjectConfigApiInterface {
         return new CachedShopwareProjectConfigApi(
             new ShopwareProjectConfigApi(
                 $client,
                 $this->dataMapperResolver,
-                $localeCreator
+                $localeCreator,
+                $defaultLanguage
             ),
             $this->cache,
             $this->debug

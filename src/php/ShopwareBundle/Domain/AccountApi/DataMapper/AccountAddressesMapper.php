@@ -31,18 +31,52 @@ class AccountAddressesMapper extends AbstractDataMapper implements ProjectConfig
     {
         $accountData = $this->extractData($resource, $resource);
 
-        $billingAddress = $this->getAddressMapper()->map($accountData['defaultBillingAddress']);
-        $billingAddress->isDefaultBillingAddress = true;
+        $addresses = [];
+        $billingAddress = [];
+        $shippingAddress = [];
 
-        $addresses[$billingAddress->addressId] = $billingAddress;
+        $defaultBillingAddressId = $accountData['defaultBillingAddressId'] ?? null;
+        $defaultShippingAddressId = $accountData['defaultShippingAddressId'] ?? null;
 
-        if (!array_key_exists($accountData['defaultShippingAddress']['id'], $addresses)) {
+        $addressesData = $accountData['addresses'] ?? [];
+
+        foreach ($addressesData as $addressData) {
+            $address = $this->getAddressMapper()->map($addressData);
+            $addresses[$address->addressId] = $address;
+        }
+
+        if (key_exists('defaultBillingAddress', $accountData) && !empty($accountData['defaultBillingAddress'])) {
+            $billingAddress = $this->getAddressMapper()->map($accountData['defaultBillingAddress']);
+            $billingAddress->isDefaultBillingAddress = true;
+
+            $addresses[$billingAddress->addressId] = $billingAddress;
+        }
+
+        if (key_exists('defaultShippingAddress', $accountData) && !empty($accountData['defaultShippingAddress'])) {
             $shippingAddress = $this->getAddressMapper()->map($accountData['defaultShippingAddress']);
             $shippingAddress->isDefaultShippingAddress = true;
 
             $addresses[$shippingAddress->addressId] = $shippingAddress;
-        } else {
-            $billingAddress->isDefaultShippingAddress = true;
+        }
+
+        if (!empty($billingAddress)) {
+            $billingAddress->isDefaultShippingAddress = empty($shippingAddress);
+        }
+
+        if (!empty($shippingAddress)) {
+            $billingAddress->isDefaultBillingAddress = empty($billingAddress);
+        }
+
+        if (!empty($defaultBillingAddressId) &&
+            key_exists($defaultBillingAddressId, $addresses)
+        ) {
+            $addresses[$defaultBillingAddressId]->isDefaultBillingAddress = true;
+        }
+
+        if (!empty($defaultShippingAddressId) &&
+            key_exists($defaultShippingAddressId, $addresses)
+        ) {
+            $addresses[$defaultShippingAddressId]->isDefaultShippingAddress = true;
         }
 
         return array_values($addresses);

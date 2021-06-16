@@ -15,7 +15,6 @@ use Frontastic\Common\ShopifyBundle\Domain\ShopifyClientFactory;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\ShopwareAccountApi;
 use Frontastic\Common\ShopwareBundle\Domain\ClientFactory as ShopwareClientFactory;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
-use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreatorFactory as ShopwareLocaleCreatorFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
 use Frontastic\Common\SprykerBundle\Domain\Account\AccountHelper;
@@ -89,7 +88,8 @@ class DefaultAccountApiFactory implements AccountApiFactory
                     $client,
                     $localeCreatorFactory->factor($project, $client),
                     $this->container->get(DataMapperResolver::class),
-                    $this->container->get(ShopwareProjectConfigApiFactory::class)
+                    $this->container->get(ShopwareProjectConfigApiFactory::class),
+                    $project->defaultLanguage
                 );
 
                 break;

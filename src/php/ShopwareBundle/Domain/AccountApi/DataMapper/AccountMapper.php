@@ -4,6 +4,7 @@ namespace Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper;
 
 use DateTimeImmutable;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
+use Frontastic\Common\CoreBundle\Domain\Json\Json;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\SalutationHelper;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
@@ -32,7 +33,11 @@ class AccountMapper extends AbstractDataMapper implements ProjectConfigApiAwareD
 
     public function map($resource)
     {
-        $accountData = $this->extractData($resource);
+        $accountData = $this->extractData($resource, $resource);
+
+        if (key_exists('attributes', $accountData)) {
+            $accountData = array_merge($accountData, $accountData['attributes']);
+        }
 
         return new Account([
             'accountId' => (string)$accountData['id'],
@@ -43,6 +48,7 @@ class AccountMapper extends AbstractDataMapper implements ProjectConfigApiAwareD
             'birthday' => isset($accountData['birthday']) ? new DateTimeImmutable($accountData['birthday']) : null,
             'confirmed' => $this->resolveConfirmation($accountData),
             'addresses' => $this->getAccountAddressesMapper()->map($accountData),
+            'confirmationToken' => $this->resolveConfirmationToken($accountData),
             'dangerousInnerAccount' => $accountData,
         ]);
     }
@@ -59,6 +65,24 @@ class AccountMapper extends AbstractDataMapper implements ProjectConfigApiAwareD
         }
 
         return $accountData['active'];
+    }
+
+    private function resolveConfirmationToken(array $accountData): ?string
+    {
+        if (key_exists('active', $accountData) && $accountData['active']) {
+            return null;
+        }
+
+        if (key_exists('hash', $accountData)) {
+            return Json::encode(
+                [
+                    'em' => sha1($accountData['email']),
+                    'hash' => $accountData['hash'],
+                ]
+            );
+        }
+
+        return null;
     }
 
     private function resolveSalutation(array $accountData): string

@@ -2,13 +2,17 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain;
 
+use Doctrine\Common\Cache\Cache;
 use Exception;
 use Frontastic\Common\HttpClient;
 use Frontastic\Common\HttpClient\Response;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client\AccessTokenProvider;
 use Frontastic\Common\ShopwareBundle\Domain\Exception\RequestException;
 use Frontastic\Common\ShopwareBundle\Domain\Exception\ResourceNotFoundException;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Uri;
+use League\OAuth2\Client\Grant\ClientCredentials;
+use League\OAuth2\Client\Token\AccessTokenInterface;
 use Psr\Http\Message\UriInterface;
 use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
@@ -17,11 +21,17 @@ class Client implements ClientInterface
     private const SHOPWARE_LANGUAGE_HEADER = 'sw-language-id';
     private const SHOPWARE_CURRENCY_HEADER = 'sw-currency-id';
     private const SHOPWARE_CONTEXT_TOKEN_HEADER = 'sw-context-token';
+    private const SHOPWARE_ACCESS_TOKEN_HEADER = 'Authorization';
 
     /**
      * @var \Frontastic\Common\HttpClient
      */
     private $httpClient;
+
+    /**
+     * @var Cache
+     */
+    private $cache;
 
     /**
      * @var string
@@ -33,17 +43,41 @@ class Client implements ClientInterface
      */
     private $baseUri;
 
+    /**
+     * @var string
+     */
+    private $accessToken;
+
+    /**
+     * @var string
+     */
+    private $clientId;
+
+    /**
+     * @var string
+     */
+    private $clientSecret;
+
     private $defaultHeaders = [
         'Accept' => '*/*',
         'Content-Type' => 'application/json',
         'sw-access-key' => ['getApiKey'],
     ];
 
-    public function __construct(HttpClient $httpClient, string $apiKey, string $baseUri)
-    {
+    public function __construct(
+        HttpClient $httpClient,
+        Cache $cache,
+        string $apiKey,
+        string $baseUri,
+        string $clientId,
+        string $clientSecret
+    ) {
         $this->httpClient = $httpClient;
+        $this->cache = $cache;
         $this->apiKey = $apiKey;
         $this->baseUri = $baseUri;
+        $this->clientId = $clientId;
+        $this->clientSecret = $clientSecret;
     }
 
     public function forLanguage(string $languageId): ClientInterface
@@ -61,6 +95,12 @@ class Client implements ClientInterface
     public function withContextToken(string $token): ClientInterface
     {
         $this->defaultHeaders[self::SHOPWARE_CONTEXT_TOKEN_HEADER] = $token;
+        return $this;
+    }
+
+    public function withAccessToken(): ClientInterface
+    {
+        $this->defaultHeaders[self::SHOPWARE_ACCESS_TOKEN_HEADER] = sprintf('Bearer %s', $this->getAccessToken());
         return $this;
     }
 
@@ -132,6 +172,8 @@ class Client implements ClientInterface
 
                 $data = Json::decode($response->body, true);
                 if (JSON_ERROR_NONE === json_last_error()) {
+                    $data['headers'] = $response->headers;
+
                     return $data;
                 }
 
@@ -189,5 +231,57 @@ class Client implements ClientInterface
     private function buildWithQueryString(UriInterface $uri, array $parameters): UriInterface
     {
         return Uri::withQueryValues($uri, $parameters);
+    }
+
+    private function getAccessToken(): string
+    {
+        if ($this->accessToken) {
+            return $this->accessToken;
+        }
+
+        $cacheId = sprintf('shopware:accessToken:%s', md5($this->apiKey));
+
+        $accessToken = $this->cache->fetch($cacheId);
+        if ($accessToken && false === $accessToken->hasExpired()) {
+            return ($this->accessToken = (string)$accessToken);
+        }
+
+        try {
+            $accessToken = $this->obtainAccessToken();
+        } catch (\Exception $e) {
+            throw new \RuntimeException(
+                'Cannot connect to Shopware to obtain an access token',
+                0,
+                $e
+            );
+        }
+
+        $this->cache->save($cacheId, $accessToken);
+        return ($this->accessToken = (string)$accessToken);
+    }
+
+    private function obtainAccessToken(): AccessTokenInterface
+    {
+        if (empty($this->clientId) || empty($this->clientSecret)) {
+            throw new \RuntimeException(
+                'The client credentials are not been set',
+            );
+        }
+
+        $authUrl = $this->buildWithQueryString(
+            new Uri($this->baseUri . '/api/oauth/token'),
+            []
+        );
+
+        $provider = new AccessTokenProvider(
+            (string)$authUrl,
+            [
+                'clientId' => $this->clientId,
+                'clientSecret' => $this->clientSecret,
+                'grant_type'=> 'client_credentials',
+            ]
+        );
+
+        return $provider->getAccessToken(new ClientCredentials());
     }
 }

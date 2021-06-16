@@ -11,8 +11,10 @@ configuration:
     supportSearchByIdentifierAndQueryParameters: true
     searchIncludesAllVariants: false
   shopware:
-    apiKey: SWSCBHFSNTVMAWNZDNFKSHLAYW
-    endpoint: https://frontastic-test.shopware.store
+    apiKey: SWSCYTDMMJVAB1NRBMR5RTRQNQ
+    endpoint: http://172.17.0.1
+    clientId: SWIABLVMZ1B2VGQ1AUT4Z01WMW
+    clientSecret: MjdpMW5BeEdobEtGQ2dQTGdDTnk2QkdvQnJOc1Yxck5MaGEydlk
   account:
     engine: shopware
   cart:
