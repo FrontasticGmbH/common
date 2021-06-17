@@ -208,6 +208,20 @@ class SearchCriteriaBuilder
         return $criteria;
     }
 
+    public static function buildFromEmail(string $email): array
+    {
+        return [
+            'page' => 1,
+            'limit' => 1,
+            'filter' => [
+                new Filter\Equals([
+                    'field' => 'email',
+                    'value' => $email,
+                ]),
+            ],
+        ];
+    }
+
     private static function addAggregationToCriteria(array &$criteria, Query\Facet $facet): void
     {
         // Due to the fact that we need to modify the handle, a copy is used instead of original

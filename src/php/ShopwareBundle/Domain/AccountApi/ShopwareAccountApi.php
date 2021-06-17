@@ -20,6 +20,7 @@ use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\Exception\RequestException;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
+use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchCriteriaBuilder;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareSalutation;
 use RuntimeException;
@@ -99,7 +100,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
 
                 return $this->client
                     ->withAccessToken()
-                    ->get("/api/customer/{$response['data']}")
+                    ->get("/api/v3/customer/{$response['data']}")
                     ->then(function ($response): Account {
                         return $this->mapResponse($response, AccountMapper::MAPPER_NAME);
                     })
@@ -182,13 +183,13 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
 
     public function refreshAccount(Account $account, string $locale = null): Account
     {
+        $criteria = SearchCriteriaBuilder::buildFromEmail($account->email);
+
         return $this->client
-            ->withContextToken($account->authToken)
-            ->get('/sales-channel-api/v2/customer')
-            ->then(function ($response) use ($account): Account {
-                $fetchedAccount = $this->mapResponse($response, AccountMapper::MAPPER_NAME);
-                $fetchedAccount->authToken = $account->authToken;
-                return $fetchedAccount;
+            ->withAccessToken()
+            ->post("/api/v3/search/customer", [], $criteria)
+            ->then(function ($response): Account {
+                return $this->mapResponse($response['data'][0], AccountMapper::MAPPER_NAME);
             })
             ->wait();
     }
