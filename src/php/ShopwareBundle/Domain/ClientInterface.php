@@ -12,9 +12,9 @@ interface ClientInterface
     public const METHOD_PUT = 'PUT';
     public const METHOD_PATCH = 'PATCH';
 
-    public function forLanguage(string $languageId): ClientInterface;
+    public function forLanguage(?string $languageId = null): ClientInterface;
 
-    public function forCurrency(string $currencyId): ClientInterface;
+    public function forCurrency(?string $currencyId = null): ClientInterface;
 
     public function withContextToken(string $token): ClientInterface;
 

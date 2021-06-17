@@ -80,15 +80,19 @@ class Client implements ClientInterface
         $this->clientSecret = $clientSecret;
     }
 
-    public function forLanguage(string $languageId): ClientInterface
+    public function forLanguage(?string $languageId = null): ClientInterface
     {
-        $this->defaultHeaders[self::SHOPWARE_LANGUAGE_HEADER] = $languageId;
+        if ($languageId) {
+            $this->defaultHeaders[self::SHOPWARE_LANGUAGE_HEADER] = $languageId;
+        }
         return $this;
     }
 
-    public function forCurrency(string $currencyId): ClientInterface
+    public function forCurrency(?string $currencyId = null): ClientInterface
     {
-        $this->defaultHeaders[self::SHOPWARE_CURRENCY_HEADER] = $currencyId;
+        if ($currencyId) {
+            $this->defaultHeaders[self::SHOPWARE_CURRENCY_HEADER] = $currencyId;
+        }
         return $this;
     }
 
