@@ -6,12 +6,12 @@ use Doctrine\Common\Cache\Cache;
 use Exception;
 use Frontastic\Common\HttpClient;
 use Frontastic\Common\HttpClient\Response;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client\AccessTokenProvider;
 use Frontastic\Common\ShopwareBundle\Domain\Exception\RequestException;
 use Frontastic\Common\ShopwareBundle\Domain\Exception\ResourceNotFoundException;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Uri;
 use League\OAuth2\Client\Grant\ClientCredentials;
+use League\OAuth2\Client\Provider\GenericProvider;
 use League\OAuth2\Client\Token\AccessTokenInterface;
 use Psr\Http\Message\UriInterface;
 use Frontastic\Common\CoreBundle\Domain\Json\Json;
@@ -102,10 +102,9 @@ class Client implements ClientInterface
         return $this;
     }
 
-    public function withAccessToken(): ClientInterface
+    public function getAccessTokenHeader(): string
     {
-        $this->defaultHeaders[self::SHOPWARE_ACCESS_TOKEN_HEADER] = sprintf('Bearer %s', $this->getAccessToken());
-        return $this;
+        return sprintf('%s: Bearer %s', self::SHOPWARE_ACCESS_TOKEN_HEADER, $this->getAccessToken());
     }
 
     public function get(string $uri, array $parameters = [], array $headers = []): PromiseInterface
@@ -277,14 +276,15 @@ class Client implements ClientInterface
             []
         );
 
-        $provider = new AccessTokenProvider(
-            (string)$authUrl,
-            [
-                'clientId' => $this->clientId,
-                'clientSecret' => $this->clientSecret,
-                'grant_type'=> 'client_credentials',
-            ]
-        );
+        $provider = new GenericProvider([
+            'urlAuthorize' => $authUrl,
+            'urlAccessToken' => $authUrl,
+            'urlResourceOwnerDetails' => null,
+            'clientId' => $this->clientId,
+            'clientSecret' => $this->clientSecret,
+            'grant_type'=> 'client_credentials',
+        ]);
+
 
         return $provider->getAccessToken(new ClientCredentials());
     }

@@ -18,7 +18,7 @@ interface ClientInterface
 
     public function withContextToken(string $token): ClientInterface;
 
-    public function withAccessToken(): ClientInterface;
+    public function getAccessTokenHeader(): string;
 
     public function get(string $uri, array $parameters = [], array $headers = []): PromiseInterface;
 

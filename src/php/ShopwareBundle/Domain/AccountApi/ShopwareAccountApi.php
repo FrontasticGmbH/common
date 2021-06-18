@@ -99,8 +99,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
                 }
 
                 return $this->client
-                    ->withAccessToken()
-                    ->get("/api/v3/customer/{$response['data']}")
+                    ->get("/api/v3/customer/{$response['data']}", [], [$this->client->getAccessTokenHeader()])
                     ->then(function ($response): Account {
                         return $this->mapResponse($response, AccountMapper::MAPPER_NAME);
                     })
@@ -186,8 +185,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         $criteria = SearchCriteriaBuilder::buildFromEmail($account->email);
 
         return $this->client
-            ->withAccessToken()
-            ->post("/api/v3/search/customer", [], $criteria)
+            ->post("/api/v3/search/customer", [$this->client->getAccessTokenHeader()], $criteria)
             ->then(function ($response): Account {
                 return $this->mapResponse($response['data'][0], AccountMapper::MAPPER_NAME);
             })
