@@ -23,7 +23,6 @@ use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchCriteriaBuilder;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareSalutation;
-use RuntimeException;
 
 class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
 {
@@ -142,14 +141,55 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
 
     public function generatePasswordResetToken(string $email, string $locale = null): PasswordResetToken
     {
-        // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
-        throw new RuntimeException('Not implemented');
+        $requestData = array_merge(
+            [
+                'email' => $email,
+                'storefrontUrl' => 'http://localhost',
+            ]
+        );
+
+        return $this->client
+            ->post('/store-api/v3/account/recovery-password', [], $requestData)
+            ->then(function ($response) use ($email) {
+                $criteria = SearchCriteriaBuilder::buildFromEmail($email);
+                $criteria = array_merge($criteria, [
+                    'associations' => [
+                        "recoveryCustomer" => []
+                    ]
+                ]);
+
+                return $this->client
+                    ->post("/api/v3/search/customer", [$this->client->getAccessTokenHeader()], $criteria)
+                    ->then(function ($response) use ($email): PasswordResetToken {
+                        return new PasswordResetToken([
+                            'email' => $email,
+                            'confirmationToken' => Json::encode(
+                                [
+                                    'hash' => $response['included'][0]['attributes']['hash']
+                                ]
+                            )
+                        ]);
+                    });
+            })
+            ->wait();
     }
 
     public function resetPassword(string $token, string $newPassword, string $locale = null): Account
     {
-        // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
-        throw new RuntimeException('Not implemented');
+        $requestData = array_merge(
+            Json::decode($token, true),
+            [
+                'newPassword' => $newPassword,
+                'newPasswordConfirm' => $newPassword,
+            ]
+        );
+
+        return $this->client
+            ->post('/store-api/v3/account/recovery-password-confirm', [], $requestData)
+            ->then(function ($response): Account {
+                return new Account();
+            })
+            ->wait();
     }
 
     public function login(Account $account, ?Cart $cart = null, string $locale = null): ?Account

@@ -211,8 +211,6 @@ class SearchCriteriaBuilder
     public static function buildFromEmail(string $email): array
     {
         return [
-            'page' => 1,
-            'limit' => 1,
             'filter' => [
                 new Filter\Equals([
                     'field' => 'email',
