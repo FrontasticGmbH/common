@@ -23,6 +23,7 @@ use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchCriteriaBuilder;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareSalutation;
+use GuzzleHttp\Promise\PromiseInterface;
 
 class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
 {
@@ -65,7 +66,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
             $requestData = Json::decode($token, true);
 
             return $this->client
-                ->post('/store-api/v3/account/register-confirm', [], $requestData)
+                ->post('/store-api/account/register-confirm', [], $requestData)
                 ->then(function ($response) {
                     /** @var Account $account */
                     $account = $this->mapResponse($response, AccountMapper::MAPPER_NAME);
@@ -98,7 +99,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
                 }
 
                 return $this->client
-                    ->get("/api/v3/customer/{$response['data']}", [], [$this->client->getAccessTokenHeader()])
+                    ->get("/api/customer/{$response['data']}", [], [$this->client->getAccessTokenHeader()])
                     ->then(function ($response): Account {
                         return $this->mapResponse($response, AccountMapper::MAPPER_NAME);
                     })
@@ -149,7 +150,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         );
 
         return $this->client
-            ->post('/store-api/v3/account/recovery-password', [], $requestData)
+            ->post('/store-api/account/recovery-password', [], $requestData)
             ->then(function () use ($email) {
                 $criteria = SearchCriteriaBuilder::buildFromEmail($email);
                 $criteria = array_merge($criteria, [
@@ -158,8 +159,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
                     ]
                 ]);
 
-                return $this->client
-                    ->post("/api/v3/search/customer", [$this->client->getAccessTokenHeader()], $criteria)
+                return $this->fetchCustomerByCriteria($criteria)
                     ->then(function ($response) use ($email): PasswordResetToken {
                         return new PasswordResetToken([
                             'email' => $email,
@@ -191,7 +191,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         $account->setPassword($newPassword);
 
         return $this->client
-            ->post('/store-api/v3/account/recovery-password-confirm', [], $requestData)
+            ->post('/store-api/account/recovery-password-confirm', [], $requestData)
             ->then(function () use ($account, $locale): Account {
                 $loggedInAccount = $this->login($account, null, $locale);
 
@@ -236,8 +236,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
     {
         $criteria = SearchCriteriaBuilder::buildFromEmail($account->email);
 
-        return $this->client
-            ->post("/api/v3/search/customer", [$this->client->getAccessTokenHeader()], $criteria)
+        return $this->fetchCustomerByCriteria($criteria)
             ->then(function ($response): Account {
                 return $this->mapResponse($response['data'][0], AccountMapper::MAPPER_NAME);
             })
@@ -384,5 +383,10 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         if ($mapper instanceof ProjectConfigApiAwareDataMapperInterface) {
             $mapper->setProjectConfigApi($this->projectConfigApi);
         }
+    }
+
+    protected function fetchCustomerByCriteria(array $criteria): PromiseInterface
+    {
+        return $this->client->post("/api/search/customer", [$this->client->getAccessTokenHeader()], $criteria);
     }
 }
