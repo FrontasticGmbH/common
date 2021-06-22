@@ -142,12 +142,10 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
 
     public function generatePasswordResetToken(string $email, string $locale = null): PasswordResetToken
     {
-        $requestData = array_merge(
-            [
-                'email' => $email,
-                'storefrontUrl' => $this->client->getBaseUri(),
-            ]
-        );
+        $requestData = [
+            'email' => $email,
+            'storefrontUrl' => $this->client->getBaseUri(),
+        ];
 
         return $this->client
             ->post('/store-api/account/recovery-password', [], $requestData)
