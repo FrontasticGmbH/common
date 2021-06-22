@@ -107,6 +107,11 @@ class Client implements ClientInterface
         return sprintf('%s: Bearer %s', self::SHOPWARE_ACCESS_TOKEN_HEADER, $this->getAccessToken());
     }
 
+    public function getBaseUri(): string
+    {
+        return $this->baseUri;
+    }
+
     public function get(string $uri, array $parameters = [], array $headers = []): PromiseInterface
     {
         return $this->request(self::METHOD_GET, $uri, $parameters, $headers);

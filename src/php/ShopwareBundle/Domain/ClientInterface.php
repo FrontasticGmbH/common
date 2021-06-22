@@ -20,6 +20,8 @@ interface ClientInterface
 
     public function getAccessTokenHeader(): string;
 
+    public function getBaseUri(): string;
+
     public function get(string $uri, array $parameters = [], array $headers = []): PromiseInterface;
 
     public function patch(string $uri, array $headers = [], $body = null): PromiseInterface;

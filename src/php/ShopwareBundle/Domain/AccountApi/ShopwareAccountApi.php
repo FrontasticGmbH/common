@@ -144,13 +144,13 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         $requestData = array_merge(
             [
                 'email' => $email,
-                'storefrontUrl' => 'http://localhost',
+                'storefrontUrl' => $this->client->getBaseUri(),
             ]
         );
 
         return $this->client
             ->post('/store-api/v3/account/recovery-password', [], $requestData)
-            ->then(function ($response) use ($email) {
+            ->then(function () use ($email) {
                 $criteria = SearchCriteriaBuilder::buildFromEmail($email);
                 $criteria = array_merge($criteria, [
                     'associations' => [
@@ -165,6 +165,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
                             'email' => $email,
                             'confirmationToken' => Json::encode(
                                 [
+                                    'email' => $email,
                                     'hash' => $response['included'][0]['attributes']['hash']
                                 ]
                             )
@@ -176,18 +177,29 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
 
     public function resetPassword(string $token, string $newPassword, string $locale = null): Account
     {
-        $requestData = array_merge(
-            Json::decode($token, true),
-            [
+        $confirmationToken = Json::decode($token, true);
+
+        $requestData = [
+                'hash' => $confirmationToken['hash'],
                 'newPassword' => $newPassword,
                 'newPasswordConfirm' => $newPassword,
-            ]
-        );
+        ];
+
+        $account = new Account([
+            'email' => $confirmationToken['email'],
+        ]);
+        $account->setPassword($newPassword);
 
         return $this->client
             ->post('/store-api/v3/account/recovery-password-confirm', [], $requestData)
-            ->then(function ($response): Account {
-                return new Account();
+            ->then(function () use ($account, $locale): Account {
+                $loggedInAccount = $this->login($account, null, $locale);
+
+                if ($loggedInAccount instanceof Account) {
+                    return $loggedInAccount;
+                }
+
+                throw new \RuntimeException(sprintf('Could not login the account %s', $account->getUsername()));
             })
             ->wait();
     }
