@@ -17,6 +17,9 @@
         <service id="Frontastic\Common\HttpClient\Stream" alias="Frontastic\Common\HttpClient"/>
 
         <service id="Frontastic\Common\HttpClient\Factory" autowire="true">
+            <argument type="service" id="logger" />
+            <argument type="service" id="Redis" on-invalid="null" />
+
             <tag name="monolog.logger" channel="httpClient"/>
         </service>
 

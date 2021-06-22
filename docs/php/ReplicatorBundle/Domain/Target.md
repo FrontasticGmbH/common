@@ -13,6 +13,8 @@
 public function lastUpdate(): string
 ```
 
+*Returns the latest sequence revision securely stored in the Target.*
+
 Return Value: `string`
 
 ### replicate()
@@ -22,6 +24,9 @@ public function replicate(
     array $updates
 ): void
 ```
+
+*Store all changes in $updates in the corresponding order. Throw
+exception if a change cannot be stored.*
 
 Argument|Type|Default|Description
 --------|----|-------|-----------

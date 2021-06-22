@@ -15,6 +15,8 @@ public function updates(
 ): array
 ```
 
+*Return a sequence of max $count updates since the last revision $since.*
+
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$since`|`string`||

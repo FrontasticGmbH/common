@@ -1,5 +1,14 @@
 # common Changelog
 
+## `2.12.0` (2021-06-15)
+
+* feat: Added Ganesha based curcuit breaker for our HTTP client stack
+
+## `2.11.10` (2021-06-14)
+
+* chore: increased symfony minor version
+* fix: implemented AccountApi::getSalutations on Shopware
+
 ## `2.11.9` (2021-05-28)
 
 * fix(FP-728): keeped original and masterData as dangerousInner on Commercetools
