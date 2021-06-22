@@ -31,16 +31,20 @@
 ```php
 public function __construct(
     ClientInterface $client,
+    LocaleCreator $localeCreator,
     DataMapperResolver $mapperResolver,
-    ShopwareProjectConfigApiFactory $projectConfigApiFactory
+    ShopwareProjectConfigApiFactory $projectConfigApiFactory,
+    ?string $defaultLanguage = null
 ): mixed
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$client`|[`ClientInterface`](../ClientInterface.md)||
+`$localeCreator`|[`LocaleCreator`](../Locale/LocaleCreator.md)||
 `$mapperResolver`|[`DataMapperResolver`](../DataMapper/DataMapperResolver.md)||
 `$projectConfigApiFactory`|[`ShopwareProjectConfigApiFactory`](../ProjectConfigApi/ShopwareProjectConfigApiFactory.md)||
+`$defaultLanguage`|`?string`|`null`|
 
 Return Value: `mixed`
 

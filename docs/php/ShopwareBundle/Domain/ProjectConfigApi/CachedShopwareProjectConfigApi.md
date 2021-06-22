@@ -96,13 +96,15 @@ Return Value: ?[`ShopwareSalutation`](ShopwareSalutation.md)
 
 ```php
 public function getSalutations(
-    ?string $criteria = null
+    ?string $criteria = null,
+    ?string $locale = null
 ): array
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$criteria`|`?string`|`null`|
+`$locale`|`?string`|`null`|
 
 Return Value: `array`
 

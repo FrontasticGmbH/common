@@ -29,13 +29,17 @@ Return Value: `mixed`
 
 ```php
 public function factor(
-    ClientInterface $client
+    ClientInterface $client,
+    ?LocaleCreator $localeCreator = null,
+    ?string $defaultLanguage = null
 ): ShopwareProjectConfigApiInterface
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$client`|[`ClientInterface`](../ClientInterface.md)||
+`$localeCreator`|?[`LocaleCreator`](../Locale/LocaleCreator.md)|`null`|
+`$defaultLanguage`|`?string`|`null`|
 
 Return Value: [`ShopwareProjectConfigApiInterface`](ShopwareProjectConfigApiInterface.md)
 

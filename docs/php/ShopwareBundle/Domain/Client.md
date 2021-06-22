@@ -10,6 +10,8 @@
 * [forLanguage()](#forlanguage)
 * [forCurrency()](#forcurrency)
 * [withContextToken()](#withcontexttoken)
+* [getAccessTokenHeader()](#getaccesstokenheader)
+* [getBaseUri()](#getbaseuri)
 * [get()](#get)
 * [patch()](#patch)
 * [post()](#post)
@@ -21,16 +23,22 @@
 ```php
 public function __construct(
     HttpClient $httpClient,
+    \Doctrine\Common\Cache\Cache $cache,
     string $apiKey,
-    string $baseUri
+    string $baseUri,
+    string $clientId,
+    string $clientSecret
 ): mixed
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$httpClient`|[`HttpClient`](../../HttpClient.md)||
+`$cache`|`\Doctrine\Common\Cache\Cache`||
 `$apiKey`|`string`||
 `$baseUri`|`string`||
+`$clientId`|`string`||
+`$clientSecret`|`string`||
 
 Return Value: `mixed`
 
@@ -38,13 +46,13 @@ Return Value: `mixed`
 
 ```php
 public function forLanguage(
-    string $languageId
+    ?string $languageId = null
 ): ClientInterface
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$languageId`|`string`||
+`$languageId`|`?string`|`null`|
 
 Return Value: [`ClientInterface`](ClientInterface.md)
 
@@ -52,13 +60,13 @@ Return Value: [`ClientInterface`](ClientInterface.md)
 
 ```php
 public function forCurrency(
-    string $currencyId
+    ?string $currencyId = null
 ): ClientInterface
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$currencyId`|`string`||
+`$currencyId`|`?string`|`null`|
 
 Return Value: [`ClientInterface`](ClientInterface.md)
 
@@ -75,6 +83,22 @@ Argument|Type|Default|Description
 `$token`|`string`||
 
 Return Value: [`ClientInterface`](ClientInterface.md)
+
+### getAccessTokenHeader()
+
+```php
+public function getAccessTokenHeader(): string
+```
+
+Return Value: `string`
+
+### getBaseUri()
+
+```php
+public function getBaseUri(): string
+```
+
+Return Value: `string`
 
 ### get()
 

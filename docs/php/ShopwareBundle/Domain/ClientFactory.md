@@ -12,13 +12,15 @@
 
 ```php
 public function __construct(
-    HttpClient $httpClient
+    HttpClient $httpClient,
+    \Doctrine\Common\Cache\Cache $cache
 ): mixed
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$httpClient`|[`HttpClient`](../../HttpClient.md)||
+`$cache`|`\Doctrine\Common\Cache\Cache`||
 
 Return Value: `mixed`
 
