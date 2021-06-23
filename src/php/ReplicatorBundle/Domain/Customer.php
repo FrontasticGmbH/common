@@ -39,7 +39,7 @@ class Customer extends DataObject
      * @var int
      * @required
      */
-    public $machineLimit = 3;
+    public $machineLimit = 10;
 
     /**
      * @var array
