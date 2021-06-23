@@ -1,5 +1,15 @@
 # common Changelog
 
+## `2.13.0` (2021-06-23)
+
+* chore(FT-731): removed unnecessary array_merge
+* feat(FP-731): login customer after reset account password on Shopware
+* feat(FP-731): implemented reset account password on Shopware
+* feat(FP-731): implemented generic auth provider on Shopware
+* feat(FP-731): validated default language and currency headers on Shopware
+* feat(FP-731): refresed account base on email on Shopware
+* feat(FP-731): implemented account creation and confirmation on Shopware
+
 ## `2.12.0` (2021-06-15)
 
 * feat: Added Ganesha based curcuit breaker for our HTTP client stack
