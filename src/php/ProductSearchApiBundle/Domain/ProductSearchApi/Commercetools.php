@@ -118,6 +118,7 @@ class Commercetools extends ProductSearchApiBase
         ];
 
         if (count($query->filter) > 0) {
+            // The defaultLocale is used to ensure that the configured filter does work in any locale the user chooses
             $parameters['filter.query'] = $this->mapper->prepareQueryFilter($query->filter, $defaultLocale);
         }
 
