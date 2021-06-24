@@ -489,7 +489,7 @@ class SprykerCartApi extends CartApiBase
         return $this->mapperResolver->getMapper(CheckoutMapper::MAPPER_NAME);
     }
 
-    private function parseLocaleString(string $localeString): SprykerLocale
+    private function parseLocaleString(?string $localeString): SprykerLocale
     {
         return $this->localeCreator->createLocaleFromString($localeString ?? $this->defaultLanguage);
     }
