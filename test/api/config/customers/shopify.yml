@@ -17,7 +17,7 @@ configuration:
         engine: shopify
     product:
         engine: shopify
-    whislist:
+    wishlist:
         engine: no-wishlist
 projects:
     -   projectId: test

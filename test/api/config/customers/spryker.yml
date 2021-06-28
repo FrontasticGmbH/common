@@ -21,7 +21,7 @@ configuration:
         shop: DE
     product:
         engine: spryker
-    whislist:
+    wishlist:
         engine: spryker
 projects:
     -   projectId: test

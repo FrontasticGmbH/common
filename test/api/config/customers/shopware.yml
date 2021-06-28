@@ -2,29 +2,29 @@
 name: "shopware"
 secret: "secret"
 configuration:
-  test:
-    disabled: false
-    canQueryCategoriesBySlug: false
-    supportCursorBasedPagination: false
-    supportOffsetPagination: true
-    hasConsistentProductSearchData: true
-    supportSearchByIdentifierAndQueryParameters: true
-    searchIncludesAllVariants: false
-  shopware:
-    apiKey: SWSCYTDMMJVAB1NRBMR5RTRQNQ
-    endpoint: http://172.17.0.1
-    clientId: SWIABLVMZ1B2VGQ1AUT4Z01WMW
-    clientSecret: MjdpMW5BeEdobEtGQ2dQTGdDTnk2QkdvQnJOc1Yxck5MaGEydlk
-  account:
-    engine: shopware
-  cart:
-    engine: shopware
-  product:
-    engine: shopware
-  whislist:
-    engine: no-wishlist
+    test:
+        disabled: false
+        canQueryCategoriesBySlug: false
+        supportCursorBasedPagination: false
+        supportOffsetPagination: true
+        hasConsistentProductSearchData: true
+        supportSearchByIdentifierAndQueryParameters: true
+        searchIncludesAllVariants: false
+    shopware:
+        apiKey: SWSCYTDMMJVAB1NRBMR5RTRQNQ
+        endpoint: http://172.17.0.1
+        clientId: SWIABLVMZ1B2VGQ1AUT4Z01WMW
+        clientSecret: MjdpMW5BeEdobEtGQ2dQTGdDTnk2QkdvQnJOc1Yxck5MaGEydlk
+    account:
+        engine: shopware
+    cart:
+        engine: shopware
+    product:
+        engine: shopware
+    wishlist:
+        engine: no-wishlist
 projects:
-  - projectId: test
-    name: Shopware Test Catwalk
-    languages: ["en_GB@GBP", "de_DE@EUR"]
-    defaultLanguage: en_GB@GBP
+    -   projectId: test
+        name: Shopware Test Catwalk
+        languages: ["en_GB@GBP", "de_DE@EUR"]
+        defaultLanguage: en_GB@GBP
