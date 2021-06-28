@@ -12,13 +12,13 @@ configuration:
     spryker:
         endpoint: https://glue.de.b2c.demo-spryker.com
         projectKey: DE
+        priceMode: GROSS_MODE
+        currency: EUR
+        shop: DE
     account:
         engine: spryker
     cart:
         engine: spryker
-        priceMode: GROSS_MODE
-        currency: EUR
-        shop: DE
     product:
         engine: spryker
     wishlist:
