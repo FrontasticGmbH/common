@@ -1,5 +1,10 @@
 # common Changelog
 
+## `2.13.1` (2021-07-01)
+
+* refactor: set Spryker cart test credentials as generic
+* fix: Allow empty local to be parsed on Spryker
+
 ## `2.13.0` (2021-06-23)
 
 * chore(FT-731): removed unnecessary array_merge
