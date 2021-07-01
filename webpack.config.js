@@ -9,12 +9,4 @@ module.exports = {
         library: 'frontastic-common',
         libraryTarget: 'umd',
     },
-    externals: {
-        lodash: {
-            commonjs: 'lodash',
-            commonjs2: 'lodash',
-            amd: 'lodash',
-            root: '_',
-        },
-    },
 }
