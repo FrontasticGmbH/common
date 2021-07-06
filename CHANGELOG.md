@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.13.2` (2021-07-06)
+
+* fix(FP-830): keep authToken on refresh account for Shopware
+
 ## `2.13.1` (2021-07-01)
 
 * refactor: set Spryker cart test credentials as generic
