@@ -232,11 +232,20 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
 
     public function refreshAccount(Account $account, string $locale = null): Account
     {
+        $authToken = $account->authToken;
+
+        if ($authToken === null) {
+            return $account;
+        }
+
         $criteria = SearchCriteriaBuilder::buildFromEmail($account->email);
 
         return $this->fetchCustomerByCriteria($criteria)
-            ->then(function ($response): Account {
-                return $this->mapResponse($response['data'][0], AccountMapper::MAPPER_NAME);
+            ->then(function ($response) use ($authToken): Account {
+                $account = $this->mapResponse($response['data'][0], AccountMapper::MAPPER_NAME);
+                $account->authToken = $authToken;
+
+                return $account;
             })
             ->wait();
     }
