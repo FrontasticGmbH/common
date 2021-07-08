@@ -138,7 +138,6 @@ class Account extends ApiDataObject implements UserInterface, \Serializable
     {
         unset($this->confirmationToken);
         unset($this->passwordHash);
-        unset($this->authToken);
     }
 
     public function assertPermission(string $required)
