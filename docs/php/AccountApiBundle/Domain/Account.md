@@ -20,6 +20,7 @@ Property|Type|Default|Required|Description
 `tokenValidUntil` | `\DateTime` |  | - | 
 `addresses` | [`Address`](Address.md)[] | `[]` | *Yes* | 
 `authToken` | `string|null` |  | - | 
+`apiToken` | `string|null` |  | - | 
 `dangerousInnerAccount` | `mixed` |  | - | Access original object from backend
 
 ## Methods
