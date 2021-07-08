@@ -76,9 +76,20 @@ class Account extends ApiDataObject implements UserInterface, \Serializable
     public $addresses = [];
 
     /**
+     * @deprecated use `apiToken` instead.
+     * An integration might return a token after an account is logged in which will be used on further API calls
+     * to identify this user (eg.: AccountApi::getAddress). This token needs to be preserved but not exposed
+     * to the frontend. Stripping this field in our JsonSerializer might cause a BC break. To prevent that,
+     * the field `apiToken` will be used since it's already strip it out.
+     *
      * @var string|null
      */
     public $authToken;
+
+    /**
+     * @var string|null
+     */
+    public $apiToken;
 
     /**
      * Access original object from backend
