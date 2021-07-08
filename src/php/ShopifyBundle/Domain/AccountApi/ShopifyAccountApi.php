@@ -87,7 +87,7 @@ class ShopifyAccountApi implements AccountApi
 
     public function update(Account $account, string $locale = null): Account
     {
-        if (is_null($account->authToken)) {
+        if (is_null($account->apiToken)) {
             $account = $this->login($account);
         }
 
@@ -100,7 +100,7 @@ class ShopifyAccountApi implements AccountApi
                         firstName: \"$account->firstName\"
                         lastName: \"$account->lastName\"
                     },
-                    customerAccessToken: \"$account->authToken\"
+                    customerAccessToken: \"$account->apiToken\"
                 ) {
                     customer {
                         {$this->getCustomerQueryFields()}
@@ -128,7 +128,7 @@ class ShopifyAccountApi implements AccountApi
                 $updatedAccount = $this->accountMapper->mapDataToAccount(
                     $result['body']['data']['customerUpdate']['customer']
                 );
-                $updatedAccount->authToken = $account->authToken;
+                $updatedAccount->apiToken = $account->apiToken;
 
                 return $updatedAccount;
             })
@@ -210,7 +210,7 @@ class ShopifyAccountApi implements AccountApi
                     ->request($query)
                     ->then(function (array $result) use ($token): Account {
                         $account = $this->accountMapper->mapDataToAccount($result['body']['data']['customer']);
-                        $account->authToken = $token['accessToken'];
+                        $account->apiToken = $token['accessToken'];
 
                         return $account;
                     });
@@ -220,13 +220,13 @@ class ShopifyAccountApi implements AccountApi
 
     public function refreshAccount(Account $account, string $locale = null): Account
     {
-        if (is_null($account->authToken)) {
+        if (is_null($account->apiToken)) {
             $account = $this->login($account);
         }
 
         $query = "
             query {
-                customer(customerAccessToken: \"{$account->authToken}\") {
+                customer(customerAccessToken: \"{$account->apiToken}\") {
                     {$this->getCustomerQueryFields()}
                      addresses(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                         edges {
@@ -243,7 +243,7 @@ class ShopifyAccountApi implements AccountApi
             ->then(function (array $result) use ($account): Account {
 
                 $fetchedAccount = $this->accountMapper->mapDataToAccount($result['body']['data']['customer']);
-                $fetchedAccount->authToken = $account->authToken;
+                $fetchedAccount->apiToken = $account->apiToken;
 
                 return $fetchedAccount;
             })
@@ -252,13 +252,13 @@ class ShopifyAccountApi implements AccountApi
 
     public function getAddresses(Account $account, string $locale = null): array
     {
-        if (is_null($account->authToken)) {
+        if (is_null($account->apiToken)) {
             $account = $this->login($account);
         }
 
         $query = "
             query {
-                customer(customerAccessToken: \"{$account->authToken}\") {
+                customer(customerAccessToken: \"{$account->apiToken}\") {
                     {$this->getCustomerQueryFields()}
                     addresses(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                         edges {
@@ -282,7 +282,7 @@ class ShopifyAccountApi implements AccountApi
 
     public function addAddress(Account $account, Address $address, string $locale = null): Account
     {
-        if (is_null($account->authToken)) {
+        if (is_null($account->apiToken)) {
             $account = $this->login($account);
         }
 
@@ -292,7 +292,7 @@ class ShopifyAccountApi implements AccountApi
                     address: {
                         {$this->accountMapper->mapAddressToData($address)}
                     },
-                    customerAccessToken: \"$account->authToken\"
+                    customerAccessToken: \"$account->apiToken\"
                 ) {
                     customerAddress {
                         {$this->getAddressQueryFields()}
@@ -317,7 +317,7 @@ class ShopifyAccountApi implements AccountApi
 
     public function updateAddress(Account $account, Address $address, string $locale = null): Account
     {
-        if (is_null($account->authToken)) {
+        if (is_null($account->apiToken)) {
             $account = $this->login($account);
         }
 
@@ -327,7 +327,7 @@ class ShopifyAccountApi implements AccountApi
                     address: {
                         {$this->accountMapper->mapAddressToData($address)}
                     },
-                    customerAccessToken: \"$account->authToken\"
+                    customerAccessToken: \"$account->apiToken\"
                     id: \"$address->addressId\"
                 ) {
                     customerAddress {

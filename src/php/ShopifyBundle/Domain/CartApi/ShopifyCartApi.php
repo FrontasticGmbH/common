@@ -68,7 +68,7 @@ class ShopifyCartApi extends CartApiBase
 
     protected function getForUserImplementation(Account $account, string $locale): Cart
     {
-        if (is_null($account->authToken)) {
+        if (is_null($account->apiToken)) {
             throw new \RuntimeException(sprintf('Account %s is not logged in', $account->email));
         }
 
@@ -94,7 +94,7 @@ class ShopifyCartApi extends CartApiBase
             mutation {
                 checkoutCustomerAssociateV2(
                     checkoutId: \"{$anonymousCart->cartId}\",
-                    customerAccessToken: \"{$account->authToken}\"
+                    customerAccessToken: \"{$account->apiToken}\"
                 ) {
                     checkout {
                         {$this->getCheckoutQueryFields()}
@@ -591,13 +591,13 @@ class ShopifyCartApi extends CartApiBase
 
     protected function getOrdersImplementation(Account $account, string $locale = null): array
     {
-        if (is_null($account->authToken)) {
+        if (is_null($account->apiToken)) {
             throw new \RuntimeException(sprintf('Account %s is not logged in', $account->email));
         }
 
         $query = "
             query {
-                customer(customerAccessToken: \"{$account->authToken}\") {
+                customer(customerAccessToken: \"{$account->apiToken}\") {
                     orders(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
                         edges {
                             node {
