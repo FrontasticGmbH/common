@@ -1,5 +1,11 @@
 # common Changelog
 
+## `2.13.3` (2021-07-08)
+
+* fix(FP-830): replaced authToken by apiToken on Shopware
+* feat: deprecated authToken in favor of apiToken.
+* fix: specify api version on Shopware
+
 ## `2.13.2` (2021-07-06)
 
 * fix(FP-830): keep authToken on refresh account for Shopware
