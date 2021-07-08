@@ -148,7 +148,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         ];
 
         return $this->client
-            ->post('/store-api/account/recovery-password', [], $requestData)
+            ->post('/store-api/v3/account/recovery-password', [], $requestData)
             ->then(function () use ($email) {
                 $criteria = SearchCriteriaBuilder::buildFromEmail($email);
                 $criteria = array_merge($criteria, [
@@ -189,7 +189,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         $account->setPassword($newPassword);
 
         return $this->client
-            ->post('/store-api/account/recovery-password-confirm', [], $requestData)
+            ->post('/store-api/v3/account/recovery-password-confirm', [], $requestData)
             ->then(function () use ($account, $locale): Account {
                 $loggedInAccount = $this->login($account, null, $locale);
 
@@ -394,6 +394,6 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
 
     protected function fetchCustomerByCriteria(array $criteria): PromiseInterface
     {
-        return $this->client->post("/api/search/customer", [$this->client->getAccessTokenHeader()], $criteria);
+        return $this->client->post("/api/v3/search/customer", [$this->client->getAccessTokenHeader()], $criteria);
     }
 }
