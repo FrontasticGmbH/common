@@ -168,7 +168,7 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
         $accessToken = $this->mapResource($response->document()->primaryResource(), TokenMapper::MAPPER_NAME);
 
         $account = $this->accountHelper->getAccount();
-        $account->authToken = $accessToken;
+        $account->apiToken = $accessToken;
 
         return $account;
     }
@@ -193,7 +193,7 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
             return null;
         }
 
-        $account->authToken = $token;
+        $account->apiToken = $token;
 
         return $this->refreshAccount($account, $locale);
     }
@@ -313,9 +313,9 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
 
     public function refreshAccount(Account $account, string $locale = null): Account
     {
-        $authToken = $account->authToken;
+        $apiToken = $account->apiToken;
 
-        if ($authToken === null) {
+        if ($apiToken === null) {
             // throw new \OutOfBoundsException('Could not refresh account');
 
             // Since Spryker doesn't offer a way to GET the customer details if the customer has not confirmed
@@ -324,15 +324,15 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
             return $account;
         }
 
-        $id = $this->getCustomerReference($authToken);
+        $id = $this->getCustomerReference($apiToken);
 
         $response = $this->client->get(
             $this->withIncludes("/customers/{$id}", ['addresses']),
-            $this->accountHelper->getAutoHeader($id, $authToken)
+            $this->accountHelper->getAutoHeader($id, $apiToken)
         );
 
         $account = $this->mapAccount($response->document()->primaryResource());
-        $account->authToken = $authToken;
+        $account->apiToken = $apiToken;
 
         return $account;
     }

@@ -118,7 +118,7 @@ class SprykerCartApi extends CartApiBase
      */
     protected function getForUserImplementation(Account $account, string $locale): Cart
     {
-        return $this->customerCart->getCart($account->authToken, $locale);
+        return $this->customerCart->getCart($account->apiToken, $locale);
     }
 
     /**
