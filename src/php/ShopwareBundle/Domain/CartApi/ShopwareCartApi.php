@@ -86,7 +86,7 @@ class ShopwareCartApi extends CartApiBase
     protected function getForUserImplementation(Account $account, string $locale): Cart
     {
         // When user is authenticated, his cart can be retrieved by using his context token
-        return $this->getById($account->authToken, $locale);
+        return $this->getById($account->apiToken, $locale);
     }
 
     protected function getAnonymousImplementation(string $anonymousId, string $locale): Cart
@@ -339,7 +339,7 @@ class ShopwareCartApi extends CartApiBase
     protected function getOrderImplementation(Account $account, string $orderId, string $locale = null): Order
     {
         $result = $this->getOrdersBy(
-            $account->authToken,
+            $account->apiToken,
             [
                 'orderId' => $orderId
             ],
@@ -352,7 +352,7 @@ class ShopwareCartApi extends CartApiBase
     protected function getOrdersImplementation(Account $account, string $locale = null): array
     {
         return $this->getOrdersBy(
-            $account->authToken,
+            $account->apiToken,
             [],
             $locale
         );

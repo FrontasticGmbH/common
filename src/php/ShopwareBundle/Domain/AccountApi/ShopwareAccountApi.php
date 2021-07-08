@@ -72,7 +72,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
                     $account = $this->mapResponse($response, AccountMapper::MAPPER_NAME);
                     $account->confirmed = true;
                     $account->confirmationToken = null;
-                    $account->authToken = isset($response['headers']['sw-context-token']) ?
+                    $account->apiToken = isset($response['headers']['sw-context-token']) ?
                         explode(',', $response['headers']['sw-context-token'])[0] :
                         null;
 
@@ -113,7 +113,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         $requestData = $this->mapRequestData($account, CustomerPatchRequestDataMapper::MAPPER_NAME);
 
         $this->client
-            ->withContextToken($account->authToken)
+            ->withContextToken($account->apiToken)
             ->patch('/sales-channel-api/v2/customer', [], $requestData)
             ->wait();
 
@@ -133,7 +133,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         ];
 
         $this->client
-            ->withContextToken($account->authToken)
+            ->withContextToken($account->apiToken)
             ->patch('/sales-channel-api/v2/customer/password', [], $requestData)
             ->wait();
 
@@ -219,7 +219,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
                         ->get('/sales-channel-api/v2/customer')
                         ->then(function ($response) use ($token): Account {
                             $account = $this->mapResponse($response, AccountMapper::MAPPER_NAME);
-                            $account->authToken = $token;
+                            $account->apiToken = $token;
                             return $account;
                         });
                 },
@@ -232,18 +232,18 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
 
     public function refreshAccount(Account $account, string $locale = null): Account
     {
-        $authToken = $account->authToken;
+        $apiToken = $account->apiToken;
 
-        if ($authToken === null) {
+        if ($apiToken === null) {
             return $account;
         }
 
         $criteria = SearchCriteriaBuilder::buildFromEmail($account->email);
 
         return $this->fetchCustomerByCriteria($criteria)
-            ->then(function ($response) use ($authToken): Account {
+            ->then(function ($response) use ($apiToken): Account {
                 $account = $this->mapResponse($response['data'][0], AccountMapper::MAPPER_NAME);
-                $account->authToken = $authToken;
+                $account->apiToken = $apiToken;
 
                 return $account;
             })
@@ -256,7 +256,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
     public function getAddresses(Account $account, string $locale = null): array
     {
         return $this->client
-            ->withContextToken($account->authToken)
+            ->withContextToken($account->apiToken)
             ->get('/sales-channel-api/v2/customer/address')
             ->then(function ($response) {
                 return $this->mapResponse($response, AddressesMapper::MAPPER_NAME);
@@ -269,7 +269,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         $requestData = $this->mapRequestData($address, AddressCreateRequestDataMapper::MAPPER_NAME);
 
         return $this->client
-            ->withContextToken($account->authToken)
+            ->withContextToken($account->apiToken)
             ->post('/sales-channel-api/v2/customer/address', [], $requestData)
             ->then(static function ($response) use ($account, $address) {
                 $account->addresses[] = $address;
@@ -296,7 +296,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         $requestData = $this->mapRequestData($address, AddressCreateRequestDataMapper::MAPPER_NAME);
 
         return $this->client
-            ->withContextToken($account->authToken)
+            ->withContextToken($account->apiToken)
             ->patch('/sales-channel-api/v2/customer/address', [], $requestData)
             ->then(static function ($response) use ($account, $address) {
                 $account->addresses[] = $address;
@@ -321,7 +321,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
     public function removeAddress(Account $account, string $addressId, string $locale = null): Account
     {
         return $this->client
-            ->withContextToken($account->authToken)
+            ->withContextToken($account->apiToken)
             ->delete("/sales-channel-api/v2/customer/address/{$addressId}")
             ->then(static function ($response) use ($account) {
                 $deletedAddressId = $response['data'];
@@ -344,7 +344,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
     public function setDefaultBillingAddress(Account $account, string $addressId, string $locale = null): Account
     {
         return $this->client
-            ->withContextToken($account->authToken)
+            ->withContextToken($account->apiToken)
             ->patch("/sales-channel-api/v2/customer/address/{$addressId}/default-billing")
             ->then(static function ($response) use ($account) {
                 $updatedBillingAddressId = $response['data'];
@@ -361,7 +361,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
     public function setDefaultShippingAddress(Account $account, string $addressId, string $locale = null): Account
     {
         return $this->client
-            ->withContextToken($account->authToken)
+            ->withContextToken($account->apiToken)
             ->patch("/sales-channel-api/v2/customer/address/{$addressId}/default-shipping")
             ->then(static function ($response) use ($account) {
                 $updatedShippingAddressId = $response['data'];
