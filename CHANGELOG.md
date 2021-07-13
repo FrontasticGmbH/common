@@ -1,5 +1,11 @@
 # common Changelog
 
+## `2.13.4` (2021-07-13)
+
+* fix: strip API version on Shopware store-api
+* chore: replaced authToken by apiToken on Shopify
+* chore: replaced authToken by apiToken on Spryker
+
 ## `2.13.3` (2021-07-08)
 
 * fix(FP-830): replaced authToken by apiToken on Shopware
