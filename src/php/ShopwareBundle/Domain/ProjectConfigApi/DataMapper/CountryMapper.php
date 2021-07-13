@@ -17,7 +17,7 @@ class CountryMapper extends AbstractDataMapper
     public function map($resource)
     {
         // Support for list with single resources as well as direct single resource
-        $countryData = $this->extractData($resource, $resource);
+        $countryData = $this->extractElements($resource, $resource);
         $countryData = $countryData[0] ?? $countryData;
 
         $country = new ShopwareCountry($countryData, true);

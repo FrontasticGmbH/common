@@ -2,9 +2,11 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi;
 
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\PaginatedQuery;
 use Frontastic\Common\ShopwareBundle\Domain\AbstractShopwareApi;
 use Frontastic\Common\ShopwareBundle\Domain\Exception\MapperNotFoundException;
 use Frontastic\Common\ShopwareBundle\Domain\Exception\ResourceNotFoundException;
+use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Filter;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper\CountryMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper\CurrenciesMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\DataMapper\PaymentMethodsMapper;
@@ -18,20 +20,36 @@ class ShopwareProjectConfigApi extends AbstractShopwareApi implements ShopwarePr
      */
     public function getCountryByCriteria(string $criteria): ?ShopwareCountry
     {
-        $parameters = [];
+        $requestData = [
+            'page' => 1,
+            'limit' => PaginatedQuery::DEFAULT_LIMIT,
+        ];
+
         if (preg_match('/^([A-Z]{2})$/', $criteria, $matches)) {
-            $parameters['filter[iso]'] = $matches[0];
+            $requestData['filter'][] = new Filter\Equals([
+                'field' => 'iso',
+                'value' => $matches[0],
+            ]);
         } elseif (preg_match('/^([A-Z]{3})$/', $criteria, $matches)) {
-            $parameters['filter[iso3]'] = $matches[0];
+            $requestData['filter'][] = new Filter\Equals([
+                'field' => 'iso3',
+                'value' => $matches[0],
+            ]);
         } elseif (preg_match('/^([a-z0-9]{32})$/', $criteria, $matches)) {
-            $parameters['filter[id]'] = $matches[0];
+            $requestData['filter'][] = new Filter\Equals([
+                'field' => 'id',
+                'value' => $matches[0],
+            ]);
         } else {
-            $parameters['filter[name]'] = $criteria;
+            $requestData['filter'][] = new Filter\Equals([
+                'field' => 'name',
+                'value' => $criteria,
+            ]);
         }
 
         try {
             return $this->client
-                ->get('/sales-channel-api/v2/country', $parameters)
+                ->post('/store-api/country', [], $requestData)
                 ->then(function ($response) {
                     return $this->mapResponse($response, CountryMapper::MAPPER_NAME);
                 })->wait();
@@ -45,12 +63,19 @@ class ShopwareProjectConfigApi extends AbstractShopwareApi implements ShopwarePr
      */
     public function getCurrency(string $currencyId): ?ShopwareCurrency
     {
-        $parameters = [
-            'filter[id]' => $currencyId,
+        $requestData = [
+            'page' => 1,
+            'limit' => 1,
+            'filter' => [
+                new Filter\Equals([
+                    'field' => 'id',
+                    'value' => $currencyId,
+                ])
+            ]
         ];
 
         return $this->client
-            ->get('/sales-channel-api/v2/currency', $parameters)
+            ->post('/store-api/currency', [], $requestData)
             ->then(function ($response) {
                 return $this->mapResponse($response, CurrenciesMapper::MAPPER_NAME)[0] ?? null;
             })->wait();
@@ -62,7 +87,7 @@ class ShopwareProjectConfigApi extends AbstractShopwareApi implements ShopwarePr
     public function getPaymentMethods(): array
     {
         return $this->client
-            ->get('/sales-channel-api/v2/payment-method?associations[media][]')
+            ->get('/store-api/payment-method?associations[media][]')
             ->then(function ($response) {
                 return $this->mapResponse($response, PaymentMethodsMapper::MAPPER_NAME);
             })->wait();
@@ -74,9 +99,9 @@ class ShopwareProjectConfigApi extends AbstractShopwareApi implements ShopwarePr
     public function getProjectConfig(): array
     {
         $contextResources = [
-            self::RESOURCE_COUNTRIES => '/sales-channel-api/v2/country',
-            self::RESOURCE_CURRENCIES => '/sales-channel-api/v2/currency',
-            self::RESOURCE_LANGUAGES => '/sales-channel-api/v2/language?associations[locale][]',
+            self::RESOURCE_COUNTRIES => '/store-api/country',
+            self::RESOURCE_CURRENCIES => '/store-api/currency',
+            self::RESOURCE_LANGUAGES => '/store-api/language?associations[locale][]',
         ];
 
         $contextPromises = (function () use ($contextResources) {
@@ -117,13 +142,19 @@ class ShopwareProjectConfigApi extends AbstractShopwareApi implements ShopwarePr
      */
     public function getSalutations(?string $criteria = null, ?string $locale = null): array
     {
-        $parameters = [];
+        $requestData = [];
 
         if ($criteria !== null) {
             if (preg_match('/^([a-z0-9]{32})$/', $criteria, $matches)) {
-                $parameters['filter[id]'] = $matches[0];
+                $requestData['filter'][] = new Filter\Equals([
+                    'field' => 'id',
+                    'value' => $matches[0],
+                ]);
             } else {
-                $parameters['filter[salutationKey]'] = $criteria;
+                $requestData['filter'][] = new Filter\Equals([
+                    'field' => 'salutationKey',
+                    'value' => $criteria,
+                ]);
             }
         }
 
@@ -131,7 +162,7 @@ class ShopwareProjectConfigApi extends AbstractShopwareApi implements ShopwarePr
 
         return $this->client
             ->forLanguage($locale->languageId)
-            ->get('/sales-channel-api/v2/salutation', $parameters)
+            ->post('/store-api/salutation', [], $requestData)
             ->then(function ($response) {
                 return $this->mapResponse($response, SalutationsMapper::MAPPER_NAME);
             })->wait();

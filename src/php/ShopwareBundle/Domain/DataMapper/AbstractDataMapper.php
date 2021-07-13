@@ -6,6 +6,7 @@ abstract class AbstractDataMapper implements DataMapperInterface
 {
     private const KEY_DATA = 'data';
     private const KEY_AGGREGATIONS = 'aggregations';
+    private const KEY_ELEMENTS = 'elements';
 
     protected function convertPriceToCent($price): int
     {
@@ -14,12 +15,17 @@ abstract class AbstractDataMapper implements DataMapperInterface
 
     protected function extractData(array $resource, array $fallback = []): array
     {
-        return $resource[self::KEY_DATA] ?? $fallback;
+        return $resource[self::KEY_DATA] ?? $this->stripHeaders($fallback);
     }
 
     protected function extractAggregations(array $resource): array
     {
         return $resource[self::KEY_AGGREGATIONS] ?? [];
+    }
+
+    protected function extractElements(array $resource, array $fallback = []): array
+    {
+        return $resource[self::KEY_ELEMENTS] ?? $this->stripHeaders($fallback);
     }
 
     protected function mapDangerousInnerData(array $innerData): ?array
@@ -40,5 +46,11 @@ abstract class AbstractDataMapper implements DataMapperInterface
     protected function resolveTranslatedValue(array $data, string $key)
     {
         return $data['translated'][$key] ?? $data[$key] ?? null;
+    }
+
+    protected function stripHeaders(array $data): array
+    {
+        unset($data['headers']);
+        return $data;
     }
 }

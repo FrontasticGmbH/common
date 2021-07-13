@@ -16,7 +16,7 @@ class CurrenciesMapper extends AbstractDataMapper
 
     public function map($resource)
     {
-        $currenciesData = $this->extractData($resource);
+        $currenciesData = $this->extractData($resource, $resource);
 
         $result = [];
         foreach ($currenciesData as $currencyData) {
