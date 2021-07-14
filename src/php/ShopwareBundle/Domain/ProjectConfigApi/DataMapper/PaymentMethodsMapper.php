@@ -16,7 +16,7 @@ class PaymentMethodsMapper extends AbstractDataMapper
 
     public function map($resource)
     {
-        $paymentMethodsData = $this->extractData($resource);
+        $paymentMethodsData = $this->extractElements($resource);
 
         $result = [];
         foreach ($paymentMethodsData as $paymentMethodData) {

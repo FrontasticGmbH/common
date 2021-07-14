@@ -33,7 +33,7 @@ class AccountMapper extends AbstractDataMapper implements ProjectConfigApiAwareD
 
     public function map($resource)
     {
-        $accountData = $this->extractData($resource, $resource);
+        $accountData = $this->extractElements($resource, $resource);
 
         if (key_exists('attributes', $accountData)) {
             $accountData = array_merge($accountData, $accountData['attributes']);

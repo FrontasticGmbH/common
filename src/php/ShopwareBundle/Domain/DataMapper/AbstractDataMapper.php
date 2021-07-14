@@ -25,7 +25,7 @@ abstract class AbstractDataMapper implements DataMapperInterface
 
     protected function extractElements(array $resource, array $fallback = []): array
     {
-        return $resource[self::KEY_ELEMENTS] ?? $this->stripHeaders($fallback);
+        return $resource[self::KEY_ELEMENTS] ?? $this->extractData($resource, $fallback);
     }
 
     protected function mapDangerousInnerData(array $innerData): ?array

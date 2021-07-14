@@ -29,7 +29,7 @@ class AddressesMapper extends AbstractDataMapper implements ProjectConfigApiAwar
 
     public function map($resource)
     {
-        $addressData = $this->extractData($resource);
+        $addressData = $this->extractElements($resource, $resource);
 
         $result = [];
         foreach ($addressData as $item) {

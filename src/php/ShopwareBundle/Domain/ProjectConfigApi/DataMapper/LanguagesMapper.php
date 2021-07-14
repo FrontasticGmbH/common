@@ -16,7 +16,7 @@ class LanguagesMapper extends AbstractDataMapper
 
     public function map($resource)
     {
-        $languagesData = $this->extractData($resource);
+        $languagesData = $this->extractElements($resource, $resource);
 
         $result = [];
         foreach ($languagesData as $languageData) {

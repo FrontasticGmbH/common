@@ -29,7 +29,7 @@ class AccountAddressesMapper extends AbstractDataMapper implements ProjectConfig
 
     public function map($resource)
     {
-        $accountData = $this->extractData($resource, $resource);
+        $accountData = $this->extractElements($resource, $resource);
 
         $addresses = [];
         $billingAddress = [];

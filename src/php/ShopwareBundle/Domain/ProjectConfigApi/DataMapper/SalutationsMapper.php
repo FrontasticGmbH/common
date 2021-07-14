@@ -17,7 +17,7 @@ class SalutationsMapper extends AbstractDataMapper
 
     public function map($resource)
     {
-        $salutationsData = $this->extractData($resource, $resource);
+        $salutationsData = $this->extractElements($resource, $resource);
 
         $result = [];
         foreach ($salutationsData as $salutationData) {
