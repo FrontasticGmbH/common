@@ -48,6 +48,9 @@ class ClientFactory
             $config['endpoint'],
             $config['clientId'],
             $config['clientSecret'],
+            property_exists($genericConfiguration, 'apiVersion') ?
+                (string)$genericConfiguration->apiVersion :
+                '6.3',
         );
     }
 
