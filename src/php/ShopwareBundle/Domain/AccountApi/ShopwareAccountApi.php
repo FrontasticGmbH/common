@@ -12,6 +12,7 @@ use Frontastic\Common\ShopwareBundle\Domain\AbstractShopwareApi;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\AccountMapper;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\AddressCreateRequestDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\AddressesMapper;
+use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\AddressMapper;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\CustomerCreateRequestDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\CustomerPatchRequestDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ClientInterface;
@@ -23,7 +24,6 @@ use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchCriteriaBuilder;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareSalutation;
-use Frontastic\Common\SprykerBundle\Domain\Account\Mapper\AddressMapper;
 use GuzzleHttp\Promise\PromiseInterface;
 
 class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
