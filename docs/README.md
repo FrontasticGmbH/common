@@ -172,8 +172,6 @@ Here you find the API documentation for the relevant classes:
 * JsonSerializer
   * [ObjectEnhancer](php/JsonSerializer/ObjectEnhancer.md)
 * [Kernel](php/Kernel.md)
-* NextJsBundle
-  * [NextJsBundle](php/NextJsBundle/NextJsBundle.md)
 * ProductApiBundle
   * Controller
     * [LegacyCategoryController](php/ProductApiBundle/Controller/LegacyCategoryController.md)
