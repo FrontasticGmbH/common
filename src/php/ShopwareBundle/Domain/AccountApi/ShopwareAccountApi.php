@@ -253,10 +253,26 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         }
 
         $criteria = SearchCriteriaBuilder::buildFromEmail($account->email);
+        $criteria = array_merge($criteria, [
+            'associations' => [
+                "addresses" => []
+            ]
+        ]);
 
         return $this->fetchCustomerByCriteria($criteria)
             ->then(function ($response) use ($apiToken): Account {
-                $account = $this->mapResponse($response['data'][0], AccountMapper::MAPPER_NAME);
+                $accountData = $response['data'][0];
+
+                if (key_exists('included', $response)) {
+                    foreach ($response['included'] as $includedEntity) {
+                        if ($includedEntity['type'] !== 'customer_address') {
+                            continue;
+                        }
+                        $accountData['addresses'][] = $includedEntity;
+                    }
+                }
+
+                $account = $this->mapResponse($accountData, AccountMapper::MAPPER_NAME);
                 $account->apiToken = $apiToken;
 
                 return $account;
