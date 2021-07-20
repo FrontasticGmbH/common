@@ -308,8 +308,7 @@ class Client implements ClientInterface
             array_push($path, $component);
 
             // Shopware deprecated the versioning since v6.3.5 where it'll not require to append the version number
-            if (
-                version_compare($this->apiVersion, "6.3.5", '<') &&
+            if (version_compare($this->apiVersion, "6.3.5", '<') &&
                 ($component === 'store-api' || $component === 'api')
             ) {
                 array_push($path, 'v3');
