@@ -27,7 +27,8 @@ public function __construct(
     string $apiKey,
     string $baseUri,
     string $clientId,
-    string $clientSecret
+    string $clientSecret,
+    string $apiVersion
 ): mixed
 ```
 
@@ -39,6 +40,7 @@ Argument|Type|Default|Description
 `$baseUri`|`string`||
 `$clientId`|`string`||
 `$clientSecret`|`string`||
+`$apiVersion`|`string`||
 
 Return Value: `mixed`
 
