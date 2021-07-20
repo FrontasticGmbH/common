@@ -45,6 +45,7 @@ class CustomerCreateRequestDataMapper extends AbstractDataMapper implements Proj
             'birthdayDay' => $account->birthday ? $account->birthday->format('d') : null,
             'birthdayMonth' => $account->birthday ? $account->birthday->format('m') : null,
             'birthdayYear' => $account->birthday ? $account->birthday->format('Y') : null,
+            'acceptedDataProtection' => true,
         ];
 
         if (isset($account->addresses[0]) && !empty($account->addresses[0])) {

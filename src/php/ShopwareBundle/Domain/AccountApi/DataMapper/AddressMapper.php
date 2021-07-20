@@ -19,8 +19,14 @@ class AddressMapper extends AbstractDataMapper implements ProjectConfigApiAwareD
         return static::MAPPER_NAME;
     }
 
-    public function map($addressData)
+    public function map($resource)
     {
+        $addressData = $this->extractElements($resource, $resource);
+
+        if (key_exists('attributes', $resource)) {
+            $addressData = array_merge($addressData, $addressData['attributes']);
+        }
+
         return new Address([
             'addressId' => $addressData['id'] ? (string)$addressData['id'] : null,
             'salutation' => $this->resolveSalutation($addressData),
@@ -39,17 +45,18 @@ class AddressMapper extends AbstractDataMapper implements ProjectConfigApiAwareD
 
     private function resolveCountry(array $addressData): ?string
     {
-        $resolveTranslatedName = $addressData['country'] ?
-            $this->resolveTranslatedValue($addressData['country'], 'name') :
-            null;
-
-        if ($resolveTranslatedName === null && isset($addressData['countryId'])) {
-            $shopwareCountry = $this->getProjectConfigApi()->getCountryByCriteria($addressData['countryId']);
-
-            return $shopwareCountry ? $shopwareCountry->name : null;
+        $resolvedIso = null;
+        if (isset($addressData['country'])) {
+            $resolvedIso = $addressData['country']['iso'] ?? null;
         }
 
-        return $resolveTranslatedName;
+        if ($resolvedIso === null && isset($addressData['countryId'])) {
+            $shopwareCountry = $this->getProjectConfigApi()->getCountryByCriteria($addressData['countryId']);
+
+            return $shopwareCountry ? $shopwareCountry->iso : null;
+        }
+
+        return $resolvedIso;
     }
 
     private function resolveSalutation(array $addressData): string

@@ -25,7 +25,7 @@ class CountriesMapper extends AbstractDataMapper
 
     public function map($resource)
     {
-        $countriesData = $this->extractData($resource);
+        $countriesData = $this->extractElements($resource, $resource);
 
         $result = [];
         foreach ($countriesData as $countryData) {

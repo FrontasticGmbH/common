@@ -58,6 +58,11 @@ class Client implements ClientInterface
      */
     private $clientSecret;
 
+    /**
+     * @var string
+     */
+    private $apiVersion;
+
     private $defaultHeaders = [
         'Accept' => '*/*',
         'Content-Type' => 'application/json',
@@ -70,7 +75,8 @@ class Client implements ClientInterface
         string $apiKey,
         string $baseUri,
         string $clientId,
-        string $clientSecret
+        string $clientSecret,
+        string $apiVersion
     ) {
         $this->httpClient = $httpClient;
         $this->cache = $cache;
@@ -78,6 +84,7 @@ class Client implements ClientInterface
         $this->baseUri = $baseUri;
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
+        $this->apiVersion = $apiVersion;
     }
 
     public function forLanguage(?string $languageId = null): ClientInterface
@@ -145,7 +152,7 @@ class Client implements ClientInterface
         $body = null
     ): PromiseInterface {
         $uri = $this->buildWithQueryString(
-            new Uri($this->baseUri . $uriComponent),
+            $uriComponent,
             $parameters
         );
 
@@ -236,9 +243,12 @@ class Client implements ClientInterface
         return array_merge($headers, $additionalHeaders);
     }
 
-    private function buildWithQueryString(UriInterface $uri, array $parameters): UriInterface
+    private function buildWithQueryString(string $uriComponent, array $parameters): UriInterface
     {
-        return Uri::withQueryValues($uri, $parameters);
+        return Uri::withQueryValues(
+            new Uri($this->baseUri . $this->handleApiVersioning($uriComponent)),
+            $parameters
+        );
     }
 
     private function getAccessToken(): string
@@ -276,10 +286,7 @@ class Client implements ClientInterface
             );
         }
 
-        $authUrl = $this->buildWithQueryString(
-            new Uri($this->baseUri . '/api/oauth/token'),
-            []
-        );
+        $authUrl = new Uri($this->baseUri . '/api/oauth/token');
 
         $provider = new GenericProvider([
             'urlAuthorize' => $authUrl,
@@ -290,7 +297,24 @@ class Client implements ClientInterface
             'grant_type'=> 'client_credentials',
         ]);
 
-
         return $provider->getAccessToken(new ClientCredentials());
+    }
+
+    private function handleApiVersioning(string $uriComponent): string
+    {
+        $path = [];
+
+        foreach (explode('/', $uriComponent) as $component) {
+            array_push($path, $component);
+
+            // Shopware deprecated the versioning since v6.3.5 where it'll not require to append the version number
+            if (version_compare($this->apiVersion, "6.3.5", '<') &&
+                ($component === 'store-api' || $component === 'api')
+            ) {
+                array_push($path, 'v3');
+            }
+        }
+
+        return implode('/', $path);
     }
 }
