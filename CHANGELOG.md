@@ -1,5 +1,19 @@
 # common Changelog
 
+## `2.14.0` (2021-07-20)
+
+* feat(FP-837): set API test credential for Shopware 6.4
+* feat(FP-837): used php comparation for API version on Shopware
+* fix(FP-837): added address on refresh account on Shopware
+* fix: Move NextJsBundle to correct component.
+* fix(FP-837): used address mapper
+* chore(FP-837): added versioning docs
+* feat(FP-837): handled different api version on Shopware client
+* feat: Bundle for NextJs
+* feat(FP-837): migrated AccountApi to store-api on Shopware
+* feat(FP-837): handle elements and data fiels on Account and Project mappers on Shopware
+* feat(FP-837): upgraded project config endpoints to store-api on Shopware
+
 ## `2.13.4` (2021-07-13)
 
 * fix: strip API version on Shopware store-api
