@@ -46,8 +46,8 @@ class ProductMapper extends AbstractDataMapper implements
     public function map($resource)
     {
         // Support for list with single resources as well as direct single resource
-        $productData = $this->extractData($resource, $resource);
-        $productData = $productData[0] ?? $productData;
+        $productData = $this->extractElements($resource, $resource);
+        $productData = $productData[0] ?? $productData['product'] ?? $productData;
         if (empty($productData)) {
             return null;
         }

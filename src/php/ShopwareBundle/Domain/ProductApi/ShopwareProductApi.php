@@ -2,11 +2,9 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi;
 
-use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\SingleProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
@@ -23,13 +21,11 @@ use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\ShopwareLocale;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper\CategoryMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper\ProductMapper;
-use Frontastic\Common\ShopwareBundle\Domain\ProductApi\DataMapper\ProductResultMapper;
-use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Query\QueryFacetExpander;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchCriteriaBuilder;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiInterface;
+use GuzzleHttp\Promise\Create;
 use GuzzleHttp\Promise\PromiseInterface;
-use function GuzzleHttp\Promise\promise_for;
 
 class ShopwareProductApi extends ProductApiBase
 {
@@ -78,7 +74,7 @@ class ShopwareProductApi extends ProductApiBase
 
         $categories = $this->client
             ->forLanguage($locale->languageId)
-            ->post('/sales-channel-api/v2/category', [], $criteria)
+            ->post('/store-api/category', [], $criteria)
             ->then(function ($response) use ($mapper) {
                 return $mapper->map($response);
             })
@@ -105,47 +101,37 @@ class ShopwareProductApi extends ProductApiBase
         $mapper = $this->buildMapper(ProductMapper::MAPPER_NAME, $locale, $query);
 
         if ($query->productId !== null) {
-            $productIdPromise = promise_for($query->productId);
+            $productIdPromise = Create::promiseFor($query->productId);
         } elseif ($query->sku !== null) {
             $criteria = SearchCriteriaBuilder::buildFromSimpleProductQuery($query);
 
             $productIdPromise = $client
-                ->post('/sales-channel-api/v2/product', [], $criteria)
-                ->then(function ($response) use ($query): string {
-                    $product = $response['data'][0] ?? [];
-                    $productId = $product['parentId'] ?? $product['id'] ?? null;
-                    if ($productId === null) {
+                ->post('/store-api/product', [], $criteria)
+                ->then(function ($response) use ($mapper, $query): string {
+                    $product = $mapper->map($response);
+
+                    if ($product === null) {
                         throw ProductApi\ProductNotFoundException::fromQuery($query);
                     }
-                    return $productId;
+
+                    return $product;
+                })
+                ->otherwise(function (\Throwable $exception) use ($query) {
+                    if ($exception instanceof RequestException) {
+                        $messagePrefix = 'Value is not a valid UUID:';
+                        if ($exception->getCode() === 400 &&
+                            substr($exception->getMessage(), 0, strlen($messagePrefix)) === $messagePrefix) {
+                            throw ProductApi\ProductNotFoundException::fromQuery($query);
+                        }
+                    }
+
+                    throw $exception;
                 });
         } else {
             throw new \RuntimeException('Not implemented');
         }
 
-        return $productIdPromise
-            ->then(function (string $productId) use ($mapper, $query, $client): PromiseInterface {
-                return $client
-                    ->get('/sales-channel-api/v2/product/' . $productId, ['associations[children][]' => 1])
-                    ->then(function ($response) use ($mapper, $query): Product {
-                        $product = $mapper->map($response);
-                        if ($product === null) {
-                            throw ProductApi\ProductNotFoundException::fromQuery($query);
-                        }
-                        return $product;
-                    });
-            })
-            ->otherwise(function (\Throwable $exception) use ($query) {
-                if ($exception instanceof RequestException) {
-                    $messagePrefix = 'Value is not a valid UUID:';
-                    if ($exception->getCode() === 400 &&
-                        substr($exception->getMessage(), 0, strlen($messagePrefix)) === $messagePrefix) {
-                        throw ProductApi\ProductNotFoundException::fromQuery($query);
-                    }
-                }
-
-                throw $exception;
-            });
+        return $productIdPromise;
     }
 
     public function getDangerousInnerClient(): ClientInterface
