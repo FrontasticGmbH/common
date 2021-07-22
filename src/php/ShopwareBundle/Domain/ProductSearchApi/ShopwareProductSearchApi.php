@@ -24,9 +24,8 @@ use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchCriteriaBuil
 use Frontastic\Common\ShopwareBundle\Domain\ProjectApi\DataMapper\GenericGroupAggregationMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiInterface;
-use GuzzleHttp\Promise\FulfilledPromise;
+use GuzzleHttp\Promise\Create;
 use GuzzleHttp\Promise\PromiseInterface;
-use function GuzzleHttp\Promise\promise_for;
 
 class ShopwareProductSearchApi extends ProductSearchApiBase
 {
@@ -83,7 +82,7 @@ class ShopwareProductSearchApi extends ProductSearchApiBase
         $promise = $this->client
             ->forCurrency($locale->currencyId)
             ->forLanguage($locale->languageId)
-            ->post('/sales-channel-api/v2/product', [], $criteria)
+            ->post('/store-api/product', [], $criteria)
             ->then(function ($response) use ($mapper) {
                 return $mapper->map($response);
             });
@@ -120,7 +119,7 @@ class ShopwareProductSearchApi extends ProductSearchApiBase
              'type' => Attribute::TYPE_CATEGORY_ID,
          ]);
 
-        return promise_for($attributes->getArrayCopy());
+        return Create::promiseFor($attributes->getArrayCopy());
     }
 
     public function getDangerousInnerClient(): ClientInterface
@@ -186,7 +185,7 @@ class ShopwareProductSearchApi extends ProductSearchApiBase
 
         return $this->client
             ->forLanguage($languageId)
-            ->post('/sales-channel-api/v2/product', [], $criteria)
+            ->post('/store-api/product', [], $criteria)
             ->then(static function ($response) use ($criteriaAggregations) {
                 $groupedAggregations = [];
                 foreach ($criteriaAggregations as $criteriaAggregation) {

@@ -25,7 +25,7 @@ class CategoryMapper extends AbstractDataMapper implements QueryAwareDataMapperI
     public function map($resource)
     {
         $result = [];
-        foreach ($this->extractData($resource) as $categoryData) {
+        foreach ($this->extractElements($resource, $resource) as $categoryData) {
             $result[] = $this->mapDataToCategory($categoryData);
         }
 
