@@ -79,15 +79,13 @@ class ShopwareProductSearchApi extends ProductSearchApiBase
         $locale = $this->parseLocaleString($query->locale);
         $mapper = $this->buildProductResultMapper($locale, $query);
 
-        $promise = $this->client
+        return $this->client
             ->forCurrency($locale->currencyId)
             ->forLanguage($locale->languageId)
             ->post('/store-api/product', [], $criteria)
             ->then(function ($response) use ($mapper) {
                 return $mapper->map($response);
             });
-
-        return $promise;
     }
 
     protected function getSearchableAttributesImplementation(): PromiseInterface
