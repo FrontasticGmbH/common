@@ -86,7 +86,6 @@ class SearchCriteriaBuilder
         $criteria = [
             'page' => self::calculatePage($query),
             'limit' => $query->limit,
-            'total-count-mode' => true,
             'filter' => [],
             'post-filter' => [],
             'aggregations' => [],
