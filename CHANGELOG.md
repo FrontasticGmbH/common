@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.15.0` (2021-07-29)
+
+* feat: enhancing tideways logging for GraphCMS adding Cache status header as well as RequestId
+
 ## `2.14.0` (2021-07-20)
 
 * feat(FP-837): set API test credential for Shopware 6.4
