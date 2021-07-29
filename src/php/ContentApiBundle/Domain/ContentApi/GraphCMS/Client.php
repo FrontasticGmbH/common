@@ -104,6 +104,8 @@ class Client
                     $span->annotate(
                         [
                             'response.status' => $result->status,
+                            'response.graphCmsRequestId' => $result->headers['x-request-id'] ?? null,
+                            'response.graphCmsCacheHeader' => $result->headers['x-cdn-cache-status'] ?? null,
                             'response.body' => $result->status !== 200 ? $result->body : null,
                         ]
                     );
