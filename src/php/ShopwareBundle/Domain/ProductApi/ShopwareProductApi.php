@@ -95,43 +95,40 @@ class ShopwareProductApi extends ProductApiBase
     protected function getProductImplementation(SingleProductQuery $query): PromiseInterface
     {
         $locale = $this->parseLocaleString($query->locale);
-        $client = $this->client
-            ->forCurrency($locale->currencyId)
-            ->forLanguage($locale->languageId);
         $mapper = $this->buildMapper(ProductMapper::MAPPER_NAME, $locale, $query);
 
         if ($query->productId !== null) {
-            $productIdPromise = Create::promiseFor($query->productId);
+            $criteria = SearchCriteriaBuilder::buildFromSimpleProductQuery($query);
         } elseif ($query->sku !== null) {
             $criteria = SearchCriteriaBuilder::buildFromSimpleProductQuery($query);
-
-            $productIdPromise = $client
-                ->post('/store-api/product', [], $criteria)
-                ->then(function ($response) use ($mapper, $query): string {
-                    $product = $mapper->map($response);
-
-                    if ($product === null) {
-                        throw ProductApi\ProductNotFoundException::fromQuery($query);
-                    }
-
-                    return $product;
-                })
-                ->otherwise(function (\Throwable $exception) use ($query) {
-                    if ($exception instanceof RequestException) {
-                        $messagePrefix = 'Value is not a valid UUID:';
-                        if ($exception->getCode() === 400 &&
-                            substr($exception->getMessage(), 0, strlen($messagePrefix)) === $messagePrefix) {
-                            throw ProductApi\ProductNotFoundException::fromQuery($query);
-                        }
-                    }
-
-                    throw $exception;
-                });
         } else {
             throw new \RuntimeException('Not implemented');
         }
 
-        return $productIdPromise;
+        return $this->client
+            ->forCurrency($locale->currencyId)
+            ->forLanguage($locale->languageId)
+            ->post('/store-api/product', [], $criteria)
+            ->then(function ($response) use ($mapper, $query) {
+                $product = $mapper->map($response);
+
+                if ($product === null) {
+                    throw ProductApi\ProductNotFoundException::fromQuery($query);
+                }
+
+                return $product;
+            })
+            ->otherwise(function (\Throwable $exception) use ($query) {
+                if ($exception instanceof RequestException) {
+                    $messagePrefix = 'Value is not a valid UUID:';
+                    if ($exception->getCode() === 400 &&
+                        substr($exception->getMessage(), 0, strlen($messagePrefix)) === $messagePrefix) {
+                        throw ProductApi\ProductNotFoundException::fromQuery($query);
+                    }
+                }
+
+                throw $exception;
+            });
     }
 
     public function getDangerousInnerClient(): ClientInterface
