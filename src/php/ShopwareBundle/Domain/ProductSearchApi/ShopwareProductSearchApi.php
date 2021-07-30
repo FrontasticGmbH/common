@@ -275,7 +275,7 @@ class ShopwareProductSearchApi extends ProductSearchApiBase
         return [
             new Aggregation\Entity([
                 'name' => 'property_groups',
-                'field' => 'properties.group.id',
+                'field' => 'properties.groupId',
                 'definition' => 'property_group',
             ]),
             new Aggregation\Entity([
