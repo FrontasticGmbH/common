@@ -123,7 +123,9 @@ class SearchCriteriaBuilder
         ];
 
         foreach ($query->filter as $filter) {
-            self::addFilterToCriteria($criteria, $filter);
+            if (!empty($filter->terms)) {
+                self::addFilterToCriteria($criteria, $filter);
+            }
         }
 
         if (!empty($query->query)) {
