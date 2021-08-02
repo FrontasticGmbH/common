@@ -4,7 +4,7 @@ namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search;
 
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Filter;
-use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Util\FacetHandleParser;
+use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Util\HandleParser;
 use RuntimeException;
 
 class SearchFilterFactory
@@ -75,7 +75,7 @@ class SearchFilterFactory
             ? new Filter\Equals(['value' => $terms[0]])
             : new Filter\EqualsAny(['value' => $terms]);
 
-        [$field] = FacetHandleParser::parseFacetHandle($handle);
+        [$field] = HandleParser::parseFacetHandle($handle);
 
         $searchFilter->field = $field;
 

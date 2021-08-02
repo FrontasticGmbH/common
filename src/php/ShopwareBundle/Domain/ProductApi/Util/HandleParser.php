@@ -2,7 +2,7 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\Util;
 
-class FacetHandleParser
+class HandleParser
 {
     private const HANDLE_SEPARATOR = '#';
 

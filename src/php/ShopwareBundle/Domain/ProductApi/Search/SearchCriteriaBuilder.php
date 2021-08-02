@@ -6,7 +6,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\PaginatedQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Filter;
-use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Util\FacetHandleParser;
+use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Util\HandleParser;
 
 class SearchCriteriaBuilder
 {
@@ -231,7 +231,7 @@ class SearchCriteriaBuilder
         $postFilter = null;
 
         if ($facet instanceof Query\TermFacet) {
-            [$field, $definition] = FacetHandleParser::parseFacetHandle($facet->handle);
+            [$field, $definition] = HandleParser::parseFacetHandle($facet->handle);
 
             $aggregationName = sprintf('%s#%s', $field, $definition);
             $aggregation = new Aggregation\Terms([

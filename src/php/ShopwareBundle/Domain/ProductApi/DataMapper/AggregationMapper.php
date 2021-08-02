@@ -9,7 +9,7 @@ use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperInter
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperTrait;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchAggregationFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchAggregationInterface;
-use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Util\FacetHandleParser;
+use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Util\HandleParser;
 
 class AggregationMapper extends AbstractDataMapper implements QueryAwareDataMapperInterface
 {
@@ -41,7 +41,7 @@ class AggregationMapper extends AbstractDataMapper implements QueryAwareDataMapp
         $result = [];
 
         foreach ($facetsByHandle as $handle => $queryFacet) {
-            [$field, $fieldDefinition, $propertyGroupId] = FacetHandleParser::parseFacetHandle($handle);
+            [$field, $fieldDefinition, $propertyGroupId] = HandleParser::parseFacetHandle($handle);
 
             $aggregationHandle = sprintf('%s#%s', $field, $fieldDefinition);
             $aggregation = $aggregationsByHandle[$aggregationHandle] ?? null;
