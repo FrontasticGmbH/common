@@ -5,11 +5,10 @@ namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Filter;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Util\HandleParser;
-use RuntimeException;
 
 class SearchFilterFactory
 {
-    public static function createFromQueryFilter(Query\Filter $queryFilter): SearchFilterInterface
+    public static function createFromQueryFilter(Query\Filter $queryFilter): ?SearchFilterInterface
     {
         $filter = null;
 
@@ -36,16 +35,6 @@ class SearchFilterFactory
                 break;
         }
 
-        if (!$filter instanceof SearchFilterInterface) {
-            throw new RuntimeException(
-                sprintf(
-                    'Can not create search filter for query filter %s with attribute type `%s`',
-                    get_class($queryFilter),
-                    $queryFilter->attributeType
-                )
-            );
-        }
-
         return $filter;
     }
 
@@ -64,8 +53,13 @@ class SearchFilterFactory
         return self::buildSearchFilter($queryFacet->handle, $queryFacet->terms);
     }
 
-    public static function buildSearchFilterFromQueryFilter(Query\TermFilter $queryFilter): SearchFilterInterface
+    public static function buildSearchFilterFromQueryFilter(Query\TermFilter $queryFilter): ?SearchFilterInterface
     {
+        // Shopware always requires terms to filter by
+        if (empty($queryFilter->terms)) {
+            return null;
+        }
+
         return self::buildSearchFilter($queryFilter->handle, $queryFilter->terms);
     }
 

@@ -123,9 +123,7 @@ class SearchCriteriaBuilder
         ];
 
         foreach ($query->filter as $filter) {
-            if (!empty($filter->terms)) {
-                self::addFilterToCriteria($criteria, $filter);
-            }
+            self::addFilterToCriteria($criteria, $filter);
         }
 
         if (!empty($query->query)) {
@@ -274,7 +272,11 @@ class SearchCriteriaBuilder
 
     private static function addFilterToCriteria(array &$criteria, Query\Filter $queryFilter): void
     {
-        $criteria['filter'][] = SearchFilterFactory::createFromQueryFilter($queryFilter);
+        $filter = SearchFilterFactory::createFromQueryFilter($queryFilter);
+
+        if ($filter) {
+            $criteria['filter'][] = $filter;
+        }
     }
 
     private static function calculatePage(PaginatedQuery $query): int
