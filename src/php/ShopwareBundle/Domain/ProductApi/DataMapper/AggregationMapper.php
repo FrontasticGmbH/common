@@ -7,6 +7,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\QueryAwareDataMapperTrait;
+use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Aggregation;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchAggregationFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchAggregationInterface;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Util\HandleParser;
@@ -44,7 +45,9 @@ class AggregationMapper extends AbstractDataMapper implements QueryAwareDataMapp
             [$field, $fieldDefinition, $propertyGroupId] = HandleParser::parseFacetHandle($handle);
 
             $aggregationHandle = sprintf('%s#%s', $field, $fieldDefinition);
-            $aggregation = $aggregationsByHandle[$aggregationHandle] ?? null;
+            $aggregation = $aggregationsByHandle[$aggregationHandle] ??
+                $aggregationsByHandle[$field] ??
+                null;
 
             if ($aggregation === null) {
                 continue;
@@ -159,7 +162,7 @@ class AggregationMapper extends AbstractDataMapper implements QueryAwareDataMapp
     {
         $result = [];
         foreach ($aggregationData as $aggregationName => $aggregationResult) {
-            [$aggregationType, $handle] = explode(self::AGGREGATION_NAME_SEPARATOR, $aggregationName, 2);
+            list($handle, $aggregationType) = $this->extractAggregationHandleAndType($aggregationName);
 
             $aggregation = $this->aggregationFactory->createFromType($aggregationType);
             $aggregation->field = $handle;
@@ -169,5 +172,21 @@ class AggregationMapper extends AbstractDataMapper implements QueryAwareDataMapp
         }
 
         return $result;
+    }
+
+    private function extractAggregationHandleAndType(string $aggregationName): array
+    {
+        $handle = $aggregationName;
+        $aggregationType = Aggregation\Entity::TYPE;
+
+        if (str_contains($aggregationName, self::AGGREGATION_NAME_SEPARATOR)) {
+            [$aggregationType, $handle] = explode(self::AGGREGATION_NAME_SEPARATOR, $aggregationName, 2);
+        } elseif ($aggregationName === 'price') {
+            // Shopware store-api does not allow to explicitly request this facet. Instead, they will always return
+            // price stats on /search and /product-listing/{categoryId} but no in /product API calls.
+            $aggregationType = Aggregation\Stats::TYPE;
+        }
+
+        return [$handle, $aggregationType];
     }
 }

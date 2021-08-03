@@ -7,6 +7,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Filter;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Util\HandleParser;
+use RuntimeException;
 
 class SearchCriteriaBuilder
 {
@@ -124,10 +125,17 @@ class SearchCriteriaBuilder
 
         foreach ($query->filter as $filter) {
             self::addFilterToCriteria($criteria, $filter);
-        }
 
-        if (!empty($query->query)) {
-            $criteria['term'] = $query->query;
+            // Shopware requires specific fields for money filters. Use "min-price" and "max-price"
+            // as criteria parameters. Only available if text search or category exist
+            if ($filter->attributeType == "money" && $filter instanceof Query\RangeFilter) {
+                if (empty($query->query) && empty($query->category)) {
+                    throw new RuntimeException('Can not use price filter without text search or category');
+                }
+
+                $criteria['min-price'] = (float) $filter->min / 100;
+                $criteria['max-price'] = (float) $filter->max / 100;
+            }
         }
 
         if (!empty($query->productIds)) {
@@ -248,7 +256,9 @@ class SearchCriteriaBuilder
                 $facet->handle = $field;
                 $postFilter = SearchFilterFactory::buildSearchFilterFromQueryFacet($facet);
             }
-        } elseif ($facet instanceof Query\RangeFacet) {
+        } elseif ($facet instanceof Query\RangeFacet && !str_contains($facet->handle, 'price')) {
+            // Shopware store-api does not allow to explicitly request the 'price' facet. Instead, they will always
+            // return price stats on /search and /product-listing/{categoryId} but no in /product API calls.
             $aggregation = new Aggregation\Stats([
                 'name' => $facet->handle,
                 'field' => $facet->handle,
@@ -274,7 +284,7 @@ class SearchCriteriaBuilder
     {
         $filter = SearchFilterFactory::createFromQueryFilter($queryFilter);
 
-        if ($filter) {
+        if ($filter instanceof SearchFilterInterface) {
             $criteria['filter'][] = $filter;
         }
     }

@@ -70,19 +70,33 @@ class ShopwareProductSearchApi extends ProductSearchApiBase
 
     protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
+        // Price facets: Shopware always returns this facet on '/search' or '/product-listing' APIs. On '/product' API
+        // is not possible to get the price facets.
         $query = QueryFacetExpander::expandQueryEnabledFacets(
             $query,
             $this->enabledFacetService->getEnabledFacetDefinitions()
         );
 
+        // Price filters: Shopware only allows price filter on '/search' or '/product-listing' APIs. Those APIs require
+        // either a search term or a categoryId. If any of these filters is present, the price filter can't be applied.
+        // On '/product' API is not possible to apply the price filter.
         $criteria = SearchCriteriaBuilder::buildFromProductQuery($query);
+        $uri = '/store-api/product';
+
+        if (!empty($query->query)) {
+            $criteria["search"] = $query->query;
+            $uri = '/store-api/search';
+        } elseif (!empty($query->category)) {
+            $uri = sprintf('/store-api/product-listing/%s', $query->category);
+        }
+
         $locale = $this->parseLocaleString($query->locale);
         $mapper = $this->buildProductResultMapper($locale, $query);
 
         return $this->client
             ->forCurrency($locale->currencyId)
             ->forLanguage($locale->languageId)
-            ->post('/store-api/product', [], $criteria)
+            ->post($uri, [], $criteria)
             ->then(function ($response) use ($mapper) {
                 return $mapper->map($response);
             });
@@ -98,12 +112,15 @@ class ShopwareProductSearchApi extends ProductSearchApiBase
             $attributes[$localizedAttribute->attributeId] = $localizedAttribute;
         }
 
-        // Shophware 6 v2 and v3 are not accepting at the moment the following parameters.
-        // $attributeId = 'price';
-        // $attributes[$attributeId] = new Attribute([
-            // 'attributeId' => $attributeId,
-            // 'type' => Attribute::TYPE_MONEY,
-        // ]);
+        // Shopware store-api only allows filter by price if the query also includes a search's term or categoryId.
+        // https://shopware.stoplight.io/docs/store-api/docs/guides/quick-start/search-for-products.md
+        // https://shopware.stoplight.io/docs/store-api/storeapi.json/components/schemas/ProductListingCriteria
+
+         $attributeId = 'price';
+         $attributes[$attributeId] = new Attribute([
+             'attributeId' => $attributeId,
+             'type' => Attribute::TYPE_MONEY,
+         ]);
 
         // $attributeId = 'listingPrices';
         // $attributes[$attributeId] = new Attribute([

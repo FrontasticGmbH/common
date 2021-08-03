@@ -14,9 +14,8 @@ class SearchFilterFactory
 
         switch ($queryFilter->attributeType) {
             case 'money':
-                if ($queryFilter instanceof Query\RangeFilter) {
-                    $filter = static::buildSearchRangeFilterFromQueryFilter($queryFilter);
-                }
+                // Shopware requires specific fields for money filters. Use "min-price" and "max-price"
+                // as criteria parameters.
                 break;
             case 'enum':
             case 'localizedEnum':
