@@ -1,5 +1,16 @@
 # common Changelog
 
+## `2.16.0` (2021-08-04)
+
+* feat(FP-839): used integer for price filters
+* feat(FP-839): included price filter and facets on Shopware
+* fix(FP-839): validated terms only in filters that might content them
+* chore(FP-839): renamed handle parser used for Facets and Filters
+* feat(FP-839): pased handler on filter creation
+* feat(custom-data-source): CustomDataSource schema (copy from CustomStream).
+* feat(FP-839): get group from common groupId field
+* fix(FP-839): reused client request for both queries
+
 ## `2.15.0` (2021-07-29)
 
 * feat: enhancing tideways logging for GraphCMS adding Cache status header as well as RequestId
