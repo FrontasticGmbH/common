@@ -126,15 +126,15 @@ class SearchCriteriaBuilder
         foreach ($query->filter as $filter) {
             self::addFilterToCriteria($criteria, $filter);
 
-            // Shopware requires specific fields for money filters. Use "min-price" and "max-price"
-            // as criteria parameters. Only available if text search or category exist
+            // Shopware requires specific fields for money filters. Use "min-price" and "max-price" as criteria
+            // parameters. Only available if text search or category exist, otherwise, the filter will be ignored.
             if ($filter->attributeType == "money" && $filter instanceof Query\RangeFilter) {
                 if (empty($query->query) && empty($query->category)) {
                     throw new RuntimeException('Can not use price filter without text search or category');
                 }
 
-                $criteria['min-price'] = (float) $filter->min / 100;
-                $criteria['max-price'] = (float) $filter->max / 100;
+                $criteria['min-price'] = (int) ($filter->min / 100);
+                $criteria['max-price'] = (int) ($filter->max / 100);
             }
         }
 
