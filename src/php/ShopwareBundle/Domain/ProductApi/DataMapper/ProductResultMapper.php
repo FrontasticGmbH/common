@@ -50,7 +50,7 @@ class ProductResultMapper extends AbstractDataMapper implements
     {
         $result = new Result();
 
-        $productData = $this->extractData($resource);
+        $productData = $this->extractElements($resource, $resource);
 
         $result->total = $resource['total'];
         $result->count = count($productData);

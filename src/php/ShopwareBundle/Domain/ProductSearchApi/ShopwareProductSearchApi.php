@@ -24,9 +24,8 @@ use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\SearchCriteriaBuil
 use Frontastic\Common\ShopwareBundle\Domain\ProjectApi\DataMapper\GenericGroupAggregationMapper;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiFactory;
 use Frontastic\Common\ShopwareBundle\Domain\ProjectConfigApi\ShopwareProjectConfigApiInterface;
-use GuzzleHttp\Promise\FulfilledPromise;
+use GuzzleHttp\Promise\Create;
 use GuzzleHttp\Promise\PromiseInterface;
-use function GuzzleHttp\Promise\promise_for;
 
 class ShopwareProductSearchApi extends ProductSearchApiBase
 {
@@ -71,24 +70,36 @@ class ShopwareProductSearchApi extends ProductSearchApiBase
 
     protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
+        // Price facets: Shopware always returns this facet on '/search' or '/product-listing' APIs. On '/product' API
+        // is not possible to get the price facets.
         $query = QueryFacetExpander::expandQueryEnabledFacets(
             $query,
             $this->enabledFacetService->getEnabledFacetDefinitions()
         );
 
+        // Price filters: Shopware only allows price filter on '/search' or '/product-listing' APIs. Those APIs require
+        // either a search term or a categoryId. If any of these filters is present, the price filter can't be applied.
+        // On '/product' API is not possible to apply the price filter.
         $criteria = SearchCriteriaBuilder::buildFromProductQuery($query);
+        $uri = '/store-api/product';
+
+        if (!empty($query->query)) {
+            $criteria["search"] = $query->query;
+            $uri = '/store-api/search';
+        } elseif (!empty($query->category)) {
+            $uri = sprintf('/store-api/product-listing/%s', $query->category);
+        }
+
         $locale = $this->parseLocaleString($query->locale);
         $mapper = $this->buildProductResultMapper($locale, $query);
 
-        $promise = $this->client
+        return $this->client
             ->forCurrency($locale->currencyId)
             ->forLanguage($locale->languageId)
-            ->post('/sales-channel-api/v2/product', [], $criteria)
+            ->post($uri, [], $criteria)
             ->then(function ($response) use ($mapper) {
                 return $mapper->map($response);
             });
-
-        return $promise;
     }
 
     protected function getSearchableAttributesImplementation(): PromiseInterface
@@ -101,12 +112,15 @@ class ShopwareProductSearchApi extends ProductSearchApiBase
             $attributes[$localizedAttribute->attributeId] = $localizedAttribute;
         }
 
-        // Shophware 6 v2 and v3 are not accepting at the moment the following parameters.
-        // $attributeId = 'price';
-        // $attributes[$attributeId] = new Attribute([
-            // 'attributeId' => $attributeId,
-            // 'type' => Attribute::TYPE_MONEY,
-        // ]);
+        // Shopware store-api only allows filter by price if the query also includes a search's term or categoryId.
+        // https://shopware.stoplight.io/docs/store-api/docs/guides/quick-start/search-for-products.md
+        // https://shopware.stoplight.io/docs/store-api/storeapi.json/components/schemas/ProductListingCriteria
+
+         $attributeId = 'price';
+         $attributes[$attributeId] = new Attribute([
+             'attributeId' => $attributeId,
+             'type' => Attribute::TYPE_MONEY,
+         ]);
 
         // $attributeId = 'listingPrices';
         // $attributes[$attributeId] = new Attribute([
@@ -120,7 +134,7 @@ class ShopwareProductSearchApi extends ProductSearchApiBase
              'type' => Attribute::TYPE_CATEGORY_ID,
          ]);
 
-        return promise_for($attributes->getArrayCopy());
+        return Create::promiseFor($attributes->getArrayCopy());
     }
 
     public function getDangerousInnerClient(): ClientInterface
@@ -186,7 +200,7 @@ class ShopwareProductSearchApi extends ProductSearchApiBase
 
         return $this->client
             ->forLanguage($languageId)
-            ->post('/sales-channel-api/v2/product', [], $criteria)
+            ->post('/store-api/product', [], $criteria)
             ->then(static function ($response) use ($criteriaAggregations) {
                 $groupedAggregations = [];
                 foreach ($criteriaAggregations as $criteriaAggregation) {
@@ -278,7 +292,7 @@ class ShopwareProductSearchApi extends ProductSearchApiBase
         return [
             new Aggregation\Entity([
                 'name' => 'property_groups',
-                'field' => 'properties.group.id',
+                'field' => 'properties.groupId',
                 'definition' => 'property_group',
             ]),
             new Aggregation\Entity([

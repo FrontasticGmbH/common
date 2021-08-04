@@ -4,19 +4,18 @@ namespace Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search;
 
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Filter;
-use RuntimeException;
+use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Util\HandleParser;
 
 class SearchFilterFactory
 {
-    public static function createFromQueryFilter(Query\Filter $queryFilter): SearchFilterInterface
+    public static function createFromQueryFilter(Query\Filter $queryFilter): ?SearchFilterInterface
     {
         $filter = null;
 
         switch ($queryFilter->attributeType) {
             case 'money':
-                if ($queryFilter instanceof Query\RangeFilter) {
-                    $filter = static::buildSearchRangeFilterFromQueryFilter($queryFilter);
-                }
+                // Shopware requires specific fields for money filters. Use "min-price" and "max-price"
+                // as criteria parameters.
                 break;
             case 'enum':
             case 'localizedEnum':
@@ -33,16 +32,6 @@ class SearchFilterFactory
                 }
 
                 break;
-        }
-
-        if (!$filter instanceof SearchFilterInterface) {
-            throw new RuntimeException(
-                sprintf(
-                    'Can not create search filter for query filter %s with attribute type `%s`',
-                    get_class($queryFilter),
-                    $queryFilter->attributeType
-                )
-            );
         }
 
         return $filter;
@@ -63,8 +52,13 @@ class SearchFilterFactory
         return self::buildSearchFilter($queryFacet->handle, $queryFacet->terms);
     }
 
-    public static function buildSearchFilterFromQueryFilter(Query\TermFilter $queryFilter): SearchFilterInterface
+    public static function buildSearchFilterFromQueryFilter(Query\TermFilter $queryFilter): ?SearchFilterInterface
     {
+        // Shopware always requires terms to filter by
+        if (empty($queryFilter->terms)) {
+            return null;
+        }
+
         return self::buildSearchFilter($queryFilter->handle, $queryFilter->terms);
     }
 
@@ -74,7 +68,9 @@ class SearchFilterFactory
             ? new Filter\Equals(['value' => $terms[0]])
             : new Filter\EqualsAny(['value' => $terms]);
 
-        $searchFilter->field = $handle;
+        [$field] = HandleParser::parseFacetHandle($handle);
+
+        $searchFilter->field = $field;
 
         return $searchFilter;
     }

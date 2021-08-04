@@ -6,7 +6,8 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\PaginatedQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Search\Filter;
-use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Util\FacetHandleParser;
+use Frontastic\Common\ShopwareBundle\Domain\ProductApi\Util\HandleParser;
+use RuntimeException;
 
 class SearchCriteriaBuilder
 {
@@ -86,7 +87,6 @@ class SearchCriteriaBuilder
         $criteria = [
             'page' => self::calculatePage($query),
             'limit' => $query->limit,
-            'total-count-mode' => true,
             'filter' => [],
             'post-filter' => [],
             'aggregations' => [],
@@ -125,10 +125,17 @@ class SearchCriteriaBuilder
 
         foreach ($query->filter as $filter) {
             self::addFilterToCriteria($criteria, $filter);
-        }
 
-        if (!empty($query->query)) {
-            $criteria['term'] = $query->query;
+            // Shopware requires specific fields for money filters. Use "min-price" and "max-price" as criteria
+            // parameters. Only available if text search or category exist, otherwise, the filter will be ignored.
+            if ($filter->attributeType == "money" && $filter instanceof Query\RangeFilter) {
+                if (empty($query->query) && empty($query->category)) {
+                    throw new RuntimeException('Can not use price filter without text search or category');
+                }
+
+                $criteria['min-price'] = (int) ($filter->min / 100);
+                $criteria['max-price'] = (int) ($filter->max / 100);
+            }
         }
 
         if (!empty($query->productIds)) {
@@ -230,7 +237,7 @@ class SearchCriteriaBuilder
         $postFilter = null;
 
         if ($facet instanceof Query\TermFacet) {
-            [$field, $definition] = FacetHandleParser::parseFacetHandle($facet->handle);
+            [$field, $definition] = HandleParser::parseFacetHandle($facet->handle);
 
             $aggregationName = sprintf('%s#%s', $field, $definition);
             $aggregation = new Aggregation\Terms([
@@ -249,7 +256,9 @@ class SearchCriteriaBuilder
                 $facet->handle = $field;
                 $postFilter = SearchFilterFactory::buildSearchFilterFromQueryFacet($facet);
             }
-        } elseif ($facet instanceof Query\RangeFacet) {
+        } elseif ($facet instanceof Query\RangeFacet && !str_contains($facet->handle, 'price')) {
+            // Shopware store-api does not allow to explicitly request the 'price' facet. Instead, they will always
+            // return price stats on /search and /product-listing/{categoryId} but no in /product API calls.
             $aggregation = new Aggregation\Stats([
                 'name' => $facet->handle,
                 'field' => $facet->handle,
@@ -273,7 +282,11 @@ class SearchCriteriaBuilder
 
     private static function addFilterToCriteria(array &$criteria, Query\Filter $queryFilter): void
     {
-        $criteria['filter'][] = SearchFilterFactory::createFromQueryFilter($queryFilter);
+        $filter = SearchFilterFactory::createFromQueryFilter($queryFilter);
+
+        if ($filter instanceof SearchFilterInterface) {
+            $criteria['filter'][] = $filter;
+        }
     }
 
     private static function calculatePage(PaginatedQuery $query): int

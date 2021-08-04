@@ -59,7 +59,7 @@ class ProductVariantMapper extends AbstractDataMapper implements
 
     public function map($resource)
     {
-        $variantData = $this->extractData($resource, $resource);
+        $variantData = $this->extractElements($resource, $resource);
 
         $variantId = (string)$variantData['id'];
         return new Variant([

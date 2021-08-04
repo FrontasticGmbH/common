@@ -28,6 +28,7 @@ class QueryFacetExpander
                 continue;
             }
 
+            $facet = null;
             switch ($enabledFacetDefinition->attributeType) {
                 case 'money':
                     $facet = new RangeFacet([
@@ -48,8 +49,10 @@ class QueryFacetExpander
                     break;
             }
 
-            $enabledFacetHandles[] = $facet->handle;
-            $enabledFacets[] = $facet;
+            if ($facet) {
+                $enabledFacetHandles[] = $facet->handle;
+                $enabledFacets[] = $facet;
+            }
         }
 
         foreach ($queryFacetsHandles as $index => $queryFacetsHandle) {
