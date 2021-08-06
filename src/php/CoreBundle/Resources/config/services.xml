@@ -71,6 +71,7 @@
                 <argument>secret</argument>
                 <argument>token</argument>
                 <argument>metaData</argument>
+                <argument>frontasticBasicAuthPassword</argument>
             </argument>
             <argument type="tagged" tag="frontastic.json_serializer.enhancer"/>
         </service>
