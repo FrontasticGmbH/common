@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.16.1` (2021-08-17)
+
+* fix: adds frontasticBasicAuthPassword to exclude list
+
 ## `2.16.0` (2021-08-04)
 
 * feat(FP-839): used integer for price filters
