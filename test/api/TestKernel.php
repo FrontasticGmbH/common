@@ -3,6 +3,7 @@
 namespace Frontastic\Common\ApiTests;
 
 use Frontastic\Common\AccountApiBundle\FrontasticCommonAccountApiBundle;
+use Frontastic\Common\AlgoliaBundle\FrontasticCommonAlgoliaBundle;
 use Frontastic\Common\CartApiBundle\FrontasticCommonCartApiBundle;
 use Frontastic\Common\ContentApiBundle\FrontasticCommonContentApiBundle;
 use Frontastic\Common\CoreBundle\FrontasticCommonCoreBundle;
@@ -45,6 +46,7 @@ class TestKernel extends Kernel
             new FrontasticCommonShopifyBundle(),
             new FrontasticCommonShopwareBundle(),
             new FrontasticCommonSprykerBundle(),
+            new FrontasticCommonAlgoliaBundle(),
             new FrontasticCommonFindologicBundle(),
         ];
     }

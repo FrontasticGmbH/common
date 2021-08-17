@@ -2,6 +2,8 @@
 
 namespace Frontastic\Common\ProductSearchApiBundle\Domain;
 
+use Frontastic\Common\AlgoliaBundle\Domain\AlgoliaClientFactory;
+use Frontastic\Common\AlgoliaBundle\Domain\ProductSearchApi\AlgoliaProductSearchApi;
 use Frontastic\Common\FindologicBundle\Domain\FindologicClientFactory;
 use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\FindologicProductSearchApi;
 use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\QueryValidator;
@@ -157,6 +159,13 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
                     $project->languages,
                     $project->defaultLanguage
                 );
+
+                break;
+            case 'algolia':
+                $clientFactory = $this->container->get(AlgoliaClientFactory::class);
+                $client = $clientFactory->factorForConfigs($project->languages, $productSearchConfig, $engineConfig);
+
+                $productSearchApi = new AlgoliaProductSearchApi($client);
 
                 break;
             case 'findologic':
