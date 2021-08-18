@@ -6,6 +6,7 @@ use Frontastic\Common\AlgoliaBundle\Domain\AlgoliaClient;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\Term;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiBase;
 use GuzzleHttp\Promise\Create;
@@ -35,6 +36,7 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
             'distinct' => true, // Enable the "Attribute for Distinct" to ensure that products are not duplicated.
             'length' => $query->limit,
             'offset' => $query->offset,
+            'facets' => '*',
             // TODO: use cursor instead of offset
             // 'hitsPerPage' => $query->limit,
             // 'page' => (int)ceil($query->cursor / $query->limit),
@@ -74,13 +76,35 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
                 ]);
             }
 
+            $facets = [];
+            foreach ($result['facets'] as $facetKey => $facetTerms) {
+                $terms = [];
+                foreach ($facetTerms as $term => $count) {
+                    $terms[] = new Term([
+                        'handle' => $term,
+                        'name' => $term,
+                        'value' => $term,
+                        'count' => $count,
+                        // TODO: implement `selected`
+                    ]);
+                }
+
+                $facets[] = new Result\TermFacet([
+                    'handle' => $facetKey,
+                    'key' => $facetKey,
+                    'terms' => $terms,
+                    // TODO: implement `selected`
+                ]);
+            }
+
             return new Result(
                 [
                     'offset' => $result['offset'] ?? 0,
                     'total' => $totalResults,
-                    'query' => clone $query,
                     'items' => $items,
                     'count' => count($items),
+                    'facets' => $facets,
+                    'query' => clone $query,
                 ]
             );
         });
