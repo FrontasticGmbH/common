@@ -4,8 +4,6 @@ namespace Frontastic\Common\AlgoliaBundle\Domain;
 
 use Algolia\AlgoliaSearch\SearchClient;
 use Algolia\AlgoliaSearch\SearchIndex;
-use GuzzleHttp\Promise\Promise;
-use GuzzleHttp\Promise\PromiseInterface;
 
 class AlgoliaClient
 {
@@ -20,14 +18,8 @@ class AlgoliaClient
             ->initIndex($indexName);
     }
 
-    public function search(): PromiseInterface
+    public function search(string $query, array $requestOptions = [])
     {
-        $objects = $this->index->search('', [
-                'distinct' => true,
-            ]
-        );
-
-        return new Promise();
+        return $this->index->search($query, $requestOptions);
     }
-
 }

@@ -32,5 +32,4 @@ class AlgoliaClientFactory
             $config['indexName'],
         );
     }
-
 }
