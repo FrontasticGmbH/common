@@ -130,7 +130,10 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
                     $attributes[$facet->key]->type = Attribute::TYPE_ENUM;
                     $attributes[$facet->key]->values = array_map(
                         function ($term) {
-                            return $term->value;
+                            return [
+                                'key' => $term->value,
+                                'label' => $term->value,
+                            ];
                         },
                         $facet->terms
                     );
