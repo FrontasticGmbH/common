@@ -5,6 +5,7 @@ namespace Frontastic\Common\AlgoliaBundle\Domain\ProductSearchApi;
 use Frontastic\Common\AlgoliaBundle\Domain\AlgoliaClient;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\TermFilter;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\Facet;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\Term;
@@ -30,9 +31,6 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
     {
         $queryTerm = $query->query ?? '';
 
-        // The index selected should have configured `productId` as "Attribute for Distinct"
-        // https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/how-to/item-variations
-
         $requestOptions = [
             'distinct' => true, // Enable the "Attribute for Distinct" to ensure that products are not duplicated.
             'length' => $query->limit,
@@ -42,6 +40,28 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
             // 'hitsPerPage' => $query->limit,
             // 'page' => (int)ceil($query->cursor / $query->limit),
         ];
+
+        foreach ($query->filter as $queryFilter) {
+            if ($queryFilter instanceof TermFilter) {
+                $requestOptions['facetFilters'][] = array_map(
+                    function ($term) use ($queryFilter) {
+                        // Format expected "<filter_name>:<filter_value>"
+                        return $queryFilter->handle . ':' . $term;
+                    },
+                    $queryFilter->terms
+                );
+            }
+        }
+
+        // TODO: implement $query->productIds
+        // TODO: implement $query->skus
+        // TODO: implement $query->productType
+        // TODO: implement $query->category
+        // TODO: implement $query->sortAttributes
+        // TODO: implement $query->facets
+
+        // The index selected should have configured `productId` as "Attribute for Distinct"
+        // https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/how-to/item-variations
 
         return Create::promiseFor(
             $this->client->search(
