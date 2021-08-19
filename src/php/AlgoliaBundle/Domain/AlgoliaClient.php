@@ -22,4 +22,9 @@ class AlgoliaClient
     {
         return $this->index->search($query, $requestOptions);
     }
+
+    public function getSettings()
+    {
+        return $this->index->getSettings();
+    }
 }
