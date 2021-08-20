@@ -53,10 +53,36 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
             }
         }
 
-        // TODO: implement $query->productIds
-        // TODO: implement $query->skus
-        // TODO: implement $query->productType
-        // TODO: implement $query->category
+        // In order to perform filter by `productIds`, `skus`, `productType` or `category` the Algolia index should
+        // have those fields set as facets
+        if ($query->productId) {
+            $requestOptions['facetFilters'][] = 'productId:' . $query->productId;
+        }
+
+        if ($query->productIds) {
+            foreach ($query->productIds as $productId) {
+                $requestOptions['facetFilters'][] = 'productId:' . $productId;
+            }
+        }
+
+        if ($query->sku) {
+            $requestOptions['facetFilters'][] = 'sku:' . $query->sku;
+        }
+
+        if ($query->skus) {
+            foreach ($query->skus as $sku) {
+                $requestOptions['facetFilters'][] = 'sku:' . $sku;
+            }
+        }
+
+        if ($query->productType) {
+            $requestOptions['facetFilters'][] = 'productType:' . $query->productType;
+        }
+
+        if ($query->category) {
+            $requestOptions['facetFilters'][] = 'category:' . $query->category;
+        }
+
         // TODO: implement $query->sortAttributes
         // TODO: implement $query->facets
 
@@ -175,6 +201,7 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
      */
     protected function dataToFacets(array $data): array
     {
+        // TODO: ignore `productId` and `skus` as facets since are only there to provide filter capabilities
         $facets = [];
 
         $facetsData = $data['facets'] ?? [];
