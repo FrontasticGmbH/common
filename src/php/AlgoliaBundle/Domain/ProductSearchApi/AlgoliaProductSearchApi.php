@@ -17,6 +17,14 @@ use GuzzleHttp\Promise\PromiseInterface;
 
 class AlgoliaProductSearchApi extends ProductSearchApiBase
 {
+    private const PRODUCT_ID_ATTRIBUTE_KEY = 'productId';
+    private const SKU_ATTRIBUTE_KEY = 'sku';
+
+    private const IGNORED_ATTRIBUTES = [
+        self::PRODUCT_ID_ATTRIBUTE_KEY,
+        self::SKU_ATTRIBUTE_KEY,
+    ];
+
     /**
      * @var AlgoliaClient
      */
@@ -83,6 +91,7 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
             $requestOptions['facetFilters'][] = 'category:' . $query->category;
         }
 
+        // TODO: implement filter for price range
         // TODO: implement $query->sortAttributes
         // TODO: implement $query->facets
 
@@ -150,7 +159,11 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
                     $searchableAttributeData
                 );
 
-                $attributes[$searchableAttributeKey] =  new Attribute([
+                if ($this->shouldIgnoreAttributeKey($searchableAttributeKey)) {
+                    continue;
+                }
+
+                $attributes[$searchableAttributeKey] = new Attribute([
                     'attributeId' => $searchableAttributeKey,
                     'type' => Attribute::TYPE_TEXT, // Use text type as default
                 ]);
@@ -206,6 +219,10 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
 
         $facetsData = $data['facets'] ?? [];
         foreach ($facetsData as $facetKey => $facetTerms) {
+            if ($this->shouldIgnoreAttributeKey($facetKey)) {
+                continue;
+            }
+
             $terms = [];
             foreach ($facetTerms as $term => $count) {
                 $terms[] = new Term([
@@ -227,6 +244,10 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
 
         $facetsStatsData = $data['facets_stats'] ?? [];
         foreach ($facetsStatsData as $facetKey => $facetStat) {
+            if ($this->shouldIgnoreAttributeKey($facetKey)) {
+                continue;
+            }
+
             $facets[] = new Result\RangeFacet([
                 'handle' => $facetKey,
                 'key' => $facetKey,
@@ -236,5 +257,10 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
         }
 
         return $facets;
+    }
+
+    protected function shouldIgnoreAttributeKey(string $attributeKey): bool
+    {
+        return in_array($attributeKey, self::IGNORED_ATTRIBUTES);
     }
 }
