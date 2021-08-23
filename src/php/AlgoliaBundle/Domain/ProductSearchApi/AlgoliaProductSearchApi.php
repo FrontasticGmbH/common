@@ -5,6 +5,7 @@ namespace Frontastic\Common\AlgoliaBundle\Domain\ProductSearchApi;
 use Frontastic\Common\AlgoliaBundle\Domain\AlgoliaClient;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\RangeFilter;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\TermFilter;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\Facet;
@@ -37,6 +38,9 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
 
     protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
+        // In order to perform filter by `productIds`, `skus`, `productType` or `category` the Algolia index should
+        // have those fields set as facets
+
         $queryTerm = $query->query ?? '';
 
         $requestOptions = [
@@ -58,11 +62,14 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
                     },
                     $queryFilter->terms
                 );
+            } elseif ($queryFilter instanceof RangeFilter) {
+                list($min, $max) = $this->extractRangeValues($queryFilter);
+
+                $requestOptions['numericFilters'][] =
+                    $queryFilter->handle . ':' . $min . ' TO ' . $max;
             }
         }
 
-        // In order to perform filter by `productIds`, `skus`, `productType` or `category` the Algolia index should
-        // have those fields set as facets
         if ($query->productId) {
             $requestOptions['facetFilters'][] = 'productId:' . $query->productId;
         }
@@ -91,7 +98,6 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
             $requestOptions['facetFilters'][] = 'category:' . $query->category;
         }
 
-        // TODO: implement filter for price range
         // TODO: implement $query->sortAttributes
         // TODO: implement $query->facets
 
@@ -261,4 +267,18 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
     {
         return in_array($attributeKey, self::IGNORED_ATTRIBUTES);
     }
+
+    protected function extractRangeValues(RangeFilter $filter): array
+    {
+        $min = $filter->min;
+        $max = $filter->max;
+
+        if ($filter->attributeType == Attribute::TYPE_MONEY) {
+            $min = $min / 100;
+            $max = $max / 100;
+        }
+
+        return [$min, $max];
+    }
+
 }
