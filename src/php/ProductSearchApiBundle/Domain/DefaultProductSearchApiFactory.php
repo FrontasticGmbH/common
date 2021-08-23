@@ -165,7 +165,7 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
                 $clientFactory = $this->container->get(AlgoliaClientFactory::class);
                 $client = $clientFactory->factorForConfigs($project->languages, $productSearchConfig, $engineConfig);
 
-                $productSearchApi = new AlgoliaProductSearchApi($client);
+                $productSearchApi = new AlgoliaProductSearchApi($client, $this->enabledFacetService);
 
                 break;
             case 'findologic':
