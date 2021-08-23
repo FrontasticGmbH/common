@@ -147,55 +147,53 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
 
     protected function getSearchableAttributesImplementation(): PromiseInterface
     {
+        // Only "TermFacet" and "price" will be returned as a searchable attributes. We are ignoring
+        // Attribute::TYPE_TEXT as a searchable attributes since Algolia does not allow filter
+        // those attributes along with a query filter, and also the text searched needs to be an exact match.
+        // In this way, we are prioritizing query filter that will allow us to perform partial searches.
+
         return Create::promiseFor(
-            $this->client->getSettings()
-        )
-        ->then(function ($response) {
-            $attributes = [];
-            foreach ($response['searchableAttributes'] as $searchableAttributeData) {
-                $searchableAttributeKey = preg_replace(
-                    '/unordered\((.*?)\)/',
-                    '$1',
-                    $searchableAttributeData
-                );
-
-                if ($this->shouldIgnoreAttributeKey($searchableAttributeKey)) {
-                    continue;
-                }
-
-                $attributes[$searchableAttributeKey] = new Attribute([
-                    'attributeId' => $searchableAttributeKey,
-                    'type' => Attribute::TYPE_TEXT, // Use text type as default
-                ]);
-            }
-
-            $searchResponse = $this->client->search(
+            $this->client->search(
                 '',
                 [
                     'attributesToRetrieve' => ['objectID'], // don't retrieve full objects
                     'hitsPerPage' => 0, // send back an empty page of results anyway
-                    'facets' => '*', // ask for all facets,
-                    'responseFields' => 'facets', // limit JSON response to `facets`
+                    'facets' => '*', // ask for all facets
+                    'responseFields' => ['facets', 'facets_stats'], // limit JSON response fields
                 ]
-            );
+            )
+        )
+        ->then(function ($response) {
+            $attributes = [];
 
-            $facets = $this->dataToFacets($searchResponse);
+            $facets = $this->dataToFacets($response);
             foreach ($facets as $facet) {
-                if (!key_exists($facet->key, $attributes)) {
-                    continue;
+                if ($facet instanceof Result\TermFacet) {
+                    $attributes[$facet->key] = new Attribute([
+                        'attributeId' => $facet->key,
+                        'type' => Attribute::TYPE_ENUM,
+                        'values' => array_map(
+                            function ($term) {
+                                return [
+                                    'key' => $term->value,
+                                    'label' => $term->value,
+                                ];
+                            },
+                            $facet->terms
+                        ),
+                    ]);
                 }
 
-                if ($facet instanceof Result\TermFacet) {
-                    $attributes[$facet->key]->type = Attribute::TYPE_ENUM;
-                    $attributes[$facet->key]->values = array_map(
-                        function ($term) {
-                            return [
-                                'key' => $term->value,
-                                'label' => $term->value,
-                            ];
-                        },
-                        $facet->terms
-                    );
+                // Only "price" will be returned as a searchable attribute since only "money" type supports range filter
+                if ($facet instanceof Result\RangeFacet && $facet->key == 'price') {
+                    $attributes[$facet->key] = new Attribute([
+                        'attributeId' => $facet->key,
+                        'type' => Attribute::TYPE_MONEY,
+                        'values' => [
+                            'min' => $facet->min,
+                            'max' => $facet->max,
+                        ]
+                    ]);
                 }
             }
 
