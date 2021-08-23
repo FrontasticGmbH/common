@@ -65,8 +65,12 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
             } elseif ($queryFilter instanceof RangeFilter) {
                 list($min, $max) = $this->extractRangeValues($queryFilter);
 
-                $requestOptions['numericFilters'][] =
-                    $queryFilter->handle . ':' . $min . ' TO ' . $max;
+                $requestOptions['numericFilters'][] = sprintf(
+                    '%s: %s to %s',
+                    $queryFilter->handle,
+                    $min,
+                    $max
+                );
             }
         }
 
