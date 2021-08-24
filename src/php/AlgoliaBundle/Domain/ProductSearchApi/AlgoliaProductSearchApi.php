@@ -51,7 +51,7 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
         // https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/how-to/item-variations
 
         // In order to perform filter by `productIds`, `skus`, `productType` or `category` the Algolia index should
-        // have those fields set as facets
+        // have those fields set as facets.
 
         // TODO: implement $query->sortAttributes. This can only be implemented by using another index.
 
@@ -66,19 +66,20 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
             // 'page' => (int)ceil($query->cursor / $query->limit),
         ];
 
+        $filters = [];
         foreach ($query->filter as $queryFilter) {
             if ($queryFilter instanceof TermFilter) {
-                $requestOptions['facetFilters'][] = array_map(
+                $terms = array_map(
                     function ($term) use ($queryFilter) {
-                        // Format expected "<filter_name>:<filter_value>"
-                        return $queryFilter->handle . ':' . $term;
+                        return $queryFilter->handle . ":'$term'" ;
                     },
                     $queryFilter->terms
                 );
+                $filters[] = '(' . implode(' OR ', $terms) . ')';
             } elseif ($queryFilter instanceof RangeFilter) {
                 list($min, $max) = $this->extractRangeValues($queryFilter);
 
-                $requestOptions['numericFilters'][] = sprintf(
+                $filters[] = sprintf(
                     '%s: %s to %s',
                     $queryFilter->handle,
                     $min,
@@ -86,6 +87,8 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
                 );
             }
         }
+
+        $requestOptions['filters'] = implode(' AND ', $filters);
 
         $enabledFacetsIds = [];
         foreach ($this->enabledFacetService->getEnabledFacetDefinitions() as $enabledFacetDefinition) {
@@ -155,7 +158,7 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
             $items = [];
             foreach ($response['hits'] as $hit) {
                 // When the `distinct` request option is enabled, the response does not contain duplicated
-                // products per each variant
+                // products per each variant.
                 $items[] = new Product([
                     'productId' => $hit['productId'] ?? null,
                     'name' => $hit['name'] ?? null,
@@ -198,7 +201,28 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
         // In this way, we are prioritizing query filter that will allow us to perform partial searches.
 
         return Create::promiseFor(
-            $this->client->search(
+            $this->client->getSettings()
+        )
+        ->then(function ($response) {
+            $attributes = [];
+            foreach ($response['searchableAttributes'] as $searchableAttributeData) {
+                $searchableAttributeKey = preg_replace(
+                    '/unordered\((.*?)\)/',
+                    '$1',
+                    $searchableAttributeData
+                );
+
+                if ($this->shouldIgnoreAttributeKey($searchableAttributeKey)) {
+                    continue;
+                }
+
+                $attributes[$searchableAttributeKey] = new Attribute([
+                    'attributeId' => $searchableAttributeKey,
+                    'type' => Attribute::TYPE_TEXT, // Use text type as default
+                ]);
+            }
+
+            $searchResponse = $this->client->search(
                 '',
                 [
                     'attributesToRetrieve' => ['objectID'], // don't retrieve full objects
@@ -206,12 +230,9 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
                     'facets' => '*', // ask for all facets
                     'responseFields' => ['facets', 'facets_stats'], // limit JSON response fields
                 ]
-            )
-        )
-        ->then(function ($response) {
-            $attributes = [];
+            );
 
-            $facets = $this->dataToFacets($response);
+            $facets = $this->dataToFacets($searchResponse);
             foreach ($facets as $facet) {
                 if ($facet instanceof Result\TermFacet) {
                     $attributes[$facet->key] = new Attribute([
