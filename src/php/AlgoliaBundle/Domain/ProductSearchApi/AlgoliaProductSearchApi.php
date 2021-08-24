@@ -5,6 +5,7 @@ namespace Frontastic\Common\AlgoliaBundle\Domain\ProductSearchApi;
 use Frontastic\Common\AlgoliaBundle\Domain\AlgoliaClient;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\Facet;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\RangeFacet;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\RangeFilter;
@@ -186,7 +187,7 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
                     'total' => $totalResults,
                     'items' => $items,
                     'count' => count($items),
-                    'facets' => $this->dataToFacets($response),
+                    'facets' => $this->dataToFacets($response, $query),
                     'query' => clone $query,
                 ]
             );
@@ -274,9 +275,11 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
 
     /**
      * @param array $data
+     * @param ProductQuery|null $query
+     *
      * @return ResultFacet[]
      */
-    protected function dataToFacets(array $data): array
+    protected function dataToFacets(array $data, ProductQuery $query = null): array
     {
         $facets = [];
 
@@ -286,6 +289,12 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
                 continue;
             }
 
+            $facetQuery = $query ? $this->findFacetQuery($query, $facetKey) : null;
+            $selectedTermsMap = [];
+            if ($facetQuery !== null) {
+                $selectedTermsMap = array_fill_keys($facetQuery->terms, true);
+            }
+
             $terms = [];
             foreach ($facetTerms as $term => $count) {
                 $terms[] = new Term([
@@ -293,7 +302,7 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
                     'name' => $term,
                     'value' => $term,
                     'count' => $count,
-                    // TODO: implement `selected`
+                    'selected' => isset($selectedTermsMap[$term]),
                 ]);
             }
 
@@ -301,7 +310,7 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
                 'handle' => $facetKey,
                 'key' => $facetKey,
                 'terms' => $terms,
-                // TODO: implement `selected`
+                'selected' => !empty($selectedTermsMap),
             ]);
         }
 
@@ -311,12 +320,24 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
                 continue;
             }
 
-            $facets[] = new Result\RangeFacet([
+            $facetQuery = $query ? $this->findFacetQuery($query, $facetKey) : null;
+
+            $facetValues = [
                 'handle' => $facetKey,
                 'key' => $facetKey,
                 'min' => $facetStat['min'] ?? null,
                 'max' => $facetStat['max'] ?? null,
-            ]);
+            ];
+
+            if ($facetQuery !== null) {
+                $facetValues['selected'] = true;
+                $facetValues['value'] = [
+                    'min' => $facetStat['min'],
+                    'max' => $facetStat['max'],
+                ];
+            }
+
+            $facets[] = new Result\RangeFacet($facetValues);
         }
 
         return $facets;
@@ -338,5 +359,15 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
         }
 
         return [$min, $max];
+    }
+
+    protected function findFacetQuery(ProductQuery $query, string $facetKey): ?Facet
+    {
+        foreach ($query->facets as $facetQuery) {
+            if ($facetQuery->handle === $facetKey) {
+                return $facetQuery;
+            }
+        }
+        return null;
     }
 }
