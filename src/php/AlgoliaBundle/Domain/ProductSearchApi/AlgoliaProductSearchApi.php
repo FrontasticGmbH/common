@@ -4,11 +4,14 @@ namespace Frontastic\Common\AlgoliaBundle\Domain\ProductSearchApi;
 
 use Frontastic\Common\AlgoliaBundle\Domain\AlgoliaClient;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\EnabledFacetService;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\RangeFacet;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\RangeFilter;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\TermFacet;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\TermFilter;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\Facet;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\Facet as ResultFacet;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\Term;
 use Frontastic\Common\ProductApiBundle\Domain\Variant;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiBase;
@@ -31,15 +34,26 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
      */
     private $client;
 
-    public function __construct(AlgoliaClient $client)
+    /**
+     * @var EnabledFacetService
+     */
+    private $enabledFacetService;
+
+    public function __construct(AlgoliaClient $client, EnabledFacetService $enabledFacetService)
     {
         $this->client = $client;
+        $this->enabledFacetService = $enabledFacetService;
     }
 
     protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
+        // The index selected should have configured `productId` as "Attribute for Distinct"
+        // https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/how-to/item-variations
+
         // In order to perform filter by `productIds`, `skus`, `productType` or `category` the Algolia index should
         // have those fields set as facets
+
+        // TODO: implement $query->sortAttributes. This can only be implemented by using another index.
 
         $queryTerm = $query->query ?? '';
 
@@ -47,7 +61,6 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
             'distinct' => true, // Enable the "Attribute for Distinct" to ensure that products are not duplicated.
             'length' => $query->limit,
             'offset' => $query->offset,
-            'facets' => '*',
             // TODO: use cursor instead of offset
             // 'hitsPerPage' => $query->limit,
             // 'page' => (int)ceil($query->cursor / $query->limit),
@@ -70,6 +83,34 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
                     $queryFilter->handle,
                     $min,
                     $max
+                );
+            }
+        }
+
+        $enabledFacetsIds = [];
+        foreach ($this->enabledFacetService->getEnabledFacetDefinitions() as $enabledFacetDefinition) {
+            $requestOptions['facets'][] = $enabledFacetDefinition->attributeId;
+            $enabledFacetsIds[] = $enabledFacetDefinition->attributeId;
+        }
+
+        foreach ($query->facets as $queryFacet) {
+            if (!in_array($queryFacet->handle, $enabledFacetsIds)) {
+                continue;
+            }
+
+            if ($queryFacet instanceof TermFacet) {
+                $requestOptions['facetFilters'][] = array_map(
+                    function ($term) use ($queryFacet) {
+                        return $queryFacet->handle . ':' . $term;
+                    },
+                    $queryFacet->terms
+                );
+            } elseif ($queryFacet instanceof RangeFacet) {
+                $requestOptions['numericFilters'][] = sprintf(
+                    '%s: %s to %s',
+                    $queryFacet->handle,
+                    $queryFacet->min,
+                    $queryFacet->max
                 );
             }
         }
@@ -101,12 +142,6 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
         if ($query->category) {
             $requestOptions['facetFilters'][] = 'category:' . $query->category;
         }
-
-        // TODO: implement $query->sortAttributes
-        // TODO: implement $query->facets
-
-        // The index selected should have configured `productId` as "Attribute for Distinct"
-        // https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/how-to/item-variations
 
         return Create::promiseFor(
             $this->client->search(
@@ -218,11 +253,10 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
 
     /**
      * @param array $data
-     * @return Facet[]
+     * @return ResultFacet[]
      */
     protected function dataToFacets(array $data): array
     {
-        // TODO: ignore `productId` and `skus` as facets since are only there to provide filter capabilities
         $facets = [];
 
         $facetsData = $data['facets'] ?? [];
@@ -284,5 +318,4 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
 
         return [$min, $max];
     }
-
 }
