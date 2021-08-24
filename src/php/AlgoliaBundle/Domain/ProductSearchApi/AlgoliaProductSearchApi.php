@@ -60,9 +60,6 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
             'distinct' => true, // Enable the "Attribute for Distinct" to ensure that products are not duplicated.
             'length' => $query->limit,
             'offset' => $query->offset,
-            // TODO: use cursor instead of offset
-            // 'hitsPerPage' => $query->limit,
-            // 'page' => (int)ceil($query->cursor / $query->limit),
         ];
 
         $filters = [];
