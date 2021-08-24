@@ -5,7 +5,12 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="Frontastic\Common\AlgoliaBundle\Domain\AlgoliaClientFactory" public="true">
+        <defaults public="true" />
+
+        <service id="Frontastic\Common\AlgoliaBundle\Domain\ProductSearchApi\Mapper">
+        </service>
+
+        <service id="Frontastic\Common\AlgoliaBundle\Domain\AlgoliaClientFactory">
             <tag name="frontastic.common.api_integration"/>
         </service>
     </services>
