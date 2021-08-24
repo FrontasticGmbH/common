@@ -54,8 +54,6 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
         // In order to perform filter by `productIds`, `skus`, `productType` or `category` the Algolia index should
         // have those fields set as facets.
 
-        // TODO: implement $query->sortAttributes. This can only be implemented by using another index.
-
         $queryTerm = $query->query ?? '';
 
         $requestOptions = [
@@ -167,12 +165,12 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
                     'description' => $hit['description'] ?? null,
                     'categories' => $hit['categories'] ?? [],
                     'variants' => [
-                        // Algolia always return a single variant per hit.
+                        // Algolia always returns a single variant per hit.
                         new Variant([
                             'id' => $hit['productId'] ?? null,
                             'sku' => $hit['sku'] ?? null,
                             'price' => intval($hit['price'] * 100),
-                            'attributes' => $hit, // TODO: should we remove already mapped values?
+                            'attributes' => $hit, // Store all attributes returned by Algolia.
                             'images' => $hit['images'] ?? [],
                             'dangerousInnerVariant' => $query->loadDangerousInnerData ? $hit : null
                         ])
@@ -196,11 +194,6 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
 
     protected function getSearchableAttributesImplementation(): PromiseInterface
     {
-        // Only "TermFacet" and "price" will be returned as a searchable attributes. We are ignoring
-        // Attribute::TYPE_TEXT as a searchable attributes since Algolia does not allow filter
-        // those attributes along with a query filter, and also the text searched needs to be an exact match.
-        // In this way, we are prioritizing query filter that will allow us to perform partial searches.
-
         return Create::promiseFor(
             $this->client->getSettings()
         )
@@ -226,10 +219,10 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
             $searchResponse = $this->client->search(
                 '',
                 [
-                    'attributesToRetrieve' => ['objectID'], // don't retrieve full objects
-                    'hitsPerPage' => 0, // send back an empty page of results anyway
-                    'facets' => '*', // ask for all facets
-                    'responseFields' => ['facets', 'facets_stats'], // limit JSON response fields
+                    'attributesToRetrieve' => ['objectID'], // Don't retrieve full objects
+                    'hitsPerPage' => 0, // Send back an empty page of results anyway
+                    'facets' => '*', // Ask for all facets
+                    'responseFields' => ['facets', 'facets_stats'], // Limit JSON response fields
                 ]
             );
 
