@@ -42,8 +42,6 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
         $this->mapper = $mapper;
     }
 
-
-
     protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
         // The index selected should have configured `productId` as "Attribute for Distinct"
@@ -53,10 +51,12 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
         // have those fields set as facets.
 
         return Create::promiseFor(
-            $this->client->search(
-                $query->query ?? '',
-                array_merge($query->rawApiInput, $this->getRequestOptions($query))
-            )
+            $this->client
+                ->setLanguage($query->locale)
+                ->search(
+                    $query->query ?? '',
+                    array_merge($query->rawApiInput, $this->getRequestOptions($query))
+                )
         )
         ->then(function ($response) use ($query) {
             $totalResults = $response['nbHits'];

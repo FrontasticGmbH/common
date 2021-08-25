@@ -39,7 +39,17 @@ class AlgoliaClient
             ->initIndex($indexConfig->indexName);
     }
 
-    public function search(string $query, array $requestOptions = [])
+    public function setLanguage(string $language): self
+    {
+        $indexConfig = $this->indexesConfig[$language] ?? $this->defaultIndexConfig;
+        if ($this->index->getIndexName() != $indexConfig->indexName) {
+            $this->initIndex($indexConfig);
+        }
+
+        return $this;
+    }
+
+    public function search(string $query, array $requestOptions)
     {
         return $this->index->search($query, $requestOptions);
     }
