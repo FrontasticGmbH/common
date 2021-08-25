@@ -124,9 +124,12 @@ class Mapper
     public function dataToAttributes(array $settingsResponse, array $searchResponse): array
     {
         $attributes = [];
-        foreach ($settingsResponse['searchableAttributes'] as $searchableAttributeData) {
+        foreach ($settingsResponse['attributesForFaceting'] as $searchableAttributeData) {
             $searchableAttributeKey = preg_replace(
-                '/unordered\((.*?)\)/',
+                [
+                    '/searchable\((.*?)\)/',
+                    '/filterOnly\((.*?)\)/',
+                ],
                 '$1',
                 $searchableAttributeData
             );
