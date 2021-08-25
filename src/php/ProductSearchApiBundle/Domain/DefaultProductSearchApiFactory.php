@@ -164,7 +164,12 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
                 break;
             case 'algolia':
                 $clientFactory = $this->container->get(AlgoliaClientFactory::class);
-                $client = $clientFactory->factorForConfigs($project->languages, $productSearchConfig, $engineConfig);
+                $client = $clientFactory->factorForConfigs(
+                    $project->languages,
+                    $project->defaultLanguage,
+                    $productSearchConfig,
+                    $engineConfig
+                );
                 $dataMapper = $this->container->get(AlgoliaDataMapper::class);
 
                 $productSearchApi = new AlgoliaProductSearchApi($client, $this->enabledFacetService, $dataMapper);

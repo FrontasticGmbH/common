@@ -25,10 +25,10 @@ class AlgoliaClient
     /**
      * @param array<string, AlgoliaIndexConfig> $indexesConfig
      */
-    public function __construct(array $indexesConfig)
+    public function __construct(array $indexesConfig, string $defaultLanguage)
     {
         $this->indexesConfig = $indexesConfig;
-        $this->defaultIndexConfig = current($indexesConfig); // Use the first index config as default
+        $this->defaultIndexConfig = $indexesConfig[$defaultLanguage] ?? current($indexesConfig);
 
         $this->initIndex($this->defaultIndexConfig);
     }

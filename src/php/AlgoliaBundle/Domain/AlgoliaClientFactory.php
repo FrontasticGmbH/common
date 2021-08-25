@@ -6,6 +6,7 @@ class AlgoliaClientFactory
 {
     public function factorForConfigs(
         array $languages,
+        string $defaultLanguage,
         object $typeSpecificConfig,
         ?object $algoliaConfig = null
     ): AlgoliaClient {
@@ -35,6 +36,6 @@ class AlgoliaClientFactory
             $clientConfigs[$language] = new AlgoliaIndexConfig($config);
         }
 
-        return new AlgoliaClient($clientConfigs);
+        return new AlgoliaClient($clientConfigs, $defaultLanguage);
     }
 }
