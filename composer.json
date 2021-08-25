@@ -60,6 +60,9 @@
         "squizlabs/php_codesniffer": "@stable",
         "symfony/swiftmailer-bundle": "^3.4"
     },
+    "suggest": {
+        "algolia/algoliasearch-client-php": "Marked as suggested to avoid conflicts with users on previous versions"
+    },
     "autoload": {
         "psr-4": {
             "Frontastic\\Common\\": "src/php/"
