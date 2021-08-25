@@ -118,7 +118,9 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
                     },
                     $queryFilter->terms
                 );
-                $filters[] = '(' . implode(' OR ', $terms) . ')';
+                if (!empty($terms)) {
+                    $filters[] = '(' . implode(' OR ', $terms) . ')';
+                }
             } elseif ($queryFilter instanceof RangeFilter) {
                 list($min, $max) = $this->extractRangeValues($queryFilter);
 
