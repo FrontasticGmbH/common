@@ -9,27 +9,32 @@ class AlgoliaClientFactory
         object $typeSpecificConfig,
         ?object $algoliaConfig = null
     ): AlgoliaClient {
-        $config = [];
-        foreach (['appId', 'appKey', 'indexName'] as $option) {
-            $value = $typeSpecificConfig->$option ?? $algoliaConfig->$option ?? null;
+        $clientConfigs = [];
 
-            if ($value === null) {
-                throw new \RuntimeException('Algolia config option ' . $option . ' is not set');
-            }
-            if (!is_string($value)) {
-                throw new \RuntimeException('Algolia config option ' . $option . ' is no string');
-            }
-            if ($value === '') {
-                throw new \RuntimeException('Algolia config option ' . $option . ' is empty');
+        $languagesConfig = $typeSpecificConfig->languages ?? $algoliaConfig->languages ?? null;
+        foreach ($languages as $language) {
+            $languageConfig = (object) ($languagesConfig[$language] ?? null);
+            $config = [];
+
+            foreach (['appId', 'appKey', 'indexName'] as $option) {
+                $value = $languageConfig->$option ?? $typeSpecificConfig->$option ?? $algoliaConfig->$option ?? null;
+
+                if ($value === null) {
+                    throw new \RuntimeException('Algolia config option ' . $option . ' is not set');
+                }
+                if (!is_string($value)) {
+                    throw new \RuntimeException('Algolia config option ' . $option . ' is no string');
+                }
+                if ($value === '') {
+                    throw new \RuntimeException('Algolia config option ' . $option . ' is empty');
+                }
+
+                $config[$option] = $value;
             }
 
-            $config[$option] = $value;
+            $clientConfigs[$language] = new AlgoliaIndexConfig($config);
         }
 
-        return new AlgoliaClient(
-            $config['appId'],
-            $config['appKey'],
-            $config['indexName'],
-        );
+        return new AlgoliaClient($clientConfigs);
     }
 }

@@ -12,6 +12,11 @@ configuration:
         appId: DILBRXOZYC
         appKey: 82da0c8ccb44ac757e991e28d6e33b4a
         indexName: dev_frontastic_search
+        languages:
+            en_GB@GBP:
+                indexName: dev_frontastic_search
+            de_DE@EUR:
+                indexName: dev_frontastic_search_de
     productSearch:
         engine: algolia
 projects:

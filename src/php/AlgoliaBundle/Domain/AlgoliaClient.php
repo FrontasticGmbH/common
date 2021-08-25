@@ -12,10 +12,31 @@ class AlgoliaClient
      */
     private $index;
 
-    public function __construct(string $appId, string $appKey, string $indexName)
+    /**
+     * @var array
+     */
+    private $indexesConfig;
+
+    /**
+     * @var AlgoliaIndexConfig
+     */
+    private $defaultIndexConfig;
+
+    /**
+     * @param array<string, AlgoliaIndexConfig> $indexesConfig
+     */
+    public function __construct(array $indexesConfig)
     {
-        $this->index = SearchClient::create($appId, $appKey)
-            ->initIndex($indexName);
+        $this->indexesConfig = $indexesConfig;
+        $this->defaultIndexConfig = current($indexesConfig); // Use the first index config as default
+
+        $this->initIndex($this->defaultIndexConfig);
+    }
+
+    protected function initIndex(AlgoliaIndexConfig $indexConfig)
+    {
+        $this->index = SearchClient::create($indexConfig->appId, $indexConfig->appKey)
+            ->initIndex($indexConfig->indexName);
     }
 
     public function search(string $query, array $requestOptions = [])
