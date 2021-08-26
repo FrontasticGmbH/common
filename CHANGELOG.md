@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.17.1` (2021-08-26)
+
+* chore: bumped version required of frontastic/catwalk to 1.16
+
 ## `2.17.0` (2021-08-26)
 
 * feat(FP-932): get default language from project config in Algolia
