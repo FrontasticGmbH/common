@@ -1,5 +1,10 @@
 # common Changelog
 
+## `2.17.2` (2021-08-26)
+
+* fix(FP-932): modified array key validation
+* feat(FP-932): mapped missing variant properties in Algolia
+
 ## `2.17.1` (2021-08-26)
 
 * chore: bumped version required of frontastic/catwalk to 1.16
