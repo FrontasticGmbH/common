@@ -37,11 +37,16 @@ class Mapper
                 'variants' => [
                     // Algolia always returns a single variant per hit.
                     new Variant([
-                        'id' => $productData['productId'] ?? null,
+                        'id' => $productData['variantId'] ?? $productData['productId'] ?? null,
                         'sku' => $productData['sku'] ?? null,
                         'price' => intval($productData['price'] * 100),
+                        'discountedPrice' => $productData['discountedPrice'] ?
+                            intval($productData['discountedPrice'] * 100) :
+                            null
+                        ,
                         'attributes' => $productData, // Store all attributes returned by Algolia.
                         'images' => $productData['images'] ?? [],
+                        'isOnStock' => $productData['isOnStock'] ?? null,
                         'dangerousInnerVariant' => $query->loadDangerousInnerData ? $productData : null
                     ])
                 ],
