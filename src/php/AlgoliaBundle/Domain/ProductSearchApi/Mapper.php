@@ -40,7 +40,7 @@ class Mapper
                         'id' => $productData['variantId'] ?? $productData['productId'] ?? null,
                         'sku' => $productData['sku'] ?? null,
                         'price' => intval($productData['price'] * 100),
-                        'discountedPrice' => $productData['discountedPrice'] ?
+                        'discountedPrice' => key_exists('discountedPrice', $productData) ?
                             intval($productData['discountedPrice'] * 100) :
                             null
                         ,
