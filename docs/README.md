@@ -36,6 +36,18 @@ Here you find the API documentation for the relevant classes:
     * [PermissionRequiredException](php/AccountApiBundle/Domain/PermissionRequiredException.md)
     * [Session](php/AccountApiBundle/Domain/Session.md)
   * [FrontasticCommonAccountApiBundle](php/AccountApiBundle/FrontasticCommonAccountApiBundle.md)
+* AlgoliaBundle
+  * DependencyInjection
+    * [Configuration](php/AlgoliaBundle/DependencyInjection/Configuration.md)
+    * [FrontasticCommonAlgoliaExtension](php/AlgoliaBundle/DependencyInjection/FrontasticCommonAlgoliaExtension.md)
+  * Domain
+    * [AlgoliaClient](php/AlgoliaBundle/Domain/AlgoliaClient.md)
+    * [AlgoliaClientFactory](php/AlgoliaBundle/Domain/AlgoliaClientFactory.md)
+    * [AlgoliaIndexConfig](php/AlgoliaBundle/Domain/AlgoliaIndexConfig.md)
+    * ProductSearchApi
+      * [AlgoliaProductSearchApi](php/AlgoliaBundle/Domain/ProductSearchApi/AlgoliaProductSearchApi.md)
+      * [Mapper](php/AlgoliaBundle/Domain/ProductSearchApi/Mapper.md)
+  * [FrontasticCommonAlgoliaBundle](php/AlgoliaBundle/FrontasticCommonAlgoliaBundle.md)
 * CartApiBundle
   * Controller
     * [LegacyCartController](php/CartApiBundle/Controller/LegacyCartController.md)
