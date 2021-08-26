@@ -1,5 +1,27 @@
 # common Changelog
 
+## `2.17.0` (2021-08-26)
+
+* feat(FP-932): get default language from project config in Algolia
+* feat(FP-932): set algolia library as suggested on composer
+* feat(FP-932): loop over attributes to get searchable attributes in Algolia
+* fix(FP-932): prevent filtering if there are no terms
+* feat(FP-932): handled multilanguage query in Algolia
+* feat(FP-932): allowed multilanguages on Algolia client
+* feat(FP-932): extracted mappers to dedicated class in Algolia
+* feat(FP-932): used offset pagination in Algolia
+* feat(FP-932): implemented selected facets in Algolia
+* feat(FP-932): included and handled text attributes as searchables in Algolia
+* feat(FP-932): missing file for the implemented facet filters in Algolia
+* feat(FP-932): implemented facet filters in Algolia
+* feat(FP-932): implemented query price filter for Algolia
+* feat(FP-932): return all facets and price as searchable attributes on Algolia
+* feat(FP-932): ignore productId and sku from product facets and searchable attributes
+* feat(FP-932): implemented filters for query fields for Algolia
+* feat(FP-932): implemented query filter for Algolia
+* feat(FP-932): use key label structure for Attributes values
+* feat(FP-932): implemented getSearchAttributes for Algolia
+
 ## `2.16.2` (2021-08-19)
 
 * Revert "fix: adds frontasticBasicAuthPassword to exclude list"
