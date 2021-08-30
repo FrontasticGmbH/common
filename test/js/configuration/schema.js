@@ -2,24 +2,49 @@
 
 import Schema from '../../../src/js/configuration/schema.js'
 
-describe('ConfigurationSchema', function () {
+import fs from 'fs'
+import path from 'path'
+
+const loadRegressionExamples = () => {
+    const fixtureBase = path.join(__dirname, '..', '..', '_fixture', 'configuration')
+    return fs.readdirSync(
+        fixtureBase
+    ).map((directory) => {
+        return {
+            exampleName: directory,
+            inputFixture: (JSON.parse(fs.readFileSync(
+                path.join(fixtureBase, directory, 'input_fixture.json')).toString()
+            )),
+            outputExpectation: (JSON.parse(fs.readFileSync(
+                path.join(fixtureBase, directory, 'output_expectation.json')).toString()
+            )),
+        }
+    })
+}
+
+describe.each(loadRegressionExamples())("A schema", ({ exampleName, inputFixture, outputExpectation }) => {
     beforeEach(function () {
         spyOn(console, 'warn')
     })
 
-    it('returns null on getting an undefined option', () => {
-        let schema = new Schema()
+    it(exampleName, () => {
+        const schema = new Schema(inputFixture)
 
-        expect(schema.get('undefined')).toBe(null)
-        expect(console.warn).toHaveBeenCalled()
+        outputExpectation.forEach((expectation) => {
+            expect(schema.get(expectation.key)).toBe(expectation.value)
+
+            if (expectation.warning) {
+                expect(console.warn).toHaveBeenCalled()
+            } else {
+                expect(console.warn).not.toHaveBeenCalled()
+            }
+        })
     })
+})
 
-    it('returns value on getting an unknown option', () => {
-        let schema = new Schema()
-        schema.configuration['unknown'] = 42
-
-        expect(schema.get('unknown')).toBe(42)
-        expect(console.warn).toHaveBeenCalled()
+describe('ConfigurationSchema', function () {
+    beforeEach(function () {
+        spyOn(console, 'warn')
     })
 
     it('throws an error on setting an undefined option', () => {
@@ -28,20 +53,6 @@ describe('ConfigurationSchema', function () {
         expect(function () { schema.set('undefined') }).toThrow(
             new Error('Unknown field undefined in this configuration schema.')
         )
-    })
-
-    it('gets default option for undefined existing field', () => {
-        let schema = new Schema([{
-            name: 'Section',
-            fields: [{
-                label: 'Test Field',
-                field: 'test',
-                type: 'string',
-                default: '42',
-            }],
-        }])
-
-        expect(schema.get('test')).toBe('42')
     })
 
     it('gets correct "false" default for boolean field', () => {
