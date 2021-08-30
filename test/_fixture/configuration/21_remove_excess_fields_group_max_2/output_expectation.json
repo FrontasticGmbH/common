@@ -1,0 +1,7 @@
+[{
+    "key": "test",
+    "value": [
+        {"groupFirst": "first"},
+        {"groupFirst": "second"}
+    ]
+}]

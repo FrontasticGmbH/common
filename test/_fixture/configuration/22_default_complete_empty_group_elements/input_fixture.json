@@ -1,0 +1,26 @@
+{
+    "schema": [{
+        "name": "Test Schema Section",
+        "fields": [{
+            "label": "Test Field",
+            "field": "test",
+            "type": "group",
+            "fields": [
+                {
+                    "label": "First",
+                    "field": "groupFirst",
+                    "type": "string",
+                    "default": "A default"
+                }
+            ]
+        }]
+    }],
+    "configuration": {
+        "test": [
+            {},
+            {
+                "groupFirst": "Not a default"
+            }
+        ]
+    }
+}

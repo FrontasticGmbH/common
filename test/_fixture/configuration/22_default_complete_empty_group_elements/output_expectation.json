@@ -1,0 +1,11 @@
+[{
+    "key": "test",
+    "value": [
+        {
+            "groupFirst": "A default"
+        },
+        {
+            "groupFirst": "Not a default"
+        }
+    ]
+}]

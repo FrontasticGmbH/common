@@ -1,11 +1,13 @@
-[{
-    "name": "Test Schema Section",
-    "fields": [
-        {
-            "label": "Known but not set",
-            "field": "knownWithDefault",
-            "type": "string",
-            "default": "I can haz value"
-        }
-    ]
-}]
+{
+    "schema": [{
+        "name": "Test Schema Section",
+        "fields": [
+            {
+                "label": "Known but not set",
+                "field": "knownWithDefault",
+                "type": "string",
+                "default": "I can haz value"
+            }
+        ]
+    }]
+}

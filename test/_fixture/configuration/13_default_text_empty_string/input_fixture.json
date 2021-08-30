@@ -1,0 +1,10 @@
+{
+    "schema": [{
+        "name": "Test Schema Section",
+        "fields": [{
+            "label": "Test Field",
+            "field": "test",
+            "type": "text"
+        }]
+    }]
+}

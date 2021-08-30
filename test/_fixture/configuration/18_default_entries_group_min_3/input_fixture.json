@@ -1,0 +1,12 @@
+{
+    "schema": [{
+        "name": "Test Schema Section",
+        "fields": [{
+            "label": "Test Field",
+            "field": "test",
+            "type": "group",
+            "min": 3,
+            "fields": []
+        }]
+    }]
+}

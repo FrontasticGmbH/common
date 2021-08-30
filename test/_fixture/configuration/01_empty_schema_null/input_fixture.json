@@ -1,4 +1,6 @@
-[{
-    "name": "Test Schema Section",
-    "fields": []
-}]
+{
+    "schema": [{
+        "name": "Test Schema Section",
+        "fields": []
+    }]
+}
