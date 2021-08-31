@@ -73,10 +73,10 @@ class ConfigurationSchema
         }
 
         if (array_key_exists($fieldName, $this->configuration)) {
-            return $this->configuration[$fieldName];
+            return $fieldConfig->processValueIfRequired($this->configuration[$fieldName]);
         }
 
-        return $fieldConfig->getDefault();
+        return $fieldConfig->processValueIfRequired($fieldConfig->getDefault());
     }
 
     private function getFieldConfiguration(string $fieldName): ?FieldConfiguration

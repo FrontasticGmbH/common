@@ -18,8 +18,8 @@ class ConfigurationSchemaTest extends TestCase
 
         foreach ($outputExpectation as $expectationSet) {
             $this->assertEquals(
-                $expectationSet->value,
-                $schema->getFieldValue($expectationSet->key)
+                $expectationSet['value'],
+                $schema->getFieldValue($expectationSet['key'])
             );
         }
     }
@@ -31,7 +31,7 @@ class ConfigurationSchemaTest extends TestCase
             $examples[] = [
                 basename($dir),
                 json_decode(file_get_contents($dir . '/input_fixture.json'), true),
-                json_decode(file_get_contents($dir . '/output_expectation.json')),
+                json_decode(file_get_contents($dir . '/output_expectation.json'), true),
             ];
         }
         return $examples;
