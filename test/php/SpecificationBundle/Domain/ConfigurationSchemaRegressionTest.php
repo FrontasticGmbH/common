@@ -4,7 +4,7 @@ namespace Frontastic\Common\SpecificationBundle\Domain;
 
 use PHPUnit\Framework\TestCase;
 
-class ConfigurationSchemaTest extends TestCase
+class ConfigurationSchemaRegressionTest extends TestCase
 {
     /**
      * @dataProvider provideRegressionExamples
