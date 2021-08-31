@@ -41,17 +41,16 @@ class GroupFieldConfiguration extends FieldConfiguration
             $value = array_slice($value, 0, $this->max);
         }
 
+        // First visit nested to complete, then visit group itself again
         foreach ($value as $index => $nestedValue) {
-            $value[$index] = $fieldVisitor->processField(
-                $this,
-                $this->completeNestedValue($nestedValue)
-            );
+            $value[$index] = $this->completeNestedValue($nestedValue, $fieldVisitor);
         }
+        $value = $fieldVisitor->processField($this, $value);
 
         return $value;
     }
 
-    private function completeNestedValue($nestedValue)
+    private function completeNestedValue($nestedValue, FieldVisitor $fieldVisitor)
     {
         if (!is_array($nestedValue)) {
             $nestedValue = [];
@@ -61,6 +60,10 @@ class GroupFieldConfiguration extends FieldConfiguration
             if (!isset($nestedValue[$nestedField->getField()])) {
                 $nestedValue[$nestedField->getField()] = $nestedField->getDefault();
             }
+            $nestedValue[$nestedField->getField()] = $fieldVisitor->processField(
+                $nestedField,
+                $nestedValue[$nestedField->getField()]
+            );
         }
         return $nestedValue;
     }
