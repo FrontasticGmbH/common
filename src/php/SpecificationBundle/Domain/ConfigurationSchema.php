@@ -68,6 +68,9 @@ class ConfigurationSchema
     public function getFieldValue(string $fieldName)
     {
         $fieldConfig = $this->getFieldConfiguration($fieldName);
+        if ($fieldConfig === null) {
+            return null;
+        }
 
         if (array_key_exists($fieldName, $this->configuration)) {
             return $this->configuration[$fieldName];
@@ -76,10 +79,12 @@ class ConfigurationSchema
         return $fieldConfig->getDefault();
     }
 
-    private function getFieldConfiguration(string $fieldName): FieldConfiguration
+    private function getFieldConfiguration(string $fieldName): ?FieldConfiguration
     {
         if (!$this->hasField($fieldName)) {
-            throw new \RuntimeException(sprintf('Unknown field %s', $fieldName));
+            return null;
+            // TODO: Log a warning (with a logger!) to conform to the JS implementation
+            // throw new \RuntimeException(sprintf('Unknown field %s', $fieldName));
         }
 
         return $this->fieldConfigurations[$fieldName];
