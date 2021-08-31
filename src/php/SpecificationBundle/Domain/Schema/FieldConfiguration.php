@@ -17,6 +17,16 @@ class FieldConfiguration
         'boolean' => false,
     ];
 
+    /**
+     * Keep in sync with paas/libraries/common/src/js/translate.js!
+     */
+    private const IS_DEFAULT_TRANSLATABLE = [
+        'string' => true,
+        'text' => true,
+        'markdown' => true,
+        'json' => true,
+    ];
+
     private const SPECIAL_TYPE_CLASSES = [
         'group' => GroupFieldConfiguration::class,
     ];
@@ -33,11 +43,14 @@ class FieldConfiguration
 
     private $default;
 
-    private function __construct(string $field, string $type, $default)
+    private bool $translatable;
+
+    private function __construct(string $field, string $type, $default, bool $translatable = false)
     {
         $this->field = $field;
         $this->type = $type;
         $this->default = $default;
+        $this->translatable = $translatable;
     }
 
     public static function fromSchema(array $fieldSchema): FieldConfiguration
@@ -56,7 +69,8 @@ class FieldConfiguration
         return new static(
             self::getRequiredSchemaString($fieldSchema, 'field'),
             $type,
-            self::getSchemaValue($fieldSchema, 'default', self::DEFAULT_VALUES[$type] ?? null)
+            self::getSchemaValue($fieldSchema, 'default', self::DEFAULT_VALUES[$type] ?? null),
+            self::getSchemaValue($fieldSchema, 'translatable', isset(self::IS_DEFAULT_TRANSLATABLE[$type]))
         );
     }
 
@@ -80,6 +94,10 @@ class FieldConfiguration
         return $value;
     }
 
+    public function isTranslatable()
+    {
+        return $this->translatable;
+    }
 
     protected static function getRequiredSchemaString(array $schema, string $key): string
     {

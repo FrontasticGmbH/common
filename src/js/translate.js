@@ -32,6 +32,9 @@ export default function (value, currentLocale, defaultLocale) {
     }
 }
 
+/**
+ * Keep in sync with paas/libraries/common/src/php/SpecificationBundle/Domain/Schema/FieldConfiguration.php!
+ */
 export const isTranslatableByDefault = (fieldType) => {
     switch (fieldType) {
     case 'string':
