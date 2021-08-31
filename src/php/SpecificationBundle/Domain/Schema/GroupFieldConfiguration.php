@@ -8,6 +8,11 @@ class GroupFieldConfiguration extends FieldConfiguration
 
     private ?int $max = null;
 
+    /**
+     * @var FieldConfiguration[]
+     */
+    private array $fields = [];
+
     public static function doCreateFromSchema(string $type, array $fieldSchema): FieldConfiguration
     {
         /** @var self $schema */
@@ -16,6 +21,9 @@ class GroupFieldConfiguration extends FieldConfiguration
         $schema->min = self::getSchemaValue($fieldSchema, 'min', 1);
         $schema->max = self::getSchemaValue($fieldSchema, 'max', null);
 
+        foreach (self::getSchemaValue($fieldSchema, 'fields', []) as $nestedFieldSchema) {
+            $schema->fields[] = FieldConfiguration::fromSchema($nestedFieldSchema);
+        }
         return $schema;
     }
 
@@ -26,7 +34,11 @@ class GroupFieldConfiguration extends FieldConfiguration
         }
 
         while (count($value) < $this->min) {
-            $value[] = $this->generateDefaultElement();
+            $value[] = [];
+        }
+
+        foreach ($value as $index => $nestedValue) {
+            $value[$index] = $this->completeNestedValue($nestedValue);
         }
 
         if ($this->max !== null && count($value) > $this->max) {
@@ -35,9 +47,17 @@ class GroupFieldConfiguration extends FieldConfiguration
         return $value;
     }
 
-    private function generateDefaultElement()
+    private function completeNestedValue($nestedValue)
     {
-        // TODO: Generate proper default for nested elements
-        return [];
+        if (!is_array($nestedValue)) {
+            $nestedValue = [];
+        }
+
+        foreach ($this->fields as $nestedField) {
+            if (!isset($nestedValue[$nestedField->getField()])) {
+                $nestedValue[$nestedField->getField()] = $nestedField->getDefault();
+            }
+        }
+        return $nestedValue;
     }
 }
