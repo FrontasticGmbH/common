@@ -17,6 +17,10 @@ class FieldConfiguration
         'boolean' => false,
     ];
 
+    private const SPECIAL_TYPE_CLASSES = [
+        'group' => GroupFieldConfiguration::class,
+    ];
+
     /**
      * @var string
      */
@@ -29,7 +33,7 @@ class FieldConfiguration
 
     private $default;
 
-    public function __construct(string $field, string $type, $default)
+    private function __construct(string $field, string $type, $default)
     {
         $this->field = $field;
         $this->type = $type;
@@ -40,7 +44,16 @@ class FieldConfiguration
     {
         $type = self::getSchemaString($fieldSchema, 'type', 'text');
 
-        return new FieldConfiguration(
+        $schemaClass = self::class;
+        if (isset(self::SPECIAL_TYPE_CLASSES[$type])) {
+            $schemaClass = self::SPECIAL_TYPE_CLASSES[$type];
+        }
+        return $schemaClass::doCreateFromSchema($type, $fieldSchema);
+    }
+
+    protected static function doCreateFromSchema(string $type, array $fieldSchema): FieldConfiguration
+    {
+        return new static(
             self::getRequiredSchemaString($fieldSchema, 'field'),
             $type,
             self::getSchemaValue($fieldSchema, 'default', self::DEFAULT_VALUES[$type] ?? null)
@@ -62,7 +75,7 @@ class FieldConfiguration
         return $this->default;
     }
 
-    private static function getRequiredSchemaString(array $schema, string $key): string
+    protected static function getRequiredSchemaString(array $schema, string $key): string
     {
         $value = self::getSchemaString($schema, $key, null);
         if ($value === null) {
@@ -72,7 +85,7 @@ class FieldConfiguration
         return $value;
     }
 
-    private static function getSchemaString(array $schema, string $key, ?string $default): ?string
+    protected static function getSchemaString(array $schema, string $key, ?string $default): ?string
     {
         if (!array_key_exists($key, $schema)) {
             return $default;
@@ -86,7 +99,7 @@ class FieldConfiguration
         return $value;
     }
 
-    private static function getSchemaValue(array $schema, string $key, $default)
+    protected static function getSchemaValue(array $schema, string $key, $default)
     {
         if (!array_key_exists($key, $schema)) {
             return $default;
