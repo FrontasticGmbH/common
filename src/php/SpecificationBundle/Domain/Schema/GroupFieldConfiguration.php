@@ -27,7 +27,7 @@ class GroupFieldConfiguration extends FieldConfiguration
         return $schema;
     }
 
-    public function processValueIfRequired($value)
+    public function processValueIfRequired($value, FieldVisitor $fieldVisitor)
     {
         if (!is_array($value)) {
             $value = [];
@@ -37,13 +37,17 @@ class GroupFieldConfiguration extends FieldConfiguration
             $value[] = [];
         }
 
-        foreach ($value as $index => $nestedValue) {
-            $value[$index] = $this->completeNestedValue($nestedValue);
-        }
-
         if ($this->max !== null && count($value) > $this->max) {
             $value = array_slice($value, 0, $this->max);
         }
+
+        foreach ($value as $index => $nestedValue) {
+            $value[$index] = $fieldVisitor->processField(
+                $this,
+                $this->completeNestedValue($nestedValue)
+            );
+        }
+
         return $value;
     }
 

@@ -41,5 +41,4 @@ class FieldConfigurationTest extends TestCase
             ['tree', false],
         ];
     }
-
 }

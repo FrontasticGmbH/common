@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\SpecificationBundle\Domain;
 
+use Frontastic\Common\SpecificationBundle\Domain\Schema\FieldVisitor\NullFieldVisitor;
 use PHPUnit\Framework\TestCase;
 
 class ConfigurationSchemaRegressionTest extends TestCase

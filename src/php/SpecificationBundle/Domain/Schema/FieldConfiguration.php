@@ -89,9 +89,9 @@ class FieldConfiguration
         return $this->default;
     }
 
-    public function processValueIfRequired($value)
+    public function processValueIfRequired($value, FieldVisitor $fieldVisitor)
     {
-        return $value;
+        return $fieldVisitor->processField($this, $value);
     }
 
     public function isTranslatable()

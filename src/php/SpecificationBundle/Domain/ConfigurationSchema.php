@@ -3,6 +3,7 @@
 namespace Frontastic\Common\SpecificationBundle\Domain;
 
 use Frontastic\Common\SpecificationBundle\Domain\Schema\FieldConfiguration;
+use Frontastic\Common\SpecificationBundle\Domain\Schema\FieldVisitor;
 
 class ConfigurationSchema
 {
@@ -65,18 +66,35 @@ class ConfigurationSchema
         return array_key_exists($fieldName, $this->fieldConfigurations);
     }
 
-    public function getFieldValue(string $fieldName)
+    public function getFieldValue(string $fieldName, FieldVisitor $fieldVisitor = null)
     {
         $fieldConfig = $this->getFieldConfiguration($fieldName);
         if ($fieldConfig === null) {
             return null;
         }
 
-        if (array_key_exists($fieldName, $this->configuration)) {
-            return $fieldConfig->processValueIfRequired($this->configuration[$fieldName]);
+        if ($fieldVisitor === null) {
+            $fieldVisitor = new FieldVisitor\NullFieldVisitor();
         }
 
-        return $fieldConfig->processValueIfRequired($fieldConfig->getDefault());
+        if (array_key_exists($fieldName, $this->configuration)) {
+            return $fieldConfig->processValueIfRequired($this->configuration[$fieldName], $fieldVisitor);
+        }
+
+        return $fieldConfig->processValueIfRequired($fieldConfig->getDefault(), $fieldVisitor);
+    }
+
+    public function getCompleteValues(FieldVisitor $fieldVisitor = null)
+    {
+        if ($fieldVisitor === null) {
+            $fieldVisitor = new FieldVisitor\NullFieldVisitor();
+        }
+
+        $values = [];
+        foreach ($this->fieldConfigurations as $configuration) {
+            $values[$configuration->getField()] = $this->getFieldValue($configuration->getField(), $fieldVisitor);
+        }
+        return $values;
     }
 
     private function getFieldConfiguration(string $fieldName): ?FieldConfiguration
