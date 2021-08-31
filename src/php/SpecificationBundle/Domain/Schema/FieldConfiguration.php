@@ -80,13 +80,6 @@ class FieldConfiguration
         return $value;
     }
 
-    private function generateGroupDefault()
-    {
-        if ($this->default !== []) {
-            return $this->default;
-        }
-        var_dump($this);
-    }
 
     protected static function getRequiredSchemaString(array $schema, string $key): string
     {
