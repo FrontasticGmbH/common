@@ -45,7 +45,7 @@ class FieldConfiguration
 
     private bool $translatable;
 
-    private function __construct(string $field, string $type, $default, bool $translatable = false)
+    final private function __construct(string $field, string $type, $default, bool $translatable = false)
     {
         $this->field = $field;
         $this->type = $type;
