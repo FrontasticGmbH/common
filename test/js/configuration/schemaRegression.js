@@ -26,7 +26,7 @@ const loadRegressionExamples = () => {
     })
 }
 
-describe.each(loadRegressionExamples())("A schema", ({ exampleName, inputFixture, outputExpectation }) => {
+describe.each(loadRegressionExamples())('A schema', ({ exampleName, inputFixture, outputExpectation }) => {
     beforeEach(function () {
         spyOn(console, 'warn')
     })
