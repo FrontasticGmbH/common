@@ -7,6 +7,7 @@
 * [fromSchemaAndConfiguration()](#fromschemaandconfiguration)
 * [hasField()](#hasfield)
 * [getFieldValue()](#getfieldvalue)
+* [getCompleteValues()](#getcompletevalues)
 
 ### fromSchemaAndConfiguration()
 
@@ -42,13 +43,29 @@ Return Value: `bool`
 
 ```php
 public function getFieldValue(
-    string $fieldName
+    string $fieldName,
+    FieldVisitor $fieldVisitor = null
 ): mixed
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$fieldName`|`string`||
+`$fieldVisitor`|[`FieldVisitor`](Schema/FieldVisitor.md)|`null`|
+
+Return Value: `mixed`
+
+### getCompleteValues()
+
+```php
+public function getCompleteValues(
+    FieldVisitor $fieldVisitor = null
+): mixed
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$fieldVisitor`|[`FieldVisitor`](Schema/FieldVisitor.md)|`null`|
 
 Return Value: `mixed`
 

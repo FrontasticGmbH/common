@@ -4,29 +4,12 @@
 
 ## Methods
 
-* [__construct()](#__construct)
 * [fromSchema()](#fromschema)
 * [getField()](#getfield)
 * [getType()](#gettype)
 * [getDefault()](#getdefault)
-
-### __construct()
-
-```php
-public function __construct(
-    string $field,
-    string $type,
-    mixed $default
-): mixed
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$field`|`string`||
-`$type`|`string`||
-`$default`|`mixed`||
-
-Return Value: `mixed`
+* [processValueIfRequired()](#processvalueifrequired)
+* [isTranslatable()](#istranslatable)
 
 ### fromSchema()
 
@@ -62,6 +45,30 @@ Return Value: `string`
 
 ```php
 public function getDefault(): mixed
+```
+
+Return Value: `mixed`
+
+### processValueIfRequired()
+
+```php
+public function processValueIfRequired(
+    mixed $value,
+    FieldVisitor $fieldVisitor
+): mixed
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$value`|`mixed`||
+`$fieldVisitor`|[`FieldVisitor`](FieldVisitor.md)||
+
+Return Value: `mixed`
+
+### isTranslatable()
+
+```php
+public function isTranslatable(): mixed
 ```
 
 Return Value: `mixed`
