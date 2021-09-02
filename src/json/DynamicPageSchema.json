@@ -8,13 +8,19 @@
     "type": "object",
 
     "properties": {
-        "dynammicPageType": {
+        "dynamicPageType": {
             "type": "string"
         },
         "isMultiple": {
             "type": "boolean"
         },
         "dataSourceType": {
+            "type": "string"
+        },
+        "description": {
+            "type": "string"
+        },
+        "icon": {
             "type": "string"
         },
         "name": {
@@ -24,5 +30,5 @@
             "type": "string"
         }
     },
-    "required": ["dynammicPageType", "isMultiple", "dataSourceType", "name"]
+    "required": ["dynamicPageType", "isMultiple", "dataSourceType", "name"]
 }
