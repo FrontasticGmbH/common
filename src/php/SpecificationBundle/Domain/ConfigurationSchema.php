@@ -78,10 +78,14 @@ class ConfigurationSchema
         }
 
         if (array_key_exists($fieldName, $this->configuration)) {
-            return $fieldConfig->processValueIfRequired($this->configuration[$fieldName], $fieldVisitor);
+            return $fieldConfig->processValueIfRequired(
+                $this->configuration[$fieldName],
+                $fieldVisitor,
+                [$fieldName]
+            );
         }
 
-        return $fieldConfig->processValueIfRequired($fieldConfig->getDefault(), $fieldVisitor);
+        return $fieldConfig->processValueIfRequired($fieldConfig->getDefault(), $fieldVisitor, [$fieldName]);
     }
 
     public function getCompleteValues(FieldVisitor $fieldVisitor = null)

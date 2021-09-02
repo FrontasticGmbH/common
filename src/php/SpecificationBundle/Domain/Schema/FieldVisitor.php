@@ -11,7 +11,8 @@ interface FieldVisitor
      *
      * @param FieldConfiguration $configuration
      * @param $value
+     * @param array $fieldPath Path of the field nesting e.g. ['groupField', 2] if this is the 3nd element in a group
      * @return mixed Processed version of $value
      */
-    public function processField(FieldConfiguration $configuration, $value);
+    public function processField(FieldConfiguration $configuration, $value, array $fieldPath);
 }

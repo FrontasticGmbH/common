@@ -7,7 +7,7 @@ use Frontastic\Common\SpecificationBundle\Domain\Schema\FieldVisitor;
 
 class NullFieldVisitor implements FieldVisitor
 {
-    public function processField(FieldConfiguration $configuration, $value)
+    public function processField(FieldConfiguration $configuration, $value, array $fieldPath)
     {
         return $value;
     }
