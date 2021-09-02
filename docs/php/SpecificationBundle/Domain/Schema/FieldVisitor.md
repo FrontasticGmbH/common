@@ -11,7 +11,8 @@
 ```php
 public function processField(
     FieldConfiguration $configuration,
-    mixed $value
+    mixed $value,
+    array $fieldPath
 ): mixed
 ```
 
@@ -23,6 +24,7 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$configuration`|[`FieldConfiguration`](FieldConfiguration.md)||
 `$value`|`mixed`||
+`$fieldPath`|`array`||Path of the field nesting e.g. ['groupField', 2] if this is the 3nd element in a group
 
 Return Value: `mixed`
 

@@ -54,7 +54,8 @@ Return Value: `mixed`
 ```php
 public function processValueIfRequired(
     mixed $value,
-    FieldVisitor $fieldVisitor
+    FieldVisitor $fieldVisitor,
+    array $fieldPath
 ): mixed
 ```
 
@@ -62,6 +63,7 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$value`|`mixed`||
 `$fieldVisitor`|[`FieldVisitor`](FieldVisitor.md)||
+`$fieldPath`|`array`||
 
 Return Value: `mixed`
 
