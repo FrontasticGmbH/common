@@ -1,0 +1,28 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://frontastic.cloud/json/dynamicPageSchema",
+
+    "title": "Dynamic Page schema",
+    "description": "A Frontastic dynamic page definition",
+
+    "type": "object",
+
+    "properties": {
+        "dynammicPageType": {
+            "type": "string"
+        },
+        "isMultiple": {
+            "type": "boolean"
+        },
+        "dataSourceType": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string"
+        },
+        "category": {
+            "type": "string"
+        }
+    },
+    "required": ["dynammicPageType", "isMultiple", "dataSourceType", "name"]
+}
