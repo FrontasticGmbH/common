@@ -1,5 +1,28 @@
 # common Changelog
 
+## `2.18.1` (2021-09-03)
+
+* chore: bumped version required of frontastic/catwalk to 1.17 
+
+## `2.18.0` (2021-09-03)
+
+* feat(FP-935): Submit current field path to visitors.
+* feat(fp-935): Fixed potential construction issue through `new static()`
+* feat(fp-935): Visitor that executes multiple visitors.
+* feat(fp-935): Test visitors are called correctly.
+* feat(fp-935): Retrieval of complete values + infra to visit these values.
+* feat(fp-935): Translatable support in backend schema implementation.
+* chore(fp-935): Removed orphan method.
+* feat(fp-935): Renamed PHP test suite.
+* feat(fp-935): Ensure compatibility of schema handling with groups.
+* feat(fp-935): Implemented dedicated handling of "group" schema fields.
+* feat(fp-935): Specialization classes for schema value types.
+* feat(fp-935): Adjust behavior of non-existing field value request to JS impl.
+* feat(fp-935): Regression test for PHP implementation of ConfigurationSchema.
+* feat(fp-935): Extracted regression test into dedicated file.
+* feat(fp-935): Migrated more tests to code lang independent format.
+* feat(fp-935): Extracted first config tests into code independant format.
+
 ## `2.17.2` (2021-08-26)
 
 * fix(FP-932): modified array key validation

@@ -12,13 +12,13 @@ class SequentialFieldVisitorTest extends TestCase
     public function testSequentialVisit()
     {
         $firstVisitor = new class implements FieldVisitor {
-            public function processField(FieldConfiguration $configuration, $value)
+            public function processField(FieldConfiguration $configuration, $value, array $fieldPath)
             {
                 return $value . "-first";
             }
         };
         $secondVisitor = new class implements FieldVisitor {
-            public function processField(FieldConfiguration $configuration, $value)
+            public function processField(FieldConfiguration $configuration, $value, array $fieldPath)
             {
                 return $value . ".second";
             }
@@ -33,7 +33,8 @@ class SequentialFieldVisitorTest extends TestCase
             'input-first.second',
             $sequentialVisitor->processField(
                 \Phake::mock(FieldConfiguration::class),
-                'input'
+                'input',
+                []
             )
         );
 

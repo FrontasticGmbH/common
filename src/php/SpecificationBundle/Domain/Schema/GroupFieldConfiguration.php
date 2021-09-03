@@ -27,7 +27,7 @@ class GroupFieldConfiguration extends FieldConfiguration
         return $schema;
     }
 
-    public function processValueIfRequired($value, FieldVisitor $fieldVisitor)
+    public function processValueIfRequired($value, FieldVisitor $fieldVisitor, array $fieldPath)
     {
         if (!is_array($value)) {
             $value = [];
@@ -43,14 +43,18 @@ class GroupFieldConfiguration extends FieldConfiguration
 
         // First visit nested to complete, then visit group itself again
         foreach ($value as $index => $nestedValue) {
-            $value[$index] = $this->completeNestedValue($nestedValue, $fieldVisitor);
+            $value[$index] = $this->completeNestedValue(
+                $nestedValue,
+                $fieldVisitor,
+                array_merge($fieldPath, [$index])
+            );
         }
-        $value = $fieldVisitor->processField($this, $value);
+        $value = $fieldVisitor->processField($this, $value, $fieldPath);
 
         return $value;
     }
 
-    private function completeNestedValue($nestedValue, FieldVisitor $fieldVisitor)
+    private function completeNestedValue($nestedValue, FieldVisitor $fieldVisitor, array $fieldPath)
     {
         if (!is_array($nestedValue)) {
             $nestedValue = [];
@@ -62,7 +66,8 @@ class GroupFieldConfiguration extends FieldConfiguration
             }
             $nestedValue[$nestedField->getField()] = $fieldVisitor->processField(
                 $nestedField,
-                $nestedValue[$nestedField->getField()]
+                $nestedValue[$nestedField->getField()],
+                array_merge($fieldPath, [$nestedField->getField()])
             );
         }
         return $nestedValue;

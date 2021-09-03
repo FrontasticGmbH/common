@@ -1,7 +1,7 @@
 {
     "name": "frontastic/common",
     "license": "None",
-    "version": "2.17.2",
+    "version": "2.18.1",
     "repositories": [
         {
             "type": "path",
@@ -16,7 +16,7 @@
         }
     },
     "conflict": {
-        "frontastic/catwalk": "<1.16"
+        "frontastic/catwalk": "<1.17"
     },
     "require": {
         "ext-json": "*",
