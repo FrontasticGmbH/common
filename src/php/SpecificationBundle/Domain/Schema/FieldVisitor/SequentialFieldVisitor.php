@@ -20,10 +20,10 @@ class SequentialFieldVisitor implements FieldVisitor
         $this->orderedInnerVisitors = $orderedInnerVisitors;
     }
 
-    public function processField(FieldConfiguration $configuration, $value)
+    public function processField(FieldConfiguration $configuration, $value, array $fieldPath)
     {
         foreach ($this->orderedInnerVisitors as $innerVisitor) {
-            $value = $innerVisitor->processField($configuration, $value);
+            $value = $innerVisitor->processField($configuration, $value, $fieldPath);
         }
         return $value;
     }

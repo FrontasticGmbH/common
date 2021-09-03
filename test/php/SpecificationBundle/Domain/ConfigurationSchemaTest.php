@@ -99,7 +99,8 @@ class ConfigurationSchemaTest extends TestCase
 
         \Phake::verify($visitor)->processField(
             $this->isInstanceOf(FieldConfiguration::class),
-            'foobar'
+            'foobar',
+            ['aString']
         );
         \Phake::verify($visitor)->processField(
             $this->isInstanceOf(GroupFieldConfiguration::class),
@@ -116,19 +117,40 @@ class ConfigurationSchemaTest extends TestCase
                     'groupFirst' => 23,
                     'groupSecond' => '',
                 ]
-            ]
+            ],
+            ['aGroup']
+        );
+
+        \Phake::verify($visitor)->processField(
+            $this->isInstanceOf(FieldConfiguration::class),
+            23,
+            ['aGroup', 0, 'groupFirst']
         );
         \Phake::verify($visitor)->processField(
             $this->isInstanceOf(FieldConfiguration::class),
-            'lalala'
+            23,
+            ['aGroup', 1, 'groupFirst']
         );
-        \Phake::verify($visitor, \Phake::times(3))->processField(
+        \Phake::verify($visitor)->processField(
             $this->isInstanceOf(FieldConfiguration::class),
-            23
+            23,
+            ['aGroup', 2, 'groupFirst']
         );
-        \Phake::verify($visitor, \Phake::times(2))->processField(
+
+        \Phake::verify($visitor)->processField(
             $this->isInstanceOf(FieldConfiguration::class),
-            ''
+            'lalala',
+            ['aGroup', 0, 'groupSecond']
+        );
+        \Phake::verify($visitor)->processField(
+            $this->isInstanceOf(FieldConfiguration::class),
+            '',
+            ['aGroup', 1, 'groupSecond']
+        );
+        \Phake::verify($visitor)->processField(
+            $this->isInstanceOf(FieldConfiguration::class),
+            '',
+            ['aGroup', 2, 'groupSecond']
         );
     }
 
