@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.18.1` (2021-09-03)
+
+* chore: bumped version required of frontastic/catwalk to 1.17 
+
 ## `2.18.0` (2021-09-03)
 
 * feat(FP-935): Submit current field path to visitors.
