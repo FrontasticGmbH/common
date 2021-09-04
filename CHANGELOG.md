@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.18.2` (2021-09-04)
+
+* fix: Handle documentary fields properly.
+
 ## `2.18.1` (2021-09-03)
 
 * chore: bumped version required of frontastic/catwalk to 1.17 
