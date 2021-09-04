@@ -53,6 +53,10 @@ class ConfigurationSchema
                     throw new \InvalidArgumentException('Fields have to be arrays');
                 }
 
+                if (FieldConfiguration::isDocumentaryField($fieldSchema['type'])) {
+                    continue;
+                }
+
                 $fieldConfiguration = FieldConfiguration::fromSchema($fieldSchema);
                 $fieldConfigurations[$fieldConfiguration->getField()] = $fieldConfiguration;
             }

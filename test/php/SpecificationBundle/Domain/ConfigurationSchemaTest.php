@@ -154,4 +154,33 @@ class ConfigurationSchemaTest extends TestCase
         );
     }
 
+    public function testDoesNotAttendToDocumentaryFields()
+    {
+        $fixture = self::SCHEMA_FIXTURE;
+
+        $fixture[0]['fields'][] = [
+            'type' => 'description',
+            'text' => 'foo',
+        ];
+        $fixture[1]['fields'][0]['fields'][] = [
+            'type' => 'image',
+            'text' => 'bar',
+        ];
+
+        $visitor = \Phake::mock(NullFieldVisitor::class);
+        \Phake::when($visitor)->processField->thenCallParent();
+
+        $configurationSchema = ConfigurationSchema::fromSchemaAndConfiguration(
+            $fixture,
+            []
+        );
+
+        $values = null;
+        try {
+            $values = $configurationSchema->getCompleteValues($visitor);
+        } catch (\Throwable $e) {
+            $this->fail('Completion failed: ' . $e->getMessage());
+        }
+        $this->assertNotNull($values);
+    }
 }
