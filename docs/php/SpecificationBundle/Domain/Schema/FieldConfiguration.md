@@ -10,6 +10,7 @@
 * [getDefault()](#getdefault)
 * [processValueIfRequired()](#processvalueifrequired)
 * [isTranslatable()](#istranslatable)
+* [isDocumentaryField()](#isdocumentaryfield)
 
 ### fromSchema()
 
@@ -74,5 +75,19 @@ public function isTranslatable(): mixed
 ```
 
 Return Value: `mixed`
+
+### isDocumentaryField()
+
+```php
+static public function isDocumentaryField(
+    string $fieldType
+): bool
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$fieldType`|`string`||
+
+Return Value: `bool`
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).
