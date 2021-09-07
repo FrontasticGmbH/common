@@ -183,4 +183,28 @@ class ConfigurationSchemaTest extends TestCase
         }
         $this->assertNotNull($values);
     }
+
+    public function testDoesNotRemoveUnknownFieldValuesOnCompletion()
+    {
+        $configurationSchema = ConfigurationSchema::fromSchemaAndConfiguration(
+            self::SCHEMA_FIXTURE,
+            [
+                'unknownTop' => 'Do you know me?',
+                'aGroup' => [
+                    [
+                        'groupSecond' => 'I am known',
+                        'groupThird' => 'I am unknown',
+                    ]
+                ]
+            ]
+        );
+
+        $values = $configurationSchema->getCompleteValues();
+
+        $this->assertEquals('Do you know me?',$values['unknownTop']);
+        $this->assertEquals('I am unknown', $values['aGroup'][0]['groupThird']);
+
+        // Ensure valid field is also there
+        $this->assertEquals('I am known', $values['aGroup'][0]['groupSecond']);
+    }
 }
