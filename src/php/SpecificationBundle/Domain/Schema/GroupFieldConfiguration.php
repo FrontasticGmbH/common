@@ -2,6 +2,8 @@
 
 namespace Frontastic\Common\SpecificationBundle\Domain\Schema;
 
+use Frontastic\Common\SpecificationBundle\Domain\ConfigurationSchema;
+
 class GroupFieldConfiguration extends FieldConfiguration
 {
     private int $min = 1;
@@ -22,6 +24,10 @@ class GroupFieldConfiguration extends FieldConfiguration
         $schema->max = self::getSchemaValue($fieldSchema, 'max', null);
 
         foreach (self::getSchemaValue($fieldSchema, 'fields', []) as $nestedFieldSchema) {
+            if (FieldConfiguration::isDocumentaryField($nestedFieldSchema['type'])) {
+                continue;
+            }
+
             $schema->fields[] = FieldConfiguration::fromSchema($nestedFieldSchema);
         }
         return $schema;

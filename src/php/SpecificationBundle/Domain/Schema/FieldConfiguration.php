@@ -31,6 +31,11 @@ class FieldConfiguration
         'group' => GroupFieldConfiguration::class,
     ];
 
+    private const NON_FIELDS = [
+        'description',
+        'image'
+    ];
+
     /**
      * @var string
      */
@@ -97,6 +102,11 @@ class FieldConfiguration
     public function isTranslatable()
     {
         return $this->translatable;
+    }
+
+    public static function isDocumentaryField(string $fieldType): bool
+    {
+        return in_array($fieldType, self::NON_FIELDS);
     }
 
     protected static function getRequiredSchemaString(array $schema, string $key): string

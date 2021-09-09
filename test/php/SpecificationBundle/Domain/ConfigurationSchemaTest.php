@@ -154,4 +154,57 @@ class ConfigurationSchemaTest extends TestCase
         );
     }
 
+    public function testDoesNotAttendToDocumentaryFields()
+    {
+        $fixture = self::SCHEMA_FIXTURE;
+
+        $fixture[0]['fields'][] = [
+            'type' => 'description',
+            'text' => 'foo',
+        ];
+        $fixture[1]['fields'][0]['fields'][] = [
+            'type' => 'image',
+            'text' => 'bar',
+        ];
+
+        $visitor = \Phake::mock(NullFieldVisitor::class);
+        \Phake::when($visitor)->processField->thenCallParent();
+
+        $configurationSchema = ConfigurationSchema::fromSchemaAndConfiguration(
+            $fixture,
+            []
+        );
+
+        $values = null;
+        try {
+            $values = $configurationSchema->getCompleteValues($visitor);
+        } catch (\Throwable $e) {
+            $this->fail('Completion failed: ' . $e->getMessage());
+        }
+        $this->assertNotNull($values);
+    }
+
+    public function testDoesNotRemoveUnknownFieldValuesOnCompletion()
+    {
+        $configurationSchema = ConfigurationSchema::fromSchemaAndConfiguration(
+            self::SCHEMA_FIXTURE,
+            [
+                'unknownTop' => 'Do you know me?',
+                'aGroup' => [
+                    [
+                        'groupSecond' => 'I am known',
+                        'groupThird' => 'I am unknown',
+                    ]
+                ]
+            ]
+        );
+
+        $values = $configurationSchema->getCompleteValues();
+
+        $this->assertEquals('Do you know me?',$values['unknownTop']);
+        $this->assertEquals('I am unknown', $values['aGroup'][0]['groupThird']);
+
+        // Ensure valid field is also there
+        $this->assertEquals('I am known', $values['aGroup'][0]['groupSecond']);
+    }
 }

@@ -1,5 +1,13 @@
 # common Changelog
 
+## `2.19.0` (2021-09-08)
+
+* fix: Keep unknown field values in completed configuration fields.
+
+## `2.18.2` (2021-09-04)
+
+* fix: Handle documentary fields properly.
+
 ## `2.18.1` (2021-09-03)
 
 * chore: bumped version required of frontastic/catwalk to 1.17 

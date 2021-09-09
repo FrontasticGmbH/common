@@ -53,6 +53,10 @@ class ConfigurationSchema
                     throw new \InvalidArgumentException('Fields have to be arrays');
                 }
 
+                if (FieldConfiguration::isDocumentaryField($fieldSchema['type'])) {
+                    continue;
+                }
+
                 $fieldConfiguration = FieldConfiguration::fromSchema($fieldSchema);
                 $fieldConfigurations[$fieldConfiguration->getField()] = $fieldConfiguration;
             }
@@ -98,7 +102,7 @@ class ConfigurationSchema
         foreach ($this->fieldConfigurations as $configuration) {
             $values[$configuration->getField()] = $this->getFieldValue($configuration->getField(), $fieldVisitor);
         }
-        return $values;
+        return array_replace_recursive($this->configuration, $values);
     }
 
     private function getFieldConfiguration(string $fieldName): ?FieldConfiguration
