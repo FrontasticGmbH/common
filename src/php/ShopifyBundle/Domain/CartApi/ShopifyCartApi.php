@@ -203,8 +203,11 @@ class ShopifyCartApi extends CartApiBase
             ->then(function (array $result) use ($cartId): Cart {
                 // Shopify does not clear the cart after checkout(cart) is completed.
                 // The following statement prevent to use the same checkout(cart) if it's already completed.
-                if (isset($result['body']['data']['node']['completedAt']) &&
-                    $result['body']['data']['node']['completedAt'] !== null
+                if ($result['body']['data']['node'] === null ||
+                    (
+                        isset($result['body']['data']['node']['completedAt']) &&
+                        result['body']['data']['node']['completedAt'] !== null
+                    )
                 ) {
                     throw new CartNotActiveException(sprintf('Cart %s is not active', $cartId));
                 }
