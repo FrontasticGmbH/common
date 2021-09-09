@@ -206,7 +206,7 @@ class ShopifyCartApi extends CartApiBase
                 if ($result['body']['data']['node'] === null ||
                     (
                         isset($result['body']['data']['node']['completedAt']) &&
-                        result['body']['data']['node']['completedAt'] !== null
+                        $result['body']['data']['node']['completedAt'] !== null
                     )
                 ) {
                     throw new CartNotActiveException(sprintf('Cart %s is not active', $cartId));
