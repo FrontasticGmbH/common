@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.19.1` (2021-09-09)
+
+* fix(FP-980): validated result to catch no active carts in Shopify
+
 ## `2.19.0` (2021-09-08)
 
 * fix: Keep unknown field values in completed configuration fields.
