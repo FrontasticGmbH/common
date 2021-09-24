@@ -37,9 +37,13 @@ class Project extends DataObject
 
     /**
      * @var string
-     * @required
      */
     public $previewUrl;
+
+    /**
+     * @var object
+     */
+    public $preview;
 
     /**
      * @var string

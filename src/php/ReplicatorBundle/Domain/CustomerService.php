@@ -142,6 +142,7 @@ class CustomerService
                         'customer' => $customer['name'],
                         'apiKey' => $customer['secret'],
                         'publicUrl' => $project['publicUrl'] ?? null,
+                        'preview' => (object) ($project['preview'] ?? []),
                         'previewUrl' => $project['previewUrl'] ?? null,
                         'webpackPort' => $project['webpackPort'] ?? 3000,
                         'ssrPort' => $project['ssrPort'] ?? 8000,
