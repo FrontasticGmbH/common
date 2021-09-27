@@ -10,7 +10,8 @@ Property|Type|Default|Required|Description
 `name` | `string` |  | *Yes* | 
 `customer` | `string` |  | *Yes* | 
 `apiKey` | `string` |  | *Yes* | In the config this is the `secret`.
-`previewUrl` | `string` |  | *Yes* | 
+`previewUrl` | `string` |  | - | 
+`preview` | `object` |  | - | 
 `publicUrl` | `string` |  | *Yes* | 
 `webpackPort` | `int` |  | *Yes* | 
 `ssrPort` | `int` |  | *Yes* | 
