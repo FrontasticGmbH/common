@@ -59,7 +59,7 @@ class LegacyLifecycleEventDecorator implements ProductSearchApi
      */
     protected function getAggregateForListeners(): ProductApi
     {
-        if ($this->container->getEnvironment() != "prod") {
+        if ($this->container->get('kernel')->getEnvironment() != "prod") {
             $this->logger->notice(
                 'Decorating ProductApi::query() is deprecated. Migrate to ProductSearchApi::query() instead.'
             );
