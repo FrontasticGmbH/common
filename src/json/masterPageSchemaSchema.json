@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
-    "id": "https://frontastic.cloud/json/dynamicPageSchema",
+    "id": "https://frontastic.cloud/json/masterPageSchemaSchema",
 
     "title": "Dynamic Page schema",
     "description": "A Frontastic dynamic page definition",
