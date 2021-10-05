@@ -59,9 +59,11 @@ class LegacyLifecycleEventDecorator implements ProductSearchApi
      */
     protected function getAggregateForListeners(): ProductApi
     {
-        $this->logger->notice(
-            'Decorating ProductApi::query() is deprecated. Migrate to ProductSearchApi::query() instead.'
-        );
+        if ($this->container->get('kernel')->getEnvironment() != "prod") {
+            $this->logger->notice(
+                'Decorating ProductApi::query() is deprecated. Migrate to ProductSearchApi::query() instead.'
+            );
+        }
         if ($this->productApi === null) {
             $this->productApi = $this->container->get('frontastic.catwalk.product_api');
         }

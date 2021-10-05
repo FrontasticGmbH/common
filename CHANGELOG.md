@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.19.2` (2021-09-23)
+
+* Always use plain json_decode for decoding CT responses
+
 ## `2.19.1` (2021-09-09)
 
 * fix(FP-980): validated result to catch no active carts in Shopify

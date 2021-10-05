@@ -197,7 +197,7 @@ class Client
                     throw $this->prepareException($response);
                 }
 
-                $data = Json::decode($response->body, true);
+                $data = Json::decode($response->body, true, 512, 0, true);
                 if (JSON_ERROR_NONE === json_last_error()) {
                     return $data;
                 }
