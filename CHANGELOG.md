@@ -1,5 +1,12 @@
 # common Changelog
 
+## `2.19.3` (2021-10-07)
+
+* fix(api-hub): disable deprecation notice in prod
+* fix(api-hub): only output deprecation notice in non-prod-env
+* fix: Keep old previewUrl config working properly
+* feat: Allow for different view and endpoint URLs for preview
+
 ## `2.19.2` (2021-09-23)
 
 * Always use plain json_decode for decoding CT responses
