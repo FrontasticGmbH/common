@@ -1,5 +1,10 @@
 # common Changelog
 
+## `2.20.0` (2021-10-11)
+
+
+* Catwalk version update
+
 ## `2.19.3` (2021-10-07)
 
 * fix(api-hub): disable deprecation notice in prod
