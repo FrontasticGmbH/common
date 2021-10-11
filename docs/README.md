@@ -359,6 +359,7 @@ Here you find the API documentation for the relevant classes:
     * [DefaultSchemaLoader](php/SpecificationBundle/Domain/DefaultSchemaLoader.md)
     * [InvalidSchemaException](php/SpecificationBundle/Domain/InvalidSchemaException.md)
     * [JsonSchemaValidator](php/SpecificationBundle/Domain/JsonSchemaValidator.md)
+    * [MasterPageSchemaSpecParser](php/SpecificationBundle/Domain/MasterPageSchemaSpecParser.md)
     * [NodeSpecParser](php/SpecificationBundle/Domain/NodeSpecParser.md)
     * [ProjectSpecParser](php/SpecificationBundle/Domain/ProjectSpecParser.md)
     * Schema
