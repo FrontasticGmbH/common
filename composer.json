@@ -16,7 +16,7 @@
         }
     },
     "conflict": {
-        "frontastic/catwalk": "<1.17"
+        "frontastic/catwalk": "<1.20.1"
     },
     "require": {
         "ext-json": "*",
