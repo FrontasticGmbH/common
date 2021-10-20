@@ -70,6 +70,10 @@ class Guzzle extends HttpClient
             $sensibleHeaders[$key] = $value;
         }
 
+        if (class_exists(\Tideways\Profiler::class) && $traceId = \Tideways\Profiler::currentTraceId()) {
+            $sensibleHeaders['X-Correlation-ID'] = $traceId;
+        }
+
         return $this->guzzleClient
             ->requestAsync(
                 $method,
