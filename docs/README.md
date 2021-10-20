@@ -357,6 +357,7 @@ Here you find the API documentation for the relevant classes:
     * [CustomDataSourceSpecParser](php/SpecificationBundle/Domain/CustomDataSourceSpecParser.md)
     * [CustomStreamSpecParser](php/SpecificationBundle/Domain/CustomStreamSpecParser.md)
     * [DefaultSchemaLoader](php/SpecificationBundle/Domain/DefaultSchemaLoader.md)
+    * [InvalidCustomDataSourceTypeException](php/SpecificationBundle/Domain/InvalidCustomDataSourceTypeException.md)
     * [InvalidSchemaException](php/SpecificationBundle/Domain/InvalidSchemaException.md)
     * [JsonSchemaValidator](php/SpecificationBundle/Domain/JsonSchemaValidator.md)
     * [MasterPageSchemaSpecParser](php/SpecificationBundle/Domain/MasterPageSchemaSpecParser.md)
