@@ -1,0 +1,49 @@
+[
+    {
+        "name": "First level",
+        "fields": [
+            {
+                "label": "A data source",
+                "field": "stream",
+                "type": "stream",
+                "streamType": "frontastic/product"
+            },
+            {
+                "label": "Another data source",
+                "field": "sindelfingen",
+                "type": "stream",
+                "streamType": "frontastic/product"
+            }
+        ]
+    },
+    {
+        "name": "Nested",
+        "fields": [
+            {
+                "label": "A group",
+                "field": "gropies",
+                "type": "group",
+                "fields": [
+                    {
+                        "label": "A nested group",
+                        "field": "nestedGoofies",
+                        "type": "group",
+                        "fields": [
+                            {
+                                "label": "A text",
+                                "field": "helloMarcel",
+                                "type": "string"
+                            },
+                            {
+                                "label": "Bibi Blocksberg",
+                                "field": "bibiBlocksberg",
+                                "type": "stream",
+                                "streamType": "frontastic/product"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

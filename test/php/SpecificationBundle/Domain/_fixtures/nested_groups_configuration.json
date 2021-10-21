@@ -1,0 +1,32 @@
+{
+    "gropies": [
+        {
+            "nestedGoofies": [
+                {
+                    "bibiBlocksberg": "d3039c1b-56ba-4154-9926-532f2dafa9c0",
+                    "helloMarcel": {
+                        "de_CH": "Lalaland "
+                    }
+                },
+                {
+                    "bibiBlocksberg": "414c3cf4-14fa-4292-b076-ad5066b981e9",
+                    "helloMarcel": {
+                        "de_CH": "Nostie"
+                    }
+                }
+            ]
+        },
+        {
+            "nestedGoofies": [
+                {
+                    "bibiBlocksberg": "414c3cf4-14fa-4292-b076-ad5066b981e9",
+                    "helloMarcel": {
+                        "de_CH": "Hello Carlito!"
+                    }
+                }
+            ]
+        }
+    ],
+    "sindelfingen": "6f56015c-79dd-4011-ac4b-ecb7f851d736",
+    "stream": "6f56015c-79dd-4011-ac4b-ecb7f851d736"
+}

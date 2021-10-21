@@ -70,9 +70,10 @@ class GroupFieldConfiguration extends FieldConfiguration
             if (!isset($nestedValue[$nestedField->getField()])) {
                 $nestedValue[$nestedField->getField()] = $nestedField->getDefault();
             }
-            $nestedValue[$nestedField->getField()] = $fieldVisitor->processField(
-                $nestedField,
+
+            $nestedValue[$nestedField->getField()] = $nestedField->processValueIfRequired(
                 $nestedValue[$nestedField->getField()],
+                $fieldVisitor,
                 array_merge($fieldPath, [$nestedField->getField()])
             );
         }

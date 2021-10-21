@@ -207,4 +207,36 @@ class ConfigurationSchemaTest extends TestCase
         // Ensure valid field is also there
         $this->assertEquals('I am known', $values['aGroup'][0]['groupSecond']);
     }
+
+    public function testVisitorIsCalledForNestedGroups()
+    {
+        $visitor = \Phake::mock(NullFieldVisitor::class);
+        \Phake::when($visitor)->processField->thenCallParent();
+
+        $configurationSchema = ConfigurationSchema::fromSchemaAndConfiguration(
+            \json_decode(file_get_contents(
+                __DIR__ . '/_fixtures/nested_groups_schema.json',
+            ), true),
+            \json_decode(file_get_contents(
+                __DIR__ . '/_fixtures/nested_groups_configuration.json',
+            ), true),
+        );
+
+        $configurationSchema->getCompleteValues($visitor);
+
+        \Phake::verify($visitor, \Phake::times(5))->processField(
+            new class implements \Phake_Matchers_IArgumentMatcher {
+               public function matches(&$argument)
+               {
+                   return ($argument instanceof FieldConfiguration) && $argument->getType() === 'stream';
+               }
+               public function __toString()
+               {
+                   return '<object:FieldConfiguration of type "stream">';
+               }
+            },
+            $this->isType('string'),
+            $this->anything()
+        );
+    }
 }
