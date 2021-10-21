@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.20.1` (2021-10-21)
+
+* fix: return a 400 json response on type error of dynamic pages
+
 ## `2.20.0` (2021-10-11)
 
 
