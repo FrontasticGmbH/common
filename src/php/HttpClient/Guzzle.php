@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\HttpClient;
 
+use Frontastic\Common\CoreBundle\Domain\Tracing;
 use Frontastic\Common\HttpClient;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -70,8 +71,8 @@ class Guzzle extends HttpClient
             $sensibleHeaders[$key] = $value;
         }
 
-        if (class_exists(\Tideways\Profiler::class) && $traceId = \Tideways\Profiler::currentTraceId()) {
-            $sensibleHeaders['X-Correlation-ID'] = $traceId;
+        if (key_exists(Tracing::CORRELATION_ID_KEY, $GLOBALS)) {
+            $sensibleHeaders[Tracing::CORRELATION_ID_HEADER_KEY] = $GLOBALS[Tracing::CORRELATION_ID_KEY];
         }
 
         return $this->guzzleClient
