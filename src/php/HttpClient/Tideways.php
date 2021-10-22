@@ -44,21 +44,16 @@ class Tideways extends HttpClient
         Options $options = null
     ): PromiseInterface {
         $span = null;
-        $traceId = null;
-
-        if (key_exists(Tracing::CORRELATION_ID_KEY, $GLOBALS)) {
-            $traceId = $GLOBALS[Tracing::CORRELATION_ID_KEY];
-            $headers[] = Tracing::CORRELATION_ID_HEADER_KEY. ': ' . $traceId;
-        }
+        $traceId = Tracing::getCurrentTraceId();
 
         if (class_exists(\Tideways\Profiler::class)) {
             $span = \Tideways\Profiler::createSpan('http');
             $span->startTimer();
 
-            if ($traceId) {
-                \Tideways\Profiler::setCustomVariable('X-Correlation-ID', $traceId);
-            }
+            \Tideways\Profiler::setCustomVariable(Tracing::CORRELATION_ID_HEADER_KEY, $traceId);
         }
+
+        $headers[] = Tracing::CORRELATION_ID_HEADER_KEY. ': ' . $traceId;
 
         return $this->aggregate
             ->requestAsync($method, $url, $body, $headers, $options)

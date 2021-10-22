@@ -71,9 +71,7 @@ class Guzzle extends HttpClient
             $sensibleHeaders[$key] = $value;
         }
 
-        if (key_exists(Tracing::CORRELATION_ID_KEY, $GLOBALS)) {
-            $sensibleHeaders[Tracing::CORRELATION_ID_HEADER_KEY] = $GLOBALS[Tracing::CORRELATION_ID_KEY];
-        }
+        $sensibleHeaders[Tracing::CORRELATION_ID_HEADER_KEY] = Tracing::getCurrentTraceId();
 
         return $this->guzzleClient
             ->requestAsync(

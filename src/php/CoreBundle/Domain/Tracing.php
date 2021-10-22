@@ -3,25 +3,27 @@
 namespace Frontastic\Common\CoreBundle\Domain;
 
 use Ramsey\Uuid\Uuid;
-use Symfony\Component\HttpFoundation\Request;
 
 class Tracing
 {
-    public const CORRELATION_ID_KEY = '__correlation_id';
     public const CORRELATION_ID_HEADER_KEY = 'X-Correlation-ID';
 
-    public static function fetchTraceIdFromRequest(Request $request)
-    {
-        // The webserver *might* default this to -, so we always assume that - is a missing id
-        $traceId = $request->headers->get('X-Cloud-Trace-Context', '-');
+    private static ?string $traceId = null;
 
-        if ($traceId === '-' || $traceId === '') {
-            $uuid = Uuid::uuid4()->toString();
-            $traceId = str_replace('-', '', $uuid);
+    public static function getCurrentTraceId()
+    {
+        if (self::$traceId) {
+            return self::$traceId;
         }
 
-        $GLOBALS[self::CORRELATION_ID_KEY] = $traceId;
+        // The webserver *might* default this to -, so we always assume that - is a missing id
+        self::$traceId = $_SERVER['HTTP_X_CLOUD_TRACE_CONTEXT'] ?? '-';
 
-        return $traceId;
+        if (self::$traceId === '-' || self::$traceId === '') {
+            $uuid = Uuid::uuid4()->toString();
+            self::$traceId = str_replace('-', '', $uuid);
+        }
+
+        return self::$traceId;
     }
 }
