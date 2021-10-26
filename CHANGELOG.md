@@ -1,5 +1,10 @@
 # common Changelog
 
+## `2.21.0` (2021-10-26)
+
+* !feat(FP-646): implemented traceability strategy adding a correlation-id to all requests and responses
+* fix: Nested groups were not visited correctly in ConfigurationSchema.
+
 ## `2.20.1` (2021-10-21)
 
 * fix: return a 400 json response on type error of dynamic pages
