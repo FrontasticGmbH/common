@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\HttpClient;
 
+use Frontastic\Common\CoreBundle\Domain\Tracing;
 use Frontastic\Common\HttpClient;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Log\LoggerInterface;
@@ -43,15 +44,16 @@ class Tideways extends HttpClient
         Options $options = null
     ): PromiseInterface {
         $span = null;
-        $traceId = null;
+        $traceId = Tracing::getCurrentTraceId();
+
         if (class_exists(\Tideways\Profiler::class)) {
             $span = \Tideways\Profiler::createSpan('http');
             $span->startTimer();
 
-            if ($traceId = \Tideways\Profiler::currentTraceId()) {
-                $headers[] = 'X-Correlation-ID: ' . $traceId;
-            }
+            \Tideways\Profiler::setCustomVariable(Tracing::CORRELATION_ID_HEADER_KEY, $traceId);
         }
+
+        $headers[] = Tracing::CORRELATION_ID_HEADER_KEY. ': ' . $traceId;
 
         return $this->aggregate
             ->requestAsync($method, $url, $body, $headers, $options)

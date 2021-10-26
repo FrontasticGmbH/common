@@ -2,6 +2,7 @@
 
 namespace Frontastic\Common\HttpClient;
 
+use Frontastic\Common\CoreBundle\Domain\Tracing;
 use Frontastic\Common\HttpClient;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -69,6 +70,8 @@ class Guzzle extends HttpClient
             $value = trim($value);
             $sensibleHeaders[$key] = $value;
         }
+
+        $sensibleHeaders[Tracing::CORRELATION_ID_HEADER_KEY] = Tracing::getCurrentTraceId();
 
         return $this->guzzleClient
             ->requestAsync(
