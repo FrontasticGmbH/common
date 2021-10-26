@@ -129,6 +129,7 @@ Here you find the API documentation for the relevant classes:
       * [SwiftMail](php/CoreBundle/Domain/Mailer/SwiftMail.md)
     * [PaginationAdapter](php/CoreBundle/Domain/PaginationAdapter.md)
     * [RequestProvider](php/CoreBundle/Domain/RequestProvider.md)
+    * [Tracing](php/CoreBundle/Domain/Tracing.md)
     * [Versioner](php/CoreBundle/Domain/Versioner.md)
   * EventListener
     * [JsonExceptionListener](php/CoreBundle/EventListener/JsonExceptionListener.md)
