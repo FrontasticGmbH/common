@@ -39,7 +39,10 @@ class Mapper
                     new Variant([
                         'id' => $productData['variantId'] ?? $productData['productId'] ?? null,
                         'sku' => $productData['sku'] ?? null,
-                        'price' => intval($productData['price'] * 100),
+                        'price' => key_exists('price', $productData) ?
+                            intval($productData['price'] * 100) :
+                            null
+                        ,
                         'discountedPrice' => key_exists('discountedPrice', $productData) ?
                             intval($productData['discountedPrice'] * 100) :
                             null
