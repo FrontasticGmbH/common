@@ -59,7 +59,8 @@ class ShopifyClient
         $this->hostUrl = $this->buildUrl($hostUrl);
     }
 
-    private function buildUrl(string $hostUrl): string {
+    private function buildUrl(string $hostUrl): string
+    {
         $url = parse_url($hostUrl);
         $scheme = $url['scheme'] ?? 'https';
         $host = $url['host'] ?? $url['path'];
