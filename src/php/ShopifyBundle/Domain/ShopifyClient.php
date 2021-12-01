@@ -64,7 +64,7 @@ class ShopifyClient
         $scheme = $url['scheme'] ?? 'https';
         $host = $url['host'] ?? $url['path'];
 
-        return $scheme .'/' . $host . '/api/'. self::SHOPIFY_API_VERSION . '/graphql.json';
+        return $scheme .'://' . $host . '/api/'. self::SHOPIFY_API_VERSION . '/graphql.json';
     }
 
     /**
