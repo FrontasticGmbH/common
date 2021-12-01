@@ -5,6 +5,7 @@ namespace Frontastic\Common\ShopifyBundle\Domain\ProductSearchApi;
 use Frontastic\Common\ProductApiBundle\Domain\Product;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Facets;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\PaginatedQuery;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiBase;
@@ -17,6 +18,15 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
 {
     private const MAX_ELEMENTS_TO_FETCH = 250;
     private const DEFAULT_ELEMENTS_TO_FETCH = 10;
+
+    const PRODUCT_QUERY_FIELDS_LABEL = 'productQueryFields';
+    const COLLECTION_QUERY_FIELDS_LABEL = 'collectionQueryFields';
+    const METAFIELD_QUERY_FIELDS_LABEL = 'metafieldQueryFields';
+    const SEO_QUERY_FIELDS_LABEL = 'seoQueryFields';
+    const VARIANT_QUERY_FIELDS_LABEL = 'variantQueryFields';
+    const PRICE_V2_QUERY_FIELDS_LABEL = 'priceV2QueryFields';
+    const IMAGE_QUERY_FIELDS_LABEL = 'imageQueryFields';
+    const SELECTED_OPTION_QUERY_FIELDS_LABEL = 'selectedOptionQueryFields';
 
     /**
      * @var ShopifyClient
@@ -36,79 +46,7 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
 
     protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
-        $productQueryFields = "
-            id
-            title
-            description
-            descriptionHtml
-            handle
-            productType
-            tags
-            vendor
-            createdAt
-            updatedAt
-            collections(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
-                edges {
-                    node {
-                        id
-                    }
-                }
-            }
-            metafields(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
-                edges {
-                    node {
-                        {$this->getMetafieldQueryFields()}
-                    }
-                }
-            }
-            seo {
-                description
-                title
-            }
-            variants(first: " . self::MAX_ELEMENTS_TO_FETCH . ") {
-                edges {
-                    node {
-                        id
-                        sku
-                        title
-                        availableForSale
-                        quantityAvailable
-                        metafields(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
-                            edges {
-                                node {
-                                    {$this->getMetafieldQueryFields()}
-                                }
-                            }
-                        }
-                        priceV2 {
-                            amount
-                            currencyCode
-                        }
-                        compareAtPriceV2 {
-                            amount
-                            currencyCode
-                        }
-                        product {
-                            id
-                            images(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
-                                edges {
-                                    node {
-                                        originalSrc
-                                    }
-                                }
-                            }
-                        }
-                        selectedOptions {
-                            name
-                            value
-                        }
-                        image {
-                            originalSrc
-                        }
-                    }
-                }
-            }
-        ";
+        $query->rawApiInput = (array)$query->rawApiInput;
 
         $parameters = [];
 
@@ -159,7 +97,7 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                 edges {
                     cursor
                     node {
-                        $productQueryFields
+                        {$this->getProductQueryFields($query)}
                     }
                 }
                 pageInfo {
@@ -188,7 +126,7 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                 nodes(ids: [\"" . implode("\",\"", $productIds) . "\"]) {
                     id
                     ... on Product {
-                        $productQueryFields
+                        {$this->getProductQueryFields($query)}
                     }
                 }
             }";
@@ -209,7 +147,7 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                             edges {
                                 cursor
                                 node {
-                                    $productQueryFields
+                                    {$this->getProductQueryFields($query)}
                                 }
                             }
                             pageInfo {
@@ -325,6 +263,11 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
         return $this->client;
     }
 
+    private function getRawApiInputField(array $rawApiInput, string $field): string
+    {
+        return key_exists($field, $rawApiInput) ? $rawApiInput[$field] : '';
+    }
+
     private function buildPageFilter(PaginatedQuery $query): string
     {
         $pageFilter = strpos($query->cursor, 'before:') === 0 ? "last:" : "first:";
@@ -334,14 +277,142 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
         return $pageFilter;
     }
 
-    private function getMetafieldQueryFields(): string
+    private function getProductQueryFields(Query $query): string
     {
-        return '
+        return "
+            id
+            title
+            description
+            descriptionHtml
+            handle
+            productType
+            tags
+            vendor
+            createdAt
+            updatedAt
+            collections(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                edges {
+                    node {
+                        {$this->getCollectionQueryFields($query)}
+                    }
+                }
+            }
+            metafields(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                edges {
+                    node {
+                        {$this->getMetafieldQueryFields($query)}
+                    }
+                }
+            }
+            seo {
+                {$this->getSeoQueryFields($query)}
+            }
+            variants(first: " . self::MAX_ELEMENTS_TO_FETCH . ") {
+                edges {
+                    node {
+                        {$this->getVariantQueryFields($query)}
+
+                    }
+                }
+            }
+            {$this->getRawApiInputField($query->rawApiInput, self::PRODUCT_QUERY_FIELDS_LABEL)}
+        ";
+    }
+
+    private function getCollectionQueryFields(Query $query): string
+    {
+        return "
+            id
+            {$this->getRawApiInputField($query->rawApiInput, self::COLLECTION_QUERY_FIELDS_LABEL)}
+        ";
+    }
+
+    private function getMetafieldQueryFields(Query $query): string
+    {
+        return "
             id
             key
             value
             type
-        ';
+            {$this->getRawApiInputField($query->rawApiInput, self::METAFIELD_QUERY_FIELDS_LABEL)}
+        ";
+    }
+
+    private function getSeoQueryFields(Query $query): string
+    {
+        return "
+            description
+            title
+            {$this->getRawApiInputField($query->rawApiInput, self::SEO_QUERY_FIELDS_LABEL)}
+        ";
+    }
+
+
+    private function getVariantQueryFields(Query $query): string
+    {
+        return "
+            id
+            sku
+            title
+            availableForSale
+            quantityAvailable
+            metafields(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                edges {
+                    node {
+                        {$this->getMetafieldQueryFields($query)}
+                    }
+                }
+            }
+            priceV2 {
+                {$this->getPriceV2QueryFields($query)}
+            }
+            compareAtPriceV2 {
+                {$this->getPriceV2QueryFields($query)}
+            }
+            product {
+                id
+                images(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
+                    edges {
+                        node {
+                            {$this->getImageQueryFields($query)}
+                        }
+                    }
+                }
+            }
+            selectedOptions {
+                {$this->getSelectedOptionQueryFields($query)}
+            }
+            image {
+                {$this->getImageQueryFields($query)}
+            }
+            {$this->getRawApiInputField($query->rawApiInput, self::VARIANT_QUERY_FIELDS_LABEL)}
+        ";
+    }
+
+    private function getPriceV2QueryFields(Query $query): string
+    {
+        return "
+            amount
+            currencyCode
+            {$this->getRawApiInputField($query->rawApiInput, self::PRICE_V2_QUERY_FIELDS_LABEL)}
+       ";
+    }
+
+    private function getImageQueryFields(Query $query): string
+    {
+        return "
+            originalSrc
+            {$this->getRawApiInputField($query->rawApiInput, self::IMAGE_QUERY_FIELDS_LABEL)}
+       ";
+    }
+
+    private function getSelectedOptionQueryFields(Query $query): string
+    {
+        return "
+            name
+            value
+            {$this->getRawApiInputField($query->rawApiInput, self::SELECTED_OPTION_QUERY_FIELDS_LABEL)}
+       ";
     }
 
     private function hasProductAnyVariantWithSkus(Product $product, array $skus): bool

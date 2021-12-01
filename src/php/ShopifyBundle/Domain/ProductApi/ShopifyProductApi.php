@@ -5,6 +5,7 @@ namespace Frontastic\Common\ShopifyBundle\Domain\ProductApi;
 use Frontastic\Common\ProductApiBundle\Domain\Category;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\PaginatedQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\ProductNotFoundException;
+use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\CategoryQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductTypeQuery;
@@ -22,6 +23,9 @@ class ShopifyProductApi extends ProductApiBase
 {
     private const DEFAULT_PRODUCT_TYPES_TO_FETCH = 10;
     private const MAX_ELEMENTS_TO_FETCH = 250;
+
+    const COLLECTION_QUERY_FIELDS_LABEL = 'collectionQueryFields';
+    const PRODUCTYPE_QUERY_FIELDS_LABEL = 'productTypeQueryFields';
 
     /**
      * @var ShopifyClient
@@ -53,6 +57,8 @@ class ShopifyProductApi extends ProductApiBase
 
     protected function queryCategoriesImplementation(CategoryQuery $query): Result
     {
+        $query->rawApiInput = (array)$query->rawApiInput;
+
         $filters = [];
 
         if ($query->slug) {
@@ -66,9 +72,7 @@ class ShopifyProductApi extends ProductApiBase
                 edges {
                     cursor
                     node {
-                        id
-                        title
-                        handle
+                        {$this->getCollectionQueryFields($query)}
                     }
                 }
                 pageInfo {
@@ -121,8 +125,7 @@ class ShopifyProductApi extends ProductApiBase
         $queryString = "{
             productTypes(first: " . self::DEFAULT_PRODUCT_TYPES_TO_FETCH . ") {
                 edges {
-                    cursor
-                    node
+                    {$this->getProductTypeQueryFields($query)}
                 }
             }
         }";
@@ -190,6 +193,30 @@ class ShopifyProductApi extends ProductApiBase
     public function getDangerousInnerClient(): ShopifyClient
     {
         return $this->client;
+    }
+
+    private function getRawApiInputField(array $rawApiInput, string $field): string
+    {
+        return key_exists($field, $rawApiInput) ? $rawApiInput[$field] : '';
+    }
+
+    private function getCollectionQueryFields(Query $query): string
+    {
+        return "
+            id
+            title
+            handle
+            {$this->getRawApiInputField($query->rawApiInput, self::COLLECTION_QUERY_FIELDS_LABEL)}
+        ";
+    }
+
+    private function getProductTypeQueryFields(Query $query): string
+    {
+        return "
+            cursor
+            node
+            {$this->getRawApiInputField($query->rawApiInput, self::PRODUCTYPE_QUERY_FIELDS_LABEL)}
+        ";
     }
 
     private function buildPageFilter(PaginatedQuery $query): string
