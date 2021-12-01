@@ -9,7 +9,7 @@ configuration:
         hasConsistentProductSearchData: true
         supportSearchByIdentifierAndQueryParameters: true
     shopify:
-        hostUrl: https://frontastic-demo.myshopify.com/api/2021-01/graphql.json
+        hostUrl: https://frontastic-demo.myshopify.com
         storefrontAccessToken: 1aa5b043c2b47c26495be4cdf119b77c
     account:
         engine: shopify

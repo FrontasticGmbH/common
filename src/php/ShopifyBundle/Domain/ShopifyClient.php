@@ -12,6 +12,8 @@ use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class ShopifyClient
 {
+    const SHOPIFY_API_VERSION = "2021-10";
+
     /**
      * @var string
      */
@@ -47,12 +49,22 @@ class ShopifyClient
         $this->httpClient = $httpClient;
         $this->cache = $cache;
         $this->requestProvider = $requestProvider;
-        $this->hostUrl = $hostUrl;
         $this->accessToken = $accessToken;
         $this->httpClient->addDefaultHeaders([
             'content-type: application/json',
             'X-Shopify-Storefront-Access-Token: ' . $this->accessToken
         ]);
+
+        // Build host url using fixed API version
+        $this->hostUrl = $this->buildUrl($hostUrl);
+    }
+
+    private function buildUrl(string $hostUrl): string {
+        $url = parse_url($hostUrl);
+        $scheme = $url['scheme'] ?? 'https';
+        $host = $url['host'] ?? $url['path'];
+
+        return $scheme .'/' . $host . '/api/'. self::SHOPIFY_API_VERSION . '/graphql.json';
     }
 
     /**

@@ -340,7 +340,7 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
             id
             key
             value
-            valueType
+            type
         ';
     }
 
