@@ -25,7 +25,7 @@ class ShopifyProductApi extends ProductApiBase
     private const MAX_ELEMENTS_TO_FETCH = 250;
 
     const COLLECTION_QUERY_FIELDS_LABEL = 'collectionQueryFields';
-    const PRODUCTYPE_QUERY_FIELDS_LABEL = 'productTypeQueryFields';
+    const PRODUCT_TYPE_QUERY_FIELDS_LABEL = 'productTypeQueryFields';
 
     /**
      * @var ShopifyClient
@@ -215,7 +215,7 @@ class ShopifyProductApi extends ProductApiBase
         return "
             cursor
             node
-            {$this->getRawApiInputField($query->rawApiInput, self::PRODUCTYPE_QUERY_FIELDS_LABEL)}
+            {$this->getRawApiInputField($query->rawApiInput, self::PRODUCT_TYPE_QUERY_FIELDS_LABEL)}
         ";
     }
 
