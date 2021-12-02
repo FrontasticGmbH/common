@@ -311,7 +311,6 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                 edges {
                     node {
                         {$this->getVariantQueryFields($query)}
-
                     }
                 }
             }
