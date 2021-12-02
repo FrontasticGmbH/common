@@ -65,10 +65,10 @@ class ShopifyAccountApi implements AccountApi
         return $this->client
             ->request($mutation, $locale)
             ->then(function ($result) use ($account) : Account {
-                if ($result['body']['data']['customerCreate']['customerUserErrors']) {
-                    if ($result['body']['data']['customerCreate']['customerUserErrors'][0]['code'] == "TAKEN") {
-                        throw new DuplicateAccountException($account->email);
-                    }
+                if ($result['body']['data']['customerCreate']['customerUserErrors'] &&
+                    $result['body']['data']['customerCreate']['customerUserErrors'][0]['code'] == "TAKEN"
+                ) {
+                    throw new DuplicateAccountException($account->email);
                 }
 
                 if (empty($account->addresses)) {
@@ -307,11 +307,12 @@ class ShopifyAccountApi implements AccountApi
         return $this->client
             ->request($mutation, $locale)
             ->then(function ($result) use ($account, $address) : Account {
-                if ($result['body']['data']['customerAddressCreate']['customerUserErrors']) {
-                    if ($result['body']['data']['customerAddressCreate']['customerUserErrors'][0]['code'] == "TAKEN") {
-                        throw new DuplicateAddressException($address->streetName);
-                    }
+                if ($result['body']['data']['customerAddressCreate']['customerUserErrors'] &&
+                    $result['body']['data']['customerAddressCreate']['customerUserErrors'][0]['code'] == "TAKEN"
+                ) {
+                    throw new DuplicateAddressException($address->streetName);
                 }
+
                 $account->addresses[] = $this->accountMapper->mapDataToAddress(
                     $result['body']['data']['customerAddressCreate']['customerAddress']
                 );
@@ -348,15 +349,14 @@ class ShopifyAccountApi implements AccountApi
         return $this->client
             ->request($mutation, $locale)
             ->then(function ($result) use ($account, $address) : Account {
-                if ($result['body']['data']['customerAddressUpdate']['customerUserErrors']) {
-                    if ($result['body']['data']['customerAddressUpdate']['customerUserErrors'][0]['code'] == "TAKEN") {
-                        throw new DuplicateAddressException($address->streetName);
-                    }
+                if ($result['body']['data']['customerAddressUpdate']['customerUserErrors'] &&
+                    $result['body']['data']['customerAddressUpdate']['customerUserErrors'][0]['code'] == "TAKEN"
+                ) {
+                    throw new DuplicateAddressException($address->streetName);
                 }
-                $account->addresses[] = $this->accountMapper->mapDataToAddress(
-                    $result['body']['data']['customerAddressUpdate']['customerAddress']
-                );
 
+                // Shopify changes the address id every time it's updated so there is no way to update the $account
+                // data in another way other than refreshing the account.
                 return $this->refreshAccount($account);
             })
             ->wait();

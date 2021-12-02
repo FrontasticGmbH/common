@@ -102,9 +102,8 @@ class AccountUpdateTest extends FrontasticApiTestCase
         // Create an account
         $account = $accountApi->create($accountData, null, $language);
 
-
         //Prepare update data
-        $updatedAddress = $account->addresses[0];
+        $updatedAddress = clone $account->addresses[0];
         $updatedAddress->firstName = 'Molly';
         $updatedAddress->lastName = 'Chambers';
         $updatedAddress->streetName = 'New str name';
