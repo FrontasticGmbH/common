@@ -6,6 +6,7 @@ use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\AccountApiBundle\Domain\DuplicateAccountException;
+use Frontastic\Common\AccountApiBundle\Domain\DuplicateAddressException;
 use Frontastic\Common\AccountApiBundle\Domain\PasswordResetToken;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyAccountMapper;
@@ -305,7 +306,12 @@ class ShopifyAccountApi implements AccountApi
 
         return $this->client
             ->request($mutation, $locale)
-            ->then(function ($result) use ($account) : Account {
+            ->then(function ($result) use ($account, $address) : Account {
+                if ($result['body']['data']['customerAddressCreate']['customerUserErrors']) {
+                    if ($result['body']['data']['customerAddressCreate']['customerUserErrors'][0]['code'] == "TAKEN") {
+                        throw new DuplicateAddressException($address->streetName);
+                    }
+                }
                 $account->addresses[] = $this->accountMapper->mapDataToAddress(
                     $result['body']['data']['customerAddressCreate']['customerAddress']
                 );
@@ -341,12 +347,17 @@ class ShopifyAccountApi implements AccountApi
 
         return $this->client
             ->request($mutation, $locale)
-            ->then(function ($result) use ($account) : Account {
+            ->then(function ($result) use ($account, $address) : Account {
+                if ($result['body']['data']['customerAddressUpdate']['customerUserErrors']) {
+                    if ($result['body']['data']['customerAddressUpdate']['customerUserErrors'][0]['code'] == "TAKEN") {
+                        throw new DuplicateAddressException($address->streetName);
+                    }
+                }
                 $account->addresses[] = $this->accountMapper->mapDataToAddress(
                     $result['body']['data']['customerAddressUpdate']['customerAddress']
                 );
 
-                return $account;
+                return $this->refreshAccount($account);
             })
             ->wait();
     }
