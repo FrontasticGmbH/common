@@ -1,5 +1,14 @@
 # common Changelog
 
+## `2.22.0` (2021-12-02)
+
+* feat(FP-1193): included rawApiImput on getProduct
+* feat(FP-581): refresh account after update address on Shopify
+* feat(FP-581): handle existing address error on Shopify
+* feat(FP-1193): included rawApiInput fields for queries on Product and ProductSearch API
+* fix(FP-1193): added url schema simbols
+* feat!(FP-1193): upgrade and fix shopify version to 2021-10
+
 ## `2.21.1` (2021-11-30)
 
 * fix: make product price nullable in Algolia integration
