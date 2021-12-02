@@ -160,6 +160,7 @@ class ShopifyProductApi extends ProductApiBase
                         'skus' => [$query->sku],
                         'locale' => $query->locale,
                         'loadDangerousInnerData' => $query->loadDangerousInnerData,
+                        'rawApiInput' => $query->rawApiInput,
                     ])
                 )
                 ->then(
@@ -178,6 +179,7 @@ class ShopifyProductApi extends ProductApiBase
                     'productIds' => [$query->productId],
                     'locale' => $query->locale,
                     'loadDangerousInnerData' => $query->loadDangerousInnerData,
+                    'rawApiInput' => $query->rawApiInput,
                 ])
             )
             ->then(
