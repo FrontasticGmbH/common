@@ -30,6 +30,7 @@ Here you find the API documentation for the relevant classes:
     * [AuthentificationInformation](php/AccountApiBundle/Domain/AuthentificationInformation.md)
     * [DefaultAccountApiFactory](php/AccountApiBundle/Domain/DefaultAccountApiFactory.md)
     * [DuplicateAccountException](php/AccountApiBundle/Domain/DuplicateAccountException.md)
+    * [DuplicateAddressException](php/AccountApiBundle/Domain/DuplicateAddressException.md)
     * [Group](php/AccountApiBundle/Domain/Group.md)
     * [MetaData](php/AccountApiBundle/Domain/MetaData.md)
     * [PasswordResetToken](php/AccountApiBundle/Domain/PasswordResetToken.md)
