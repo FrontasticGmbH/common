@@ -369,6 +369,7 @@ Here you find the API documentation for the relevant classes:
       * [FieldConfiguration](php/SpecificationBundle/Domain/Schema/FieldConfiguration.md)
       * [FieldVisitor](php/SpecificationBundle/Domain/Schema/FieldVisitor.md)
       * [GroupFieldConfiguration](php/SpecificationBundle/Domain/Schema/GroupFieldConfiguration.md)
+      * [StreamFieldConfiguration](php/SpecificationBundle/Domain/Schema/StreamFieldConfiguration.md)
     * [SpecParser](php/SpecificationBundle/Domain/SpecParser.md)
     * [TasticSpecParser](php/SpecificationBundle/Domain/TasticSpecParser.md)
     * [ValidatingSpecParser](php/SpecificationBundle/Domain/ValidatingSpecParser.md)

@@ -8,6 +8,7 @@
 * [hasField()](#hasfield)
 * [getFieldValue()](#getfieldvalue)
 * [getCompleteValues()](#getcompletevalues)
+* [getFieldConfigurations()](#getfieldconfigurations)
 
 ### fromSchemaAndConfiguration()
 
@@ -66,6 +67,14 @@ public function getCompleteValues(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$fieldVisitor`|[`FieldVisitor`](Schema/FieldVisitor.md)|`null`|
+
+Return Value: `mixed`
+
+### getFieldConfigurations()
+
+```php
+public function getFieldConfigurations(): mixed
+```
 
 Return Value: `mixed`
 
