@@ -6,6 +6,7 @@ use Frontastic\Common\SpecificationBundle\Domain\Schema\FieldConfiguration;
 use Frontastic\Common\SpecificationBundle\Domain\Schema\FieldVisitor;
 use Frontastic\Common\SpecificationBundle\Domain\Schema\FieldVisitor\NullFieldVisitor;
 use Frontastic\Common\SpecificationBundle\Domain\Schema\GroupFieldConfiguration;
+use Frontastic\Common\SpecificationBundle\Domain\Schema\StreamFieldConfiguration;
 use PHPUnit\Framework\TestCase;
 
 class ConfigurationSchemaTest extends TestCase
@@ -238,5 +239,23 @@ class ConfigurationSchemaTest extends TestCase
             $this->isType('string'),
             $this->anything()
         );
+    }
+
+    public function testConfigurationSchemaCreatesSpecialStreamField()
+    {
+        // Reusing this fixture because it has dataSources
+        $configurationSchema = ConfigurationSchema::fromSchemaAndConfiguration(
+            \json_decode(file_get_contents(
+                __DIR__ . '/_fixtures/nested_groups_schema.json',
+            ), true),
+            \json_decode(file_get_contents(
+                __DIR__ . '/_fixtures/nested_groups_configuration.json',
+            ), true),
+        );
+
+        $actualFieldConfigurations = $configurationSchema->getFieldConfigurations();
+
+        $this->assertInstanceOf(StreamFieldConfiguration::class, $actualFieldConfigurations['stream']);
+
     }
 }

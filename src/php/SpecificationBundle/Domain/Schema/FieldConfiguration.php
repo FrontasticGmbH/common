@@ -29,11 +29,12 @@ class FieldConfiguration
 
     private const SPECIAL_TYPE_CLASSES = [
         'group' => GroupFieldConfiguration::class,
+        'stream' => StreamFieldConfiguration::class,
     ];
 
     private const NON_FIELDS = [
         'description',
-        'image'
+        'image',
     ];
 
     /**

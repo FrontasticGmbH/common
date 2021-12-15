@@ -115,4 +115,9 @@ class ConfigurationSchema
 
         return $this->fieldConfigurations[$fieldName];
     }
+
+    public function getFieldConfigurations()
+    {
+        return $this->fieldConfigurations;
+    }
 }
