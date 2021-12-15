@@ -4,30 +4,31 @@ namespace Frontastic\Common\SpecificationBundle\Domain\Schema\FieldVisitor;
 
 use Frontastic\Common\SpecificationBundle\Domain\Schema\FieldConfiguration;
 use Frontastic\Common\SpecificationBundle\Domain\Schema\FieldVisitor;
+use Frontastic\Common\SpecificationBundle\Domain\Schema\StreamFieldConfiguration;
 
 class ExtractDataSourcesVisitor implements FieldVisitor
 {
     /**
      * @var string
      */
-    private array $foundDataSourceTypes;
+    private array $foundStreamTypes;
 
     public function __construct()
     {
-        $this->foundDataSourceTypes = [];
+        $this->foundStreamTypes = [];
     }
 
     public function processField(FieldConfiguration $configuration, $value, array $fieldPath)
     {
-        if($configuration->getType()=== 'stream') {
-            //$this->foundDataSourceTypes[] = $configuration->getDataSourceTypes()
+        if ($configuration instanceof StreamFieldConfiguration) {
+            $this->foundStreamTypes[] = $configuration->getStreamType();
         }
         return $value;
     }
 
-    public function getFoundDataSourceTypes()
+    public function getFoundStreamTypes()
     {
-        return array_unique($this->foundDataSourceTypes);
+        return array_unique($this->foundStreamTypes);
     }
 
 }
