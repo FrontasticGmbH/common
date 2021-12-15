@@ -256,6 +256,7 @@ class ConfigurationSchemaTest extends TestCase
         $actualFieldConfigurations = $configurationSchema->getFieldConfigurations();
 
         $this->assertInstanceOf(StreamFieldConfiguration::class, $actualFieldConfigurations['stream']);
+        $this->assertEquals('frontastic/product', $actualFieldConfigurations['stream']->getStreamType());
 
     }
 }
