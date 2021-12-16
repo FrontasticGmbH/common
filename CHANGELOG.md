@@ -1,5 +1,11 @@
 # common Changelog
 
+## `2.23.0` (2021-12-16)
+
+* feat: Created method for CustomDataSourceValidation in the CustomDataSourceService
+* feat: Store the stream type for stream fields
+* feat: Introduced a special field configuration for stream fields
+
 ## `2.22.0` (2021-12-02)
 
 * feat(FP-1193): included rawApiImput on getProduct
