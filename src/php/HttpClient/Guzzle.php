@@ -72,6 +72,7 @@ class Guzzle extends HttpClient
         }
 
         $sensibleHeaders[Tracing::CORRELATION_ID_HEADER_KEY] = Tracing::getCurrentTraceId();
+        $sensibleHeaders['User-Agent'] = 'Frontastic';
 
         return $this->guzzleClient
             ->requestAsync(
