@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.24.0` (2022-01-05)
+
+* feat(FP-324): Include User-Agent Frontastic as part of API requests
+
 ## `2.23.0` (2021-12-16)
 
 * feat: Created method for CustomDataSourceValidation in the CustomDataSourceService
