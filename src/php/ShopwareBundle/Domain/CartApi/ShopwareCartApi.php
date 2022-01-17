@@ -102,9 +102,9 @@ class ShopwareCartApi extends CartApiBase
         return $this->client
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
-            ->post('/sales-channel-api/v2/checkout/cart', [], $requestData)
+            ->post('/store-api/checkout/cart', [], $requestData)
             ->then(static function ($response) {
-                return $response['sw-context-token'];
+                return $response['headers']['sw-context-token'];
             })->then(function ($token) use ($locale) {
                 return $this->getById($token, $locale);
             })
@@ -120,7 +120,7 @@ class ShopwareCartApi extends CartApiBase
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($token)
-            ->get('/sales-channel-api/v2/checkout/cart')
+            ->get('/store-api/checkout/cart')
             ->then(function ($response) use ($mapper) {
                 return $mapper->map($response);
             })

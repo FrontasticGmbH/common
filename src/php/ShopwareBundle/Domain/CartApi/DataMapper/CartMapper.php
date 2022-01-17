@@ -44,7 +44,7 @@ class CartMapper extends AbstractDataMapper implements
 
     public function map($resource)
     {
-        $cartData = $this->extractData($resource);
+        $cartData = $this->extractData($resource, $resource);
 
         $locationData = $this->extractFromDeliveries($cartData, 'location')['address'] ?? null;
         $shippingMethodData = $this->extractFromDeliveries($cartData, 'shippingMethod');
