@@ -39,7 +39,8 @@ class LineItemsMapper extends AbstractDataMapper implements
                         'totalPrice' => $this->convertPriceToCent($lineItemData['price']['totalPrice']),
                         'variant' => new Variant([
                             'id' => $lineItemData['referencedId'],
-                            'sku' => $lineItemData['referencedId'],
+                            'sku' => $lineItemData['payload']['productNumber'] ?? $lineItemData['referencedId'],
+                            'groupId' => $lineItemData['referencedId'],
                             'images' => [
                                 $lineItemData['cover']['url'],
                             ],

@@ -139,9 +139,9 @@ class Client implements ClientInterface
         return $this->request(self::METHOD_PUT, $uri, [], $headers, $body);
     }
 
-    public function delete(string $uri, array $headers = []): PromiseInterface
+    public function delete(string $uri, array $headers = [], $body = null): PromiseInterface
     {
-        return $this->request(self::METHOD_DELETE, $uri, [], $headers);
+        return $this->request(self::METHOD_DELETE, $uri, [], $headers, $body);
     }
 
     private function request(

@@ -30,5 +30,5 @@ interface ClientInterface
 
     public function put(string $uri, array $headers = [], $body = null): PromiseInterface;
 
-    public function delete(string $uri, array $headers = []): PromiseInterface;
+    public function delete(string $uri, array $headers = [], $body = null): PromiseInterface;
 }

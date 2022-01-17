@@ -156,14 +156,13 @@ class ShopwareCartApi extends CartApiBase
         $mapper = $this->buildMapper(CartMapper::MAPPER_NAME, $shopwareLocale);
         $requestDataMapper = $this->buildMapper(CartItemRequestDataMapper::MAPPER_NAME, $shopwareLocale);
 
-        $requestData = $requestDataMapper->map($lineItem);
-        $id = $requestData['referencedId'];
+        $requestData['items'][] = $requestDataMapper->map($lineItem);
 
         return $this->client
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($cart->cartId)
-            ->post("/sales-channel-api/v2/checkout/cart/line-item/{$id}", [], $requestData)
+            ->post("/store-api/checkout/cart/line-item", [], $requestData)
             ->then(function ($response) use ($mapper) {
                 if (isset($response['data']['errors']) && !empty($response['data']['errors'])) {
                     $this->respondWithError($response['data']['errors']);
@@ -185,14 +184,16 @@ class ShopwareCartApi extends CartApiBase
         $mapper = $this->buildMapper(CartMapper::MAPPER_NAME, $shopwareLocale);
         $requestDataMapper = $this->buildMapper(CartItemRequestDataMapper::MAPPER_NAME, $shopwareLocale);
 
-        $requestData = $requestDataMapper->map($lineItem);
-        $id = $requestData['referencedId'];
+        $item = $requestDataMapper->map($lineItem);
+        $item['quantity'] = $count;
+
+        $requestData['items'][] = $item;
 
         return $this->client
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($cart->cartId)
-            ->patch("/sales-channel-api/v2/checkout/cart/line-item/{$id}", [], $requestData)
+            ->patch("/store-api/checkout/cart/line-item", [], $requestData)
             ->then(function ($response) use ($mapper) {
                 if (isset($response['data']['errors']) && !empty($response['data']['errors'])) {
                     $this->respondWithError($response['data']['errors']);
@@ -208,11 +209,13 @@ class ShopwareCartApi extends CartApiBase
         $shopwareLocale = $this->parseLocaleString($locale);
         $mapper = $this->buildMapper(CartMapper::MAPPER_NAME, $shopwareLocale);
 
+        $requestData['ids'][] = $lineItem->lineItemId;
+
         return $this->client
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($cart->cartId)
-            ->delete("/sales-channel-api/v2/checkout/cart/line-item/{$lineItem->lineItemId}")
+            ->delete("/store-api/checkout/cart/line-item", [], $requestData)
             ->then(function ($response) use ($mapper) {
                 if (isset($response['data']['errors']) && !empty($response['data']['errors'])) {
                     $this->respondWithError($response['data']['errors']);
