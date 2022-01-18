@@ -243,12 +243,12 @@ class ShopwareCartApi extends CartApiBase
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($cart->cartId)
-            ->patch("/sales-channel-api/v2/context", [], $requestData)
+            ->patch("/store-api/context", [], $requestData)
             ->then(function ($response) {
                 if (isset($response['data']['errors']) && !empty($response['data']['errors'])) {
                     $this->respondWithError($response['data']['errors']);
                 }
-                return $response['sw-context-token'];
+                return $response['headers']['sw-context-token'];
             })->then(function ($token) use ($locale) {
                 return $this->getById($token, $locale);
             })
@@ -393,7 +393,8 @@ class ShopwareCartApi extends CartApiBase
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($cart->cartId)
-            ->post('/sales-channel-api/v2/shipping-method', [], $requestData)
+            ->post('/store-api/shipping-method', [], $requestData)
+
             ->then(function ($response) use ($mapper) {
                 return $mapper->map($response);
             })
@@ -419,7 +420,7 @@ class ShopwareCartApi extends CartApiBase
         }
 
         return $this->client
-            ->post('/sales-channel-api/v2/shipping-method', [], $requestData)
+            ->post('/store-api/shipping-method', [], $requestData)
             ->then(function ($response) use ($mapper) {
                 return $mapper->map($response);
             })

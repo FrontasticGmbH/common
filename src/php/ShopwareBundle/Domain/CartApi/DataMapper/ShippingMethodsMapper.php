@@ -17,7 +17,7 @@ class ShippingMethodsMapper extends AbstractDataMapper
 
     public function map($resource)
     {
-        $shippingMethodsData = $this->extractData($resource);
+        $shippingMethodsData = $this->extractElements($resource, $resource);
 
         $result = [];
         foreach ($shippingMethodsData as $shippingMethodData) {
