@@ -296,11 +296,16 @@ class ShopwareCartApi extends CartApiBase
         $shopwareLocale = $this->parseLocaleString($locale);
         $mapper = $this->buildMapper(CartMapper::MAPPER_NAME, $shopwareLocale);
 
+        $requestData['items'][] = [
+            'type' => ShopwareCartApi::LINE_ITEM_TYPE_PROMOTION,
+            'referencedId' => $code,
+        ];
+
         return $this->client
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($cart->cartId)
-            ->post("/sales-channel-api/v2/checkout/cart/code/{$code}")
+            ->post("/store-api/checkout/cart/line-item", [], $requestData)
             ->then(function ($response) use ($mapper) {
                 if (isset($response['data']['errors']) && !empty($response['data']['errors'])) {
                     $this->respondWithError($response['data']['errors']);

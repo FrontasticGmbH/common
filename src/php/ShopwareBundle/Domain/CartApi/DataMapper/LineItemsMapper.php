@@ -29,9 +29,10 @@ class LineItemsMapper extends AbstractDataMapper implements
     {
         $result = [];
         foreach ($lineItemsData as $lineItemData) {
+            $lineItem = null;
             switch ($lineItemData['type']) {
                 case ShopwareCartApi::LINE_ITEM_TYPE_PRODUCT:
-                    $lineItemData = new LineItem\Variant([
+                    $lineItem = new LineItem\Variant([
                         'lineItemId' => (string)$lineItemData['id'],
                         'name' => $lineItemData['label'],
                         'count' => $lineItemData['quantity'],
@@ -51,8 +52,10 @@ class LineItemsMapper extends AbstractDataMapper implements
                     ]);
                     break;
                 case ShopwareCartApi::LINE_ITEM_TYPE_PROMOTION:
+                    // Promotions are mapped as Cart.discountCodes instead of Cart.lineItems
+                    break;
                 default:
-                    $lineItemData = new LineItem([
+                    $lineItem = new LineItem([
                         'lineItemId' => (string)$lineItemData['id'],
                         'type' => $lineItemData['type'],
                         'name' => $lineItemData['label'],
@@ -63,10 +66,14 @@ class LineItemsMapper extends AbstractDataMapper implements
                     break;
             }
 
-            $lineItemData->currency = $this->resolveCurrencyCodeFromLocale();
-            $lineItemData->dangerousInnerItem = $lineItemData;
+            if (!$lineItem instanceof LineItem) {
+                continue;
+            }
 
-            $result[] = $lineItemData;
+            $lineItem->currency = $this->resolveCurrencyCodeFromLocale();
+            $lineItem->dangerousInnerItem = $lineItemData;
+
+            $result[] = $lineItem;
         }
 
         return $result;

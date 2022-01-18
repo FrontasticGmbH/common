@@ -3,6 +3,7 @@
 namespace Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper;
 
 use Frontastic\Common\CartApiBundle\Domain\Cart;
+use Frontastic\Common\CartApiBundle\Domain\Discount;
 use Frontastic\Common\CartApiBundle\Domain\ShippingInfo;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\AddressMapper;
 use Frontastic\Common\ShopwareBundle\Domain\CartApi\ShopwareCartApi;
@@ -60,7 +61,7 @@ class CartMapper extends AbstractDataMapper implements
             'shippingAddress' => empty($locationData) ? null : $this->addressMapper->map($locationData),
             'shippingInfo' => empty($shippingMethodData) ? null : $this->mapDataToShippingInfo($shippingMethodData),
             'shippingMethod' => empty($shippingMethodData) ? null : $this->mapDataToShippingInfo($shippingMethodData),
-            'discountCodes' => $this->extractDiscountCodesFromLineItems($lineItems),
+            'discountCodes' => $this->extractDiscountsFromLineItems($cartData['lineItems']),
             // @TODO: resolve billing address?
         ]);
     }
@@ -75,16 +76,22 @@ class CartMapper extends AbstractDataMapper implements
      *
      * @return string[]
      */
-    private function extractDiscountCodesFromLineItems(array $lineItems): array
+    private function extractDiscountsFromLineItems(array $lineItemsData): array
     {
-        $result = [];
-        foreach ($lineItems as $lineItem) {
-            if ($lineItem->type === ShopwareCartApi::LINE_ITEM_TYPE_PROMOTION) {
-                $result[] = $lineItem->name;
+        $discounts = [];
+        foreach ($lineItemsData as $lineItemData) {
+            if ($lineItemData['type'] === ShopwareCartApi::LINE_ITEM_TYPE_PROMOTION) {
+                $discounts[] = new Discount([
+                    'discountId' => $lineItemData['id'],
+                    'code' => $lineItemData['referencedId'],
+                    'name' => $lineItemData['label'],
+                    'description' => $lineItemData['description'],
+                    'discountedAmount' => $lineItemData['price']['totalPrice'],
+                ]);
             }
         }
 
-        return $result;
+        return $discounts;
     }
 
     private function getLineItemsMapper(): LineItemsMapper
