@@ -2,11 +2,12 @@
 
 namespace Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper;
 
+use Frontastic\Common\CartApiBundle\Domain\ShippingInfo;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
 
-class ShippingMethodsMapper extends AbstractDataMapper
+class ShippingInfoMapper extends AbstractDataMapper
 {
-    public const MAPPER_NAME = 'shipping-methods';
+    public const MAPPER_NAME = 'shipping-info';
 
     /**
      * @var \Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper\ShippingMethodMapper
@@ -24,14 +25,17 @@ class ShippingMethodsMapper extends AbstractDataMapper
 
     public function map($resource)
     {
-        $shippingMethodsData = $this->extractElements($resource, $resource);
+        $shippingInfoData = $this->extractElements($resource, $resource);
+        $shippingMethod = $this->getShippingMethodMapper()->map($shippingInfoData['shippingMethod']);
 
-        $result = [];
-        foreach ($shippingMethodsData as $shippingMethodData) {
-            $result[] = $this->getShippingMethodMapper()->map($shippingMethodData);
-        }
-
-        return $result;
+        return new ShippingInfo(
+            array_merge(
+                (array)$shippingMethod,
+                [
+                'price' => $this->convertPriceToCent($shippingInfoData['shippingCosts']['totalPrice'] ?? 0),
+                ]
+            )
+        );
     }
 
     private function getShippingMethodMapper(): ShippingMethodMapper

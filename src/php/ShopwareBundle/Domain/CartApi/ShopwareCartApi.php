@@ -479,6 +479,7 @@ class ShopwareCartApi extends CartApiBase
             'associations' => [
                 'lineItems' => [],
                 'addresses' => [],
+                'deliveries' => [],
             ]
         ];
 
