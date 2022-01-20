@@ -85,7 +85,7 @@ class AccountMapper extends AbstractDataMapper implements ProjectConfigApiAwareD
         return null;
     }
 
-    private function resolveSalutation(array $accountData): string
+    private function resolveSalutation(array $accountData): ?string
     {
         $shopwareSalutation = null;
         if (isset($accountData['salutationId'])) {

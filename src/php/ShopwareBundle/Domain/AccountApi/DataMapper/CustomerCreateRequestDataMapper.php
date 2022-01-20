@@ -1,7 +1,9 @@
-<?php declare(strict_types = 1);
+<?php
 
 namespace Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper;
 
+use Frontastic\Common\AccountApiBundle\Domain\Account;
+use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\SalutationHelper;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
@@ -35,13 +37,17 @@ class CustomerCreateRequestDataMapper extends AbstractDataMapper implements Proj
      */
     public function map($account)
     {
+        if ($this->isGuestAccount($account)) {
+            $account = $this->generateGuestData($account);
+        }
+
         $requestData = [
             'salutationId' => $this->resolveSalutationId($account->salutation),
             'firstName' => $account->firstName,
             'lastName' => $account->lastName,
-            'guest' => false,
+            'guest' => $this->isGuestAccount($account),
             'email' => $account->email,
-            'password' => $account->getPassword(),
+            'password' => $this->isGuestAccount($account) ? substr(md5(microtime()), 2, 8) : $account->getPassword(),
             'birthdayDay' => $account->birthday ? $account->birthday->format('d') : null,
             'birthdayMonth' => $account->birthday ? $account->birthday->format('m') : null,
             'birthdayYear' => $account->birthday ? $account->birthday->format('Y') : null,
@@ -57,6 +63,27 @@ class CustomerCreateRequestDataMapper extends AbstractDataMapper implements Proj
         }
 
         return $requestData;
+    }
+
+    private function isGuestAccount(Account $account): bool
+    {
+        return empty($account->getPassword());
+    }
+
+    private function generateGuestData(Account $account): Account
+    {
+        $account->firstName = strstr($account->email,'@',true);
+        $account->lastName = strstr($account->email,'@',true);
+        $account->addresses = [
+            new Address([
+                'streetName' => strstr($account->email,'@',true),
+                'postalCode' => '1234',
+                'country' => 'DE',
+                'city' => 'Berlin',
+                ]),
+        ];
+
+        return $account;
     }
 
     private function getAddressCreateRequestDataMapper(): AddressCreateRequestDataMapper

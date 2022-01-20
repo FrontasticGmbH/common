@@ -59,7 +59,7 @@ class AddressMapper extends AbstractDataMapper implements ProjectConfigApiAwareD
         return $resolvedIso;
     }
 
-    private function resolveSalutation(array $addressData): string
+    private function resolveSalutation(array $addressData): ?string
     {
         $shopwareSalutation = null;
         if (isset($addressData['salutationId'])) {
