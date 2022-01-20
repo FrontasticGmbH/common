@@ -3,6 +3,7 @@
 namespace Frontastic\Common\ShopwareBundle\Domain\CartApi;
 
 use Frontastic\Common\AccountApiBundle\Domain\Account;
+use Frontastic\Common\AccountApiBundle\Domain\AccountApi;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
@@ -65,6 +66,11 @@ class ShopwareCartApi extends CartApiBase
     private $projectConfigApi;
 
     /**
+     * @var AccountApi
+     */
+    private $accountApi;
+
+    /**
      * @var string|null
      */
     private $defaultLanguage;
@@ -74,12 +80,14 @@ class ShopwareCartApi extends CartApiBase
         LocaleCreator $localeCreator,
         DataMapperResolver $mapperResolver,
         ShopwareProjectConfigApiFactory $projectConfigApiFactory,
+        AccountApi $accountApi,
         ?string $defaultLanguage
     ) {
         $this->client = $client;
         $this->localeCreator = $localeCreator;
         $this->mapperResolver = $mapperResolver;
         $this->projectConfigApi = $projectConfigApiFactory->factor($client);
+        $this->accountApi = $accountApi;
         $this->defaultLanguage = $defaultLanguage;
     }
 
@@ -92,9 +100,10 @@ class ShopwareCartApi extends CartApiBase
     protected function getAnonymousImplementation(string $anonymousId, string $locale): Cart
     {
         $shopwareLocale = $this->parseLocaleString($locale);
+        $mapper = $this->buildMapper(CartMapper::MAPPER_NAME, $shopwareLocale);
 
         $requestData = [
-            'name' => self::CART_NAME_GUEST,
+            'name' => self::CART_NAME_GUEST . '-' . $anonymousId,
         ];
 
         // When user is anonymous, the cart need to be initialized first, and then returned using the context token
@@ -103,10 +112,8 @@ class ShopwareCartApi extends CartApiBase
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->post('/store-api/checkout/cart', [], $requestData)
-            ->then(static function ($response) {
-                return $response['headers']['sw-context-token'];
-            })->then(function ($token) use ($locale) {
-                return $this->getById($token, $locale);
+            ->then(static function ($response) use ($mapper) {
+                return $mapper->map($response);
             })
             ->wait();
     }
@@ -121,8 +128,11 @@ class ShopwareCartApi extends CartApiBase
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($token)
             ->get('/store-api/checkout/cart')
-            ->then(function ($response) use ($mapper) {
-                return $mapper->map($response);
+            ->then(function ($response) use ($mapper, $token) {
+                // TODO: improve request to get context in concurrency as done in ShopwareProjectConfigApi
+                $context = $this->getContext($token);
+
+                return $mapper->map(array_merge($context, $response));
             })
             ->wait();
     }
@@ -228,8 +238,26 @@ class ShopwareCartApi extends CartApiBase
 
     protected function setEmailImplementation(Cart $cart, string $email, string $locale = null): Cart
     {
-        // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
-        throw new RuntimeException(__METHOD__ . ' not implemented');
+        // Shopware links the email to the context.customer and not the cart. In order to update the email,
+        // the account should be updated through Account::update().
+
+        // Guest accounts can't be logging in or change the email if it's already set.
+        if ($cart->email) {
+            return $cart;
+        }
+
+        // Set email for a guest account
+        $account = new Account([
+            'email' => $email,
+        ]);
+
+        $account = $this->accountApi->create($account, $cart, $locale);
+        $cart = $this->getById($account->apiToken, $locale);
+
+        // For a guest account, the token changes, so we need to update $currentTransaction.
+        $this->currentTransaction = $cart->cartId;
+
+        return $cart;
     }
 
     protected function setShippingMethodImplementation(Cart $cart, string $shippingMethod, string $locale = null): Cart
@@ -337,7 +365,7 @@ class ShopwareCartApi extends CartApiBase
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($cart->cartId)
-            ->post('/sales-channel-api/v2/checkout/order')
+            ->post('/store-api/checkout/order')
             ->then(function ($orderResponse) use ($mapper) {
                 return $mapper->map($orderResponse);
             })
@@ -399,7 +427,6 @@ class ShopwareCartApi extends CartApiBase
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($cart->cartId)
             ->post('/store-api/shipping-method', [], $requestData)
-
             ->then(function ($response) use ($mapper) {
                 return $mapper->map($response);
             })
@@ -446,12 +473,14 @@ class ShopwareCartApi extends CartApiBase
      */
     private function getOrdersBy(string $token, array $parameters = [], ?string $locale = null): array
     {
-        $requestParameters = [];
-//        @TODO: could be uncommented once there will be a way to pass limit and page parameters
-//        $requestParameters = [
-//            'limit' => $parameters['limit'] ?? self::DEFAULT_ORDER_LIMIT,
-//            'page' => $parameters['page'] ?? self::DEFAULT_ORDER_PAGE,
-//        ];
+        $requestParameters = [
+            'limit' => $parameters['limit'] ?? self::DEFAULT_ORDER_LIMIT,
+            'page' => $parameters['page'] ?? self::DEFAULT_ORDER_PAGE,
+            'associations' => [
+                'lineItems' => [],
+                'addresses' => [],
+            ]
+        ];
 
         if (isset($parameters['orderId'])) {
             $requestParameters['filter[id]'] = $parameters['orderId'];
@@ -464,7 +493,7 @@ class ShopwareCartApi extends CartApiBase
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($token)
-            ->get('/sales-channel-api/v2/customer/order', $requestParameters)
+            ->post('/store-api/order', [], $requestParameters)
             ->then(function ($response) use ($mapper) {
                 return $mapper->map($response);
             })
@@ -498,5 +527,16 @@ class ShopwareCartApi extends CartApiBase
             $mapper->setProjectConfigApi($this->projectConfigApi);
         }
         return $mapper;
+    }
+
+    protected function getContext(string $token): array
+    {
+        return $this->client
+            ->withContextToken($token)
+            ->get('/store-api/context')
+            ->then(static function ($response) {
+                return $response;
+            })
+            ->wait();
     }
 }

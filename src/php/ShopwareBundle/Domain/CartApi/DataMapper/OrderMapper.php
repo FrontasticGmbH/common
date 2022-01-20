@@ -44,10 +44,18 @@ class OrderMapper extends AbstractDataMapper implements
 
     public function map($resource)
     {
-        $orderData = $this->extractData($resource);
+        $orderData = $this->extractData($resource, $resource);
+
+        $shippingAddress = [];
+        $billingAddress = [];
+
+        if ($orderData['addresses']) {
+            $shippingAddress = $this->mapShippingAddress($orderData['addresses'], $orderData['billingAddressId']);
+            $billingAddress = $this->mapBillingAddress($orderData['addresses'], $orderData['billingAddressId']);
+        }
 
         $order = new Order([
-            'cartId' => $orderData['id'],
+            'cartId' => $resource['headers']['sw-context-token'] ?? null,
             'currency' => $this->resolveCurrencyCode($orderData['currencyId']),
             'orderState' => $orderData['stateMachineState']['technicalName'],
             'createdAt' => new DateTimeImmutable($orderData['orderDateTime']),
@@ -57,8 +65,8 @@ class OrderMapper extends AbstractDataMapper implements
             'email' => $orderData['orderCustomer']['email'] ?? null,
 // @TODO: no data
 //            'shippingMethod' => $this->mapShippingMethod($orderData['shippingInfo'] ?? []),
-            'shippingAddress' => $this->mapShippingAddress($orderData['addresses'], $orderData['billingAddressId']),
-            'billingAddress' => $this->mapBillingAddress($orderData['addresses'], $orderData['billingAddressId']),
+            'shippingAddress' => $shippingAddress,
+            'billingAddress' => $billingAddress,
             'sum' => $this->convertPriceToCent($orderData['price']['totalPrice']),
 // @TODO: no data yet
 //            'payments' => $this->mapPayments($order),

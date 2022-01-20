@@ -58,11 +58,14 @@ class CartMapper extends AbstractDataMapper implements
             'sum' => $this->convertPriceToCent($cartData['price']['totalPrice']),
             'currency' => $this->resolveCurrencyCodeFromLocale(),
             'lineItems' => $lineItems,
+            'email' => $cartData['customer']['email'] ?? null,
             'shippingAddress' => empty($locationData) ? null : $this->addressMapper->map($locationData),
+            'billingAddress' => empty($locationData) ? null : $this->addressMapper->map($locationData), // TODO: get billing address
             'shippingInfo' => empty($shippingMethodData) ? null : $this->mapDataToShippingInfo($shippingMethodData),
             'shippingMethod' => empty($shippingMethodData) ? null : $this->mapDataToShippingInfo($shippingMethodData),
             'discountCodes' => $this->extractDiscountsFromLineItems($cartData['lineItems']),
             // @TODO: resolve billing address?
+            'dangerousInnerCart' => $cartData,
         ]);
     }
 

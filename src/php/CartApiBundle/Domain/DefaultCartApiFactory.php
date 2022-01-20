@@ -125,11 +125,14 @@ class DefaultCartApiFactory implements CartApiFactory
                 $localeCreatorFactory = $this->container->get(ShopwareLocaleCreatorFactory::class);
 
                 $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
+                $accountApi = $this->accountApiFactory->factor($project);
+
                 $cartApi = new ShopwareCartApi(
                     $client,
                     $localeCreatorFactory->factor($project, $client),
                     $this->container->get(DataMapperResolver::class),
                     $this->container->get(ShopwareProjectConfigApiFactory::class),
+                    $accountApi,
                     $project->defaultLanguage
                 );
                 break;

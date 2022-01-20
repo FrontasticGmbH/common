@@ -72,9 +72,13 @@ abstract class AbstractShopwareApi
         return $mapper->map($requestData);
     }
 
-    protected function parseLocaleString(?string $localeString): ShopwareLocale
+    protected function parseLocaleString(?string $localeString): ?ShopwareLocale
     {
         $localeString = $localeString ?? $this->defaultLanguage;
+
+        if ($this->localeCreator === null) {
+            return null;
+        }
 
         $this->locale = $this->localeCreator->createLocaleFromString($localeString);
 

@@ -29,10 +29,14 @@ class OrdersMapper extends AbstractDataMapper implements ProjectConfigApiAwareDa
 
     public function map($resource)
     {
-        $orderData = $this->extractData($resource);
+        if (!key_exists(self::MAPPER_NAME, $resource)) {
+            return [];
+        }
+
+        $ordersData = $this->extractElements($resource[self::MAPPER_NAME], $resource[self::MAPPER_NAME]);
 
         $result = [];
-        foreach ($orderData as $item) {
+        foreach ($ordersData as $item) {
             $result[] = $this->getOrderMapper()->map($item);
         }
 
