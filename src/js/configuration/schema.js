@@ -247,6 +247,12 @@ class ConfigurationSchema {
                 typeof value.target !== 'string' || value.target === ''
         }
 
+        // If media field has an empty media object like: {media: null}
+        // It should be flagged as a missing required value
+        if (schema.type === 'media' && value) {
+            return Object.values(value).some((v) => !v)
+        }
+
         // If string field has an empty translatable object like: {en_GB@EUR: ""}
         // It should be flagged as a missing required value
         if (schema.type === 'string' && schema.translatable && value) {
