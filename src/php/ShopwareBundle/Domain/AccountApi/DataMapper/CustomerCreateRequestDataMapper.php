@@ -72,11 +72,11 @@ class CustomerCreateRequestDataMapper extends AbstractDataMapper implements Proj
 
     private function generateGuestData(Account $account): Account
     {
-        $account->firstName = strstr($account->email,'@',true);
-        $account->lastName = strstr($account->email,'@',true);
+        $account->firstName = strstr($account->email, '@', true);
+        $account->lastName = strstr($account->email, '@', true);
         $account->addresses = [
             new Address([
-                'streetName' => strstr($account->email,'@',true),
+                'streetName' => strstr($account->email, '@', true),
                 'postalCode' => '1234',
                 'country' => 'DE',
                 'city' => 'Berlin',

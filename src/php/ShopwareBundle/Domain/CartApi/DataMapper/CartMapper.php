@@ -39,8 +39,7 @@ class CartMapper extends AbstractDataMapper implements
         AddressMapper $addressMapper,
         LineItemsMapper $lineItemsMapper,
         DiscountsMapper $discountsMapper
-    )
-    {
+    ) {
         $this->addressMapper = $addressMapper;
         $this->lineItemsMapper = $lineItemsMapper;
         $this->discountsMapper = $discountsMapper;

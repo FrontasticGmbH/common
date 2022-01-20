@@ -36,8 +36,12 @@ class LineItemsMapper extends AbstractDataMapper implements
                         'lineItemId' => (string)$lineItemData['id'],
                         'name' => $lineItemData['label'],
                         'count' => $lineItemData['quantity'],
-                        'price' => $this->convertPriceToCent($lineItemData['price']['unitPrice'] ?? $lineItemData['unitPrice']),
-                        'totalPrice' => $this->convertPriceToCent($lineItemData['price']['totalPrice'] ?? $lineItemData['totalPrice']),
+                        'price' => $this->convertPriceToCent(
+                            $lineItemData['price']['unitPrice'] ?? $lineItemData['unitPrice']
+                        ),
+                        'totalPrice' => $this->convertPriceToCent(
+                            $lineItemData['price']['totalPrice'] ?? $lineItemData['totalPrice']
+                        ),
                         'variant' => new Variant([
                             'id' => $lineItemData['referencedId'],
                             'sku' => $lineItemData['payload']['productNumber'] ?? $lineItemData['referencedId'],

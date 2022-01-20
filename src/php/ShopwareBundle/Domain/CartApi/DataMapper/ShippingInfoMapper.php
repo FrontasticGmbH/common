@@ -14,7 +14,8 @@ class ShippingInfoMapper extends AbstractDataMapper
      */
     private $shippingMethodMapper;
 
-    public function __construct(ShippingMethodMapper $shippingMethodMapper) {
+    public function __construct(ShippingMethodMapper $shippingMethodMapper)
+    {
         $this->shippingMethodMapper = $shippingMethodMapper;
     }
 
