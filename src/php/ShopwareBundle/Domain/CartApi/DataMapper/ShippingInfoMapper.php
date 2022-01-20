@@ -26,7 +26,10 @@ class ShippingInfoMapper extends AbstractDataMapper
     public function map($resource)
     {
         $shippingInfoData = $this->extractElements($resource, $resource);
-        $shippingMethod = $this->getShippingMethodMapper()->map($shippingInfoData['shippingMethod']);
+
+        $shippingMethod = $this
+            ->getShippingMethodMapper()
+            ->map($shippingInfoData['shippingMethod'] ?? $shippingInfoData);
 
         return new ShippingInfo(
             array_merge(

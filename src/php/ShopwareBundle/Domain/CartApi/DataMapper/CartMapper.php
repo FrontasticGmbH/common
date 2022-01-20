@@ -3,10 +3,8 @@
 namespace Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper;
 
 use Frontastic\Common\CartApiBundle\Domain\Cart;
-use Frontastic\Common\CartApiBundle\Domain\Discount;
 use Frontastic\Common\CartApiBundle\Domain\ShippingInfo;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\AddressMapper;
-use Frontastic\Common\ShopwareBundle\Domain\CartApi\ShopwareCartApi;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperTrait;
@@ -32,10 +30,20 @@ class CartMapper extends AbstractDataMapper implements
      */
     private $lineItemsMapper;
 
-    public function __construct(AddressMapper $addressMapper, LineItemsMapper $lineItemsMapper)
+    /**
+     * @var \Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper\DiscountsMapper
+     */
+    private $discountsMapper;
+
+    public function __construct(
+        AddressMapper $addressMapper,
+        LineItemsMapper $lineItemsMapper,
+        DiscountsMapper $discountsMapper
+    )
     {
         $this->addressMapper = $addressMapper;
         $this->lineItemsMapper = $lineItemsMapper;
+        $this->discountsMapper = $discountsMapper;
     }
 
     public function getName(): string
@@ -60,11 +68,10 @@ class CartMapper extends AbstractDataMapper implements
             'lineItems' => $lineItems,
             'email' => $cartData['customer']['email'] ?? null,
             'shippingAddress' => empty($locationData) ? null : $this->addressMapper->map($locationData),
-            'billingAddress' => empty($locationData) ? null : $this->addressMapper->map($locationData), // TODO: get billing address
+            'billingAddress' => empty($locationData) ? null : $this->addressMapper->map($locationData),
             'shippingInfo' => empty($shippingMethodData) ? null : $this->mapDataToShippingInfo($shippingMethodData),
             'shippingMethod' => empty($shippingMethodData) ? null : $this->mapDataToShippingInfo($shippingMethodData),
-            'discountCodes' => $this->extractDiscountsFromLineItems($cartData['lineItems']),
-            // @TODO: resolve billing address?
+            'discountCodes' => $this->mapDataToDiscounts($cartData['lineItems'] ?? []),
             'dangerousInnerCart' => $cartData,
         ]);
     }
@@ -74,34 +81,16 @@ class CartMapper extends AbstractDataMapper implements
         return $cartData['deliveries'][0][$deliveryItemKey] ?? [];
     }
 
-    /**
-     * @param \Frontastic\Common\CartApiBundle\Domain\LineItem[] $lineItems
-     *
-     * @return string[]
-     */
-    private function extractDiscountsFromLineItems(array $lineItemsData): array
-    {
-        $discounts = [];
-        foreach ($lineItemsData as $lineItemData) {
-            if ($lineItemData['type'] === ShopwareCartApi::LINE_ITEM_TYPE_PROMOTION) {
-                $discounts[] = new Discount([
-                    'discountId' => $lineItemData['id'],
-                    'code' => $lineItemData['referencedId'],
-                    'name' => $lineItemData['label'],
-                    'description' => $lineItemData['description'],
-                    'discountedAmount' => $lineItemData['price']['totalPrice'],
-                ]);
-            }
-        }
-
-        return $discounts;
-    }
-
     private function getLineItemsMapper(): LineItemsMapper
     {
         return $this->lineItemsMapper
             ->setProjectConfigApi($this->getProjectConfigApi())
             ->setLocale($this->getLocale());
+    }
+
+    private function getDiscountsMapper(): DiscountsMapper
+    {
+        return $this->discountsMapper;
     }
 
     /**
@@ -112,6 +101,16 @@ class CartMapper extends AbstractDataMapper implements
     private function mapDataToLineItems(array $lineItemsData): array
     {
         return $this->getLineItemsMapper()->map($lineItemsData);
+    }
+
+    /**
+     * @param array $lineItemsData
+     *
+     * @return \Frontastic\Common\CartApiBundle\Domain\Discount[]
+     */
+    private function mapDataToDiscounts(array $lineItemsData): array
+    {
+        return $this->getDiscountsMapper()->map($lineItemsData);
     }
 
     private function mapDataToShippingInfo(array $shippingMethodData): ?ShippingInfo

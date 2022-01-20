@@ -37,14 +37,21 @@ class OrderMapper extends AbstractDataMapper implements
      */
     private $shippingInfoMapper;
 
+    /**
+     * @var \Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper\DiscountsMapper
+     */
+    private $discountsMapper;
+
     public function __construct(
         AddressMapper $addressMapper,
         LineItemsMapper $lineItemsMapper,
-        ShippingInfoMapper $shippingInfoMapper
+        ShippingInfoMapper $shippingInfoMapper,
+        DiscountsMapper $discountsMapper
     ) {
         $this->addressMapper = $addressMapper;
         $this->lineItemsMapper = $lineItemsMapper;
         $this->shippingInfoMapper = $shippingInfoMapper;
+        $this->discountsMapper = $discountsMapper;
     }
 
     public function getName(): string
@@ -85,8 +92,7 @@ class OrderMapper extends AbstractDataMapper implements
             'sum' => $this->convertPriceToCent($orderData['price']['totalPrice']),
 // @TODO: no data yet
 //            'payments' => $this->mapPayments($order),
-// @TODO: no data, lineItems are not returned together with other order information
-            'discountCodes' => $this->mapDiscounts($orderData),
+            'discountCodes' => $this->mapDataToDiscounts($orderData['lineItems']),
             'dangerousInnerOrder' => $orderData,
         ]);
 
@@ -109,6 +115,11 @@ class OrderMapper extends AbstractDataMapper implements
     private function getShippingInfoMapper(): ShippingInfoMapper
     {
         return $this->shippingInfoMapper;
+    }
+
+    private function getDiscountsMapper(): DiscountsMapper
+    {
+        return $this->discountsMapper;
     }
 
     /**
@@ -174,6 +185,16 @@ class OrderMapper extends AbstractDataMapper implements
         }
 
         return $this->getAddressMapper()->map($shippingOrderAddress);
+    }
+
+    /**
+     * @param array $lineItemsData
+     *
+     * @return \Frontastic\Common\CartApiBundle\Domain\Discount[]
+     */
+    private function mapDataToDiscounts(array $lineItemsData): array
+    {
+        return $this->getDiscountsMapper()->map($lineItemsData);
     }
 
     private function resolveCurrencyCode(string $currencyId): ?string
