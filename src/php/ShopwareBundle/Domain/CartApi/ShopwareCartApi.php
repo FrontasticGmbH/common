@@ -238,8 +238,17 @@ class ShopwareCartApi extends CartApiBase
 
     protected function setEmailImplementation(Cart $cart, string $email, string $locale = null): Cart
     {
-        // Shopware links the email to the context.customer and not the cart. In order to update the email,
+        // Shopware links the email to the context.customer and not to the cart. In order to update the email,
         // the account should be updated through Account::update().
+        if (!$this->isGuestCart($cart)) {
+            throw new \DomainException(
+                sprintf(
+                    'To set the email "%s", you should update the account details. Current email used "%s".',
+                    $email,
+                    $cart->email
+                )
+            );
+        }
 
         $addresses = [];
 
@@ -304,6 +313,10 @@ class ShopwareCartApi extends CartApiBase
 
     protected function setShippingAddressImplementation(Cart $cart, Address $address, string $locale = null): Cart
     {
+        if (!$this->isGuestCart($cart)) {
+            throw new \DomainException('To set the shipping address you should update the account details.');
+        }
+
         $addresses = [];
 
         if (!empty($cart->shippingAddress)) {
@@ -342,6 +355,10 @@ class ShopwareCartApi extends CartApiBase
 
     protected function setBillingAddressImplementation(Cart $cart, Address $address, string $locale = null): Cart
     {
+        if (!$this->isGuestCart($cart)) {
+            throw new \DomainException('To set the billing address you should update the account details.');
+        }
+
         $addresses = [];
 
         if (!empty($cart->shippingAddress)) {
@@ -618,5 +635,13 @@ class ShopwareCartApi extends CartApiBase
                 return $response;
             })
             ->wait();
+    }
+
+    protected function isGuestCart(Cart $cart): bool
+    {
+        $context = $this->getContext($cart->cartId);
+
+        // If it's not a guest account but the email needs confirmation, the context customer will not exist.
+        return ($context['customer'] === null || $context['customer']['guest'] === true);
     }
 }
