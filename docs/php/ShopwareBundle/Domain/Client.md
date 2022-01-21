@@ -179,7 +179,8 @@ Return Value: `\GuzzleHttp\Promise\PromiseInterface`
 ```php
 public function delete(
     string $uri,
-    array $headers = []
+    array $headers = [],
+    mixed $body = null
 ): \GuzzleHttp\Promise\PromiseInterface
 ```
 
@@ -187,6 +188,7 @@ Argument|Type|Default|Description
 --------|----|-------|-----------
 `$uri`|`string`||
 `$headers`|`array`|`[]`|
+`$body`|`mixed`|`null`|
 
 Return Value: `\GuzzleHttp\Promise\PromiseInterface`
 
