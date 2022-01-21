@@ -55,6 +55,14 @@ class CartMapper extends AbstractDataMapper implements
         $cartData = $this->extractData($resource, $resource);
 
         $locationData = $this->extractFromDeliveries($cartData, 'location')['address'] ?? null;
+        $defaultShippingAddress = $cartData['customer']['defaultShippingAddress'] ?? null;
+        $defaultBillingAddress = $cartData['customer']['defaultBillingAddress'] ?? null;
+
+        $shippingAddressData = $defaultShippingAddress ?? $locationData ?? null;
+        $billingAddressData = $defaultBillingAddress ?? $locationData ?? null;
+        $shippingAddress =  empty($shippingAddressData) ? null : $this->addressMapper->map($shippingAddressData);
+        $billingAddress =  empty($billingAddressData) ? null : $this->addressMapper->map($billingAddressData);
+
         $shippingMethodData = $this->extractFromDeliveries($cartData, 'shippingMethod');
 
         $lineItems = $this->mapDataToLineItems($cartData['lineItems'] ?? []);
@@ -66,8 +74,8 @@ class CartMapper extends AbstractDataMapper implements
             'currency' => $this->resolveCurrencyCodeFromLocale(),
             'lineItems' => $lineItems,
             'email' => $cartData['customer']['email'] ?? null,
-            'shippingAddress' => empty($locationData) ? null : $this->addressMapper->map($locationData),
-            'billingAddress' => empty($locationData) ? null : $this->addressMapper->map($locationData),
+            'shippingAddress' => $shippingAddress ?? $billingAddress,
+            'billingAddress' => $billingAddress ?? $shippingAddress,
             'shippingInfo' => empty($shippingMethodData) ? null : $this->mapDataToShippingInfo($shippingMethodData),
             'shippingMethod' => empty($shippingMethodData) ? null : $this->mapDataToShippingInfo($shippingMethodData),
             'discountCodes' => $this->mapDataToDiscounts($cartData['lineItems'] ?? []),

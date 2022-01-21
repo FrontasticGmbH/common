@@ -241,20 +241,33 @@ class ShopwareCartApi extends CartApiBase
         // Shopware links the email to the context.customer and not the cart. In order to update the email,
         // the account should be updated through Account::update().
 
-        // Guest accounts can't be logging in or change the email if it's already set.
-        if ($cart->email) {
-            return $cart;
+        $addresses = [];
+
+        if (!empty($cart->shippingAddress)) {
+            $cart->shippingAddress->isDefaultShippingAddress = true;
+            $addresses[] = $cart->shippingAddress;
         }
 
-        // Set email for a guest account
+        if (!empty($cart->billingAddress)) {
+            $cart->billingAddress->isDefaultBillingAddress = true;
+            $addresses[] = $cart->billingAddress;
+        }
+
+        // For a guest account, Shopware ignores the shipping address salutation, firstName, and lastName,
+        // instead it uses the guest account values.
         $account = new Account([
+            'apiToken' => $cart->cartId,
+            'salutation' => $cart->billingAddress->salutation ?? null,
+            'firstName' => $cart->billingAddress->firstName ?? null,
+            'lastName' => $cart->billingAddress->lastName ?? null,
             'email' => $email,
+            'addresses' => $addresses,
         ]);
 
         $account = $this->accountApi->create($account, $cart, $locale);
         $cart = $this->getById($account->apiToken, $locale);
 
-        // For a guest account, the token changes, so we need to update $currentTransaction.
+        // The token changes for a guest account, so we always update the $currentTransaction.
         $this->currentTransaction = $cart->cartId;
 
         return $cart;
@@ -291,16 +304,78 @@ class ShopwareCartApi extends CartApiBase
 
     protected function setShippingAddressImplementation(Cart $cart, Address $address, string $locale = null): Cart
     {
-        // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
-        // but it could be set by calling set ShopwareAccountApi::setDefaultShippingAddress
-        throw new RuntimeException(__METHOD__ . ' not implemented');
+        $addresses = [];
+
+        if (!empty($cart->shippingAddress)) {
+            $cart->shippingAddress->isDefaultShippingAddress = false;
+            $addresses[] = $cart->shippingAddress;
+        }
+
+        if (!empty($cart->billingAddress)) {
+            $cart->billingAddress->isDefaultBillingAddress = true;
+            $addresses[] = $cart->billingAddress;
+        }
+
+        $address->isDefaultShippingAddress = true;
+        $addresses[] = $address;
+
+        // For a guest account, Shopware ignores the shipping address salutation, firstName, and lastName,
+        // instead it uses the guest account values.
+        $account = new Account([
+            'apiToken' => $cart->cartId,
+            'salutation' => $cart->billingAddress->salutation ?? null,
+            'firstName' => $cart->billingAddress->firstName ?? null,
+            'lastName' => $cart->billingAddress->lastName ?? null,
+            'email' => $cart->email ?? self::CART_NAME_GUEST . '-' . uniqid('', true) . '@frontastic.com',
+            'addresses' => $addresses,
+        ]);
+
+        $account = $this->accountApi->create($account, $cart, $locale);
+
+        $cart = $this->getById($account->apiToken, $locale);
+
+        // For a guest account, the token changes, so we need to update $currentTransaction.
+        $this->currentTransaction = $cart->cartId;
+
+        return $cart;
     }
 
     protected function setBillingAddressImplementation(Cart $cart, Address $address, string $locale = null): Cart
     {
-        // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
-        // but it could be set by calling set ShopwareAccountApi::setDefaultBillingAddress
-        throw new RuntimeException(__METHOD__ . ' not implemented');
+        $addresses = [];
+
+        if (!empty($cart->shippingAddress)) {
+            $cart->shippingAddress->isDefaultShippingAddress = true;
+            $addresses[] = $cart->shippingAddress;
+        }
+
+        if (!empty($cart->billingAddress)) {
+            $cart->billingAddress->isDefaultBillingAddress = false;
+            $addresses[] = $cart->billingAddress;
+        }
+
+        $address->isDefaultBillingAddress = true;
+        $addresses[] = $address;
+
+        // For a guest account, Shopware ignores the shipping address salutation, firstName, and lastName,
+        // instead it uses the guest account values.
+        $account = new Account([
+            'apiToken' => $cart->cartId,
+            'salutation' => $address->salutation,
+            'firstName' => $address->firstName,
+            'lastName' => $address->lastName,
+            'email' => $cart->email ?? self::CART_NAME_GUEST . '-' . uniqid('', true) . '@frontastic.com',
+            'addresses' => $addresses,
+        ]);
+
+        $account = $this->accountApi->create($account, $cart, $locale);
+
+        $cart = $this->getById($account->apiToken, $locale);
+
+        // For a guest account, the token changes, so we need to update $currentTransaction.
+        $this->currentTransaction = $cart->cartId;
+
+        return $cart;
     }
 
     protected function addPaymentImplementation(
@@ -356,6 +431,10 @@ class ShopwareCartApi extends CartApiBase
     {
         if (!$cart->isReadyForCheckout()) {
             throw new \DomainException('Cart not complete yet.');
+        }
+
+        if (substr($cart->email, 0, strlen(self::CART_NAME_GUEST)) === self::CART_NAME_GUEST) {
+            throw new \DomainException('Cart not complete yet. Email needs to be provided');
         }
 
         $shopwareLocale = $this->parseLocaleString($locale);

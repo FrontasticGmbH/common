@@ -54,13 +54,26 @@ class CustomerCreateRequestDataMapper extends AbstractDataMapper implements Proj
             'acceptedDataProtection' => true,
         ];
 
-        if (isset($account->addresses[0]) && !empty($account->addresses[0])) {
-            $requestData['billingAddress'] = $this->getAddressCreateRequestDataMapper()->map($account->addresses[0]);
+        $shippingAddresses = null;
+        $billingAddresses = null;
+
+        foreach ($account->addresses as $address) {
+            $requestAddressData = $this->getAddressCreateRequestDataMapper()->map($address);
+
+            $shippingAddresses = $shippingAddresses ?? $requestAddressData;
+            $billingAddresses = $billingAddresses ?? $requestAddressData;
+
+            if ($address->isDefaultShippingAddress) {
+                $shippingAddresses = $requestAddressData;
+            }
+
+            if ($address->isDefaultBillingAddress) {
+                $billingAddresses = $requestAddressData;
+            }
         }
 
-        if (isset($account->addresses[1]) && !empty($account->addresses[1])) {
-            $requestData['shippingAddress'] = $this->getAddressCreateRequestDataMapper()->map($account->addresses[1]);
-        }
+        $requestData['shippingAddress'] = $shippingAddresses ?? $billingAddresses;
+        $requestData['billingAddress'] = $billingAddresses ?? $shippingAddresses;
 
         return $requestData;
     }
@@ -72,10 +85,15 @@ class CustomerCreateRequestDataMapper extends AbstractDataMapper implements Proj
 
     private function generateGuestData(Account $account): Account
     {
-        $account->firstName = strstr($account->email, '@', true);
-        $account->lastName = strstr($account->email, '@', true);
-        $account->addresses = [
+        $defaultName = strstr($account->email, '@', true);
+
+        $account->firstName =$account->firstName ?? $defaultName;
+        $account->lastName = $account->lastName ?? $defaultName;
+        $account->addresses = !empty($account->addresses) ? $account->addresses : [
             new Address([
+                'salutation' => $account->salutation,
+                'firstName' => $account->firstName,
+                'lastName' => $account->lastName,
                 'streetName' => strstr($account->email, '@', true),
                 'postalCode' => '1234',
                 'country' => 'DE',
