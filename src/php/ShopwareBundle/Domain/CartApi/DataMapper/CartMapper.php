@@ -5,7 +5,6 @@ namespace Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\ShippingInfo;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\AddressMapper;
-use Frontastic\Common\ShopwareBundle\Domain\CartApi\ShopwareCartApi;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperTrait;
@@ -31,10 +30,19 @@ class CartMapper extends AbstractDataMapper implements
      */
     private $lineItemsMapper;
 
-    public function __construct(AddressMapper $addressMapper, LineItemsMapper $lineItemsMapper)
-    {
+    /**
+     * @var \Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper\DiscountsMapper
+     */
+    private $discountsMapper;
+
+    public function __construct(
+        AddressMapper $addressMapper,
+        LineItemsMapper $lineItemsMapper,
+        DiscountsMapper $discountsMapper
+    ) {
         $this->addressMapper = $addressMapper;
         $this->lineItemsMapper = $lineItemsMapper;
+        $this->discountsMapper = $discountsMapper;
     }
 
     public function getName(): string
@@ -44,9 +52,17 @@ class CartMapper extends AbstractDataMapper implements
 
     public function map($resource)
     {
-        $cartData = $this->extractData($resource);
+        $cartData = $this->extractData($resource, $resource);
 
         $locationData = $this->extractFromDeliveries($cartData, 'location')['address'] ?? null;
+        $defaultShippingAddress = $cartData['customer']['defaultShippingAddress'] ?? null;
+        $defaultBillingAddress = $cartData['customer']['defaultBillingAddress'] ?? null;
+
+        $shippingAddressData = $defaultShippingAddress ?? $locationData ?? null;
+        $billingAddressData = $defaultBillingAddress ?? $locationData ?? null;
+        $shippingAddress =  empty($shippingAddressData) ? null : $this->addressMapper->map($shippingAddressData);
+        $billingAddress =  empty($billingAddressData) ? null : $this->addressMapper->map($billingAddressData);
+
         $shippingMethodData = $this->extractFromDeliveries($cartData, 'shippingMethod');
 
         $lineItems = $this->mapDataToLineItems($cartData['lineItems'] ?? []);
@@ -57,11 +73,13 @@ class CartMapper extends AbstractDataMapper implements
             'sum' => $this->convertPriceToCent($cartData['price']['totalPrice']),
             'currency' => $this->resolveCurrencyCodeFromLocale(),
             'lineItems' => $lineItems,
-            'shippingAddress' => empty($locationData) ? null : $this->addressMapper->map($locationData),
+            'email' => $cartData['customer']['email'] ?? null,
+            'shippingAddress' => $shippingAddress ?? $billingAddress,
+            'billingAddress' => $billingAddress ?? $shippingAddress,
             'shippingInfo' => empty($shippingMethodData) ? null : $this->mapDataToShippingInfo($shippingMethodData),
             'shippingMethod' => empty($shippingMethodData) ? null : $this->mapDataToShippingInfo($shippingMethodData),
-            'discountCodes' => $this->extractDiscountCodesFromLineItems($lineItems),
-            // @TODO: resolve billing address?
+            'discountCodes' => $this->mapDataToDiscounts($cartData['lineItems'] ?? []),
+            'dangerousInnerCart' => $cartData,
         ]);
     }
 
@@ -70,28 +88,16 @@ class CartMapper extends AbstractDataMapper implements
         return $cartData['deliveries'][0][$deliveryItemKey] ?? [];
     }
 
-    /**
-     * @param \Frontastic\Common\CartApiBundle\Domain\LineItem[] $lineItems
-     *
-     * @return string[]
-     */
-    private function extractDiscountCodesFromLineItems(array $lineItems): array
-    {
-        $result = [];
-        foreach ($lineItems as $lineItem) {
-            if ($lineItem->type === ShopwareCartApi::LINE_ITEM_TYPE_PROMOTION) {
-                $result[] = $lineItem->name;
-            }
-        }
-
-        return $result;
-    }
-
     private function getLineItemsMapper(): LineItemsMapper
     {
         return $this->lineItemsMapper
             ->setProjectConfigApi($this->getProjectConfigApi())
             ->setLocale($this->getLocale());
+    }
+
+    private function getDiscountsMapper(): DiscountsMapper
+    {
+        return $this->discountsMapper;
     }
 
     /**
@@ -102,6 +108,16 @@ class CartMapper extends AbstractDataMapper implements
     private function mapDataToLineItems(array $lineItemsData): array
     {
         return $this->getLineItemsMapper()->map($lineItemsData);
+    }
+
+    /**
+     * @param array $lineItemsData
+     *
+     * @return \Frontastic\Common\CartApiBundle\Domain\Discount[]
+     */
+    private function mapDataToDiscounts(array $lineItemsData): array
+    {
+        return $this->getDiscountsMapper()->map($lineItemsData);
     }
 
     private function mapDataToShippingInfo(array $shippingMethodData): ?ShippingInfo

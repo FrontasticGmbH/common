@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php
 
 namespace Frontastic\Common\ShopwareBundle\Domain\AccountApi;
 
@@ -87,6 +87,10 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
 
     public function create(Account $account, ?Cart $cart = null, string $locale = null): Account
     {
+        if ($account->salutation === null && (($salutations = $this->getSalutations($locale)) !== null)) {
+            $account->salutation = $salutations[0];
+        }
+
         $requestData = $this->mapRequestData($account, CustomerCreateRequestDataMapper::MAPPER_NAME);
 
         $requestData['storefrontUrl'] = $this->client->getBaseUri();
@@ -97,19 +101,36 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
             ->withContextToken($contextToken)
             ->post('/store-api/account/register', [], $requestData)
             ->then(function ($response) use ($account) {
-                // If the "Double opt-in on sign-up" option is not enabled in Shopware, login will not be possible
-                // until the customer emails is been confirmed through AccountApi::confirmEmail
+
+                $token = isset($response['headers']['sw-context-token']) ?
+                    explode(',', $response['headers']['sw-context-token'])[0] :
+                    null;
+
+                // Shopware does not allow logging for guest accounts.
+                if (key_exists('guest', $response) && $response['guest']) {
+                    $account = $this->mapResponse($response, AccountMapper::MAPPER_NAME);
+                    $account->apiToken = $token;
+
+                    return $account;
+                }
+
+                // If the "Double opt-in on sign-up" option is enabled in Shopware, login will not be possible
+                // until the customer emails is being confirmed through AccountApi::confirmEmail.
                 $createdAccount = $this->login($account);
                 if ($createdAccount instanceof Account) {
                     return $createdAccount;
                 }
 
                 // To be able to confirm the email account we need to set the Account.confirmationToken using
-                // the "hash" value, only available throughout the "admin" API
+                // the "hash" value, only available throughout the "admin" API.
                 return $this->client
+                    ->withContextToken($token)
                     ->get("/api/customer/{$response['id']}", [], [$this->client->getAccessTokenHeader()])
-                    ->then(function ($response): Account {
-                        return $this->mapResponse($response, AccountMapper::MAPPER_NAME);
+                    ->then(function ($response) use ($token): Account {
+                        $account = $this->mapResponse($response, AccountMapper::MAPPER_NAME);
+                        $account->apiToken = $token;
+
+                        return $account;
                     })
                     ->wait();
             })
@@ -124,6 +145,19 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
             ->withContextToken($account->apiToken)
             ->post('/store-api/account/change-profile', [], $requestData)
             ->wait();
+
+        if ($account->getPassword()) {
+            $requestData = [
+                'email' => $account->email,
+                'emailConfirmation' => $account->email,
+                'password' => $account->getPassword(),
+            ];
+
+            $this->client
+                ->withContextToken($account->apiToken)
+                ->post('/store-api/account/change-email', [], $requestData)
+                ->wait();
+        }
 
         return $account;
     }

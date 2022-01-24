@@ -160,6 +160,10 @@ class ShopwareProjectConfigApi extends AbstractShopwareApi implements ShopwarePr
 
         $locale = $this->parseLocaleString($locale);
 
+        if ($locale === null) {
+            return [];
+        }
+
         return $this->client
             ->forLanguage($locale->languageId)
             ->post('/store-api/salutation', [], $requestData)

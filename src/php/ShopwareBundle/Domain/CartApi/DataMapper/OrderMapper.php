@@ -1,10 +1,11 @@
-<?php declare(strict_types = 1);
+<?php
 
 namespace Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper;
 
 use DateTimeImmutable;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Order;
+use Frontastic\Common\CartApiBundle\Domain\ShippingInfo;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper\AddressMapper;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperInterface;
@@ -31,10 +32,26 @@ class OrderMapper extends AbstractDataMapper implements
      */
     private $lineItemsMapper;
 
-    public function __construct(AddressMapper $addressMapper, LineItemsMapper $lineItemsMapper)
-    {
+    /**
+     * @var \Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper\ShippingInfoMapper
+     */
+    private $shippingInfoMapper;
+
+    /**
+     * @var \Frontastic\Common\ShopwareBundle\Domain\CartApi\DataMapper\DiscountsMapper
+     */
+    private $discountsMapper;
+
+    public function __construct(
+        AddressMapper $addressMapper,
+        LineItemsMapper $lineItemsMapper,
+        ShippingInfoMapper $shippingInfoMapper,
+        DiscountsMapper $discountsMapper
+    ) {
         $this->addressMapper = $addressMapper;
         $this->lineItemsMapper = $lineItemsMapper;
+        $this->shippingInfoMapper = $shippingInfoMapper;
+        $this->discountsMapper = $discountsMapper;
     }
 
     public function getName(): string
@@ -44,10 +61,24 @@ class OrderMapper extends AbstractDataMapper implements
 
     public function map($resource)
     {
-        $orderData = $this->extractData($resource);
+        $orderData = $this->extractData($resource, $resource);
+
+        $shippingAddress = [];
+        $billingAddress = [];
+        $shippingInfo = [];
+
+        if ($orderData['addresses']) {
+            $shippingAddress = $this->mapShippingAddress($orderData['addresses'], $orderData['billingAddressId']);
+            $billingAddress = $this->mapBillingAddress($orderData['addresses'], $orderData['billingAddressId']);
+        }
+
+        if ($orderData['deliveries']) {
+            $shippingAddress = $this->mapDeliveriesToShippingAddress($orderData['deliveries']);
+            $shippingInfo = $this->mapShippingInfo($orderData['deliveries']);
+        }
 
         $order = new Order([
-            'cartId' => $orderData['id'],
+            'cartId' => $resource['headers']['sw-context-token'] ?? null,
             'currency' => $this->resolveCurrencyCode($orderData['currencyId']),
             'orderState' => $orderData['stateMachineState']['technicalName'],
             'createdAt' => new DateTimeImmutable($orderData['orderDateTime']),
@@ -55,15 +86,13 @@ class OrderMapper extends AbstractDataMapper implements
             'orderVersion' => $orderData['versionId'],
             'lineItems' => $this->mapDataToLineItems($orderData['lineItems']),
             'email' => $orderData['orderCustomer']['email'] ?? null,
-// @TODO: no data
-//            'shippingMethod' => $this->mapShippingMethod($orderData['shippingInfo'] ?? []),
-            'shippingAddress' => $this->mapShippingAddress($orderData['addresses'], $orderData['billingAddressId']),
-            'billingAddress' => $this->mapBillingAddress($orderData['addresses'], $orderData['billingAddressId']),
+            'shippingAddress' => $shippingAddress,
+            'billingAddress' => $billingAddress,
+            'shippingInfo' => $shippingInfo,
             'sum' => $this->convertPriceToCent($orderData['price']['totalPrice']),
 // @TODO: no data yet
 //            'payments' => $this->mapPayments($order),
-// @TODO: no data, lineItems are not returned together with other order information
-//            'discountCodes' => $this->mapDiscounts($order),
+            'discountCodes' => $this->mapDataToDiscounts($orderData['lineItems']),
             'dangerousInnerOrder' => $orderData,
         ]);
 
@@ -81,6 +110,16 @@ class OrderMapper extends AbstractDataMapper implements
     private function getLineItemsMapper(): LineItemsMapper
     {
         return $this->lineItemsMapper->setLocale($this->getLocale());
+    }
+
+    private function getShippingInfoMapper(): ShippingInfoMapper
+    {
+        return $this->shippingInfoMapper;
+    }
+
+    private function getDiscountsMapper(): DiscountsMapper
+    {
+        return $this->discountsMapper;
     }
 
     /**
@@ -125,6 +164,37 @@ class OrderMapper extends AbstractDataMapper implements
         }
 
         return $this->getAddressMapper()->map($shippingAddressData);
+    }
+
+    private function mapShippingInfo(?array $deliveries): ?ShippingInfo
+    {
+        if (empty($deliveries)) {
+            return null;
+        }
+
+        // We will only map the first delivery info
+        return $this->getShippingInfoMapper()->map($deliveries[0]);
+    }
+
+    private function mapDeliveriesToShippingAddress(?array $deliveries): ?Address
+    {
+        $shippingOrderAddress = $deliveries[0]['shippingOrderAddress'] ?? null;
+
+        if ($shippingOrderAddress === null) {
+            return null;
+        }
+
+        return $this->getAddressMapper()->map($shippingOrderAddress);
+    }
+
+    /**
+     * @param array $lineItemsData
+     *
+     * @return \Frontastic\Common\CartApiBundle\Domain\Discount[]
+     */
+    private function mapDataToDiscounts(array $lineItemsData): array
+    {
+        return $this->getDiscountsMapper()->map($lineItemsData);
     }
 
     private function resolveCurrencyCode(string $currencyId): ?string

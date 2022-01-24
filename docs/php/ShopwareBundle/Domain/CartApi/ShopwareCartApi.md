@@ -19,6 +19,7 @@ public function __construct(
     LocaleCreator $localeCreator,
     DataMapperResolver $mapperResolver,
     ShopwareProjectConfigApiFactory $projectConfigApiFactory,
+    AccountApi $accountApi,
     ?string $defaultLanguage
 ): mixed
 ```
@@ -29,6 +30,7 @@ Argument|Type|Default|Description
 `$localeCreator`|[`LocaleCreator`](../Locale/LocaleCreator.md)||
 `$mapperResolver`|[`DataMapperResolver`](../DataMapper/DataMapperResolver.md)||
 `$projectConfigApiFactory`|[`ShopwareProjectConfigApiFactory`](../ProjectConfigApi/ShopwareProjectConfigApiFactory.md)||
+`$accountApi`|[`AccountApi`](../../../AccountApiBundle/Domain/AccountApi.md)||
 `$defaultLanguage`|`?string`||
 
 Return Value: `mixed`

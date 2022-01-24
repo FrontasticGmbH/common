@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php
 
 namespace Frontastic\Common\ShopwareBundle\Domain;
 
@@ -7,6 +7,7 @@ use Frontastic\Common\ShopwareBundle\Domain\DataMapper\DataMapperResolver;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\LocaleAwareDataMapperInterface;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\LocaleCreator;
 use Frontastic\Common\ShopwareBundle\Domain\Locale\ShopwareLocale;
+use RuntimeException;
 
 abstract class AbstractShopwareApi
 {
@@ -75,6 +76,10 @@ abstract class AbstractShopwareApi
     protected function parseLocaleString(?string $localeString): ShopwareLocale
     {
         $localeString = $localeString ?? $this->defaultLanguage;
+
+        if ($this->localeCreator === null) {
+            throw new RuntimeException('The localeCreator has not been instantiated');
+        }
 
         $this->locale = $this->localeCreator->createLocaleFromString($localeString);
 

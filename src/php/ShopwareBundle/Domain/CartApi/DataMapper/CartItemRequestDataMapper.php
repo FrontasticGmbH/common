@@ -22,12 +22,12 @@ class CartItemRequestDataMapper extends AbstractDataMapper
     public function map($lineItem)
     {
         return [
+            'id' => $lineItem->lineItemId ?? null,
             'type' => ShopwareCartApi::LINE_ITEM_TYPE_PRODUCT,
             'quantity' => $lineItem->count,
             'stackable' => true,
             'removable' => true,
             'label' => $lineItem->name,
-            'coverId' => null,
             'referencedId' => $lineItem->variant->id ?? $lineItem->lineItemId,
         ];
     }

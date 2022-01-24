@@ -1,7 +1,9 @@
-<?php declare(strict_types = 1);
+<?php
 
 namespace Frontastic\Common\ShopwareBundle\Domain\AccountApi\DataMapper;
 
+use Frontastic\Common\AccountApiBundle\Domain\Account;
+use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\ShopwareBundle\Domain\AccountApi\SalutationHelper;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\AbstractDataMapper;
 use Frontastic\Common\ShopwareBundle\Domain\DataMapper\ProjectConfigApiAwareDataMapperInterface;
@@ -35,28 +37,71 @@ class CustomerCreateRequestDataMapper extends AbstractDataMapper implements Proj
      */
     public function map($account)
     {
+        if ($this->isGuestAccount($account)) {
+            $account = $this->generateGuestData($account);
+        }
+
         $requestData = [
             'salutationId' => $this->resolveSalutationId($account->salutation),
             'firstName' => $account->firstName,
             'lastName' => $account->lastName,
-            'guest' => false,
+            'guest' => $this->isGuestAccount($account),
             'email' => $account->email,
-            'password' => $account->getPassword(),
+            'password' => $this->isGuestAccount($account) ? substr(md5(microtime()), 2, 8) : $account->getPassword(),
             'birthdayDay' => $account->birthday ? $account->birthday->format('d') : null,
             'birthdayMonth' => $account->birthday ? $account->birthday->format('m') : null,
             'birthdayYear' => $account->birthday ? $account->birthday->format('Y') : null,
             'acceptedDataProtection' => true,
         ];
 
-        if (isset($account->addresses[0]) && !empty($account->addresses[0])) {
-            $requestData['billingAddress'] = $this->getAddressCreateRequestDataMapper()->map($account->addresses[0]);
+        $shippingAddresses = null;
+        $billingAddresses = null;
+
+        foreach ($account->addresses as $address) {
+            $requestAddressData = $this->getAddressCreateRequestDataMapper()->map($address);
+
+            $shippingAddresses = $shippingAddresses ?? $requestAddressData;
+            $billingAddresses = $billingAddresses ?? $requestAddressData;
+
+            if ($address->isDefaultShippingAddress) {
+                $shippingAddresses = $requestAddressData;
+            }
+
+            if ($address->isDefaultBillingAddress) {
+                $billingAddresses = $requestAddressData;
+            }
         }
 
-        if (isset($account->addresses[1]) && !empty($account->addresses[1])) {
-            $requestData['shippingAddress'] = $this->getAddressCreateRequestDataMapper()->map($account->addresses[1]);
-        }
+        $requestData['shippingAddress'] = $shippingAddresses ?? $billingAddresses;
+        $requestData['billingAddress'] = $billingAddresses ?? $shippingAddresses;
 
         return $requestData;
+    }
+
+    private function isGuestAccount(Account $account): bool
+    {
+        return empty($account->getPassword());
+    }
+
+    private function generateGuestData(Account $account): Account
+    {
+        $defaultName = strstr($account->email, '@', true);
+
+        $account->firstName =$account->firstName ?? $defaultName;
+        $account->lastName = $account->lastName ?? $defaultName;
+        $account->addresses = !empty($account->addresses) ? $account->addresses : [
+            new Address([
+                'salutation' => $account->salutation,
+                'firstName' => $account->firstName,
+                'lastName' => $account->lastName,
+                'streetName' => strstr($account->email, '@', true),
+                'postalCode' => '1234',
+                'country' => 'DE',
+                'city' => 'Berlin',
+                ]),
+        ];
+
+        return $account;
     }
 
     private function getAddressCreateRequestDataMapper(): AddressCreateRequestDataMapper
