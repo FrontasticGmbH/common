@@ -1,5 +1,19 @@
 # common Changelog
 
+## `2.25.0` (2022-01-24)
+
+* fix(FP-838): improved error handling on parse locator for Shopware
+* feat(FP-838): prevent update email, shipping address, or billing address on Shopware CartApi
+* feat(FP-838): implemented set shipping and billing address on Shopware CartApi
+* feat(FP-838): map discounts and shipping info on Shopware CartApi
+* feat(FP-838): map shipping info from order on Shopware CartApi
+* feat(FP-838): upgrade order, anonymous cart, and email on Shopware CartApi
+* feat(FP-838): allow customer guest create and update emal on Shopware AccountApi
+* feat(FP-838): upgraded discount actions on Shopware CartApi
+* feat(FP-838): upgrade shipping methods actions on Shopware CartApi
+* feat(FP-838): upgrade add, update, and remove item to cart on Shopware CartApi
+* feat(FP-838): upgrade get anonymous cart and get cart by id on Shopware
+
 ## `2.24.0` (2022-01-05)
 
 * feat(FP-324): Include User-Agent Frontastic as part of API requests
