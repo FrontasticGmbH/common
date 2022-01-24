@@ -247,6 +247,12 @@ class ConfigurationSchema {
                 typeof value.target !== 'string' || value.target === ''
         }
 
+        // If media field has an empty stream object like: {value: null}
+        // It should be flagged as a missing required value
+        if (schema.type === 'stream' && value) {
+            return Object.values(value).some((v) => !v)
+        }
+
         // If media field has an empty media object like: {media: null}
         // It should be flagged as a missing required value
         if (schema.type === 'media' && value) {
