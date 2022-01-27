@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.25.1` (2022-01-27)
+
+* fix: if there's no filter chosen - the error reappears
+
 ## `2.25.0` (2022-01-24)
 
 * fix(FP-838): improved error handling on parse locator for Shopware
