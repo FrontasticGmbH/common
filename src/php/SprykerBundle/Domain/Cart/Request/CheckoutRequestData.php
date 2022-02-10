@@ -3,10 +3,11 @@
 namespace Frontastic\Common\SprykerBundle\Domain\Cart\Request;
 
 use Frontastic\Common\AccountApiBundle\Domain\Account;
+use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\SprykerBundle\Domain\AbstractRequestData;
 use Frontastic\Common\SprykerBundle\Domain\Account\SalutationHelper;
-use Frontastic\Common\SprykerBundle\Domain\Address;
+use Frontastic\Common\SprykerBundle;
 
 class CheckoutRequestData extends AbstractRequestData
 {
@@ -158,6 +159,8 @@ class CheckoutRequestData extends AbstractRequestData
      */
     private function addressAttributes(Address $address): array
     {
+        $isSprykerAddress = $address instanceof SprykerBundle\Domain\Address;
+
         $data = [
             'salutation' => SalutationHelper::getSprykerSalutation(
                 $address->salutation ?? SalutationHelper::DEFAULT_FRONTASTIC_SALUTATION
@@ -169,9 +172,10 @@ class CheckoutRequestData extends AbstractRequestData
             'address3' => $address->additionalStreetInfo,
             'zipCode' => $address->postalCode,
             'city' => $address->city,
-            'iso2Code' => $address->country ? mb_substr($address->country, 0, 2) : static::DEFAULT_COUNTRY,
-            'company' => $address->company ?? '',
-            'phone' => '',
+            'iso2Code' => $address->country ?
+                mb_strtoupper(mb_substr($address->country, 0, 2)) : static::DEFAULT_COUNTRY,
+            'company' => $isSprykerAddress && $address->company ? $address->company : '',
+            'phone' => $address->phone,
             'isDefaultBilling' => $address->isDefaultBillingAddress,
             'isDefaultShipping' => $address->isDefaultShippingAddress,
         ];
