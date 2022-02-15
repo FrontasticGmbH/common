@@ -7,7 +7,7 @@ use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
 use Frontastic\Common\SprykerBundle\Domain\AbstractRequestData;
 use Frontastic\Common\SprykerBundle\Domain\Account\SalutationHelper;
-use Frontastic\Common\SprykerBundle;
+use Frontastic\Common\SprykerBundle\Domain\Address as SprykerAddress;
 
 class CheckoutRequestData extends AbstractRequestData
 {
@@ -159,7 +159,7 @@ class CheckoutRequestData extends AbstractRequestData
      */
     private function addressAttributes(Address $address): array
     {
-        $isSprykerAddress = $address instanceof SprykerBundle\Domain\Address;
+        $isSprykerAddress = $address instanceof SprykerAddress;
 
         $data = [
             'salutation' => SalutationHelper::getSprykerSalutation(
