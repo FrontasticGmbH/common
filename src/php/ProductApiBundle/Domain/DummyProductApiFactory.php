@@ -20,7 +20,7 @@ class DummyProductApiFactory implements ProductApiFactory
     private $productSearchApiFactory;
 
     public function __construct(
-        ProductSearchApiFactory $productSearchApiFactory,
+        ProductSearchApiFactory $productSearchApiFactory
     ) {
         $this->productSearchApiFactory = $productSearchApiFactory;
     }

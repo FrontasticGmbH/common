@@ -19,7 +19,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 class DummyProductApi extends ProductApiBase
 {
     public function __construct(
-        ProductSearchApi $productSearchApi,
+        ProductSearchApi $productSearchApi
     ) {
         parent::__construct($productSearchApi);
     }
