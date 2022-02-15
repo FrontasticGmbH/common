@@ -1,5 +1,10 @@
 # common Changelog
 
+## `2.25.2` (2022-02-15)
+
+* fix(FP-775): Minor refactor, import of SprykerAddress
+* fix(FP-755): Fix Spryker address
+
 ## `2.25.1` (2022-01-27)
 
 * fix: if there's no filter chosen - the error reappears
