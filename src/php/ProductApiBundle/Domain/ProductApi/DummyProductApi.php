@@ -26,21 +26,26 @@ class DummyProductApi extends ProductApiBase
 
     protected function queryCategoriesImplementation(CategoryQuery $query): Result
     {
-        throw new \Exception("ProductApi is not available for Nextjs projects.");
+        throw $this->exception();
     }
 
     protected function getProductTypesImplementation(ProductTypeQuery $query): array
     {
-        throw new \Exception("ProductApi is not available for Nextjs projects.");
+        throw $this->exception();
     }
 
     protected function getProductImplementation(SingleProductQuery $query): PromiseInterface
     {
-        throw new \Exception("ProductApi is not available for Nextjs projects.");
+        throw $this->exception();
     }
 
     public function getDangerousInnerClient(): Client
     {
-        throw new \Exception("ProductApi is not available for Nextjs projects.");
+        throw $this->exception();
+    }
+
+    private function exception(): \Throwable
+    {
+        return new \Exception("ProductApi is not available for Nextjs projects.");
     }
 }

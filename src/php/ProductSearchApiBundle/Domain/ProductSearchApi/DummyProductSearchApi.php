@@ -17,16 +17,21 @@ class DummyProductSearchApi extends ProductSearchApiBase
 {
     protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
-        throw new \Exception("ProductSearchApi is not available for Nextjs projects.");
+        throw $this->exception();
     }
 
     protected function getSearchableAttributesImplementation(): PromiseInterface
     {
-        throw new \Exception("ProductSearchApi is not available for Nextjs projects.");
+        throw $this->exception();
     }
 
     public function getDangerousInnerClient(): Client
     {
-        throw new \Exception("ProductSearchApi is not available for Nextjs projects.");
+        throw $this->exception();
+    }
+
+    private function exception(): \Throwable
+    {
+        return new \Exception("ProductSearchApi is not available for Nextjs projects.");
     }
 }
