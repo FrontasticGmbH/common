@@ -2,18 +2,9 @@
 
 namespace Frontastic\Common\WishlistApiBundle\Domain\WishlistApi;
 
-use Frontastic\Common\ProductApiBundle\Domain\Product;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi;
-use Frontastic\Common\WishlistApiBundle\Domain\Payment;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Client;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Mapper;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Locale;
-use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query;
-use Frontastic\Common\WishlistApiBundle\Domain\Category;
 use Frontastic\Common\WishlistApiBundle\Domain\Wishlist;
 use Frontastic\Common\WishlistApiBundle\Domain\LineItem;
 use Frontastic\Common\WishlistApiBundle\Domain\WishlistApi;
-use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class DummyWishlistApi implements WishlistApi
 {
