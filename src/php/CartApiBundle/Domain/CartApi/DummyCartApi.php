@@ -17,22 +17,22 @@ class DummyCartApi extends CartApiBase
 {
     protected function getForUserImplementation(Account $account, string $localeString): Cart
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function getAnonymousImplementation(string $anonymousId, string $localeString): Cart
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function getByIdImplementation(string $cartId, string $localeString = null): Cart
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function addToCartImplementation(Cart $cart, LineItem $lineItem, string $localeString = null): Cart
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function updateLineItemImplementation(
@@ -42,17 +42,17 @@ class DummyCartApi extends CartApiBase
         ?array $custom = null,
         string $localeString = null
     ): Cart {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function removeLineItemImplementation(Cart $cart, LineItem $lineItem, string $localeString = null): Cart
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function setEmailImplementation(Cart $cart, string $email, string $localeString = null): Cart
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function setShippingMethodImplementation(
@@ -60,27 +60,27 @@ class DummyCartApi extends CartApiBase
         string $shippingMethod,
         string $localeString = null
     ): Cart {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function setCustomFieldImplementation(Cart $cart, array $fields, string $localeString = null): Cart
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function setRawApiInputImplementation(Cart $cart, string $localeString = null): Cart
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function setShippingAddressImplementation(Cart $cart, Address $address, string $localeString = null): Cart
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function setBillingAddressImplementation(Cart $cart, Address $address, string $localeString = null): Cart
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function addPaymentImplementation(
@@ -89,17 +89,17 @@ class DummyCartApi extends CartApiBase
         ?array $custom = null,
         string $localeString = null
     ): Cart {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function updatePaymentImplementation(Cart $cart, Payment $payment, string $localeString): Payment
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function redeemDiscountCodeImplementation(Cart $cart, string $code, string $localeString = null): Cart
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function removeDiscountCodeImplementation(
@@ -107,101 +107,101 @@ class DummyCartApi extends CartApiBase
         LineItem $discountLineItem,
         string $localeString = null
     ): Cart {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function orderImplementation(Cart $cart, string $locale = null): Order
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function getOrderImplementation(Account $account, string $orderId, string $locale = null): Order
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function getOrdersImplementation(Account $account, string $locale = null): array
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function postCartActions(Cart $cart, array $actions, CommercetoolsLocale $locale): Cart
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function startTransactionImplementation(Cart $cart): void
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function commitImplementation(string $localeString = null): Cart
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     public function getAvailableShippingMethodsImplementation(Cart $cart, string $localeString): array
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     public function getShippingMethodsImplementation(string $localeString, bool $onlyMatching = false): array
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     public function getDangerousInnerClient()
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     public function getDangerousInnerMapper(): CartApi\Commercetools\Mapper
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     public function getDangerousInnerLocaleCreator(): CommercetoolsLocaleCreator
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function setCustomLineItemTypeImplementation(array $lineItemType): void
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function getCustomLineItemTypeImplementation(): array
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function setTaxCategoryImplementation(array $taxCategory): void
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     protected function getTaxCategoryImplementation(): ?array
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     public function updatePaymentStatus(Payment $payment): void
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     public function getPayment(string $paymentId): ?Payment
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
     public function updatePaymentInterfaceId(Payment $payment): void
     {
-        $this->doNotUse();
+        throw $this->exception();
     }
 
-    private function doNotUse(): void
+    private function exception(): \Throwable
     {
-        throw new \Exception("CartApi is not available for Nextjs projects.");
+        return new \Exception("CartApi is not available for Nextjs projects.");
     }
 }
