@@ -22,6 +22,7 @@ Here you find the API documentation for the relevant classes:
     * [AccountApi](php/AccountApiBundle/Domain/AccountApi.md)
     * AccountApi
       * [Commercetools](php/AccountApiBundle/Domain/AccountApi/Commercetools.md)
+      * [DummyAccountApi](php/AccountApiBundle/Domain/AccountApi/DummyAccountApi.md)
       * [Exception](php/AccountApiBundle/Domain/AccountApi/Exception.md)
       * [LifecycleEventDecorator](php/AccountApiBundle/Domain/AccountApi/LifecycleEventDecorator.md)
     * [AccountApiFactory](php/AccountApiBundle/Domain/AccountApiFactory.md)
@@ -29,6 +30,7 @@ Here you find the API documentation for the relevant classes:
     * [Address](php/AccountApiBundle/Domain/Address.md)
     * [AuthentificationInformation](php/AccountApiBundle/Domain/AuthentificationInformation.md)
     * [DefaultAccountApiFactory](php/AccountApiBundle/Domain/DefaultAccountApiFactory.md)
+    * [DummyAccountApiFactory](php/AccountApiBundle/Domain/DummyAccountApiFactory.md)
     * [DuplicateAccountException](php/AccountApiBundle/Domain/DuplicateAccountException.md)
     * [DuplicateAddressException](php/AccountApiBundle/Domain/DuplicateAddressException.md)
     * [Group](php/AccountApiBundle/Domain/Group.md)
@@ -60,12 +62,14 @@ Here you find the API documentation for the relevant classes:
     * [CartApi](php/CartApiBundle/Domain/CartApi.md)
     * CartApi
       * [Commercetools](php/CartApiBundle/Domain/CartApi/Commercetools.md)
+      * [DummyCartApi](php/CartApiBundle/Domain/CartApi/DummyCartApi.md)
       * [Exception](php/CartApiBundle/Domain/CartApi/Exception.md)
       * [LifecycleEventDecorator](php/CartApiBundle/Domain/CartApi/LifecycleEventDecorator.md)
     * [CartApiBase](php/CartApiBundle/Domain/CartApiBase.md)
     * [CartApiFactory](php/CartApiBundle/Domain/CartApiFactory.md)
     * [DefaultCartApiFactory](php/CartApiBundle/Domain/DefaultCartApiFactory.md)
     * [Discount](php/CartApiBundle/Domain/Discount.md)
+    * [DummyCartApiFactory](php/CartApiBundle/Domain/DummyCartApiFactory.md)
     * [LineItem](php/CartApiBundle/Domain/LineItem.md)
     * LineItem
       * [Variant](php/CartApiBundle/Domain/LineItem/Variant.md)
@@ -98,6 +102,7 @@ Here you find the API documentation for the relevant classes:
       * [CachingContentApi](php/ContentApiBundle/Domain/ContentApi/CachingContentApi.md)
       * [Content](php/ContentApiBundle/Domain/ContentApi/Content.md)
       * [Contentful](php/ContentApiBundle/Domain/ContentApi/Contentful.md)
+      * [DummyContentApi](php/ContentApiBundle/Domain/ContentApi/DummyContentApi.md)
       * [Exception](php/ContentApiBundle/Domain/ContentApi/Exception.md)
       * [GraphCMS](php/ContentApiBundle/Domain/ContentApi/GraphCMS.md)
       * [LifecycleEventDecorator](php/ContentApiBundle/Domain/ContentApi/LifecycleEventDecorator.md)
@@ -105,6 +110,7 @@ Here you find the API documentation for the relevant classes:
     * [ContentQueryFactory](php/ContentApiBundle/Domain/ContentQueryFactory.md)
     * [ContentType](php/ContentApiBundle/Domain/ContentType.md)
     * [DefaultContentApiFactory](php/ContentApiBundle/Domain/DefaultContentApiFactory.md)
+    * [DummyContentApiFactory](php/ContentApiBundle/Domain/DummyContentApiFactory.md)
     * [Query](php/ContentApiBundle/Domain/Query.md)
     * [Result](php/ContentApiBundle/Domain/Result.md)
   * [FrontasticCommonContentApiBundle](php/ContentApiBundle/FrontasticCommonContentApiBundle.md)
@@ -196,10 +202,12 @@ Here you find the API documentation for the relevant classes:
   * Domain
     * [Category](php/ProductApiBundle/Domain/Category.md)
     * [DefaultProductApiFactory](php/ProductApiBundle/Domain/DefaultProductApiFactory.md)
+    * [DummyProductApiFactory](php/ProductApiBundle/Domain/DummyProductApiFactory.md)
     * [Product](php/ProductApiBundle/Domain/Product.md)
     * [ProductApi](php/ProductApiBundle/Domain/ProductApi.md)
     * ProductApi
       * [Commercetools](php/ProductApiBundle/Domain/ProductApi/Commercetools.md)
+      * [DummyProductApi](php/ProductApiBundle/Domain/ProductApi/DummyProductApi.md)
       * [EmptyEnabledFacetService](php/ProductApiBundle/Domain/ProductApi/EmptyEnabledFacetService.md)
       * [EnabledFacetService](php/ProductApiBundle/Domain/ProductApi/EnabledFacetService.md)
       * [Exception](php/ProductApiBundle/Domain/ProductApi/Exception.md)
@@ -221,12 +229,14 @@ Here you find the API documentation for the relevant classes:
     * [FrontasticCommonProductSearchApiExtension](php/ProductSearchApiBundle/DependencyInjection/FrontasticCommonProductSearchApiExtension.md)
   * Domain
     * [DefaultProductSearchApiFactory](php/ProductSearchApiBundle/Domain/DefaultProductSearchApiFactory.md)
+    * [DummyProductSearchApiFactory](php/ProductSearchApiBundle/Domain/DummyProductSearchApiFactory.md)
     * [LegacyLifecycleEventDecorator](php/ProductSearchApiBundle/Domain/LegacyLifecycleEventDecorator.md)
     * [LifecycleEventDecorator](php/ProductSearchApiBundle/Domain/LifecycleEventDecorator.md)
     * [NoopProductSearchApi](php/ProductSearchApiBundle/Domain/NoopProductSearchApi.md)
     * [ProductSearchApi](php/ProductSearchApiBundle/Domain/ProductSearchApi.md)
     * ProductSearchApi
       * [Commercetools](php/ProductSearchApiBundle/Domain/ProductSearchApi/Commercetools.md)
+      * [DummyProductSearchApi](php/ProductSearchApiBundle/Domain/ProductSearchApi/DummyProductSearchApi.md)
     * [ProductSearchApiBase](php/ProductSearchApiBundle/Domain/ProductSearchApiBase.md)
     * [ProductSearchApiFactory](php/ProductSearchApiBundle/Domain/ProductSearchApiFactory.md)
   * [FrontasticCommonProductSearchApiBundle](php/ProductSearchApiBundle/FrontasticCommonProductSearchApiBundle.md)
@@ -435,6 +445,7 @@ Here you find the API documentation for the relevant classes:
     * [FrontasticCommonWishlistApiExtension](php/WishlistApiBundle/DependencyInjection/FrontasticCommonWishlistApiExtension.md)
   * Domain
     * [DefaultWishlistApiFactory](php/WishlistApiBundle/Domain/DefaultWishlistApiFactory.md)
+    * [DummyWishlistApiFactory](php/WishlistApiBundle/Domain/DummyWishlistApiFactory.md)
     * [LineItem](php/WishlistApiBundle/Domain/LineItem.md)
     * LineItem
       * [Variant](php/WishlistApiBundle/Domain/LineItem/Variant.md)
@@ -442,6 +453,7 @@ Here you find the API documentation for the relevant classes:
     * [WishlistApi](php/WishlistApiBundle/Domain/WishlistApi.md)
     * WishlistApi
       * [Commercetools](php/WishlistApiBundle/Domain/WishlistApi/Commercetools.md)
+      * [DummyWishlistApi](php/WishlistApiBundle/Domain/WishlistApi/DummyWishlistApi.md)
       * [Exception](php/WishlistApiBundle/Domain/WishlistApi/Exception.md)
       * [LifecycleEventDecorator](php/WishlistApiBundle/Domain/WishlistApi/LifecycleEventDecorator.md)
       * [NoWishlistApi](php/WishlistApiBundle/Domain/WishlistApi/NoWishlistApi.md)
