@@ -1,5 +1,15 @@
 # common Changelog
 
+## `2.25.3` (2022-03-02)
+
+* fix(api-hub): replace content api with dummy for nextjs projects
+* fix(api-hub): replace wishlist api with dummy for nextjs
+* fix(api-hub): no repeating exception messages in dummy product api and product search api
+* fix(api-hub): use dummy for cart api
+* fix(api-hub): replace repeating exception with function in DummyAccountApi
+* fix(api-hub): add dummy for AccountApi
+* fix(api-hub): fix syntax and add parameter to factory config
+
 ## `2.25.2` (2022-02-15)
 
 * fix(FP-775): Minor refactor, import of SprykerAddress
