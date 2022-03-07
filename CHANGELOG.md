@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.25.4` (2022-03-07)
+
+* misc: allowed ramsey/uuid library version ^4 as dependency
+
 ## `2.25.3` (2022-03-02)
 
 * fix(api-hub): replace content api with dummy for nextjs projects
