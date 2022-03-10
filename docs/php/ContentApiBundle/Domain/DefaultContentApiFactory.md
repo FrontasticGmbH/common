@@ -14,7 +14,6 @@
 ```php
 public function __construct(
     \Psr\Container\ContainerInterface $container,
-    \Doctrine\Common\Cache\Cache $cache,
     \Psr\SimpleCache\CacheInterface $psrCache,
     \Contentful\RichText\Renderer $richtextRenderer,
     bool $debug,
@@ -25,7 +24,6 @@ public function __construct(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$container`|`\Psr\Container\ContainerInterface`||
-`$cache`|`\Doctrine\Common\Cache\Cache`||
 `$psrCache`|`\Psr\SimpleCache\CacheInterface`||
 `$richtextRenderer`|`\Contentful\RichText\Renderer`||
 `$debug`|`bool`||
