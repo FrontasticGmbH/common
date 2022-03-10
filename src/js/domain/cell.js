@@ -15,6 +15,12 @@ class Cell {
                 folded: true,
                 fields: [
                     {
+                        label: 'Name',
+                        field: 'name',
+                        type: 'string',
+                        translatable: true,
+                    },
+                    {
                         label: 'Layout element width',
                         field: 'size',
                         type: 'enum',
