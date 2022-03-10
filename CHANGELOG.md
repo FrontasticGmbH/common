@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.26.0` (2022-03-10)
+
+* feat: add GraphCMS client factory
+
 ## `2.25.4` (2022-03-07)
 
 * misc: allowed ramsey/uuid library version ^4 as dependency
