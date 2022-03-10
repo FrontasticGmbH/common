@@ -3,14 +3,13 @@
 namespace Frontastic\Common\ContentApiBundle\Domain;
 
 use Contentful\RichText\Renderer;
-use Doctrine\Common\Cache\Cache;
+use Frontastic\Common\ContentApiBundle\Domain\ContentApi\CachingContentApi;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful\ContentfulClientFactory;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful\ContentfulLocaleMapper;
-use Frontastic\Common\HttpClient;
-use Frontastic\Common\ContentApiBundle\Domain\ContentApi\CachingContentApi;
+use Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS\GraphCMSClientFactory;
 use Frontastic\Common\ReplicatorBundle\Domain\Project;
-use Psr\SimpleCache\CacheInterface;
 use Psr\Container\ContainerInterface;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -25,11 +24,6 @@ class DefaultContentApiFactory implements ContentApiFactory
     private $container;
     private $decorators = [];
     private $contentfulLocaleMapperId = 'Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful\LocaleMapper';
-
-    /**
-     * @var \Doctrine\Common\Cache\Cache
-     */
-    private $cache;
 
     /**
      * @var CacheInterface
@@ -48,7 +42,6 @@ class DefaultContentApiFactory implements ContentApiFactory
 
     public function __construct(
         ContainerInterface $container,
-        Cache $cache,
         CacheInterface $psrCache,
         Renderer $richtextRenderer,
         bool $debug,
@@ -56,7 +49,6 @@ class DefaultContentApiFactory implements ContentApiFactory
     ) {
         $this->container = $container;
         $this->decorators = $decorators;
-        $this->cache = $cache;
         $this->psrCache = $psrCache;
         $this->richtextRenderer = $richtextRenderer;
         $this->debug = $debug;
@@ -86,15 +78,8 @@ class DefaultContentApiFactory implements ContentApiFactory
                 break;
 
             case 'graphcms':
-                $client = new ContentApi\GraphCMS\Client(
-                    $contentConfiguration->projectId,
-                    $contentConfiguration->apiToken,
-                    $contentConfiguration->apiVersion ?? 'v1',
-                    $contentConfiguration->region,
-                    $contentConfiguration->stage,
-                    $this->container->get(HttpClient::class),
-                    $this->cache
-                );
+                $clientFactory = $this->container->get(GraphCMSClientFactory::class);
+                $client = $clientFactory->factorForProjectAndType($project, self::CONFIGURATION_TYPE_NAME);
                 $api = new ContentApi\GraphCMS($client, $project->defaultLanguage);
                 break;
             default:
