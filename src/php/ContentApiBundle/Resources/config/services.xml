@@ -12,9 +12,6 @@
 
         <service id="Frontastic\Common\ContentApiBundle\Domain\DefaultContentApiFactory">
             <argument type="service" id="service_container" />
-            <argument type="service">
-                <service class="Doctrine\Common\Cache\ApcuCache" />
-            </argument>
             <argument type="service" id="cache.app.simple" />
             <argument type="service" id="Contentful\RichText\Renderer" />
             <argument>%kernel.debug%</argument>
@@ -23,6 +20,13 @@
 
         <service id="Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful\ContentfulClientFactory">
             <argument type="service" id="logger" />
+        </service>
+
+        <service id="Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS\GraphCMSClientFactory">
+            <argument type="service" id="Frontastic\Common\HttpClient" />
+            <argument type="service">
+                <service class="Doctrine\Common\Cache\ApcuCache" />
+            </argument>
         </service>
 
         <service id="Contentful\RichText\Renderer" />
