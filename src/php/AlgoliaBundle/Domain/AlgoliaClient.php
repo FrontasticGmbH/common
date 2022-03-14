@@ -33,10 +33,54 @@ class AlgoliaClient
         $this->initIndex($this->defaultIndexConfig);
     }
 
-    protected function initIndex(AlgoliaIndexConfig $indexConfig)
+    protected function initIndex(AlgoliaIndexConfig $indexConfig, ?string $indexOverride = null)
     {
-        $this->index = SearchClient::create($indexConfig->appId, $indexConfig->appKey)
-            ->initIndex($indexConfig->indexName);
+        $client = SearchClient::create($indexConfig->appId, $indexConfig->appKey);
+
+        $this->index = $client->initIndex($indexOverride ?? $indexConfig->indexName);
+    }
+
+    protected function getSortIndex(array $sortAttributes): ?string
+    {
+        if (count($sortAttributes) < 1) {
+            return null;
+        }
+
+        $sortIndices = $this->defaultIndexConfig->sortIndices;
+
+        // Single attribute sort
+        if (count($sortAttributes) === 1) {
+            $key = array_key_first($sortAttributes);
+            $mode = $sortAttributes[$key];
+
+            return isset($sortIndices[$key][$mode]) ? $sortIndices[$key][$mode] : null;
+        }
+
+        // Multi attribute sort
+        foreach ($sortIndices as $key => $sortIndex) {
+            $match = true;
+            $length = 0;
+
+            // Order is not guaranteed so we have to check each attribute individually
+            // We also have to check the length of the key to only allow full matches
+            foreach ($sortAttributes as $name => $mode) {
+                $length += strlen("{$name}_{$mode}");
+                if (strpos($key, "{$name}_{$mode}") === false) {
+                    $match = false;
+                    break;
+                }
+            }
+
+            // Attributes are delimited with an underscore, we need to count those as well
+            // e.g price_asc_rating_desc -> 1 extra underscore
+            $attributeDelimiterCount = count($sortAttributes) - 1;
+
+            if ($match && strlen($key) === $length + $attributeDelimiterCount && is_string($sortIndex)) {
+                return $sortIndex;
+            }
+        }
+
+        return null;
     }
 
     public function setLanguage(string $language): self
@@ -44,6 +88,17 @@ class AlgoliaClient
         $indexConfig = $this->indexesConfig[$language] ?? $this->defaultIndexConfig;
         if ($this->index->getIndexName() != $indexConfig->indexName) {
             $this->initIndex($indexConfig);
+        }
+
+        return $this;
+    }
+
+    public function setSortIndex(array $sortAttributes): self
+    {
+        $sortIndex = $this->getSortIndex($sortAttributes);
+
+        if ($sortIndex !== null) {
+            $this->initIndex($this->defaultIndexConfig, $sortIndex);
         }
 
         return $this;
