@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.27.0` (2022-03-15)
+
+* feat(FP-1486): upgrade Shopify version to latest stable version 2022-01
+
 ## `2.26.0` (2022-03-10)
 
 * feat: add GraphCMS client factory
