@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.27.1` (2022-03-17)
+
+* fix: fix issue from studio-deployment-branch
+
 ## `2.27.0` (2022-03-15)
 
 * feat(FP-1486): upgrade Shopify version to latest stable version 2022-01
