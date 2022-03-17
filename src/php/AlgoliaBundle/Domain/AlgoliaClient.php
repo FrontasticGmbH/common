@@ -48,15 +48,6 @@ class AlgoliaClient
 
         $sortIndices = $this->defaultIndexConfig->sortIndices;
 
-        // Single attribute sort
-        if (count($sortAttributes) === 1) {
-            $key = array_key_first($sortAttributes);
-            $mode = $sortAttributes[$key];
-
-            return isset($sortIndices[$key][$mode]) ? $sortIndices[$key][$mode] : null;
-        }
-
-        // Multi attribute sort
         foreach ($sortIndices as $key => $sortIndex) {
             $match = true;
             $length = 0;
