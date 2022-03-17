@@ -6,6 +6,7 @@
 
 * [__construct()](#__construct)
 * [setLanguage()](#setlanguage)
+* [setSortIndex()](#setsortindex)
 * [search()](#search)
 * [getSettings()](#getsettings)
 
@@ -36,6 +37,20 @@ public function setLanguage(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$language`|`string`||
+
+Return Value: `self`
+
+### setSortIndex()
+
+```php
+public function setSortIndex(
+    array $sortAttributes
+): self
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$sortAttributes`|`array`||
 
 Return Value: `self`
 

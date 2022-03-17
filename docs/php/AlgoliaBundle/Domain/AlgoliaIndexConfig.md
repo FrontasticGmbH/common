@@ -9,5 +9,6 @@ Property|Type|Default|Required|Description
 `appId` | `string` |  | - | 
 `appKey` | `string` |  | - | 
 `indexName` | `string` |  | - | 
+`sortIndices` | `array` |  | - | 
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).
