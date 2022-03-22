@@ -1,5 +1,10 @@
 # common Changelog
 
+## `2.28.0` (2022-03-22)
+
+* refactor(FP-1122): Make logic for handling single-attribute sorting the same as multi-attribute
+* feat(FP-1122): Add sort by custom attribute functionality to Algolia integration
+
 ## `2.27.1` (2022-03-17)
 
 * fix: fix issue from studio-deployment-branch
