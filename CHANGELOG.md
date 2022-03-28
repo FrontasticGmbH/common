@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.28.1` (2022-03-28)
+
+* fix(FP-1694): checked mapped orders on default decorators
+
 ## `2.28.0` (2022-03-22)
 
 * refactor(FP-1122): Make logic for handling single-attribute sorting the same as multi-attribute
