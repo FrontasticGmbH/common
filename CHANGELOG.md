@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.28.2` (2022-03-29)
+
+* fix(FP-1694): checked mapped orders on default deprecated decorator
+
 ## `2.28.1` (2022-03-28)
 
 * fix(FP-1694): checked mapped orders on default decorators
