@@ -1,5 +1,10 @@
 # common Changelog
 
+## `2.29.0` (2022-03-30)
+
+* feat(FP-1647): included machine region map in CustomerService
+* feat(FP-1647): implemented region selector base on customer config
+
 ## `2.28.2` (2022-03-29)
 
 * fix(FP-1694): checked mapped orders on default deprecated decorator
