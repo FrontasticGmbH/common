@@ -11,6 +11,7 @@ Property|Type|Default|Required|Description
 `edition` | `string` | `'micro'` | *Yes* | 
 `hasPaasModifications` | `bool` | `false` | *Yes* | 
 `machineLimit` | `int` | `10` | *Yes* | Number of available Frontastic Machines
+`machineRegionToProviderMap` | `array` | `[]` | *Yes* | Frontastic Machines Map to define providers use in each region
 `features` | `array` | `[]` | *Yes* | 
 `isTransient` | `bool` | `false` | *Yes* | Used to indicate this customer is only "half" configured or similar.
 `configuration` | `array` | `[]` | *Yes* | 
