@@ -12,7 +12,7 @@ class StreamFieldConfiguration extends FieldConfiguration
     {
         /** @var StreamFieldConfiguration $schema */
         $schema = parent::doCreateFromSchema($type, $fieldSchema);
-        $schema->streamType = $fieldSchema['streamType'] ?? null;
+        $schema->streamType = $fieldSchema['streamType'] ?? $fieldSchema['dataSourceType'] ?? null;
         return $schema;
     }
 
