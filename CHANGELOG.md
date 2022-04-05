@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.30.0` (2022-04-05)
+
+* feat: allow field type dataSource in Classic as well
+
 ## `2.29.0` (2022-03-30)
 
 * feat(FP-1647): included machine region map in CustomerService
