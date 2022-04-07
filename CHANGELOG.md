@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.31.0` (2022-04-07)
+
+* feat(FP-1794): extracted logic to validate cart status before checkout
+
 ## `2.30.1` (2022-04-07)
 
 * fix(FP-1794): consider only single successful payment as payment completed
