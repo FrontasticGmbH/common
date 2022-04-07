@@ -108,7 +108,13 @@ class Cart extends ApiDataObject
                 function (Payment $payment) {
                     return $payment->amount;
                 },
-                $this->payments ?: []
+                array_filter(
+                    $this->payments ?: [],
+                    function (Payment $payment) {
+                        // We'll only consider the amount of payments with paid status.
+                        return $payment->paymentStatus === Payment::PAYMENT_STATUS_PAID;
+                    }
+                )
             )
         );
     }
@@ -152,17 +158,17 @@ class Cart extends ApiDataObject
 
     public function hasCompletePayments(): bool
     {
+        $paymentPaid = false;
         foreach ($this->payments as $payment) {
-            if ($payment->paymentStatus !== Payment::PAYMENT_STATUS_PAID) {
-                return false;
+            $paymentPaid = $payment->paymentStatus === Payment::PAYMENT_STATUS_PAID;
+            // A cart might have multiple payments and not all of them might be successful.
+            // If only one payment is successful payment it's enough.
+            if ($paymentPaid) {
+                break;
             }
         }
 
-        if ($this->getPayedAmount() < $this->sum) {
-            return false;
-        }
-
-        return true;
+        return ($paymentPaid && ($this->getPayedAmount() >= $this->sum));
     }
 
     /**
