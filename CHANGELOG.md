@@ -1,5 +1,11 @@
 # common Changelog
 
+## `2.30.1` (2022-04-07)
+
+* fix(FP-1794): consider only single successful payment as payment completed
+* fix(FP-1794): moved cart readines validation to isReadyForCheckout
+* fix(FP-1794): validated if cart is completed
+
 ## `2.30.0` (2022-04-05)
 
 * feat: allow field type dataSource in Classic as well
