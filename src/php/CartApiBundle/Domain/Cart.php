@@ -101,6 +101,9 @@ class Cart extends ApiDataObject
      */
     public $dangerousInnerCart;
 
+    /**
+     * @deprecated use "Frontastic\Common\CartApiBundle\Domain\CartCheckout::getPayedAmount" instead.
+     */
     public function getPayedAmount(): int
     {
         return array_sum(
@@ -108,13 +111,7 @@ class Cart extends ApiDataObject
                 function (Payment $payment) {
                     return $payment->amount;
                 },
-                array_filter(
-                    $this->payments ?: [],
-                    function (Payment $payment) {
-                        // We'll only consider the amount of payments with paid status.
-                        return $payment->paymentStatus === Payment::PAYMENT_STATUS_PAID;
-                    }
-                )
+                $this->payments ?: []
             )
         );
     }
@@ -156,34 +153,34 @@ class Cart extends ApiDataObject
         );
     }
 
+    /**
+     * @deprecated use "Frontastic\Common\CartApiBundle\Domain\CartCheckout::hasCompletePayments" instead.
+     */
     public function hasCompletePayments(): bool
     {
         $paymentPaid = false;
-        foreach ($this->payments as $payment) {
-            $paymentPaid = $payment->paymentStatus === Payment::PAYMENT_STATUS_PAID;
-            // A cart might have multiple payments and not all of them might be successful.
-            // If only one payment is successful payment it's enough.
-            if ($paymentPaid) {
-                break;
+        if (0 < count($this->payments)) {
+            foreach ($this->payments as $payment) {
+                $paymentPaid = ($payment->paymentStatus === Payment::PAYMENT_STATUS_PAID) ? true : false;
+                if ($paymentPaid) {
+                    break;
+                }
             }
         }
 
-        return ($paymentPaid && ($this->getPayedAmount() >= $this->sum));
+        return (
+            $paymentPaid &&
+            ($this->getPayedAmount() >= $this->sum)
+        );
     }
 
     /**
-     * Some commerce backends might consider a cart ready without payment(s).
-     *
-     * This method will return true if there are no payments or if all payments
-     * had paid status and the total amounts are equal to cart total amount.
-     *
-     * @return bool
+     * @deprecated use "Frontastic\Common\CartApiBundle\Domain\CartCheckout::isReadyForCheckout" instead.
      */
     public function isReadyForCheckout(): bool
     {
-        return $this->hasUser() && $this->hasAddresses() && (empty($this->payments) || $this->hasCompletePayments());
+        return $this->hasUser() && $this->hasAddresses();
     }
-
 
     public function isComplete(): bool
     {

@@ -9,6 +9,7 @@ use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools\Options;
 use Frontastic\Common\CartApiBundle\Domain\CartApiBase;
 use Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools\Mapper as CartMapper;
+use Frontastic\Common\CartApiBundle\Domain\CartCheckoutService;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\OrderIdGeneratorV2;
@@ -54,6 +55,11 @@ class Commercetools extends CartApiBase
     private $orderIdGenerator;
 
     /**
+     * @var CartCheckoutService
+     */
+    private $cartCheckoutService;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -88,6 +94,7 @@ class Commercetools extends CartApiBase
         CartMapper $cartMapper,
         CommercetoolsLocaleCreator $localeCreator,
         OrderIdGeneratorV2 $orderIdGenerator,
+        CartCheckoutService $cartCheckoutService,
         LoggerInterface $logger,
         ?Options $options = null
     ) {
@@ -95,6 +102,7 @@ class Commercetools extends CartApiBase
         $this->cartMapper = $cartMapper;
         $this->localeCreator = $localeCreator;
         $this->orderIdGenerator = $orderIdGenerator;
+        $this->cartCheckoutService = $cartCheckoutService;
         $this->logger = $logger;
 
         $this->options = $options ?? new Options();
@@ -718,7 +726,7 @@ class Commercetools extends CartApiBase
      */
     protected function orderImplementation(Cart $cart, string $locale = null): Order
     {
-        if (!$cart->isReadyForCheckout()) {
+        if (!$this->cartCheckoutService->isReadyForCheckout($cart)) {
             throw new \DomainException('Cart not complete yet.');
         }
 
