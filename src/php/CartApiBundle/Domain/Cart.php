@@ -166,22 +166,23 @@ class Cart extends ApiDataObject
         return true;
     }
 
-    public function isReadyForCheckout(): bool
-    {
-        return $this->hasUser() && $this->hasAddresses();
-    }
-
     /**
-     * Some commerce backends might consider a cart completed without payment(s).
+     * Some commerce backends might consider a cart ready without payment(s).
      *
      * This method will return true if there are no payments or if all payments
      * had paid status and the total amounts are equal to cart total amount.
      *
      * @return bool
      */
-    public function isComplete(): bool
+    public function isReadyForCheckout(): bool
     {
         return $this->hasUser() && $this->hasAddresses() && (empty($this->payments) || $this->hasCompletePayments());
+    }
+
+
+    public function isComplete(): bool
+    {
+        return $this->hasUser() && $this->hasAddresses() && $this->hasCompletePayments();
     }
 
     public function getPaymentById(string $paymentId): Payment
