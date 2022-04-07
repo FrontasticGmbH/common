@@ -718,7 +718,7 @@ class Commercetools extends CartApiBase
      */
     protected function orderImplementation(Cart $cart, string $locale = null): Order
     {
-        if (!$cart->isReadyForCheckout()) {
+        if (!$cart->isComplete()) {
             throw new \DomainException('Cart not complete yet.');
         }
 

@@ -150,22 +150,20 @@ class Cart extends ApiDataObject
         );
     }
 
+
     public function hasCompletePayments(): bool
     {
-        $paymentPaid = false;
-        if (0 < count($this->payments)) {
-            foreach ($this->payments as $payment) {
-                $paymentPaid = ($payment->paymentStatus === Payment::PAYMENT_STATUS_PAID) ? true : false;
-                if ($paymentPaid) {
-                    break;
-                }
+        foreach ($this->payments as $payment) {
+            if ($payment->paymentStatus !== Payment::PAYMENT_STATUS_PAID) {
+                return false;
             }
         }
 
-        return (
-            $paymentPaid &&
-            ($this->getPayedAmount() >= $this->sum)
-        );
+        if ($this->getPayedAmount() < $this->sum) {
+            return false;
+        }
+
+        return true;
     }
 
     public function isReadyForCheckout(): bool
@@ -173,9 +171,17 @@ class Cart extends ApiDataObject
         return $this->hasUser() && $this->hasAddresses();
     }
 
+    /**
+     * Some commerce backends might consider a cart completed without payment(s).
+     *
+     * This method will return true if there are no payments or if all payments
+     * had paid status and the total amounts are equal to cart total amount.
+     *
+     * @return bool
+     */
     public function isComplete(): bool
     {
-        return $this->hasUser() && $this->hasAddresses() && $this->hasCompletePayments();
+        return $this->hasUser() && $this->hasAddresses() && (empty($this->payments) || $this->hasCompletePayments());
     }
 
     public function getPaymentById(string $paymentId): Payment
