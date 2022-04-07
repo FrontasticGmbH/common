@@ -150,7 +150,6 @@ class Cart extends ApiDataObject
         );
     }
 
-
     public function hasCompletePayments(): bool
     {
         foreach ($this->payments as $payment) {
