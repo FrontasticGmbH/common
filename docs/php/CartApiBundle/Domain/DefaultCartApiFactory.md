@@ -17,6 +17,7 @@ public function __construct(
     AccountApiFactory $accountApiFactory,
     object $orderIdGenerator,
     iterable $decorators,
+    CartCheckoutService $cartCheckoutService,
     \Psr\Log\LoggerInterface $logger
 ): mixed
 ```
@@ -27,6 +28,7 @@ Argument|Type|Default|Description
 `$accountApiFactory`|[`AccountApiFactory`](../../AccountApiBundle/Domain/AccountApiFactory.md)||
 `$orderIdGenerator`|`object`||
 `$decorators`|`iterable`||
+`$cartCheckoutService`|[`CartCheckoutService`](CartCheckoutService.md)||
 `$logger`|`\Psr\Log\LoggerInterface`||
 
 Return Value: `mixed`

@@ -25,6 +25,7 @@ public function __construct(
     Commercetools\Mapper $cartMapper,
     Commercetools\Locale\CommercetoolsLocaleCreator $localeCreator,
     OrderIdGeneratorV2 $orderIdGenerator,
+    CartCheckoutService $cartCheckoutService,
     \Psr\Log\LoggerInterface $logger,
     ?Commercetools\Options $options = null
 ): mixed
@@ -36,6 +37,7 @@ Argument|Type|Default|Description
 `$cartMapper`|[`Commercetools`](Commercetools.md)\Mapper||
 `$localeCreator`|[`Commercetools`](../../../ProductApiBundle/Domain/ProductApi/Commercetools.md)\Locale\CommercetoolsLocaleCreator||
 `$orderIdGenerator`|[`OrderIdGeneratorV2`](../OrderIdGeneratorV2.md)||
+`$cartCheckoutService`|[`CartCheckoutService`](../CartCheckoutService.md)||
 `$logger`|`\Psr\Log\LoggerInterface`||
 `$options`|?[`Commercetools`](Commercetools.md)\Options|`null`|
 

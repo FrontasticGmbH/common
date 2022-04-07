@@ -88,11 +88,6 @@ Return Value: `bool`
 public function isReadyForCheckout(): bool
 ```
 
-*Some commerce backends might consider a cart ready without payment(s).*
-
-This method will return true if there are no payments or if all payments
-had paid status and the total amounts are equal to cart total amount.
-
 Return Value: `bool`
 
 ### isComplete()
