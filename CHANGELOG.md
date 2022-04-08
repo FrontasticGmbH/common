@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.31.1` (2022-04-08)
+
+* fix: prevent bc break on commercetools CartApi
+
 ## `2.31.0` (2022-04-07)
 
 * feat(FP-1794): extracted logic to validate cart status before checkout
