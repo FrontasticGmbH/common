@@ -94,18 +94,18 @@ class Commercetools extends CartApiBase
         CartMapper $cartMapper,
         CommercetoolsLocaleCreator $localeCreator,
         OrderIdGeneratorV2 $orderIdGenerator,
-        CartCheckoutService $cartCheckoutService,
         LoggerInterface $logger,
-        ?Options $options = null
+        ?Options $options = null,
+        ?CartCheckoutService $cartCheckoutService = null
     ) {
         $this->client = $client;
         $this->cartMapper = $cartMapper;
         $this->localeCreator = $localeCreator;
         $this->orderIdGenerator = $orderIdGenerator;
-        $this->cartCheckoutService = $cartCheckoutService;
         $this->logger = $logger;
 
         $this->options = $options ?? new Options();
+        $this->cartCheckoutService = $cartCheckoutService ?? null;
     }
 
     /**
@@ -726,7 +726,7 @@ class Commercetools extends CartApiBase
      */
     protected function orderImplementation(Cart $cart, string $locale = null): Order
     {
-        if (!$this->cartCheckoutService->isReadyForCheckout($cart)) {
+        if (!$this->isReadyForCheckout($cart)) {
             throw new \DomainException('Cart not complete yet.');
         }
 
@@ -1103,5 +1103,14 @@ class Commercetools extends CartApiBase
                 ],
             ])
         );
+    }
+
+    private function isReadyForCheckout(Cart $cart): bool
+    {
+        if ($this->cartCheckoutService !== null) {
+            return $this->cartCheckoutService->isReadyForCheckout($cart);
+        }
+
+        return $cart->isReadyForCheckout();
     }
 }

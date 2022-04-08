@@ -110,9 +110,9 @@ class DefaultCartApiFactory implements CartApiFactory
                     $this->container->get(CommercetoolsCartMapper::class),
                     $localeCreatorFactory->factor($project, $client),
                     $this->orderIdGenerator,
-                    $this->cartCheckoutService,
                     $this->logger,
-                    (isset($cartConfig->options) ? new Options($cartConfig->options) : null)
+                    (isset($cartConfig->options) ? new Options($cartConfig->options) : null),
+                    $this->cartCheckoutService,
                 );
                 break;
 
