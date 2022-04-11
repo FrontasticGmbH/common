@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.31.2` (2022-04-11)
+
+* fix: Categories with same name are returned
+
 ## `2.31.1` (2022-04-08)
 
 * fix: prevent bc break on commercetools CartApi
