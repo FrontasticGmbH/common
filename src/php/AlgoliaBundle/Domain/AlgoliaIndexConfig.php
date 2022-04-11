@@ -20,4 +20,9 @@ class AlgoliaIndexConfig extends DataObject
      * @var string
      */
     public $indexName;
+
+    /**
+     * @var array
+     */
+    public $sortIndices;
 }

@@ -53,6 +53,7 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
         return Create::promiseFor(
             $this->client
                 ->setLanguage($query->locale)
+                ->setSortIndex($query->sortAttributes)
                 ->search(
                     $query->query ?? '',
                     array_merge($query->rawApiInput, $this->getRequestOptions($query))

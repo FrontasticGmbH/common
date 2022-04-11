@@ -33,6 +33,11 @@ class AlgoliaClientFactory
                 $config[$option] = $value;
             }
 
+            $config['sortIndices'] = $languageConfig->sortIndices
+                ?? $typeSpecificConfig->sortIndices
+                ?? $algoliaConfig->sortIndices
+                ?? [];
+
             $clientConfigs[$language] = new AlgoliaIndexConfig($config);
         }
 

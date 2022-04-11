@@ -42,6 +42,14 @@ class Customer extends DataObject
     public $machineLimit = 10;
 
     /**
+     * Frontastic Machines Map to define providers use in each region
+     *
+     * @var array
+     * @required
+     */
+    public $machineRegionToProviderMap = [];
+
+    /**
      * @var array
      * @required
      */
