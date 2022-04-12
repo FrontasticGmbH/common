@@ -1,5 +1,36 @@
 # common Changelog
 
+## `2.31.2` (2022-04-11)
+
+* fix: Categories with same name are returned
+
+## `2.31.1` (2022-04-08)
+
+* fix: prevent bc break on commercetools CartApi
+
+## `2.31.0` (2022-04-07)
+
+* feat(FP-1794): extracted logic to validate cart status before checkout
+
+## `2.30.1` (2022-04-07)
+
+* fix(FP-1794): consider only single successful payment as payment completed
+* fix(FP-1794): moved cart readines validation to isReadyForCheckout
+* fix(FP-1794): validated if cart is completed
+
+## `2.30.0` (2022-04-05)
+
+* feat: allow field type dataSource in Classic as well
+
+## `2.29.0` (2022-03-30)
+
+* feat(FP-1647): included machine region map in CustomerService
+* feat(FP-1647): implemented region selector base on customer config
+
+## `2.28.2` (2022-03-29)
+
+* fix(FP-1694): checked mapped orders on default deprecated decorator
+
 ## `2.28.1` (2022-03-28)
 
 * fix(FP-1694): checked mapped orders on default decorators

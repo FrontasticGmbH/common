@@ -254,15 +254,20 @@ abstract class BaseImplementation
     /**
      * @param CartApi $cartApi
      * @param Order[] $orders
+     *
      * @return Order[]|null
      */
     public function afterGetOrders(CartApi $cartApi, array $orders): ?array
     {
-        foreach ($orders as &$order) {
-            $order = $this->mapReturnedOrder($order);
+        $mappedOrders = [];
+        foreach ($orders as $order) {
+            $mappedOrder = $this->mapReturnedOrder($order);
+            if ($mappedOrder) {
+                array_push($mappedOrders, $mappedOrder);
+            }
         }
 
-        return $orders;
+        return !empty($mappedOrders) ? $mappedOrders : null;
     }
 
     /*** startTransaction() *******************************************************************************************/

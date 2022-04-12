@@ -1,3 +1,7 @@
+function isStreamType (type) {
+    return type === 'stream' || type === 'dataSource'
+}
+
 const AUTOMATIC_REQUIRED_STREAM_TYPES = [
     'product',
     'product-list',
@@ -10,7 +14,9 @@ function fieldIsRequired (requiredFlag, type, streamType) {
         return Boolean(requiredFlag)
     }
 
-    // @TODO: Streams should be marked as required in the tastic configurations
+    // Streams should be marked as required in the tastic configurations. This check exists for backwards compatibility.
+    // Since the type alias "dataSource" was introduced after this workaround, we don't need to be backwards compatible
+    // for that type.
     return type === 'stream' && AUTOMATIC_REQUIRED_STREAM_TYPES.includes(streamType)
 }
 
@@ -110,7 +116,7 @@ function getSchemaWithResolvedStreams (schema, configuration, streamData, custom
 
     const value = getFieldValue(schema, configuration)
 
-    if (schema.type === 'stream') {
+    if (isStreamType(schema.type)) {
         return streamData[value] || null
     }
 
@@ -237,7 +243,7 @@ class ConfigurationSchema {
             return false
         }
 
-        if (schema.type === 'stream' && skipStreams) {
+        if (isStreamType(schema.type) && skipStreams) {
             return false
         }
 
@@ -247,9 +253,9 @@ class ConfigurationSchema {
                 typeof value.target !== 'string' || value.target === ''
         }
 
-        // If media field has an empty stream object like: {value: null}
+        // If stream field has an empty stream object like: {value: null}
         // It should be flagged as a missing required value
-        if (schema.type === 'stream' && value) {
+        if (isStreamType(schema.type) && value) {
             return Object.values(value).some((v) => !v)
         }
 

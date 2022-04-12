@@ -26,7 +26,8 @@ public function __construct(
     Commercetools\Locale\CommercetoolsLocaleCreator $localeCreator,
     OrderIdGeneratorV2 $orderIdGenerator,
     \Psr\Log\LoggerInterface $logger,
-    ?Commercetools\Options $options = null
+    ?Commercetools\Options $options = null,
+    ?CartCheckoutService $cartCheckoutService = null
 ): mixed
 ```
 
@@ -38,6 +39,7 @@ Argument|Type|Default|Description
 `$orderIdGenerator`|[`OrderIdGeneratorV2`](../OrderIdGeneratorV2.md)||
 `$logger`|`\Psr\Log\LoggerInterface`||
 `$options`|?[`Commercetools`](Commercetools.md)\Options|`null`|
+`$cartCheckoutService`|?[`CartCheckoutService`](../CartCheckoutService.md)|`null`|
 
 Return Value: `mixed`
 

@@ -34,6 +34,7 @@
                                         "enum": [
                                             "boolean",
                                             "custom",
+                                            "dataSource",
                                             "decimal",
                                             "dynamic-filter",
                                             "enum",
@@ -127,6 +128,10 @@
                     }
                 },
                 "streamType": {
+                    "$comment": "TODO: Define dependency to type?",
+                    "type": "string"
+                },
+                "dataSourceType": {
                     "$comment": "TODO: Define dependency to type?",
                     "type": "string"
                 },

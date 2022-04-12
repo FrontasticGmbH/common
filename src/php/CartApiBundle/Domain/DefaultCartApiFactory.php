@@ -56,6 +56,11 @@ class DefaultCartApiFactory implements CartApiFactory
     private $orderIdGenerator;
 
     /**
+     * @var CartCheckoutService
+     */
+    private $cartCheckoutService;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -70,6 +75,7 @@ class DefaultCartApiFactory implements CartApiFactory
      * @param AccountApiFactory $accountApiFactory
      * @param OrderIdGeneratorV2|OrderIdGenerator $orderIdGenerator
      * @param iterable $decorators
+     * @param CartCheckoutService $cartCheckoutService
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -77,11 +83,13 @@ class DefaultCartApiFactory implements CartApiFactory
         AccountApiFactory $accountApiFactory,
         object $orderIdGenerator, // BC for OrderIdGenerator
         iterable $decorators,
+        CartCheckoutService $cartCheckoutService,
         LoggerInterface $logger
     ) {
         $this->container = $container;
         $this->accountApiFactory = $accountApiFactory;
         $this->decorators = $decorators;
+        $this->cartCheckoutService = $cartCheckoutService;
         $this->logger = $logger;
 
         $this->setOrderIdGenerator($orderIdGenerator);
@@ -103,7 +111,8 @@ class DefaultCartApiFactory implements CartApiFactory
                     $localeCreatorFactory->factor($project, $client),
                     $this->orderIdGenerator,
                     $this->logger,
-                    (isset($cartConfig->options) ? new Options($cartConfig->options) : null)
+                    (isset($cartConfig->options) ? new Options($cartConfig->options) : null),
+                    $this->cartCheckoutService,
                 );
                 break;
 
