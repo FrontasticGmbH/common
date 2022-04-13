@@ -509,6 +509,7 @@ class FrontasticApiTestCase extends KernelTestCase
     protected function getFrontasticAddress(): Address
     {
         return new Address([
+            'salutation' => 'Frau',
             'firstName' => 'FRONTASTIC',
             'lastName' => 'GmbH',
             'streetName' => 'Hafenweg',
