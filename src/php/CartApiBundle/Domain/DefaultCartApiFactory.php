@@ -142,7 +142,8 @@ class DefaultCartApiFactory implements CartApiFactory
                     $this->container->get(DataMapperResolver::class),
                     $this->container->get(ShopwareProjectConfigApiFactory::class),
                     $accountApi,
-                    $project->defaultLanguage
+                    $project->defaultLanguage,
+                    $this->cartCheckoutService
                 );
                 break;
 
