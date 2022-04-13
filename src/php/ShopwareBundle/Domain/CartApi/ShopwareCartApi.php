@@ -8,6 +8,7 @@ use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\CartApiBundle\Domain\Cart;
 use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\CartApiBase;
+use Frontastic\Common\CartApiBundle\Domain\CartCheckoutService;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\Payment;
@@ -75,13 +76,19 @@ class ShopwareCartApi extends CartApiBase
      */
     private $defaultLanguage;
 
+    /**
+     * @var CartCheckoutService
+     */
+    private $cartCheckoutService;
+
     public function __construct(
         ClientInterface $client,
         LocaleCreator $localeCreator,
         DataMapperResolver $mapperResolver,
         ShopwareProjectConfigApiFactory $projectConfigApiFactory,
         AccountApi $accountApi,
-        ?string $defaultLanguage
+        ?string $defaultLanguage,
+        ?CartCheckoutService $cartCheckoutService = null
     ) {
         $this->client = $client;
         $this->localeCreator = $localeCreator;
@@ -89,6 +96,7 @@ class ShopwareCartApi extends CartApiBase
         $this->projectConfigApi = $projectConfigApiFactory->factor($client);
         $this->accountApi = $accountApi;
         $this->defaultLanguage = $defaultLanguage;
+        $this->cartCheckoutService = $cartCheckoutService ?? null;
     }
 
     protected function getForUserImplementation(Account $account, string $locale): Cart
@@ -446,10 +454,12 @@ class ShopwareCartApi extends CartApiBase
 
     protected function orderImplementation(Cart $cart, string $locale = null): Order
     {
-        if (!$cart->isReadyForCheckout()) {
+        if (!$this->isReadyForCheckout($cart)) {
             throw new \DomainException('Cart not complete yet.');
         }
 
+        // Shopware requires an email when a shipping address is set. For guest customer we use the CART_NAME_GUEST
+        // as email, but the customer needs to set a valid email before the order is created.
         if (substr($cart->email, 0, strlen(self::CART_NAME_GUEST)) === self::CART_NAME_GUEST) {
             throw new \DomainException('Cart not complete yet. Email needs to be provided');
         }
@@ -457,11 +467,24 @@ class ShopwareCartApi extends CartApiBase
         $shopwareLocale = $this->parseLocaleString($locale);
         $mapper = $this->buildMapper(OrderMapper::MAPPER_NAME, $shopwareLocale);
 
+        /**
+         * The Prepared Payment flow in Shopware allows to make a payment before place an order. When the order
+         * is processed, Shopware expects the payment data as a checkout/order request payload. To allow this,
+         * we are passing the rawApiInput as a request payload. Shopware will accept any data passed since
+         * this can't be defined beforehand and will validate only the following fields:
+         *
+         * {
+         *  "customerComment": "string",
+         *  "affiliateCode": "string",
+         *  "campaignCode": "string"
+         * }
+         */
+
         return $this->client
             ->forCurrency($shopwareLocale->currencyId)
             ->forLanguage($shopwareLocale->languageId)
             ->withContextToken($cart->cartId)
-            ->post('/store-api/checkout/order')
+            ->post('/store-api/checkout/order', [], $cart->rawApiInput)
             ->then(function ($orderResponse) use ($mapper) {
                 return $mapper->map($orderResponse);
             })
@@ -643,5 +666,14 @@ class ShopwareCartApi extends CartApiBase
 
         // If it's not a guest account but the email needs confirmation, the context customer will not exist.
         return ($context['customer'] === null || $context['customer']['guest'] === true);
+    }
+
+    private function isReadyForCheckout(Cart $cart): bool
+    {
+        if ($this->cartCheckoutService !== null) {
+            return $this->cartCheckoutService->isReadyForCheckout($cart);
+        }
+
+        return $cart->isReadyForCheckout();
     }
 }
