@@ -196,15 +196,14 @@ class AnonymousCartTest extends FrontasticApiTestCase
         $cartApi = $this->getCartApiForProject($project);
         $email = 'integration-tests-' . uniqid('', true) . '@frontastic.com';
 
-        $product = $this->getAProduct($project, $language);
         $cartApi->startTransaction($cart);
-        $cartApi->addToCart($cart, $this->getLineItemForProduct($this->getAProduct($project, $language)), $language);
-        $cartApi->setEmail($cart, $email, $language);
-        $cartApi->setShippingAddress($cart, $this->getFrontasticAddress(), $language);
-        $cartApi->setBillingAddress($cart, $this->getFrontasticAddress(), $language);
+        $cart = $cartApi->addToCart($cart, $this->getLineItemForProduct($this->getAProduct($project, $language)), $language);
+        $cart = $cartApi->setEmail($cart, $email, $language);
+        $cart = $cartApi->setShippingAddress($cart, $this->getFrontasticAddress(), $language);
+        $cart = $cartApi->setBillingAddress($cart, $this->getFrontasticAddress(), $language);
         $cart = $cartApi->commit($language);
 
-        $order = $cartApi->order($cart);
+        $order = $cartApi->order($cart, $language);
 
         $this->assertInstanceOf(Order::class, $order);
 
