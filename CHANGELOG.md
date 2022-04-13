@@ -1,5 +1,11 @@
 # common Changelog
 
+## `2.32.0` (2022-04-13)
+
+* fix: rehused cart on api test order
+* fix: added salutaion to api test address.
+* feat(FP-840): included cart rawApiData when placing order in Shopware
+
 ## `2.31.2` (2022-04-11)
 
 * fix: Categories with same name are returned
