@@ -9,6 +9,7 @@ use Frontastic\Common\CartApiBundle\Domain\CartApi;
 use Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools\Options;
 use Frontastic\Common\CartApiBundle\Domain\CartApiBase;
 use Frontastic\Common\CartApiBundle\Domain\CartApi\Commercetools\Mapper as CartMapper;
+use Frontastic\Common\CartApiBundle\Domain\CartCheckoutService;
 use Frontastic\Common\CartApiBundle\Domain\LineItem;
 use Frontastic\Common\CartApiBundle\Domain\Order;
 use Frontastic\Common\CartApiBundle\Domain\OrderIdGeneratorV2;
@@ -54,6 +55,11 @@ class Commercetools extends CartApiBase
     private $orderIdGenerator;
 
     /**
+     * @var CartCheckoutService
+     */
+    private $cartCheckoutService;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -89,7 +95,8 @@ class Commercetools extends CartApiBase
         CommercetoolsLocaleCreator $localeCreator,
         OrderIdGeneratorV2 $orderIdGenerator,
         LoggerInterface $logger,
-        ?Options $options = null
+        ?Options $options = null,
+        ?CartCheckoutService $cartCheckoutService = null
     ) {
         $this->client = $client;
         $this->cartMapper = $cartMapper;
@@ -98,6 +105,7 @@ class Commercetools extends CartApiBase
         $this->logger = $logger;
 
         $this->options = $options ?? new Options();
+        $this->cartCheckoutService = $cartCheckoutService ?? null;
     }
 
     /**
@@ -718,7 +726,7 @@ class Commercetools extends CartApiBase
      */
     protected function orderImplementation(Cart $cart, string $locale = null): Order
     {
-        if (!$cart->isReadyForCheckout()) {
+        if (!$this->isReadyForCheckout($cart)) {
             throw new \DomainException('Cart not complete yet.');
         }
 
@@ -1095,5 +1103,14 @@ class Commercetools extends CartApiBase
                 ],
             ])
         );
+    }
+
+    private function isReadyForCheckout(Cart $cart): bool
+    {
+        if ($this->cartCheckoutService !== null) {
+            return $this->cartCheckoutService->isReadyForCheckout($cart);
+        }
+
+        return $cart->isReadyForCheckout();
     }
 }

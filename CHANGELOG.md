@@ -1,5 +1,29 @@
 # common Changelog
 
+## `2.32.0` (2022-04-13)
+
+* fix: rehused cart on api test order
+* fix: added salutaion to api test address.
+* feat(FP-840): included cart rawApiData when placing order in Shopware
+
+## `2.31.2` (2022-04-11)
+
+* fix: Categories with same name are returned
+
+## `2.31.1` (2022-04-08)
+
+* fix: prevent bc break on commercetools CartApi
+
+## `2.31.0` (2022-04-07)
+
+* feat(FP-1794): extracted logic to validate cart status before checkout
+
+## `2.30.1` (2022-04-07)
+
+* fix(FP-1794): consider only single successful payment as payment completed
+* fix(FP-1794): moved cart readines validation to isReadyForCheckout
+* fix(FP-1794): validated if cart is completed
+
 ## `2.30.0` (2022-04-05)
 
 * feat: allow field type dataSource in Classic as well

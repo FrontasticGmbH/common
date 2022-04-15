@@ -20,7 +20,8 @@ public function __construct(
     DataMapperResolver $mapperResolver,
     ShopwareProjectConfigApiFactory $projectConfigApiFactory,
     AccountApi $accountApi,
-    ?string $defaultLanguage
+    ?string $defaultLanguage,
+    ?CartCheckoutService $cartCheckoutService = null
 ): mixed
 ```
 
@@ -32,6 +33,7 @@ Argument|Type|Default|Description
 `$projectConfigApiFactory`|[`ShopwareProjectConfigApiFactory`](../ProjectConfigApi/ShopwareProjectConfigApiFactory.md)||
 `$accountApi`|[`AccountApi`](../../../AccountApiBundle/Domain/AccountApi.md)||
 `$defaultLanguage`|`?string`||
+`$cartCheckoutService`|?[`CartCheckoutService`](../../../CartApiBundle/Domain/CartCheckoutService.md)|`null`|
 
 Return Value: `mixed`
 

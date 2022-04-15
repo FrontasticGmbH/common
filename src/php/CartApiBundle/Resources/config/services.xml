@@ -23,6 +23,11 @@
             alias="Frontastic\Common\CartApiBundle\Domain\DefaultCartApiFactory"
         />
 
+        <service id="Frontastic\Common\CartApiBundle\Domain\DefaultCartCheckoutService"/>
+
+        <service id="Frontastic\Common\CartApiBundle\Domain\CartCheckoutService"
+                 alias="Frontastic\Common\CartApiBundle\Domain\DefaultCartCheckoutService"/>
+
         <service
             id="Frontastic\Common\CartApiBundle\Domain\DefaultCartApiFactory"
             class="Frontastic\Common\CartApiBundle\Domain\DefaultCartApiFactory">
@@ -30,6 +35,7 @@
             <argument type="service" id="Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory" />
             <argument type="service" id="frontastic.order-id-generator"/>
             <argument type="tagged" tag="cartApi.lifecycleEventListener"/>
+            <argument type="service" id="Frontastic\Common\CartApiBundle\Domain\CartCheckoutService"/>
             <argument type="service" id="logger" />
         </service>
     </services>

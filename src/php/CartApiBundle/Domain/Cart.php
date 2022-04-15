@@ -101,6 +101,9 @@ class Cart extends ApiDataObject
      */
     public $dangerousInnerCart;
 
+    /**
+     * @deprecated use "Frontastic\Common\CartApiBundle\Domain\CartCheckout::getPayedAmount" instead.
+     */
     public function getPayedAmount(): int
     {
         return array_sum(
@@ -150,6 +153,9 @@ class Cart extends ApiDataObject
         );
     }
 
+    /**
+     * @deprecated use "Frontastic\Common\CartApiBundle\Domain\CartCheckout::hasCompletePayments" instead.
+     */
     public function hasCompletePayments(): bool
     {
         $paymentPaid = false;
@@ -168,6 +174,9 @@ class Cart extends ApiDataObject
         );
     }
 
+    /**
+     * @deprecated use "Frontastic\Common\CartApiBundle\Domain\CartCheckout::isReadyForCheckout" instead.
+     */
     public function isReadyForCheckout(): bool
     {
         return $this->hasUser() && $this->hasAddresses();
