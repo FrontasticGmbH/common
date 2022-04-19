@@ -39,8 +39,8 @@ export interface Discount extends CoreApiDataObject {
      discountId: string;
      code: string;
      state: string;
-     name: {[key: string]: string};
-     description?: {[key: string]: string};
+     name: Record<string, string> | [];
+     description?: Record<string, string> | [];
      /**
       * Amount discounted.
       *

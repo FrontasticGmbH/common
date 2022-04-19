@@ -14,6 +14,6 @@ export interface Attribute extends CoreApiDataObject {
       * The labels with the locale as key and the actual label as value. `null`
       * if the label is unknown
       */
-     label?: {[key: string]: string} | null;
+     label?: Record<string, string> | [] | null;
      values?: null | any;
 }
