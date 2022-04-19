@@ -13,6 +13,9 @@ export interface ShopwareCountry {
 
 export interface ShopwareCurrency {
      id?: string;
+     /**
+      * Factor against euro
+      */
      factor?: number;
      name?: string;
      shortName?: string;

@@ -10,9 +10,21 @@ export interface LineItem extends CoreApiDataObject {
      type: string;
      addedAt: any /* \DateTimeImmutable */;
      count: number;
+     /**
+      * Access original object from backend
+      *
+      * This should only be used if you need very specific features
+      * right NOW. Please notify Frontastic about your need so that
+      * we can integrate those twith the common API. Any usage off
+      * this property might make your code unstable against future
+      * changes.
+      */
      dangerousInnerItem?: any;
 }
 
+/**
+ * Class Wishlist
+ */
 export interface Wishlist extends CoreApiDataObject {
      wishlistId: string;
      wishlistVersion?: string;
@@ -20,5 +32,14 @@ export interface Wishlist extends CoreApiDataObject {
      accountId?: string;
      name: string[];
      lineItems: LineItem[];
+     /**
+      * Access original object from backend
+      *
+      * This should only be used if you need very specific features
+      * right NOW. Please notify Frontastic about your need so that
+      * we can integrate those twith the common API. Any usage off
+      * this property might make your code unstable against future
+      * changes.
+      */
      dangerousInnerWishlist?: any;
 }

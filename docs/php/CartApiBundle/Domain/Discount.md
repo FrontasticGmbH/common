@@ -9,8 +9,8 @@ Property|Type|Default|Required|Description
 `discountId` | `string` |  | *Yes* | 
 `code` | `string` |  | *Yes* | 
 `state` | `string` |  | *Yes* | 
-`name` | [`Translatable`](../../Translatable.md) |  | *Yes* | 
-`description` | [`Translatable`](../../Translatable.md) |  | - | 
+`name` | `array<string, string>` |  | *Yes* | 
+`description` | `array<string, string>` |  | - | 
 `discountedAmount` | `?int` |  | - | Amount discounted.
 `dangerousInnerDiscount` | `mixed` |  | - | Access original object from backend
 

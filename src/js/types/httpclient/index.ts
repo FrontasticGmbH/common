@@ -2,6 +2,9 @@
 
 export interface Configuration {
      options?: Options;
+     /**
+      * List (not hashmap!) of headers
+      */
      defaultHeaders?: string[];
      signatureSecret?: null | string;
      collectStats?: boolean;
@@ -9,12 +12,27 @@ export interface Configuration {
 }
 
 export interface Options {
+     /**
+      * Timeout for the complete request in seconds
+      */
      timeout?: number | number;
 }
 
 export interface Response {
+     /**
+      * Response HTTP status code
+      */
      status: number;
+     /**
+      * The HTTP headers from the response as a plain array
+      */
      headers: string[];
+     /**
+      * Response body
+      */
      body?: string;
+     /**
+      * Raw HTTP output response
+      */
      rawApiOutput?: any /* \Psr\Http\Message\ResponseInterface */;
 }

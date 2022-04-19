@@ -6,7 +6,14 @@ import {
 
 export interface Attribute extends CoreApiDataObject {
      attributeId: string;
+     /**
+      * TYPE_*
+      */
      type: string;
-     label?: Map<string, string> | null;
+     /**
+      * The labels with the locale as key and the actual label as value. `null`
+      * if the label is unknown
+      */
+     label?: {[key: string]: string} | null;
      values?: null | any;
 }
