@@ -16,6 +16,7 @@ class Variant extends LineItem
 
     /**
      * @var string
+     * @required
      */
     public $type = 'variant';
 }

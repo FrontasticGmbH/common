@@ -10,5 +10,5 @@ import {
 
 export interface Variant extends CartLineItem {
      variant?: ProductVariant;
-     type?: string;
+     type: string;
 }

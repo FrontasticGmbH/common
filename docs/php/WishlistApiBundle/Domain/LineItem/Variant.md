@@ -7,6 +7,6 @@
 Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
 `variant` | [`Variant`](../../../ProductApiBundle/Domain/Variant.md) |  | - | 
-`type` | `string` | `'variant'` | - | 
+`type` | `string` | `'variant'` | *Yes* | 
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).
