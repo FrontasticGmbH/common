@@ -6,6 +6,12 @@
 * feat: enhance TypeScript map types
 * fix: correct type hints for translatable text
 
+## `2.33.0` (2022-04-21)
+
+* fix: add a missing @required statements
+* feat: enhance TypeScript map types
+* fix: correct type hints for translatable text
+
 ## `2.32.0` (2022-04-13)
 
 * fix: rehused cart on api test order
