@@ -79,6 +79,11 @@ class Notifier {
             }, 100)
         }
     }
+
+    close () {
+        this.webSocket.onclose = () => {}
+        this.webSocket.close()
+    }
 }
 
 export default Notifier
