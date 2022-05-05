@@ -45,4 +45,17 @@ class PaginationAdapterTest extends TestCase
         $this->assertNull( $resultFixture->nextCursor);
         $this->assertSame('offset:800', $resultFixture->previousCursor);
     }
+
+    public function testResultOffsetToCursorFixCount0()
+    {
+        $resultFixture = new Result();
+        $resultFixture->offset = 400;
+        $resultFixture->count = 0;
+        $resultFixture->total = 1000;
+
+        PaginationAdapter::resultOffsetToCursor($resultFixture);
+
+        $this->assertNull($resultFixture->nextCursor);
+        $this->assertNull($resultFixture->previousCursor);
+    }
 }
