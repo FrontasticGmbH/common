@@ -42,7 +42,7 @@ class PaginationAdapterTest extends TestCase
 
         PaginationAdapter::resultOffsetToCursor($resultFixture);
 
-        $this->assertNull( $resultFixture->nextCursor);
+        $this->assertNull($resultFixture->nextCursor);
         $this->assertSame('offset:800', $resultFixture->previousCursor);
     }
 
