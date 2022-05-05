@@ -11,6 +11,11 @@ const cloudinaryUrl = (imageIdentifier, configuration, options) => {
         ...options,
     }
 
+    if (imageIdentifier.startsWith('video:')) {
+        options.resourceType = 'video'
+        imageIdentifier = imageIdentifier.slice(6)
+    }
+
     let transformations = []
     for (let [transformation, value] of Object.entries(options)) {
         switch (transformation) {
