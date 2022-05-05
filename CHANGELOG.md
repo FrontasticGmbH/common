@@ -1,5 +1,9 @@
 # common Changelog
 
+## `2.33.2` (2022-05-05)
+
+* fix(FP-1934): Pagination previous/nextCursor set to null on count 0.
+
 ## `2.33.1` (2022-04-21)
 
 * chore: re-run release process
