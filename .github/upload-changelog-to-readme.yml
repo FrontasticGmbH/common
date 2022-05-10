@@ -1,0 +1,32 @@
+name: Update common libraries changelog on ReadMe API reference
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+jobs:
+  update-changelog:
+    name: Upload CHANGELOG.md to Readme changelog
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read CHANGELOG.md file
+        id: variables
+        run: echo ::set-output name=changelog::$(cat CHANGELOG.md)
+      - name: Delete existing changelog
+        run: curl --request DELETE \
+              --url https://dash.readme.com/api/v1/changelogs/${{ secrets.CHANGELOG_TITLE }} \
+              --header 'Authorization: Basic ${{ secrets.README_API_KEY }}'
+      - name: Create updated changelog
+        run: curl --request POST \
+              --url https://dash.readme.com/api/v1/changelogs \
+              --header 'Authorization: Basic ${{ secrets.README_API_KEY }}' \
+              --header 'Content-Type: application/json' \
+              --data '
+              {
+                "title": "${{ secrets.CHANGELOG_TITLE }}",
+                "body": "${{ steps.variables.outputs.changelog }}",
+                "hidden": true
+              }
+              '
