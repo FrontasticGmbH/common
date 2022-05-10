@@ -51,9 +51,24 @@
                                             "tree"
                                         ]
                                     }
-                                }
+                                },
+                                "anyOf": [
+                                    {
+                                        "not": {
+                                            "properties": {
+                                                "type": {
+                                                    "enum": ["enum"]
+                                                }
+                                            },
+                                            "required": ["type"]
+                                        }
+                                    },
+                                    { "required": ["values"] }
+                                     
+                                ]
+                                    
                             },
-                            {"$ref": "#/definitions/field"}
+                            { "$ref": "#/definitions/field" }
                         ]
                     },
                     {
@@ -66,7 +81,7 @@
                                     }
                                 }
                             },
-                            {"$ref": "#/definitions/group"}
+                            { "$ref": "#/definitions/group" }
                         ]
                     },
                     {
@@ -79,7 +94,7 @@
                                     }
                                 }
                             },
-                            {"$ref": "#/definitions/tastic"}
+                            { "$ref": "#/definitions/tastic" }
                         ]
                     },
                     {
@@ -92,7 +107,7 @@
                                     }
                                 }
                             },
-                            {"$ref": "#/definitions/image"}
+                            { "$ref": "#/definitions/image" }
                         ]
                     },
                     {
@@ -105,12 +120,13 @@
                                     }
                                 }
                             },
-                            {"$ref": "#/definitions/description"}
+                            { "$ref": "#/definitions/description" }
                         ]
                     }
                 ]
             }
         },
+
 
         "field": {
             "type": "object",
@@ -178,7 +194,7 @@
                     "type": "string"
                 }
             },
-            "required": ["field", "type", "label"]
+            "required": ["type", "label", "field"]
         },
         "group": {
             "type": "object",
