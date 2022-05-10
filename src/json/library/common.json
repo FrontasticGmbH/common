@@ -63,10 +63,8 @@
                                             "required": ["type"]
                                         }
                                     },
-                                    { "required": ["values"] }
-                                     
-                                ]
-                                    
+                                    { "required": ["values"] }    
+                                ]    
                             },
                             { "$ref": "#/definitions/field" }
                         ]
