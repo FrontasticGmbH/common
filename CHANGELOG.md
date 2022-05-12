@@ -1,5 +1,13 @@
 # common Changelog
 
+## `2.33.3` (2022-05-12)
+
+* Add "Version" in the version heading
+* Add p tag to avoid nextline
+* Reformat the changelog
+* Remove whitespace
+* Prevent enum fields without values field to exist
+
 ## Version 2.33.2 (2022-05-05)
 
 * fix(FP-1934): Pagination previous/nextCursor set to null on count 0.
