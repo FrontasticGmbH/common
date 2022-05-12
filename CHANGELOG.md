@@ -1,6 +1,5 @@
-# common Changelog
 
-## `2.33.3` (2022-05-12)
+## Version 2.33.3 (2022-05-12)
 
 * Add "Version" in the version heading
 * Add p tag to avoid nextline
