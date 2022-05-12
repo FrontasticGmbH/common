@@ -1,4 +1,12 @@
-<p>Our common library is updated every Tuesday and Thursday. We add to this list after each release. Big changes will have their own changelog to explain the updates in more detail.</p>
+# common Changelog
+
+## `2.33.2` (2022-05-12)
+
+* Add "Version" in the version heading
+* Add p tag to avoid nextline
+* Reformat the changelog
+* Remove whitespace
+* Prevent enum fields without values field to exist
 
 ## Version 2.33.2 (2022-05-05)
 
