@@ -1,4 +1,7 @@
 
+## Version 2.33.4 (2022-05-17)
+
+* fix: used correct format on Changelog for catwalk and common
 ## Version 2.33.3 (2022-05-12)
 
 * Prevent enum fields without values field to exist
