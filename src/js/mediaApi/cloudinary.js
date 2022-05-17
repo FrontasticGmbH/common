@@ -4,9 +4,9 @@ const cloudinaryEncodeURI = (string) => {
     })
 }
 
-const cloudinaryUrl = (imageIdentifier, resourceType, configuration, options) => {
+const cloudinaryUrl = (imageIdentifier, configuration, options) => {
     options = {
-        resourceType: resourceType,
+        resourceType: 'image',
         type: 'upload',
         ...options,
     }
@@ -51,7 +51,6 @@ class Cloudinary {
     getImageUrl (media, width, height, options = {}) {
         return cloudinaryUrl(
             media.mediaId,
-            media.resourceType ?? 'image',
             this.configuration,
             {
                 fetch_format: media.format && media.format === 'svg' ? undefined : 'auto',
@@ -74,7 +73,6 @@ class Cloudinary {
 
         return cloudinaryUrl(
             url,
-            'image',
             this.configuration,
             {
                 fetch_format: 'auto',
@@ -93,7 +91,6 @@ class Cloudinary {
     getImageUrlWithoutDefaults (media, width, height, options = {}) {
         return cloudinaryUrl(
             media.mediaId,
-            media.resourceType ?? 'image',
             this.configuration,
             {
                 width: width,
