@@ -2,9 +2,12 @@
 
 namespace Frontastic\Common\ProductSearchApiBundle\Domain;
 
+use Frontastic\Common\AlgoliaBundle\Domain\AlgoliaClient;
 use Frontastic\Common\AlgoliaBundle\Domain\AlgoliaClientFactory;
 use Frontastic\Common\AlgoliaBundle\Domain\ProductSearchApi\AlgoliaProductSearchApi;
+use Frontastic\Common\AlgoliaBundle\Domain\ProductSearchApi\AlgoliaProductSearchApiV2;
 use Frontastic\Common\AlgoliaBundle\Domain\ProductSearchApi\Mapper as AlgoliaDataMapper;
+use Frontastic\Common\AlgoliaBundle\Domain\ProductSearchApi\MapperV2 as AlgoliaDataMapperV2;
 use Frontastic\Common\FindologicBundle\Domain\FindologicClientFactory;
 use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\FindologicProductSearchApi;
 use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\QueryValidator;
@@ -163,18 +166,20 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
 
                 break;
             case 'algolia':
-                $clientFactory = $this->container->get(AlgoliaClientFactory::class);
-                $client = $clientFactory->factorForConfigs(
-                    $project->languages,
-                    $project->defaultLanguage,
-                    $productSearchConfig,
-                    $engineConfig
-                );
+                $client = $this->getAlgoliaClient($project, $productSearchConfig, $engineConfig);
                 $dataMapper = $this->container->get(AlgoliaDataMapper::class);
 
                 $productSearchApi = new AlgoliaProductSearchApi($client, $this->enabledFacetService, $dataMapper);
 
                 break;
+            case 'algoliaV2':
+                $client = $this->getAlgoliaClient($project, $productSearchConfig, $engineConfig);
+                $dataMapper = $this->container->get(AlgoliaDataMapperV2::class);
+
+                $productSearchApi = new AlgoliaProductSearchApiV2($client, $this->enabledFacetService, $dataMapper);
+
+                break;
+
             case 'findologic':
                 $clientFactory = $this->container->get(FindologicClientFactory::class);
                 $mapperFactory = $this->container->get(FindologicMapperFactory::class);
@@ -225,5 +230,18 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
         }
 
         return $project->getConfigurationSection(self::CONFIGURATION_TYPE_NAME_PRODUCT);
+    }
+
+    private function getAlgoliaClient(Project $project, object $productSearchConfig, object $engineConfig): AlgoliaClient
+    {
+        /** @var AlgoliaClientFactory $clientFactory */
+        $clientFactory = $this->container->get(AlgoliaClientFactory::class);
+
+        return $clientFactory->factorForConfigs(
+            $project->languages,
+            $project->defaultLanguage,
+            $productSearchConfig,
+            $engineConfig
+        );
     }
 }

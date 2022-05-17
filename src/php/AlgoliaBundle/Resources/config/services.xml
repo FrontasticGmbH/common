@@ -10,6 +10,9 @@
         <service id="Frontastic\Common\AlgoliaBundle\Domain\ProductSearchApi\Mapper">
         </service>
 
+        <service id="Frontastic\Common\AlgoliaBundle\Domain\ProductSearchApi\MapperV2">
+        </service>
+
         <service id="Frontastic\Common\AlgoliaBundle\Domain\AlgoliaClientFactory">
             <tag name="frontastic.common.api_integration"/>
         </service>
