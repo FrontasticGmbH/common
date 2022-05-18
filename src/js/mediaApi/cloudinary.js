@@ -51,7 +51,7 @@ class Cloudinary {
     getImageUrl (media, width, height, options = {}) {
         return cloudinaryUrl(
             media.mediaId,
-            media.resourceType ?? 'image',
+            typeof media.resourceType === 'string' && media.resourceType !== '' ? '' : 'image',
             this.configuration,
             {
                 fetch_format: media.format && media.format === 'svg' ? undefined : 'auto',
@@ -93,7 +93,7 @@ class Cloudinary {
     getImageUrlWithoutDefaults (media, width, height, options = {}) {
         return cloudinaryUrl(
             media.mediaId,
-            media.resourceType ?? 'image',
+            typeof media.resourceType === 'string' && media.resourceType !== '' ? '' : 'image',
             this.configuration,
             {
                 width: width,
