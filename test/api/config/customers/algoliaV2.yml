@@ -8,17 +8,18 @@ configuration:
         supportOffsetPagination: true
         hasConsistentProductSearchData: false
         supportSearchByIdentifierAndQueryParameters: false
-    algoliaV2:
+    algolia:
         appId: DILBRXOZYC
         appKey: 82da0c8ccb44ac757e991e28d6e33b4a
         indexName: dev_frontastic_search
+        apiVersion: v2
         languages:
             en_GB@GBP:
                 indexName: dev_frontastic_search
             de_DE@EUR:
                 indexName: dev_frontastic_search_de
     productSearch:
-        engine: algoliaV2
+        engine: algolia
 projects:
     -   projectId: test
         name: Algolia Test
