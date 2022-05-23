@@ -3,7 +3,6 @@
 namespace Frontastic\Common\CartApiBundle\Domain;
 
 use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
-use Frontastic\Common\Translatable;
 
 /**
  * @type
@@ -29,13 +28,13 @@ class Discount extends ApiDataObject
     public $state;
 
     /**
-     * @var Translatable
+     * @var array<string, string>
      * @required
      */
     public $name;
 
     /**
-     * @var Translatable
+     * @var array<string, string>
      */
     public $description;
 

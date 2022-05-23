@@ -1,68 +1,97 @@
-# common Changelog
 
-## `2.32.0` (2022-04-13)
+## Version 2.33.5 (2022-05-19)
+
+* fix: don’t use ?? in libraries/common
+## Version 2.33.4 (2022-05-17)
+
+* fix: used correct format on Changelog for catwalk and common
+## Version 2.33.3 (2022-05-12)
+
+* Prevent enum fields without values field to exist
+
+## Version 2.33.2 (2022-05-05)
+
+* fix(FP-1934): Pagination previous/nextCursor set to null on count 0.
+
+## Version 2.33.1 (2022-04-21)
+
+* chore: re-run release process
+
+## Version 2.33.0 (2022-04-21)
+
+* fix: add a missing @required statements
+* feat: enhance TypeScript map types
+* fix: correct type hints for translatable text
+
+## Version 2.33.0 (2022-04-21)
+
+* fix: add a missing @required statements
+* feat: enhance TypeScript map types
+* fix: correct type hints for translatable text
+
+## Version 2.32.0 (2022-04-13)
 
 * fix: rehused cart on api test order
 * fix: added salutaion to api test address.
 * feat(FP-840): included cart rawApiData when placing order in Shopware
 
-## `2.31.2` (2022-04-11)
+## Version 2.31.2 (2022-04-11)
 
 * fix: Categories with same name are returned
 
-## `2.31.1` (2022-04-08)
+## Version 2.31.1 (2022-04-08)
 
 * fix: prevent bc break on commercetools CartApi
 
-## `2.31.0` (2022-04-07)
+## Version 2.31.0 (2022-04-07)
 
 * feat(FP-1794): extracted logic to validate cart status before checkout
 
-## `2.30.1` (2022-04-07)
+## Version 2.30.1 (2022-04-07)
 
 * fix(FP-1794): consider only single successful payment as payment completed
 * fix(FP-1794): moved cart readines validation to isReadyForCheckout
 * fix(FP-1794): validated if cart is completed
 
-## `2.30.0` (2022-04-05)
+## Version 2.30.0 (2022-04-05)
 
 * feat: allow field type dataSource in Classic as well
 
-## `2.29.0` (2022-03-30)
+## Version 2.29.0 (2022-03-30)
 
 * feat(FP-1647): included machine region map in CustomerService
 * feat(FP-1647): implemented region selector base on customer config
 
-## `2.28.2` (2022-03-29)
+## Version 2.28.2 (2022-03-29)
 
 * fix(FP-1694): checked mapped orders on default deprecated decorator
 
-## `2.28.1` (2022-03-28)
+## Version 2.28.1 (2022-03-28)
 
 * fix(FP-1694): checked mapped orders on default decorators
 
-## `2.28.0` (2022-03-22)
+## Version 2.28.0 (2022-03-22)
 
 * refactor(FP-1122): Make logic for handling single-attribute sorting the same as multi-attribute
 * feat(FP-1122): Add sort by custom attribute functionality to Algolia integration
 
-## `2.27.1` (2022-03-17)
+## Version 2.27.1 (2022-03-17)
 
 * fix: fix issue from studio-deployment-branch
 
-## `2.27.0` (2022-03-15)
+## Version 2.27.0 (2022-03-15)
 
 * feat(FP-1486): upgrade Shopify version to latest stable version 2022-01
 
-## `2.26.0` (2022-03-10)
+## Version 2.26.0 (2022-03-10)
 
 * feat: add GraphCMS client factory
 
-## `2.25.4` (2022-03-07)
+## Version 2.25.4 (2022-03-07)
 
 * misc: allowed ramsey/uuid library version ^4 as dependency
 
-## `2.25.3` (2022-03-02)
+## Version 2.25.3 (2022-03-02)
 
 * fix(api-hub): replace content api with dummy for nextjs projects
 * fix(api-hub): replace wishlist api with dummy for nextjs
@@ -72,16 +101,16 @@
 * fix(api-hub): add dummy for AccountApi
 * fix(api-hub): fix syntax and add parameter to factory config
 
-## `2.25.2` (2022-02-15)
+## Version 2.25.2 (2022-02-15)
 
 * fix(FP-775): Minor refactor, import of SprykerAddress
 * fix(FP-755): Fix Spryker address
 
-## `2.25.1` (2022-01-27)
+## Version 2.25.1 (2022-01-27)
 
 * fix: if there's no filter chosen - the error reappears
 
-## `2.25.0` (2022-01-24)
+## Version 2.25.0 (2022-01-24)
 
 * fix(FP-838): improved error handling on parse locator for Shopware
 * feat(FP-838): prevent update email, shipping address, or billing address on Shopware CartApi
@@ -95,17 +124,17 @@
 * feat(FP-838): upgrade add, update, and remove item to cart on Shopware CartApi
 * feat(FP-838): upgrade get anonymous cart and get cart by id on Shopware
 
-## `2.24.0` (2022-01-05)
+## Version 2.24.0 (2022-01-05)
 
 * feat(FP-324): Include User-Agent Frontastic as part of API requests
 
-## `2.23.0` (2021-12-16)
+## Version 2.23.0 (2021-12-16)
 
 * feat: Created method for CustomDataSourceValidation in the CustomDataSourceService
 * feat: Store the stream type for stream fields
 * feat: Introduced a special field configuration for stream fields
 
-## `2.22.0` (2021-12-02)
+## Version 2.22.0 (2021-12-02)
 
 * feat(FP-1193): included rawApiImput on getProduct
 * feat(FP-581): refresh account after update address on Shopify
@@ -114,52 +143,51 @@
 * fix(FP-1193): added url schema simbols
 * feat!(FP-1193): upgrade and fix shopify version to 2021-10
 
-## `2.21.1` (2021-11-30)
+## Version 2.21.1 (2021-11-30)
 
 * fix: make product price nullable in Algolia integration
 
-## `2.21.0` (2021-10-26)
+## Version 2.21.0 (2021-10-26)
 
 * !feat(FP-646): implemented traceability strategy adding a correlation-id to all requests and responses
 * fix: Nested groups were not visited correctly in ConfigurationSchema.
 
-## `2.20.1` (2021-10-21)
+## Version 2.20.1 (2021-10-21)
 
 * fix: return a 400 json response on type error of dynamic pages
 
-## `2.20.0` (2021-10-11)
-
+## Version 2.20.0 (2021-10-11)
 
 * Catwalk version update
 
-## `2.19.3` (2021-10-07)
+## Version 2.19.3 (2021-10-07)
 
 * fix(api-hub): disable deprecation notice in prod
 * fix(api-hub): only output deprecation notice in non-prod-env
 * fix: Keep old previewUrl config working properly
 * feat: Allow for different view and endpoint URLs for preview
 
-## `2.19.2` (2021-09-23)
+## Version 2.19.2 (2021-09-23)
 
 * Always use plain json_decode for decoding CT responses
 
-## `2.19.1` (2021-09-09)
+## Version 2.19.1 (2021-09-09)
 
 * fix(FP-980): validated result to catch no active carts in Shopify
 
-## `2.19.0` (2021-09-08)
+## Version 2.19.0 (2021-09-08)
 
 * fix: Keep unknown field values in completed configuration fields.
 
-## `2.18.2` (2021-09-04)
+## Version 2.18.2 (2021-09-04)
 
 * fix: Handle documentary fields properly.
 
-## `2.18.1` (2021-09-03)
+## Version 2.18.1 (2021-09-03)
 
-* chore: bumped version required of frontastic/catwalk to 1.17 
+* chore: bumped version required of frontastic/catwalk to 1.17
 
-## `2.18.0` (2021-09-03)
+## Version 2.18.0 (2021-09-03)
 
 * feat(FP-935): Submit current field path to visitors.
 * feat(fp-935): Fixed potential construction issue through `new static()`
@@ -178,16 +206,16 @@
 * feat(fp-935): Migrated more tests to code lang independent format.
 * feat(fp-935): Extracted first config tests into code independant format.
 
-## `2.17.2` (2021-08-26)
+## Version 2.17.2 (2021-08-26)
 
 * fix(FP-932): modified array key validation
 * feat(FP-932): mapped missing variant properties in Algolia
 
-## `2.17.1` (2021-08-26)
+## Version 2.17.1 (2021-08-26)
 
 * chore: bumped version required of frontastic/catwalk to 1.16
 
-## `2.17.0` (2021-08-26)
+## Version 2.17.0 (2021-08-26)
 
 * feat(FP-932): get default language from project config in Algolia
 * feat(FP-932): set algolia library as suggested on composer
@@ -209,15 +237,15 @@
 * feat(FP-932): use key label structure for Attributes values
 * feat(FP-932): implemented getSearchAttributes for Algolia
 
-## `2.16.2` (2021-08-19)
+## Version 2.16.2 (2021-08-19)
 
 * Revert "fix: adds frontasticBasicAuthPassword to exclude list"
 
-## `2.16.1` (2021-08-17)
+## Version 2.16.1 (2021-08-17)
 
 * fix: adds frontasticBasicAuthPassword to exclude list
 
-## `2.16.0` (2021-08-04)
+## Version 2.16.0 (2021-08-04)
 
 * feat(FP-839): used integer for price filters
 * feat(FP-839): included price filter and facets on Shopware
@@ -228,11 +256,11 @@
 * feat(FP-839): get group from common groupId field
 * fix(FP-839): reused client request for both queries
 
-## `2.15.0` (2021-07-29)
+## Version 2.15.0 (2021-07-29)
 
 * feat: enhancing tideways logging for GraphCMS adding Cache status header as well as RequestId
 
-## `2.14.0` (2021-07-20)
+## Version 2.14.0 (2021-07-20)
 
 * feat(FP-837): set API test credential for Shopware 6.4
 * feat(FP-837): used php comparation for API version on Shopware
@@ -246,28 +274,28 @@
 * feat(FP-837): handle elements and data fiels on Account and Project mappers on Shopware
 * feat(FP-837): upgraded project config endpoints to store-api on Shopware
 
-## `2.13.4` (2021-07-13)
+## Version 2.13.4 (2021-07-13)
 
 * fix: strip API version on Shopware store-api
 * chore: replaced authToken by apiToken on Shopify
 * chore: replaced authToken by apiToken on Spryker
 
-## `2.13.3` (2021-07-08)
+## Version 2.13.3 (2021-07-08)
 
 * fix(FP-830): replaced authToken by apiToken on Shopware
 * feat: deprecated authToken in favor of apiToken.
 * fix: specify api version on Shopware
 
-## `2.13.2` (2021-07-06)
+## Version 2.13.2 (2021-07-06)
 
 * fix(FP-830): keep authToken on refresh account for Shopware
 
-## `2.13.1` (2021-07-01)
+## Version 2.13.1 (2021-07-01)
 
 * refactor: set Spryker cart test credentials as generic
 * fix: Allow empty local to be parsed on Spryker
 
-## `2.13.0` (2021-06-23)
+## Version 2.13.0 (2021-06-23)
 
 * chore(FT-731): removed unnecessary array_merge
 * feat(FP-731): login customer after reset account password on Shopware
@@ -277,36 +305,36 @@
 * feat(FP-731): refresed account base on email on Shopware
 * feat(FP-731): implemented account creation and confirmation on Shopware
 
-## `2.12.0` (2021-06-15)
+## Version 2.12.0 (2021-06-15)
 
 * feat: Added Ganesha based curcuit breaker for our HTTP client stack
 
-## `2.11.10` (2021-06-14)
+## Version 2.11.10 (2021-06-14)
 
 * chore: increased symfony minor version
 * fix: implemented AccountApi::getSalutations on Shopware
 
-## `2.11.9` (2021-05-28)
+## Version 2.11.9 (2021-05-28)
 
 * fix(FP-728): keeped original and masterData as dangerousInner on Commercetools
 
-## `2.11.8` (2021-05-28)
+## Version 2.11.8 (2021-05-28)
 
 * fix: validated relations before map them in Spryker
 * fix: remove scope from client call
 * fix: implemented CartApi::setShippingMethod on Shopware integration
 
-## `2.11.7` (2021-05-18)
+## Version 2.11.7 (2021-05-18)
 
 * fix(FP-709): moved cart validation to Shopware integration
 * fix(FP-709): included addresses and email into cart on Spryker
 * fix(FP-709): moved cart validation to Commercetools integration
 
-## `2.11.6` (2021-05-13)
+## Version 2.11.6 (2021-05-13)
 
 * fix(FP-691): returned empty response if content by id is query on GraphCMS
 
-## `2.11.5` (2021-05-11)
+## Version 2.11.5 (2021-05-11)
 
 * fix(FP-695): validated empty nodes before access data in Shopify
 * feat(backstage): latest terminology typo fix
@@ -315,16 +343,16 @@
 * feat(backstage): latest copy updates
 * feat: tastics term in studio
 
-## `2.11.4` (2021-04-29)
+## Version 2.11.4 (2021-04-29)
 
 * fix(FP-624): moved variant SKU method to Shopify integration
 * fix(FP-624): validated product returned when filtered by SKUs in Shopify
 
-## `2.11.3` (2021-04-29)
+## Version 2.11.3 (2021-04-29)
 
 * misc: Tests for CustomerService.
 
-## `2.11.2` (2021-04-27)
+## Version 2.11.2 (2021-04-27)
 
 * fix(FP-645): included host and status code to Contentful logs
 * fix(FP-645): decorated Contentful client to enhance logger
@@ -332,93 +360,93 @@
 * fix(FP-645): set default timeout and logger on Contentful client
 * fix: Find version manually
 
-## `2.11.1` (2021-04-22)
+## Version 2.11.1 (2021-04-22)
 
 * fix: Fix the /api/version SystemController to use version parameter bag
 * fix: Fix the /api/version SystemController parameter bag
 
-## `2.11.0` (2021-04-20)
+## Version 2.11.0 (2021-04-20)
 
 * feat(FP-617): exposed authorization url on project config for commercetools
 
-## `2.10.13` (2021-04-13)
+## Version 2.10.13 (2021-04-13)
 
 * fix: fixed unit test for Content
 * fix(606): included Content slug on GraphCMS
 * fix(606): validate content attribute key before fetch
 * misc: included API test to place order for logged in user
 
-## `2.10.12` (2021-04-08)
+## Version 2.10.12 (2021-04-08)
 
 * fix(FP-567): handle client exceptions and skip Union types
 * fix(FP-363): Shopify API, use existing account with token and remove returned address on create
 * fix(FP-363): API to add address on customer create and unit tests for create update adjustment
 
-## `2.10.11` (2021-03-30)
+## Version 2.10.11 (2021-03-30)
 
 * fix: Remove phpcpd from all projects
 
-## `2.10.10` (2021-03-23)
+## Version 2.10.10 (2021-03-23)
 
 * fix(FP-96): migrated and updated implementation for shipping methods on Shopware
 * fix(FP-84): used alias on category facet and set missing definition
 * fix: Use proper AccessDeniedException
 
-## `2.10.9` (2021-03-10)
+## Version 2.10.9 (2021-03-10)
 
 * fix(FP-458): used config from engine and include query as part of Result
 * chore(FP-458): removed unused max offset
 * fix(FP-458): exposed max offset in project.yml and validated before query
 * fix(FP-458): created maximum offset and validate Product queries againts it on Commercetools
 
-## `2.10.8` (2021-03-09)
+## Version 2.10.8 (2021-03-09)
 
 * chore(FP-447): improved documentation and log messages
 * fix(FP-447): throw and handle Cart not active exception
 * fix(FP-447): get existing cart for logged in customer in Shopify
 
-## `2.10.7` (2021-03-04)
+## Version 2.10.7 (2021-03-04)
 
 * fix(FP-447): cart regenerated if is already completed on Shopify
 * fix: validate version and category index before map
 
-## `2.10.6` (2021-03-02)
+## Version 2.10.6 (2021-03-02)
 
 * fix(FP-249): added address on account creation for Commercetools
 
-## `2.10.5` (2021-03-01)
+## Version 2.10.5 (2021-03-01)
 
 * fix(FP-395): implemented build query for next page and calculate last (#623)
 * fix: fix E_NOTICE on product not found
 
-## `2.10.4` (2021-02-25)
+## Version 2.10.4 (2021-02-25)
 
 * fix: stan errors
 
-## `2.10.3` (2021-02-23)
+## Version 2.10.3 (2021-02-23)
 
 * fix(FP-389): included discounts on LineItems and mapped data for Commercetools
 * fix: removed decoded exceptions in favor of fallback on php native decoder
 
-## `2.10.2` (2021-02-19)
+## Version 2.10.2 (2021-02-19)
 
 * fix: removed cartApi extra argument from BaseImplementationAdapterV2
 
-## `2.10.1` (2021-02-19)
+## Version 2.10.1 (2021-02-19)
 
 * fix(FP-364): fixed unit test inlcuding dangerousInnerShippingMethod to expected data
 * fix(FP-364): extended shipping method query and map localization zone
 
-## `2.10.0` (2021-02-18)
+## Version 2.10.0 (2021-02-18)
 
 * feat(FP-81): included documentation of rawApiInput fields from Commercetools on Wishlist
 * fix(FP-335): extended Wishlist from ApiDataObject
 * feat(FP-81): included documentation of rawApiInput fields from Commercetools
 * Feat: JavaScript based Decorators
 
-## `1.9.5` (2021-02-18)
+## Version 1.9.5 (2021-02-18)
 
-## `2.9.0` (2021-02-16)
+## Version 2.9.0 (2021-02-16)
 
 * fix(FP-323): mapped discount for product discounts
 * fix: added attributes response on after event for getSearchableAttributes
@@ -426,41 +454,42 @@
 * fix: used ContentApi instead of WishlistApi as aggreageted on LifecycleEventDecorator
 * feat: included BaseImplementation for ProductSearchApi and deprecated duplicated methods in ProductApi
 
-## `2.8.0` (2021-02-11)
+## Version 2.8.0 (2021-02-11)
 
 * feat: Update ShopifyCartApi.php
 * feat: add compareAtPriceV2 on Shopify product variants
 
-## `2.7.2` (2021-02-11)
+## Version 2.7.2 (2021-02-11)
 
 * fix: Return empty array to unblock the customer
 
-## `2.7.1` (2021-02-02)
+## Version 2.7.1 (2021-02-02)
 
 * chore: included the conflict version with catwalk on common/composer.json
 
-## `2.7.0` (2021-02-02)
+## Version 2.7.0 (2021-02-02)
 
 * !feat(fp-90) catwalk controllers (#580)
 * feat: included shipping info id for CommerceTools
 
-## `2.6.1` (2021-01-27)
+## Version 2.6.1 (2021-01-27)
 
 * fix: removed shipping or billing fields dependency to set shippingMethodName
 * fix(FP-150): returned ShippingMethod in getAvailableShippingMethods for Shopify
 
-## `2.6.0` (2021-01-20)
+## Version 2.6.0 (2021-01-20)
 
 * feat(FT-545): implemented shipping methods for a given cart on Spryker
 
-## `2.5.1` (2021-01-20)
+## Version 2.5.1 (2021-01-20)
 
 * fix: Missed adaption to OrderIdGeneratorV2.
 * feat(FT-590): upgrade Shopify version on API test and include SEO fields on product
 
-## `2.5.0` (2021-01-18)
+## Version 2.5.0 (2021-01-18)
 
-* fix(563): revert change to tests and add typecasting into Spryker CatalogSearchQuery to ensure that categoryId will be an int
+* fix(563): revert change to tests and add typecasting into Spryker CatalogSearchQuery to ensure that categoryId will be
+  an int
 * feat: included metafields on Shopify product variants
 * feat(FT-581): mapped rates and locations on ShippingRates for Commercetools
 * fix: Consistency for toString() methods on ProductApi\Locale.
@@ -475,7 +504,7 @@
 * feat(cart-defaults): Options for CommerceTools cart defaults.
 * feat(CartFetcher): CartFetcher as unified entrance to loading a cart.
 
-## `2.4.0` (2021-01-14)
+## Version 2.4.0 (2021-01-14)
 
 * feat(cart-defaults): Options for CommerceTools cart defaults.
 * feat(FT-506): implemented setEmail for Spryker
@@ -483,26 +512,27 @@
 * fix(FT-563): add if-else condition depending on current customer to change behavior for Spryker
 * feat(FT-457): included Shopify product images to each variant
 
-## `2.3.0` (2021-01-06)
+## Version 2.3.0 (2021-01-06)
 
 * feat(FT-544): implemented cart available shipping methods
 * fix(shopify): mapped variant stock from quantityAvailable and included availableForSale
 * feat(FT-470): Mapped shipping discounted price when present
 
-## `2.2.1` (2020-12-18)
+## Version 2.2.1 (2020-12-18)
 
 * fix: removed extra comma at the end of parameter list
 
-## `2.2.0` (2020-12-18)
+## Version 2.2.0 (2020-12-18)
 
 * fix: added missing default language
 * feat(FT-532): extracted Wishlist Api interface
 * feat(FT-532): extracted Cart Api interface
 * feat(FT-532): extracted Account Api interface
-* fix(FT-540): make defaultLanguage in Spryker Product Search API bundle non-nullable, but make localeString in parseLocaleString nullable
+* fix(FT-540): make defaultLanguage in Spryker Product Search API bundle non-nullable, but make localeString in
+  parseLocaleString nullable
 * fix(FT-540): Fix SprykerProductSearchApi, add usage of forLanguage to have locale included into products search
 
-## `2.1.0` (2020-12-14)
+## Version 2.1.0 (2020-12-14)
 
 * Fix missing namespace
 * Update json calls around wrapper
@@ -522,7 +552,7 @@
 * fix: Remaining dependencies to work with common 2.0
 * fix: Set composer platform to PHP 7.4
 
-## `2.0.0` (2020-11-27)
+## Version 2.0.0 (2020-11-27)
 
 * feat(tax): included tax class and implementation fro Commercetools
 * feat!(ShippingMethod): API enhancement for fetching shipping methods. (#420)
@@ -546,14 +576,14 @@
 * feat(shopify): included descriptionHtml and images to Product query
 * feat(ApiBase): implemented CartApiBase on Spryker
 
-## `1.1.20` (2020-11-26)
+## Version 1.1.20 (2020-11-26)
 
 * fix: Correct bundle references
 * refactor: removed duplicated tests
 * [FT-442] Migrate DataObjects to ApiDataObjects
 * fix: set right test name on AnonymousCart
 
-## `1.1.19` (2020-11-13)
+## Version 1.1.19 (2020-11-13)
 
 * chore: Built release 2020.11.13.11.34
 * fix(shopify): Used lowecase for variant attributes
@@ -569,7 +599,7 @@
 * fix(shopware): Commented invalid attributes for Shopware v2 and v3
 * feat(shopify): Implemented facet filters for tags and product types
 
-## `1.1.18` (2020-11-04)
+## Version 1.1.18 (2020-11-04)
 
 * fix(spryker): Included abstract decription
 * fix(spryker): Counted items returned
@@ -579,7 +609,7 @@
 * fix(spryker): Removed mapImages overwrited implementation
 * fix(spryker): Set valid variant sku
 
-## `1.1.17` (2020-10-30)
+## Version 1.1.17 (2020-10-30)
 
 * fix(spryker): Returned orignal account if not possible to be refreshed with no authToken
 * fix: don't enforce tax category in Commercetools
@@ -587,7 +617,7 @@
 * fix(spryker): Removed verifyEmail as non part of AccountAPI abstraction
 * fix(spryker): Returned email as part of reset account
 
-## `1.1.16` (2020-10-16)
+## Version 1.1.16 (2020-10-16)
 
 * fix(productSearchApi): Remove URL decoding for Findologic provided URLs
 * fix(productSearchApi): Remove redundant code from FindologicClientFactory
@@ -604,12 +634,12 @@
 * fix: Only set fetch_format when needed
 * chore: Extracted common webspocket code
 
-## `1.1.15` (2020-10-13)
+## Version 1.1.15 (2020-10-13)
 
 * fix: Do not cast null values in media library to numeric
 * fix: Set whislist as not implemented for Shopify
 
-## `1.1.14` (2020-10-07)
+## Version 1.1.14 (2020-10-07)
 
 * fix(shopify): Used only SKU values on variant.sku mapping
 * fix: Import deprecate helper in a way it also works in tests
@@ -701,7 +731,7 @@
 * Fixed type hint
 * Flagged types
 
-## `1.1.13` (2020-10-02)
+## Version 1.1.13 (2020-10-02)
 
 * fix: Removed cartId validation on testAPI
 * chore: Refactored withCurrency method as appendCurrencyToUrl
@@ -785,23 +815,23 @@
 * Fixed type hint
 * Flagged types
 
-## `1.1.12` (2020-10-01)
+## Version 1.1.12 (2020-10-01)
 
 * feat: Shopify CartApi & AccountApi
 
-## `1.1.11` (2020-09-17)
+## Version 1.1.11 (2020-09-17)
 
 * feat!: Use the product search API
 * feat: Add ShopifyProductSearchApi
 * feat: Call product event listeners
 * chore: Extracted common webspocket code
 
-## `1.1.10` (2020-09-15)
+## Version 1.1.10 (2020-09-15)
 
 * Regenerated API documentation
 * Generated TypeScript types for catwalk & common domain models
 
-## `1.1.9` (2020-09-11)
+## Version 1.1.9 (2020-09-11)
 
 * Implement localization and include Product filter by language
 * add Spryker product search API
@@ -816,7 +846,7 @@
 * Build cloudinary URLs ourselves
 * Add FindologicBundle
 
-## `1.1.8` (2020-08-24)
+## Version 1.1.8 (2020-08-24)
 
 * chore(shopify integration): Included pagination documentation
 * fix(shopify integration): Updated Api test to use cursor based pagination
@@ -883,19 +913,19 @@
 * feat(spryker integration): Impleted WoohooLabs ResourceObject to handle Api response content
 * feat(spryker integration): Included raw api output as part of Http/Response
 
-## `1.1.5` (2020-08-05)
+## Version 1.1.5 (2020-08-05)
 
 * fix: Restore (again) missing CHANGELOG.md in common
 
-## `1.1.4` (2020-08-05)
+## Version 1.1.4 (2020-08-05)
 
 * fix: Restore missing CHANGELOG.md in common
 
-## `1.1.3` (2020-08-05)
+## Version 1.1.3 (2020-08-05)
 
 * Fixed release script
 
-## `1.1.2` (2020-08-05)
+## Version 1.1.2 (2020-08-05)
 
 * fix: Use readlink instead of realpath to work on mac
 * Enable tideways for sparhandy and fix check in setup handle
@@ -910,12 +940,13 @@
 * feat(boost-theme): theming - next phase
 * chore(frontasticli): Add github action for releasing
 * fix(boost-theme): custom hook and some photo scaling
-* fix(boost-theme): custom hook and some photo scaling (solution for now, until we get more customized photos from commerce tools)
+* fix(boost-theme): custom hook and some photo scaling (solution for now, until we get more customized photos from
+  commerce tools)
 * chore: removing customers that have github actions by now
 * chore: enabling teams hook for Apollo and disabling Slack
 * chore: Remove orphan DI tag frontastic.common.api_integration.
 
-## `1.1.1` (2020-07-30)
+## Version 1.1.1 (2020-07-30)
 
 * fix: Logger is still unavailable in container.
 * chore: Removed FactoryServiceLocator from libraries/common.
@@ -957,9 +988,8 @@
 * Expose additional category filter properties
 * Added field `state` and mapping for CommerceTools in `Address`.
 
-## `1.1.0` (2020-07-30)
+## Version 1.1.0 (2020-07-30)
 
-## `1.0.0` (2020-05-27)
-
+## Version 1.0.0 (2020-05-27)
 
 * Initial stable release

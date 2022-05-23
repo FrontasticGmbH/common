@@ -12,8 +12,18 @@ export interface Customer {
      secret: string;
      edition: string;
      hasPaasModifications: boolean;
+     /**
+      * Number of available Frontastic Machines
+      */
      machineLimit: number;
+     /**
+      * Frontastic Machines Map to define providers use in each region
+      */
+     machineRegionToProviderMap: any;
      features: any;
+     /**
+      * Used to indicate this customer is only "half" configured or similar.
+      */
      isTransient: boolean;
      configuration: any;
      environments: any;
@@ -31,12 +41,20 @@ export interface Project {
      projectId: string;
      name: string;
      customer: string;
+     /**
+      * In the config this is the `secret`.
+      */
      apiKey: string;
-     previewUrl: string;
+     previewUrl?: string;
+     preview?: any;
      publicUrl: string;
      webpackPort: number;
      ssrPort: number;
      configuration: any;
+     /**
+      * Additional external project data from sources like tideways. Does not
+      * follow any defined schema.
+      */
      data: any;
      languages: string[];
      defaultLanguage: string;

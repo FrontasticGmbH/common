@@ -4,6 +4,9 @@ namespace Frontastic\Common\CartApiBundle\Domain;
 
 use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
 
+/**
+ * @type
+ */
 class ShippingRate extends ApiDataObject
 {
     /**
