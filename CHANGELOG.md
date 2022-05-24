@@ -1,4 +1,7 @@
 
+## Version 2.33.6 (2022-05-24)
+
+* fix: correctly fetch cloudinary URLs again
 ## Version 2.33.5 (2022-05-19)
 
 * fix: don’t use ?? in libraries/common
