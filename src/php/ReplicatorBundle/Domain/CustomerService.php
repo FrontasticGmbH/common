@@ -138,7 +138,7 @@ class CustomerService
             'projects' => array_map(
                 function (array $project) use ($customer, $customerConfiguration): Project {
                     $projectSpecificEntities = $project['projectSpecific'] ?? [];
-                    $projectSpecificEntities[] = ['Frontastic.Backstage.StageBundle.Domain.NodesTree'];
+                    $projectSpecificEntities[] = 'Frontastic.Backstage.StageBundle.Domain.NodesTree';
 
                     return new Project([
                         'projectId' => $project['projectId'],
