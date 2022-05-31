@@ -138,7 +138,8 @@ class CustomerService
             'projects' => array_map(
                 function (array $project) use ($customer, $customerConfiguration): Project {
                     $projectSpecificEntities = $project['projectSpecific'] ?? [];
-                    $projectSpecificEntities[] = 'Frontastic.Backstage.StageBundle.Domain.NodesTree';
+                    // this entity is intended for cache usage and is NEVER shared between projects
+                    $projectSpecificEntities[] = 'Frontastic.Backstage.StageBundle.Domain.NodesTreeCache';
 
                     return new Project([
                         'projectId' => $project['projectId'],
