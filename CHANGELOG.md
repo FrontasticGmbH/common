@@ -1,15 +1,19 @@
 ## Version 2.33.7 (2022-06-02)
 
 * fix: Don’t overwrite explicitly set user agent. This fixes user agent detection during SSR.
+
 ## Version 2.33.6 (2022-05-24)
 
 * fix: correctly fetch cloudinary URLs again
+
 ## Version 2.33.5 (2022-05-19)
 
 * fix: don’t use ?? in libraries/common
+
 ## Version 2.33.4 (2022-05-17)
 
 * fix: used correct format on Changelog for catwalk and common
+
 ## Version 2.33.3 (2022-05-12)
 
 * Prevent enum fields without values field to exist
