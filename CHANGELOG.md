@@ -1,4 +1,6 @@
+## Version 2.33.7 (2022-06-02)
 
+* fix: Don’t overwrite explicitly set user agent. This fixes user agent detection during SSR.
 ## Version 2.33.6 (2022-05-24)
 
 * fix: correctly fetch cloudinary URLs again
