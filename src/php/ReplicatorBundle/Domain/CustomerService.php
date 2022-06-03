@@ -137,10 +137,6 @@ class CustomerService
             ],
             'projects' => array_map(
                 function (array $project) use ($customer, $customerConfiguration): Project {
-                    $projectSpecificEntities = $project['projectSpecific'] ?? [];
-                    // this entity is intended for cache usage and is NEVER shared between projects
-                    $projectSpecificEntities[] = 'Frontastic.Backstage.StageBundle.Domain.NodesTreeCache';
-
                     return new Project([
                         'projectId' => $project['projectId'],
                         'name' => $project['name'],
@@ -159,7 +155,7 @@ class CustomerService
                         ),
                         'languages' => $project['languages'] ?? [$project['defaultLanguage'] ?? 'eng_GB'],
                         'defaultLanguage' => $project['defaultLanguage'] ?? 'eng_GB',
-                        'projectSpecific' => $projectSpecificEntities,
+                        'projectSpecific' => $project['projectSpecific'] ?? [],
                         'data' => array_merge_recursive($customer['data'] ?? [], $project['data'] ?? []),
                         'endpoints' => array_map(
                             function (array $endpoint): Endpoint {
