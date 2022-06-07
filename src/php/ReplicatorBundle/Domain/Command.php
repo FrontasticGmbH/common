@@ -28,6 +28,12 @@ class Command extends DataObject
     public $customer;
 
     /**
+     * @var bool
+     * @required
+     */
+    public $allowCache = true;
+
+    /**
      * @var array
      * @required
      */
