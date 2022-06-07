@@ -1,4 +1,8 @@
-## Version 2.33.7 (2022-06-02)
+
+## Version 2.33.8 (2022-06-07)
+
+* Revert "Panos/nodes tree caching"
+
 
 * fix: Don’t overwrite explicitly set user agent. This fixes user agent detection during SSR.
 
