@@ -31,18 +31,11 @@ class Command extends DataObject
      * @var bool
      * @required
      */
-    public $allowCache;
+    public $allowCache = true;
 
     /**
      * @var array
      * @required
      */
     public $payload = [];
-
-
-    public function __construct(array $values = array(), bool $ignoreAdditionalAttributes = false)
-    {
-        $this->allowCache = true; // set default value
-        parent::__construct($values, $ignoreAdditionalAttributes);
-    }
 }
