@@ -139,7 +139,7 @@ class CustomerService
                 function (array $project) use ($customer, $customerConfiguration): Project {
                     $projectSpecificEntities = $project['projectSpecific'] ?? [];
                     // this entity is intended for cache usage and is NEVER shared between projects
-                    $projectSpecificEntities[] = 'Frontastic.Backstage.StageBundle.Domain.NodesTreeCache';
+                    // $projectSpecificEntities[] = 'Frontastic.Backstage.StageBundle.Domain.NodesTreeCache';
 
                     return new Project([
                         'projectId' => $project['projectId'],
