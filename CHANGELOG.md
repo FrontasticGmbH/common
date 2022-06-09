@@ -1,4 +1,10 @@
 
+## Version 2.33.9 (2022-06-09)
+
+** Improvements **
+
+- Small refactorings from PR review
+
 ## Version 2.33.8 (2022-06-07)
 
 * Revert "Panos/nodes tree caching"
