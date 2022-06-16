@@ -47,6 +47,7 @@ Here you find the API documentation for the relevant classes:
     * [AlgoliaClient](php/AlgoliaBundle/Domain/AlgoliaClient.md)
     * [AlgoliaClientFactory](php/AlgoliaBundle/Domain/AlgoliaClientFactory.md)
     * [AlgoliaIndexConfig](php/AlgoliaBundle/Domain/AlgoliaIndexConfig.md)
+    * [AlgoliaMapperFactory](php/AlgoliaBundle/Domain/AlgoliaMapperFactory.md)
     * ProductSearchApi
       * [AlgoliaProductSearchApi](php/AlgoliaBundle/Domain/ProductSearchApi/AlgoliaProductSearchApi.md)
       * [Mapper](php/AlgoliaBundle/Domain/ProductSearchApi/Mapper.md)
