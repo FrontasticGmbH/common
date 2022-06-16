@@ -144,6 +144,8 @@ function getFieldDefaultValue (type, defaultValue) {
         return '{}'
     case 'boolean':
         return false
+    case 'date-time':
+        return null
     default:
         return null
     }

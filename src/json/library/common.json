@@ -48,7 +48,8 @@
                                             "stream",
                                             "string",
                                             "text",
-                                            "tree"
+                                            "tree",
+                                            "date-time"
                                         ]
                                     }
                                 },
@@ -178,14 +179,6 @@
                             }
                         }
                     }
-                },
-                "scheduledFrom": {
-                    "type": "string",
-                    "format": "date-time"
-                },
-                "scheduledTo": {
-                    "type": "string",
-                    "format": "date-time"
                 },
 
                 "translatable": {
