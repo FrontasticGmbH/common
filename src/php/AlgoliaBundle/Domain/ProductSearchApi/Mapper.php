@@ -27,7 +27,8 @@ class Mapper
      */
     private $apiVersion;
 
-    public function __construct(string $apiVersion = null) {
+    public function __construct(string $apiVersion = null)
+    {
         // By default, use version 1
         $this->apiVersion = $apiVersion ?? 'v1';
     }
