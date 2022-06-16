@@ -137,6 +137,13 @@ class CustomerService
             ],
             'projects' => array_map(
                 function (array $project) use ($customer, $customerConfiguration): Project {
+                    $projectSpecificEntities = $project['projectSpecific'] ?? [];
+                    // Frontastic.Backstage.StageBundle.Domain.NodesTreeCache entity is used for nodes tree
+                    // caching and must follow Frontastic.Backstage.StageBundle.Domain.Node replication rules
+                    if (\in_array('Frontastic.Backstage.StageBundle.Domain.Node', $projectSpecificEntities)) {
+                        $projectSpecificEntities[] = 'Frontastic.Backstage.StageBundle.Domain.NodesTreeCache';
+                    }
+
                     return new Project([
                         'projectId' => $project['projectId'],
                         'name' => $project['name'],
@@ -155,7 +162,7 @@ class CustomerService
                         ),
                         'languages' => $project['languages'] ?? [$project['defaultLanguage'] ?? 'eng_GB'],
                         'defaultLanguage' => $project['defaultLanguage'] ?? 'eng_GB',
-                        'projectSpecific' => $project['projectSpecific'] ?? [],
+                        'projectSpecific' => $projectSpecificEntities,
                         'data' => array_merge_recursive($customer['data'] ?? [], $project['data'] ?? []),
                         'endpoints' => array_map(
                             function (array $endpoint): Endpoint {

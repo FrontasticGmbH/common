@@ -1,7 +1,29 @@
 
+## Version 2.33.9 (2022-06-09)
+
+** Improvements **
+
+- Small refactorings from PR review
+
+## Version 2.33.8 (2022-06-07)
+
+* Revert "Panos/nodes tree caching"
+
+
+* fix: Don’t overwrite explicitly set user agent. This fixes user agent detection during SSR.
+
+## Version 2.33.6 (2022-05-24)
+
+* fix: correctly fetch cloudinary URLs again
+
+## Version 2.33.5 (2022-05-19)
+
+* fix: don’t use ?? in libraries/common
+
 ## Version 2.33.4 (2022-05-17)
 
 * fix: used correct format on Changelog for catwalk and common
+
 ## Version 2.33.3 (2022-05-12)
 
 * Prevent enum fields without values field to exist

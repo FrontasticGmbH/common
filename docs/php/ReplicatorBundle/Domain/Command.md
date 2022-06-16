@@ -9,6 +9,7 @@ Property|Type|Default|Required|Description
 `command` | `string` |  | *Yes* | 
 `channel` | `string` |  | *Yes* | 
 `customer` | `string` |  | *Yes* | 
+`allowCache` | `bool` | `true` | *Yes* | 
 `payload` | `array` | `[]` | *Yes* | 
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).
