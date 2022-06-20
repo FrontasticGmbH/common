@@ -48,7 +48,8 @@
                                             "stream",
                                             "string",
                                             "text",
-                                            "tree"
+                                            "tree",
+                                            "date-time"
                                         ]
                                     }
                                 },
