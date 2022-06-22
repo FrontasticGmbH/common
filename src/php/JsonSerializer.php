@@ -19,12 +19,18 @@ class JsonSerializer
     private $objectEnhancers = [];
 
     /**
+     * @var bool
+     */
+    private $includeType = true;
+
+    /**
      * @param string[] $propertyExcludeList
      * @param ObjectEnhancer[] $objectEnhancers
      */
-    public function __construct(array $propertyExcludeList = [], iterable $objectEnhancers = [])
+    public function __construct(array $propertyExcludeList = [], iterable $objectEnhancers = [], $includeType = true)
     {
         $this->propertyExcludeList = $propertyExcludeList;
+        $this->includeType = $includeType;
 
         foreach ($objectEnhancers as $enhancer) {
             $this->addEnhancer($enhancer);
@@ -88,7 +94,12 @@ class JsonSerializer
             return $this->convertProxy($item);
         }
 
-        $result = ['_type' => get_class($item)];
+        $result = [];
+
+        if ($this->includeType === true) {
+            $result['_type'] = get_class($item);
+        }
+
         foreach (get_object_vars($item) as $key => $value) {
             if (strpos($key, 'dangerousInner') === 0) {
                 continue;
@@ -110,7 +121,7 @@ class JsonSerializer
             $this->enhanceSerialization($item)
         );
 
-        if ($result['_type'] === 'stdClass') {
+        if (isset($result['_type']) && $result['_type'] === 'stdClass') {
             unset($result['_type']);
         }
 
@@ -148,9 +159,12 @@ class JsonSerializer
     protected function convertProxy(Proxy $item)
     {
         $proxy = [
-            '_proxy' => true,
-            '_type' => get_parent_class($item),
+            '_proxy' => true
         ];
+
+        if ($this->includeType === true) {
+            $proxy['_type'] = get_parent_class($item);
+        }
 
         if (property_exists($item, 'id')) {
             $proxy['id'] = $item->id;
