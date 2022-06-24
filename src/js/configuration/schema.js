@@ -144,7 +144,7 @@ function getFieldDefaultValue (type, defaultValue) {
         return '{}'
     case 'boolean':
         return false
-    case 'instance':
+    case 'instant':
         return null
     default:
         return null
