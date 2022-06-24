@@ -15,7 +15,7 @@ class FieldConfiguration
         'markdown' => '',
         'json' => '{}',
         'boolean' => false,
-        'date-time' => null
+        'instance' => null
     ];
 
     /**
