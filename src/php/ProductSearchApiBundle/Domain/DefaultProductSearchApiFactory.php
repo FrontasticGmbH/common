@@ -3,8 +3,8 @@
 namespace Frontastic\Common\ProductSearchApiBundle\Domain;
 
 use Frontastic\Common\AlgoliaBundle\Domain\AlgoliaClientFactory;
+use Frontastic\Common\AlgoliaBundle\Domain\AlgoliaMapperFactory;
 use Frontastic\Common\AlgoliaBundle\Domain\ProductSearchApi\AlgoliaProductSearchApi;
-use Frontastic\Common\AlgoliaBundle\Domain\ProductSearchApi\Mapper as AlgoliaDataMapper;
 use Frontastic\Common\FindologicBundle\Domain\FindologicClientFactory;
 use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\FindologicProductSearchApi;
 use Frontastic\Common\FindologicBundle\Domain\ProductSearchApi\QueryValidator;
@@ -163,6 +163,7 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
 
                 break;
             case 'algolia':
+                /** @var AlgoliaClientFactory $clientFactory */
                 $clientFactory = $this->container->get(AlgoliaClientFactory::class);
                 $client = $clientFactory->factorForConfigs(
                     $project->languages,
@@ -170,7 +171,10 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
                     $productSearchConfig,
                     $engineConfig
                 );
-                $dataMapper = $this->container->get(AlgoliaDataMapper::class);
+
+                /** @var AlgoliaMapperFactory $mapperFactory */
+                $mapperFactory = $this->container->get(AlgoliaMapperFactory::class);
+                $dataMapper = $mapperFactory->factorForConfigs($productSearchConfig, $engineConfig);
 
                 $productSearchApi = new AlgoliaProductSearchApi($client, $this->enabledFacetService, $dataMapper);
 

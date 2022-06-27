@@ -1,4 +1,15 @@
 
+## Version 2.34.0 (2022-06-16)
+
+** New Features **
+
+- New Algolia implementation. Include prices in cents and attributes listed by index.
+
+
+** Improvements **
+
+- Improving performance on Apollo caching.
+
 ## Version 2.33.9 (2022-06-09)
 
 ** Improvements **

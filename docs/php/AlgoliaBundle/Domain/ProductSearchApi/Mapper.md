@@ -4,9 +4,24 @@
 
 ## Methods
 
+* [__construct()](#__construct)
 * [dataToProducts()](#datatoproducts)
 * [dataToFacets()](#datatofacets)
 * [dataToAttributes()](#datatoattributes)
+
+### __construct()
+
+```php
+public function __construct(
+    string $apiVersion = null
+): mixed
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$apiVersion`|`string`|`null`|
+
+Return Value: `mixed`
 
 ### dataToProducts()
 

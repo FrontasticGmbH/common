@@ -22,6 +22,17 @@ class Mapper
         self::SKU_ATTRIBUTE_KEY,
     ];
 
+    /**
+     * @var string
+     */
+    private $apiVersion;
+
+    public function __construct(string $apiVersion = null)
+    {
+        // By default, use version 1
+        $this->apiVersion = $apiVersion ?? 'v1';
+    }
+
     public function dataToProducts(array $data, ProductQuery $query): array
     {
         $products = [];
@@ -39,15 +50,9 @@ class Mapper
                     new Variant([
                         'id' => $productData['variantId'] ?? $productData['productId'] ?? null,
                         'sku' => $productData['sku'] ?? null,
-                        'price' => key_exists('price', $productData) ?
-                            intval($productData['price'] * 100) :
-                            null
-                        ,
-                        'discountedPrice' => key_exists('discountedPrice', $productData) ?
-                            intval($productData['discountedPrice'] * 100) :
-                            null
-                        ,
-                        'attributes' => $productData, // Store all attributes returned by Algolia.
+                        'price' => $this->productDataToPrice($productData),
+                        'discountedPrice' => $this->productDataToDiscountPrice($productData),
+                        'attributes' => $this->productDataToAttributes($productData),
                         'images' => $productData['images'] ?? [],
                         'isOnStock' => $productData['isOnStock'] ?? null,
                         'dangerousInnerVariant' => $query->loadDangerousInnerData ? $productData : null
@@ -198,5 +203,40 @@ class Mapper
     protected function shouldIgnoreAttributeKey(string $attributeKey): bool
     {
         return in_array($attributeKey, self::IGNORED_ATTRIBUTES);
+    }
+
+    private function productDataToPrice(array $productData): ?int
+    {
+        if ($this->apiVersion !== 'v1') {
+            return key_exists('price', $productData) ?
+                intval($productData['price']) :
+                null;
+        }
+
+        return key_exists('price', $productData) ?
+            intval($productData['price'] * 100) :
+            null;
+    }
+
+    private function productDataToDiscountPrice(array $productData): ?int
+    {
+        if ($this->apiVersion !== 'v1') {
+            return key_exists('discountedPrice', $productData) ?
+                intval($productData['discountedPrice']) :
+                null;
+        }
+
+        return key_exists('discountedPrice', $productData) ?
+            intval($productData['discountedPrice'] * 100) :
+            null;
+    }
+
+    private function productDataToAttributes(array $productData): ?array
+    {
+        if ($this->apiVersion !== 'v1') {
+            return $productData['attributes'] ?? null;
+        }
+
+        return $productData;
     }
 }
