@@ -29,7 +29,7 @@ function buildFieldsFromSectionSchema (sectionSchema) {
 
     for (let fieldIndex = 0; fieldIndex < sectionSchema.fields.length; ++fieldIndex) {
         const fieldSchema = sectionSchema.fields[fieldIndex]
-        if (!fieldSchema.field) {
+        if (!fieldSchema?.field) {
             continue
         }
 
