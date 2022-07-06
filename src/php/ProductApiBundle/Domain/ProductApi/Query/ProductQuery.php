@@ -20,6 +20,11 @@ class ProductQuery extends PaginatedQuery
     public $category;
 
     /**
+     * @var ?string[]
+     */
+    public $categories;
+
+    /**
      * @deprecated use `skus` instead
      * @var ?string
      */
@@ -99,5 +104,17 @@ class ProductQuery extends PaginatedQuery
         $this->validateProperty('facets', 'array');
         $this->validateProperty('sortAttributes', 'array');
         $this->validateProperty('fuzzy', 'boolean');
+    }
+
+    public function getAllUniqueCategories(): array
+    {
+        $categories = [];
+        if ($this->categories) {
+            $categories = $this->categories;
+        }
+        if ($this->category) {
+            $categories[] = $this->category;
+        }
+        return array_unique($categories);
     }
 }

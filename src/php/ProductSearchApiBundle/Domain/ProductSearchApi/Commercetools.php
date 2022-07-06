@@ -125,8 +125,19 @@ class Commercetools extends ProductSearchApiBase
         if ($query->productType) {
             $parameters['filter.query'][] = sprintf('productType.id:"%s"', $query->productType);
         }
-        if ($query->category) {
-            $parameters['filter.query'][] = sprintf('categories.id: subtree("%s")', $query->category);
+
+        $categories = $query->getAllUniqueCategories();
+        if (count($categories) > 0) {
+            $parameters['filter.query'][] = 'categories.id: ' .
+                join(
+                    ', ',
+                    array_map(
+                        function ($category) {
+                            return sprintf('subtree("%s")', $category);
+                        },
+                        $categories
+                    )
+                );
         }
         if ($query->query) {
             $parameters[sprintf('text.%s', $locale->language)] = $query->query;
