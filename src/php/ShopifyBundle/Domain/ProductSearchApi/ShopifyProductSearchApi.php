@@ -138,9 +138,10 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
             );
         }
 
-        if ($query->category) {
+        $categories = $query->getAllUniqueCategories();
+        if ($categories) {
             $queryString = "{
-                node(id: \"{$query->category}\") {
+                node(id: \"{$categories[0]}\") {
                     id
                     ... on Collection {
                         products($pageFilter) {
