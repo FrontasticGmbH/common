@@ -188,8 +188,9 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
             $requestOptions['facetFilters'][] = 'productType:' . $query->productType;
         }
 
-        if ($query->category) {
-            $requestOptions['facetFilters'][] = 'category:' . $query->category;
+        $categories = $query->getAllUniqueCategories();
+        foreach ($categories as $category) {
+            $requestOptions['facetFilters'][] = 'category:' . $category;
         }
 
         return $requestOptions;
