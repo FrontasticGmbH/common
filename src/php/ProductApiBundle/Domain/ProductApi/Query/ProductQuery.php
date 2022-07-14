@@ -109,12 +109,13 @@ class ProductQuery extends PaginatedQuery
     public function getAllUniqueCategories(): array
     {
         $categories = [];
-        if ($this->categories) {
-            $categories = $this->categories;
-        }
         if ($this->category) {
             $categories[] = $this->category;
         }
+        if ($this->categories) {
+            $categories= array_merge($categories, $this->categories);
+        }
+
         return array_unique($categories);
     }
 }
