@@ -273,6 +273,33 @@ class ConfigurationSchema {
             return Object.values(value).some((v) => !v)
         }
 
+        // If markdown has an empty translatable object like: {en_GB@EUR: ""}
+        // It should be flagged as a missing required value
+        if (schema.type === 'markdown' && schema.translatable && value) {
+            // if (Object.values(value).length > 0) {
+            //     console.log('Object is NOT empty')
+            // } else {
+            //     console.log('Object IS empty')
+            //     // console.log('value', value)
+            //     return Object.values(value).some((v) => !v)
+            // }
+
+            // for(var prop in obj) {
+            //     if(obj.hasOwnProperty(prop))
+            //         return false;
+            // }
+
+            value.forEach(val => {
+                if(val.length > 0) {
+                    console.log('Object is NOT empty')
+                    return false
+                } else {
+                    console.log('Object IS empty')
+                    return true
+                }
+            })
+        }
+
         return typeof value === 'undefined' || value === null || value === ''
     }
 
