@@ -39,7 +39,7 @@ abstract class ProductSearchApiBase implements ProductSearchApi
         $this->logger = $logger;
     }
 
-    final protected function getLogger():LoggerInterface
+    final protected function getLogger(): LoggerInterface
     {
         if ($this->logger === null) {
             $this->logger = new NullLogger();

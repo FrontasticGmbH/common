@@ -296,7 +296,6 @@ class Mapper
 
         if (count($categories) >= 1) {
             $attributes['cat'] = [$categories[0]];
-            //TODO: warn when count >1
         }
         return $attributes;
     }
