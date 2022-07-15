@@ -294,7 +294,7 @@ class Mapper
         $categories = $query->getAllUniqueCategories();
         $attributes = [];
 
-        if(count($categories) >= 1) {
+        if (count($categories) >= 1) {
             $attributes['cat'] = [$categories[0]];
             //TODO: warn when count >1
         }

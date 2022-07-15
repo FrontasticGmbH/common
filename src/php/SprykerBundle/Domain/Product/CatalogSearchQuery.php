@@ -52,10 +52,6 @@ class CatalogSearchQuery
 
         $categories = $productQuery->getAllUniqueCategories();
         if (count($categories) > 0) {
-            if (count($categories)>1){
-                //warn about the use of multiple categories even though spriker does not support that
-                var_dump("warning: spriker does not support filter with multiple categories!");
-            }
             $query['category'] = (int)$categories[0];
         }
 

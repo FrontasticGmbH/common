@@ -73,6 +73,14 @@ class SprykerProductSearchApi extends ProductSearchApiBase
     protected function queryImplementation(ProductQuery $query): PromiseInterface
     {
         $searchQuery = CatalogSearchQuery::createFromProductQuery($query);
+        if (count($query->getAllUniqueCategories()) > 1) {
+            $logger = $this->getLogger();
+            $logger->warning(
+                'Spryker does not support querying products from multiple categories, ' .
+                'only first of provided categories is used: {categories}',
+                ['categories' => $query->getAllUniqueCategories()]
+            );
+        }
         $locale = $this->parseLocaleString($query->locale);
         $mapper = $this->mapperResolver->getMapper(ProductResultMapper::MAPPER_NAME);
 
