@@ -49,77 +49,16 @@
                                             "string",
                                             "text",
                                             "tree",
-                                            "instant"
+                                            "instant",
+                                            "group",
+                                            "image",
+                                            "description",
+                                            "tastic"
                                         ]
                                     }
-                                },
-                                "anyOf": [
-                                    {
-                                        "not": {
-                                            "properties": {
-                                                "type": {
-                                                    "enum": ["enum"]
-                                                }
-                                            },
-                                            "required": ["type"]
-                                        }
-                                    },
-                                    { "required": ["values"] }
-                                ]
-                            },
-                            { "$ref": "#/definitions/field" }
-                        ]
-                    },
-                    {
-                        "allOf": [
-                            {
-                                "type": "object",
-                                "properties": {
-                                    "type": {
-                                        "enum": ["group"]
-                                    }
                                 }
                             },
-                            { "$ref": "#/definitions/group" }
-                        ]
-                    },
-                    {
-                        "allOf": [
-                            {
-                                "type": "object",
-                                "properties": {
-                                    "type": {
-                                        "enum": ["tastic"]
-                                    }
-                                }
-                            },
-                            { "$ref": "#/definitions/tastic" }
-                        ]
-                    },
-                    {
-                        "allOf": [
-                            {
-                                "type": "object",
-                                "properties": {
-                                    "type": {
-                                        "enum": ["image"]
-                                    }
-                                }
-                            },
-                            { "$ref": "#/definitions/image" }
-                        ]
-                    },
-                    {
-                        "allOf": [
-                            {
-                                "type": "object",
-                                "properties": {
-                                    "type": {
-                                        "enum": ["description"]
-                                    }
-                                }
-                            },
-                            { "$ref": "#/definitions/description" }
+                            { "$ref": "#/definitions/match-type-with-relevant-schema" }
                         ]
                     }
                 ]
@@ -193,7 +132,7 @@
                     "type": "string"
                 }
             },
-            "required": ["type", "label", "field"]
+            "$ref": "#/definitions/multiple-field-types-imply-multiple-attributes-is-required"  
         },
         "group": {
             "type": "object",
@@ -225,7 +164,7 @@
                     "type": "string"
                 }
             },
-            "required": ["label", "field", "type"]
+            "$ref": "#/definitions/group-type-implies-label-and-field-are-required"
         },
         "tastic":{
             "$comment": "Allow nesting of tastics",
@@ -243,7 +182,7 @@
                     "type": "string"
                 }
             },
-            "required": ["label", "type"]
+            "$ref": "#/definitions/tastic-type-implies-label-is-required"
         },
         "image": {
             "$comment": "Illustrating image as part of the input form",
@@ -258,7 +197,7 @@
                     "type": "string"
                 }
             },
-            "required": ["url", "type"]
+            "$ref": "#/definitions/image-type-implies-url-is-required"
         },
         "description": {
             "$comment": "Illustrating description as part of the input form",
@@ -273,7 +212,201 @@
                     "type": "string"
                 }
             },
-            "required": ["text", "type"]
+            "$ref": "#/definitions/description-type-implies-text-is-required"
+        },
+
+        "match-type-with-relevant-schema": {
+            "allOf":[
+                {
+                    "anyOf":[
+                        {
+                            "not": {
+                                "properties": {
+                                    "type": {
+                                        "enum": ["image"]
+                                    }
+                                },
+                                "required": ["type"]
+                            }
+                        },
+                        { "$ref": "#/definitions/image" }
+                    ]
+                },
+                {
+                    "anyOf":[
+                        {
+                            "not": {
+                                "properties": {
+                                    "type": {
+                                        "enum": ["description"]
+                                    }
+                                },
+                                "required": ["type"]
+                            }
+                        },
+                        { "$ref": "#/definitions/description" }
+                    ]
+                },
+                {
+                    "anyOf":[
+                        {
+                            "not": {
+                                "properties": {
+                                    "type": {
+                                        "enum": ["tastic"]
+                                    }
+                                },
+                                "required": ["type"]
+                            }
+                        },
+                        { "$ref": "#/definitions/tastic" }
+                    ]
+                },
+                {
+                    "anyOf":[
+                        {
+                            "not": {
+                                "properties": {
+                                    "type": {
+                                        "enum": ["group"]
+                                    }
+                                },
+                                "required": ["type"]
+                            }
+                        },
+                        { "$ref": "#/definitions/group" }
+                    ]
+                },
+                { "$ref": "#/definitions/field" }
+            ]
+        },
+
+        "multiple-field-types-imply-multiple-attributes-is-required": {
+            "allOf":[
+                {
+                    "anyOf":[
+                        {
+                            "not": {
+                                "properties": {
+                                    "type": {
+                                        "enum": ["enum"]
+                                    }
+                                },
+                                "required": ["type"]
+                            }
+                        },
+                        { "required": ["values"] }
+                    ]
+                },
+                {
+                    "anyOf":[
+                        {
+                            "not": {
+                                "properties": {
+                                    "type": {
+                                        "enum": [""]
+                                    }
+                                }
+                            }
+                        },
+                        { "required": ["label", "type", "field"] }
+                    ]
+                },
+                {
+                    "anyOf":[
+                        {
+                            "not": {
+                                "properties": {
+                                    "type": {
+                                        "enum": [
+                                            "boolean",
+                                            "custom",
+                                            "dataSource",
+                                            "decimal",
+                                            "dynamic-filter",
+                                            "enum",
+                                            "integer",
+                                            "json",
+                                            "markdown",
+                                            "media",
+                                            "node",
+                                            "number",
+                                            "reference",
+                                            "stream",
+                                            "string",
+                                            "text",
+                                            "tree",
+                                            "instant"
+                                        ]
+                                    }
+                                },
+                                "required": ["type"]
+                            }
+                        },
+                        { "required": ["label", "type", "field"] }
+                    ]
+                }
+            ]
+        },
+        "group-type-implies-label-and-field-are-required": {
+            "anyOf":[
+                {
+                    "not": {
+                        "properties": {
+                            "type": {
+                                "enum": ["group"]
+                            }
+                        },
+                        "required": ["type"]
+                    }
+                },
+                { "required": ["label", "field"] }
+            ]
+        },
+        "tastic-type-implies-label-is-required": {
+            "anyOf":[
+                {
+                    "not": {
+                        "properties": {
+                            "type": {
+                                "enum": ["tastic"]
+                            }
+                        },
+                        "required": ["type"]
+                    }
+                },
+                { "required": ["label"] }
+            ]
+        },
+        "image-type-implies-url-is-required": {
+            "anyOf":[
+                {
+                    "not": {
+                        "properties": {
+                            "type": {
+                                "enum": ["image"]
+                            }
+                        },
+                        "required": ["type"]
+                    }
+                },
+                { "required": ["url"] }
+            ]
+        },
+        "description-type-implies-text-is-required": {
+            "anyOf":[
+                {
+                    "not": {
+                        "properties": {
+                            "type": {
+                                "enum": ["description"]
+                            }
+                        },
+                        "required": ["type"]
+                    }
+                },
+                { "required": ["text"] }
+            ]
         }
     }
 }
