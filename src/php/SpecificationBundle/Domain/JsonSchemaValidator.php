@@ -57,18 +57,27 @@ class JsonSchemaValidator
                     "\n",
                     array_map(
                         function (array $error): string {
-                            return sprintf(
-                                "* %s: %s",
-                                $error['property'],
-                                $error['message']
-                            );
+                            if (str_contains($error['message'], "required")) {
+                                return sprintf(
+                                    "* %s: %s",
+                                    $error['property'],
+                                    $error['message']
+                                );
+                            } else if (str_contains($error['message'], "enumeration")) {
+                                return sprintf(
+                                    "* %s: %s",
+                                    "Set the type in the following schema",
+                                    $error['property']
+                                );
+                            } else {
+                                return "";
+                            }  
                         },
                         $errors
                     )
                 )
             );
         }
-
         return $object;
     }
 
