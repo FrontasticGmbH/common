@@ -9,13 +9,15 @@
 
     "properties": {
         "dynamicPageType": {
-            "type": "string"
+            "type": "string",
+            "pattern": "[^ ]"
         },
         "isMultiple": {
             "type": "boolean"
         },
         "dataSourceType": {
-            "type": "string"
+            "type": "string",
+            "pattern": "[^ ]$"
         },
         "description": {
             "type": "string"
@@ -31,4 +33,5 @@
         }
     },
     "required": ["dynamicPageType", "isMultiple", "dataSourceType", "name"]
+       
 }
