@@ -9,7 +9,8 @@
 
     "properties": {
         "customDataSourceType": {
-            "type": "string"
+            "type": "string",
+            "pattern": "[^ ]"
         },
         "name": {
             "type": "string"
