@@ -6,7 +6,8 @@
     "type": "object",
     "properties": {
         "tasticType": {
-            "type": "string"
+            "type": "string",
+            "pattern": "[^ ]"
         },
         "name": {
             "type": "string"
