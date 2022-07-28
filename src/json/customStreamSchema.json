@@ -9,7 +9,8 @@
 
     "properties": {
         "customStreamType": {
-            "type": "string"
+            "type": "string",
+            "pattern": "[^ ]"
         },
         "name": {
             "type": "string"
