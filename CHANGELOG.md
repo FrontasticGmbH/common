@@ -1,4 +1,10 @@
 
+## Version 2.35.1 (2022-08-04)
+
+** Bug fixes **
+
+- Remove the empty schema value from object and highlight the required field for errors
+
 ## Version 2.35.0 (2022-07-07)
 
 ** New Features and Improvements **
