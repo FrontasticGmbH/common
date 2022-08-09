@@ -1,4 +1,25 @@
 
+## Version 2.35.1 (2022-08-04)
+
+** Bug fixes **
+
+- Remove the empty schema value from object and highlight the required field for errors
+
+## Version 2.35.0 (2022-07-07)
+
+** New Features and Improvements **
+
+- Add the ability to not include _type in JSON serializer, use it in NextJsBundle 
+
+- Remove type field from JSON serializer
+
+
+** Bug fixes **
+
+- Fix data source filters breaking
+
+- Fix syntax change for preventing common library failing
+
 ## Version 2.34.0 (2022-06-16)
 
 ** New Features **

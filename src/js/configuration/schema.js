@@ -267,10 +267,10 @@ class ConfigurationSchema {
             return Object.values(value).some((v) => !v)
         }
 
-        // If string field has an empty translatable object like: {en_GB@EUR: ""}
+        // If string or markdown field has an empty translatable object like: {en_GB@EUR: ""}
         // It should be flagged as a missing required value
-        if (schema.type === 'string' && schema.translatable && value) {
-            return Object.values(value).some((v) => !v)
+        if ((schema.type === 'string' || schema.type === 'markdown') && schema.translatable && value) {
+            return Object.values(value).some((v) => !v) || Object.values(value).length === 0
         }
 
         return typeof value === 'undefined' || value === null || value === ''
