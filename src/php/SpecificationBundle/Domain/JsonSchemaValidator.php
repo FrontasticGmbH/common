@@ -12,7 +12,14 @@ use Frontastic\Common\CoreBundle\Domain\Json\Json;
 class JsonSchemaValidator
 {
     const SCHEMA_DIRECTORY = __DIR__ . '/../../../json';
-
+    private const SCHEMA_PROPERTIES = [
+        "tasticType",
+        "dynamicPageType",
+        "dataSourceType",
+        "customStreamType",
+        "customDataSourceType"
+    ];
+    
     /**
      * @return array Array of errors, empty if valid
      */
@@ -50,9 +57,11 @@ class JsonSchemaValidator
         }
 
         $errors = $this->validate($object, $schemaFile, $schemaLibraryFiles);
+        // var_dump($object);
         if (count($errors) > 0) {
             throw new InvalidSchemaException(
                 "JSON does not follow schema.",
+                
                 implode(
                     "\n",
                     array_map(
@@ -66,9 +75,16 @@ class JsonSchemaValidator
                             } else if (str_contains($error['message'], "enumeration")) {
                                 return sprintf(
                                     "* %s: %s",
-                                    "Set the type in the following schema",
-                                    $error['property']
+                                    $error['property'],
+                                    $error['message']
                                 );
+                            } else if (array_search($error['property'], JsonSchemaValidator::SCHEMA_PROPERTIES) !== false) {
+                                return sprintf(
+                                    "* %s: %s",
+                                    $error['property'],
+                                    $error['message']
+                                );
+
                             } else {
                                 return "";
                             }  
