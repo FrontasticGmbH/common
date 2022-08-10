@@ -25,7 +25,7 @@ class ValidatingSpecParser implements SpecParser
         $schema = $this->validator->parse(
             $schema,
             $this->schemaFile,
-            ['library/common.json']
+            ['library/common.json', 'library/implications.json']
         );
 
         return $this->verifySchema($schema);

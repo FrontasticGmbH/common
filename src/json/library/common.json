@@ -58,7 +58,7 @@
                                     }
                                 }
                             },
-                            { "$ref": "#/definitions/match-type-with-relevant-schema" }
+                            { "$ref": "https://frontastic.cloud/json/library/implications#/definitions/match-field-type-with-corresponding-subschema" }
                         ]
                     }
                 ]
@@ -98,7 +98,7 @@
                     "type": "string"
                 },
                 "default": {
-                    "$comment": "Value type depends on the 'type' and is therefore arbitrary."
+                    "$comment": "Value type has to be as the same as the 'type' property"
                 },
                 "options": {
                     "$comment": "Any kind of options supported by the field type",
@@ -132,7 +132,7 @@
                     "type": "string"
                 }
             },
-            "$ref": "#/definitions/multiple-field-types-imply-multiple-attributes-is-required"  
+            "$ref": "https://frontastic.cloud/json/library/implications#/definitions/multiple-field-types-imply-multiple-attributes-is-required"
         },
         "group": {
             "type": "object",
@@ -164,7 +164,7 @@
                     "type": "string"
                 }
             },
-            "$ref": "#/definitions/group-type-implies-label-and-field-are-required"
+            "$ref": "https://frontastic.cloud/json/library/implications#/definitions/group-type-implies-label-field-and-fields-are-required"
         },
         "tastic":{
             "$comment": "Allow nesting of tastics",
@@ -182,7 +182,7 @@
                     "type": "string"
                 }
             },
-            "$ref": "#/definitions/tastic-type-implies-label-is-required"
+            "$ref": "https://frontastic.cloud/json/library/implications#/definitions/tastic-type-implies-label-is-required"
         },
         "image": {
             "$comment": "Illustrating image as part of the input form",
@@ -197,7 +197,7 @@
                     "type": "string"
                 }
             },
-            "$ref": "#/definitions/image-type-implies-url-is-required"
+            "$ref": "https://frontastic.cloud/json/library/implications#/definitions/image-type-implies-url-is-required"
         },
         "description": {
             "$comment": "Illustrating description as part of the input form",
@@ -212,201 +212,7 @@
                     "type": "string"
                 }
             },
-            "$ref": "#/definitions/description-type-implies-text-is-required"
-        },
-
-        "match-type-with-relevant-schema": {
-            "allOf":[
-                {
-                    "anyOf":[
-                        {
-                            "not": {
-                                "properties": {
-                                    "type": {
-                                        "enum": ["image"]
-                                    }
-                                },
-                                "required": ["type"]
-                            }
-                        },
-                        { "$ref": "#/definitions/image" }
-                    ]
-                },
-                {
-                    "anyOf":[
-                        {
-                            "not": {
-                                "properties": {
-                                    "type": {
-                                        "enum": ["description"]
-                                    }
-                                },
-                                "required": ["type"]
-                            }
-                        },
-                        { "$ref": "#/definitions/description" }
-                    ]
-                },
-                {
-                    "anyOf":[
-                        {
-                            "not": {
-                                "properties": {
-                                    "type": {
-                                        "enum": ["tastic"]
-                                    }
-                                },
-                                "required": ["type"]
-                            }
-                        },
-                        { "$ref": "#/definitions/tastic" }
-                    ]
-                },
-                {
-                    "anyOf":[
-                        {
-                            "not": {
-                                "properties": {
-                                    "type": {
-                                        "enum": ["group"]
-                                    }
-                                },
-                                "required": ["type"]
-                            }
-                        },
-                        { "$ref": "#/definitions/group" }
-                    ]
-                },
-                { "$ref": "#/definitions/field" }
-            ]
-        },
-
-        "multiple-field-types-imply-multiple-attributes-is-required": {
-            "allOf":[
-                {
-                    "anyOf":[
-                        {
-                            "not": {
-                                "properties": {
-                                    "type": {
-                                        "enum": ["enum"]
-                                    }
-                                },
-                                "required": ["type"]
-                            }
-                        },
-                        { "required": ["values"] }
-                    ]
-                },
-                {
-                    "anyOf":[
-                        {
-                            "not": {
-                                "properties": {
-                                    "type": {
-                                        "enum": [""]
-                                    }
-                                }
-                            }
-                        },
-                        { "required": ["label", "type", "field"] }
-                    ]
-                },
-                {
-                    "anyOf":[
-                        {
-                            "not": {
-                                "properties": {
-                                    "type": {
-                                        "enum": [
-                                            "boolean",
-                                            "custom",
-                                            "dataSource",
-                                            "decimal",
-                                            "dynamic-filter",
-                                            "enum",
-                                            "integer",
-                                            "json",
-                                            "markdown",
-                                            "media",
-                                            "node",
-                                            "number",
-                                            "reference",
-                                            "stream",
-                                            "string",
-                                            "text",
-                                            "tree",
-                                            "instant"
-                                        ]
-                                    }
-                                },
-                                "required": ["type"]
-                            }
-                        },
-                        { "required": ["label", "type", "field"] }
-                    ]
-                }
-            ]
-        },
-        "group-type-implies-label-and-field-are-required": {
-            "anyOf":[
-                {
-                    "not": {
-                        "properties": {
-                            "type": {
-                                "enum": ["group"]
-                            }
-                        },
-                        "required": ["type"]
-                    }
-                },
-                { "required": ["label", "field"] }
-            ]
-        },
-        "tastic-type-implies-label-is-required": {
-            "anyOf":[
-                {
-                    "not": {
-                        "properties": {
-                            "type": {
-                                "enum": ["tastic"]
-                            }
-                        },
-                        "required": ["type"]
-                    }
-                },
-                { "required": ["label"] }
-            ]
-        },
-        "image-type-implies-url-is-required": {
-            "anyOf":[
-                {
-                    "not": {
-                        "properties": {
-                            "type": {
-                                "enum": ["image"]
-                            }
-                        },
-                        "required": ["type"]
-                    }
-                },
-                { "required": ["url"] }
-            ]
-        },
-        "description-type-implies-text-is-required": {
-            "anyOf":[
-                {
-                    "not": {
-                        "properties": {
-                            "type": {
-                                "enum": ["description"]
-                            }
-                        },
-                        "required": ["type"]
-                    }
-                },
-                { "required": ["text"] }
-            ]
+            "$ref": "https://frontastic.cloud/json/library/implications#/definitions/description-type-implies-text-is-required"
         }
     }
 }
