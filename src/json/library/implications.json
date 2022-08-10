@@ -1,0 +1,361 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://frontastic.cloud/json/library/implications",
+    "title": "Implications for Common Schema",
+    "description": "Definitions of Implications for Common Schema",
+
+    "definitions": {        
+        "match-field-type-with-corresponding-subschema": {
+            "allOf":[
+                {
+                    "anyOf":[
+                        {
+                            "not": {
+                                "properties": {
+                                    "type": {
+                                        "enum": ["image"]
+                                    }
+                                },
+                                "required": ["type"]
+                            }
+                        },
+                        {
+                            "$ref": "https://frontastic.cloud/json/library/common#/definitions/image",
+                            "$comment": "Match field of 'image' type with the corresponding subschema"
+                        }
+                    ]
+                },
+                {
+                    "anyOf":[
+                        {
+                            "not": {
+                                "properties": {
+                                    "type": {
+                                        "enum": ["description"]
+                                    }
+                                },
+                                "required": ["type"]
+                            }
+                        },
+                        {
+                            "$ref": "https://frontastic.cloud/json/library/common#/definitions/description",
+                            "$comment": "Match field of 'description' type with the corresponding subschema"
+                        }
+                    ]
+                },
+                {
+                    "anyOf":[
+                        {
+                            "not": {
+                                "properties": {
+                                    "type": {
+                                        "enum": ["tastic"]
+                                    }
+                                },
+                                "required": ["type"]
+                            }
+                        },
+                        {
+                            "$ref": "https://frontastic.cloud/json/library/common#/definitions/tastic",
+                            "$comment": "Match field of 'tastic' type with the corresponding subschema"
+                        }
+                    ]
+                },
+                {
+                    "anyOf":[
+                        {
+                            "not": {
+                                "properties": {
+                                    "type": {
+                                        "enum": ["group"]
+                                    }
+                                },
+                                "required": ["type"]
+                            }
+                        },
+                        {
+                            "$ref": "https://frontastic.cloud/json/library/common#/definitions/group",
+                            "$comment": "Match field of 'group' type with the corresponding subschema"
+                        }
+                    ]
+                },
+                {
+                    "$ref": "https://frontastic.cloud/json/library/common#/definitions/field",
+                    "$comment": "Match field of any other type with the corresponding subschema"
+                }
+            ]
+        },
+        
+        "multiple-field-types-imply-multiple-attributes-is-required": {
+            "allOf":[
+                {
+                    "anyOf":[
+                        {
+                            "not": {
+                                "properties": {
+                                    "type": {
+                                        "enum": ["enum"]
+                                    }
+                                },
+                                "required": ["type"]
+                            }
+                        },
+                        {
+                            "required": ["values"],
+                            "$comment": "Field of type 'enum' requires 'values' property"
+                        }
+                    ]
+                },
+                {
+                    "anyOf":[
+                        {
+                            "not": {
+                                "properties": {
+                                    "type": {
+                                        "enum": ["custom"]
+                                    }
+                                },
+                                "required": ["type"]
+                            }
+                        },
+                        {
+                            "required": ["customAppType"],
+                            "$comment": "Field of type 'custom' requires 'customAppType' property"
+                        }
+                    ]
+                },
+                {
+                    "anyOf":[
+                        {
+                            "not": {
+                                "properties": {
+                                    "type": {
+                                        "enum": ["stream"]
+                                    }
+                                },
+                                "required": ["type"]
+                            }
+                        },
+                        {
+                            "required": ["streamType"],
+                            "$comment": "Field of type 'stream' requires 'streamType' property"
+                        }
+                    ]
+                },
+                {
+                    "anyOf":[
+                        {
+                            "not": {
+                                "properties": {
+                                    "type": {
+                                        "enum": ["dataSource"]
+                                    }
+                                },
+                                "required": ["type"]
+                            }
+                        },
+                        {
+                            "required": ["dataSourceType"],
+                            "$comment": "Field of type 'dataSource' requires 'dataSourceType' property"
+                        }
+                    ]
+                },
+                {
+                    "anyOf":[
+                        {
+                            "not": {
+                                "properties": {
+                                    "type": {
+                                        "enum": ["dynamic-filter"]
+                                    }
+                                },
+                                "required": ["type"]
+                            }
+                        },
+                        {
+                            "required": ["dynamicFilterEndpoint"],
+                            "$comment": "Field of type 'dynamic-filter' requires 'dynamicFilterEndpoin' property"
+                        }
+                    ]
+                },
+                {
+                    "anyOf":[
+                        {
+                            "not": {
+                                "properties": {
+                                    "type": {
+                                        "enum": [
+                                            "boolean",
+                                            "custom",
+                                            "dataSource",
+                                            "decimal",
+                                            "dynamic-filter",
+                                            "enum",
+                                            "integer",
+                                            "json",
+                                            "markdown",
+                                            "media",
+                                            "node",
+                                            "number",
+                                            "reference",
+                                            "stream",
+                                            "string",
+                                            "text",
+                                            "tree", 
+                                            "instant",
+                                            null
+                                        ]
+                                    }
+                                },
+                                "required": ["type"]
+                            }
+                        },
+                        {
+                            "required": ["label", "type", "field"],
+                            "$comment": "Field types require 'label', 'type', and 'field' properties"
+                        }
+                    ]
+                },
+                {
+                    "anyOf":[
+                        {
+                            "not": {
+                                "properties": {
+                                    "type": {
+                                        "enum": ["string"]
+                                    }
+                                },
+                                "required": ["type"]
+                            }
+                        },
+                        {
+                            "patternProperties": {
+                                "^(default)$": {
+                                    "type": ["string"]
+                                }
+                            },
+                            "$comment": "Default value has to be 'string' if the field type is 'string'"
+                        }
+                    ]
+                },
+                {
+                    "anyOf":[
+                        {
+                            "not": {
+                                "properties": {
+                                    "type": {
+                                        "enum": ["boolean"]
+                                    }
+                                },
+                                "required": ["type"]
+                            }
+                        },
+                        {
+                            "patternProperties": {
+                                "^(default)$": {
+                                    "type": ["boolean"]
+                                }
+                            },
+                            "$comment": "Default value has to be 'boolean' if the field type is 'boolean'"
+                        }
+                    ]
+                },
+                {
+                    "anyOf":[
+                        {
+                            "not": {
+                                "properties": {
+                                    "type": {
+                                        "enum": ["integer"]
+                                    }
+                                },
+                                "required": ["type"]
+                            }
+                        },
+                        {
+                            "patternProperties": {
+                                "^(default)$": {
+                                    "type": ["integer"]
+                                }
+                            },
+                            "$comment": "Default value has to be 'integer' if the field type is 'integer'"
+                        }
+                    ]
+                },
+                { "required": ["label", "type", "field"] }
+            ]
+        },
+        "group-type-implies-label-field-and-fields-are-required": {
+            "anyOf":[
+                {
+                    "not": {
+                        "properties": {
+                            "type": {
+                                "enum": ["group"]
+                            }
+                        },
+                        "required": ["type"]
+                    }
+                },
+                {
+                    "required": ["label", "field", "fields"],
+                    "$comment": "Field of type 'group' requires 'label', 'fields' & 'field' properties"
+                }
+            ]
+        },
+        "tastic-type-implies-label-is-required": {
+            "anyOf":[
+                {
+                    "not": {
+                        "properties": {
+                            "type": {
+                                "enum": ["tastic"]
+                            }
+                        },
+                        "required": ["type"]
+                    }
+                },
+                {
+                    "required": ["label"],
+                    "$comment": "Field of type 'tastic' requires 'label' property"
+                }
+            ]
+        },
+        "image-type-implies-url-is-required": {
+            "anyOf":[
+                {
+                    "not": {
+                        "properties": {
+                            "type": {
+                                "enum": ["image"]
+                            }
+                        },
+                        "required": ["type"]
+                    }
+                },
+                {
+                    "required": ["url"],
+                    "$comment": "Field of type 'image' requires 'url' property"
+                }
+            ]
+        },
+        "description-type-implies-text-is-required": {
+            "anyOf":[
+                {
+                    "not": {
+                        "properties": {
+                            "type": {
+                                "enum": ["description"]
+                            }
+                        },
+                        "required": ["type"]
+                    }
+                },
+                {
+                    "required": ["text"],
+                    "$comment": "Field of type 'description' requires 'text' property"
+                }
+            ]
+        }
+    }
+}
