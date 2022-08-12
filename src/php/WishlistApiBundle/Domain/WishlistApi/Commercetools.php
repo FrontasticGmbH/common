@@ -407,6 +407,9 @@ class Commercetools implements WishlistApi
      */
     private function fetchWishlistVariantMap(array $wishlist, Locale $locale): array
     {
+        if (!$wishlist['lineItems']) {
+            return [];
+        }
         $wishlistVariantSkus = [];
         foreach ($wishlist['lineItems'] as $rawLineItem) {
             if (isset($rawLineItem['variant']) && isset($rawLineItem['variant']['sku'])) {
