@@ -352,6 +352,10 @@ class Commercetools implements WishlistApi
      */
     private function mapLineItems(array $wishlist, Locale $locale): array
     {
+        // Check for empty wishlist tp prevent product query in fetchWishlistVariantMap
+        if (!$wishlist['lineItems']) {
+            return [];
+        }
         $wishlistVariantMap = $this->fetchWishlistVariantMap($wishlist, $locale);
 
         $lineItems = array_values(array_filter(
@@ -407,9 +411,6 @@ class Commercetools implements WishlistApi
      */
     private function fetchWishlistVariantMap(array $wishlist, Locale $locale): array
     {
-        if (!$wishlist['lineItems']) {
-            return [];
-        }
         $wishlistVariantSkus = [];
         foreach ($wishlist['lineItems'] as $rawLineItem) {
             if (isset($rawLineItem['variant']) && isset($rawLineItem['variant']['sku'])) {
