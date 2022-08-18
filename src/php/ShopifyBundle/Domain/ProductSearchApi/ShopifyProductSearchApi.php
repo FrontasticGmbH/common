@@ -138,9 +138,18 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
             );
         }
 
-        if ($query->category) {
+        $categories = $query->getAllUniqueCategories();
+        if ($categories) {
+            if (count($categories) > 1) {
+                $logger = $this->getLogger();
+                $logger->warning(
+                    'Shopify does not support querying products from multiple categories, ' .
+                    'only first of provided categories is used: {categories}',
+                    ['categories' => $query->getAllUniqueCategories()]
+                );
+            }
             $queryString = "{
-                node(id: \"{$query->category}\") {
+                node(id: \"{$categories[0]}\") {
                     id
                     ... on Collection {
                         products($pageFilter) {

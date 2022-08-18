@@ -8,6 +8,7 @@
 
 * [query()](#query)
 * [getSearchableAttributes()](#getsearchableattributes)
+* [setLogger()](#setlogger)
 
 ### query()
 
@@ -30,5 +31,19 @@ public function getSearchableAttributes(): \GuzzleHttp\Promise\PromiseInterface
 ```
 
 Return Value: `\GuzzleHttp\Promise\PromiseInterface`
+
+### setLogger()
+
+```php
+public function setLogger(
+    \Psr\Log\LoggerInterface $logger
+): mixed
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$logger`|`\Psr\Log\LoggerInterface`||
+
+Return Value: `mixed`
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

@@ -83,6 +83,14 @@ class FindologicProductSearchApi extends ProductSearchApiBase
         }
 
         $request = $this->mapper->queryToRequest($query);
+        if (count($query->getAllUniqueCategories()) > 1) {
+            $logger = $this->getLogger();
+            $logger->warning(
+                'Findologic does not support querying products from multiple categories, ' .
+                'only first of provided categories is used: {categories}',
+                ['categories' => $query->getAllUniqueCategories()]
+            );
+        }
 
         return $this->client->search($query->locale, $request)
             ->then(

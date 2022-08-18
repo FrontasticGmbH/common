@@ -79,11 +79,10 @@ class Mapper
     {
         $filterAttributes = $this->getFiltersForRequest($query);
         $facetAttributes = $this->getFacetsForRequest($query);
+        $categoryAttributes = $this->getCategoriesForRequest($query);
 
         return array_merge_recursive(
-            $query->category === null ? [] : [
-                'cat' => [$query->category],
-            ],
+            $categoryAttributes,
             $filterAttributes,
             $facetAttributes
         );
@@ -287,6 +286,17 @@ class Mapper
             }
         }
 
+        return $attributes;
+    }
+
+    private function getCategoriesForRequest(ProductQuery $query): array
+    {
+        $categories = $query->getAllUniqueCategories();
+        $attributes = [];
+
+        if (count($categories) >= 1) {
+            $attributes['cat'] = [$categories[0]];
+        }
         return $attributes;
     }
 

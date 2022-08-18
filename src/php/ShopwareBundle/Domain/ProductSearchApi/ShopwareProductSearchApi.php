@@ -86,8 +86,17 @@ class ShopwareProductSearchApi extends ProductSearchApiBase
         if (!empty($query->query)) {
             $criteria["search"] = $query->query;
             $uri = '/store-api/search';
-        } elseif (!empty($query->category)) {
-            $uri = sprintf('/store-api/product-listing/%s', $query->category);
+        } elseif (!empty($query->category) || !empty($query->categories)) {
+            $categories = $query->getAllUniqueCategories();
+            if (count($categories) > 1) {
+                $logger = $this->getLogger();
+                $logger->warning(
+                    'Shopware does not support querying products from multiple categories, ' .
+                    'only first of provided categories is used: {categories}',
+                    ['categories' => $query->getAllUniqueCategories()]
+                );
+            }
+            $uri = sprintf('/store-api/product-listing/%s', $categories[0]);
         }
 
         $locale = $this->parseLocaleString($query->locale);

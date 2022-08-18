@@ -74,6 +74,10 @@ class DefaultProductSearchApiFactory implements ProductSearchApiFactory
         $vendorConfig = $project->getConfigurationSection($productSearchConfig->engine);
 
         $productSearchApi = $this->factorFromConfiguration($project, $productSearchConfig, $vendorConfig);
+        if ($productSearchApi instanceof  ProductSearchApiBase) {
+            $productSearchApi->setLogger($this->logger);
+        }
+
         $productSearchApi = new LifecycleEventDecorator($productSearchApi, $this->decorators);
         $productSearchApi = new LegacyLifecycleEventDecorator(
             $productSearchApi,

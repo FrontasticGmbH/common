@@ -50,8 +50,9 @@ class CatalogSearchQuery
 
         $query['q'] = implode(' ', $queryString);
 
-        if ($productQuery->category) {
-            $query['category'] = (int)$productQuery->category;
+        $categories = $productQuery->getAllUniqueCategories();
+        if (count($categories) > 0) {
+            $query['category'] = (int)$categories[0];
         }
 
         if ($productQuery->limit === self::DEFAULT_ITEMS_PER_PAGE_FRONTASTIC) {
