@@ -1,4 +1,10 @@
 
+## Version 2.35.2 (2022-08-19)
+
+** Bug fixes **
+
+- Added categories
+
 ## Version 2.35.1 (2022-08-04)
 
 ** Bug fixes **
