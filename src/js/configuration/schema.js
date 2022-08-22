@@ -250,6 +250,9 @@ class ConfigurationSchema {
         }
 
         if (schema.type === 'reference') {
+            if (value !== null) {
+                return Object.values(value).some((v) => !v) || Object.values(value).length === 0
+            }
             return typeof value !== 'object' || value === null ||
                 typeof value.type !== 'string' || value.type === '' ||
                 typeof value.target !== 'string' || value.target === ''
