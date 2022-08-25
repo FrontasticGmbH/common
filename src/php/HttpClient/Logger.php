@@ -43,10 +43,32 @@ class Logger extends HttpClient
 
         return $this->aggregate
             ->requestAsync($method, $url, $body, $headers, $options)
-            ->then(function ($response) use ($start, $method, $url) {
+            ->then(function ($response) use ($start, $method, $url, $body) {
                 $time = microtime(true) - $start;
 
                 $host = parse_url($url, PHP_URL_HOST);
+
+                $outgoingRequestDetails = [
+                    'host' => $host,
+                    'path' => parse_url($url, PHP_URL_PATH),
+                    'method' => $method,
+                    'responseTime' => $time,
+                    'statusCode' => $response->status,
+                ];
+
+                $correlationId = $response->getHeaderValue('X-Correlation-Id');
+                if ($correlationId !== null) {
+                    $outgoingRequestDetails['responseCorrelationId'] = $correlationId;
+                }
+
+                if ($body !== '') {
+                    $outgoingRequestDetails['requestBodySize'] = strlen($body);
+                }
+
+                if (is_string($response->body) && $response->body !== '') {
+                    $outgoingRequestDetails['responseBodySize'] = strlen($response->body);
+                }
+
                 $this->logger->info(
                     sprintf(
                         'Request against %s took %dms',
@@ -54,13 +76,7 @@ class Logger extends HttpClient
                         $time * 1000
                     ),
                     [
-                        'outgoingRequest' => [
-                            'host' => $host,
-                            'path' => parse_url($url, PHP_URL_PATH),
-                            'method' => $method,
-                            'responseTime' => $time,
-                            'statusCode' => $response->status,
-                        ],
+                        'outgoingRequest' => $outgoingRequestDetails,
                     ]
                 );
 
