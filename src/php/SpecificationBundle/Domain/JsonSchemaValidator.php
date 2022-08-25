@@ -57,7 +57,6 @@ class JsonSchemaValidator
         }
 
         $errors = $this->validate($object, $schemaFile, $schemaLibraryFiles);
-        // var_dump($object);
         if (count($errors) > 0) {
             throw new InvalidSchemaException(
                 "JSON does not follow schema.",
@@ -66,23 +65,29 @@ class JsonSchemaValidator
                     "\n",
                     array_map(
                         function (array $error): string {
-                            if (str_contains($error['message'], "required")) {
+                            if (str_contains($error['message'], "value") && str_contains($error['message'], "enumeration") == false) {
                                 return sprintf(
-                                    "* %s: %s",
-                                    $error['property'],
-                                    $error['message']
+                                    "* %s: The default value type doesn't match the field type. Check the default value type.",
+                                    join(".", array_slice(explode('.', $error['property']),0, array_key_last(explode('.', $error['property']))))
+                                );
+                            } else if (str_contains($error['message'], "required")) {
+                                return sprintf(
+                                    "* %s: A property %s is required. Add %s property.",
+                                    join(".", array_slice(explode('.', $error['property']),0, array_key_last(explode('.', $error['property'])))),
+                                    explode('.', $error['property'])[array_key_last(explode('.', $error['property']))],
+                                    explode('.', $error['property'])[array_key_last(explode('.', $error['property']))]
                                 );
                             } else if (str_contains($error['message'], "enumeration")) {
                                 return sprintf(
-                                    "* %s: %s",
-                                    $error['property'],
-                                    $error['message']
+                                    "* %s: Field type doesn't have a valid value. Check the field type matches the value type.",
+                                    join(".", array_slice(explode('.', $error['property']),0, array_key_last(explode('.', $error['property']))))
+                                    
                                 );
                             } else if (array_search($error['property'], JsonSchemaValidator::SCHEMA_PROPERTIES) !== false) {
                                 return sprintf(
-                                    "* %s: %s",
+                                    "* %s is a required field. You need to input a %s.",
                                     $error['property'],
-                                    $error['message']
+                                    $error['property']
                                 );
 
                             } else {
