@@ -282,7 +282,7 @@
                         }
                     ]
                 },
-                { "required": ["label", "type", "field"] }
+                { "required": ["type"] }
             ]
         },
         "group-type-implies-label-field-and-fields-are-required": {
