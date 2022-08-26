@@ -44,7 +44,18 @@ class JsonSchemaValidator
         if ($exception = $jsonParser->lint($toParse)) {
             throw new InvalidSchemaException(
                 "Failed to lint JSON.",
-                $exception->getMessage()
+                sprintf(
+                    "There's a syntax error %s. Check your syntax on that line.",
+                    str_replace(
+                        ":",
+                        ".",
+                        substr(
+                            $exception->getMessage(),
+                            strpos($exception->getMessage(), "on line"),
+                            strpos($exception->getMessage(), ":") - strpos($exception->getMessage(), "on line")
+                        )
+                    )
+                )
             );
         }
 
