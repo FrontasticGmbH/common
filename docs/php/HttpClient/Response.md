@@ -13,7 +13,25 @@ Property|Type|Default|Required|Description
 
 ## Methods
 
+* [getHeaderValue()](#getheadervalue)
 * [__toString()](#__tostring)
+
+### getHeaderValue()
+
+```php
+public function getHeaderValue(
+    string $header
+): ?string
+```
+
+*Get the header value for the given header name ignoring the case of the header. If the header does not exist,
+null is returned.*
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$header`|`string`||
+
+Return Value: `?string`
 
 ### __toString()
 
