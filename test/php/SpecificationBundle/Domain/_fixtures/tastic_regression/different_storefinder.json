@@ -19,14 +19,14 @@
                             "field": "domain",
                             "type": "string",
                             "translatable": false,
-                            "default": null
+                            "default": ""
                         },
                         {
                             "label": "Google API Key",
                             "field": "apiKey",
                             "type": "string",
                             "translatable": false,
-                            "default": null
+                            "default": ""
                         }
                     ]
                 }
