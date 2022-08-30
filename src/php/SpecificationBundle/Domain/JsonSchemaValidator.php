@@ -44,7 +44,18 @@ class JsonSchemaValidator
         if ($exception = $jsonParser->lint($toParse)) {
             throw new InvalidSchemaException(
                 "Failed to lint JSON.",
-                $exception->getMessage()
+                sprintf(
+                    "There's a syntax error %s. Check your syntax on that line.",
+                    str_replace(
+                        ":",
+                        ".",
+                        substr(
+                            $exception->getMessage(),
+                            strpos($exception->getMessage(), "on line"),
+                            strpos($exception->getMessage(), ":") - strpos($exception->getMessage(), "on line")
+                        )
+                    )
+                )
             );
         }
 
@@ -60,41 +71,44 @@ class JsonSchemaValidator
         if (count($errors) > 0) {
             throw new InvalidSchemaException(
                 "JSON does not follow schema.",
-                
                 implode(
                     "\n",
-                    array_map(
-                        function (array $error): string {
-                            if (str_contains($error['message'], "value") && str_contains($error['message'], "enumeration") == false) {
-                                return sprintf(
-                                    "* %s: The default value type doesn't match the field type. Check the default value type.",
-                                    join(".", array_slice(explode('.', $error['property']),0, array_key_last(explode('.', $error['property']))))
-                                );
-                            } else if (str_contains($error['message'], "required")) {
-                                return sprintf(
-                                    "* %s: A property %s is required. Add %s property.",
-                                    join(".", array_slice(explode('.', $error['property']),0, array_key_last(explode('.', $error['property'])))),
-                                    explode('.', $error['property'])[array_key_last(explode('.', $error['property']))],
-                                    explode('.', $error['property'])[array_key_last(explode('.', $error['property']))]
-                                );
-                            } else if (str_contains($error['message'], "enumeration")) {
-                                return sprintf(
-                                    "* %s: Field type doesn't have a valid value. Check the field type matches the value type.",
-                                    join(".", array_slice(explode('.', $error['property']),0, array_key_last(explode('.', $error['property']))))
-                                    
-                                );
-                            } else if (array_search($error['property'], JsonSchemaValidator::SCHEMA_PROPERTIES) !== false) {
-                                return sprintf(
-                                    "* %s is a required field. You need to input a %s.",
-                                    $error['property'],
-                                    $error['property']
-                                );
+                    array_filter(
+                        array_map(
+                            function (array $error): string {
+                                if (str_contains($error['message'], "value") && str_contains($error['message'], "enumeration") == false) {
+                                    return sprintf(
+                                        "* %s: The %s value type doesn't match the correct type. You've inputted %s value but you need to input %s.",
+                                        join(".", array_slice(explode('.', $error['property']),0, array_key_last(explode('.', $error['property'])))),
+                                        explode('.', $error['property'])[array_key_last(explode('.', $error['property']))],
+                                        strtolower(explode(" ", $error['message'])[0]),
+                                        explode(" ", $error['message'])[5]
+                                    );
+                                } else if (str_contains($error['message'], "required")) {
+                                    return sprintf(
+                                        "* %s: A property %s is required. Add %s property.",
+                                        join(".", array_slice(explode('.', $error['property']),0, array_key_last(explode('.', $error['property'])))),
+                                        explode('.', $error['property'])[array_key_last(explode('.', $error['property']))],
+                                        explode('.', $error['property'])[array_key_last(explode('.', $error['property']))]
+                                    );
+                                } else if (str_contains($error['message'], "enumeration")) {
+                                    return sprintf(
+                                        "* %s: Field type doesn't have a valid value. Check the field type matches the value type.",
+                                        join(".", array_slice(explode('.', $error['property']),0, array_key_last(explode('.', $error['property']))))
+                                    );
+                                } else if (array_search($error['property'], JsonSchemaValidator::SCHEMA_PROPERTIES) !== false) {
+                                    return sprintf(
+                                        "* %s is a required field. You need to input a %s.",
+                                        $error['property'],
+                                        $error['property']
+                                    );
 
-                            } else {
-                                return "";
-                            }  
-                        },
-                        $errors
+                                } else {
+                                    return "";
+                                }  
+                            },
+                            $errors
+                        )
                     )
                 )
             );
