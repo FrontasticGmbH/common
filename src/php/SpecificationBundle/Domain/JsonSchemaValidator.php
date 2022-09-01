@@ -17,7 +17,8 @@ class JsonSchemaValidator
         "dynamicPageType",
         "dataSourceType",
         "customStreamType",
-        "customDataSourceType"
+        "customDataSourceType",
+        "identifier"
     ];
     
     /**
@@ -119,7 +120,7 @@ class JsonSchemaValidator
                                             $error['property']
                                         )[array_key_last(explode('.', $error['property']))]
                                     );
-                                    
+
                                     if (str_contains($errorMessage, "missing")) {
                                         return str_replace(':', ".", $errorMessage);
                                     } else {
