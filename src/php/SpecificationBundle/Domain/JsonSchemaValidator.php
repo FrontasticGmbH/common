@@ -17,7 +17,8 @@ class JsonSchemaValidator
         "dynamicPageType",
         "dataSourceType",
         "customStreamType",
-        "customDataSourceType"
+        "customDataSourceType",
+        "identifier"
     ];
     
     /**
@@ -97,7 +98,7 @@ class JsonSchemaValidator
                                         explode(" ", $error['message'])[5]
                                     );
                                 } elseif (str_contains($error['message'], "required")) {
-                                    return sprintf(
+                                    $errorMessage = sprintf(
                                         "* %s: A property %s is required. Add %s property.",
                                         join(
                                             ".",
@@ -109,7 +110,7 @@ class JsonSchemaValidator
                                                 0,
                                                 array_key_last(explode('.', $error['property']))
                                             )
-                                        ),
+                                        )?:"One of your properties is missing",
                                         explode(
                                             '.',
                                             $error['property']
@@ -119,6 +120,12 @@ class JsonSchemaValidator
                                             $error['property']
                                         )[array_key_last(explode('.', $error['property']))]
                                     );
+
+                                    if (str_contains($errorMessage, "missing")) {
+                                        return str_replace(':', ".", $errorMessage);
+                                    } else {
+                                        return $errorMessage;
+                                    }
                                 } elseif (str_contains($error['message'], "enumeration")) {
                                     return sprintf(
                                         "* %s: Field type doesn't have a valid value." .

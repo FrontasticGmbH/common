@@ -231,7 +231,7 @@
                         {
                             "patternProperties": {
                                 "^(default)$": {
-                                    "type": ["string"]
+                                    "type": ["string", "object"]
                                 }
                             },
                             "$comment": "Default value has to be 'string' if the field type is 'string'"
