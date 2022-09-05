@@ -40,6 +40,21 @@ class Response extends \Kore\DataObject\DataObject
      */
     public $rawApiOutput;
 
+    /**
+     * Get the header value for the given header name ignoring the case of the header. If the header does not exist,
+     * null is returned.
+     */
+    public function getHeaderValue(string $header): ?string
+    {
+        foreach ($this->headers as $key => $value) {
+            if (strcasecmp($header, $key) === 0) {
+                return $value;
+            }
+        }
+
+        return null;
+    }
+
     public function __toString()
     {
         $formattedHeaders = array();
