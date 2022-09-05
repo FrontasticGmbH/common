@@ -80,7 +80,7 @@ class JsonSchemaValidator
                                 if (str_contains($error['message'], "value") &&
                                     str_contains($error['message'], "enumeration") == false) {
                                     return sprintf(
-                                        "* %s: The %s value type doesn't match the correct type." .
+                                        "* %s: The %s value type doesn't match the correct type. " .
                                         "You've inputted %s value but you need to input %s.",
                                         join(
                                             ".",
