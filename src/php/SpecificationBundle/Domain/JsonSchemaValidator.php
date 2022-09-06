@@ -81,15 +81,16 @@ class JsonSchemaValidator
                                     str_contains($error['message'], "enumeration") == false) {
                                     return sprintf(
                                         "* %s: The %s value type doesn't match the correct type. " .
-                                        "You've inputted %s value but you need to input %s.",
-                                        join(
-                                            ".",
-                                            array_slice(
-                                                explode('.', $error['property']),
-                                                0,
-                                                array_key_last(explode('.', $error['property']))
-                                            )
-                                        ),
+                                        "You have input %s value but you need to input %s.",
+                                        // join(
+                                        //     ".",
+                                        //     array_slice(
+                                        //         explode('.', $error['property']),
+                                        //         0,
+                                        //         array_key_last(explode('.', $error['property']))
+                                        //     )
+                                        // ),
+                                        $error['property'],
                                         explode(
                                             '.',
                                             $error['property']
