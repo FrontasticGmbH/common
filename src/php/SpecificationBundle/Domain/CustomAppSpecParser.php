@@ -56,6 +56,10 @@ class CustomAppSpecParser extends ValidatingSpecParser
 
     private function verifyIndexedFields(\stdClass $schema, array $fields)
     {
+        if (!\property_exists($schema, 'indexes')) {
+            return $fields;
+        }
+        
         $validIndexTypes = ["string", "integer", "boolean", "decimal"];
 
         foreach ($schema->indexes as $index) {
