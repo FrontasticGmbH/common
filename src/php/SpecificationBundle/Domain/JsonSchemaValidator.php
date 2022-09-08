@@ -81,15 +81,7 @@ class JsonSchemaValidator
                                     str_contains($error['message'], "enumeration") == false) {
                                     return sprintf(
                                         "* %s: The %s value type doesn't match the correct type. " .
-                                        "You have input %s value but you need to input %s.",
-                                        // join(
-                                        //     ".",
-                                        //     array_slice(
-                                        //         explode('.', $error['property']),
-                                        //         0,
-                                        //         array_key_last(explode('.', $error['property']))
-                                        //     )
-                                        // ),
+                                        "You have inputted %s value but you need to input %s.",
                                         $error['property'],
                                         explode(
                                             '.',
@@ -129,16 +121,9 @@ class JsonSchemaValidator
                                     }
                                 } elseif (str_contains($error['message'], "enumeration")) {
                                     return sprintf(
-                                        "* %s: Field type doesn't have a valid value." .
+                                        "* %s: Field type doesn't have a valid value. " .
                                         "Check the field type matches the value type.",
-                                        join(
-                                            ".",
-                                            array_slice(
-                                                explode('.', $error['property']),
-                                                0,
-                                                array_key_last(explode('.', $error['property']))
-                                            )
-                                        )
+                                        $error['property']
                                     );
                                 } elseif (array_search(
                                     $error['property'],
