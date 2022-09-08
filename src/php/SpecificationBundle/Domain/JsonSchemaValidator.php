@@ -122,7 +122,7 @@ class JsonSchemaValidator
                                 } elseif (str_contains($error['message'], "enumeration")) {
                                     return sprintf(
                                         "* %s: Field type doesn't have a valid value. " .
-                                        "Check the field type matches the value type.",
+                                        "Check that the field type matches the value type.",
                                         $error['property']
                                     );
                                 } elseif (array_search(

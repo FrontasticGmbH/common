@@ -2,9 +2,6 @@
 
 namespace Frontastic\Common\SpecificationBundle\Domain;
 
-
-use InvalidArgumentException;
-
 class CustomAppSpecParserTest extends \PHPUnit\Framework\TestCase
 {
     const FIXTURE_DIR = __DIR__ . '/_fixtures';
@@ -44,7 +41,7 @@ class CustomAppSpecParserTest extends \PHPUnit\Framework\TestCase
             $specParser->parse(file_get_contents(self::FIXTURE_DIR . '/unknown_field_type.json'));
         } catch (InvalidSchemaException $e) {
             $this->assertStringContainsString(
-                "schema[0].fields[0]: Field type doesn't have a valid value.Check the field type matches the value type",
+                "schema[0].fields[0].type: Field type doesn't have a valid value. Check that the field type matches the value type.",
                 $e->getError(),
                 'Exception error does not contain required text.'
             );
