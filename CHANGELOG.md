@@ -1,4 +1,12 @@
 
+## Version 2.36.0 (2022-09-20)
+
+** New Features and Improvements **
+
+- Update the Contentful SDK to add support for tables in richtext fields
+- Include the X-Correlation-Id of HTTP responses in log messages
+- Remove superfluous commerce API requests for empty wishlists
+
 ## Version 2.35.2 (2022-08-19)
 
 ** Bug fixes **
