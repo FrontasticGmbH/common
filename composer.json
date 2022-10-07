@@ -31,7 +31,7 @@
         "domnikl/statsd": "^2.6",
         "guzzlehttp/guzzle": "^6.3",
         "justinrainbow/json-schema": "@stable",
-        "kore/data-object": "@stable",
+        "frontastic/data-object": "@stable",
         "league/oauth2-client": "^2.3",
         "myclabs/deep-copy": "^1.0",
         "qafoolabs/no-framework-bundle": "^2.6",
