@@ -144,6 +144,14 @@ class CustomerService
                         $projectSpecificEntities[] = 'Frontastic.Backstage.StageBundle.Domain.NodesTreeCache';
                     }
 
+                    if (!\in_array('Frontastic.Backstage.ProjectConfigurationBundle.Domain.ProjectConfiguration', $projectSpecificEntities)) {
+                        $projectSpecificEntities[] = 'Frontastic.Backstage.ProjectConfigurationBundle.Domain.ProjectConfiguration';
+                    }
+
+                    if (!\in_array('Frontastic.Backstage.ProjectConfigurationBundle.Domain.Schema', $projectSpecificEntities)) {
+                        $projectSpecificEntities[] = 'Frontastic.Backstage.ProjectConfigurationBundle.Domain.Schema';
+                    }
+
                     return new Project([
                         'projectId' => $project['projectId'],
                         'name' => $project['name'],
