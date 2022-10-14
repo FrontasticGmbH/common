@@ -144,7 +144,7 @@ class CustomerService
                         $projectSpecificEntities[] = 'Frontastic.Backstage.StageBundle.Domain.NodesTreeCache';
                     }
 
-                    if (\in_array('Frontastic.Backstage.DeveloperBundle.Domain.Tastic', $projectSpecificEntities) && 
+                    if (\in_array('Frontastic.Backstage.DeveloperBundle.Domain.Tastic', $projectSpecificEntities) &&
                         !\in_array('Frontastic.Backstage.DeveloperBundle.Domain.CustomStream', $projectSpecificEntities)
                     ) {
                         $projectSpecificEntities[] = 'Frontastic.Backstage.DeveloperBundle.Domain.CustomStream';
