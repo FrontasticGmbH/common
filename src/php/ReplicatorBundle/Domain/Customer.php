@@ -93,4 +93,9 @@ class Customer extends DataObject
      * @required
      */
     public $projects = [];
+
+    /**
+     * @var ?string
+     */
+    public $netlifyUrl = null;
 }
