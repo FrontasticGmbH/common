@@ -144,7 +144,6 @@ class CustomerService
                         $projectSpecificEntities[] = 'Frontastic.Backstage.StageBundle.Domain.NodesTreeCache';
                     }
 
-
                     $doc_type = 'Frontastic.Backstage.ProjectConfigurationBundle.Domain.ProjectConfiguration';
                     if (!\in_array($doc_type, $projectSpecificEntities)) {
                         $projectSpecificEntities[] = $doc_type;
@@ -156,9 +155,9 @@ class CustomerService
                     )) {
                         $projectSpecificEntities[] = 'Frontastic.Backstage.ProjectConfigurationBundle.Domain.Schema';
 
-                    if (\in_array('Frontastic.Backstage.DeveloperBundle.Domain.Tastic', $projectSpecificEntities)) {
-                        $projectSpecificEntities[] = 'Frontastic.Backstage.DeveloperBundle.Domain.CustomStream';
-                    }
+                    if (\in_array('Frontastic.Backstage.DeveloperBundle.Domain.Tastic', $projectSpecificEntities) &&
+                        !\in_array('Frontastic.Backstage.DeveloperBundle.Domain.CustomStream', $projectSpecificEntities)
+                    ) {
 
                     return new Project([
                         'projectId' => $project['projectId'],
