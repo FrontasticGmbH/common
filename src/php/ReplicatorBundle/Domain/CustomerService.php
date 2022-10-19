@@ -147,8 +147,6 @@ class CustomerService
                     if (\in_array('Frontastic.Backstage.DeveloperBundle.Domain.Tastic', $projectSpecificEntities) &&
                         !\in_array('Frontastic.Backstage.DeveloperBundle.Domain.CustomStream', $projectSpecificEntities)
                     ) {
-                        $projectSpecificEntities[] = 'Frontastic.Backstage.DeveloperBundle.Domain.CustomStream';
-                    }
 
                     return new Project([
                         'projectId' => $project['projectId'],
