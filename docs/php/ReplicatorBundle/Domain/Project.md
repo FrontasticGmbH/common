@@ -15,6 +15,7 @@ Property|Type|Default|Required|Description
 `publicUrl` | `string` |  | *Yes* | 
 `webpackPort` | `int` |  | *Yes* | 
 `ssrPort` | `int` |  | *Yes* | 
+`encryptedFieldsPublicKey` | `string|null` | `null` | - | 
 `configuration` | `array` | `[]` | *Yes* | 
 `data` | `array` | `[]` | *Yes* | Additional external project data from sources like tideways. Does not follow any defined schema.
 `languages` | `string[]` | `[]` | *Yes* | 

@@ -64,6 +64,11 @@ class Project extends DataObject
     public $ssrPort;
 
     /**
+     * @var string|null
+     */
+    public $encryptedFieldsPublicKey = null;
+
+    /**
      * @var array
      * @required
      */
