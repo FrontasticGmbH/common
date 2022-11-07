@@ -51,11 +51,11 @@
         "doctrine/common": "^2.9",
         "frontastic/apidocs": "@dev",
         "pdepend/pdepend": "@stable",
-        "phake/phake": "^3.1",
+        "phake/phake": "^4.0",
         "phploc/phploc": "@stable",
         "phpmd/phpmd": "@stable",
         "phpstan/phpstan": "0.12.25",
-        "phpunit/phpunit": "^7",
+        "phpunit/phpunit": "^8",
         "sebastian/phpcpd": "@stable",
         "squizlabs/php_codesniffer": "@stable",
         "symfony/swiftmailer-bundle": "^3.4"

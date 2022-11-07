@@ -226,7 +226,7 @@ class ConfigurationSchemaTest extends TestCase
         $configurationSchema->getCompleteValues($visitor);
 
         \Phake::verify($visitor, \Phake::times(5))->processField(
-            new class implements \Phake_Matchers_IArgumentMatcher {
+            new class implements \Phake\Matchers\IArgumentMatcher {
                public function matches(&$argument)
                {
                    return ($argument instanceof FieldConfiguration) && $argument->getType() === 'stream';
