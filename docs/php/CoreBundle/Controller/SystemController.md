@@ -29,6 +29,8 @@ Return Value: `mixed`
 public function versionAction(): \Symfony\Component\HttpFoundation\JsonResponse
 ```
 
+*This endpoint exists as a health check for deployments. Do NOT remove.*
+
 Return Value: `\Symfony\Component\HttpFoundation\JsonResponse`
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).
