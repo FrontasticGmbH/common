@@ -19,6 +19,9 @@ class SystemController extends AbstractController
         $this->env = $env;
     }
 
+    /**
+     * This endpoint exists as a health check for deployments. Do NOT remove.
+     */
     public function versionAction(): JsonResponse
     {
         $version = false;
