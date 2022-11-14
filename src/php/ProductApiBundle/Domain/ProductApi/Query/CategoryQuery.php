@@ -16,5 +16,10 @@ class CategoryQuery extends PaginatedQuery
     /**
      * @var string
      */
+    public $categoryId;
+
+    /**
+     * @var string
+     */
     public $slug;
 }
