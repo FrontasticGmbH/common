@@ -1,4 +1,14 @@
 
+## Version 2.37.0 (2022-11-08)
+
+** New Features and Improvements **
+
+- Allow fetching categories by ID from commercetools
+
+** Bug fixes **
+
+- Don't throw an exception in the replicator on unknown field names
+
 ## Version 2.36.0 (2022-09-20)
 
 ** New Features and Improvements **

@@ -88,6 +88,20 @@ class Commercetools extends ProductApiBase
      */
     protected function queryCategoriesImplementation(CategoryQuery $query): Result
     {
+        if (is_string($query->categoryId) && $query->categoryId !== '' && !$query->slug) {
+            $category = $this->querySingleCategoryImplementation($query->categoryId, $query->locale);
+            if (!$query->loadDangerousInnerData) {
+                $category->dangerousInnerCategory = null;
+            }
+            return new ProductApi\Result([
+                'offset' => 0,
+                'total' => $category === null ? 0 : 1,
+                'count' => $category === null ? 0 : 1,
+                'items' => $category === null ? [] : [$category],
+                'query' => clone($query),
+            ]);
+        }
+
         $parameters = [
             'offset' => $query->offset,
             'limit' => $query->limit,
@@ -163,9 +177,47 @@ class Commercetools extends ProductApiBase
         $categoryItems = array_values($categoryMap);
 
         return new ProductApi\Result([
+            'offset' => $query->offset,
+            'total' => $categories->total,
             'count' => count($categoryItems),
             'items' => $categoryItems,
             'query' => clone($query),
+        ]);
+    }
+
+    private function querySingleCategoryImplementation(string $categoryId, string $locale): ?Category
+    {
+
+        $category = $this->client
+            ->fetchAsyncById('/categories', $categoryId)
+            ->wait();
+        if ($category === null) {
+            return null;
+        }
+
+        $locale = $this->localeCreator->createLocaleFromString($locale);
+
+        return new Category([
+            'categoryId' => $category['id'],
+            'name' => $category['name'][$locale->language] ?? '',
+            'slug' => $category['slug'][$locale->language] ?? '',
+            'depth' => count($category['ancestors']),
+            'dangerousInnerCategory' => $category,
+            'path' =>
+                rtrim(
+                    '/' .
+                    implode(
+                        '/',
+                        array_map(
+                            function (array $ancestor) {
+                                return $ancestor['id'];
+                            },
+                            $category['ancestors']
+                        )
+                    ),
+                    '/'
+                )
+                . '/' . $category['id'],
         ]);
     }
 
