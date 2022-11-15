@@ -36,6 +36,8 @@ Property|Type|Default|Required|Description
 * [cleanForSession()](#cleanforsession)
 * [serialize()](#serialize)
 * [unserialize()](#unserialize)
+* [__serialize()](#__serialize)
+* [__unserialize()](#__unserialize)
 
 ### setPassword()
 
@@ -148,5 +150,27 @@ Argument|Type|Default|Description
 `$serialized`|`mixed`||
 
 Return Value: `mixed`
+
+### __serialize()
+
+```php
+public function __serialize(): array
+```
+
+Return Value: `array`
+
+### __unserialize()
+
+```php
+public function __unserialize(
+    array $data
+): void
+```
+
+Argument|Type|Default|Description
+--------|----|-------|-----------
+`$data`|`array`||
+
+Return Value: `void`
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).
