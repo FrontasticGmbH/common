@@ -17,7 +17,7 @@ interface SprykerCartInterface
      *
      * @return \Frontastic\Common\CartApiBundle\Domain\Cart
      */
-    public function getCart(?string $id = null, ?string $locale): Cart;
+    public function getCart(?string $id = null, ?string $locale = null): Cart;
 
     /**
      * @param Cart $cart

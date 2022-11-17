@@ -35,7 +35,7 @@ class LifecycleEventDecorator implements ContentApi
         }
     }
 
-    public function getAggregate()
+    public function getAggregate(): object
     {
         return $this->aggregate;
     }
