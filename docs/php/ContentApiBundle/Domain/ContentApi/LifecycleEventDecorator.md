@@ -34,10 +34,10 @@ Return Value: `mixed`
 ### getAggregate()
 
 ```php
-public function getAggregate(): mixed
+public function getAggregate(): object
 ```
 
-Return Value: `mixed`
+Return Value: `object`
 
 ### getContentTypes()
 

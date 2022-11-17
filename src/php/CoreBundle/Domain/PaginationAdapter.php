@@ -11,7 +11,7 @@ class PaginationAdapter
 
     public static function queryCursorToOffset(PaginatedQuery $query): PaginatedQuery
     {
-        if (substr($query->cursor, 0, strlen(self::OFFSET_TAG)) === self::OFFSET_TAG) {
+        if (substr($query->cursor ?? '', 0, strlen(self::OFFSET_TAG)) === self::OFFSET_TAG) {
             $query->offset = (int) substr($query->cursor, strlen(self::OFFSET_TAG));
         }
 

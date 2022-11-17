@@ -191,6 +191,16 @@ class Account extends ApiDataObject implements UserInterface, \Serializable
 
     public function serialize()
     {
+        return \serialize($this->__serialize());
+    }
+
+    public function unserialize($serialized)
+    {
+        $this->__unserialize(\unserialize($serialized, ['allowed_classes' => true]));
+    }
+
+    public function __serialize(): array
+    {
         $variables = get_object_vars($this);
 
         foreach ($variables as $key => $value) {
@@ -199,12 +209,12 @@ class Account extends ApiDataObject implements UserInterface, \Serializable
             }
         }
 
-        return \serialize($variables);
+        return $variables;
     }
 
-    public function unserialize($serialized)
+    public function __unserialize(array $data): void
     {
-        foreach (\unserialize($serialized) as $key => $value) {
+        foreach ($data as $key => $value) {
             $this->$key = $value;
         }
     }
