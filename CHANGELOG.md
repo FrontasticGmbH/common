@@ -1,4 +1,10 @@
 
+## Version 2.38.0 (2022-12-02)
+
+** New Features and Improvements **
+
+- Add PHP 8.1 compatibility
+
 ## Version 2.37.0 (2022-11-08)
 
 ** New Features and Improvements **
