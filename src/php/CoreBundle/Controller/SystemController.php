@@ -3,12 +3,20 @@
 namespace Frontastic\Common\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+
+use Kore\DataObject\DataObject;
+
+use Frontastic\UserBundle\Domain\MetaData;
 
 class SystemController extends AbstractController
 {
-    public function __construct(private readonly string $env)
+    private string $env;
+
+    public function __construct(string $env)
     {
+        $this->env = $env;
     }
 
     /**
