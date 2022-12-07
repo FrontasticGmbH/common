@@ -16,13 +16,13 @@ class ShopifyProductMapper
     public function mapDataToProduct(array $productData, Query $query = null): Product
     {
         return new Product([
-            'productId' => $productData['id'] ?? null,
+            'productId' => ShopifyIdMapper::mapDataToId($productData['id'] ?? null),
             'name' => $productData['title'] ?? null,
             'description' => $productData['description'] ?? null,
             'slug' => $productData['handle'] ?? null,
             'categories' => array_map(
                 function (array $category) {
-                    return $category['node']['id'];
+                    return ShopifyIdMapper::mapDataToId($category['node']['id']);
                 },
                 $productData['collections']['edges']
             ),
@@ -74,9 +74,9 @@ class ShopifyProductMapper
     public function mapDataToVariant(array $variantData, Query $query = null): Variant
     {
         return new Variant([
-            'id' => $variantData['id'] ?? null,
+            'id' => ShopifyIdMapper::mapDataToId($variantData['id'] ?? null),
             'sku' => $variantData['sku'] ?? null,
-            'groupId' => $variantData['product']['id'] ?? null,
+            'groupId' => ShopifyIdMapper::mapDataToId($variantData['product']['id'] ?? null),
             'isOnStock' => $variantData['quantityAvailable'] && $variantData['quantityAvailable'] > 0,
             'price' => $this->mapDataToPriceValue($variantData['priceV2'] ?? []),
             'currency' => $variantData['priceV2']['currencyCode'] ?? null,

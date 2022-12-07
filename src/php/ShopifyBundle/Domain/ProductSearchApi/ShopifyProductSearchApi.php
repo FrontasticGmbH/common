@@ -10,6 +10,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiBase;
 use Frontastic\Common\ShopifyBundle\Domain\Exception\QueryException;
+use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyIdMapper;
 use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyProductMapper;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClient;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -109,10 +110,10 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
 
         $productIds = [];
         if ($query->productId !== null) {
-            $productIds[] = $query->productId;
+            $productIds[] = ShopifyIdMapper::mapIdToData($query->productId);
         }
         if ($query->productIds !== null) {
-            $productIds = array_merge($productIds, $query->productIds);
+            $productIds = array_merge($productIds, ShopifyIdMapper::mapIdsToData($query->productIds));
         }
 
         if (count($parameters) && count($productIds)) {
@@ -148,8 +149,9 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                     ['categories' => $query->getAllUniqueCategories()]
                 );
             }
+            $categoryId = ShopifyIdMapper::mapIdToData($categories[0]);
             $queryString = "{
-                node(id: \"{$categories[0]}\") {
+                node(id: \"{$categoryId}\") {
                     id
                     ... on Collection {
                         products($pageFilter) {
