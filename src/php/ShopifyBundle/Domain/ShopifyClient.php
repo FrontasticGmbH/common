@@ -12,7 +12,7 @@ use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
 class ShopifyClient
 {
-    const SHOPIFY_API_VERSION = "2022-07";
+    const SHOPIFY_API_VERSION = "2022-10";
 
     /**
      * @var string
