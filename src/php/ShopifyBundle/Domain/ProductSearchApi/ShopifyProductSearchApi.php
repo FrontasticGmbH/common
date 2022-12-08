@@ -375,11 +375,11 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
             metafields({$this->getMetafieldQueryArguments($query, self::VARIANT_METAFIELD_QUERY_ARGUMENTS)}) {
                 {$this->getMetafieldQueryFields($query)}
             }
-            priceV2 {
-                {$this->getPriceV2QueryFields($query)}
+            price {
+                {$this->getPriceQueryFields($query)}
             }
-            compareAtPriceV2 {
-                {$this->getPriceV2QueryFields($query)}
+            compareAtPrice {
+                {$this->getPriceQueryFields($query)}
             }
             product {
                 id
@@ -401,7 +401,7 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
         ";
     }
 
-    private function getPriceV2QueryFields(Query $query): string
+    private function getPriceQueryFields(Query $query): string
     {
         return "
             amount

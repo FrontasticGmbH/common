@@ -744,9 +744,9 @@ class ShopifyCartApi extends CartApiBase
             'cartVersion' => $cartData['createdAt'] ?? null,
             'email' => $cartData['email'] ?? null,
             'sum' => $this->productMapper->mapDataToPriceValue(
-                $cartData['totalPriceV2'] ?? []
+                $cartData['totalPrice'] ?? []
             ),
-            'currency' => $cartData['totalPriceV2']['currencyCode'] ?? null,
+            'currency' => $cartData['totalPrice']['currencyCode'] ?? null,
             'lineItems' => $this->mapDataToLineItems($cartData['lineItems']['edges'] ?? []),
             'shippingAddress' => $this->accountMapper->mapDataToAddress(
                 $cartData['shippingAddress'] ?? []
@@ -790,9 +790,9 @@ class ShopifyCartApi extends CartApiBase
                 $orderData['shippingLine'] ?? []
             ),
             'sum' => $this->productMapper->mapDataToPriceValue(
-                $orderData['totalPriceV2'] ?? []
+                $orderData['totalPrice'] ?? []
             ),
-            'currency' => $orderData['totalPriceV2']['currencyCode'] ?? null,
+            'currency' => $orderData['totalPrice']['currencyCode'] ?? null,
             'dangerousInnerCart' => $orderData,
             'dangerousInnerOrder' => $orderData,
         ]);
@@ -827,7 +827,7 @@ class ShopifyCartApi extends CartApiBase
             'shippingMethodId' => $shippingMethodData['handle'] ?? null,
             'name' => $shippingMethodData['title'] ?? null,
             'price' => $this->productMapper->mapDataToPriceValue(
-                $shippingMethodData['priceV2'] ?? []
+                $shippingMethodData['price'] ?? []
             ),
             'dangerousInnerShippingInfo' => $shippingMethodData,
         ]);
@@ -844,8 +844,8 @@ class ShopifyCartApi extends CartApiBase
             'name' => $shippingMethodData['title'] ?? null,
             'rates' => [
                 new ShippingRate([
-                    'price' => $this->productMapper->mapDataToPriceValue($shippingMethodData['priceV2'] ?? []),
-                    'currency' => $shippingMethodData['priceV2']['currencyCode'] ?? null,
+                    'price' => $this->productMapper->mapDataToPriceValue($shippingMethodData['price'] ?? []),
+                    'currency' => $shippingMethodData['price']['currencyCode'] ?? null,
                 ])
             ],
             'dangerousInnerShippingMethod' => $shippingMethodData,
@@ -861,7 +861,7 @@ class ShopifyCartApi extends CartApiBase
             email
             webUrl
             requiresShipping
-            totalPriceV2 {
+            totalPrice {
                 amount
                 currencyCode
             }
@@ -891,7 +891,7 @@ class ShopifyCartApi extends CartApiBase
             orderNumber
             processedAt
             financialStatus
-            totalPriceV2 {
+            totalPrice {
                 amount
                 currencyCode
             }
@@ -918,11 +918,11 @@ class ShopifyCartApi extends CartApiBase
             title
             availableForSale
             quantityAvailable
-            priceV2 {
+            price {
                 amount
                 currencyCode
             }
-            compareAtPriceV2 {
+            compareAtPrice {
                 amount
                 currencyCode
             }
@@ -978,7 +978,7 @@ class ShopifyCartApi extends CartApiBase
         return '
             handle
             title
-            priceV2 {
+            price {
                 amount
                 currencyCode
             }
