@@ -10,10 +10,7 @@
     ],
     "config": {
         "sort-packages": true,
-        "optimize-autoloader": true,
-        "platform": {
-            "php": "7.4"
-        }
+        "optimize-autoloader": true
     },
     "conflict": {
         "frontastic/catwalk": "<1.20.1"
@@ -54,7 +51,7 @@
         "phake/phake": "^4.0",
         "phploc/phploc": "@stable",
         "phpmd/phpmd": "@stable",
-        "phpstan/phpstan": "0.12.25",
+        "phpstan/phpstan": "^0.12.18",
         "phpunit/phpunit": "^8",
         "sebastian/phpcpd": "@stable",
         "squizlabs/php_codesniffer": "@stable",
