@@ -50,7 +50,9 @@ class CreateAccountCommand extends ContainerAwareCommand
             $accountService->create($account, null, $project->defaultLanguage);
         } catch (DuplicateAccountException $exception) {
             $output->writeln('<error>This email address already is in use.</error>');
-            return;
+            return 1;
         }
+
+        return 0;
     }
 }

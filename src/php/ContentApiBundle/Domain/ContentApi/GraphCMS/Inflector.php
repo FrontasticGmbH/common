@@ -537,6 +537,8 @@ class Inflector
                 return static::$_cache['pluralize'][$word];
             }
         }
+
+        throw new \RuntimeException('This code is unreachable');
     }
 
     /**
