@@ -1,4 +1,13 @@
 
+## Version 2.40.0 (2022-12-20)
+
+** New Features and Improvements **
+
+- Upgrade Shopify API to version 2022-10. Unfortunately this includes some backwards compatibility breaks:
+    - Shopify does no longer base64 encode IDs. We still en-/decode the IDs in our domain model but not within the unmapped data.
+    - Shopify does no longer return the first 10 metafields so they need to be requested explicitly.
+    - Shopify removed the xxxV2 money field names. We adjusted the mapping of the domain model but the data within the unmapped data has changed.
+
 ## Version 2.39.0 (2022-12-13)
 
 ** Bug fixes **
