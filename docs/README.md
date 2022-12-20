@@ -306,6 +306,7 @@ Here you find the API documentation for the relevant classes:
       * [QueryException](php/ShopifyBundle/Domain/Exception/QueryException.md)
     * Mapper
       * [ShopifyAccountMapper](php/ShopifyBundle/Domain/Mapper/ShopifyAccountMapper.md)
+      * [ShopifyIdMapper](php/ShopifyBundle/Domain/Mapper/ShopifyIdMapper.md)
       * [ShopifyProductMapper](php/ShopifyBundle/Domain/Mapper/ShopifyProductMapper.md)
     * ProductApi
       * [ShopifyProductApi](php/ShopifyBundle/Domain/ProductApi/ShopifyProductApi.md)

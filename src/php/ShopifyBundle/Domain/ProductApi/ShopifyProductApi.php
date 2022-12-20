@@ -14,6 +14,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApiBase;
 use Frontastic\Common\ProductApiBundle\Domain\ProductType;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApi;
+use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyIdMapper;
 use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyProductMapper;
 use Frontastic\Common\ShopifyBundle\Domain\ProductSearchApi\ShopifyProductSearchApi;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClient;
@@ -99,10 +100,10 @@ class ShopifyProductApi extends ProductApiBase
 
             foreach ($collectionsData as $collectionData) {
                 $categories[] = new Category([
-                    'categoryId' => $collectionData['node']['id'],
+                    'categoryId' => ShopifyIdMapper::mapDataToId($collectionData['node']['id']),
                     'name' => $collectionData['node']['title'],
                     'slug' => $collectionData['node']['handle'],
-                    'path' => '/' . $collectionData['node']['id'],
+                    'path' => '/' . ShopifyIdMapper::mapDataToId($collectionData['node']['id']),
                     'dangerousInnerCategory' => $query->loadDangerousInnerData ? $collectionData : null,
                 ]);
 

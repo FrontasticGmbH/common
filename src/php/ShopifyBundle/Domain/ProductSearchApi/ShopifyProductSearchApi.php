@@ -10,6 +10,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiBase;
 use Frontastic\Common\ShopifyBundle\Domain\Exception\QueryException;
+use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyIdMapper;
 use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyProductMapper;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClient;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -18,10 +19,13 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
 {
     private const MAX_ELEMENTS_TO_FETCH = 250;
     private const DEFAULT_ELEMENTS_TO_FETCH = 10;
+    private const DEFAULT_METAFIELD_QUERY_ARGUMENTS = 'identifiers:[]';
 
     const PRODUCT_QUERY_FIELDS_LABEL = 'productQueryFields';
     const COLLECTION_QUERY_FIELDS_LABEL = 'collectionQueryFields';
     const METAFIELD_QUERY_FIELDS_LABEL = 'metafieldQueryFields';
+    const PRODUCT_METAFIELD_QUERY_ARGUMENTS = 'productMetafieldQueryArguments';
+    const VARIANT_METAFIELD_QUERY_ARGUMENTS = 'variantMetafieldQueryArguments';
     const SEO_QUERY_FIELDS_LABEL = 'seoQueryFields';
     const VARIANT_QUERY_FIELDS_LABEL = 'variantQueryFields';
     const PRICE_V2_QUERY_FIELDS_LABEL = 'priceV2QueryFields';
@@ -109,10 +113,10 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
 
         $productIds = [];
         if ($query->productId !== null) {
-            $productIds[] = $query->productId;
+            $productIds[] = ShopifyIdMapper::mapIdToData($query->productId);
         }
         if ($query->productIds !== null) {
-            $productIds = array_merge($productIds, $query->productIds);
+            $productIds = array_merge($productIds, ShopifyIdMapper::mapIdsToData($query->productIds));
         }
 
         if (count($parameters) && count($productIds)) {
@@ -148,8 +152,9 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                     ['categories' => $query->getAllUniqueCategories()]
                 );
             }
+            $categoryId = ShopifyIdMapper::mapIdToData($categories[0]);
             $queryString = "{
-                node(id: \"{$categories[0]}\") {
+                node(id: \"{$categoryId}\") {
                     id
                     ... on Collection {
                         products($pageFilter) {
@@ -306,12 +311,8 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                     }
                 }
             }
-            metafields(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
-                edges {
-                    node {
-                        {$this->getMetafieldQueryFields($query)}
-                    }
-                }
+            metafields({$this->getMetafieldQueryArguments($query, self::PRODUCT_METAFIELD_QUERY_ARGUMENTS)}) {
+                {$this->getMetafieldQueryFields($query)}
             }
             seo {
                 {$this->getSeoQueryFields($query)}
@@ -333,6 +334,13 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
             id
             {$this->getRawApiInputField($query->rawApiInput, self::COLLECTION_QUERY_FIELDS_LABEL)}
         ";
+    }
+
+    private function getMetafieldQueryArguments(Query $query, string $rawApiInputField): string
+    {
+        $arguments = trim($this->getRawApiInputField($query->rawApiInput, $rawApiInputField));
+
+        return $arguments !== '' ? $arguments : self::DEFAULT_METAFIELD_QUERY_ARGUMENTS;
     }
 
     private function getMetafieldQueryFields(Query $query): string
@@ -364,18 +372,14 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
             title
             availableForSale
             quantityAvailable
-            metafields(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
-                edges {
-                    node {
-                        {$this->getMetafieldQueryFields($query)}
-                    }
-                }
+            metafields({$this->getMetafieldQueryArguments($query, self::VARIANT_METAFIELD_QUERY_ARGUMENTS)}) {
+                {$this->getMetafieldQueryFields($query)}
             }
-            priceV2 {
-                {$this->getPriceV2QueryFields($query)}
+            price {
+                {$this->getPriceQueryFields($query)}
             }
-            compareAtPriceV2 {
-                {$this->getPriceV2QueryFields($query)}
+            compareAtPrice {
+                {$this->getPriceQueryFields($query)}
             }
             product {
                 id
@@ -397,7 +401,7 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
         ";
     }
 
-    private function getPriceV2QueryFields(Query $query): string
+    private function getPriceQueryFields(Query $query): string
     {
         return "
             amount

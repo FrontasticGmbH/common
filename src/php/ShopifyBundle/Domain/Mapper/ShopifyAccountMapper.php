@@ -21,7 +21,7 @@ class ShopifyAccountMapper
         }
 
         return new Account([
-            'accountId' => $accountData['id'] ?? null,
+            'accountId' => ShopifyIdMapper::mapDataToId($accountData['id'] ?? null),
             'firstName' => $accountData['firstName'] ?? null,
             'lastName' => $accountData['lastName'] ?? null,
             'email' => $accountData['email'] ?? null,
@@ -38,7 +38,7 @@ class ShopifyAccountMapper
         }
 
         return new Address([
-            'addressId' => $addressData['id'] ?? null,
+            'addressId' => ShopifyIdMapper::mapDataToId($addressData['id'] ?? null),
             'streetName' => $addressData['address1'] ?? null,
             'streetNumber' => $addressData['address2'] ?? null,
             'city' => $addressData['city'] ?? null,

@@ -15,6 +15,7 @@ use Frontastic\Common\CartApiBundle\Domain\ShippingInfo;
 use Frontastic\Common\CartApiBundle\Domain\ShippingMethod;
 use Frontastic\Common\CartApiBundle\Domain\ShippingRate;
 use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyAccountMapper;
+use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyIdMapper;
 use Frontastic\Common\ShopifyBundle\Domain\Mapper\ShopifyProductMapper;
 use Frontastic\Common\ShopifyBundle\Domain\ShopifyClient;
 use Psr\Log\LoggerInterface;
@@ -90,10 +91,12 @@ class ShopifyCartApi extends CartApiBase
 
         $anonymousCart = $this->getAnonymous(uniqid(), $locale);
 
+        $cartIdData = ShopifyIdMapper::mapIdToData($anonymousCart->cartId);
+
         $mutation = "
             mutation {
                 checkoutCustomerAssociateV2(
-                    checkoutId: \"{$anonymousCart->cartId}\",
+                    checkoutId: \"{$cartIdData}\",
                     customerAccessToken: \"{$account->apiToken}\"
                 ) {
                     checkout {
@@ -171,9 +174,11 @@ class ShopifyCartApi extends CartApiBase
 
     protected function getByIdImplementation(string $cartId, string $locale = null): Cart
     {
+        $cartIdData = ShopifyIdMapper::mapIdToData($cartId);
+
         $query = "
             query {
-                node(id: \"{$cartId}\") {
+                node(id: \"{$cartIdData}\") {
                     ... on Checkout {
                         {$this->getCheckoutQueryFields()}
                         lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
@@ -243,13 +248,16 @@ class ShopifyCartApi extends CartApiBase
 
     protected function addToCartImplementation(Cart $cart, LineItem $lineItem, string $locale = null): Cart
     {
+        $cartIdData = ShopifyIdMapper::mapIdToData($cart->cartId);
+        $variantIdData = ShopifyIdMapper::mapIdToData($lineItem->variant->id);
+
         $mutation = "
             mutation {
                 checkoutLineItemsAdd(
-                    checkoutId: \"{$cart->cartId}\",
+                    checkoutId: \"{$cartIdData}\",
                     lineItems: {
                         quantity: {$lineItem->count}
-                        variantId: \"{$lineItem->variant->id}\"
+                        variantId: \"{$variantIdData}\"
                     }
                 ) {
                     checkout {
@@ -293,12 +301,15 @@ class ShopifyCartApi extends CartApiBase
         ?array $custom = null,
         string $locale = null
     ): Cart {
+        $cartIdData = ShopifyIdMapper::mapIdToData($cart->cartId);
+        $lineItemIdData = ShopifyIdMapper::mapIdToData($lineItem->lineItemId);
+
         $mutation = "
             mutation {
                 checkoutLineItemsUpdate(
-                    checkoutId: \"{$cart->cartId}\",
+                    checkoutId: \"{$cartIdData}\",
                     lineItems: {
-                        id: \"{$lineItem->lineItemId}\"
+                        id: \"{$lineItemIdData}\"
                         quantity: {$count}
                     }
                 ) {
@@ -338,11 +349,14 @@ class ShopifyCartApi extends CartApiBase
 
     protected function removeLineItemImplementation(Cart $cart, LineItem $lineItem, string $locale = null): Cart
     {
+        $cartIdData = ShopifyIdMapper::mapIdToData($cart->cartId);
+        $lineItemIdData = ShopifyIdMapper::mapIdToData($lineItem->lineItemId);
+
         $mutation = "
             mutation {
                 checkoutLineItemsRemove(
-                    checkoutId: \"{$cart->cartId}\",
-                    lineItemIds: \"{$lineItem->lineItemId}\"
+                    checkoutId: \"{$cartIdData}\",
+                    lineItemIds: \"{$lineItemIdData}\"
                 ) {
                     checkout {
                         {$this->getCheckoutQueryFields($cart)}
@@ -380,10 +394,12 @@ class ShopifyCartApi extends CartApiBase
 
     protected function setEmailImplementation(Cart $cart, string $email, string $locale = null): Cart
     {
+        $cartIdData = ShopifyIdMapper::mapIdToData($cart->cartId);
+
         $mutation = "
             mutation {
                 checkoutEmailUpdateV2(
-                    checkoutId: \"{$cart->cartId}\",
+                    checkoutId: \"{$cartIdData}\",
                     email: \"{$email}\",
                 ) {
                     checkout {
@@ -422,10 +438,12 @@ class ShopifyCartApi extends CartApiBase
 
     protected function setShippingMethodImplementation(Cart $cart, string $shippingMethod, string $locale = null): Cart
     {
+        $cartIdData = ShopifyIdMapper::mapIdToData($cart->cartId);
+
         $mutation = "
             mutation {
                 checkoutShippingLineUpdate(
-                    checkoutId: \"{$cart->cartId}\",
+                    checkoutId: \"{$cartIdData}\",
                     shippingRateHandle: \"{$shippingMethod}\",
                 ) {
                     checkout {
@@ -470,10 +488,12 @@ class ShopifyCartApi extends CartApiBase
 
     protected function setShippingAddressImplementation(Cart $cart, Address $address, string $locale = null): Cart
     {
+        $cartIdData = ShopifyIdMapper::mapIdToData($cart->cartId);
+
         $mutation = "
             mutation {
                  checkoutShippingAddressUpdateV2(
-                    checkoutId: \"{$cart->cartId}\",
+                    checkoutId: \"{$cartIdData}\",
                     shippingAddress: {
                         {$this->accountMapper->mapAddressToData($address)}
                     },
@@ -561,9 +581,11 @@ class ShopifyCartApi extends CartApiBase
 
     protected function getOrderImplementation(Account $account, string $orderId, string $locale = null): Order
     {
+        $orderIdData = ShopifyIdMapper::mapIdToData($orderId);
+
         $query = "
             query {
-                node(id: \"{$orderId}\") {
+                node(id: \"{$orderIdData}\") {
                     ... on Order {
                         {$this->getOrderQueryFields()}
                         lineItems(first: " . self::DEFAULT_ELEMENTS_TO_FETCH . ") {
@@ -661,9 +683,11 @@ class ShopifyCartApi extends CartApiBase
             );
         }
 
+        $cartIdData = ShopifyIdMapper::mapIdToData($cart->cartId);
+
         $query = "
             query {
-                node(id: \"{$cart->cartId}\") {
+                node(id: \"{$cartIdData}\") {
                     ... on Checkout {
                         {$this->getCheckoutQueryFields($cart)}
                     }
@@ -716,13 +740,13 @@ class ShopifyCartApi extends CartApiBase
     private function mapDataToCart(array $cartData): Cart
     {
         return new Cart([
-            'cartId' => $cartData['id'] ?? null,
+            'cartId' => ShopifyIdMapper::mapDataToId($cartData['id'] ?? null),
             'cartVersion' => $cartData['createdAt'] ?? null,
             'email' => $cartData['email'] ?? null,
             'sum' => $this->productMapper->mapDataToPriceValue(
-                $cartData['totalPriceV2'] ?? []
+                $cartData['totalPrice'] ?? []
             ),
-            'currency' => $cartData['totalPriceV2']['currencyCode'] ?? null,
+            'currency' => $cartData['totalPrice']['currencyCode'] ?? null,
             'lineItems' => $this->mapDataToLineItems($cartData['lineItems']['edges'] ?? []),
             'shippingAddress' => $this->accountMapper->mapDataToAddress(
                 $cartData['shippingAddress'] ?? []
@@ -737,10 +761,10 @@ class ShopifyCartApi extends CartApiBase
         ]);
     }
 
-    private function mapDataToOrders(array $orderData): array
+    private function mapDataToOrders(array $ordersData): array
     {
         $orders = [];
-        foreach ($orderData['edges'] as $orderData) {
+        foreach ($ordersData['edges'] as $orderData) {
             $orders[] = $this->mapDataToOrder($orderData['node']);
         }
 
@@ -751,7 +775,7 @@ class ShopifyCartApi extends CartApiBase
     {
         return new Order([
             'orderId' => $orderData['orderNumber'],
-            'cartId' => $orderData['id'] ?? null,
+            'cartId' => ShopifyIdMapper::mapDataToId($orderData['id'] ?? null),
             'orderState' => $orderData['financialStatus'],
             'createdAt' => new \DateTimeImmutable($orderData['processedAt']),
             'email' => $orderData['email'] ?? null,
@@ -766,9 +790,9 @@ class ShopifyCartApi extends CartApiBase
                 $orderData['shippingLine'] ?? []
             ),
             'sum' => $this->productMapper->mapDataToPriceValue(
-                $orderData['totalPriceV2'] ?? []
+                $orderData['totalPrice'] ?? []
             ),
-            'currency' => $orderData['totalPriceV2']['currencyCode'] ?? null,
+            'currency' => $orderData['totalPrice']['currencyCode'] ?? null,
             'dangerousInnerCart' => $orderData,
             'dangerousInnerOrder' => $orderData,
         ]);
@@ -780,7 +804,7 @@ class ShopifyCartApi extends CartApiBase
 
         foreach ($lineItemsData as $lineItemData) {
             $lineItems[] = new LineItem\Variant([
-                'lineItemId' => $lineItemData['node']['id'] ?? null,
+                'lineItemId' => ShopifyIdMapper::mapDataToId($lineItemData['node']['id'] ?? null),
                 'name' => $lineItemData['node']['title'] ?? null,
                 'count' => $lineItemData['node']['quantity'] ?? null,
                 'price' => $lineItemData['node']['unitPrice'] ?? null,
@@ -803,7 +827,7 @@ class ShopifyCartApi extends CartApiBase
             'shippingMethodId' => $shippingMethodData['handle'] ?? null,
             'name' => $shippingMethodData['title'] ?? null,
             'price' => $this->productMapper->mapDataToPriceValue(
-                $shippingMethodData['priceV2'] ?? []
+                $shippingMethodData['price'] ?? []
             ),
             'dangerousInnerShippingInfo' => $shippingMethodData,
         ]);
@@ -820,8 +844,8 @@ class ShopifyCartApi extends CartApiBase
             'name' => $shippingMethodData['title'] ?? null,
             'rates' => [
                 new ShippingRate([
-                    'price' => $this->productMapper->mapDataToPriceValue($shippingMethodData['priceV2'] ?? []),
-                    'currency' => $shippingMethodData['priceV2']['currencyCode'] ?? null,
+                    'price' => $this->productMapper->mapDataToPriceValue($shippingMethodData['price'] ?? []),
+                    'currency' => $shippingMethodData['price']['currencyCode'] ?? null,
                 ])
             ],
             'dangerousInnerShippingMethod' => $shippingMethodData,
@@ -837,7 +861,7 @@ class ShopifyCartApi extends CartApiBase
             email
             webUrl
             requiresShipping
-            totalPriceV2 {
+            totalPrice {
                 amount
                 currencyCode
             }
@@ -867,7 +891,7 @@ class ShopifyCartApi extends CartApiBase
             orderNumber
             processedAt
             financialStatus
-            totalPriceV2 {
+            totalPrice {
                 amount
                 currencyCode
             }
@@ -894,11 +918,11 @@ class ShopifyCartApi extends CartApiBase
             title
             availableForSale
             quantityAvailable
-            priceV2 {
+            price {
                 amount
                 currencyCode
             }
-            compareAtPriceV2 {
+            compareAtPrice {
                 amount
                 currencyCode
             }
@@ -954,7 +978,7 @@ class ShopifyCartApi extends CartApiBase
         return '
             handle
             title
-            priceV2 {
+            price {
                 amount
                 currencyCode
             }
