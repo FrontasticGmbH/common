@@ -31,7 +31,7 @@ trait ContainerTestTrait
 
             $this->assertIsObject(
                 $service,
-                sprintf("Service '%s' was not build as an object.", $serviceId)
+                sprintf('Service "%" was not build as an object.', $serviceId)
             );
         }
     }
