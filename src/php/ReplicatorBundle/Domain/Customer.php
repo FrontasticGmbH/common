@@ -64,6 +64,15 @@ class Customer extends DataObject
     public $isTransient = false;
 
     /**
+     * Used to indicate the customer uses the new down-sharded CouchDB
+     * schema with the "_downsharded" suffix database name convention
+     *
+     * @var bool
+     * @required
+     */
+    public bool $dbIsDownsharded = false;
+
+    /**
      * @var array
      * @required
      */
