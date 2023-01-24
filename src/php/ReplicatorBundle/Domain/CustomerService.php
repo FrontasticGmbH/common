@@ -129,6 +129,7 @@ class CustomerService
             'machineRegionToProviderMap' => $customer['machineRegionToProviderMap'] ?? [],
             'features' => $customer['features'] ?? [],
             'isTransient' => $transient,
+            'dbIsDownsharded' => $customer['dbIsDownsharded'] ?? false,
             'configuration' => $this->convertConfigurationToObjects($customerConfiguration),
             'environments' => $customer['environments'] ?? [
                 'production',
