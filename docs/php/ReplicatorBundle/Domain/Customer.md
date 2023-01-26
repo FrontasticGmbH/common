@@ -14,7 +14,6 @@ Property|Type|Default|Required|Description
 `machineRegionToProviderMap` | `array` | `[]` | *Yes* | Frontastic Machines Map to define providers use in each region
 `features` | `array` | `[]` | *Yes* | 
 `isTransient` | `bool` | `false` | *Yes* | Used to indicate this customer is only "half" configured or similar.
-`dbIsDownsharded` | `bool` | `false` | *Yes* | Used to indicate the customer uses the new down-sharded CouchDB schema with the "_downsharded" suffix database name convention
 `configuration` | `array` | `[]` | *Yes* | 
 `environments` | `array` | `['production', 'staging', 'development']` | *Yes* | 
 `projects` | [`Project`](Project.md)[] | `[]` | *Yes* | 
