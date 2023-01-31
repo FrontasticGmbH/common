@@ -25,8 +25,13 @@ class SwiftMail extends Mailer
         }
     }
 
-    public function sendToUser($user, string $type, string $subject, array $parameters = array(), $ignoreErrors = false)
-    {
+    public function sendToUser(
+        $user,
+        string $type,
+        string $subject,
+        array $parameters = array(),
+        $ignoreErrors = false
+    ) {
         $parameters = array_merge(
             $parameters,
             array(
