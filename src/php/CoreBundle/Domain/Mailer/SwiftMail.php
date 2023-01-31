@@ -25,7 +25,7 @@ class SwiftMail extends Mailer
         }
     }
 
-    public function sendToUser($user, string $type, string $subject, array $parameters = array())
+    public function sendToUser($user, string $type, string $subject, array $parameters = array(), $ignoreErrors = false)
     {
         $parameters = array_merge(
             $parameters,
@@ -49,8 +49,13 @@ class SwiftMail extends Mailer
         } catch (\InvalidArgumentException $e) {
             // Ignore missing text part
         }
-
-        $this->mailer->send($message);
+        try {
+            $this->mailer->send($message);
+        } catch (\Exception $e) {
+            if (!$ignoreErrors) {
+                throw $e;
+            }
+        }
     }
 
     private function renderView(string $template, array $parameters)
