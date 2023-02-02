@@ -10,7 +10,6 @@ abstract class Mailer
         $user,
         string $type,
         string $subject,
-        array $parameters = array(),
-        $ignoreErrors = false
+        array $parameters = array()
     );
 }
