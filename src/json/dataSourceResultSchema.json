@@ -1,0 +1,32 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://frontastic.cloud/json/dataSourceResponseSchema",
+    "title": "Data Source Preview Schema",
+    "description": "A Frontastic data source Preview definition",
+    "type": "object",    
+    "properties": {
+        "_type": {
+            "type": "string"
+        },
+        "dataSourcePayload": {
+            "type": "object"
+        },
+        "previewPayload": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type":"string"
+                    },
+                    "image": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            }
+        }
+    },
+    "required": ["_type", "dataSourcePayload", "previewPayload"],
+    "additionalProperties": false
+}
