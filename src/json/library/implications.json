@@ -174,7 +174,7 @@
                         },
                         {
                             "required": ["dynamicFilterEndpoint"],
-                            "$comment": "Field of type 'dynamic-filter' requires 'dynamicFilterEndpoin' property"
+                            "$comment": "Field of type 'dynamic-filter' requires 'dynamicFilterEndpoint' property"
                         }
                     ]
                 },
