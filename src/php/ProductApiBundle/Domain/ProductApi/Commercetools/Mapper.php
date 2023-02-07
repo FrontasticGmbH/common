@@ -559,6 +559,13 @@ class Mapper
             ",",
             array_map(
                 function ($term) {
+                    if ($term === true) {
+                        return '"true"';
+                    }
+                    if ($term === false) {
+                        return '"false"';
+                    }
+
                     return sprintf('"%s"', $term);
                 },
                 $terms
