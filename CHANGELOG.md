@@ -1,4 +1,10 @@
 
+## Version 2.40.1 (2023-02-08)
+
+** Bug fixes **
+
+- Correctly handle boolean filter values in product searches
+
 ## Version 2.40.0 (2022-12-20)
 
 ** New Features and Improvements **
