@@ -5,9 +5,6 @@
     "description": "A Frontastic data source Preview definition",
     "type": "object",    
     "properties": {
-        "_type": {
-            "type": "string"
-        },
         "dataSourcePayload": {
             "type": "object"
         },
@@ -22,11 +19,9 @@
                     "image": {
                         "type": "string"
                     }
-                },
-                "additionalProperties": false
+                }
             }
         }
     },
-    "required": ["_type", "dataSourcePayload", "previewPayload"],
-    "additionalProperties": false
+    "required": ["dataSourcePayload", "previewPayload"]
 }
