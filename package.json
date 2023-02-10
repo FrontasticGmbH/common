@@ -38,8 +38,8 @@
     "scripts": {
         "build": "webpack",
         "test": "node bin/test.js --env=jsdom",
-        "check": "node node_modules/.bin/eslint --ext .js --ext .jsx -c ../../integration/eslint.config.json --ignore-pattern frontastic-common.js src/js/ test/js/",
-        "fix": "node node_modules/.bin/eslint --fix --ext .js --ext .jsx -c ../../integration/eslint.config.json --ignore-pattern frontastic-common.js src/js/ test/js/"
+        "check": "eslint --ext .js --ext .jsx -c ../../integration/eslint.config.json --ignore-pattern frontastic-common.js src/js/ test/js/",
+        "fix": "eslint --fix --ext .js --ext .jsx -c ../../integration/eslint.config.json --ignore-pattern frontastic-common.js src/js/ test/js/"
     },
     "jest": {
         "collectCoverageFrom": [
