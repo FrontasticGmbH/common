@@ -1,4 +1,10 @@
 
+## Version 2.41.0 (2023-02-15)
+
+** New Features and Improvements **
+
+- Store build version info on CI extension upload
+
 ## Version 2.40.1 (2023-02-08)
 
 ** Bug fixes **
