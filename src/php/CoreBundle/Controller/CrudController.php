@@ -24,15 +24,21 @@ abstract class CrudController extends AbstractController
         return $body;
     }
 
-    protected function fillFromRequest(DataObject $entity, Request $request): DataObject
-    {
+    protected function fillFromRequest(
+        DataObject $entity,
+        Request $request,
+        bool $ignoreUndefinedProperties = false
+    ): DataObject {
         $body = $this->getJsonContent($request);
 
-        return $this->fillFromArray($entity, $body);
+        return $this->fillFromArray($entity, $body, $ignoreUndefinedProperties);
     }
 
-    protected function fillFromArray(DataObject $entity, array $body): DataObject
-    {
+    protected function fillFromArray(
+        DataObject $entity,
+        array $body,
+        bool $ignoreUndefinedProperties = false
+    ): DataObject {
         $versioner = new Versioner();
 
         if ($versioner->supports($entity)) {
@@ -44,6 +50,10 @@ abstract class CrudController extends AbstractController
                 continue;
             }
 
+            if ($ignoreUndefinedProperties && !property_exists($entity, $property)) {
+                continue;
+            }
+            
             $entity->$property = $value;
         }
 
