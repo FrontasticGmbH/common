@@ -144,9 +144,9 @@ class CustomerService
                         $projectSpecificEntities[] = 'Frontastic.Backstage.StageBundle.Domain.NodesTreeCache';
                     }
 
-                    $doc_type = 'Frontastic.Backstage.ProjectConfigurationBundle.Domain.ProjectConfiguration';
-                    if (!\in_array($doc_type, $projectSpecificEntities)) {
-                        $projectSpecificEntities[] = $doc_type;
+                    $entity = 'Frontastic.Backstage.ProjectConfigurationBundle.Domain.ProjectConfiguration';
+                    if (!\in_array($entity, $projectSpecificEntities)) {
+                        $projectSpecificEntities[] = $entity;
                     }
 
                     if (\in_array('Frontastic.Backstage.DeveloperBundle.Domain.Tastic', $projectSpecificEntities) &&
@@ -154,6 +154,8 @@ class CustomerService
                     ) {
                         $projectSpecificEntities[] = 'Frontastic.Backstage.DeveloperBundle.Domain.CustomStream';
                     }
+
+                    $publicKey = $project['encryptedFieldsPublicKey'] ?? null;
 
                     return new Project([
                         'projectId' => $project['projectId'],
@@ -165,6 +167,7 @@ class CustomerService
                         'previewUrl' => $project['previewUrl'] ?? null,
                         'webpackPort' => $project['webpackPort'] ?? 3000,
                         'ssrPort' => $project['ssrPort'] ?? 8000,
+                        'encryptedFieldsPublicKey' => isset($publicKey) ? base64_decode($publicKey) : $publicKey,
                         'configuration' => $this->convertConfigurationToObjects(
                             array_replace_recursive(
                                 $customerConfiguration,
