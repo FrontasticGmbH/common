@@ -53,7 +53,8 @@
                                             "group",
                                             "image",
                                             "description",
-                                            "tastic"
+                                            "tastic",
+                                            "encrypted"
                                         ]
                                     }
                                 }
