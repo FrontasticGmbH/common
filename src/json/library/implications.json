@@ -222,6 +222,31 @@
                             "not": {
                                 "properties": {
                                     "type": {
+                                        "enum": ["encrypted"]
+                                    }
+                                },
+                                "required": ["type"]
+                            }
+                        },
+                        {
+                            "patternProperties": {
+                                "^(translatable)$": {
+                                    "enum": [false]
+                                },
+                                "^(default)$": {
+                                    "enum": [null]
+                                }
+                            },
+                            "$comment": "Encrypted fields are neither translatable nor having a default value."
+                        }
+                    ]
+                },
+                {
+                    "anyOf":[
+                        {
+                            "not": {
+                                "properties": {
+                                    "type": {
                                         "enum": ["string"]
                                     }
                                 },
