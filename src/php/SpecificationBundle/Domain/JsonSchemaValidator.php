@@ -92,6 +92,12 @@ class JsonSchemaValidator
                                             $error['property']
                                         );
                                         break;
+                                    case 'notTranslatableField':
+                                        return sprintf(
+                                            "* %s: Field type isn't translatable.",
+                                            $error['property']
+                                        );
+                                        break;
                                     case 'invalidSchemaProperty':
                                         return sprintf(
                                             "* %s is a required field. You need to input a %s.",
@@ -167,19 +173,18 @@ class JsonSchemaValidator
         $errorFlag = "";
 
         if (str_contains($error['message'], "value found")) {
-            // For invalid inputted values
             $errorFlag = "invalidValueType";
         } elseif (str_contains($error['message'], "required")) {
-            // For missing properties
             $errorFlag = "missingProperty";
         } elseif (str_contains($error['message'], "enumeration")) {
-            // For invalid field types
-            $errorFlag = "invalidFieldType";
+            if (str_contains($error['property'], "translatable")) {
+                $errorFlag = "notTranslatableField";
+            } else {
+                $errorFlag = "invalidFieldType";
+            }
         } elseif (array_search($error['property'], self::SCHEMA_PROPERTIES) !== false) {
-            // For schema property pattern validation
             $errorFlag = "invalidSchemaProperty";
         } elseif (str_contains($error['message'], "additional properties")) {
-            // For unsupported additional properties
             $errorFlag = "unsupportedProperty";
         } else {
             foreach (self::FIELD_PROPERTIES as $fileProperty => $pattern) {
