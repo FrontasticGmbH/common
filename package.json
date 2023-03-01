@@ -36,7 +36,7 @@
     "main": "src/js/frontastic-common.js",
     "module": "src/js/index.js",
     "scripts": {
-        "build": "webpack",
+        "build": "webpack --mode=production",
         "test": "node bin/test.js --env=jsdom",
         "check": "eslint --ext .js --ext .jsx -c ../../integration/eslint.config.json --ignore-pattern frontastic-common.js src/js/ test/js/",
         "fix": "eslint --fix --ext .js --ext .jsx -c ../../integration/eslint.config.json --ignore-pattern frontastic-common.js src/js/ test/js/"
