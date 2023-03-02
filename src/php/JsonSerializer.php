@@ -23,14 +23,21 @@ class JsonSerializer
      */
     private $includeType = true;
 
+    private string $environment;
+
     /**
      * @param string[] $propertyExcludeList
      * @param ObjectEnhancer[] $objectEnhancers
      */
-    public function __construct(array $propertyExcludeList = [], iterable $objectEnhancers = [], $includeType = true)
-    {
+    public function __construct(
+        array $propertyExcludeList = [],
+        iterable $objectEnhancers = [],
+        $includeType = true,
+        $environment = 'dev'
+    ) {
         $this->propertyExcludeList = $propertyExcludeList;
         $this->includeType = $includeType;
+        $this->environment = $environment;
 
         foreach ($objectEnhancers as $enhancer) {
             $this->addEnhancer($enhancer);
@@ -78,7 +85,9 @@ class JsonSerializer
                 }
 
                 if (in_array($key, $this->propertyExcludeList, true)) {
-                    $result[$key] = '_FILTERED_';
+                    if (in_array($this->environment, ['dev', 'test'])) {
+                        $result[$key] = '_FILTERED_';
+                    }
                 } else {
                     $result[$key] = $this->serialize($value, $visitedIds);
                 }
@@ -110,7 +119,9 @@ class JsonSerializer
             }
 
             if (in_array($key, $this->propertyExcludeList)) {
-                $result[$key] = '_FILTERED_';
+                if (in_array($this->environment, ['dev', 'test'])) {
+                    $result[$key] = '_FILTERED_';
+                }
             } else {
                 $result[$key] = $this->serialize($value, $visitedIds);
             }
