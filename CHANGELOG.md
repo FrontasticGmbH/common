@@ -1,4 +1,16 @@
 
+## Version 2.42.0 (2023-03-02)
+
+** New Features and Improvements **
+
+- Some JavaScript dependency updates
+
+## Version 2.41.1 (2023-02-17)
+
+** New Features and Improvements **
+
+- Some JavaScript dependency updates
+
 ## Version 2.41.0 (2023-02-15)
 
 ** New Features and Improvements **
