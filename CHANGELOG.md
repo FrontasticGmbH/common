@@ -1,4 +1,28 @@
 
+## Version 2.42.0 (2023-03-02)
+
+** New Features and Improvements **
+
+- Some JavaScript dependency updates
+
+## Version 2.41.1 (2023-02-17)
+
+** New Features and Improvements **
+
+- Some JavaScript dependency updates
+
+## Version 2.41.0 (2023-02-15)
+
+** New Features and Improvements **
+
+- Store build version info on CI extension upload
+
+## Version 2.40.1 (2023-02-08)
+
+** Bug fixes **
+
+- Correctly handle boolean filter values in product searches
+
 ## Version 2.40.0 (2022-12-20)
 
 ** New Features and Improvements **
