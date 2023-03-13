@@ -3,6 +3,7 @@
 namespace Frontastic\Common\ReplicatorBundle\Domain;
 
 use Symfony\Component\Yaml\Yaml;
+use Frontastic\Backstage\ApiBundle\Domain\Context;
 
 class CustomerService
 {
@@ -142,6 +143,11 @@ class CustomerService
                     // caching and must follow Frontastic.Backstage.StageBundle.Domain.Node replication rules
                     if (\in_array('Frontastic.Backstage.StageBundle.Domain.Node', $projectSpecificEntities)) {
                         $projectSpecificEntities[] = 'Frontastic.Backstage.StageBundle.Domain.NodesTreeCache';
+                    }
+
+                    // multi-tenant customers must have the build versions saved on a per project basis
+                    if (\in_array(Context::FEATURE_MULTITENANT, $customer['features'])) {
+                        $projectSpecificEntities[] = 'Frontastic.Backstage.DeveloperBundle.Domain.BuildVersion';
                     }
 
                     $doc_type = 'Frontastic.Backstage.ProjectConfigurationBundle.Domain.ProjectConfiguration';
