@@ -128,7 +128,7 @@ class CustomerService
             'hasPaasModifications' => $customer['hasPaasModifications'] ?? false,
             'machineLimit' => $customer['machineLimit'] ?? 3,
             'machineRegionToProviderMap' => $customer['machineRegionToProviderMap'] ?? [],
-            'features' => $customer['features'] ?? [],
+            'features' => $customerFeatures = ($customer['features'] ?? []),
             'isTransient' => $transient,
             'configuration' => $this->convertConfigurationToObjects($customerConfiguration),
             'environments' => $customer['environments'] ?? [
@@ -137,7 +137,7 @@ class CustomerService
                 'development',
             ],
             'projects' => array_map(
-                function (array $project) use ($customer, $customerConfiguration): Project {
+                function (array $project) use ($customer, $customerConfiguration, $customerFeatures): Project {
                     $projectSpecificEntities = $project['projectSpecific'] ?? [];
                     // Frontastic.Backstage.StageBundle.Domain.NodesTreeCache entity is used for nodes tree
                     // caching and must follow Frontastic.Backstage.StageBundle.Domain.Node replication rules
@@ -151,7 +151,8 @@ class CustomerService
                     }
 
                     // multi-tenant customers must have the build versions saved on a per project basis
-                    if (\in_array(Context::FEATURE_MULTITENANT, $customer['features'])) {
+                    if (\in_array(Context::FEATURE_MULTITENANT, $customerFeatures) &&
+                        !\in_array('Frontastic.Backstage.DeveloperBundle.Domain.BuildVersion', $customerFeatures)) {
                         $projectSpecificEntities[] = 'Frontastic.Backstage.DeveloperBundle.Domain.BuildVersion';
                     }
 
