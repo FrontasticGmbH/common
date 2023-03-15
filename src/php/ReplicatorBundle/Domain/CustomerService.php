@@ -3,7 +3,6 @@
 namespace Frontastic\Common\ReplicatorBundle\Domain;
 
 use Symfony\Component\Yaml\Yaml;
-use Frontastic\Backstage\ApiBundle\Domain\Context;
 
 class CustomerService
 {
@@ -146,7 +145,9 @@ class CustomerService
                     }
 
                     // multi-tenant customers must have the build versions saved on a per project basis
-                    if (\in_array(Context::FEATURE_MULTITENANT, $customerFeatures) &&
+                    // could not use Frontastic\Backstage\ApiBundle\Domain\Context::FEATURE_MULTITENANT
+                    // constant in common component, so I used "multiTenant" instead
+                    if (\in_array('multiTenant', $customerFeatures) &&
                         !\in_array('Frontastic.Backstage.DeveloperBundle.Domain.BuildVersion', $customerFeatures)) {
                         $projectSpecificEntities[] = 'Frontastic.Backstage.DeveloperBundle.Domain.BuildVersion';
                     }
