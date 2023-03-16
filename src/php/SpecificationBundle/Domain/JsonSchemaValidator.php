@@ -115,6 +115,11 @@ class JsonSchemaValidator
                                         break;
                                     case 'unsupportedProperty':
                                         return $error['message'];
+                                    case 'reservedFieldName':
+                                        return "* You've used a reserved field name." . 
+                                            " Reserved field names are password, token, id, sequence, locale, or is_deleted." . 
+                                            "You must change the field name where you've used the reserved word.";
+                                        break;
                                     default:
                                         return "";
                                 }
@@ -186,6 +191,8 @@ class JsonSchemaValidator
             $errorFlag = "invalidSchemaProperty";
         } elseif (str_contains($error['message'], "additional properties")) {
             $errorFlag = "unsupportedProperty";
+        } elseif (str_contains($error['message'], "Matched a schema which it should not")) {
+            $errorFlag = "reservedFieldName";
         } else {
             foreach (self::FIELD_PROPERTIES as $fileProperty => $pattern) {
                 if (str_contains($error['property'], $fileProperty)) {
