@@ -77,28 +77,6 @@
             <argument>%kernel.environment%</argument>
         </service>
 
-        <service id="Frontastic\Common\AppDataFilter">
-            <!-- always keep keys list -->
-            <argument type="collection">
-                <argument>children</argument>
-                <argument>streams</argument>
-                <argument>projectConfiguration</argument>
-                <argument>projectConfigurationSchema</argument>
-                <argument>email</argument>
-                <argument>groups</argument>
-                <argument>addresses</argument>
-            </argument>
-            <!-- always remove keys list -->
-            <argument type="collection">
-                <argument>_type</argument>
-                <argument>sequence</argument>
-            </argument>
-            <!-- always remove property paths list -->
-            <argument type="collection">
-                <argument>[context][customer][projects]</argument>
-            </argument>
-        </service>
-
         <service id="Domnikl\Statsd\Client">
             <argument type="service">
                 <service class="Domnikl\Statsd\Connection\UdpSocket">
