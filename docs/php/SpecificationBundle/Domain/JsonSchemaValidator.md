@@ -11,7 +11,7 @@
 
 ```php
 public function validate(
-    object $toValidate,
+    mixed $toValidate,
     string $schemaFile,
     array $schemaLibraryFiles = []
 ): array
@@ -19,7 +19,7 @@ public function validate(
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$toValidate`|`object`||
+`$toValidate`|`mixed`||
 `$schemaFile`|`string`||
 `$schemaLibraryFiles`|`array`|`[]`|
 
