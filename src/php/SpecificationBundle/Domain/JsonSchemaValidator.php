@@ -116,8 +116,9 @@ class JsonSchemaValidator
                                     case 'unsupportedProperty':
                                         return $error['message'];
                                     case 'reservedFieldName':
-                                        return "* You've used a reserved field name." . 
-                                            " Reserved field names are password, token, id, sequence, locale, or is_deleted." . 
+                                        return "* You've used a reserved field name." .
+                                            " Reserved field names are " .
+                                            "password, token, id, sequence, locale, or is_deleted." .
                                             "You must change the field name where you've used the reserved word.";
                                         break;
                                     default:
