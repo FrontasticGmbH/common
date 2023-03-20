@@ -151,7 +151,7 @@ class CustomerService
 
                     // multi-tenant customers must have the build versions saved on a per project basis
                     // could not use Frontastic\Backstage\ApiBundle\Domain\Context::FEATURE_MULTITENANT
-                    // constant in common component, so I used "multiTenant" instead
+                    // constant in common component, so I used the "multiTenant" value instead
                     if (\in_array('multiTenant', $customerFeatures) &&
                         !\in_array('Frontastic.Backstage.DeveloperBundle.Domain.BuildVersion', $customerFeatures)) {
                         $projectSpecificEntities[] = 'Frontastic.Backstage.DeveloperBundle.Domain.BuildVersion';
