@@ -53,7 +53,8 @@
                                             "group",
                                             "image",
                                             "description",
-                                            "tastic"
+                                            "tastic",
+                                            "encrypted"
                                         ]
                                     }
                                 }
@@ -90,8 +91,8 @@
                     "type": "string"
                 },
                 "dynamicFilterEndpoint": {
-                    "$comment": "TODO: Define dependency to type dynamic-filter?",
-                    "type": "string"
+                    "type": "string",
+                    "pattern": "^/"
                 },
                 "customAppType": {
                     "$comment": "TODO: Define dependency to type?",

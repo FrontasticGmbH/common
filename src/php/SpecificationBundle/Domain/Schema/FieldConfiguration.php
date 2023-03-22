@@ -15,7 +15,8 @@ class FieldConfiguration
         'markdown' => '',
         'json' => '{}',
         'boolean' => false,
-        'instant' => null
+        'instant' => null,
+        'encrypted' => null
     ];
 
     /**

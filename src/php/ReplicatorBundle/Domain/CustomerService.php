@@ -144,17 +144,17 @@ class CustomerService
                         $projectSpecificEntities[] = 'Frontastic.Backstage.StageBundle.Domain.NodesTreeCache';
                     }
 
+                    $entity = 'Frontastic.Backstage.ProjectConfigurationBundle.Domain.ProjectConfiguration';
+                    if (!\in_array($entity, $projectSpecificEntities)) {
+                        $projectSpecificEntities[] = $entity;
+                    }
+
                     // multi-tenant customers must have the build versions saved on a per project basis
                     // could not use Frontastic\Backstage\ApiBundle\Domain\Context::FEATURE_MULTITENANT
-                    // constant in common component, so I used "multiTenant" instead
+                    // constant in common component, so I used the "multiTenant" value instead
                     if (\in_array('multiTenant', $customerFeatures) &&
                         !\in_array('Frontastic.Backstage.DeveloperBundle.Domain.BuildVersion', $customerFeatures)) {
                         $projectSpecificEntities[] = 'Frontastic.Backstage.DeveloperBundle.Domain.BuildVersion';
-                    }
-
-                    $doc_type = 'Frontastic.Backstage.ProjectConfigurationBundle.Domain.ProjectConfiguration';
-                    if (!\in_array($doc_type, $projectSpecificEntities)) {
-                        $projectSpecificEntities[] = $doc_type;
                     }
 
                     if (\in_array('Frontastic.Backstage.DeveloperBundle.Domain.Tastic', $projectSpecificEntities) &&
@@ -162,6 +162,8 @@ class CustomerService
                     ) {
                         $projectSpecificEntities[] = 'Frontastic.Backstage.DeveloperBundle.Domain.CustomStream';
                     }
+
+                    $publicKey = $project['encryptedFieldsPublicKey'] ?? null;
 
                     return new Project([
                         'projectId' => $project['projectId'],
@@ -173,6 +175,7 @@ class CustomerService
                         'previewUrl' => $project['previewUrl'] ?? null,
                         'webpackPort' => $project['webpackPort'] ?? 3000,
                         'ssrPort' => $project['ssrPort'] ?? 8000,
+                        'encryptedFieldsPublicKey' => isset($publicKey) ? base64_decode($publicKey) : $publicKey,
                         'configuration' => $this->convertConfigurationToObjects(
                             array_replace_recursive(
                                 $customerConfiguration,
