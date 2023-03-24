@@ -134,4 +134,16 @@ class Project extends DataObject
 
         return $config;
     }
+
+    public function getExtensionRunnerManagerHost(string $environment): string
+    {
+        $environments = $this->configuration['multitenant']['environments'] ?? [];
+        if (!isset($environments[$environment])) {
+            throw new \OutOfBoundsException('Extension Runner Manager configuration was not found.');
+        }
+
+       return ($environments[$environment]) === 'http://localhost:8087' ?
+                $environments[$environment] :
+                'https://' . $environments[$environment] . '-extensions.frontastic.cloud';
+    }
 }
