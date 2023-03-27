@@ -79,7 +79,14 @@
                 "field": {
                     "type": "string",
                     "not": {
-                        "enum": ["id", "sequence", "locale", "is_deleted"]
+                        "enum": [
+                            "id",
+                            "sequence",
+                            "locale",
+                            "is_deleted",
+                            "password",
+                            "token"
+                        ]
                     }
                 },
                 "streamType": {
