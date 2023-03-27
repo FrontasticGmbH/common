@@ -142,8 +142,10 @@ class Project extends DataObject
             throw new \OutOfBoundsException('Extension Runner Manager configuration was not found.');
         }
 
-        return ($environments[$environment]) === 'http://localhost:8087' ?
-            $environments[$environment] :
-            'https://' . $environments[$environment] . '-extensions.frontastic.cloud';
+        if ($environments[$environment] === 'http://localhost:8087') {
+            return $environments[$environment];
+        }
+
+        return 'https://multitenant-gke-' . $environments[$environment] . '-extensions.frontastic.cloud';
     }
 }
