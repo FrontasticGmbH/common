@@ -137,7 +137,8 @@ class Project extends DataObject
 
     public function getExtensionRunnerManagerHost(string $environment): string
     {
-        $environments = $this->configuration['multitenant']['environments'] ?? [];
+        $multitenantConfiguration = (array) ($this->configuration['multitenant'] ?? []);
+        $environments = $multitenantConfiguration['environments'] ?? [];
         if (!isset($environments[$environment])) {
             throw new \OutOfBoundsException('Extension Runner Manager configuration was not found.');
         }

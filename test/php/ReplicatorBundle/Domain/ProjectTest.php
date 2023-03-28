@@ -11,7 +11,7 @@ class ProjectTest extends TestCase
     {
         $project = new Project([
             'configuration' => [
-                'multitenant' => [
+                'multitenant' => (object) [
                     'environments' => [
                         'dev' => 'http://localhost:8087',
                         'staging' => 'http://localhost:8087',
@@ -28,7 +28,7 @@ class ProjectTest extends TestCase
     {
         $project = new Project([
             'configuration' => [
-                'multitenant' => [
+                'multitenant' => (object) [
                     'environments' => [
                         'dev' => '000',
                         'staging' => 'XXX',
