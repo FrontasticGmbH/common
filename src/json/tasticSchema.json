@@ -7,16 +7,20 @@
     "properties": {
         "tasticType": {
             "type": "string",
-            "pattern": "[^ ]"
+            "pattern": "[^ ]",
+            "maxLength": 255
         },
         "name": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 255
         },
         "description": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 255
         },
         "category": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 255
         },
         "schema": {
             "$ref": "https://frontastic.cloud/json/library/common#/definitions/schema"
