@@ -7,7 +7,7 @@ use Frontastic\Common\ReplicatorBundle\Domain\Project;
 
 class ProjectTest extends TestCase
 {
-    public function testSandboxExtensionRunnerHost()
+    public function testSandboxExtensionRunnerUrl()
     {
         $project = new Project([
             'configuration' => [
@@ -20,11 +20,11 @@ class ProjectTest extends TestCase
             ],
         ]);
 
-        $this->assertEquals('http://localhost:8087', $project->getExtensionRunnerManagerHost('dev'));
-        $this->assertEquals('http://localhost:8087', $project->getExtensionRunnerManagerHost('staging'));
+        $this->assertEquals('http://localhost:8087', $project->getExtensionRunnerManagerUrl('dev'));
+        $this->assertEquals('http://localhost:8087', $project->getExtensionRunnerManagerUrl('staging'));
     }
 
-    public function testNonSandboxExtensionRunnerHost()
+    public function testNonSandboxExtensionRunnerUrl()
     {
         $project = new Project([
             'configuration' => [
@@ -39,11 +39,11 @@ class ProjectTest extends TestCase
 
         $this->assertEquals(
             'https://multitenant-gke-000-extensions.frontastic.cloud',
-            $project->getExtensionRunnerManagerHost('dev')
+            $project->getExtensionRunnerManagerUrl('dev')
         );
         $this->assertEquals(
             'https://multitenant-gke-XXX-extensions.frontastic.cloud',
-            $project->getExtensionRunnerManagerHost('staging')
+            $project->getExtensionRunnerManagerUrl('staging')
         );
     }
 
@@ -54,16 +54,16 @@ class ProjectTest extends TestCase
             'configuration' => [],
         ]);
 
-        $project->getExtensionRunnerManagerHost('dev');
+        $project->getExtensionRunnerManagerUrl('dev');
     }
 
-    public function testNonMultiTenantExtensionRunnerHostStaging()
+    public function testNonMultiTenantExtensionRunnerUrlStaging()
     {
         $this->expectException(\OutOfBoundsException::class);
         $project = new Project([
             'configuration' => [],
         ]);
 
-        $project->getExtensionRunnerManagerHost('staging');
+        $project->getExtensionRunnerManagerUrl('staging');
     }
 }

@@ -135,7 +135,7 @@ class Project extends DataObject
         return $config;
     }
 
-    public function getExtensionRunnerManagerHost(string $environment): string
+    public function getExtensionRunnerManagerUrl(string $environment): string
     {
         $multitenantConfiguration = (array) ($this->configuration['multitenant'] ?? []);
         $environments = $multitenantConfiguration['environments'] ?? [];

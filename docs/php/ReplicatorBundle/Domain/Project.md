@@ -25,8 +25,10 @@ Property|Type|Default|Required|Description
 
 ## Methods
 
-* [getConfigurationSection()](#getconfigurationsection)
-* [getExtensionRunnerManagerHost()](#getextensionrunnermanagerhost)
+- [Project](#project)
+  - [Methods](#methods)
+    - [getConfigurationSection()](#getconfigurationsection)
+    - [getExtensionRunnerManagerUrl()](#getextensionrunnermanagerurl)
 
 ### getConfigurationSection()
 
@@ -42,10 +44,10 @@ Argument|Type|Default|Description
 
 Return Value: `object`
 
-### getExtensionRunnerManagerHost()
+### getExtensionRunnerManagerUrl()
 
 ```php
-public function getExtensionRunnerManagerHost(
+public function getExtensionRunnerManagerUrl(
     string $environment
 ): string
 ```
