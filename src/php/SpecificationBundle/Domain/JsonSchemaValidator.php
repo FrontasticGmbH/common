@@ -180,8 +180,8 @@ class JsonSchemaValidator
 
         if (str_contains($error['message'], "value found")) {
             $errorFlag = "invalidValueType";
-        } elseif (
-            str_contains($error['message'], "Must be at most") && str_contains($error['message'], "characters long")
+        } elseif (str_contains($error['message'], "Must be at most") &&
+            str_contains($error['message'], "characters long")
         ) {
             $errorFlag = "stringTooLong";
         } elseif (str_contains($error['message'], "required")) {
@@ -196,8 +196,7 @@ class JsonSchemaValidator
             $errorFlag = "invalidSchemaProperty";
         } elseif (str_contains($error['message'], "additional properties")) {
             $errorFlag = "unsupportedProperty";
-        } elseif (
-            str_contains($error['message'], "Matched a schema which it should not") &&
+        } elseif (str_contains($error['message'], "Matched a schema which it should not") &&
             strpos($this->extractPropertyName($error['property']), "fields") === false
         ) {
             $errorFlag = "reservedFieldName";
