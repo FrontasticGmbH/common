@@ -25,10 +25,7 @@ Property|Type|Default|Required|Description
 
 ## Methods
 
-- [Project](#project)
-  - [Methods](#methods)
-    - [getConfigurationSection()](#getconfigurationsection)
-    - [getExtensionRunnerManagerUrl()](#getextensionrunnermanagerurl)
+* [getConfigurationSection()](#getconfigurationsection)
 
 ### getConfigurationSection()
 
@@ -43,19 +40,5 @@ Argument|Type|Default|Description
 `…$sectionNamePath`|`string`||
 
 Return Value: `object`
-
-### getExtensionRunnerManagerUrl()
-
-```php
-public function getExtensionRunnerManagerUrl(
-    string $environment
-): string
-```
-
-Argument|Type|Default|Description
---------|----|-------|-----------
-`$environment`|`string`||
-
-Return Value: `string`
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).
