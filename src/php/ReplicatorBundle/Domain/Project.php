@@ -134,19 +134,4 @@ class Project extends DataObject
 
         return $config;
     }
-
-    public function getExtensionRunnerManagerUrl(string $environment): string
-    {
-        $multitenantConfiguration = (array) ($this->configuration['multitenant'] ?? []);
-        $environments = $multitenantConfiguration['environments'] ?? [];
-        if (!isset($environments[$environment])) {
-            throw new \OutOfBoundsException('Extension Runner Manager configuration was not found.');
-        }
-
-        if ($environments[$environment] === 'http://localhost:8087') {
-            return $environments[$environment];
-        }
-
-        return 'https://multitenant-gke-' . $environments[$environment] . '-extensions.frontastic.cloud';
-    }
 }
