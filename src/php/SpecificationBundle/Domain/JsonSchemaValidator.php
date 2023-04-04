@@ -25,7 +25,7 @@ class JsonSchemaValidator
     private const FIELD_PROPERTIES = [
         "dynamicFilterEndpoint" => "starts with /",
     ];
-    
+
     /**
      * @return array Array of errors, empty if valid
      */
@@ -40,7 +40,7 @@ class JsonSchemaValidator
         if ($validator->isValid()) {
             return [];
         }
-        
+
         return $validator->getErrors();
     }
 
@@ -49,78 +49,84 @@ class JsonSchemaValidator
         $this->checkSchemaSyntax($toParse);
 
         $schemaToValidate = $this->checkSchemaType($toParse);
-        
+
         $errors = $this->validate($schemaToValidate, $schemaFile, $schemaLibraryFiles);
         if (count($errors) > 0) {
             throw new InvalidSchemaException(
                 "JSON does not follow schema.",
                 implode(
                     "\n",
-                    array_filter(
-                        array_map(
-                            function (array $error): string {
-                                /** @var SchemaError $schemaError */
-                                $schemaError = $this->createSchemaError($error);
+                    array_map(
+                        function (array $error): string {
+                            /** @var SchemaError $schemaError */
+                            $schemaError = $this->createSchemaError($error);
 
-                                switch ($schemaError->errorFlag) {
-                                    case 'invalidValueType':
-                                        return sprintf(
-                                            "* %s: The %s value type doesn't match the correct type. " .
+                            switch ($schemaError->errorFlag) {
+                                case 'invalidValueType':
+                                    return sprintf(
+                                        "* %s: The %s value type doesn't match the correct type. " .
                                             "You have inputted %s value but you need to input %s.",
-                                            $error['property'],
-                                            explode(
-                                                '.',
-                                                $error['property']
-                                            )[array_key_last(explode('.', $error['property']))],
-                                            strtolower(explode(" ", $error['message'])[0]),
-                                            explode(" ", $error['message'])[5]
-                                        );
-                                        break;
-                                    case 'missingProperty':
-                                        return sprintf(
-                                            "* %s A property %s is required. Add %s property.",
-                                            $schemaError->errorIndex ? $schemaError->errorIndex . ":" :
-                                                "One of your properties is missing.",
-                                            $schemaError->propertyName,
-                                            $schemaError->propertyName
-                                        );
-                                        break;
-                                    case 'invalidFieldType':
-                                        return sprintf(
-                                            "* %s: Field type doesn't have a valid value. " .
+                                        $error['property'],
+                                        explode(
+                                            '.',
+                                            $error['property']
+                                        )[array_key_last(explode('.', $error['property']))],
+                                        strtolower(explode(" ", $error['message'])[0]),
+                                        explode(" ", $error['message'])[5]
+                                    );
+                                    break;
+                                case 'missingProperty':
+                                    return sprintf(
+                                        "* %s A property %s is required. Add %s property.",
+                                        $schemaError->errorIndex ? $schemaError->errorIndex . ":" :
+                                            "One of your properties is missing.",
+                                        $schemaError->propertyName,
+                                        $schemaError->propertyName
+                                    );
+                                    break;
+                                case 'invalidFieldType':
+                                    return sprintf(
+                                        "* %s: Field type doesn't have a valid value. " .
                                             "Check that the field type matches the value type.",
-                                            $error['property']
-                                        );
-                                        break;
-                                    case 'notTranslatableField':
-                                        return sprintf(
-                                            "* %s: Field type isn't translatable.",
-                                            $error['property']
-                                        );
-                                        break;
-                                    case 'invalidSchemaProperty':
-                                        return sprintf(
-                                            "* %s is a required field. You need to input a %s.",
-                                            $schemaError->propertyName,
-                                            $schemaError->propertyName
-                                        );
-                                        break;
-                                    case 'invalidFieldProperty':
-                                        return sprintf(
-                                            "* %s is a required field.You need to input a %s that %s.",
-                                            $schemaError->propertyName,
-                                            $schemaError->propertyName,
-                                            self::FIELD_PROPERTIES[$schemaError->propertyName]
-                                        );
-                                        break;
-                                    case 'unsupportedProperty':
-                                        return $error['message'];
-                                    default:
-                                        return "";
-                                }
-                            },
-                            $errors
-                        )
+                                        $error['property']
+                                    );
+                                    break;
+                                case 'notTranslatableField':
+                                    return sprintf(
+                                        "* %s: Field type isn't translatable.",
+                                        $error['property']
+                                    );
+                                    break;
+                                case 'invalidSchemaProperty':
+                                    return sprintf(
+                                        "* %s is a required field. You need to input a %s.",
+                                        $schemaError->propertyName,
+                                        $schemaError->propertyName
+                                    );
+                                    break;
+                                case 'invalidFieldProperty':
+                                    return sprintf(
+                                        "* %s is a required field. You need to input a %s that %s.",
+                                        $schemaError->propertyName,
+                                        $schemaError->propertyName,
+                                        self::FIELD_PROPERTIES[$schemaError->propertyName]
+                                    );
+                                    break;
+                                case 'unsupportedProperty':
+                                    return $error['message'];
+                                case 'stringTooLong':
+                                    return '* ' . $schemaError->propertyName . ': ' . $error['message'];
+                                case 'reservedFieldName':
+                                    return "* You've used a reserved field name." .
+                                        " Reserved field names are " .
+                                        "password, token, id, sequence, locale, or is_deleted." .
+                                        "You must change the field name where you've used the reserved word.";
+                                    break;
+                                default:
+                                    return "";
+                            }
+                        },
+                        $errors
                     )
                 )
             );
@@ -174,6 +180,10 @@ class JsonSchemaValidator
 
         if (str_contains($error['message'], "value found")) {
             $errorFlag = "invalidValueType";
+        } elseif (str_contains($error['message'], "Must be at most") &&
+            str_contains($error['message'], "characters long")
+        ) {
+            $errorFlag = "stringTooLong";
         } elseif (str_contains($error['message'], "required")) {
             $errorFlag = "missingProperty";
         } elseif (str_contains($error['message'], "enumeration")) {
@@ -186,6 +196,10 @@ class JsonSchemaValidator
             $errorFlag = "invalidSchemaProperty";
         } elseif (str_contains($error['message'], "additional properties")) {
             $errorFlag = "unsupportedProperty";
+        } elseif (str_contains($error['message'], "Matched a schema which it should not") &&
+            strpos($this->extractPropertyName($error['property']), "fields") === false
+        ) {
+            $errorFlag = "reservedFieldName";
         } else {
             foreach (self::FIELD_PROPERTIES as $fileProperty => $pattern) {
                 if (str_contains($error['property'], $fileProperty)) {
