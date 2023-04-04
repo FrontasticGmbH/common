@@ -25,7 +25,6 @@
     <import file="${frontastic_basedir}/paas/integration/build-commons/modules/composer.xml" />
     <import file="${frontastic_basedir}/paas/integration/build-commons/modules/phpunit.xml" />
     <import file="${frontastic_basedir}/paas/integration/build-commons/modules/checkstyle.xml" />
-    <import file="${frontastic_basedir}/paas/integration/build-commons/modules/pdepend.xml" />
     <import file="${frontastic_basedir}/paas/integration/build-commons/modules/phpstan.xml" />
     <import file="${frontastic_basedir}/paas/integration/build-commons/modules/apidocs.xml" />
     <import file="${basedir}/src/ant/javascript.xml" />
