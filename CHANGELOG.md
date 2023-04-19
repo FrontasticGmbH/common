@@ -1,4 +1,10 @@
 
+## Version 2.42.1 (2023-04-19)
+
+** Bug fixes **
+
+- Explicitly specify the uuid dependency in package.json and update the compatible versions
+
 ## Version 2.42.0 (2023-03-02)
 
 ** New Features and Improvements **
