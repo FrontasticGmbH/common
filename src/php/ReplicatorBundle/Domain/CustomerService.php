@@ -145,6 +145,14 @@ class CustomerService
                     }
 
                     if (!\in_array(
+                        'Frontastic.Backstage.NotificationBundle.Domain.Notification',
+                        $projectSpecificEntities
+                    )) {
+                        $projectSpecificEntities[] =
+                            'Frontastic.Backstage.NotificationBundle.Domain.Notification';
+                    }
+
+                    if (!\in_array(
                         'Frontastic.Backstage.ProjectConfigurationBundle.Domain.ProjectConfiguration',
                         $projectSpecificEntities
                     )) {
