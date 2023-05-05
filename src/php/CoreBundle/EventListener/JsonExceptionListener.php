@@ -27,7 +27,6 @@ class JsonExceptionListener
         if (!in_array('application/json', $acceptableContentTypes) &&
             !in_array('text/json', $acceptableContentTypes) &&
             !$event->getRequest()->isXmlHttpRequest()) {
-            // var_dump($acceptableContentTypes);
             return;
         }
 
