@@ -53,6 +53,7 @@ class Logger extends HttpClient
                     'path' => parse_url($url, PHP_URL_PATH),
                     'method' => $method,
                     'responseTime' => $time,
+                    'responseTimeMs' => $time * 1000,
                     'statusCode' => $response->status,
                 ];
 
