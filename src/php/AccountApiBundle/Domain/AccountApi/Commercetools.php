@@ -101,6 +101,7 @@ class Commercetools implements AccountApi
                             'firstName' => $account->firstName,
                             'lastName' => $account->lastName,
                             'dateOfBirth' => $account->birthday ? $account->birthday->format('Y-m-d') : null,
+                            'authenticationMode' => $account->getPassword() !== null ? 'Password' : 'ExternalAuth',
                             'password' => $this->sanitizePassword($account->getPassword()),
                             'isEmailVerified' => $account->confirmed,
                             'addresses' => $addressesData,
@@ -591,8 +592,12 @@ class Commercetools implements AccountApi
         return $this->client;
     }
 
-    private function sanitizePassword(string $password): string
+    private function sanitizePassword(?string $password): ?string
     {
+        if ($password === null) {
+            return null;
+        }
+
         return str_replace('%', '', $password);
     }
 }
