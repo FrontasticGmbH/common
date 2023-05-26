@@ -1,0 +1,72 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://frontastic.cloud/json/dynamicFiltersResponseSchema",
+    "title": "Dynamic Filters Response Schema",
+    "description": "A Frontastic dynamic Filters Response definition",
+    "type": "array",    
+    "items": {
+        "type": "object",
+        "properties": {
+            "field": {
+                "type": "string",
+                "not": {
+                    "enum": [
+                        "id",
+                        "sequence",
+                        "locale",
+                        "is_deleted"
+                    ]
+                }
+            },
+            "type": {
+                "type": "string"
+            },
+            "label": {
+                "type": "string"
+            },
+            "values": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "value": {
+                            "type": "string"
+                        },
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "$ref": "#/definitions/enum-field-types-imply-values-attributes-is-required"  
+    },
+
+    "definitions": {  
+        "enum-field-types-imply-values-attributes-is-required": {
+            "allOf":[
+                {
+                    "anyOf":[
+                        {
+                            "not": {
+                                "properties": {
+                                    "type": {
+                                        "enum": ["enum"]
+                                    }
+                                },
+                                "required": ["type"]
+                            }
+                        },
+                        {
+                            "required": ["values"],
+                            "$comment": "Field of type 'enum' requires 'values' property"
+                        }
+                    ]
+                },
+                {
+                    "required": ["type", "field", "label"]
+                }
+            ]
+        }
+    }
+}

@@ -174,7 +174,7 @@
                         },
                         {
                             "required": ["dynamicFilterEndpoint"],
-                            "$comment": "Field of type 'dynamic-filter' requires 'dynamicFilterEndpoin' property"
+                            "$comment": "Field of type 'dynamic-filter' requires 'dynamicFilterEndpoint' property"
                         }
                     ]
                 },
@@ -213,6 +213,31 @@
                         {
                             "required": ["label", "type", "field"],
                             "$comment": "Field types require 'label', 'type', and 'field' properties"
+                        }
+                    ]
+                },
+                {
+                    "anyOf":[
+                        {
+                            "not": {
+                                "properties": {
+                                    "type": {
+                                        "enum": ["encrypted"]
+                                    }
+                                },
+                                "required": ["type"]
+                            }
+                        },
+                        {
+                            "patternProperties": {
+                                "^(translatable)$": {
+                                    "enum": [false]
+                                },
+                                "^(default)$": {
+                                    "enum": [null]
+                                }
+                            },
+                            "$comment": "Encrypted fields are neither translatable nor having a default value."
                         }
                     ]
                 },

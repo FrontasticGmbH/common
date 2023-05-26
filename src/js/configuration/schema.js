@@ -146,6 +146,8 @@ function getFieldDefaultValue (type, defaultValue) {
         return false
     case 'instant':
         return null
+    case 'encrypted':
+        return null
     default:
         return null
     }

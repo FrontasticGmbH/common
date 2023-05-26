@@ -53,7 +53,8 @@
                                             "group",
                                             "image",
                                             "description",
-                                            "tastic"
+                                            "tastic",
+                                            "encrypted"
                                         ]
                                     }
                                 }
@@ -78,7 +79,14 @@
                 "field": {
                     "type": "string",
                     "not": {
-                        "enum": ["id", "sequence", "locale", "is_deleted"]
+                        "enum": [
+                            "id",
+                            "sequence",
+                            "locale",
+                            "is_deleted",
+                            "password",
+                            "token"
+                        ]
                     }
                 },
                 "streamType": {
@@ -90,8 +98,8 @@
                     "type": "string"
                 },
                 "dynamicFilterEndpoint": {
-                    "$comment": "TODO: Define dependency to type dynamic-filter?",
-                    "type": "string"
+                    "type": "string",
+                    "pattern": "^/"
                 },
                 "customAppType": {
                     "$comment": "TODO: Define dependency to type?",

@@ -32,11 +32,14 @@
             <arg value="build" />
         </exec>
 
-        <retry retrycount="3" retrydelay="1000">
-            <exec executable="git" failonerror="true" dir="${basedir}">
-                <arg value="add" />
-                <arg value="${basedir}/src/js/frontastic-common.js" />
-            </exec>
-        </retry>
+        <!-- git directly fails if it can't acquire it's lock, but it might be that some other component does a git operation at the same time. In this case it's better to wait for the lock than directly fail. -->
+        <exec executable="flock" failonerror="true" dir="${basedir}">
+            <arg value="--timeout" />
+            <arg value="5" />
+            <arg value="${frontastic_basedir}/git-flock.lock" />
+            <arg value="git" />
+            <arg value="add" />
+            <arg value="${basedir}/src/js/frontastic-common.js" />
+        </exec>
     </target>
 </project>

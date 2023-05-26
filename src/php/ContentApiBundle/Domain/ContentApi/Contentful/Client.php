@@ -47,6 +47,7 @@ class Client extends ContentfulClient
                     'path' => parse_url($uri, PHP_URL_PATH),
                     'method' => $method,
                     'responseTime' => $time,
+                    'responseTimeMs' => $time * 1000,
                     'statusCode' => end($messages)->getResponse()->getStatusCode(),
                 ],
             ]

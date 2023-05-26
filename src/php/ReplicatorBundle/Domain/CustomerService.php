@@ -127,7 +127,7 @@ class CustomerService
             'hasPaasModifications' => $customer['hasPaasModifications'] ?? false,
             'machineLimit' => $customer['machineLimit'] ?? 3,
             'machineRegionToProviderMap' => $customer['machineRegionToProviderMap'] ?? [],
-            'features' => $customer['features'] ?? [],
+            'features' => $customerFeatures = ($customer['features'] ?? []),
             'isTransient' => $transient,
             'configuration' => $this->convertConfigurationToObjects($customerConfiguration),
             'environments' => $customer['environments'] ?? [
@@ -136,7 +136,7 @@ class CustomerService
                 'development',
             ],
             'projects' => array_map(
-                function (array $project) use ($customer, $customerConfiguration): Project {
+                function (array $project) use ($customer, $customerConfiguration, $customerFeatures): Project {
                     $projectSpecificEntities = $project['projectSpecific'] ?? [];
                     // Frontastic.Backstage.StageBundle.Domain.NodesTreeCache entity is used for nodes tree
                     // caching and must follow Frontastic.Backstage.StageBundle.Domain.Node replication rules
@@ -144,9 +144,20 @@ class CustomerService
                         $projectSpecificEntities[] = 'Frontastic.Backstage.StageBundle.Domain.NodesTreeCache';
                     }
 
-                    $doc_type = 'Frontastic.Backstage.ProjectConfigurationBundle.Domain.ProjectConfiguration';
-                    if (!\in_array($doc_type, $projectSpecificEntities)) {
-                        $projectSpecificEntities[] = $doc_type;
+                    if (!\in_array(
+                        'Frontastic.Backstage.ProjectConfigurationBundle.Domain.ProjectConfiguration',
+                        $projectSpecificEntities
+                    )) {
+                        $projectSpecificEntities[] =
+                            'Frontastic.Backstage.ProjectConfigurationBundle.Domain.ProjectConfiguration';
+                    }
+
+                    // multi-tenant customers must have the build versions saved on a per project basis
+                    // could not use Frontastic\Backstage\ApiBundle\Domain\Context::FEATURE_MULTITENANT
+                    // constant in common component, so I used the "multiTenant" value instead
+                    if (\in_array('multiTenant', $customerFeatures) &&
+                        !\in_array('Frontastic.Backstage.DeveloperBundle.Domain.BuildVersion', $customerFeatures)) {
+                        $projectSpecificEntities[] = 'Frontastic.Backstage.DeveloperBundle.Domain.BuildVersion';
                     }
 
                     if (\in_array('Frontastic.Backstage.DeveloperBundle.Domain.Tastic', $projectSpecificEntities) &&
@@ -154,6 +165,8 @@ class CustomerService
                     ) {
                         $projectSpecificEntities[] = 'Frontastic.Backstage.DeveloperBundle.Domain.CustomStream';
                     }
+
+                    $publicKey = $project['encryptedFieldsPublicKey'] ?? null;
 
                     return new Project([
                         'projectId' => $project['projectId'],
@@ -165,6 +178,7 @@ class CustomerService
                         'previewUrl' => $project['previewUrl'] ?? null,
                         'webpackPort' => $project['webpackPort'] ?? 3000,
                         'ssrPort' => $project['ssrPort'] ?? 8000,
+                        'encryptedFieldsPublicKey' => $publicKey ? base64_decode($publicKey) : $publicKey,
                         'configuration' => $this->convertConfigurationToObjects(
                             array_replace_recursive(
                                 $customerConfiguration,
@@ -202,6 +216,16 @@ class CustomerService
     {
         $this->parseCustomers();
         return $this->customers;
+    }
+
+    /**
+     * @return \Frontastic\Common\ReplicatorBundle\Domain\Customer[]
+     */
+    public function getCustomersInHost(): array
+    {
+        return \array_filter($this->getCustomers(), function (Customer $customer) {
+            return $customer->isTransient;
+        });
     }
 
     public function getCustomer(string $customerName): Customer
