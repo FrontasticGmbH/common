@@ -1,4 +1,12 @@
 
+## Version 2.43.0 (2023-05-26)
+
+** New Features and Improvements **
+
+- Remove filtered values from JSON in non-development environments
+- Allow creating external auth accounts in commercetools composable commerce
+- Add milisecond timings in log messages for outgoing requests
+
 ## Version 2.42.1 (2023-04-19)
 
 ** Bug fixes **
