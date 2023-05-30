@@ -15,7 +15,8 @@
 public function __construct(
     array $propertyExcludeList = [],
     iterable $objectEnhancers = [],
-    mixed $includeType = true
+    mixed $includeType = true,
+    mixed $environment = 'dev'
 ): mixed
 ```
 
@@ -24,6 +25,7 @@ Argument|Type|Default|Description
 `$propertyExcludeList`|`array`|`[]`|
 `$objectEnhancers`|`iterable`|`[]`|
 `$includeType`|`mixed`|`true`|
+`$environment`|`mixed`|`'dev'`|
 
 Return Value: `mixed`
 

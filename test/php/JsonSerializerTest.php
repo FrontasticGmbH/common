@@ -119,4 +119,17 @@ class JsonSerializerTest extends \PHPUnit\Framework\TestCase
             $trace[8]['args'][0]
         );
     }
+
+    public function testStripFilteredValuesForNonDevOrTestEnvironments()
+    {
+        $serializer = new JsonSerializer(['password'], [], true, 'prod');
+
+        $result = $serializer->serialize([
+            'foo' => [
+                'password' => 'pass'
+            ],
+        ]);
+
+        $this->assertEquals(['foo' => []], $result);
+    }
 }

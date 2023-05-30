@@ -73,6 +73,8 @@
                 <argument>metaData</argument>
             </argument>
             <argument type="tagged" tag="frontastic.json_serializer.enhancer"/>
+            <argument>true</argument>
+            <argument>%kernel.environment%</argument>
         </service>
 
         <service id="Domnikl\Statsd\Client">
