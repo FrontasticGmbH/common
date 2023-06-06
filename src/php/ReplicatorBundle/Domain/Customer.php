@@ -21,6 +21,8 @@ class Customer extends DataObject
      */
     public $secret;
 
+    public ?string $externalSecret = null;
+
     /**
      * @var string
      * @required
