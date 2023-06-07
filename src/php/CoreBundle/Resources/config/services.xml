@@ -69,6 +69,7 @@
                 <argument>passwordHash</argument>
                 <argument>previewToken</argument>
                 <argument>secret</argument>
+                <argument>externalSecret</argument>
                 <argument>token</argument>
                 <argument>metaData</argument>
             </argument>
