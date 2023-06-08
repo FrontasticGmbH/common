@@ -8,6 +8,7 @@ Property|Type|Default|Required|Description
 --------|----|-------|--------|-----------
 `name` | `string` |  | *Yes* | 
 `secret` | `string` |  | *Yes* | 
+`externalSecret` | `` | `null` | - | 
 `edition` | `string` | `'micro'` | *Yes* | 
 `hasPaasModifications` | `bool` | `false` | *Yes* | 
 `machineLimit` | `int` | `10` | *Yes* | Number of available Frontastic Machines
