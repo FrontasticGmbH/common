@@ -123,7 +123,6 @@ class CustomerService
         $this->customers[$customer['name']] = $customer = new Customer([
             'name' => $customer['name'],
             'secret' => $customer['secret'],
-            'externalSecret' => $customer['externalSecret'] ?? null,
             'edition' => $customer['edition'] ?? 'mirco',
             'hasPaasModifications' => $customer['hasPaasModifications'] ?? false,
             'machineLimit' => $customer['machineLimit'] ?? 3,
