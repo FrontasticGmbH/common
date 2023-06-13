@@ -108,46 +108,37 @@ class Commercetools extends CartApiBase
         $this->cartCheckoutService = $cartCheckoutService ?? null;
     }
 
-    /**
-     * @throws RequestException
-     * @todo Should we catch the RequestException here?
-     */
     protected function getForUserImplementation(Account $account, string $localeString): Cart
     {
         $locale = $this->localeCreator->createLocaleFromString($localeString);
 
         try {
-            $cart = $this->cartMapper->mapDataToCart(
-                $this->client->get(
-                    '/carts',
-                    [
-                        'customerId' => $account->accountId,
-                        'expand' => self::EXPAND,
-                    ]
-                ),
-                $locale
-            );
+            $cart = $this->fetchCartForUser($account, $locale);
 
-            return $this->assertCorrectLocale($cart, $locale);
+            if ($cart !== null) {
+                return $this->assertCorrectLocale($cart, $locale);
+            }
         } catch (RequestException $e) {
-            return $this->cartMapper->mapDataToCart(
-                $this->client->post(
-                    '/carts',
-                    ['expand' => self::EXPAND],
-                    [],
-                    Json::encode(array_merge(
-                        $this->options->cartDefaults,
-                        [
-                            'country' => $locale->country,
-                            'currency' => $locale->currency,
-                            'customerId' => $account->accountId,
-                            'state' => 'Active',
-                        ]
-                    ))
-                ),
-                $locale
-            );
+            // ignore this exception and create a new cart for this user
         }
+
+        return $this->cartMapper->mapDataToCart(
+            $this->client->post(
+                '/carts',
+                ['expand' => self::EXPAND],
+                [],
+                Json::encode(array_merge(
+                    $this->options->cartDefaults,
+                    [
+                        'country' => $locale->country,
+                        'currency' => $locale->currency,
+                        'customerId' => $account->accountId,
+                        'state' => 'Active',
+                    ]
+                ))
+            ),
+            $locale
+        );
     }
 
     private function assertCorrectLocale(Cart $cart, CommercetoolsLocale $locale): Cart
@@ -1112,5 +1103,50 @@ class Commercetools extends CartApiBase
         }
 
         return $cart->isReadyForCheckout();
+    }
+
+    private function fetchCartForUser(Account $account, CommercetoolsLocale $locale): ?Cart
+    {
+        if ($this->fetchFrozenCartsForUser()) {
+            $result = $this->client->get(
+                '/carts',
+                [
+                    'where' => 'customerId = :customerId and cartState in ("Active", "Frozen")',
+                    'var.customerId' => $account->accountId,
+                    'sort' => 'lastModifiedAt desc',
+                    'limit' => 1,
+                    'withTotal' => 'false',
+                    'expand' => self::EXPAND,
+                ]
+            );
+
+            if ($result['count'] !== 1) {
+                var_dump('count != 1');
+                return null;
+            }
+
+            if (!is_array($result['results'] ?? null) || count($result['results']) !== 1) {
+                var_dump('!arry | count != 1');
+                return null;
+            }
+
+            return $this->cartMapper->mapDataToCart($result['results'][0], $locale);
+        }
+
+        return $this->cartMapper->mapDataToCart(
+            $this->client->get(
+                '/carts',
+                [
+                    'customerId' => $account->accountId,
+                    'expand' => self::EXPAND,
+                ]
+            ),
+            $locale
+        );
+    }
+
+    private function fetchFrozenCartsForUser(): bool
+    {
+        return getenv('commercetools_fetch_frozen_user_carts') === '1';
     }
 }
