@@ -1,4 +1,10 @@
 
+## Version 2.44.0 (2023-06-14)
+
+** New Features and Improvements **
+
+- Add option to fetch frozen carts for logged in users with the environment variable `commercetools_fetch_frozen_user_carts=1`
+
 ## Version 2.43.0 (2023-05-26)
 
 ** New Features and Improvements **
