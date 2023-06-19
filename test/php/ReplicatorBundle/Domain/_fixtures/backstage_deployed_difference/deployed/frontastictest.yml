@@ -2,7 +2,6 @@ name: frontastictest
 secret: $this_is_deployed
 edition: enterprise
 features:
-  - developer.machine
   - fecl
   - pageScheduleFecl
 configuration:

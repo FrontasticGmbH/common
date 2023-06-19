@@ -2,7 +2,6 @@ name: frontastictest
 secret: $123abc
 edition: enterprise
 features:
-  - developer.machine
   - fecl
   - pageScheduleFecl
 configuration:
