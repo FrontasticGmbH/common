@@ -6,7 +6,6 @@ hasPaasModifications: true
 features:
   - fecl
   - pageScheduleFecl
-  - machinesImprovedErrors
 machineLimit: 2
 configuration:
   kibana:
