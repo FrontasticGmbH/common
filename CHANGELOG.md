@@ -1,4 +1,10 @@
 
+## Version 2.45.0 (2023-06-27)
+
+** New Features and Improvements **
+
+- Allow terretory with numbers in locale parsing
+
 ## Version 2.44.0 (2023-06-14)
 
 ** New Features and Improvements **

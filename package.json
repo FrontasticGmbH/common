@@ -1,6 +1,6 @@
 {
     "name": "@frontastic/common",
-    "version": "2.44.0",
+    "version": "2.45.0",
     "devDependencies": {
         "@babel/core": "7.21.0",
         "@babel/plugin-proposal-class-properties": "^7.5.0",
