@@ -73,7 +73,7 @@ class Locale extends ApiDataObject
      */
     const LOCALE = '(^
         (?P<language>[a-z]{2,})
-        (?:_(?P<territory>[A-Z]{2,}))?
+        (?:_(?P<territory>[A-Z0-9]{2,}))?
         (?:\\.(?P<codeset>[A-Z0-9_+-]+))?
         (?:@(?P<modifier>[A-Za-z]+))?
     $)x';
