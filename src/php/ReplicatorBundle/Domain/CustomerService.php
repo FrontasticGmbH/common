@@ -232,7 +232,7 @@ class CustomerService
     public function getCustomersInHost(): array
     {
         return \array_filter($this->getCustomers(), function (Customer $customer) {
-            return $customer->isTransient;
+            return !$customer->isTransient;
         });
     }
 
