@@ -6,7 +6,6 @@
 
 * [__construct()](#__construct)
 * [getCustomers()](#getcustomers)
-* [getCustomersInHost()](#getcustomersinhost)
 * [getCustomer()](#getcustomer)
 * [getProject()](#getproject)
 * [getForHost()](#getforhost)
@@ -31,14 +30,6 @@ Return Value: `mixed`
 
 ```php
 public function getCustomers(): array
-```
-
-Return Value: `array`
-
-### getCustomersInHost()
-
-```php
-public function getCustomersInHost(): array
 ```
 
 Return Value: `array`
