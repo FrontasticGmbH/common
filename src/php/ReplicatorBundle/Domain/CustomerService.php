@@ -226,16 +226,6 @@ class CustomerService
         return $this->customers;
     }
 
-    /**
-     * @return \Frontastic\Common\ReplicatorBundle\Domain\Customer[]
-     */
-    public function getCustomersInHost(): array
-    {
-        return \array_filter($this->getCustomers(), function (Customer $customer) {
-            return !$customer->isTransient;
-        });
-    }
-
     public function getCustomer(string $customerName): Customer
     {
         $this->parseCustomers();
