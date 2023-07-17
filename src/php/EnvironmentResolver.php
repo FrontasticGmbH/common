@@ -8,7 +8,7 @@ class EnvironmentResolver
 {
     public function loadEnvironmentVariables(array $directories, array $baseConfig = []): void
     {
-        $dotEnv = new DotEnv();
+        $dotEnv = new Dotenv();
 
         $dotEnv->populate($baseConfig);
 
