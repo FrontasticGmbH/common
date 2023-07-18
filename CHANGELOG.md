@@ -1,4 +1,10 @@
 
+## Version 2.46.0 (2023-07-18)
+
+** New Features and Improvements **
+
+- Update to webpack 5
+
 ## Version 2.45.0 (2023-06-27)
 
 ** New Features and Improvements **
