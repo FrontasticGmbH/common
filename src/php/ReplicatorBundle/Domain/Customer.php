@@ -17,6 +17,7 @@ class Customer extends DataObject
     public const FEATURE_MACHINES_REGIONS = 'machinesRegions';
     public const FEATURE_COLLABORATION = 'collaboration';
     public const FEATURE_VERSION_HISTORY = 'versionHistory';
+    public const FEATURE_API_KEYS_PAGE = 'apiKeysPage';
 
     public const FEATURE_FLAG_DESCRIPTIONS = [
         self::FEATURE_FRONTASTIC_NEXTJS => 'Differentiate between coFE (Next.JS) and legacy (frontastic) customers',
@@ -27,6 +28,7 @@ class Customer extends DataObject
         self::FEATURE_MACHINES_REGIONS => 'Toggle support for alternate regions in sandboxes',
         self::FEATURE_COLLABORATION => 'Toggle the "Collaboration" section for the Editor Page on the Frontend',
         self::FEATURE_VERSION_HISTORY => 'Toggle the "Version History" section for the Editor Page on the Frontend',
+        self::FEATURE_API_KEYS_PAGE => 'Toggle the "API Key Page" for the Developer section on the Frontend. FP-4654',
     ];
 
     // these feature flags should only be toggled by developers
