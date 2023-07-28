@@ -9,16 +9,16 @@ use Kore\DataObject\DataObject;
  */
 class Customer extends DataObject
 {
-    final public const FEATURE_FRONTASTIC_NEXTJS = 'frontasticNextJs';
-    final public const FEATURE_MULTITENANT = 'multiTenant';
-    final public const FEATURE_DB_IN_CLUSTER = 'dbInCluster';
-    final public const FEATURE_FECL = 'fecl';
-    final public const FEATURE_PAGE_SCHEDULE_FECL = 'pageScheduleFecl';
-    final public const FEATURE_MACHINES_REGIONS = 'machinesRegions';
-    final public const FEATURE_COLLABORATION = 'collaboration';
-    final public const FEATURE_VERSION_HISTORY = 'versionHistory';
+    public const FEATURE_FRONTASTIC_NEXTJS = 'frontasticNextJs';
+    public const FEATURE_MULTITENANT = 'multiTenant';
+    public const FEATURE_DB_IN_CLUSTER = 'dbInCluster';
+    public const FEATURE_FECL = 'fecl';
+    public const FEATURE_PAGE_SCHEDULE_FECL = 'pageScheduleFecl';
+    public const FEATURE_MACHINES_REGIONS = 'machinesRegions';
+    public const FEATURE_COLLABORATION = 'collaboration';
+    public const FEATURE_VERSION_HISTORY = 'versionHistory';
 
-    final public const FEATURE_FLAG_DESCRIPTIONS = [
+    public const FEATURE_FLAG_DESCRIPTIONS = [
         self::FEATURE_FRONTASTIC_NEXTJS => 'Differentiate between coFE (Next.JS) and legacy (frontastic) customers',
         self::FEATURE_MULTITENANT => 'Defines whether the customer is hosted in a multi-tenant infrastructure or not',
         self::FEATURE_DB_IN_CLUSTER => 'Defines whether the database is hosted in the studio host or in the cluster',
@@ -31,7 +31,7 @@ class Customer extends DataObject
 
     // these feature flags should only be toggled by developers
     // only after major changes to the customer's infrastructure
-    final public const INFTRASTRUCTURE_SPECIFIC_FEATURES = [
+    public const INFTRASTRUCTURE_SPECIFIC_FEATURES = [
         self::FEATURE_FRONTASTIC_NEXTJS,
         self::FEATURE_MULTITENANT,
         self::FEATURE_DB_IN_CLUSTER,
