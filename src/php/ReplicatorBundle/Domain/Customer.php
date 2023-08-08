@@ -12,6 +12,8 @@ class Customer extends DataObject
     public const FEATURE_FRONTASTIC_NEXTJS = 'frontasticNextJs';
     public const FEATURE_MULTITENANT = 'multiTenant';
     public const FEATURE_DB_IN_CLUSTER = 'dbInCluster';
+    public const FEATURE_CUSTOM_GIT_REPO = 'customGitRepo';
+    public const FEATURE_DISABLE_FRONTASTIC_CI = 'disableFrontasticCi';
     public const FEATURE_FECL = 'fecl';
     public const FEATURE_PAGE_SCHEDULE_FECL = 'pageScheduleFecl';
     public const FEATURE_MACHINES_REGIONS = 'machinesRegions';
@@ -23,6 +25,8 @@ class Customer extends DataObject
         self::FEATURE_FRONTASTIC_NEXTJS => 'Differentiate between coFE (Next.JS) and legacy (frontastic) customers',
         self::FEATURE_MULTITENANT => 'Defines whether the customer is hosted in a multi-tenant infrastructure or not',
         self::FEATURE_DB_IN_CLUSTER => 'Defines whether the database is hosted in the studio host or in the cluster',
+        self::FEATURE_CUSTOM_GIT_REPO => 'Defines whether the customer have brought their own custom git repository',
+        self::FEATURE_DISABLE_FRONTASTIC_CI => 'Defines that the code is not build by our Frontastic CI',
         self::FEATURE_FECL => 'Toggle support for FECL criteria in dynamic page rule scheduling',
         self::FEATURE_PAGE_SCHEDULE_FECL => 'Toggle support for FECL criteria in page version scheduling (deprecated?)',
         self::FEATURE_MACHINES_REGIONS => 'Toggle support for alternate regions in sandboxes',
@@ -37,6 +41,8 @@ class Customer extends DataObject
         self::FEATURE_FRONTASTIC_NEXTJS,
         self::FEATURE_MULTITENANT,
         self::FEATURE_DB_IN_CLUSTER,
+        self::FEATURE_CUSTOM_GIT_REPO,
+        self::FEATURE_DISABLE_FRONTASTIC_CI,
     ];
 
     /**
