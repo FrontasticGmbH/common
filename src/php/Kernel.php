@@ -97,7 +97,7 @@ abstract class Kernel extends SymfonyKernel
      * Initialize configuration
      *
      * @return mixed
-     * @todo This parse_ini_file() stuff is deprecated, we use dotenv now
+     * @deprecated This parse_ini_file() stuff is deprecated, we use dotenv now in the index.php, use getenv instead
      */
     public static function getConfiguration()
     {
