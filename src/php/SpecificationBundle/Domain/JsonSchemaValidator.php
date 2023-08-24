@@ -119,7 +119,7 @@ class JsonSchemaValidator
                                 case 'reservedFieldName':
                                     return "* You've used a reserved field name." .
                                         " Reserved field names are " .
-                                        "password, token, id, sequence, locale, or is_deleted." .
+                                        "password, token, id, sequence, locale, name, or is_deleted." .
                                         "You must change the field name where you've used the reserved word.";
                                     break;
                                 default:

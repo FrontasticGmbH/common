@@ -71,7 +71,13 @@
             "type": "object",
             "properties": {
                 "label": {
-                    "type": "string"
+                    "type": "string",
+                    "not": {
+                        "enum": [
+                            "Name",
+                            "name"
+                        ]
+                    }
                 },
                 "description": {
                     "type": "string"
@@ -85,7 +91,8 @@
                             "locale",
                             "is_deleted",
                             "password",
-                            "token"
+                            "token",
+                            "name"
                         ]
                     }
                 },
