@@ -85,8 +85,7 @@
                             "locale",
                             "is_deleted",
                             "password",
-                            "token",
-                            "name"
+                            "token"
                         ]
                     }
                 },
