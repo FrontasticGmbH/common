@@ -9,7 +9,7 @@ class Page {
         this.nodes = page.nodes || []
         this.layoutId = page.layoutId || DEFAULT_PAGE_LAYOUT
         this.name = page.name || DEFAULT_PAGE_NAME
-
+        this._type = page._type ||""
         this.regions = {}
 
         this.tasticSchemas = (tastics || []).map(tastic => { return tastic.configurationSchema })
