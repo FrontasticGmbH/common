@@ -7,6 +7,10 @@
     <services>
         <defaults public="true"/>
 
+        <service id="cache.app.psr16" class="Symfony\Component\Cache\Psr16Cache">
+            <argument type="service" id="cache.app" />
+        </service>
+
         <service id="Frontastic\Common\HttpClient">
             <factory service="Frontastic\Common\HttpClient\Factory" method="create"/>
 
