@@ -10,7 +10,7 @@ use Frontastic\Common\AccountApiBundle\Domain\AccountService;
 use Frontastic\Common\AccountApiBundle\Domain\Address;
 use Frontastic\Common\AccountApiBundle\Domain\DuplicateAccountException;
 use Frontastic\Common\CoreBundle\Domain\ErrorResult;
-use QafooLabs\MVC\RedirectRoute;
+use Gyro\MVC\RedirectRoute;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
