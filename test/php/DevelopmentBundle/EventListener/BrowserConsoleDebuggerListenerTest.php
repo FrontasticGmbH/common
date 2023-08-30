@@ -7,7 +7,7 @@ use Frontastic\Common\JsonSerializer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class BrowserConsoleDebuggerListenerTest extends TestCase
@@ -28,7 +28,7 @@ class BrowserConsoleDebuggerListenerTest extends TestCase
         $response->headers->set('Content-Type', 'text/html; charset=UTF-8');
         $response->setContent($html);
 
-        $event = new FilterResponseEvent(
+        $event = new ResponseEvent(
             $this->getMockBuilder(HttpKernelInterface::class)->getMock(),
             $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock(),
             HttpKernelInterface::MASTER_REQUEST,
