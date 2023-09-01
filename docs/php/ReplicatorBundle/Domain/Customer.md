@@ -18,7 +18,6 @@ Property|Type|Default|Required|Description
 `environments` | `array` | `['production', 'staging', 'development']` | *Yes* | 
 `projects` | [`Project`](Project.md)[] | `[]` | *Yes* | 
 `netlifyUrl` | `?string` | `null` | - | 
-`humioUrl` | `?string` | `null` | - | 
 
 ## Methods
 
