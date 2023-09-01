@@ -140,9 +140,4 @@ class Customer extends DataObject
      * @var ?string
      */
     public $netlifyUrl = null;
-
-    /**
-     * @var ?string
-     */
-    public $humioUrl = null;
 }
