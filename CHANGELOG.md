@@ -1,4 +1,10 @@
 
+## Version 2.47.0 (2023-09-05)
+
+** New Features and Improvements **
+
+- Update the Shopify integration from API version 2022-10 to version 2023-07
+
 ## Version 2.46.0 (2023-07-18)
 
 ** New Features and Improvements **
