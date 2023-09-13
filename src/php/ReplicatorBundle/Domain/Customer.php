@@ -18,7 +18,6 @@ class Customer extends DataObject
     public const FEATURE_FECL = 'fecl';
     public const FEATURE_PAGE_SCHEDULE_FECL = 'pageScheduleFecl';
     public const FEATURE_MACHINES_REGIONS = 'machinesRegions';
-    public const FEATURE_COLLABORATION = 'collaboration';
     public const FEATURE_VERSION_HISTORY = 'versionHistory';
     public const FEATURE_API_KEYS_PAGE = 'apiKeysPage';
     public const FEATURE_HUMIO = 'humio';
@@ -34,7 +33,6 @@ class Customer extends DataObject
         self::FEATURE_FECL => 'Toggle support for FECL criteria in dynamic page rule scheduling',
         self::FEATURE_PAGE_SCHEDULE_FECL => 'Toggle support for FECL criteria in page version scheduling (deprecated?)',
         self::FEATURE_MACHINES_REGIONS => 'Toggle support for alternate regions in sandboxes',
-        self::FEATURE_COLLABORATION => 'Toggle the "Collaboration" section for the Editor Page on the Frontend',
         self::FEATURE_VERSION_HISTORY => 'Toggle the "Version History" section for the Editor Page on the Frontend',
         self::FEATURE_API_KEYS_PAGE => 'Toggle the "API Key Page" for the Developer section on the Frontend. FP-4654',
         self::FEATURE_HUMIO => 'Toggle the "humio" feature for the User Profile section on the Frontend.',
