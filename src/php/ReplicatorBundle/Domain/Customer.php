@@ -14,7 +14,6 @@ class Customer extends DataObject
     public const FEATURE_DB_IN_CLUSTER = 'dbInCluster';
     public const FEATURE_CUSTOM_GIT_REPO = 'customGitRepo';
     public const FEATURE_DISABLE_FRONTASTIC_CI = 'disableFrontasticCi';
-    public const FEATURE_MANUAL_STAGING_DEPLOYMENTS = 'manualStagingDeployments';
     public const FEATURE_FECL = 'fecl';
     public const FEATURE_PAGE_SCHEDULE_FECL = 'pageScheduleFecl';
     public const FEATURE_MACHINES_REGIONS = 'machinesRegions';
@@ -22,7 +21,7 @@ class Customer extends DataObject
     public const FEATURE_API_KEYS_PAGE = 'apiKeysPage';
     public const FEATURE_HUMIO = 'humio';
     public const FEATURE_PREVIEW_LOCALE = 'previewLocale';
-
+    public const FEATURE_MANUAL_STAGING_DEPLOYMENTS = 'manualStagingDeployments';
 
     public const FEATURE_FLAG_DESCRIPTIONS = [
         self::FEATURE_FRONTASTIC_NEXTJS => 'Differentiate between coFE (Next.JS) and legacy (frontastic) customers',
@@ -48,7 +47,6 @@ class Customer extends DataObject
         self::FEATURE_DB_IN_CLUSTER,
         self::FEATURE_CUSTOM_GIT_REPO,
         self::FEATURE_DISABLE_FRONTASTIC_CI,
-        self::FEATURE_MANUAL_STAGING_DEPLOYMENTS,
     ];
 
     /**
