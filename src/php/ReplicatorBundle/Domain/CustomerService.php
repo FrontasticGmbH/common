@@ -7,6 +7,7 @@ use Frontastic\Backstage\DeveloperBundle\Domain\CustomStream;
 use Frontastic\Backstage\DeveloperBundle\Domain\Tastic;
 use Frontastic\Backstage\NotificationBundle\Domain\Notification;
 use Frontastic\Backstage\ProjectConfigurationBundle\Domain\ProjectConfiguration;
+use Frontastic\Backstage\StageBundle\Domain\Node;
 use Frontastic\Backstage\StageBundle\Domain\NodesTreeCache;
 use Frontastic\Backstage\VersionBundle\Domain\Version;
 use Symfony\Component\Yaml\Yaml;
