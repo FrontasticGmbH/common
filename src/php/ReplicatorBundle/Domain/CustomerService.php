@@ -2,14 +2,6 @@
 
 namespace Frontastic\Common\ReplicatorBundle\Domain;
 
-use Frontastic\Backstage\DeveloperBundle\Domain\BuildVersion;
-use Frontastic\Backstage\DeveloperBundle\Domain\CustomStream;
-use Frontastic\Backstage\DeveloperBundle\Domain\Tastic;
-use Frontastic\Backstage\NotificationBundle\Domain\Notification;
-use Frontastic\Backstage\ProjectConfigurationBundle\Domain\ProjectConfiguration;
-use Frontastic\Backstage\StageBundle\Domain\Node;
-use Frontastic\Backstage\StageBundle\Domain\NodesTreeCache;
-use Frontastic\Backstage\VersionBundle\Domain\Version;
 use Symfony\Component\Yaml\Yaml;
 use Frontastic\Common\ReplicatorBundle\Domain\Customer;
 
@@ -149,31 +141,38 @@ class CustomerService
                     $projectSpecificEntities = $project['projectSpecific'] ?? [];
                     // Frontastic.Backstage.StageBundle.Domain.NodesTreeCache entity is used for nodes tree
                     // caching and must follow Frontastic.Backstage.StageBundle.Domain.Node replication rules
-                    if (\in_array(Node::COUCHDB_DOCUMENT_TYPE, $projectSpecificEntities)) {
-                        $projectSpecificEntities[] = NodesTreeCache::COUCHDB_DOCUMENT_TYPE;
+                    if (\in_array('Frontastic.Backstage.StageBundle.Domain.Node', $projectSpecificEntities)) {
+                        $projectSpecificEntities[] = 'Frontastic.Backstage.StageBundle.Domain.NodesTreeCache';
                     }
 
-                    if (!\in_array(Notification::COUCHDB_DOCUMENT_TYPE, $projectSpecificEntities)) {
-                        $projectSpecificEntities[] = Notification::COUCHDB_DOCUMENT_TYPE;
+                    if (!\in_array(
+                        'Frontastic.Backstage.NotificationBundle.Domain.Notification',
+                        $projectSpecificEntities
+                    )) {
+                        $projectSpecificEntities[] = 'Frontastic.Backstage.NotificationBundle.Domain.Notification';
                     }
 
-                    if (!\in_array(ProjectConfiguration::COUCHDB_DOCUMENT_TYPE, $projectSpecificEntities)) {
-                        $projectSpecificEntities[] = ProjectConfiguration::COUCHDB_DOCUMENT_TYPE;
+                    if (!\in_array(
+                        'Frontastic.Backstage.ProjectConfigurationBundle.Domain.ProjectConfiguration',
+                        $projectSpecificEntities
+                    )) {
+                        $projectSpecificEntities[] =
+                            'Frontastic.Backstage.ProjectConfigurationBundle.Domain.ProjectConfiguration';
                     }
 
-                    if (!\in_array(Version::COUCHDB_DOCUMENT_TYPE, $projectSpecificEntities)) {
-                        $projectSpecificEntities[] = Version::COUCHDB_DOCUMENT_TYPE;
+                    if (!\in_array('Frontastic.Backstage.VersionBundle.Domain.Version', $projectSpecificEntities)) {
+                        $projectSpecificEntities[] = 'Frontastic.Backstage.VersionBundle.Domain.Version';
                     }
 
                     if (\in_array(Customer::FEATURE_MULTITENANT, $customerFeatures) &&
-                        !\in_array(BuildVersion::COUCHDB_DOCUMENT_TYPE, $customerFeatures)) {
-                        $projectSpecificEntities[] = BuildVersion::COUCHDB_DOCUMENT_TYPE;
+                        !\in_array('Frontastic.Backstage.DeveloperBundle.Domain.BuildVersion', $customerFeatures)) {
+                        $projectSpecificEntities[] = 'Frontastic.Backstage.DeveloperBundle.Domain.BuildVersion';
                     }
 
-                    if (\in_array(Tastic::COUCHDB_DOCUMENT_TYPE, $projectSpecificEntities) &&
-                        !\in_array(CustomStream::COUCHDB_DOCUMENT_TYPE, $projectSpecificEntities)
+                    if (\in_array('Frontastic.Backstage.DeveloperBundle.Domain.Tastic', $projectSpecificEntities) &&
+                        !\in_array('Frontastic.Backstage.DeveloperBundle.Domain.CustomStream', $projectSpecificEntities)
                     ) {
-                        $projectSpecificEntities[] = CustomStream::COUCHDB_DOCUMENT_TYPE;
+                        $projectSpecificEntities[] = 'Frontastic.Backstage.DeveloperBundle.Domain.CustomStream';
                     }
 
                     $publicKey = $project['encryptedFieldsPublicKey'] ?? null;
