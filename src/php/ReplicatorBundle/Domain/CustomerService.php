@@ -160,10 +160,6 @@ class CustomerService
                             'Frontastic.Backstage.ProjectConfigurationBundle.Domain.ProjectConfiguration';
                     }
 
-                    if (!\in_array('Frontastic.Backstage.VersionBundle.Domain.Version', $projectSpecificEntities)) {
-                        $projectSpecificEntities[] = 'Frontastic.Backstage.VersionBundle.Domain.Version';
-                    }
-
                     if (\in_array(Customer::FEATURE_MULTITENANT, $customerFeatures) &&
                         !\in_array('Frontastic.Backstage.DeveloperBundle.Domain.BuildVersion', $customerFeatures)) {
                         $projectSpecificEntities[] = 'Frontastic.Backstage.DeveloperBundle.Domain.BuildVersion';
@@ -174,6 +170,8 @@ class CustomerService
                     ) {
                         $projectSpecificEntities[] = 'Frontastic.Backstage.DeveloperBundle.Domain.CustomStream';
                     }
+
+                    $projectSpecificEntities[] = 'Frontastic.Backstage.VersionBundle.Domain.Version';
 
                     $publicKey = $project['encryptedFieldsPublicKey'] ?? null;
 
