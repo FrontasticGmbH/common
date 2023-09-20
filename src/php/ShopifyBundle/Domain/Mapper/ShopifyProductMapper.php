@@ -111,10 +111,12 @@ class ShopifyProductMapper
 
     public function mapDataToFacets(array $productsData): array
     {
+        $facets = [];
+
         $facets[] = $this->mapDataToTagFacet($productsData);
         $facets[] = $this->mapDataToProductTypeFacet($productsData);
 
-        return array_filter($facets);
+        return array_values(array_filter($facets));
     }
 
     public function mapDataToProductAttributes(array $productAttributesData): array
