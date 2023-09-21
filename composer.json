@@ -24,7 +24,7 @@
         "cache/filesystem-adapter": "^1.0",
         "cloudinary/cloudinary_php": "^1.8",
         "composer/package-versions-deprecated": "@stable",
-        "contentful/contentful": "^6.0",
+        "contentful/contentful": "^6.0|^7.0",
         "domnikl/statsd": "^2.6",
         "guzzlehttp/guzzle": "^6.3",
         "justinrainbow/json-schema": "@stable",
