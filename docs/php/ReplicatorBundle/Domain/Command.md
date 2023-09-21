@@ -11,5 +11,6 @@ Property|Type|Default|Required|Description
 `customer` | `string` |  | *Yes* | 
 `allowCache` | `bool` | `true` | *Yes* | 
 `payload` | `array` | `[]` | *Yes* | 
+`environment` | `string` | `null` | - | 
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).
