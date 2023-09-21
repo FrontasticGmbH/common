@@ -38,4 +38,9 @@ class Command extends DataObject
      * @required
      */
     public $payload = [];
+
+    /**
+     * @var string
+     */
+    public $environment = null;
 }
