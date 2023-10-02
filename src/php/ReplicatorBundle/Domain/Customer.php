@@ -15,6 +15,7 @@ class Customer extends DataObject
     public const FEATURE_CUSTOM_GIT_REPO = 'customGitRepo';
     public const FEATURE_DISABLE_FRONTASTIC_CI = 'disableFrontasticCi';
     public const FEATURE_MANUAL_STAGING_DEPLOYMENTS = 'manualStagingDeployments';
+    public const FEATURE_ALLOW_CLEAR_FIXTURES = 'allowClearFixtures';
     public const FEATURE_FECL = 'fecl';
     public const FEATURE_PAGE_SCHEDULE_FECL = 'pageScheduleFecl';
     public const FEATURE_MACHINES_REGIONS = 'machinesRegions';
@@ -30,6 +31,7 @@ class Customer extends DataObject
         self::FEATURE_DB_IN_CLUSTER => 'Defines whether the database is hosted in the studio host or in the cluster',
         self::FEATURE_CUSTOM_GIT_REPO => 'Defines whether the customer have brought their own custom git repository',
         self::FEATURE_DISABLE_FRONTASTIC_CI => 'Defines that the code is not build by our Frontastic CI',
+        self::FEATURE_ALLOW_CLEAR_FIXTURES => 'Toggle the locking of the clear fixtures endpoint for a customer',
         self::FEATURE_FECL => 'Toggle support for FECL criteria in dynamic page rule scheduling',
         self::FEATURE_PAGE_SCHEDULE_FECL => 'Toggle support for FECL criteria in page version scheduling (deprecated?)',
         self::FEATURE_MACHINES_REGIONS => 'Toggle support for alternate regions in sandboxes',
