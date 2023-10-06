@@ -21,6 +21,7 @@ class Customer extends DataObject
     public const FEATURE_VERSION_HISTORY = 'versionHistory';
     public const FEATURE_API_KEYS_PAGE = 'apiKeysPage';
     public const FEATURE_HUMIO = 'humio';
+    public const FEATURE_MEDIA = 'newMediaPage';
     public const FEATURE_PREVIEW_LOCALE = 'previewLocale';
     public const FEATURE_MANUAL_STAGING_DEPLOYMENTS = 'manualStagingDeployments';
 
@@ -37,6 +38,7 @@ class Customer extends DataObject
         self::FEATURE_VERSION_HISTORY => 'Toggle the "Version History" section for the Editor Page on the Frontend',
         self::FEATURE_API_KEYS_PAGE => 'Toggle the "API Key Page" for the Developer section on the Frontend. FP-4654',
         self::FEATURE_HUMIO => 'Toggle the "humio" feature for the User Profile section on the Frontend.',
+        self::FEATURE_MEDIA => '[FP-4003] Toggle the "media" feature for the new media component on the Frontend.',
         self::FEATURE_PREVIEW_LOCALE => 'Toggle the forced locale feature on page previews',
         self::FEATURE_MANUAL_STAGING_DEPLOYMENTS => 'Toggle manual staging deployments for multi-tenant customers',
     ];
