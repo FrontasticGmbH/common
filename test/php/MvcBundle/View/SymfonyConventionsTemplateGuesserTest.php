@@ -6,6 +6,8 @@ use PHPUnit\Framework\TestCase;
 
 class SymfonyConventionsTemplateGuesserTest extends TestCase
 {
+    private $bundleLocation;
+    private $parser;
     private $guesser;
 
     public function setUp() : void
