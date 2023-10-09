@@ -6,10 +6,6 @@
         {
             "type": "path",
             "url": "../*"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/mantiz/mvc-bundle.git"
         }
     ],
     "config": {
@@ -35,7 +31,6 @@
         "frontastic/data-object": "@stable",
         "league/oauth2-client": "^2.3",
         "myclabs/deep-copy": "^1.0",
-        "gyro/mvc-bundle": "dev-php74-compatibility as 1.0.0",
         "ramsey/uuid": "^3.9||^4",
         "seld/jsonlint": "@stable",
         "swiftmailer/swiftmailer": "^6.2",
