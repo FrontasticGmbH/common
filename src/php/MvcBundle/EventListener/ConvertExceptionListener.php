@@ -117,7 +117,8 @@ class ConvertExceptionListener
         $exceptionClass = get_class($exception);
 
         foreach ($this->exceptionClassMap as $originalExceptionClass => $convertedExceptionClass) {
-            if ($exceptionClass === $originalExceptionClass || is_subclass_of($exceptionClass, $originalExceptionClass)) {
+            if ($exceptionClass === $originalExceptionClass
+                || is_subclass_of($exceptionClass, $originalExceptionClass)) {
                 return $convertedExceptionClass;
             }
         }

@@ -67,7 +67,9 @@ class ViewListener
         \assert(\is_object($result) || \is_array($result));
 
         if (!$result) {
-            throw new \LogicException("Controllers with generators must return a result that is or can be converted to a Response.");
+            throw new \LogicException(
+                "Controllers with generators must return a result that is or can be converted to a Response."
+            );
         }
 
         $response = $this->convert($result, $request);

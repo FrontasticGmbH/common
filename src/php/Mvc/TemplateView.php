@@ -20,8 +20,12 @@ class TemplateView
      * @param object|array<string,mixed> $viewParams
      * @param array<string,string>       $headers
      */
-    public function __construct($viewParams, ?string $actionTemplateName = null, int $statusCode = 200, array $headers = [])
-    {
+    public function __construct(
+        $viewParams,
+        ?string $actionTemplateName = null,
+        int $statusCode = 200,
+        array $headers = []
+    ) {
         $this->viewParams = $viewParams;
         $this->actionTemplateName = $actionTemplateName;
         $this->statusCode = $statusCode;

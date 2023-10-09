@@ -12,7 +12,8 @@ class InvalidFormRequest implements FormRequest
      * @param array<string,mixed>|object $bindData
      * @param array<string,mixed>        $options
      *
-     * @throws \Frontastic\Common\Mvc\Exception\FormAlreadyHandledException when a form was already bound on this request before.
+     * @throws \Frontastic\Common\Mvc\Exception\FormAlreadyHandledException when a form was already bound on this
+     *         request before.
      */
     public function handle(string $formType, $bindData = null, array $options = []): bool
     {

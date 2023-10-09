@@ -65,10 +65,8 @@ class ParamConverterListener
             $class = $type->getName();
             $name = $param->getName();
 
-            if (
-                is_subclass_of($class, SessionInterface::class) ||
-                   $class === SessionInterface::class
-            ) {
+            if (is_subclass_of($class, SessionInterface::class)
+                || $class === SessionInterface::class) {
                 $value = $request->getSession();
             } elseif ($class === FormRequest::class) {
                 $value = new SymfonyFormRequest($request, $this->serviceProvider->getFormFactory());
