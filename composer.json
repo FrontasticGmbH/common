@@ -51,7 +51,7 @@
         "phake/phake": "^4.0",
         "phploc/phploc": "@stable",
         "phpmd/phpmd": "@stable",
-        "phpstan/phpstan": "^0.12.18",
+        "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^8",
         "sebastian/phpcpd": "@stable",
         "squizlabs/php_codesniffer": "@stable",
