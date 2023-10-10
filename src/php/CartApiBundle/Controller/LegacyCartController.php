@@ -367,11 +367,15 @@ class LegacyCartController extends CrudController
         return $this->getCartFetcher($context)->fetchCart($context, $request);
     }
 
+    // The CartFetcher class is created dynamically, so that PHPStan can't find.
+    // @phpstan-ignore-next-line
     private function getCartFetcher(Context $context): CartFetcher
     {
         if (!isset($this->cartFetcher)) {
+            // @phpstan-ignore-next-line
             $this->cartFetcher = new CartFetcher($this->getCartApi($context), $this->get('logger'));
         }
+        // @phpstan-ignore-next-line
         return $this->cartFetcher;
     }
 

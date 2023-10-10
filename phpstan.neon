@@ -4,7 +4,7 @@ parameters:
         - src/php
         - test/api
         - test/php
-    excludes_analyse:
+    excludePaths:
         - test/api/var/*
     inferPrivatePropertyTypeFromConstructor: true
     ignoreErrors:
@@ -16,4 +16,5 @@ parameters:
         - '#Result of method Kore\\DataObject\\DataObject::__get\(\) \(void\) is used.#'
         - '#Function debug not found.*#'
         - '#simdjson_decode not found#'
+        - '#Variable \$[a-zA-Z]+ on left side of \?\? always exists and is not nullable.#'
     reportUnmatchedIgnoredErrors: false
