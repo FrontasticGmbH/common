@@ -3,6 +3,7 @@
 vendor/
 node_modules/
 yarn.lock
+# Because this is a library, the lock file should not be under version control. See https://stackoverflow.com/a/63215615/390808
 composer.lock
 
 test/api/var
