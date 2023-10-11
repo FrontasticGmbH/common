@@ -1,4 +1,15 @@
 
+## Version 2.48.0 (2023-10-11)
+
+** New Features and Improvements **
+
+- Add compatibiltiy with Symfony 5.4.
+- Add compatibility with Contentful SDK version 7.
+
+** Bug fixes **
+
+- Always return an array with facets in Shopify product searches.
+
 ## Version 2.47.0 (2023-09-05)
 
 ** New Features and Improvements **
