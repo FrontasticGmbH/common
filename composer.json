@@ -40,7 +40,7 @@
         "symfony/expression-language": "^4.4||^5.4",
         "symfony/finder": "^4.4||^5.4",
         "symfony/http-kernel": "^4.4||^5.4",
-        "symfony/symfony": "^4.4||^5.4",
+        "symfony/symfony": "^4.4",
         "symfony/yaml": "^4.4||^5.4",
         "woohoolabs/yang": "^2.3"
     },
