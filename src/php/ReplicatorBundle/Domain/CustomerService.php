@@ -172,6 +172,10 @@ class CustomerService
                         $projectSpecificEntities[] = 'Frontastic.Backstage.DeveloperBundle.Domain.CustomStream';
                     }
 
+                    if (\in_array('Frontastic.Backstage.VersionBundle.Domain.Version', $projectSpecificEntities)) {
+                        $projectSpecificEntities[] = 'Frontastic.Backstage.VersionBundle.Domain.Version';
+                    }
+
                     $publicKey = $project['encryptedFieldsPublicKey'] ?? null;
 
                     return new Project([
