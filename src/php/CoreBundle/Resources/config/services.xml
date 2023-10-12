@@ -41,6 +41,9 @@
 
         <service id="Frontastic\Common\CoreBundle\Controller\SystemController">
             <argument>%env%</argument>
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
         </service>
 
         <service id="Frontastic\Common\CoreBundle\EventListener\JsonViewListener">
