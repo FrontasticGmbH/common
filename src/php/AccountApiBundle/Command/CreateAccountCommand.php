@@ -5,14 +5,17 @@ namespace Frontastic\Common\AccountApiBundle\Command;
 use Frontastic\Common\AccountApiBundle\Domain\Account;
 use Frontastic\Common\AccountApiBundle\Domain\AuthentificationInformation;
 use Frontastic\Common\AccountApiBundle\Domain\DuplicateAccountException;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class CreateAccountCommand extends ContainerAwareCommand
+class CreateAccountCommand extends Command
 {
+    use ContainerAwareTrait;
+
     protected function configure()
     {
         $this
@@ -24,8 +27,8 @@ class CreateAccountCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $accountService = $this->getContainer()->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
-        $project = $this->getContainer()->get('Frontastic\Common\ReplicatorBundle\Domain\Project');
+        $accountService = $this->container->get('Frontastic\Common\AccountApiBundle\Domain\AccountService');
+        $project = $this->container->get('Frontastic\Common\ReplicatorBundle\Domain\Project');
 
         if (!$input->hasArgument('password')) {
             $helper = $this->getHelper('question');

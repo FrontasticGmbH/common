@@ -1,0 +1,85 @@
+<?php
+
+namespace Frontastic\Common\MvcBundle\EventListener;
+
+use Frontastic\Common\MvcBundle\ParamConverter\ServiceProvider;
+use Frontastic\Common\MvcBundle\Request\SymfonyFormRequest;
+use Frontastic\Common\MvcBundle\SymfonyTokenContext;
+use Frontastic\Common\Mvc\FormRequest;
+use Frontastic\Common\Mvc\TokenContext;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
+
+/**
+ * Convert the request parameters into objects when typehinted.
+ *
+ * This replicates the SensioFrameworkExtraBundle behavior but keeps it simple
+ * and without a dependency to allow usage outside Symfony Framework apps
+ * (Silex, ..).
+ */
+class ParamConverterListener
+{
+    /**
+     * @var ServiceProvider
+     */
+    private $serviceProvider;
+
+    public function __construct(ServiceProvider $container)
+    {
+        $this->serviceProvider = $container;
+    }
+
+    /**
+     * @param ControllerEvent|ControllerEvent $event
+     *
+     * @psalm-suppress ArgumentTypeCoercion
+     * @psalm-suppress PossiblyNullReference
+     */
+    public function onKernelController(ControllerEvent $event): void
+    {
+        $controller = $event->getController();
+        /** @psalm-suppress UndefinedClass */
+        $request = $event->getRequest();
+
+        if (\is_array($controller)) {
+            $r = new \ReflectionMethod($controller[0], $controller[1]);
+        } elseif ($controller instanceof \Closure || \method_exists($controller, '__invoke')) {
+            $r = new \ReflectionMethod($controller, '__invoke');
+        } else {
+            $r = new \ReflectionFunction($controller);
+        }
+
+        // automatically apply conversion for non-configured objects
+        foreach ($r->getParameters() as $param) {
+            if (!$param->getType()) {
+                continue;
+            }
+
+            $type = $param->getType();
+
+            // skip union and intersection types (for now?)
+            if (!($type instanceof \ReflectionNamedType)) {
+                continue;
+            }
+
+            $class = $type->getName();
+            $name = $param->getName();
+
+            if (is_subclass_of($class, SessionInterface::class)
+                || $class === SessionInterface::class) {
+                $value = $request->getSession();
+            } elseif ($class === FormRequest::class) {
+                $value = new SymfonyFormRequest($request, $this->serviceProvider->getFormFactory());
+            } elseif ($class === TokenContext::class) {
+                $value = new SymfonyTokenContext(
+                    $this->serviceProvider->getTokenStorage(),
+                    $this->serviceProvider->getAuthorizationChecker()
+                );
+            } else {
+                continue;
+            }
+
+            $request->attributes->set($name, $value);
+        }
+    }
+}

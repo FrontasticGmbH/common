@@ -1,7 +1,7 @@
 {
     "name": "frontastic/common",
     "license": "None",
-    "version": "2.47.0",
+    "version": "2.48.1",
     "repositories": [
         {
             "type": "path",
@@ -13,7 +13,7 @@
         "optimize-autoloader": true
     },
     "conflict": {
-        "frontastic/catwalk": "<1.20.1"
+        "frontastic/catwalk": "<1.68.0"
     },
     "require": {
         "ext-json": "*",
@@ -31,17 +31,17 @@
         "frontastic/data-object": "@stable",
         "league/oauth2-client": "^2.3",
         "myclabs/deep-copy": "^1.0",
-        "qafoolabs/no-framework-bundle": "^2.6",
         "ramsey/uuid": "^3.9||^4",
         "seld/jsonlint": "@stable",
         "swiftmailer/swiftmailer": "^6.2",
-        "symfony/config": "^4.4",
-        "symfony/dependency-injection": "^4.4",
-        "symfony/expression-language": "^4.4",
-        "symfony/finder": "^4.4",
-        "symfony/http-kernel": "^4.4",
+        "symfony/config": "^4.4||^5.4",
+        "symfony/dependency-injection": "^4.4||^5.4",
+        "symfony/event-dispatcher": "^4.4||^5.4",
+        "symfony/expression-language": "^4.4||^5.4",
+        "symfony/finder": "^4.4||^5.4",
+        "symfony/http-kernel": "^4.4||^5.4",
         "symfony/symfony": "^4.4",
-        "symfony/yaml": "^4.4",
+        "symfony/yaml": "^4.4||^5.4",
         "woohoolabs/yang": "^2.3"
     },
     "require-dev": {

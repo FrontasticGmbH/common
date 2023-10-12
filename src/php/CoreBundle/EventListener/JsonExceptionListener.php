@@ -3,7 +3,7 @@
 namespace Frontastic\Common\CoreBundle\EventListener;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 use Frontastic\Common\CoreBundle\Domain\ErrorResult;
@@ -21,7 +21,7 @@ class JsonExceptionListener
         $this->debug = $debug;
     }
 
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event)
     {
         $acceptableContentTypes = $event->getRequest()->getAcceptableContentTypes();
         if (!in_array('application/json', $acceptableContentTypes) &&
@@ -30,7 +30,7 @@ class JsonExceptionListener
             return;
         }
 
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
         syslog(LOG_WARNING, $exception->getMessage() . PHP_EOL . $exception->getTraceAsString());
 
         $errorData = [

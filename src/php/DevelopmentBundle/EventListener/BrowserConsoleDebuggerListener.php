@@ -5,8 +5,8 @@ namespace Frontastic\Common\DevelopmentBundle\EventListener;
 use Frontastic\Common\DevelopmentBundle\Debugger;
 use Frontastic\Common\JsonSerializer;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Frontastic\Common\CoreBundle\Domain\Json\Json;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 class BrowserConsoleDebuggerListener
 {
@@ -20,7 +20,7 @@ class BrowserConsoleDebuggerListener
         $this->serializer = $serializer;
     }
 
-    public function onKernelResponse(FilterResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event)
     {
         if (count(Debugger::getMessages()) === 0) {
             return;

@@ -7,6 +7,10 @@
     <services>
         <defaults public="true"/>
 
+        <service id="cache.app.psr16" class="Symfony\Component\Cache\Psr16Cache">
+            <argument type="service" id="cache.app" />
+        </service>
+
         <service id="Frontastic\Common\HttpClient">
             <factory service="Frontastic\Common\HttpClient\Factory" method="create"/>
 
@@ -37,6 +41,9 @@
 
         <service id="Frontastic\Common\CoreBundle\Controller\SystemController">
             <argument>%env%</argument>
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
         </service>
 
         <service id="Frontastic\Common\CoreBundle\EventListener\JsonViewListener">
@@ -48,7 +55,7 @@
         <service id="Frontastic\Common\CoreBundle\Domain\Mailer"
                  class="Frontastic\Common\CoreBundle\Domain\Mailer\SwiftMail">
             <argument type="service" id="mailer"/>
-            <argument type="service" id="templating"/>
+            <argument type="service" id="twig"/>
             <argument>%env(smtp_sender)%</argument>
         </service>
 

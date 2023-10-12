@@ -2,9 +2,8 @@
 
 namespace Frontastic\Common\CoreBundle\Domain\Mailer;
 
-use Symfony\Component\Templating\EngineInterface;
-
 use Frontastic\Common\CoreBundle\Domain\Mailer;
+use Twig\Environment;
 
 class SwiftMail extends Mailer
 {
@@ -12,7 +11,7 @@ class SwiftMail extends Mailer
     private $twig;
     private $sender;
 
-    public function __construct(\Swift_Mailer $mailer, EngineInterface $twig, string $sender = 'support@frontastic.io')
+    public function __construct(\Swift_Mailer $mailer, Environment $twig, string $sender = 'support@frontastic.io')
     {
         $this->mailer = $mailer;
         $this->twig = $twig;
