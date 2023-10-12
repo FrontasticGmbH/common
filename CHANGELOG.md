@@ -1,4 +1,11 @@
 
+## Version 2.48.1 (2023-10-12)
+
+** Bug fixes **
+
+- Disable the Symfony 5.4 compatibility for now.
+- Add breaking statement for old Catwalk versions in composer.
+
 ## Version 2.48.0 (2023-10-11)
 
 ** New Features and Improvements **
