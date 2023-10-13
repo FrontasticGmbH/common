@@ -17,6 +17,6 @@ class Versioner
         $entity->versions = $entity->versions ?: [];
         array_unshift($entity->versions, $oldEntity);
 
-        $entity->versions = array_slice($entity->versions, 0, 3);
+        $entity->versions = array_slice($entity->versions, 0, 32);
     }
 }
