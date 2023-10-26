@@ -23,7 +23,7 @@ class Customer extends DataObject
     public const FEATURE_HUMIO = 'humio';
     public const FEATURE_MEDIA = 'newMediaPage';
     public const FEATURE_PREVIEW_LOCALE = 'previewLocale';
-    public const FEATURE_MANUAL_STAGING_DEPLOYMENTS = 'manualStagingDeployments';
+    public const FEATURE_STUDIO_ORCHESTRATED_DEPLOYMENTS = 'studioOrchestratedDeployments';
 
     public const FEATURE_FLAG_DESCRIPTIONS = [
         self::FEATURE_FRONTASTIC_NEXTJS => 'Differentiate between coFE (Next.JS) and legacy (frontastic) customers',
@@ -40,7 +40,7 @@ class Customer extends DataObject
         self::FEATURE_HUMIO => 'Toggle the "humio" feature for the User Profile section on the Frontend.',
         self::FEATURE_MEDIA => '[FP-4003] Toggle the "media" feature for the new media component on the Frontend.',
         self::FEATURE_PREVIEW_LOCALE => 'Toggle the forced locale feature on page previews',
-        self::FEATURE_MANUAL_STAGING_DEPLOYMENTS => 'Toggle manual staging deployments for multi-tenant customers',
+        self::FEATURE_STUDIO_ORCHESTRATED_DEPLOYMENTS => 'Toggle manual staging deployments for multi-tenant customers',
     ];
 
     // these feature flags should only be toggled by developers
