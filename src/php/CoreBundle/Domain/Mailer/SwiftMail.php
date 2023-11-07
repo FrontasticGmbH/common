@@ -4,6 +4,7 @@ namespace Frontastic\Common\CoreBundle\Domain\Mailer;
 
 use Frontastic\Common\CoreBundle\Domain\Mailer;
 use Twig\Environment;
+use Twig\Error\LoaderError;
 
 class SwiftMail extends Mailer
 {
@@ -45,7 +46,7 @@ class SwiftMail extends Mailer
         try {
             $textPart = $this->renderView("Emails/$type.txt.twig", $parameters);
             $message->addPart($textPart, 'text/plain');
-        } catch (\InvalidArgumentException $e) {
+        } catch (\InvalidArgumentException | LoaderError $e) {
             // Ignore missing text part
         }
 
