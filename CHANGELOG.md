@@ -1,4 +1,11 @@
 
+## Version 2.48.2 (2023-11-09)
+
+** Bug fixes **
+
+- Catch correct exception for missing template in new Twig versions
+- Correctly inject the service container into the system controller
+
 ## Version 2.48.1 (2023-10-12)
 
 ** Bug fixes **
