@@ -19,6 +19,10 @@ class EnvironmentResolver
             if (file_exists($directory . '/environment.local')) {
                 $dotEnv->load($directory . '/environment.local');
             }
+            if (getenv('CONFIG') && file_exists(getenv('CONFIG'))) {
+                $files[] = getenv('CONFIG');
+                $dotEnv->load(getenv('CONFIG'));
+            }
         }
     }
 }

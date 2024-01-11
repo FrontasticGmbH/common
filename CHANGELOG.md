@@ -1,4 +1,10 @@
 
+## Version 2.48.3 (2024-01-11)
+
+** New Features and Improvements **
+
+- Add compatibiltiy with Symfony 5.4.
+
 ## Version 2.48.2 (2023-11-09)
 
 ** Bug fixes **
