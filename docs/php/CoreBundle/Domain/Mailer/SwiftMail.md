@@ -14,7 +14,7 @@
 ```php
 public function __construct(
     \Swift_Mailer $mailer,
-    \Symfony\Component\Templating\EngineInterface $twig,
+    \Twig\Environment $twig,
     string $sender = 'support@frontastic.io'
 ): mixed
 ```
@@ -22,7 +22,7 @@ public function __construct(
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$mailer`|`\Swift_Mailer`||
-`$twig`|`\Symfony\Component\Templating\EngineInterface`||
+`$twig`|`\Twig\Environment`||
 `$sender`|`string`|`'support@frontastic.io'`|
 
 Return Value: `mixed`

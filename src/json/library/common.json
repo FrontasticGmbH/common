@@ -124,7 +124,8 @@
                             "name": {
                                 "type": "string"
                             }
-                        }
+                        },
+                        "required": ["name", "value"]
                     }
                 },
 

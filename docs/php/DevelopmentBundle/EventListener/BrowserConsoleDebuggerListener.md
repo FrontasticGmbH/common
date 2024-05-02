@@ -25,13 +25,13 @@ Return Value: `mixed`
 
 ```php
 public function onKernelResponse(
-    \Symfony\Component\HttpKernel\Event\FilterResponseEvent $event
+    \Symfony\Component\HttpKernel\Event\ResponseEvent $event
 ): mixed
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$event`|`\Symfony\Component\HttpKernel\Event\FilterResponseEvent`||
+`$event`|`\Symfony\Component\HttpKernel\Event\ResponseEvent`||
 
 Return Value: `mixed`
 

@@ -30,6 +30,9 @@
         },
         "category": {
             "type": "string"
+        },
+        "pageMatchingPayloadSchema": {
+            "$ref": "https://frontastic.cloud/json/library/common#/definitions/fields"
         }
     },
     "required": ["dynamicPageType", "isMultiple", "dataSourceType", "name"]

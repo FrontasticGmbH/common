@@ -1,6 +1,6 @@
-#  JsonExceptionListener
+#  ConvertExceptionListener
 
-**Fully Qualified**: [`\Frontastic\Common\CoreBundle\EventListener\JsonExceptionListener`](../../../../src/php/CoreBundle/EventListener/JsonExceptionListener.php)
+**Fully Qualified**: [`\Frontastic\Common\MvcBundle\EventListener\ConvertExceptionListener`](../../../../src/php/MvcBundle/EventListener/ConvertExceptionListener.php)
 
 ## Methods
 
@@ -11,13 +11,15 @@
 
 ```php
 public function __construct(
-    mixed $debug = false
+    ?\Psr\Log\LoggerInterface $logger = null,
+    array $exceptionClassMap = []
 ): mixed
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$debug`|`mixed`|`false`|
+`$logger`|`?\Psr\Log\LoggerInterface`|`null`|
+`$exceptionClassMap`|`array`|`[]`|
 
 Return Value: `mixed`
 
@@ -25,14 +27,14 @@ Return Value: `mixed`
 
 ```php
 public function onKernelException(
-    \Symfony\Component\HttpKernel\Event\ExceptionEvent $event
-): mixed
+    mixed $event
+): void
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$event`|`\Symfony\Component\HttpKernel\Event\ExceptionEvent`||
+`$event`|`mixed`||
 
-Return Value: `mixed`
+Return Value: `void`
 
 Generated with [Frontastic API Docs](https://github.com/FrontasticGmbH/apidocs).

@@ -17,7 +17,6 @@ Property|Type|Default|Required|Description
 `configuration` | `array` | `[]` | *Yes* | 
 `environments` | `array` | `['production', 'staging', 'development']` | *Yes* | 
 `projects` | [`Project`](Project.md)[] | `[]` | *Yes* | 
-`netlifyUrl` | `?string` | `null` | - | 
 
 ## Methods
 

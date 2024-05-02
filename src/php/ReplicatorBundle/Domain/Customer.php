@@ -22,11 +22,11 @@ class Customer extends DataObject
     public const FEATURE_VERSION_HISTORY = 'versionHistory';
     public const FEATURE_API_KEYS_PAGE = 'apiKeysPage';
     public const FEATURE_HUMIO = 'humio';
-    public const FEATURE_MEDIA = 'newMediaPage';
     public const FEATURE_PREVIEW_LOCALE = 'previewLocale';
     public const FEATURE_STUDIO_ORCHESTRATED_DEPLOYMENTS = 'studioOrchestratedDeployments';
     public const FEATURE_DISABLE_SLUG_TRANSLITERATION = 'disableSlugTransliteration';
     public const FEATURE_UPDATE_LOCALE_DROPDOWN = 'updateLocaleDropdown';
+    public const FEATURE_NETLIFY_PREVIEW = 'netlifyPreview';
 
     public const FEATURE_FLAG_DESCRIPTIONS = [
         self::FEATURE_FRONTASTIC_NEXTJS => 'Differentiate between coFE (Next.JS) and legacy (frontastic) customers',
@@ -43,7 +43,6 @@ class Customer extends DataObject
             '[FP-3387] Toggle the "Version History" section for the Editor Page on the Frontend',
         self::FEATURE_API_KEYS_PAGE => '[FP-4392] Toggle the "API Key Page" for the Developer section on the Frontend.',
         self::FEATURE_HUMIO => '[FP-4536] Toggle the "humio" feature for the User Profile section on the Frontend.',
-        self::FEATURE_MEDIA => '[FP-4003] Toggle the "media" feature for the new media component on the Frontend.',
         self::FEATURE_STUDIO_ORCHESTRATED_DEPLOYMENTS => 'Toggle manual staging deployments for multi-tenant customers',
         self::FEATURE_PREVIEW_LOCALE => '[Hackday] Toggle the forced locale feature on page previews',
         self::FEATURE_DISABLE_SLUG_TRANSLITERATION =>
@@ -51,6 +50,7 @@ class Customer extends DataObject
         self::FEATURE_UPDATE_LOCALE_DROPDOWN =>
             '[FP-4145] Update locale dropdown on stage/page/PageSettingsDialog.tsx',
         self::FEATURE_REFACTOR_FECL => '[FP-2380] Refactor FECL to use the new FECL API and Designs',
+        self::FEATURE_NETLIFY_PREVIEW => '[FP-5733] Add Netlify Preview to the Studio Developer Section',
     ];
 
     // these feature flags should only be toggled by developers
@@ -147,9 +147,4 @@ class Customer extends DataObject
      * @required
      */
     public $projects = [];
-
-    /**
-     * @var ?string
-     */
-    public $netlifyUrl = null;
 }

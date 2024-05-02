@@ -25,13 +25,13 @@ Return Value: `mixed`
 
 ```php
 public function onKernelView(
-    \Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent $event
+    \Symfony\Component\HttpKernel\Event\ViewEvent $event
 ): mixed
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
-`$event`|`\Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent`||
+`$event`|`\Symfony\Component\HttpKernel\Event\ViewEvent`||
 
 Return Value: `mixed`
 

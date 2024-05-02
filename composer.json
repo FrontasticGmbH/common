@@ -1,7 +1,7 @@
 {
     "name": "frontastic/common",
     "license": "None",
-    "version": "2.48.3",
+    "version": "2.48.4",
     "repositories": [
         {
             "type": "path",
@@ -26,7 +26,8 @@
         "composer/package-versions-deprecated": "@stable",
         "contentful/contentful": "^6.0|^7.0",
         "domnikl/statsd": "^2.6",
-        "guzzlehttp/guzzle": "^6.3",
+        "guzzlehttp/guzzle": "^6.3||^7",
+        "guzzlehttp/promises": "^1.0",
         "justinrainbow/json-schema": "@stable",
         "frontastic/data-object": "@stable",
         "league/oauth2-client": "^2.3",

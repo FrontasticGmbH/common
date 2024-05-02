@@ -197,7 +197,7 @@ class JsonSchemaValidator
         } elseif (str_contains($error['message'], "additional properties")) {
             $errorFlag = "unsupportedProperty";
         } elseif (str_contains($error['message'], "Matched a schema which it should not") &&
-            strpos($this->extractPropertyName($error['property']), "fields") === false
+            strpos($this->extractPropertyName($error['property']), "field") === 0
         ) {
             $errorFlag = "reservedFieldName";
         } else {

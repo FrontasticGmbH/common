@@ -69,14 +69,14 @@ Return Value: `\Symfony\Component\HttpFoundation\Response`
 ```php
 public function requestResetAction(
     \Symfony\Component\HttpFoundation\Request $request
-): \QafooLabs\MVC\RedirectRoute
+): RedirectRoute
 ```
 
 Argument|Type|Default|Description
 --------|----|-------|-----------
 `$request`|`\Symfony\Component\HttpFoundation\Request`||
 
-Return Value: `\QafooLabs\MVC\RedirectRoute`
+Return Value: [`RedirectRoute`](../../Mvc/RedirectRoute.md)
 
 ### resetAction()
 
