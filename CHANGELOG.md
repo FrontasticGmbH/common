@@ -1,4 +1,10 @@
 
+## Version 2.48.5 (2024-05-03)
+
+** Bug fixes **
+
+- Fix an incompatibility with guzzle 7
+
 ## Version 2.48.4 (2024-05-02)
 
 ** New Features and Improvements **

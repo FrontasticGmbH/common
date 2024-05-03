@@ -4,7 +4,7 @@ namespace Frontastic\Common\HttpClient;
 
 use Frontastic\Common\CoreBundle\Domain\Tracing;
 use Frontastic\Common\HttpClient;
-use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -108,7 +108,7 @@ class Guzzle extends HttpClient
                         'rawApiOutput' => $guzzleResponse
                     ]);
                 },
-                function (RequestException $exception) use ($url) {
+                function (TransferException $exception) use ($url) {
                     return new HttpClient\Response([
                         'status' => 599,
                         'body' => "Could not connect to server {$url}: " . $exception->getMessage(),
