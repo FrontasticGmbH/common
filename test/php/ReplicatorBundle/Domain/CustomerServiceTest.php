@@ -16,7 +16,7 @@ class CustomerServiceTest extends TestCase
         $actualCustomers = $customerService->getCustomers();
 
         $this->assertTrue(count($actualCustomers) > 2, 'Parsed fewer than 2 customers');
-        $this->assertCustomerExists('frontastictest', $actualCustomers);
+        $this->assertCustomerExists('demo', $actualCustomers);
     }
 
     public function testGetCustomersDemoNotExistsWhenNotDeployed()

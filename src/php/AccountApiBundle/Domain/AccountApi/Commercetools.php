@@ -319,7 +319,7 @@ class Commercetools implements AccountApi
             ->fetchAsync(
                 '/customers',
                 [
-                    'where' => 'email="' . $account->email . '"',
+                    'where' => 'lowercaseEmail="' . strtolower($account->email) . '"',
                 ]
             )
             ->wait();

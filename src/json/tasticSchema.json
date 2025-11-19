@@ -22,6 +22,10 @@
             "type": "string",
             "maxLength": 255
         },
+        "maxUsePerPage": {
+            "type": "integer",
+            "minimum": 1
+        },
         "schema": {
             "$ref": "https://frontastic.cloud/json/library/common#/definitions/schema"
         }

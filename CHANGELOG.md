@@ -1,4 +1,11 @@
 
+## Version 2.48.6 (2025-11-19)
+
+** Bug Fixes **
+
+- Refresh accounts from Commercetools by comparing mail addresses case insensitively.
+- Remove debug output.
+
 ## Version 2.48.5 (2024-05-03)
 
 ** Bug fixes **

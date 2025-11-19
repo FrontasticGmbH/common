@@ -160,7 +160,7 @@ class CustomerService
                             'Frontastic.Backstage.ProjectConfigurationBundle.Domain.ProjectConfiguration';
                     }
 
-                    if (\in_array(Customer::FEATURE_MULTITENANT, $customerFeatures) &&
+                    if (\in_array(Customer::FEATURE_FRONTASTIC_NEXTJS, $customerFeatures) &&
                         !\in_array('Frontastic.Backstage.DeveloperBundle.Domain.BuildVersion', $customerFeatures)) {
                         $projectSpecificEntities[] = 'Frontastic.Backstage.DeveloperBundle.Domain.BuildVersion';
                     }

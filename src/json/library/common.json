@@ -135,6 +135,23 @@
                 "required": {
                     "type": "boolean"
                 },
+                "format": {
+                    "type": "string",
+                    "enum": [
+                        "url",
+                        "email",
+                        "hex"
+                    ]
+                },
+                "type": {
+                    "type": "string"
+                },
+                "minLength": {
+                    "type": "integer"
+                },
+                "maxLength": {
+                    "type": "integer"
+                },
 
                 "$comment": {
                     "@comment": "Allow json-schema style comments in our schemas",

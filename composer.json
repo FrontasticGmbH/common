@@ -1,7 +1,7 @@
 {
     "name": "frontastic/common",
     "license": "None",
-    "version": "2.48.5",
+    "version": "2.48.6",
     "repositories": [
         {
             "type": "path",
@@ -28,7 +28,7 @@
         "domnikl/statsd": "^2.6",
         "guzzlehttp/guzzle": "^6.3||^7",
         "guzzlehttp/promises": "^1.0",
-        "justinrainbow/json-schema": "@stable",
+        "justinrainbow/json-schema": "^5",
         "frontastic/data-object": "@stable",
         "league/oauth2-client": "^2.3",
         "myclabs/deep-copy": "^1.0",
@@ -47,7 +47,6 @@
     },
     "require-dev": {
         "doctrine/common": "^2.9",
-        "frontastic/apidocs": "@dev",
         "pdepend/pdepend": "@stable",
         "phake/phake": "^4.0",
         "phploc/phploc": "@stable",

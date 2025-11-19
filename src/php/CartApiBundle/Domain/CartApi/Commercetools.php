@@ -1121,12 +1121,10 @@ class Commercetools extends CartApiBase
             );
 
             if ($result['count'] !== 1) {
-                var_dump('count != 1');
                 return null;
             }
 
             if (!is_array($result['results'] ?? null) || count($result['results']) !== 1) {
-                var_dump('!arry | count != 1');
                 return null;
             }
 

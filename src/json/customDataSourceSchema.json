@@ -21,6 +21,10 @@
         "description": {
             "type": "string"
         },
+        "dependsOnDynamicPageDataSourceType": {
+            "type": "string",
+            "pattern": "[^ ]"
+        },
         "schema": {
             "$ref": "https://frontastic.cloud/json/library/common#/definitions/schema"
         }

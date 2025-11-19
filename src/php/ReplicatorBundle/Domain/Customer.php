@@ -11,7 +11,6 @@ class Customer extends DataObject
 {
     public const FEATURE_FRONTASTIC_NEXTJS = 'frontasticNextJs';
     public const FEATURE_MULTITENANT = 'multiTenant';
-    public const FEATURE_DB_IN_CLUSTER = 'dbInCluster';
     public const FEATURE_CUSTOM_GIT_REPO = 'customGitRepo';
     public const FEATURE_DISABLE_FRONTASTIC_CI = 'disableFrontasticCi';
     public const FEATURE_ALLOW_CLEAR_FIXTURES = 'allowClearFixtures';
@@ -31,7 +30,6 @@ class Customer extends DataObject
     public const FEATURE_FLAG_DESCRIPTIONS = [
         self::FEATURE_FRONTASTIC_NEXTJS => 'Differentiate between coFE (Next.JS) and legacy (frontastic) customers',
         self::FEATURE_MULTITENANT => 'Defines whether the customer is hosted in a multi-tenant infrastructure or not',
-        self::FEATURE_DB_IN_CLUSTER => 'Defines whether the database is hosted in the studio host or in the cluster',
         self::FEATURE_CUSTOM_GIT_REPO =>
             '[FP-4863] Defines whether the customer have brought their own custom git repository',
         self::FEATURE_DISABLE_FRONTASTIC_CI => 'Defines that the code is not build by our Frontastic CI',
@@ -58,7 +56,6 @@ class Customer extends DataObject
     public const INFTRASTRUCTURE_SPECIFIC_FEATURES = [
         self::FEATURE_FRONTASTIC_NEXTJS,
         self::FEATURE_MULTITENANT,
-        self::FEATURE_DB_IN_CLUSTER,
         self::FEATURE_CUSTOM_GIT_REPO,
         self::FEATURE_DISABLE_FRONTASTIC_CI,
     ];
