@@ -19,9 +19,9 @@ use Frontastic\Common\SprykerBundle\Domain\Product\Mapper\ProductResultMapper;
 use Frontastic\Common\SprykerBundle\Domain\Product\SprykerProductApiExtendedConstants;
 use Frontastic\Common\SprykerBundle\Domain\Project\Mapper\ProductSearchableAttributesMapper;
 use Frontastic\Common\SprykerBundle\Domain\SprykerClientInterface;
+use GuzzleHttp\Promise\Create;
 use GuzzleHttp\Promise\PromiseInterface;
 use WoohooLabs\Yang\JsonApi\Response\JsonApiResponse;
-use function GuzzleHttp\Promise\promise_for;
 
 class SprykerProductSearchApi extends ProductSearchApiBase
 {
@@ -148,7 +148,7 @@ class SprykerProductSearchApi extends ProductSearchApiBase
             }
         }
 
-        return promise_for($this->addCustomAttributes($attributes));
+        return Create::promiseFor($this->addCustomAttributes($attributes));
     }
 
     public function getDangerousInnerClient()

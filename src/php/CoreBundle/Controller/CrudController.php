@@ -53,10 +53,15 @@ abstract class CrudController extends AbstractController
             if ($ignoreUndefinedProperties && !property_exists($entity, $property)) {
                 continue;
             }
-            
+
             $entity->$property = $value;
         }
 
         return $entity;
+    }
+
+    protected function get(string $id): object
+    {
+        return $this->container->get($id);
     }
 }

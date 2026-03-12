@@ -6,7 +6,8 @@ use Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS\Client;
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS\ClientResult;
 use Frontastic\Common\ContentApiBundle\Domain\Query;
-use GuzzleHttp\Promise;
+use GuzzleHttp\Promise\Create;
+use GuzzleHttp\Promise\RejectedPromise;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class GraphCMSTest extends \PHPUnit\Framework\TestCase
@@ -54,7 +55,7 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
             ],
         ]);
 
-        $promise = Promise\promise_for($clientResult);
+        $promise = Create::promiseFor($clientResult);
 
         $this->clientMock->expects($this->exactly(2))->method('get')->with($contentType, $contentId)->will($this->returnValue($promise));
 
@@ -105,7 +106,7 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
             ],
         ]);
 
-        $promise = Promise\promise_for($clientResult);
+        $promise = Create::promiseFor($clientResult);
 
         $this->clientMock->expects($this->exactly(2))->method('getAll')->with($contentType)->will($this->returnValue($promise));
 
@@ -129,7 +130,7 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
         $query = new Query();
 
         $resultAsync = $this->api->query($query, $this->locale, ContentApi::QUERY_ASYNC);
-        $this->assertInstanceOf(Promise\RejectedPromise::class, $resultAsync);
+        $this->assertInstanceOf(RejectedPromise::class, $resultAsync);
     }
 
     public function testSearchQuery()
@@ -149,7 +150,7 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
             ],
         ]);
 
-        $promise = Promise\promise_for($clientResult);
+        $promise = Create::promiseFor($clientResult);
 
         $this->clientMock->expects($this->exactly(2))
             ->method('search')
@@ -188,7 +189,7 @@ class GraphCMSTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         ]);
-        $promise = Promise\promise_for($clientResult);
+        $promise = Create::promiseFor($clientResult);
 
         $this->clientMock->expects($this->exactly(2))->method('search')->with('er')->will($this->returnValue($promise));
 

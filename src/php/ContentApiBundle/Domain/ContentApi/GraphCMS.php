@@ -8,7 +8,7 @@ use Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS\Inflector;
 use Frontastic\Common\ContentApiBundle\Domain\ContentType;
 use Frontastic\Common\ContentApiBundle\Domain\Query;
 use Frontastic\Common\ContentApiBundle\Domain\Result;
-use GuzzleHttp\Promise;
+use GuzzleHttp\Promise\Create;
 use GuzzleHttp\Promise\PromiseInterface;
 use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
@@ -56,7 +56,7 @@ class GraphCMS implements ContentApi
                 throw $exception;
             }
 
-            return Promise\rejection_for($exception);
+            return Create::rejectionFor($exception);
         }
         list($contentId, $contentType) = $parts;
 
@@ -77,7 +77,7 @@ class GraphCMS implements ContentApi
                     if ($mode === self::QUERY_SYNC) {
                         throw $exception;
                     }
-                    return Promise\rejection_for($exception);
+                    return Create::rejectionFor($exception);
                 }
 
                 $attributes = $this->getDataFromResult($clientResult, $contentType);
@@ -94,7 +94,7 @@ class GraphCMS implements ContentApi
                     if ($mode === self::QUERY_SYNC) {
                         throw $exception;
                     }
-                    return Promise\rejection_for($exception);
+                    return Create::rejectionFor($exception);
                 }
 
                 $name = $this->extractName($attributes);
@@ -130,7 +130,7 @@ class GraphCMS implements ContentApi
             // Mock query method to prevent exception if only contentIds provided
             $promise = $this->queryByContentIds($query, $locale);
         } else {
-            $promise = Promise\rejection_for(
+            $promise = Create::rejectionFor(
                 new \InvalidArgumentException('provide a ContentType and/or a search text')
             );
         }
@@ -260,7 +260,7 @@ class GraphCMS implements ContentApi
                     if ($mode === self::QUERY_SYNC) {
                         throw $exception;
                     }
-                    return Promise\rejection_for($exception);
+                    return Create::rejectionFor($exception);
                 }
                 return array_map(
                     function ($e) use ($clientResult, $query) {
@@ -293,11 +293,7 @@ class GraphCMS implements ContentApi
 
     public function queryByContentIds(Query $query, string $locale): PromiseInterface
     {
-        $promise = new Promise\Promise();
-
-        $promise->resolve(new Result());
-
-        return $promise;
+        return Create::promiseFor(new Result());
     }
 
     /**

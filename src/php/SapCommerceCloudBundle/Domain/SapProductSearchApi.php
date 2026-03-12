@@ -7,9 +7,9 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductSearchApiBundle\Domain\ProductSearchApiBase;
 use Frontastic\Common\ProjectApiBundle\Domain\Attribute;
 use Frontastic\Common\SapCommerceCloudBundle\Domain\Locale\SapLocaleCreator;
+use GuzzleHttp\Promise\Create;
 use GuzzleHttp\Promise\PromiseInterface;
-use function GuzzleHttp\Promise\promise_for;
-use function GuzzleHttp\Promise\unwrap;
+use GuzzleHttp\Promise\Utils;
 
 class SapProductSearchApi extends ProductSearchApiBase
 {
@@ -144,7 +144,7 @@ class SapProductSearchApi extends ProductSearchApiBase
                     return $attributes;
                 });
         }
-        $results = unwrap($results);
+        $results = Utils::unwrap($results);
 
         $attributes = [];
         foreach ($results as $result) {
@@ -169,7 +169,7 @@ class SapProductSearchApi extends ProductSearchApiBase
             }
         }
 
-        return promise_for($attributes);
+        return Create::promiseFor($attributes);
     }
 
     public function getDangerousInnerClient()

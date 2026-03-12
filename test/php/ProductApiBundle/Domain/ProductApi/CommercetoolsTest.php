@@ -9,6 +9,7 @@ use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\ProductQuery;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\RangeFacet;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Query\TermFacet;
 use Frontastic\Common\ProductApiBundle\Domain\ProductApi\Result\Term;
+use GuzzleHttp\Promise\Create;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -191,7 +192,7 @@ class CommercetoolsTest extends TestCase
     private function returnTestParseFacetsResult()
     {
         return $this->returnValue(
-            \GuzzleHttp\Promise\promise_for(
+            Create::promiseFor(
                 require __DIR__ . '/_fixtures/CommercetoolsTest/testParseFacetsResult.php'
             )
         );

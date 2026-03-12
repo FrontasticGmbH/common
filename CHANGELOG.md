@@ -1,4 +1,13 @@
 
+## Version 2.49.0 (2026-03-12)
+
+** New Features & Improvements **
+
+- Drop support for Symfony 4.4
+- Add support for Symfony 5.4
+- Remove legacy controller aliases for controllers moved to Catwalk a long time ago
+- Replace Swiftmailer with symfony/mailer
+
 ## Version 2.48.6 (2025-11-19)
 
 ** Bug Fixes **

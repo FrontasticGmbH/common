@@ -14,7 +14,7 @@ use Frontastic\Common\ContentApiBundle\Domain\ContentApi\Contentful\LocaleMapper
 use Frontastic\Common\ContentApiBundle\Domain\ContentType;
 use Frontastic\Common\ContentApiBundle\Domain\Query;
 use Frontastic\Common\ContentApiBundle\Domain\Result;
-use GuzzleHttp\Promise;
+use GuzzleHttp\Promise\Create;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -72,7 +72,7 @@ class Contentful implements ContentApi
     {
         $locale = $locale ?? $this->defaultLocale;
 
-        $promise = Promise\promise_for(
+        $promise = Create::promiseFor(
             $this->client->getEntry($contentId, $this->localeMapper->replaceLocale($locale))
         )->then(function ($entry) {
             return $this->createContentFromEntry($entry);
@@ -112,7 +112,7 @@ class Contentful implements ContentApi
             }
         }
 
-        $promise = Promise\promise_for(
+        $promise = Create::promiseFor(
             $this->client->getEntries($contentfulQuery)
         )->then(function (ResourceArray $result) {
             $items = $result->getItems();

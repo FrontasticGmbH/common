@@ -3,13 +3,14 @@
 namespace Frontastic\Common\AccountApiBundle\Domain;
 
 use Frontastic\Common\CoreBundle\Domain\ApiDataObject;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\Collection;
 
 /**
  * @type
  */
-class Account extends ApiDataObject implements UserInterface, \Serializable
+class Account extends ApiDataObject implements UserInterface, PasswordAuthenticatedUserInterface, \Serializable
 {
     /**
      * @var string
@@ -125,17 +126,22 @@ class Account extends ApiDataObject implements UserInterface, \Serializable
         return false;
     }
 
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->email;
     }
 
-    public function getRoles()
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
+    }
+
+    public function getRoles(): array
     {
         return ['ROLE_USER'];
     }
 
-    public function getPassword()
+    public function getPassword(): ?string
     {
         return $this->passwordHash;
     }

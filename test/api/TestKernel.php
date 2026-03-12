@@ -32,7 +32,6 @@ class TestKernel extends Kernel
         return [
             new FrameworkBundle(),
             new TwigBundle(),
-            new SwiftmailerBundle(),
 
             new FrontasticCommonCoreBundle(),
             new FrontasticCommonAccountApiBundle(),

@@ -512,7 +512,7 @@ class Client
                 $searchAttribute = reset($possibleSearchAttributes); // get first entry of array, regardless of it's key
                 $attributeString = $this->attributeQueryPart($attributes);
                 $queryPart =
-                           $name . "(where: { ${searchAttribute['name']}_contains: \"$searchString\" }){ " .
+                           $name . "(where: { {$searchAttribute['name']}_contains: \"$searchString\" }){ " .
                            $attributeString .  " }";
                 return $queryPart;
             },

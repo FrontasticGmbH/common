@@ -27,7 +27,7 @@ abstract class Kernel extends SymfonyKernel
      *
      * @TODO Use Symfony Flex mechanism instead
      */
-    public function registerContainerConfiguration(LoaderInterface $loader)
+    public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             $loader->load(static::getBaseDir() . '/config/config_' . $this->getEnvironment() . '.yml');
@@ -40,7 +40,7 @@ abstract class Kernel extends SymfonyKernel
      * Symfony determines this be Kernel file location otherwise, this does not
      * work for Catwalks.
      */
-    public function getRootDir()
+    public function getRootDir(): string
     {
         return static::getBaseDir();
     }
@@ -82,7 +82,7 @@ abstract class Kernel extends SymfonyKernel
      *
      * @throws \RuntimeException
      */
-    protected function buildContainer()
+    protected function buildContainer(): ContainerBuilder
     {
         $container = parent::buildContainer();
 
@@ -190,7 +190,7 @@ abstract class Kernel extends SymfonyKernel
      *
      * @return void
      */
-    protected function initializeContainer()
+    protected function initializeContainer(): void
     {
         $class = $this->getContainerClass();
         $containerCacheFile = $this->getCacheDir() . '/' . $class . '.php';
@@ -205,6 +205,6 @@ abstract class Kernel extends SymfonyKernel
             }
         }
 
-        return parent::initializeContainer();
+        parent::initializeContainer();
     }
 }

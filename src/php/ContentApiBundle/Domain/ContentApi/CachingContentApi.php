@@ -4,7 +4,7 @@ namespace Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 
 use Frontastic\Common\ContentApiBundle\Domain\ContentApi;
 use Frontastic\Common\ContentApiBundle\Domain\Query;
-use GuzzleHttp\Promise;
+use GuzzleHttp\Promise\Create;
 use Psr\SimpleCache\CacheInterface;
 use Frontastic\Common\CoreBundle\Domain\Json\Json;
 
@@ -104,7 +104,7 @@ class CachingContentApi implements ContentApi
                 });
         }
 
-        return Promise\promise_for($result);
+        return Create::promiseFor($result);
     }
 
     /**
@@ -153,7 +153,7 @@ class CachingContentApi implements ContentApi
                 });
         }
 
-        return Promise\promise_for($result);
+        return Create::promiseFor($result);
     }
 
     /**

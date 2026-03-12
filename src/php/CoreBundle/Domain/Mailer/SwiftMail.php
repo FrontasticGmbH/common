@@ -3,6 +3,10 @@
 namespace Frontastic\Common\CoreBundle\Domain\Mailer;
 
 use Frontastic\Common\CoreBundle\Domain\Mailer;
+use Symfony\Bridge\Twig\Mime\BodyRenderer;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mailer\Mailer as SymfonyMailer;
+use Symfony\Component\Mime\Address;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 
@@ -12,17 +16,11 @@ class SwiftMail extends Mailer
     private $twig;
     private $sender;
 
-    public function __construct(\Swift_Mailer $mailer, Environment $twig, string $sender = 'support@frontastic.io')
+    public function __construct(SymfonyMailer $mailer, Environment $twig, string $sender = 'support@frontastic.io')
     {
         $this->mailer = $mailer;
         $this->twig = $twig;
         $this->sender = $sender;
-
-        // Fix stupid swiftmail sendmail configuration which is not possible to
-        // configure through bundle.
-        if ($this->mailer->getTransport() instanceof \Swift_Transport_SendmailTransport) {
-            $this->mailer->getTransport()->setCommand('/usr/sbin/sendmail -t');
-        }
     }
 
     public function sendToUser($user, string $type, string $subject, array $parameters = array())
@@ -35,26 +33,16 @@ class SwiftMail extends Mailer
             )
         );
 
-        $message = new \Swift_Message(
-            $subject,
-            $this->renderView("Emails/$type.html.twig", $parameters),
-            'text/html'
-        );
-        $message->setFrom($this->sender);
-        $message->setTo($user->email);
+        $email = (new TemplatedEmail())
+            ->from(new Address($this->sender))
+            ->to(new Address($user->email))
+            ->subject($subject)
+            ->htmlTemplate("Emails/$type.html.twig")
+            ->context($parameters);
 
-        try {
-            $textPart = $this->renderView("Emails/$type.txt.twig", $parameters);
-            $message->addPart($textPart, 'text/plain');
-        } catch (\InvalidArgumentException | LoaderError $e) {
-            // Ignore missing text part
-        }
+        $bodyRenderer = new BodyRenderer($this->twig, $parameters);
+        $bodyRenderer->render($email);
 
-        $this->mailer->send($message);
-    }
-
-    private function renderView(string $template, array $parameters)
-    {
-        return $this->twig->render($template, $parameters);
+        $this->mailer->send($email);
     }
 }
