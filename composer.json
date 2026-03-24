@@ -1,7 +1,7 @@
 {
     "name": "frontastic/common",
     "license": "None",
-    "version": "2.49.0",
+    "version": "2.49.1",
     "repositories": [
         {
             "type": "path",
@@ -26,7 +26,7 @@
         "composer/package-versions-deprecated": "@stable",
         "contentful/contentful": "^6.0|^7.0",
         "doctrine/cache": "^1.13||^2.2",
-        "domnikl/statsd": "^2.6",
+        "slickdeals/statsd": "^2.6",
         "frontastic/data-object": "@stable",
         "guzzlehttp/guzzle": "^6.3||^7",
         "guzzlehttp/promises": "^1.5|^2.0",

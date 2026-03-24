@@ -1,4 +1,11 @@
 
+## Version 2.49.1 (2026-03-24)
+
+
+** Bug Fixes **
+
+- Switch from domnikl/statsd-php to slickdeals/statsd
+
 ## Version 2.49.0 (2026-03-12)
 
 ** New Features & Improvements **
