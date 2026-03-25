@@ -10,7 +10,7 @@ while the [API Documentation](docs/) can be found inside this repository.
 
 # API Design Concepts
 
-## TL;DR
+## TL;DR;
 
 * Plain data objects without logic
 * Logic replaceable encapsulated in services from DIC or factory
