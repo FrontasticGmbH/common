@@ -29,7 +29,7 @@ class OrdersMapper extends AbstractDataMapper implements ProjectConfigApiAwareDa
 
     public function map($resource)
     {
-        if (!key_exists(self::MAPPER_NAME, $resource)) {
+        if (!array_key_exists(self::MAPPER_NAME, $resource)) {
             return [];
         }
 

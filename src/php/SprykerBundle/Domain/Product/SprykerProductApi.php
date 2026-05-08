@@ -142,7 +142,7 @@ class SprykerProductApi extends ProductApiBase
 
                 return $product;
             })
-            ->otherwise(function (\Throwable $exception) use ($query) {
+            ->otherwise(function (\Throwable $exception) use ($query): void {
                 if ($exception instanceof RequestException && $exception->getCode() >= 500) {
                     return;
                 }

@@ -218,7 +218,7 @@ class JsonSchemaValidator
 
     private function extractErrorPlaceInSchema(string $errorProperty): string
     {
-        $errorPlaceInSchema = join(
+        $errorPlaceInSchema = implode(
             ".",
             array_slice(explode('.', $errorProperty), 0, array_key_last(explode('.', $errorProperty)))
         );

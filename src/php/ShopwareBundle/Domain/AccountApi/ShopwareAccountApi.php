@@ -61,7 +61,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         );
     }
 
-    public function confirmEmail(string $token, string $locale = null): Account
+    public function confirmEmail(string $token, ?string $locale = null): Account
     {
         try {
             $requestData = Json::decode($token, true);
@@ -85,7 +85,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         }
     }
 
-    public function create(Account $account, ?Cart $cart = null, string $locale = null): Account
+    public function create(Account $account, ?Cart $cart = null, ?string $locale = null): Account
     {
         if ($account->salutation === null && (($salutations = $this->getSalutations($locale)) !== null)) {
             $account->salutation = $salutations[0];
@@ -107,7 +107,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
                     null;
 
                 // Shopware does not allow logging for guest accounts.
-                if (key_exists('guest', $response) && $response['guest']) {
+                if (array_key_exists('guest', $response) && $response['guest']) {
                     $account = $this->mapResponse($response, AccountMapper::MAPPER_NAME);
                     $account->apiToken = $token;
 
@@ -137,7 +137,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
             ->wait();
     }
 
-    public function update(Account $account, string $locale = null): Account
+    public function update(Account $account, ?string $locale = null): Account
     {
         $requestData = $this->mapRequestData($account, CustomerPatchRequestDataMapper::MAPPER_NAME);
 
@@ -166,7 +166,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         Account $account,
         string $oldPassword,
         string $newPassword,
-        string $locale = null
+        ?string $locale = null
     ): Account {
         $requestData = [
             'password' => $oldPassword,
@@ -182,7 +182,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
         return $account;
     }
 
-    public function generatePasswordResetToken(string $email, string $locale = null): PasswordResetToken
+    public function generatePasswordResetToken(string $email, ?string $locale = null): PasswordResetToken
     {
         $requestData = [
             'email' => $email,
@@ -215,7 +215,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
             ->wait();
     }
 
-    public function resetPassword(string $token, string $newPassword, string $locale = null): Account
+    public function resetPassword(string $token, string $newPassword, ?string $locale = null): Account
     {
         $confirmationToken = Json::decode($token, true);
 
@@ -244,7 +244,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
             ->wait();
     }
 
-    public function login(Account $account, ?Cart $cart = null, string $locale = null): ?Account
+    public function login(Account $account, ?Cart $cart = null, ?string $locale = null): ?Account
     {
         $requestData = [
             'username' => $account->getUsername(),
@@ -278,7 +278,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
             ->wait();
     }
 
-    public function refreshAccount(Account $account, string $locale = null): Account
+    public function refreshAccount(Account $account, ?string $locale = null): Account
     {
         $apiToken = $account->apiToken;
 
@@ -297,7 +297,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
             ->then(function ($response) use ($apiToken): Account {
                 $accountData = $response['data'][0];
 
-                if (key_exists('included', $response)) {
+                if (array_key_exists('included', $response)) {
                     foreach ($response['included'] as $includedEntity) {
                         if ($includedEntity['type'] !== 'customer_address') {
                             continue;
@@ -317,7 +317,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
     /**
      * @inheritDoc
      */
-    public function getAddresses(Account $account, string $locale = null): array
+    public function getAddresses(Account $account, ?string $locale = null): array
     {
         return $this->client
             ->withContextToken($account->apiToken)
@@ -328,7 +328,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
             ->wait();
     }
 
-    public function addAddress(Account $account, Address $address, string $locale = null): Account
+    public function addAddress(Account $account, Address $address, ?string $locale = null): Account
     {
         $requestData = $this->mapRequestData($address, AddressCreateRequestDataMapper::MAPPER_NAME);
 
@@ -355,7 +355,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
             ->wait();
     }
 
-    public function updateAddress(Account $account, Address $address, string $locale = null): Account
+    public function updateAddress(Account $account, Address $address, ?string $locale = null): Account
     {
         $requestData = $this->mapRequestData($address, AddressCreateRequestDataMapper::MAPPER_NAME);
 
@@ -382,7 +382,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
             ->wait();
     }
 
-    public function removeAddress(Account $account, string $addressId, string $locale = null): Account
+    public function removeAddress(Account $account, string $addressId, ?string $locale = null): Account
     {
         return $this->client
             ->withContextToken($account->apiToken)
@@ -404,7 +404,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
             ->wait();
     }
 
-    public function setDefaultBillingAddress(Account $account, string $addressId, string $locale = null): Account
+    public function setDefaultBillingAddress(Account $account, string $addressId, ?string $locale = null): Account
     {
         return $this->client
             ->withContextToken($account->apiToken)
@@ -421,7 +421,7 @@ class ShopwareAccountApi extends AbstractShopwareApi implements AccountApi
             ->wait();
     }
 
-    public function setDefaultShippingAddress(Account $account, string $addressId, string $locale = null): Account
+    public function setDefaultShippingAddress(Account $account, string $addressId, ?string $locale = null): Account
     {
         return $this->client
             ->withContextToken($account->apiToken)

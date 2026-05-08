@@ -318,7 +318,7 @@ class Mapper
 
         $price = $shippingInfoData['price']['centAmount'] ?? null;
 
-        if (key_exists('discountedPrice', $shippingInfoData)) {
+        if (array_key_exists('discountedPrice', $shippingInfoData)) {
             $price = $shippingInfoData['discountedPrice']['value']['centAmount'] ?? null;
         }
 
@@ -400,7 +400,7 @@ class Mapper
 
             $shippingRates = array_merge($shippingRates, array_map(
                 function ($shippingRate) use ($zoneId, $name, $locations) {
-                    if (key_exists('isMatching', $shippingRate) && $shippingRate['isMatching'] === false) {
+                    if (array_key_exists('isMatching', $shippingRate) && $shippingRate['isMatching'] === false) {
                         return [];
                     }
 

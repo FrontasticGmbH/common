@@ -46,7 +46,7 @@ abstract class BaseImplementationV2
     }
 
     /*** confirmEmail() ***********************************************************************************************/
-    public function beforeConfirmEmail(AccountApi $accountApi, string $token, string $locale = null): ?array
+    public function beforeConfirmEmail(AccountApi $accountApi, string $token, ?string $locale = null): ?array
     {
         return null;
     }
@@ -61,7 +61,7 @@ abstract class BaseImplementationV2
         AccountApi $accountApi,
         Account $account,
         ?Cart $cart = null,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         return null;
     }
@@ -72,7 +72,7 @@ abstract class BaseImplementationV2
     }
 
     /*** update() *****************************************************************************************************/
-    public function beforeUpdate(AccountApi $accountApi, Account $account, string $locale = null): ?array
+    public function beforeUpdate(AccountApi $accountApi, Account $account, ?string $locale = null): ?array
     {
         return null;
     }
@@ -88,7 +88,7 @@ abstract class BaseImplementationV2
         Account $account,
         string $oldPassword,
         string $newPassword,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         return null;
     }
@@ -116,7 +116,7 @@ abstract class BaseImplementationV2
         AccountApi $accountApi,
         string $token,
         string $newPassword,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         return null;
     }
@@ -131,7 +131,7 @@ abstract class BaseImplementationV2
         AccountApi $accountApi,
         Account $account,
         ?Cart $cart = null,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         return null;
     }
@@ -145,7 +145,7 @@ abstract class BaseImplementationV2
     }
 
     /*** refreshAccount() *********************************************************************************************/
-    public function beforeRefreshAccount(AccountApi $accountApi, Account $account, string $locale = null): ?array
+    public function beforeRefreshAccount(AccountApi $accountApi, Account $account, ?string $locale = null): ?array
     {
         return null;
     }
@@ -156,7 +156,7 @@ abstract class BaseImplementationV2
     }
 
     /*** getAddresses() ***********************************************************************************************/
-    public function beforeGetAddresses(AccountApi $accountApi, Account $account, string $locale = null): ?array
+    public function beforeGetAddresses(AccountApi $accountApi, Account $account, ?string $locale = null): ?array
     {
         return null;
     }
@@ -176,7 +176,7 @@ abstract class BaseImplementationV2
         AccountApi $accountApi,
         Account $account,
         Address $address,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         return null;
     }
@@ -191,7 +191,7 @@ abstract class BaseImplementationV2
         AccountApi $accountApi,
         Account $account,
         Address $address,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         return null;
     }
@@ -206,7 +206,7 @@ abstract class BaseImplementationV2
         AccountApi $accountApi,
         Account $account,
         string $addressId,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         return null;
     }
@@ -221,7 +221,7 @@ abstract class BaseImplementationV2
         AccountApi $accountApi,
         Account $account,
         string $addressId,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         return null;
     }
@@ -236,7 +236,7 @@ abstract class BaseImplementationV2
         AccountApi $accountApi,
         Account $account,
         string $addressId,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         return null;
     }

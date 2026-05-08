@@ -126,7 +126,7 @@ class ShopwareCartApi extends CartApiBase
             ->wait();
     }
 
-    protected function getByIdImplementation(string $token, string $locale = null): Cart
+    protected function getByIdImplementation(string $token, ?string $locale = null): Cart
     {
         $shopwareLocale = $this->parseLocaleString($locale);
         $mapper = $this->buildMapper(CartMapper::MAPPER_NAME, $shopwareLocale);
@@ -168,7 +168,7 @@ class ShopwareCartApi extends CartApiBase
         return null;
     }
 
-    protected function addToCartImplementation(Cart $cart, LineItem $lineItem, string $locale = null): Cart
+    protected function addToCartImplementation(Cart $cart, LineItem $lineItem, ?string $locale = null): Cart
     {
         $shopwareLocale = $this->parseLocaleString($locale);
         $mapper = $this->buildMapper(CartMapper::MAPPER_NAME, $shopwareLocale);
@@ -196,7 +196,7 @@ class ShopwareCartApi extends CartApiBase
         LineItem $lineItem,
         int $count,
         ?array $custom = null,
-        string $locale = null
+        ?string $locale = null
     ): Cart {
         $shopwareLocale = $this->parseLocaleString($locale);
         $mapper = $this->buildMapper(CartMapper::MAPPER_NAME, $shopwareLocale);
@@ -222,7 +222,7 @@ class ShopwareCartApi extends CartApiBase
             ->wait();
     }
 
-    protected function removeLineItemImplementation(Cart $cart, LineItem $lineItem, string $locale = null): Cart
+    protected function removeLineItemImplementation(Cart $cart, LineItem $lineItem, ?string $locale = null): Cart
     {
         $shopwareLocale = $this->parseLocaleString($locale);
         $mapper = $this->buildMapper(CartMapper::MAPPER_NAME, $shopwareLocale);
@@ -244,7 +244,7 @@ class ShopwareCartApi extends CartApiBase
             ->wait();
     }
 
-    protected function setEmailImplementation(Cart $cart, string $email, string $locale = null): Cart
+    protected function setEmailImplementation(Cart $cart, string $email, ?string $locale = null): Cart
     {
         // Shopware links the email to the context.customer and not to the cart. In order to update the email,
         // the account should be updated through Account::update().
@@ -290,7 +290,7 @@ class ShopwareCartApi extends CartApiBase
         return $cart;
     }
 
-    protected function setShippingMethodImplementation(Cart $cart, string $shippingMethod, string $locale = null): Cart
+    protected function setShippingMethodImplementation(Cart $cart, string $shippingMethod, ?string $locale = null): Cart
     {
         $shopwareLocale = $this->parseLocaleString($locale);
         $requestData = [
@@ -313,13 +313,13 @@ class ShopwareCartApi extends CartApiBase
             ->wait();
     }
 
-    protected function setRawApiInputImplementation(Cart $cart, string $locale = null): Cart
+    protected function setRawApiInputImplementation(Cart $cart, ?string $locale = null): Cart
     {
         // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
         throw new RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    protected function setShippingAddressImplementation(Cart $cart, Address $address, string $locale = null): Cart
+    protected function setShippingAddressImplementation(Cart $cart, Address $address, ?string $locale = null): Cart
     {
         if (!$this->isGuestCart($cart)) {
             throw new \DomainException('To set the shipping address you should update the account details.');
@@ -361,7 +361,7 @@ class ShopwareCartApi extends CartApiBase
         return $cart;
     }
 
-    protected function setBillingAddressImplementation(Cart $cart, Address $address, string $locale = null): Cart
+    protected function setBillingAddressImplementation(Cart $cart, Address $address, ?string $locale = null): Cart
     {
         if (!$this->isGuestCart($cart)) {
             throw new \DomainException('To set the billing address you should update the account details.');
@@ -407,7 +407,7 @@ class ShopwareCartApi extends CartApiBase
         Cart $cart,
         Payment $payment,
         ?array $custom = null,
-        string $locale = null
+        ?string $locale = null
     ): Cart {
         // Standard Shopware6 SalesChannel API does not have an endpoint to handle this
         throw new RuntimeException(__METHOD__ . ' not implemented');
@@ -419,7 +419,7 @@ class ShopwareCartApi extends CartApiBase
         throw new RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    protected function redeemDiscountCodeImplementation(Cart $cart, string $code, string $locale = null): Cart
+    protected function redeemDiscountCodeImplementation(Cart $cart, string $code, ?string $locale = null): Cart
     {
         $shopwareLocale = $this->parseLocaleString($locale);
         $mapper = $this->buildMapper(CartMapper::MAPPER_NAME, $shopwareLocale);
@@ -447,12 +447,12 @@ class ShopwareCartApi extends CartApiBase
     protected function removeDiscountCodeImplementation(
         Cart $cart,
         LineItem $discountLineItem,
-        string $locale = null
+        ?string $locale = null
     ): Cart {
         return $this->removeLineItem($cart, $discountLineItem, $locale);
     }
 
-    protected function orderImplementation(Cart $cart, string $locale = null): Order
+    protected function orderImplementation(Cart $cart, ?string $locale = null): Order
     {
         if (!$this->isReadyForCheckout($cart)) {
             throw new \DomainException('Cart not complete yet.');
@@ -491,7 +491,7 @@ class ShopwareCartApi extends CartApiBase
             ->wait();
     }
 
-    protected function getOrderImplementation(Account $account, string $orderId, string $locale = null): Order
+    protected function getOrderImplementation(Account $account, string $orderId, ?string $locale = null): Order
     {
         $result = $this->getOrdersBy(
             $account->apiToken,
@@ -504,7 +504,7 @@ class ShopwareCartApi extends CartApiBase
         return $result[0];
     }
 
-    protected function getOrdersImplementation(Account $account, string $locale = null): array
+    protected function getOrdersImplementation(Account $account, ?string $locale = null): array
     {
         return $this->getOrdersBy(
             $account->apiToken,
@@ -518,7 +518,7 @@ class ShopwareCartApi extends CartApiBase
         $this->currentTransaction = $cart->cartId;
     }
 
-    protected function commitImplementation(string $locale = null): Cart
+    protected function commitImplementation(?string $locale = null): Cart
     {
         if (null === $token = $this->currentTransaction) {
             throw new RuntimeException('No transaction currently in progress');

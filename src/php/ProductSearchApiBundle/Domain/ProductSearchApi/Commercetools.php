@@ -129,7 +129,7 @@ class Commercetools extends ProductSearchApiBase
         $categories = $query->getAllUniqueCategories();
         if (count($categories) > 0) {
             $parameters['filter.query'][] = 'categories.id: ' .
-                join(
+                implode(
                     ', ',
                     array_map(
                         function ($category) {
@@ -143,13 +143,13 @@ class Commercetools extends ProductSearchApiBase
             $parameters[sprintf('text.%s', $locale->language)] = $query->query;
         }
         if ($query->productIds) {
-            $parameters['filter.query'][] = sprintf('id: "%s"', join('","', $query->productIds));
+            $parameters['filter.query'][] = sprintf('id: "%s"', implode('","', $query->productIds));
         }
         if ($query->sku) {
             $parameters['filter.query'][] = sprintf('variants.sku:"%s"', $query->sku);
         }
         if ($query->skus) {
-            $parameters['filter.query'][] = sprintf('variants.sku:"%s"', join('","', $query->skus));
+            $parameters['filter.query'][] = sprintf('variants.sku:"%s"', implode('","', $query->skus));
         }
 
         if ($query->sortAttributes) {
@@ -285,7 +285,7 @@ class Commercetools extends ProductSearchApiBase
         return $localizedResult;
     }
 
-    private function mapValueLocales(array $values = null): ?array
+    private function mapValueLocales(?array $values = null): ?array
     {
         if ($values === null) {
             return null;

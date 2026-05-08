@@ -55,7 +55,7 @@ class Commercetools implements AccountApi
         return null;
     }
 
-    public function confirmEmail(string $token, string $locale = null): Account
+    public function confirmEmail(string $token, ?string $locale = null): Account
     {
         try {
             return $this->mapAccount($this->client->post(
@@ -77,7 +77,7 @@ class Commercetools implements AccountApi
      *
      * @todo Should we catch the RequestException here?
      */
-    public function create(Account $account, ?Cart $cart = null, string $locale = null): Account
+    public function create(Account $account, ?Cart $cart = null, ?string $locale = null): Account
     {
         list(
             $addressesData,
@@ -163,7 +163,7 @@ class Commercetools implements AccountApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function update(Account $account, string $locale = null): Account
+    public function update(Account $account, ?string $locale = null): Account
     {
         $accountVersion = $this->client->get('/customers/' . $account->accountId);
 
@@ -218,7 +218,7 @@ class Commercetools implements AccountApi
         Account $account,
         string $oldPassword,
         string $newPassword,
-        string $locale = null
+        ?string $locale = null
     ): Account {
         $accountData = $this->client->get('/customers/' . $account->accountId);
 
@@ -262,7 +262,7 @@ class Commercetools implements AccountApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function resetPassword(string $token, string $newPassword, string $locale = null): Account
+    public function resetPassword(string $token, string $newPassword, ?string $locale = null): Account
     {
         return $this->mapAccount($this->client->post(
             '/customers/password/reset',
@@ -275,7 +275,7 @@ class Commercetools implements AccountApi
         ));
     }
 
-    public function login(Account $account, ?Cart $cart = null, string $locale = null): ?Account
+    public function login(Account $account, ?Cart $cart = null, ?string $locale = null): ?Account
     {
         try {
             $account = $this->mapAccount($this->client->post(
@@ -313,7 +313,7 @@ class Commercetools implements AccountApi
         return $account;
     }
 
-    public function refreshAccount(Account $account, string $locale = null): Account
+    public function refreshAccount(Account $account, ?string $locale = null): Account
     {
         $result = $this->client
             ->fetchAsync(
@@ -336,7 +336,7 @@ class Commercetools implements AccountApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function getAddresses(Account $account, string $locale = null): array
+    public function getAddresses(Account $account, ?string $locale = null): array
     {
         return $this->mapAddresses($this->client->get('/customers/' . $account->accountId));
     }
@@ -349,7 +349,7 @@ class Commercetools implements AccountApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function addAddress(Account $account, Address $address, string $locale = null): Account
+    public function addAddress(Account $account, Address $address, ?string $locale = null): Account
     {
         $accountData = $this->client->get('/customers/' . $account->accountId);
 
@@ -403,7 +403,7 @@ class Commercetools implements AccountApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function updateAddress(Account $account, Address $address, string $locale = null): Account
+    public function updateAddress(Account $account, Address $address, ?string $locale = null): Account
     {
         $accountData = $this->client->get('/customers/' . $account->accountId);
 
@@ -446,7 +446,7 @@ class Commercetools implements AccountApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function removeAddress(Account $account, string $addressId, string $locale = null): Account
+    public function removeAddress(Account $account, string $addressId, ?string $locale = null): Account
     {
         $accountData = $this->client->get('/customers/' . $account->accountId);
         return $this->mapAccount($this->client->post(
@@ -469,7 +469,7 @@ class Commercetools implements AccountApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function setDefaultBillingAddress(Account $account, string $addressId, string $locale = null): Account
+    public function setDefaultBillingAddress(Account $account, string $addressId, ?string $locale = null): Account
     {
         $accountData = $this->client->get('/customers/' . $account->accountId);
         return $this->mapAccount($this->client->post(
@@ -492,7 +492,7 @@ class Commercetools implements AccountApi
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    public function setDefaultShippingAddress(Account $account, string $addressId, string $locale = null): Account
+    public function setDefaultShippingAddress(Account $account, string $addressId, ?string $locale = null): Account
     {
         $accountData = $this->client->get('/customers/' . $account->accountId);
         return $this->mapAccount($this->client->post(

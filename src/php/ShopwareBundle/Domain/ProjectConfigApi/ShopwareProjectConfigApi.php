@@ -114,10 +114,10 @@ class ShopwareProjectConfigApi extends AbstractShopwareApi implements ShopwarePr
         $result = [];
         (new EachPromise($contextPromises, [
             'concurrency' => 3,
-            'fulfilled' => function ($resource, $resourceName) use (&$result) {
+            'fulfilled' => function ($resource, $resourceName) use (&$result): void {
                 $result[$resourceName] = $this->mapResponse($resource, $resourceName);
             },
-            'rejected' => static function ($reason) {
+            'rejected' => static function ($reason): void {
                 throw $reason;
             }
         ]))->promise()->wait();

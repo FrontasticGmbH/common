@@ -67,7 +67,7 @@ class FindologicClient
                 }
             )
             ->otherwise(
-                function () {
+                function (): void {
                     throw new ServiceNotAliveException();
                 }
             );
@@ -112,7 +112,7 @@ class FindologicClient
             );
     }
 
-    private function buildQueryUrl(string $language, string $route, array $parameters = null)
+    private function buildQueryUrl(string $language, string $route, ?array $parameters = null)
     {
         if (!isset($this->endpoints[$language])) {
             throw new \RuntimeException('No Findologic backend configured for requested language "' . $language . '".');

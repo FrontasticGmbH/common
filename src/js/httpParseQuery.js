@@ -90,22 +90,34 @@ let parse_str = function (str, array) {
         }
       }
 
+      let hasDangerousKey = false
+      for (j = 0, keysLen = keys.length; j < keysLen; j++) {
+        keys[j] = keys[j].replace(/^['"]/, '').replace(/['"]$/, '')
+        if (keys[j] === '__proto__' || keys[j] === 'prototype' || keys[j] === 'constructor') {
+          hasDangerousKey = true
+          break
+        }
+      }
+      if (hasDangerousKey) {
+        continue
+      }
+
       obj = array
       for (j = 0, keysLen = keys.length; j < keysLen; j++) {
-        key = keys[j].replace(/^['"]/, '')
-          .replace(/['"]$/, '')
+        key = keys[j]
         lastIter = j !== keys.length - 1
         lastObj = obj
+
         if ((key !== '' && key !== ' ') || j === 0) {
           if (obj[key] === undef) {
-            obj[key] = {}
+            obj[key] = Object.create(null)
           }
           obj = obj[key]
         } else {
           // To insert new dimension
           ct = -1
           for (p in obj) {
-            if (obj.hasOwnProperty(p)) {
+            if (Object.prototype.hasOwnProperty.call(obj, p)) {
               if (+p > ct && p.match(/^\d+$/g)) {
                 ct = +p
               }
@@ -150,7 +162,7 @@ let convertArrayObjectsToArrays = function (object) {
 }
 
 let httpParseQuery = function (queryString) {
-    let parameters = {}
+    let parameters = Object.create(null)
     parse_str(queryString, parameters)
     parameters = convertArrayObjectsToArrays(parameters)
     return parameters

@@ -41,7 +41,7 @@ class Tideways extends HttpClient
         string $url,
         string $body = '',
         array $headers = array(),
-        Options $options = null
+        ?Options $options = null
     ): PromiseInterface {
         $span = null;
         $traceId = Tracing::getCurrentTraceId();
@@ -77,7 +77,7 @@ class Tideways extends HttpClient
 
                     return $response;
                 },
-                function (\Exception $reason) use ($method, $url, $body, $headers, $span) {
+                function (\Exception $reason) use ($method, $url, $body, $headers, $span): void {
                     $this->logger->error(sprintf(
                         '[HTTP] Exception: %s %s (%s)',
                         $method,

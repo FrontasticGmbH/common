@@ -126,8 +126,8 @@ class ContentTest extends FrontasticApiTestCase
 
     private function assertAreContentResultWellFormed(
         Result $result,
-        string $contentTypeId = null,
-        string $query = null
+        ?string $contentTypeId = null,
+        ?string $query = null
     ): void {
         $this->assertContainsOnlyInstancesOf(Content::class, $result->items);
         $this->assertCount($result->count, $result->items);

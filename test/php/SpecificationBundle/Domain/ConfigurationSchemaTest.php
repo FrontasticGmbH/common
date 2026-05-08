@@ -83,7 +83,7 @@ class ConfigurationSchemaTest extends TestCase
     public function testGetCompleteValuesCallsVisitor()
     {
         $visitor = \Phake::mock(NullFieldVisitor::class);
-        \Phake::when($visitor)->processField->thenCallParent();
+        \Phake::when($visitor)->processField(\Phake::anyParameters())->thenCallParent();
 
         $configurationSchema = ConfigurationSchema::fromSchemaAndConfiguration(
             self::SCHEMA_FIXTURE,
@@ -169,7 +169,7 @@ class ConfigurationSchemaTest extends TestCase
         ];
 
         $visitor = \Phake::mock(NullFieldVisitor::class);
-        \Phake::when($visitor)->processField->thenCallParent();
+        \Phake::when($visitor)->processField(\Phake::anyParameters())->thenCallParent();
 
         $configurationSchema = ConfigurationSchema::fromSchemaAndConfiguration(
             $fixture,
@@ -212,7 +212,7 @@ class ConfigurationSchemaTest extends TestCase
     public function testVisitorIsCalledForNestedGroups()
     {
         $visitor = \Phake::mock(NullFieldVisitor::class);
-        \Phake::when($visitor)->processField->thenCallParent();
+        \Phake::when($visitor)->processField(\Phake::anyParameters())->thenCallParent();
 
         $configurationSchema = ConfigurationSchema::fromSchemaAndConfiguration(
             \json_decode(file_get_contents(

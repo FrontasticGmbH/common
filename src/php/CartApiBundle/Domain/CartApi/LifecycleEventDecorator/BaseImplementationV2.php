@@ -59,7 +59,7 @@ abstract class BaseImplementationV2
     }
 
     /*** getById() ****************************************************************************************************/
-    public function beforeGetById(CartApi $cartApi, string $cartId, string $locale = null): ?array
+    public function beforeGetById(CartApi $cartApi, string $cartId, ?string $locale = null): ?array
     {
         return null;
     }
@@ -70,7 +70,7 @@ abstract class BaseImplementationV2
     }
 
     /*** addToCart() **************************************************************************************************/
-    public function beforeAddToCart(CartApi $cartApi, Cart $cart, LineItem $lineItem, string $locale = null): ?array
+    public function beforeAddToCart(CartApi $cartApi, Cart $cart, LineItem $lineItem, ?string $locale = null): ?array
     {
         return null;
     }
@@ -87,7 +87,7 @@ abstract class BaseImplementationV2
         LineItem $lineItem,
         int $count,
         ?array $custom = null,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         return null;
     }
@@ -102,7 +102,7 @@ abstract class BaseImplementationV2
         CartApi $cartApi,
         Cart $cart,
         LineItem $lineItem,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         return null;
     }
@@ -113,7 +113,7 @@ abstract class BaseImplementationV2
     }
 
     /*** setEmail() ***************************************************************************************************/
-    public function beforeSetEmail(CartApi $cartApi, Cart $cart, string $email, string $locale = null): ?array
+    public function beforeSetEmail(CartApi $cartApi, Cart $cart, string $email, ?string $locale = null): ?array
     {
         return null;
     }
@@ -128,7 +128,7 @@ abstract class BaseImplementationV2
         CartApi $cartApi,
         Cart $cart,
         string $shippingMethod,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         return null;
     }
@@ -139,7 +139,7 @@ abstract class BaseImplementationV2
     }
 
     /*** setCustomField() *********************************************************************************************/
-    public function beforeSetCustomField(CartApi $cartApi, Cart $cart, array $fields, string $locale = null): ?array
+    public function beforeSetCustomField(CartApi $cartApi, Cart $cart, array $fields, ?string $locale = null): ?array
     {
         return null;
     }
@@ -150,7 +150,7 @@ abstract class BaseImplementationV2
     }
 
     /*** setRawApiInput() *********************************************************************************************/
-    public function beforeSetRawApiInput(CartApi $cartApi, Cart $cart, string $locale = null): ?array
+    public function beforeSetRawApiInput(CartApi $cartApi, Cart $cart, ?string $locale = null): ?array
     {
         return null;
     }
@@ -165,7 +165,7 @@ abstract class BaseImplementationV2
         CartApi $cartApi,
         Cart $cart,
         Address $address,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         return null;
     }
@@ -180,7 +180,7 @@ abstract class BaseImplementationV2
         CartApi $cartApi,
         Cart $cart,
         Address $address,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         return null;
     }
@@ -196,7 +196,7 @@ abstract class BaseImplementationV2
         Cart $cart,
         Payment $payment,
         ?array $custom = null,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         return null;
     }
@@ -222,7 +222,7 @@ abstract class BaseImplementationV2
     }
 
     /*** redeemDiscountCode() *****************************************************************************************/
-    public function beforeRedeemDiscountCode(CartApi $cartApi, Cart $cart, string $code, string $locale = null): ?array
+    public function beforeRedeemDiscountCode(CartApi $cartApi, Cart $cart, string $code, ?string $locale = null): ?array
     {
         return null;
     }
@@ -237,7 +237,7 @@ abstract class BaseImplementationV2
         CartApi $cartApi,
         Cart $cart,
         LineItem $discountLineItem,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         return null;
     }
@@ -248,7 +248,7 @@ abstract class BaseImplementationV2
     }
 
     /*** order() ******************************************************************************************************/
-    public function beforeOrder(CartApi $cartApi, Cart $cart, string $locale = null): ?array
+    public function beforeOrder(CartApi $cartApi, Cart $cart, ?string $locale = null): ?array
     {
         return null;
     }
@@ -259,7 +259,7 @@ abstract class BaseImplementationV2
     }
 
     /*** getOrder() ***************************************************************************************************/
-    public function beforeGetOrder(CartApi $cartApi, Account $account, string $orderId, string $locale = null): ?array
+    public function beforeGetOrder(CartApi $cartApi, Account $account, string $orderId, ?string $locale = null): ?array
     {
         return null;
     }
@@ -270,7 +270,7 @@ abstract class BaseImplementationV2
     }
 
     /*** getOrders() **************************************************************************************************/
-    public function beforeGetOrders(CartApi $cartApi, Account $account, string $locale = null): ?array
+    public function beforeGetOrders(CartApi $cartApi, Account $account, ?string $locale = null): ?array
     {
         return null;
     }
@@ -302,7 +302,7 @@ abstract class BaseImplementationV2
     // as this original method returns `void` it does not make sense to have an after* method here
 
     /*** commit() *****************************************************************************************************/
-    public function beforeCommit(CartApi $cartApi, string $locale = null): ?array
+    public function beforeCommit(CartApi $cartApi, ?string $locale = null): ?array
     {
         return null;
     }

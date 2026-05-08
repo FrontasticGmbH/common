@@ -56,7 +56,7 @@ abstract class BaseImplementation
     public function beforeGetContent(
         ContentApi $contentApi,
         string $contentId,
-        string $locale = null,
+        ?string $locale = null,
         string $mode = ContentApi::QUERY_SYNC
     ): void {
     }
@@ -70,7 +70,7 @@ abstract class BaseImplementation
     public function beforeQuery(
         ContentApi $contentApi,
         Query $query,
-        string $locale = null,
+        ?string $locale = null,
         string $mode = ContentApi::QUERY_SYNC
     ): void {
     }

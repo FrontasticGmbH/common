@@ -120,7 +120,7 @@ class ProductVariantMapper extends AbstractDataMapper implements
         $propertiesByGroups = $this->groupProperties($properties);
 
         $result = [];
-        foreach ($propertiesByGroups as $groupId => $group) {
+        foreach ($propertiesByGroups as $group) {
             $attribute = [
                 'label' => $group['name'],
             ];

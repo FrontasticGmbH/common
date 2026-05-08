@@ -60,7 +60,7 @@ class LifecycleEventDecorator implements CartApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function getById(string $cartId, string $locale = null): Cart
+    public function getById(string $cartId, ?string $locale = null): Cart
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
@@ -90,7 +90,7 @@ class LifecycleEventDecorator implements CartApi
         return $this->aggregate->getTaxCategory();
     }
 
-    public function addToCart(Cart $cart, LineItem $lineItem, string $locale = null): Cart
+    public function addToCart(Cart $cart, LineItem $lineItem, ?string $locale = null): Cart
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
@@ -100,47 +100,47 @@ class LifecycleEventDecorator implements CartApi
         LineItem $lineItem,
         int $count,
         ?array $custom = null,
-        string $locale = null
+        ?string $locale = null
     ): Cart {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function removeLineItem(Cart $cart, LineItem $lineItem, string $locale = null): Cart
+    public function removeLineItem(Cart $cart, LineItem $lineItem, ?string $locale = null): Cart
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function setEmail(Cart $cart, string $email, string $locale = null): Cart
+    public function setEmail(Cart $cart, string $email, ?string $locale = null): Cart
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function setShippingMethod(Cart $cart, string $shippingMethod, string $locale = null): Cart
+    public function setShippingMethod(Cart $cart, string $shippingMethod, ?string $locale = null): Cart
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function setCustomField(Cart $cart, array $fields, string $locale = null): Cart
+    public function setCustomField(Cart $cart, array $fields, ?string $locale = null): Cart
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function setRawApiInput(Cart $cart, string $locale = null): Cart
+    public function setRawApiInput(Cart $cart, ?string $locale = null): Cart
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function setShippingAddress(Cart $cart, Address $address, string $locale = null): Cart
+    public function setShippingAddress(Cart $cart, Address $address, ?string $locale = null): Cart
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function setBillingAddress(Cart $cart, Address $address, string $locale = null): Cart
+    public function setBillingAddress(Cart $cart, Address $address, ?string $locale = null): Cart
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function addPayment(Cart $cart, Payment $payment, ?array $custom = null, string $locale = null): Cart
+    public function addPayment(Cart $cart, Payment $payment, ?array $custom = null, ?string $locale = null): Cart
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
@@ -150,22 +150,22 @@ class LifecycleEventDecorator implements CartApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function redeemDiscountCode(Cart $cart, string $code, string $locale = null): Cart
+    public function redeemDiscountCode(Cart $cart, string $code, ?string $locale = null): Cart
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function removeDiscountCode(Cart $cart, LineItem $discountLineItem, string $locale = null): Cart
+    public function removeDiscountCode(Cart $cart, LineItem $discountLineItem, ?string $locale = null): Cart
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function order(Cart $cart, string $locale = null): Order
+    public function order(Cart $cart, ?string $locale = null): Order
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function getOrder(Account $account, string $orderId, string $locale = null): Order
+    public function getOrder(Account $account, string $orderId, ?string $locale = null): Order
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
@@ -173,7 +173,7 @@ class LifecycleEventDecorator implements CartApi
     /**
      * @return Order[]
      */
-    public function getOrders(Account $account, string $locale = null): array
+    public function getOrders(Account $account, ?string $locale = null): array
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
@@ -194,7 +194,7 @@ class LifecycleEventDecorator implements CartApi
         $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function commit(string $locale = null): Cart
+    public function commit(?string $locale = null): Cart
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }

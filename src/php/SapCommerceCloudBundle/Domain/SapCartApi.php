@@ -63,7 +63,7 @@ class SapCartApi extends CartApiBase
             ->wait();
     }
 
-    protected function getByIdImplementation(string $cartId, string $locale = null): Cart
+    protected function getByIdImplementation(string $cartId, ?string $locale = null): Cart
     {
         list($userId, $sapCartId) = $this->splitCartId($cartId);
         return $this->fetchCart($userId, $sapCartId, $this->createLocaleFromString($locale));
@@ -89,7 +89,7 @@ class SapCartApi extends CartApiBase
         return null;
     }
 
-    protected function addToCartImplementation(Cart $cart, LineItem $lineItem, string $locale = null): Cart
+    protected function addToCartImplementation(Cart $cart, LineItem $lineItem, ?string $locale = null): Cart
     {
         list($userId, $sapCartId) = $this->splitCartId($cart->cartId);
 
@@ -123,7 +123,7 @@ class SapCartApi extends CartApiBase
         LineItem $lineItem,
         int $count,
         ?array $custom = null,
-        string $locale = null
+        ?string $locale = null
     ): Cart {
         list($userId, $sapCartId) = $this->splitCartId($cart->cartId);
 
@@ -145,7 +145,7 @@ class SapCartApi extends CartApiBase
         return $cart;
     }
 
-    protected function removeLineItemImplementation(Cart $cart, LineItem $lineItem, string $locale = null): Cart
+    protected function removeLineItemImplementation(Cart $cart, LineItem $lineItem, ?string $locale = null): Cart
     {
         list($userId, $sapCartId) = $this->splitCartId($cart->cartId);
 
@@ -158,27 +158,27 @@ class SapCartApi extends CartApiBase
         return $cart;
     }
 
-    protected function setEmailImplementation(Cart $cart, string $email, string $locale = null): Cart
+    protected function setEmailImplementation(Cart $cart, string $email, ?string $locale = null): Cart
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    protected function setShippingMethodImplementation(Cart $cart, string $shippingMethod, string $locale = null): Cart
+    protected function setShippingMethodImplementation(Cart $cart, string $shippingMethod, ?string $locale = null): Cart
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    protected function setCustomFieldImplementation(Cart $cart, array $fields, string $locale = null): Cart
+    protected function setCustomFieldImplementation(Cart $cart, array $fields, ?string $locale = null): Cart
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    protected function setRawApiInputImplementation(Cart $cart, string $locale = null): Cart
+    protected function setRawApiInputImplementation(Cart $cart, ?string $locale = null): Cart
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    protected function setShippingAddressImplementation(Cart $cart, Address $address, string $locale = null): Cart
+    protected function setShippingAddressImplementation(Cart $cart, Address $address, ?string $locale = null): Cart
     {
         list($userId, $sapCartId) = $this->splitCartId($cart->cartId);
 
@@ -198,7 +198,7 @@ class SapCartApi extends CartApiBase
         return $cart;
     }
 
-    protected function setBillingAddressImplementation(Cart $cart, Address $address, string $locale = null): Cart
+    protected function setBillingAddressImplementation(Cart $cart, Address $address, ?string $locale = null): Cart
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
@@ -207,7 +207,7 @@ class SapCartApi extends CartApiBase
         Cart $cart,
         Payment $payment,
         ?array $custom = null,
-        string $locale = null
+        ?string $locale = null
     ): Cart {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
@@ -217,7 +217,7 @@ class SapCartApi extends CartApiBase
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    protected function redeemDiscountCodeImplementation(Cart $cart, string $code, string $locale = null): Cart
+    protected function redeemDiscountCodeImplementation(Cart $cart, string $code, ?string $locale = null): Cart
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
@@ -225,22 +225,22 @@ class SapCartApi extends CartApiBase
     protected function removeDiscountCodeImplementation(
         Cart $cart,
         LineItem $discountLineItem,
-        string $locale = null
+        ?string $locale = null
     ): Cart {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    protected function orderImplementation(Cart $cart, string $locale = null): Order
+    protected function orderImplementation(Cart $cart, ?string $locale = null): Order
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    protected function getOrderImplementation(Account $account, string $orderId, string $locale = null): Order
+    protected function getOrderImplementation(Account $account, string $orderId, ?string $locale = null): Order
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    protected function getOrdersImplementation(Account $account, string $locale = null): array
+    protected function getOrdersImplementation(Account $account, ?string $locale = null): array
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
@@ -250,7 +250,7 @@ class SapCartApi extends CartApiBase
         $this->currentTransaction = $this->splitCartId($cart->cartId);
     }
 
-    protected function commitImplementation(string $locale = null): Cart
+    protected function commitImplementation(?string $locale = null): Cart
     {
         if ($this->currentTransaction === null) {
             throw new \RuntimeException('No transaction currently in progress');

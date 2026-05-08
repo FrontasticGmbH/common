@@ -40,7 +40,7 @@ class StatsD extends HttpClient
         string $url,
         string $body = '',
         array $headers = array(),
-        Options $options = null
+        ?Options $options = null
     ): PromiseInterface {
         $start = microtime(true);
 

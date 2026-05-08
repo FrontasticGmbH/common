@@ -45,14 +45,14 @@ class AccountAddressesMapper extends AbstractDataMapper implements ProjectConfig
             $addresses[$address->addressId] = $address;
         }
 
-        if (key_exists('defaultBillingAddress', $accountData) && !empty($accountData['defaultBillingAddress'])) {
+        if (array_key_exists('defaultBillingAddress', $accountData) && !empty($accountData['defaultBillingAddress'])) {
             $billingAddress = $this->getAddressMapper()->map($accountData['defaultBillingAddress']);
             $billingAddress->isDefaultBillingAddress = true;
 
             $addresses[$billingAddress->addressId] = $billingAddress;
         }
 
-        if (key_exists('defaultShippingAddress', $accountData) && !empty($accountData['defaultShippingAddress'])) {
+        if (array_key_exists('defaultShippingAddress', $accountData) && !empty($accountData['defaultShippingAddress'])) {
             $shippingAddress = $this->getAddressMapper()->map($accountData['defaultShippingAddress']);
             $shippingAddress->isDefaultShippingAddress = true;
 
@@ -68,13 +68,13 @@ class AccountAddressesMapper extends AbstractDataMapper implements ProjectConfig
         }
 
         if (!empty($defaultBillingAddressId) &&
-            key_exists($defaultBillingAddressId, $addresses)
+            array_key_exists($defaultBillingAddressId, $addresses)
         ) {
             $addresses[$defaultBillingAddressId]->isDefaultBillingAddress = true;
         }
 
         if (!empty($defaultShippingAddressId) &&
-            key_exists($defaultShippingAddressId, $addresses)
+            array_key_exists($defaultShippingAddressId, $addresses)
         ) {
             $addresses[$defaultShippingAddressId]->isDefaultShippingAddress = true;
         }

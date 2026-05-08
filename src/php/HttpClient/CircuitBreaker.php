@@ -39,7 +39,7 @@ class CircuitBreaker extends HttpClient
         string $url,
         string $body = '',
         array $headers = array(),
-        Options $options = null
+        ?Options $options = null
     ): PromiseInterface {
         $start = microtime(true);
         $service = parse_url($url, PHP_URL_HOST);
@@ -77,7 +77,7 @@ class CircuitBreaker extends HttpClient
 
                     return $response;
                 },
-                function (\Exception $reason) use ($service) {
+                function (\Exception $reason) use ($service): void {
                     $this->circuitBreaker->failure($service);
                     throw $reason;
                 }

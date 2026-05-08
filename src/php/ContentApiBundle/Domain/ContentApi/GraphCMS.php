@@ -43,7 +43,7 @@ class GraphCMS implements ContentApi
         );
     }
 
-    public function getContent(string $contentId, string $locale = null, string $mode = self::QUERY_SYNC): ?object
+    public function getContent(string $contentId, ?string $locale = null, string $mode = self::QUERY_SYNC): ?object
     {
         $parts = explode(':', $contentId);
         if (count($parts) != 2) {
@@ -112,7 +112,7 @@ class GraphCMS implements ContentApi
         return $this->returnPromiseOrResult($promise, $mode);
     }
 
-    public function query(Query $query, string $locale = null, string $mode = self::QUERY_SYNC): ?object
+    public function query(Query $query, ?string $locale = null, string $mode = self::QUERY_SYNC): ?object
     {
         $locale = $locale ?? $this->defaultLocale;
 
@@ -223,7 +223,7 @@ class GraphCMS implements ContentApi
                     'items' => $contents,
                 ]);
             })
-            ->otherwise(function (\Exception $exception) {
+            ->otherwise(function (\Exception $exception): void {
                 throw $exception;
             });
     }

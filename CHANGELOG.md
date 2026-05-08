@@ -1,4 +1,10 @@
 
+## Version 2.49.3 (2026-05-08)
+
+** Security Fixes **
+
+- Prevent `Object.prototype` pollution in query string parser
+
 
 ## Version 2.49.1 (2026-03-24)
 

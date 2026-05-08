@@ -51,8 +51,8 @@ class Client
         string $hostUrl,
         HttpClient $httpClient,
         Cache $cache,
-        float $readOperationTimeout = null,
-        float $writeOperationTimeout = null
+        ?float $readOperationTimeout = null,
+        ?float $writeOperationTimeout = null
     ) {
         $this->authUrl = $authUrl;
         $this->clientId = $clientId;

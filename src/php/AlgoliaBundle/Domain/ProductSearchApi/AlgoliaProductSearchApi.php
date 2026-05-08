@@ -202,8 +202,8 @@ class AlgoliaProductSearchApi extends ProductSearchApiBase
         $max = $filter->max;
 
         if ($filter->attributeType == Attribute::TYPE_MONEY) {
-            $min = $min / 100;
-            $max = $max / 100;
+            $min /= 100;
+            $max /= 100;
         }
 
         return [$min, $max];

@@ -47,7 +47,7 @@ class CustomerCart extends AbstractSprykerCart
         );
     }
 
-    public function getById(string $cartId, string $locale = null): Cart
+    public function getById(string $cartId, ?string $locale = null): Cart
     {
         $sprykerLocale = $this->parseLocaleString($locale);
 
@@ -151,7 +151,7 @@ class CustomerCart extends AbstractSprykerCart
         return $this->getCart();
     }
 
-    public function redeemDiscount(Cart $cart, string $code, string $locale = null): Cart
+    public function redeemDiscount(Cart $cart, string $code, ?string $locale = null): Cart
     {
         $sprykerLocale = $this->parseLocaleString($locale);
 
@@ -173,7 +173,7 @@ class CustomerCart extends AbstractSprykerCart
         return $this->mapResponseToCart($response);
     }
 
-    public function removeDiscount(Cart $cart, LineItem $discountLineItem, string $locale = null): Cart
+    public function removeDiscount(Cart $cart, LineItem $discountLineItem, ?string $locale = null): Cart
     {
         $sprykerLocale = $this->parseLocaleString($locale);
 

@@ -34,12 +34,12 @@ class SapAccountApi implements AccountApi
         return ['Mrs.'];
     }
 
-    public function confirmEmail(string $token, string $locale = null): Account
+    public function confirmEmail(string $token, ?string $locale = null): Account
     {
         throw new \RuntimeException('Email confirmation is not supported by the SAP commerce cloud account API.');
     }
 
-    public function create(Account $account, ?Cart $cart = null, string $locale = null): Account
+    public function create(Account $account, ?Cart $cart = null, ?string $locale = null): Account
     {
         return $this->client
             ->post(
@@ -85,7 +85,7 @@ class SapAccountApi implements AccountApi
             ->wait();
     }
 
-    public function update(Account $account, string $locale = null): Account
+    public function update(Account $account, ?string $locale = null): Account
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
@@ -94,22 +94,22 @@ class SapAccountApi implements AccountApi
         Account $account,
         string $oldPassword,
         string $newPassword,
-        string $locale = null
+        ?string $locale = null
     ): Account {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function generatePasswordResetToken(string $email, string $locale = null): PasswordResetToken
+    public function generatePasswordResetToken(string $email, ?string $locale = null): PasswordResetToken
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function resetPassword(string $token, string $newPassword, string $locale = null): Account
+    public function resetPassword(string $token, string $newPassword, ?string $locale = null): Account
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function login(Account $account, ?Cart $cart = null, string $locale = null): ?Account
+    public function login(Account $account, ?Cart $cart = null, ?string $locale = null): ?Account
     {
         if (!$this->client->checkAccountCredentials($account->email, $account->getPassword())) {
             return null;
@@ -118,7 +118,7 @@ class SapAccountApi implements AccountApi
         return $this->refreshAccount($account);
     }
 
-    public function refreshAccount(Account $account, string $locale = null): Account
+    public function refreshAccount(Account $account, ?string $locale = null): Account
     {
         return $this->client
             ->get(
@@ -133,32 +133,32 @@ class SapAccountApi implements AccountApi
             ->wait();
     }
 
-    public function getAddresses(Account $account, string $locale = null): array
+    public function getAddresses(Account $account, ?string $locale = null): array
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function addAddress(Account $account, Address $address, string $locale = null): Account
+    public function addAddress(Account $account, Address $address, ?string $locale = null): Account
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function updateAddress(Account $account, Address $address, string $locale = null): Account
+    public function updateAddress(Account $account, Address $address, ?string $locale = null): Account
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function removeAddress(Account $account, string $addressId, string $locale = null): Account
+    public function removeAddress(Account $account, string $addressId, ?string $locale = null): Account
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function setDefaultBillingAddress(Account $account, string $addressId, string $locale = null): Account
+    public function setDefaultBillingAddress(Account $account, string $addressId, ?string $locale = null): Account
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function setDefaultShippingAddress(Account $account, string $addressId, string $locale = null): Account
+    public function setDefaultShippingAddress(Account $account, string $addressId, ?string $locale = null): Account
     {
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }

@@ -24,7 +24,7 @@ class Factory
      */
     private $defaultOptions;
 
-    public function __construct(LoggerInterface $httpClientLogger, \Redis $redis = null, Options $defaultOptions = null)
+    public function __construct(LoggerInterface $httpClientLogger, ?\Redis $redis = null, ?Options $defaultOptions = null)
     {
         $this->logger = $httpClientLogger;
         $this->redis = $redis;
@@ -35,7 +35,7 @@ class Factory
         $this->defaultOptions = $defaultOptions;
     }
 
-    public function create($clientIdentifier, Configuration $configuration = null): HttpClient
+    public function create($clientIdentifier, ?Configuration $configuration = null): HttpClient
     {
         if ($configuration === null) {
             $configuration = new Configuration();
@@ -70,7 +70,7 @@ class Factory
                 ->minimumRequests(10)
                 ->build();
 
-            $circuitBreaker->subscribe(function ($event, $service, $message) {
+            $circuitBreaker->subscribe(function ($event, $service, $message): void {
                 switch ($event) {
                     case \Ackintosh\Ganesha::EVENT_TRIPPED:
                         $this->logger->error(

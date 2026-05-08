@@ -68,7 +68,7 @@ class Contentful implements ContentApi
         );
     }
 
-    public function getContent(string $contentId, string $locale = null, string $mode = self::QUERY_SYNC): ?object
+    public function getContent(string $contentId, ?string $locale = null, string $mode = self::QUERY_SYNC): ?object
     {
         $locale = $locale ?? $this->defaultLocale;
 
@@ -85,7 +85,7 @@ class Contentful implements ContentApi
         return $promise;
     }
 
-    public function query(Query $query, string $locale = null, string $mode = self::QUERY_SYNC): ?object
+    public function query(Query $query, ?string $locale = null, string $mode = self::QUERY_SYNC): ?object
     {
         $contentfulQuery = new \Contentful\Delivery\Query();
 

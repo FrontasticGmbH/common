@@ -35,7 +35,7 @@ class AccountMapper extends AbstractDataMapper implements ProjectConfigApiAwareD
     {
         $accountData = $this->extractElements($resource, $resource);
 
-        if (key_exists('attributes', $accountData)) {
+        if (array_key_exists('attributes', $accountData)) {
             $accountData = array_merge($accountData, $accountData['attributes']);
         }
 
@@ -69,11 +69,11 @@ class AccountMapper extends AbstractDataMapper implements ProjectConfigApiAwareD
 
     private function resolveConfirmationToken(array $accountData): ?string
     {
-        if (key_exists('active', $accountData) && $accountData['active']) {
+        if (array_key_exists('active', $accountData) && $accountData['active']) {
             return null;
         }
 
-        if (key_exists('hash', $accountData)) {
+        if (array_key_exists('hash', $accountData)) {
             return Json::encode(
                 [
                     'em' => sha1($accountData['email']),

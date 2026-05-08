@@ -708,7 +708,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
         }
     }
 
-    private function assertContainsNoHtml(string $actual, string $message = null): void
+    private function assertContainsNoHtml(string $actual, ?string $message = null): void
     {
         $this->assertEquals($actual, strip_tags($actual), $message ?? 'The string may not contain HTML tags.');
     }

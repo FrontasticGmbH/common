@@ -30,7 +30,7 @@ class Guzzle extends HttpClient
      */
     private $defaultOptions;
 
-    public function __construct(Options $defaultOptions = null)
+    public function __construct(?Options $defaultOptions = null)
     {
         $this->defaultOptions = $defaultOptions ?: new Options();
         $this->guzzleClient = new \GuzzleHttp\Client();
@@ -59,7 +59,7 @@ class Guzzle extends HttpClient
         string $url,
         string $body = '',
         array $headers = array(),
-        Options $options = null
+        ?Options $options = null
     ): PromiseInterface {
         $options = $options ?: $this->defaultOptions;
 

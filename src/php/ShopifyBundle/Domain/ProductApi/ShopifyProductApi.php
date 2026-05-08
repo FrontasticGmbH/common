@@ -91,7 +91,7 @@ class ShopifyProductApi extends ProductApiBase
         $hasPreviousPage = null;
         $categories = [];
 
-        if (key_exists('collections', $result['body']['data'])) {
+        if (array_key_exists('collections', $result['body']['data'])) {
             $collectionsData = $result['body']['data']['collections']['edges'];
             $hasNextPage = $result['body']['data']['collections']['pageInfo']['hasNextPage'];
             $hasPreviousPage = $result['body']['data']['collections']['pageInfo']['hasPreviousPage'];
@@ -200,7 +200,7 @@ class ShopifyProductApi extends ProductApiBase
 
     private function getRawApiInputField(array $rawApiInput, string $field): string
     {
-        return key_exists($field, $rawApiInput) ? $rawApiInput[$field] : '';
+        return array_key_exists($field, $rawApiInput) ? $rawApiInput[$field] : '';
     }
 
     private function getCollectionQueryFields(Query $query): string

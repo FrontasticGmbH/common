@@ -44,7 +44,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         return $this->baseImplementation->afterGetAnonymous($cartApi, $cart);
     }
 
-    public function beforeGetById(CartApi $cartApi, string $cartId, string $locale = null): ?array
+    public function beforeGetById(CartApi $cartApi, string $cartId, ?string $locale = null): ?array
     {
         $this->baseImplementation->beforeGetById($cartApi, $cartId, $locale);
         return [$cartId, $locale];
@@ -55,7 +55,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         return $this->baseImplementation->afterGetById($cartApi, $cart);
     }
 
-    public function beforeAddToCart(CartApi $cartApi, Cart $cart, LineItem $lineItem, string $locale = null): ?array
+    public function beforeAddToCart(CartApi $cartApi, Cart $cart, LineItem $lineItem, ?string $locale = null): ?array
     {
         $this->baseImplementation->beforeAddToCart($cartApi, $cart, $lineItem, $locale);
         return [$cart, $lineItem, $locale];
@@ -72,7 +72,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         LineItem $lineItem,
         int $count,
         ?array $custom = null,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         $this->baseImplementation->beforeUpdateLineItem($cartApi, $cart, $lineItem, $count, $custom, $locale);
         return [$cart, $lineItem, $count, $custom, $locale];
@@ -87,7 +87,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         CartApi $cartApi,
         Cart $cart,
         LineItem $lineItem,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         $this->baseImplementation->beforeRemoveLineItem($cartApi, $cart, $lineItem, $locale);
         return [$cart, $lineItem, $locale];
@@ -98,7 +98,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         return $this->baseImplementation->afterRemoveLineItem($cartApi, $cart);
     }
 
-    public function beforeSetEmail(CartApi $cartApi, Cart $cart, string $email, string $locale = null): ?array
+    public function beforeSetEmail(CartApi $cartApi, Cart $cart, string $email, ?string $locale = null): ?array
     {
         $this->baseImplementation->beforeSetEmail($cartApi, $cart, $email, $locale);
         return [$cart, $email, $locale];
@@ -113,7 +113,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         CartApi $cartApi,
         Cart $cart,
         string $shippingMethod,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         $this->baseImplementation->beforeSetShippingMethod($cartApi, $cart, $shippingMethod, $locale);
         return [$cart, $shippingMethod, $locale];
@@ -124,7 +124,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         return $this->baseImplementation->afterSetShippingMethod($cartApi, $cart);
     }
 
-    public function beforeSetCustomField(CartApi $cartApi, Cart $cart, array $fields, string $locale = null): ?array
+    public function beforeSetCustomField(CartApi $cartApi, Cart $cart, array $fields, ?string $locale = null): ?array
     {
         $this->baseImplementation->beforeSetCustomField($cartApi, $cart, $fields, $locale);
         return [$cart, $fields, $locale];
@@ -135,7 +135,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         return $this->baseImplementation->afterSetCustomField($cartApi, $cart);
     }
 
-    public function beforeSetRawApiInput(CartApi $cartApi, Cart $cart, string $locale = null): ?array
+    public function beforeSetRawApiInput(CartApi $cartApi, Cart $cart, ?string $locale = null): ?array
     {
         $this->baseImplementation->beforeSetRawApiInput($cartApi, $cart, $locale);
         return [$cart, $locale];
@@ -150,7 +150,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         CartApi $cartApi,
         Cart $cart,
         Address $address,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         $this->baseImplementation->beforeSetShippingAddress($cartApi, $cart, $address, $locale);
         return [$cart, $address, $locale];
@@ -165,7 +165,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         CartApi $cartApi,
         Cart $cart,
         Address $address,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         $this->baseImplementation->beforeSetBillingAddress($cartApi, $cart, $address, $locale);
         return [$cart, $address, $locale];
@@ -181,7 +181,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         Cart $cart,
         Payment $payment,
         ?array $custom = null,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         $this->baseImplementation->beforeAddPayment($cartApi, $cart, $payment, $custom, $locale);
         return [$cart, $payment, $custom, $locale];
@@ -207,7 +207,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         return $this->baseImplementation->afterUpdatePayment($cartApi, $payment);
     }
 
-    public function beforeRedeemDiscountCode(CartApi $cartApi, Cart $cart, string $code, string $locale = null): ?array
+    public function beforeRedeemDiscountCode(CartApi $cartApi, Cart $cart, string $code, ?string $locale = null): ?array
     {
         $this->baseImplementation->beforeRedeemDiscountCode($cartApi, $cart, $code, $locale);
         return [$cart, $code, $locale];
@@ -222,7 +222,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         CartApi $cartApi,
         Cart $cart,
         LineItem $discountLineItem,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         $this->baseImplementation->beforeRemoveDiscountCode($cartApi, $cart, $discountLineItem, $locale);
         return [$cart, $discountLineItem, $locale];
@@ -233,7 +233,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         return $this->baseImplementation->afterRemoveDiscountCode($cartApi, $cart);
     }
 
-    public function beforeOrder(CartApi $cartApi, Cart $cart, string $locale = null): ?array
+    public function beforeOrder(CartApi $cartApi, Cart $cart, ?string $locale = null): ?array
     {
         $this->baseImplementation->beforeOrder($cartApi, $cart, $locale);
         return [$cart, $locale];
@@ -244,7 +244,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         return $this->baseImplementation->afterOrder($cartApi, $order);
     }
 
-    public function beforeGetOrder(CartApi $cartApi, Account $account, string $orderId, string $locale = null): ?array
+    public function beforeGetOrder(CartApi $cartApi, Account $account, string $orderId, ?string $locale = null): ?array
     {
         $this->baseImplementation->beforeGetOrder($cartApi, $account, $orderId, $locale);
         return [$account, $orderId, $locale];
@@ -255,7 +255,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         return $this->baseImplementation->afterGetOrder($cartApi, $order);
     }
 
-    public function beforeGetOrders(CartApi $cartApi, Account $account, string $locale = null): ?array
+    public function beforeGetOrders(CartApi $cartApi, Account $account, ?string $locale = null): ?array
     {
         $this->baseImplementation->beforeGetOrders($cartApi, $account, $locale);
         return [$account, $locale];
@@ -278,7 +278,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
     }
     // as this original method returns `void` it does not make sense to have an after* method here
 
-    public function beforeCommit(CartApi $cartApi, string $locale = null): ?array
+    public function beforeCommit(CartApi $cartApi, ?string $locale = null): ?array
     {
         $this->baseImplementation->beforeCommit($cartApi, $locale);
         return [$locale];

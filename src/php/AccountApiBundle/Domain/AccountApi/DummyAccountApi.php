@@ -15,17 +15,17 @@ class DummyAccountApi implements AccountApi
         throw $this->exception();
     }
 
-    public function confirmEmail(string $token, string $locale = null): Account
+    public function confirmEmail(string $token, ?string $locale = null): Account
     {
         throw $this->exception();
     }
 
-    public function create(Account $account, ?Cart $cart = null, string $locale = null): Account
+    public function create(Account $account, ?Cart $cart = null, ?string $locale = null): Account
     {
         throw $this->exception();
     }
 
-    public function update(Account $account, string $locale = null): Account
+    public function update(Account $account, ?string $locale = null): Account
     {
         throw $this->exception();
     }
@@ -34,7 +34,7 @@ class DummyAccountApi implements AccountApi
         Account $account,
         string $oldPassword,
         string $newPassword,
-        string $locale = null
+        ?string $locale = null
     ): Account {
         throw $this->exception();
     }
@@ -44,47 +44,47 @@ class DummyAccountApi implements AccountApi
         throw $this->exception();
     }
 
-    public function resetPassword(string $token, string $newPassword, string $locale = null): Account
+    public function resetPassword(string $token, string $newPassword, ?string $locale = null): Account
     {
         throw $this->exception();
     }
 
-    public function login(Account $account, ?Cart $cart = null, string $locale = null): ?Account
+    public function login(Account $account, ?Cart $cart = null, ?string $locale = null): ?Account
     {
         throw $this->exception();
     }
 
-    public function refreshAccount(Account $account, string $locale = null): Account
+    public function refreshAccount(Account $account, ?string $locale = null): Account
     {
         throw $this->exception();
     }
 
-    public function getAddresses(Account $account, string $locale = null): array
+    public function getAddresses(Account $account, ?string $locale = null): array
     {
         throw $this->exception();
     }
 
-    public function addAddress(Account $account, Address $address, string $locale = null): Account
+    public function addAddress(Account $account, Address $address, ?string $locale = null): Account
     {
         throw $this->exception();
     }
 
-    public function updateAddress(Account $account, Address $address, string $locale = null): Account
+    public function updateAddress(Account $account, Address $address, ?string $locale = null): Account
     {
         throw $this->exception();
     }
 
-    public function removeAddress(Account $account, string $addressId, string $locale = null): Account
+    public function removeAddress(Account $account, string $addressId, ?string $locale = null): Account
     {
         throw $this->exception();
     }
 
-    public function setDefaultBillingAddress(Account $account, string $addressId, string $locale = null): Account
+    public function setDefaultBillingAddress(Account $account, string $addressId, ?string $locale = null): Account
     {
         throw $this->exception();
     }
 
-    public function setDefaultShippingAddress(Account $account, string $addressId, string $locale = null): Account
+    public function setDefaultShippingAddress(Account $account, string $addressId, ?string $locale = null): Account
     {
         throw $this->exception();
     }

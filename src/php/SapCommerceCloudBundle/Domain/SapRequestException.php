@@ -14,7 +14,7 @@ class SapRequestException extends \RuntimeException
     /**
      * @param string[] $errorTypes
      */
-    public function __construct(string $message = '', array $errorTypes = [], int $code = 0, Throwable $previous = null)
+    public function __construct(string $message = '', array $errorTypes = [], int $code = 0, ?Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
         $this->errorTypes = $errorTypes;

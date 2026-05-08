@@ -27,7 +27,7 @@ class Mapper
      */
     private $apiVersion;
 
-    public function __construct(string $apiVersion = null)
+    public function __construct(?string $apiVersion = null)
     {
         // By default, use version 1
         $this->apiVersion = $apiVersion ?? 'v1';
@@ -70,7 +70,7 @@ class Mapper
      *
      * @return ResultFacet[]
      */
-    public function dataToFacets(array $data, ProductQuery $query = null): array
+    public function dataToFacets(array $data, ?ProductQuery $query = null): array
     {
         $facets = [];
 
@@ -208,12 +208,12 @@ class Mapper
     private function productDataToPrice(array $productData): ?int
     {
         if ($this->apiVersion !== 'v1') {
-            return key_exists('price', $productData) ?
+            return array_key_exists('price', $productData) ?
                 intval($productData['price']) :
                 null;
         }
 
-        return key_exists('price', $productData) ?
+        return array_key_exists('price', $productData) ?
             intval($productData['price'] * 100) :
             null;
     }
@@ -221,12 +221,12 @@ class Mapper
     private function productDataToDiscountPrice(array $productData): ?int
     {
         if ($this->apiVersion !== 'v1') {
-            return key_exists('discountedPrice', $productData) ?
+            return array_key_exists('discountedPrice', $productData) ?
                 intval($productData['discountedPrice']) :
                 null;
         }
 
-        return key_exists('discountedPrice', $productData) ?
+        return array_key_exists('discountedPrice', $productData) ?
             intval($productData['discountedPrice'] * 100) :
             null;
     }

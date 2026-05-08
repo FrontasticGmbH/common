@@ -280,7 +280,7 @@ class Commercetools extends ProductApiBase
                 function ($product) use ($query, $locale) {
                     return $this->mapper->dataToProduct($product, $query, $locale);
                 },
-                function (\Throwable $exception) use ($query) {
+                function (\Throwable $exception) use ($query): void {
                     if ($exception instanceof RequestException && $exception->getCode() === 404) {
                         throw ProductNotFoundException::byProductId($query->productId);
                     }

@@ -70,7 +70,7 @@ class ConfigurationSchema
         return array_key_exists($fieldName, $this->fieldConfigurations);
     }
 
-    public function getFieldValue(string $fieldName, FieldVisitor $fieldVisitor = null)
+    public function getFieldValue(string $fieldName, ?FieldVisitor $fieldVisitor = null)
     {
         $fieldConfig = $this->getFieldConfiguration($fieldName);
         if ($fieldConfig === null) {
@@ -92,7 +92,7 @@ class ConfigurationSchema
         return $fieldConfig->processValueIfRequired($fieldConfig->getDefault(), $fieldVisitor, [$fieldName]);
     }
 
-    public function getCompleteValues(FieldVisitor $fieldVisitor = null)
+    public function getCompleteValues(?FieldVisitor $fieldVisitor = null)
     {
         if ($fieldVisitor === null) {
             $fieldVisitor = new FieldVisitor\NullFieldVisitor();

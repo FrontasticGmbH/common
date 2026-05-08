@@ -118,7 +118,7 @@ class ShopwareProductApi extends ProductApiBase
 
                 return $product;
             })
-            ->otherwise(function (\Throwable $exception) use ($query) {
+            ->otherwise(function (\Throwable $exception) use ($query): void {
                 if ($exception instanceof RequestException) {
                     $messagePrefix = 'Value is not a valid UUID:';
                     if ($exception->getCode() === 400 &&

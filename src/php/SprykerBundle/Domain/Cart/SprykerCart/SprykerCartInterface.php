@@ -9,7 +9,7 @@ use Frontastic\Common\CartApiBundle\Domain\LineItem\Variant;
 interface SprykerCartInterface
 {
 
-    public function getById(string $cartId, string $locale = null): Cart;
+    public function getById(string $cartId, ?string $locale = null): Cart;
 
     /**
      * @param string|null $id
@@ -41,7 +41,7 @@ interface SprykerCartInterface
      */
     public function removeLineItem(Cart $cart, Variant $lineItem): Cart;
 
-    public function redeemDiscount(Cart $cart, string $code, string $locale = null): Cart;
+    public function redeemDiscount(Cart $cart, string $code, ?string $locale = null): Cart;
 
-    public function removeDiscount(Cart $cart, LineItem $discountLineItem, string $locale = null): Cart;
+    public function removeDiscount(Cart $cart, LineItem $discountLineItem, ?string $locale = null): Cart;
 }

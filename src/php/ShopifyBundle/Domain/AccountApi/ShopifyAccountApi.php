@@ -38,12 +38,12 @@ class ShopifyAccountApi implements AccountApi
         return ['Mrs.'];
     }
 
-    public function confirmEmail(string $token, string $locale = null): Account
+    public function confirmEmail(string $token, ?string $locale = null): Account
     {
         throw new \RuntimeException('Email confirmation is not supported by the Shopify Storefront API.');
     }
 
-    public function create(Account $account, ?Cart $cart = null, string $locale = null): Account
+    public function create(Account $account, ?Cart $cart = null, ?string $locale = null): Account
     {
         $mutation = "
             mutation {
@@ -86,7 +86,7 @@ class ShopifyAccountApi implements AccountApi
             ->wait();
     }
 
-    public function update(Account $account, string $locale = null): Account
+    public function update(Account $account, ?string $locale = null): Account
     {
         if (is_null($account->apiToken)) {
             $account = $this->login($account);
@@ -140,7 +140,7 @@ class ShopifyAccountApi implements AccountApi
         Account $account,
         string $oldPassword,
         string $newPassword,
-        string $locale = null
+        ?string $locale = null
     ): Account {
         $account->setPassword($oldPassword);
 
@@ -159,13 +159,13 @@ class ShopifyAccountApi implements AccountApi
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function resetPassword(string $token, string $newPassword, string $locale = null): Account
+    public function resetPassword(string $token, string $newPassword, ?string $locale = null): Account
     {
         // TODO: Implement resetPassword() method.
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function login(Account $account, ?Cart $cart = null, string $locale = null): ?Account
+    public function login(Account $account, ?Cart $cart = null, ?string $locale = null): ?Account
     {
         $mutation = "
             mutation {
@@ -219,7 +219,7 @@ class ShopifyAccountApi implements AccountApi
             ->wait();
     }
 
-    public function refreshAccount(Account $account, string $locale = null): Account
+    public function refreshAccount(Account $account, ?string $locale = null): Account
     {
         if (is_null($account->apiToken)) {
             $account = $this->login($account);
@@ -251,7 +251,7 @@ class ShopifyAccountApi implements AccountApi
             ->wait();
     }
 
-    public function getAddresses(Account $account, string $locale = null): array
+    public function getAddresses(Account $account, ?string $locale = null): array
     {
         if (is_null($account->apiToken)) {
             $account = $this->login($account);
@@ -281,7 +281,7 @@ class ShopifyAccountApi implements AccountApi
             ->wait();
     }
 
-    public function addAddress(Account $account, Address $address, string $locale = null): Account
+    public function addAddress(Account $account, Address $address, ?string $locale = null): Account
     {
         if (is_null($account->apiToken)) {
             $account = $this->login($account);
@@ -322,7 +322,7 @@ class ShopifyAccountApi implements AccountApi
             ->wait();
     }
 
-    public function updateAddress(Account $account, Address $address, string $locale = null): Account
+    public function updateAddress(Account $account, Address $address, ?string $locale = null): Account
     {
         if (is_null($account->apiToken)) {
             $account = $this->login($account);
@@ -362,19 +362,19 @@ class ShopifyAccountApi implements AccountApi
             ->wait();
     }
 
-    public function removeAddress(Account $account, string $addressId, string $locale = null): Account
+    public function removeAddress(Account $account, string $addressId, ?string $locale = null): Account
     {
         // TODO: Implement removeAddress() method.
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function setDefaultShippingAddress(Account $account, string $addressId, string $locale = null): Account
+    public function setDefaultShippingAddress(Account $account, string $addressId, ?string $locale = null): Account
     {
         // TODO: Implement setDefaultShippingAddress() method.
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    public function setDefaultBillingAddress(Account $account, string $addressId, string $locale = null): Account
+    public function setDefaultBillingAddress(Account $account, string $addressId, ?string $locale = null): Account
     {
         // TODO: Implement setDefaultBillingAddress() method.
         throw new \RuntimeException(__METHOD__ . ' not implemented');

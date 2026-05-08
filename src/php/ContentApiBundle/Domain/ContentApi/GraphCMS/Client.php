@@ -75,7 +75,7 @@ class Client
     /**
      * takes GraphQL query, returns JSON result as string
      */
-    public function query(string $query, string $locale = null): PromiseInterface
+    public function query(string $query, ?string $locale = null): PromiseInterface
     {
         $url = "https://api-{$this->region}.graphcms.com/{$this->apiVersion}/{$this->projectId}/{$this->stage}";
         $body = Json::encode(['query' => $query], JSON_HEX_QUOT);
@@ -315,13 +315,13 @@ class Client
     }
 
     // contentType must be capitalized and singular
-    public function get(string $contentType, string $contentId, string $locale = null): PromiseInterface
+    public function get(string $contentType, string $contentId, ?string $locale = null): PromiseInterface
     {
         return $this->getMultiple($contentType, [$contentId], $locale);
     }
 
     // contentType must be capitalized and singular
-    public function getMultiple(string $contentType, array $contentIds, string $locale = null): PromiseInterface
+    public function getMultiple(string $contentType, array $contentIds, ?string $locale = null): PromiseInterface
     {
         $attributes = $this->getAttributes($contentType);
         $attributeString = $this->attributeQueryPart($attributes);
@@ -352,7 +352,7 @@ class Client
     }
 
     // contentType must be capitalized and singular
-    public function getAll(string $contentType, string $locale = null): PromiseInterface
+    public function getAll(string $contentType, ?string $locale = null): PromiseInterface
     {
         $attributes = $this->getAttributes($contentType);
         $attributeString = $this->attributeQueryPart($attributes);
@@ -480,7 +480,7 @@ class Client
         );
     }
 
-    public function search(string $searchString, array $contentTypes = [], string $locale = null): PromiseInterface
+    public function search(string $searchString, array $contentTypes = [], ?string $locale = null): PromiseInterface
     {
         if (empty($contentTypes)) {
             $contentTypes = $this->getContentTypes();

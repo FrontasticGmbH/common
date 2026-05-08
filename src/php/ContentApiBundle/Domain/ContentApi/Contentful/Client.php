@@ -16,7 +16,7 @@ class Client extends ContentfulClient
         string $token,
         string $spaceId,
         string $environmentId = 'master',
-        ClientOptions $options = null
+        ?ClientOptions $options = null
     ) {
         parent::__construct($token, $spaceId, $environmentId, $options);
 

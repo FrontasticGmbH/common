@@ -29,7 +29,7 @@ abstract class HttpClient
         string $url,
         string $body = '',
         array $headers = array(),
-        Options $options = null
+        ?Options $options = null
     ): Response {
         return $this->requestAsync($method, $url, $body, $headers, $options)->wait();
     }
@@ -39,7 +39,7 @@ abstract class HttpClient
         string $url,
         string $body = '',
         array $headers = array(),
-        Options $options = null
+        ?Options $options = null
     ): PromiseInterface;
 
     /**

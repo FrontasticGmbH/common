@@ -60,7 +60,7 @@ abstract class BaseImplementation
     }
 
     /*** getById() ****************************************************************************************************/
-    public function beforeGetById(CartApi $cartApi, string $cartId, string $locale = null): void
+    public function beforeGetById(CartApi $cartApi, string $cartId, ?string $locale = null): void
     {
     }
 
@@ -70,7 +70,7 @@ abstract class BaseImplementation
     }
 
     /*** addToCart() **************************************************************************************************/
-    public function beforeAddToCart(CartApi $cartApi, Cart $cart, LineItem $lineItem, string $locale = null): void
+    public function beforeAddToCart(CartApi $cartApi, Cart $cart, LineItem $lineItem, ?string $locale = null): void
     {
     }
 
@@ -86,7 +86,7 @@ abstract class BaseImplementation
         LineItem $lineItem,
         int $count,
         ?array $custom = null,
-        string $locale = null
+        ?string $locale = null
     ): void {
     }
 
@@ -96,7 +96,7 @@ abstract class BaseImplementation
     }
 
     /*** removeLineItem() *********************************************************************************************/
-    public function beforeRemoveLineItem(CartApi $cartApi, Cart $cart, LineItem $lineItem, string $locale = null): void
+    public function beforeRemoveLineItem(CartApi $cartApi, Cart $cart, LineItem $lineItem, ?string $locale = null): void
     {
     }
 
@@ -106,7 +106,7 @@ abstract class BaseImplementation
     }
 
     /*** setEmail() ***************************************************************************************************/
-    public function beforeSetEmail(CartApi $cartApi, Cart $cart, string $email, string $locale = null): void
+    public function beforeSetEmail(CartApi $cartApi, Cart $cart, string $email, ?string $locale = null): void
     {
     }
 
@@ -120,7 +120,7 @@ abstract class BaseImplementation
         CartApi $cartApi,
         Cart $cart,
         string $shippingMethod,
-        string $locale = null
+        ?string $locale = null
     ): void {
     }
 
@@ -130,7 +130,7 @@ abstract class BaseImplementation
     }
 
     /*** setCustomField() *********************************************************************************************/
-    public function beforeSetCustomField(CartApi $cartApi, Cart $cart, array $fields, string $locale = null): void
+    public function beforeSetCustomField(CartApi $cartApi, Cart $cart, array $fields, ?string $locale = null): void
     {
     }
 
@@ -140,7 +140,7 @@ abstract class BaseImplementation
     }
 
     /*** setRawApiInput() *********************************************************************************************/
-    public function beforeSetRawApiInput(CartApi $cartApi, Cart $cart, string $locale = null): void
+    public function beforeSetRawApiInput(CartApi $cartApi, Cart $cart, ?string $locale = null): void
     {
     }
 
@@ -154,7 +154,7 @@ abstract class BaseImplementation
         CartApi $cartApi,
         Cart $cart,
         Address $address,
-        string $locale = null
+        ?string $locale = null
     ): void {
     }
 
@@ -164,7 +164,7 @@ abstract class BaseImplementation
     }
 
     /*** setBillingAddress() ******************************************************************************************/
-    public function beforeSetBillingAddress(CartApi $cartApi, Cart $cart, Address $address, string $locale = null): void
+    public function beforeSetBillingAddress(CartApi $cartApi, Cart $cart, Address $address, ?string $locale = null): void
     {
     }
 
@@ -179,7 +179,7 @@ abstract class BaseImplementation
         Cart $cart,
         Payment $payment,
         ?array $custom = null,
-        string $locale = null
+        ?string $locale = null
     ): void {
     }
 
@@ -203,7 +203,7 @@ abstract class BaseImplementation
     }
 
     /*** redeemDiscountCode() *****************************************************************************************/
-    public function beforeRedeemDiscountCode(CartApi $cartApi, Cart $cart, string $code, string $locale = null): void
+    public function beforeRedeemDiscountCode(CartApi $cartApi, Cart $cart, string $code, ?string $locale = null): void
     {
     }
 
@@ -217,7 +217,7 @@ abstract class BaseImplementation
         CartApi $cartApi,
         Cart $cart,
         LineItem $discountLineItem,
-        string $locale = null
+        ?string $locale = null
     ): void {
     }
 
@@ -227,7 +227,7 @@ abstract class BaseImplementation
     }
 
     /*** order() ******************************************************************************************************/
-    public function beforeOrder(CartApi $cartApi, Cart $cart, string $locale = null): void
+    public function beforeOrder(CartApi $cartApi, Cart $cart, ?string $locale = null): void
     {
     }
 
@@ -237,7 +237,7 @@ abstract class BaseImplementation
     }
 
     /*** getOrder() ***************************************************************************************************/
-    public function beforeGetOrder(CartApi $cartApi, Account $account, string $orderId, string $locale = null): void
+    public function beforeGetOrder(CartApi $cartApi, Account $account, string $orderId, ?string $locale = null): void
     {
     }
 
@@ -247,7 +247,7 @@ abstract class BaseImplementation
     }
 
     /*** getOrders() **************************************************************************************************/
-    public function beforeGetOrders(CartApi $cartApi, Account $account, string $locale = null): void
+    public function beforeGetOrders(CartApi $cartApi, Account $account, ?string $locale = null): void
     {
     }
 
@@ -277,7 +277,7 @@ abstract class BaseImplementation
     // as this original method returns `void` it does not make sense to have an after* method here
 
     /*** commit() *****************************************************************************************************/
-    public function beforeCommit(CartApi $cartApi, string $locale = null): void
+    public function beforeCommit(CartApi $cartApi, ?string $locale = null): void
     {
     }
 

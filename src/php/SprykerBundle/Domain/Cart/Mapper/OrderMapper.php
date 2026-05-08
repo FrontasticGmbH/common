@@ -98,7 +98,7 @@ class OrderMapper implements ExtendedMapperInterface
         $packets = [];
 
         if ($orderItems) {
-            foreach ($orderItems as $key => $item) {
+            foreach ($orderItems as $item) {
                 if ($item[self::KEY_SHIPPED_AT] &&
                     $item[self::KEY_TRACKING_LINK] &&
                     !$this->alreadyInPacket($item[self::KEY_SHIPPED_AT], $packets)

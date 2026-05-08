@@ -52,7 +52,7 @@ class CachingContentApi implements ContentApi
         return $this->aggregate->getContentTypes();
     }
 
-    public function getContent(string $contentId, string $locale = null, string $mode = self::QUERY_SYNC): ?object
+    public function getContent(string $contentId, ?string $locale = null, string $mode = self::QUERY_SYNC): ?object
     {
         if ($mode === self::QUERY_SYNC) {
             return $this->getContentCachedSynced($contentId, $locale);
@@ -61,7 +61,7 @@ class CachingContentApi implements ContentApi
         return $this->getContentCachedAsync($contentId, $locale);
     }
 
-    public function query(Query $query, string $locale = null, string $mode = self::QUERY_SYNC): ?object
+    public function query(Query $query, ?string $locale = null, string $mode = self::QUERY_SYNC): ?object
     {
         if ($mode === self::QUERY_SYNC) {
             return $this->queryCachedSynced($query, $locale);

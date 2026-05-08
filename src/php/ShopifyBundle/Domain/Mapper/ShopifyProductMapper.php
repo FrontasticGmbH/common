@@ -13,7 +13,7 @@ use Frontastic\Common\ProjectApiBundle\Domain\Attribute;
 
 class ShopifyProductMapper
 {
-    public function mapDataToProduct(array $productData, Query $query = null): Product
+    public function mapDataToProduct(array $productData, ?Query $query = null): Product
     {
         return new Product([
             'productId' => ShopifyIdMapper::mapDataToId($productData['id'] ?? null),
@@ -50,7 +50,7 @@ class ShopifyProductMapper
         throw new \RuntimeException('Invalid date: ' . $string);
     }
 
-    public function dataToDangerousInnerData(array $rawData, Query $query = null): ?array
+    public function dataToDangerousInnerData(array $rawData, ?Query $query = null): ?array
     {
         if (is_null($query)) {
             return null;
@@ -61,7 +61,7 @@ class ShopifyProductMapper
         return null;
     }
 
-    public function mapDataToVariants(array $variantsData, Query $query = null): array
+    public function mapDataToVariants(array $variantsData, ?Query $query = null): array
     {
         $variants = [];
         foreach ($variantsData as $variant) {
@@ -71,7 +71,7 @@ class ShopifyProductMapper
         return $variants;
     }
 
-    public function mapDataToVariant(array $variantData, Query $query = null): Variant
+    public function mapDataToVariant(array $variantData, ?Query $query = null): Variant
     {
         return new Variant([
             'id' => ShopifyIdMapper::mapDataToId($variantData['id'] ?? null),
@@ -233,7 +233,7 @@ class ShopifyProductMapper
         $productTagValues = [];
         foreach ($productsData as $productData) {
             $productData = $productData['node'] ?? $productData;
-            if (!is_array($productData) || !key_exists('tags', $productData)) {
+            if (!is_array($productData) || !array_key_exists('tags', $productData)) {
                 continue;
             }
 
@@ -272,7 +272,7 @@ class ShopifyProductMapper
         $productTypeValues = [];
         foreach ($productsData as $productData) {
             $productData = $productData['node'] ?? $productData;
-            if (!is_array($productData) || !key_exists('productType', $productData)) {
+            if (!is_array($productData) || !array_key_exists('productType', $productData)) {
                 continue;
             }
 
@@ -308,7 +308,7 @@ class ShopifyProductMapper
     {
         $variantImages = [];
 
-        if ($variantData['image'] !== null && key_exists('originalSrc', $variantData['image'])) {
+        if ($variantData['image'] !== null && array_key_exists('originalSrc', $variantData['image'])) {
             $variantImages = [$variantData['image']['originalSrc']] ?? [];
         }
 

@@ -31,7 +31,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         return $this->baseImplementation->afterGetSalutations($accountApi, $salutations);
     }
 
-    public function beforeConfirmEmail(AccountApi $accountApi, string $token, string $locale = null): ?array
+    public function beforeConfirmEmail(AccountApi $accountApi, string $token, ?string $locale = null): ?array
     {
         $this->baseImplementation->beforeConfirmEmail($accountApi, $token, $locale);
         return [$token, $locale];
@@ -46,7 +46,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         AccountApi $accountApi,
         Account $account,
         ?Cart $cart = null,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         $this->baseImplementation->beforeCreate($accountApi, $account, $cart, $locale);
         return [$account, $cart, $locale];
@@ -57,7 +57,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         return $this->baseImplementation->afterCreate($accountApi, $account);
     }
 
-    public function beforeUpdate(AccountApi $accountApi, Account $account, string $locale = null): ?array
+    public function beforeUpdate(AccountApi $accountApi, Account $account, ?string $locale = null): ?array
     {
         $this->baseImplementation->beforeUpdate($accountApi, $account, $locale);
         return [$account, $locale];
@@ -73,7 +73,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         Account $account,
         string $oldPassword,
         string $newPassword,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         $this->baseImplementation->beforeUpdatePassword(
             $accountApi,
@@ -107,7 +107,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         AccountApi $accountApi,
         string $token,
         string $newPassword,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         $this->baseImplementation->beforeResetPassword($accountApi, $token, $newPassword, $locale);
         return [$token, $newPassword, $locale];
@@ -122,7 +122,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         AccountApi $accountApi,
         Account $account,
         ?Cart $cart = null,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         $this->baseImplementation->beforeLogin($accountApi, $account, $cart, $locale);
         return [$account, $cart, $locale];
@@ -133,7 +133,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         return $this->baseImplementation->afterLogin($accountApi, $account);
     }
 
-    public function beforeRefreshAccount(AccountApi $accountApi, Account $account, string $locale = null): ?array
+    public function beforeRefreshAccount(AccountApi $accountApi, Account $account, ?string $locale = null): ?array
     {
         $this->baseImplementation->beforeRefreshAccount($accountApi, $account, $locale);
         return [$account, $locale];
@@ -144,7 +144,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         return $this->baseImplementation->afterRefreshAccount($accountApi, $account);
     }
 
-    public function beforeGetAddresses(AccountApi $accountApi, Account $account, string $locale = null): ?array
+    public function beforeGetAddresses(AccountApi $accountApi, Account $account, ?string $locale = null): ?array
     {
         $this->baseImplementation->beforeGetAddresses($accountApi, $account, $locale);
         return [$account, $locale];
@@ -164,7 +164,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         AccountApi $accountApi,
         Account $account,
         Address $address,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         $this->baseImplementation->beforeAddAddress($accountApi, $account, $address, $locale);
         return [$account, $address, $locale];
@@ -179,7 +179,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         AccountApi $accountApi,
         Account $account,
         Address $address,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         $this->baseImplementation->beforeUpdateAddress($accountApi, $account, $address, $locale);
         return [$account, $address, $locale];
@@ -194,7 +194,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         AccountApi $accountApi,
         Account $account,
         string $addressId,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         $this->baseImplementation->beforeRemoveAddress($accountApi, $account, $addressId, $locale);
         return [$account, $addressId, $locale];
@@ -209,7 +209,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         AccountApi $accountApi,
         Account $account,
         string $addressId,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         $this->baseImplementation->beforeSetDefaultBillingAddress($accountApi, $account, $addressId, $locale);
         return [$account, $addressId, $locale];
@@ -224,7 +224,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
         AccountApi $accountApi,
         Account $account,
         string $addressId,
-        string $locale = null
+        ?string $locale = null
     ): ?array {
         $this->baseImplementation->beforeSetDefaultShippingAddress($accountApi, $account, $addressId, $locale);
         return [$account, $addressId, $locale];

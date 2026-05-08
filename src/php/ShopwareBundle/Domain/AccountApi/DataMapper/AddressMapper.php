@@ -23,7 +23,7 @@ class AddressMapper extends AbstractDataMapper implements ProjectConfigApiAwareD
     {
         $addressData = $this->extractElements($resource, $resource);
 
-        if (key_exists('attributes', $resource)) {
+        if (array_key_exists('attributes', $resource)) {
             $addressData = array_merge($addressData, $addressData['attributes']);
         }
 

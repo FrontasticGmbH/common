@@ -188,17 +188,17 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
                     throw new \Exception('Empty body response');
                 }
 
-                if (key_exists('nodes', $result['body']['data'])) {
+                if (array_key_exists('nodes', $result['body']['data'])) {
                     $productsData = $result['body']['data']['nodes'];
                 }
 
-                if (key_exists('node', $result['body']['data']) &&
-                    key_exists('products', $result['body']['data']['node'])) {
+                if (array_key_exists('node', $result['body']['data']) &&
+                    array_key_exists('products', $result['body']['data']['node'])) {
                     $productsData = $result['body']['data']['node']['products']['edges'];
                     $pageInfoData = $result['body']['data']['node']['products']['pageInfo'];
                 }
 
-                if (key_exists('products', $result['body']['data'])) {
+                if (array_key_exists('products', $result['body']['data'])) {
                     $productsData = $result['body']['data']['products']['edges'];
                     $pageInfoData = $result['body']['data']['products']['pageInfo'];
                 }
@@ -279,7 +279,7 @@ class ShopifyProductSearchApi extends ProductSearchApiBase
 
     private function getRawApiInputField(array $rawApiInput, string $field): string
     {
-        return key_exists($field, $rawApiInput) ? $rawApiInput[$field] : '';
+        return array_key_exists($field, $rawApiInput) ? $rawApiInput[$field] : '';
     }
 
     private function buildPageFilter(PaginatedQuery $query): string

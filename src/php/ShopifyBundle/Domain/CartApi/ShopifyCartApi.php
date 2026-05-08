@@ -172,7 +172,7 @@ class ShopifyCartApi extends CartApiBase
             ->wait();
     }
 
-    protected function getByIdImplementation(string $cartId, string $locale = null): Cart
+    protected function getByIdImplementation(string $cartId, ?string $locale = null): Cart
     {
         $cartIdData = ShopifyIdMapper::mapIdToData($cartId);
 
@@ -246,7 +246,7 @@ class ShopifyCartApi extends CartApiBase
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    protected function addToCartImplementation(Cart $cart, LineItem $lineItem, string $locale = null): Cart
+    protected function addToCartImplementation(Cart $cart, LineItem $lineItem, ?string $locale = null): Cart
     {
         $cartIdData = ShopifyIdMapper::mapIdToData($cart->cartId);
         $variantIdData = ShopifyIdMapper::mapIdToData($lineItem->variant->id);
@@ -299,7 +299,7 @@ class ShopifyCartApi extends CartApiBase
         LineItem $lineItem,
         int $count,
         ?array $custom = null,
-        string $locale = null
+        ?string $locale = null
     ): Cart {
         $cartIdData = ShopifyIdMapper::mapIdToData($cart->cartId);
         $lineItemIdData = ShopifyIdMapper::mapIdToData($lineItem->lineItemId);
@@ -347,7 +347,7 @@ class ShopifyCartApi extends CartApiBase
             ->wait();
     }
 
-    protected function removeLineItemImplementation(Cart $cart, LineItem $lineItem, string $locale = null): Cart
+    protected function removeLineItemImplementation(Cart $cart, LineItem $lineItem, ?string $locale = null): Cart
     {
         $cartIdData = ShopifyIdMapper::mapIdToData($cart->cartId);
         $lineItemIdData = ShopifyIdMapper::mapIdToData($lineItem->lineItemId);
@@ -392,7 +392,7 @@ class ShopifyCartApi extends CartApiBase
             ->wait();
     }
 
-    protected function setEmailImplementation(Cart $cart, string $email, string $locale = null): Cart
+    protected function setEmailImplementation(Cart $cart, string $email, ?string $locale = null): Cart
     {
         $cartIdData = ShopifyIdMapper::mapIdToData($cart->cartId);
 
@@ -436,7 +436,7 @@ class ShopifyCartApi extends CartApiBase
             ->wait();
     }
 
-    protected function setShippingMethodImplementation(Cart $cart, string $shippingMethod, string $locale = null): Cart
+    protected function setShippingMethodImplementation(Cart $cart, string $shippingMethod, ?string $locale = null): Cart
     {
         $cartIdData = ShopifyIdMapper::mapIdToData($cart->cartId);
 
@@ -480,13 +480,13 @@ class ShopifyCartApi extends CartApiBase
             ->wait();
     }
 
-    protected function setRawApiInputImplementation(Cart $cart, string $locale = null): Cart
+    protected function setRawApiInputImplementation(Cart $cart, ?string $locale = null): Cart
     {
         // TODO: Implement setRawApiInput() method.
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    protected function setShippingAddressImplementation(Cart $cart, Address $address, string $locale = null): Cart
+    protected function setShippingAddressImplementation(Cart $cart, Address $address, ?string $locale = null): Cart
     {
         $cartIdData = ShopifyIdMapper::mapIdToData($cart->cartId);
 
@@ -532,7 +532,7 @@ class ShopifyCartApi extends CartApiBase
             ->wait();
     }
 
-    protected function setBillingAddressImplementation(Cart $cart, Address $address, string $locale = null): Cart
+    protected function setBillingAddressImplementation(Cart $cart, Address $address, ?string $locale = null): Cart
     {
         // Not supported by Shopify.
         // The billing address should be set up on checkout-complete flow.
@@ -543,7 +543,7 @@ class ShopifyCartApi extends CartApiBase
         Cart $cart,
         Payment $payment,
         ?array $custom = null,
-        string $locale = null
+        ?string $locale = null
     ): Cart {
         // TODO: Implement addPayment() method.
         throw new \RuntimeException(__METHOD__ . ' not implemented');
@@ -555,7 +555,7 @@ class ShopifyCartApi extends CartApiBase
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    protected function redeemDiscountCodeImplementation(Cart $cart, string $code, string $locale = null): Cart
+    protected function redeemDiscountCodeImplementation(Cart $cart, string $code, ?string $locale = null): Cart
     {
         // TODO: Implement redeemDiscountCode() method.
         throw new \RuntimeException(__METHOD__ . ' not implemented');
@@ -564,13 +564,13 @@ class ShopifyCartApi extends CartApiBase
     protected function removeDiscountCodeImplementation(
         Cart $cart,
         LineItem $discountLineItem,
-        string $locale = null
+        ?string $locale = null
     ): Cart {
         // TODO: Implement removeDiscountCode() method.
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    protected function orderImplementation(Cart $cart, string $locale = null): Order
+    protected function orderImplementation(Cart $cart, ?string $locale = null): Order
     {
         // Shopify handle the checkout complete action in their side.
         // The url where the customer should be redirected to complete this process
@@ -579,7 +579,7 @@ class ShopifyCartApi extends CartApiBase
         throw new \RuntimeException(__METHOD__ . ' not implemented');
     }
 
-    protected function getOrderImplementation(Account $account, string $orderId, string $locale = null): Order
+    protected function getOrderImplementation(Account $account, string $orderId, ?string $locale = null): Order
     {
         $orderIdData = ShopifyIdMapper::mapIdToData($orderId);
 
@@ -614,7 +614,7 @@ class ShopifyCartApi extends CartApiBase
             ->wait();
     }
 
-    protected function getOrdersImplementation(Account $account, string $locale = null): array
+    protected function getOrdersImplementation(Account $account, ?string $locale = null): array
     {
         if (is_null($account->apiToken)) {
             throw new \RuntimeException(sprintf('Account %s is not logged in', $account->email));
@@ -659,7 +659,7 @@ class ShopifyCartApi extends CartApiBase
         $this->currentTransaction = $cart->cartId;
     }
 
-    protected function commitImplementation(string $locale = null): Cart
+    protected function commitImplementation(?string $locale = null): Cart
     {
         if ($this->currentTransaction === null) {
             throw new \RuntimeException('No transaction currently in progress');
@@ -674,7 +674,7 @@ class ShopifyCartApi extends CartApiBase
 
     public function getAvailableShippingMethodsImplementation(Cart $cart, string $locale): array
     {
-        if (key_exists('availableShippingRates', $cart->dangerousInnerCart)) {
+        if (array_key_exists('availableShippingRates', $cart->dangerousInnerCart)) {
             return array_map(
                 function (array $shippingMethodData): ShippingMethod {
                     return $this->mapDataToShippingMethod($shippingMethodData);
@@ -699,7 +699,7 @@ class ShopifyCartApi extends CartApiBase
             ->request($query)
             ->then(function (array $result): array {
                 $cartData = $result['body']['data']['node'];
-                if (!key_exists('availableShippingRates', $cartData)) {
+                if (!array_key_exists('availableShippingRates', $cartData)) {
                     return [];
                 }
 
@@ -874,7 +874,7 @@ class ShopifyCartApi extends CartApiBase
         // Shopify requires a shipping address and the flag requiresShipping
         // in order to return the available shipping methods
         if ($cart->shippingAddress instanceof Address &&
-            key_exists('requiresShipping', $cart->dangerousInnerCart) &&
+            array_key_exists('requiresShipping', $cart->dangerousInnerCart) &&
             $cart->dangerousInnerCart['requiresShipping'] !== false
         ) {
             $checkoutQueryFields .= $this->getAvailableShippingRatesQueryFields();

@@ -30,7 +30,7 @@ class Signing extends HttpClient
         string $url,
         string $body = '',
         array $headers = array(),
-        Options $options = null
+        ?Options $options = null
     ): PromiseInterface {
         $nonce = random_int(0, mt_getrandmax());
         $hash = hash_hmac('sha256', $nonce . ':' . $body, $this->sharedSecret);

@@ -37,7 +37,7 @@ class Logger extends HttpClient
         string $url,
         string $body = '',
         array $headers = [],
-        Options $options = null
+        ?Options $options = null
     ): PromiseInterface {
         $start = microtime(true);
 

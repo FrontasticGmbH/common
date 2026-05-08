@@ -27,7 +27,7 @@ interface ContentApi
      * @param string $mode One of the QUERY_* connstants. Execute the query synchronously or asynchronously?
      * @return Content|PromiseInterface|null A product or null when the mode is sync and a promise if the mode is async.
      */
-    public function getContent(string $contentId, string $locale = null, string $mode = self::QUERY_SYNC): ?object;
+    public function getContent(string $contentId, ?string $locale = null, string $mode = self::QUERY_SYNC): ?object;
 
     /**
      * Fetch content with by a $query in $locale. Interpretation of the query
@@ -39,7 +39,7 @@ interface ContentApi
      * @param string $mode One of the QUERY_* connstants. Execute the query synchronously or asynchronously?
      * @return Result|PromiseInterface|null A product or null when the mode is sync and a promise if the mode is async.
      */
-    public function query(Query $query, string $locale = null, string $mode = self::QUERY_SYNC): ?object;
+    public function query(Query $query, ?string $locale = null, string $mode = self::QUERY_SYNC): ?object;
 
     /**
      * Get *dangerous* inner client

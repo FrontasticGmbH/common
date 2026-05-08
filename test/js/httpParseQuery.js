@@ -80,4 +80,80 @@ describe('httpQueryParser', function () {
             'a': ['foo', 'bar'],
         })
     })
+
+    it('it does not pollute the Object prototype', () => {
+        const parserResult = httpParseQuery('__proto__["test"]=foo')
+
+        expect(parserResult).toEqual({})
+
+        expect(({}).test).toBeUndefined()
+    })
+
+    it('it does not pollute via constructor.prototype', () => {
+        const parserResult = httpParseQuery('constructor[prototype][polluted]=yes')
+
+        expect(parserResult).toEqual({})
+        expect(({}).polluted).toBeUndefined()
+    })
+
+    it('it does not pollute via nested __proto__', () => {
+        const parserResult = httpParseQuery('a[__proto__][polluted]=yes')
+
+        expect(parserResult).toEqual({})
+        expect(({}).polluted).toBeUndefined()
+    })
+
+    it('it does not pollute via single-segment __proto__', () => {
+        const parserResult = httpParseQuery('__proto__=evil')
+
+        expect(parserResult).toEqual({})
+        expect(Object.getPrototypeOf({})).toBe(Object.prototype)
+        expect(({}).constructor).toBe(Object)
+    })
+
+    it('it does not pollute via __proto__ as the final segment', () => {
+        const parserResult = httpParseQuery('a[__proto__]=evil')
+
+        expect(parserResult).toEqual({})
+        expect(({}).a).toBeUndefined()
+        expect(Object.getPrototypeOf({})).toBe(Object.prototype)
+    })
+
+    it('it does not pollute via quoted __proto__', () => {
+        const parserResult = httpParseQuery('%27__proto__%27[polluted]=yes')
+
+        expect(parserResult).toEqual({})
+        expect(({}).polluted).toBeUndefined()
+    })
+
+    it('it does not pollute via double-quoted __proto__', () => {
+        const parserResult = httpParseQuery('%22__proto__%22[polluted]=yes')
+
+        expect(parserResult).toEqual({})
+        expect(({}).polluted).toBeUndefined()
+    })
+
+    it('it does not pollute via single-segment constructor', () => {
+        const parserResult = httpParseQuery('constructor=evil')
+
+        expect(parserResult).toEqual({})
+        expect(({}).constructor).toBe(Object)
+    })
+
+    it('it does not pollute via single-segment prototype', () => {
+        const parserResult = httpParseQuery('prototype=evil')
+
+        expect(parserResult).toEqual({})
+        expect(Object.getPrototypeOf({})).toBe(Object.prototype)
+    })
+
+    it('it drops only entries with dangerous keys, not benign ones in the same query', () => {
+        const parserResult = httpParseQuery('foo=bar&__proto__[polluted]=yes&baz=qux')
+
+        expect(parserResult).toEqual({
+            foo: 'bar',
+            baz: 'qux',
+        })
+        expect(({}).polluted).toBeUndefined()
+    })
 })

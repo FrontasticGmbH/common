@@ -71,7 +71,7 @@ class ShopifyClient
     /**
      * takes GraphQL query, returns JSON result as string
      */
-    public function request(string $query, string $locale = null): PromiseInterface
+    public function request(string $query, ?string $locale = null): PromiseInterface
     {
         $body = Json::encode(['query' => $query], JSON_HEX_QUOT);
         $headers = [];

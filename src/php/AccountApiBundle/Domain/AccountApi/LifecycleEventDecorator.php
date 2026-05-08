@@ -48,17 +48,17 @@ class LifecycleEventDecorator implements AccountApi
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function confirmEmail(string $token, string $locale = null): Account
+    public function confirmEmail(string $token, ?string $locale = null): Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function create(Account $account, ?Cart $cart = null, string $locale = null): Account
+    public function create(Account $account, ?Cart $cart = null, ?string $locale = null): Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function update(Account $account, string $locale = null): Account
+    public function update(Account $account, ?string $locale = null): Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
@@ -67,27 +67,27 @@ class LifecycleEventDecorator implements AccountApi
         Account $account,
         string $oldPassword,
         string $newPassword,
-        string $locale = null
+        ?string $locale = null
     ): Account {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function generatePasswordResetToken(string $email, string $locale = null): PasswordResetToken
+    public function generatePasswordResetToken(string $email, ?string $locale = null): PasswordResetToken
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function resetPassword(string $token, string $newPassword, string $locale = null): Account
+    public function resetPassword(string $token, string $newPassword, ?string $locale = null): Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function login(Account $account, ?Cart $cart = null, string $locale = null): ?Account
+    public function login(Account $account, ?Cart $cart = null, ?string $locale = null): ?Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function refreshAccount(Account $account, string $locale = null): Account
+    public function refreshAccount(Account $account, ?string $locale = null): Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
@@ -95,32 +95,32 @@ class LifecycleEventDecorator implements AccountApi
     /**
      * @return Account[]
      */
-    public function getAddresses(Account $account, string $locale = null): array
+    public function getAddresses(Account $account, ?string $locale = null): array
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function addAddress(Account $account, Address $address, string $locale = null): Account
+    public function addAddress(Account $account, Address $address, ?string $locale = null): Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function updateAddress(Account $account, Address $address, string $locale = null): Account
+    public function updateAddress(Account $account, Address $address, ?string $locale = null): Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function removeAddress(Account $account, string $addressId, string $locale = null): Account
+    public function removeAddress(Account $account, string $addressId, ?string $locale = null): Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function setDefaultBillingAddress(Account $account, string $addressId, string $locale = null): Account
+    public function setDefaultBillingAddress(Account $account, string $addressId, ?string $locale = null): Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }
 
-    public function setDefaultShippingAddress(Account $account, string $addressId, string $locale = null): Account
+    public function setDefaultShippingAddress(Account $account, string $addressId, ?string $locale = null): Account
     {
         return $this->dispatch(__FUNCTION__, func_get_args());
     }

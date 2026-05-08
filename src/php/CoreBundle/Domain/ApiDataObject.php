@@ -63,7 +63,7 @@ abstract class ApiDataObject extends DataObject
     public function updateWithProjectSpecificData(array $values): self
     {
         foreach ($this as $key => $value) {
-            if (key_exists($key, $values)) {
+            if (array_key_exists($key, $values)) {
                 $this->{$key} = $values[$key];
             }
         }

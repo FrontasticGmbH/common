@@ -25,12 +25,12 @@ class DummyCartApi extends CartApiBase
         throw $this->exception();
     }
 
-    protected function getByIdImplementation(string $cartId, string $localeString = null): Cart
+    protected function getByIdImplementation(string $cartId, ?string $localeString = null): Cart
     {
         throw $this->exception();
     }
 
-    protected function addToCartImplementation(Cart $cart, LineItem $lineItem, string $localeString = null): Cart
+    protected function addToCartImplementation(Cart $cart, LineItem $lineItem, ?string $localeString = null): Cart
     {
         throw $this->exception();
     }
@@ -40,17 +40,17 @@ class DummyCartApi extends CartApiBase
         LineItem $lineItem,
         int $count,
         ?array $custom = null,
-        string $localeString = null
+        ?string $localeString = null
     ): Cart {
         throw $this->exception();
     }
 
-    protected function removeLineItemImplementation(Cart $cart, LineItem $lineItem, string $localeString = null): Cart
+    protected function removeLineItemImplementation(Cart $cart, LineItem $lineItem, ?string $localeString = null): Cart
     {
         throw $this->exception();
     }
 
-    protected function setEmailImplementation(Cart $cart, string $email, string $localeString = null): Cart
+    protected function setEmailImplementation(Cart $cart, string $email, ?string $localeString = null): Cart
     {
         throw $this->exception();
     }
@@ -58,27 +58,27 @@ class DummyCartApi extends CartApiBase
     protected function setShippingMethodImplementation(
         Cart $cart,
         string $shippingMethod,
-        string $localeString = null
+        ?string $localeString = null
     ): Cart {
         throw $this->exception();
     }
 
-    protected function setCustomFieldImplementation(Cart $cart, array $fields, string $localeString = null): Cart
+    protected function setCustomFieldImplementation(Cart $cart, array $fields, ?string $localeString = null): Cart
     {
         throw $this->exception();
     }
 
-    protected function setRawApiInputImplementation(Cart $cart, string $localeString = null): Cart
+    protected function setRawApiInputImplementation(Cart $cart, ?string $localeString = null): Cart
     {
         throw $this->exception();
     }
 
-    protected function setShippingAddressImplementation(Cart $cart, Address $address, string $localeString = null): Cart
+    protected function setShippingAddressImplementation(Cart $cart, Address $address, ?string $localeString = null): Cart
     {
         throw $this->exception();
     }
 
-    protected function setBillingAddressImplementation(Cart $cart, Address $address, string $localeString = null): Cart
+    protected function setBillingAddressImplementation(Cart $cart, Address $address, ?string $localeString = null): Cart
     {
         throw $this->exception();
     }
@@ -87,7 +87,7 @@ class DummyCartApi extends CartApiBase
         Cart $cart,
         Payment $payment,
         ?array $custom = null,
-        string $localeString = null
+        ?string $localeString = null
     ): Cart {
         throw $this->exception();
     }
@@ -97,7 +97,7 @@ class DummyCartApi extends CartApiBase
         throw $this->exception();
     }
 
-    protected function redeemDiscountCodeImplementation(Cart $cart, string $code, string $localeString = null): Cart
+    protected function redeemDiscountCodeImplementation(Cart $cart, string $code, ?string $localeString = null): Cart
     {
         throw $this->exception();
     }
@@ -105,22 +105,22 @@ class DummyCartApi extends CartApiBase
     protected function removeDiscountCodeImplementation(
         Cart $cart,
         LineItem $discountLineItem,
-        string $localeString = null
+        ?string $localeString = null
     ): Cart {
         throw $this->exception();
     }
 
-    protected function orderImplementation(Cart $cart, string $locale = null): Order
+    protected function orderImplementation(Cart $cart, ?string $locale = null): Order
     {
         throw $this->exception();
     }
 
-    protected function getOrderImplementation(Account $account, string $orderId, string $locale = null): Order
+    protected function getOrderImplementation(Account $account, string $orderId, ?string $locale = null): Order
     {
         throw $this->exception();
     }
 
-    protected function getOrdersImplementation(Account $account, string $locale = null): array
+    protected function getOrdersImplementation(Account $account, ?string $locale = null): array
     {
         throw $this->exception();
     }
@@ -135,7 +135,7 @@ class DummyCartApi extends CartApiBase
         throw $this->exception();
     }
 
-    protected function commitImplementation(string $localeString = null): Cart
+    protected function commitImplementation(?string $localeString = null): Cart
     {
         throw $this->exception();
     }

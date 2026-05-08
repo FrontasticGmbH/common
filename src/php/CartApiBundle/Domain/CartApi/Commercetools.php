@@ -294,7 +294,7 @@ class Commercetools extends CartApiBase
     /**
      * @throws \RuntimeException if cart with $cartId was not found
      */
-    protected function getByIdImplementation(string $cartId, string $localeString = null): Cart
+    protected function getByIdImplementation(string $cartId, ?string $localeString = null): Cart
     {
         $locale = $this->parseLocaleString($localeString);
 
@@ -319,7 +319,7 @@ class Commercetools extends CartApiBase
      * @see https://docs.commercetools.com/api/projects/carts#add-lineitem
      * @see https://docs.commercetools.com/api/projects/carts#add-customlineitem
      */
-    protected function addToCartImplementation(Cart $cart, LineItem $lineItem, string $localeString = null): Cart
+    protected function addToCartImplementation(Cart $cart, LineItem $lineItem, ?string $localeString = null): Cart
     {
         $locale = $this->parseLocaleString($localeString);
 
@@ -402,7 +402,7 @@ class Commercetools extends CartApiBase
         LineItem $lineItem,
         int $count,
         ?array $custom = null,
-        string $localeString = null
+        ?string $localeString = null
     ): Cart {
         $actions = [];
         if ($lineItem instanceof LineItem\Variant) {
@@ -446,7 +446,7 @@ class Commercetools extends CartApiBase
         );
     }
 
-    protected function removeLineItemImplementation(Cart $cart, LineItem $lineItem, string $localeString = null): Cart
+    protected function removeLineItemImplementation(Cart $cart, LineItem $lineItem, ?string $localeString = null): Cart
     {
         $locale = $this->parseLocaleString($localeString);
 
@@ -475,7 +475,7 @@ class Commercetools extends CartApiBase
         }
     }
 
-    protected function setEmailImplementation(Cart $cart, string $email, string $localeString = null): Cart
+    protected function setEmailImplementation(Cart $cart, string $email, ?string $localeString = null): Cart
     {
         return $this->postCartActions(
             $cart,
@@ -492,7 +492,7 @@ class Commercetools extends CartApiBase
     protected function setShippingMethodImplementation(
         Cart $cart,
         string $shippingMethod,
-        string $localeString = null
+        ?string $localeString = null
     ): Cart {
         $action = [
             'action' => 'setShippingMethod',
@@ -512,7 +512,7 @@ class Commercetools extends CartApiBase
         );
     }
 
-    protected function setCustomFieldImplementation(Cart $cart, array $fields, string $localeString = null): Cart
+    protected function setCustomFieldImplementation(Cart $cart, array $fields, ?string $localeString = null): Cart
     {
         $this->logger
             ->warning(
@@ -534,7 +534,7 @@ class Commercetools extends CartApiBase
         return $this->setRawApiInput($cart, $localeString);
     }
 
-    protected function setRawApiInputImplementation(Cart $cart, string $localeString = null): Cart
+    protected function setRawApiInputImplementation(Cart $cart, ?string $localeString = null): Cart
     {
         return $this->postCartActions($cart, [], $this->parseLocaleString($localeString));
     }
@@ -544,7 +544,7 @@ class Commercetools extends CartApiBase
      *
      * Only for use in scenarios where CommerceTools is set as the backend API.
      */
-    public function setCustomType(Cart $cart, string $key, string $localeString = null): Cart
+    public function setCustomType(Cart $cart, string $key, ?string $localeString = null): Cart
     {
         $cart->rawApiInput[] = [
             'action' => 'setCustomType',
@@ -556,7 +556,7 @@ class Commercetools extends CartApiBase
         return $this->setRawApiInput($cart, $localeString);
     }
 
-    protected function setShippingAddressImplementation(Cart $cart, Address $address, string $localeString = null): Cart
+    protected function setShippingAddressImplementation(Cart $cart, Address $address, ?string $localeString = null): Cart
     {
         return $this->postCartActions(
             $cart,
@@ -570,7 +570,7 @@ class Commercetools extends CartApiBase
         );
     }
 
-    protected function setBillingAddressImplementation(Cart $cart, Address $address, string $localeString = null): Cart
+    protected function setBillingAddressImplementation(Cart $cart, Address $address, ?string $localeString = null): Cart
     {
         return $this->postCartActions(
             $cart,
@@ -595,10 +595,10 @@ class Commercetools extends CartApiBase
         Cart $cart,
         Payment $payment,
         ?array $custom = null,
-        string $localeString = null
+        ?string $localeString = null
     ): Cart {
         // For BC only.
-        if (!key_exists('custom', $payment->rawApiInput) && !empty($custom)) {
+        if (!array_key_exists('custom', $payment->rawApiInput) && !empty($custom)) {
             $payment->rawApiInput['custom'] = $custom;
             $this->logger
                 ->warning(
@@ -677,7 +677,7 @@ class Commercetools extends CartApiBase
         );
     }
 
-    protected function redeemDiscountCodeImplementation(Cart $cart, string $code, string $localeString = null): Cart
+    protected function redeemDiscountCodeImplementation(Cart $cart, string $code, ?string $localeString = null): Cart
     {
         return $this->postCartActions(
             $cart,
@@ -694,7 +694,7 @@ class Commercetools extends CartApiBase
     protected function removeDiscountCodeImplementation(
         Cart $cart,
         LineItem $discountLineItem,
-        string $localeString = null
+        ?string $localeString = null
     ): Cart {
         return $this->postCartActions(
             $cart,
@@ -715,7 +715,7 @@ class Commercetools extends CartApiBase
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    protected function orderImplementation(Cart $cart, string $locale = null): Order
+    protected function orderImplementation(Cart $cart, ?string $locale = null): Order
     {
         if (!$this->isReadyForCheckout($cart)) {
             throw new \DomainException('Cart not complete yet.');
@@ -748,7 +748,7 @@ class Commercetools extends CartApiBase
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    protected function getOrderImplementation(Account $account, string $orderId, string $locale = null): Order
+    protected function getOrderImplementation(Account $account, string $orderId, ?string $locale = null): Order
     {
         return $this->cartMapper->mapDataToOrder(
             $this->client->get(
@@ -764,7 +764,7 @@ class Commercetools extends CartApiBase
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    protected function getOrdersImplementation(Account $account, string $locale = null): array
+    protected function getOrdersImplementation(Account $account, ?string $locale = null): array
     {
         $result = $this->client
             ->fetchAsync(
@@ -833,7 +833,7 @@ class Commercetools extends CartApiBase
      * @throws RequestException
      * @todo Should we catch the RequestException here?
      */
-    protected function commitImplementation(string $localeString = null): Cart
+    protected function commitImplementation(?string $localeString = null): Cart
     {
         $cart = $this->inTransaction;
         $this->inTransaction = null;

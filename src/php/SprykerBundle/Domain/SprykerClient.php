@@ -176,7 +176,7 @@ class SprykerClient implements SprykerClientInterface
                     }
                     return new JsonApiResponse($response->rawApiOutput);
                 },
-                function (RequestException $exception) use ($endpoint) {
+                function (RequestException $exception) use ($endpoint): void {
                     if ($exception instanceof ServerException) {
                         throw $this->exceptionFactory->createFromGuzzleServerException($exception, $endpoint);
                     }

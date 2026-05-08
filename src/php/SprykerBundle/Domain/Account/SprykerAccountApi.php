@@ -62,7 +62,7 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
      * @param string|null $locale
      * @return \Frontastic\Common\AccountApiBundle\Domain\Account
      */
-    public function confirmEmail(string $token, string $locale = null): Account
+    public function confirmEmail(string $token, ?string $locale = null): Account
     {
         throw new \RuntimeException('Not implemented');
     }
@@ -73,7 +73,7 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
      * @param string|null $locale
      * @return Account
      */
-    public function create(Account $account, ?Cart $cart = null, string $locale = null): Account
+    public function create(Account $account, ?Cart $cart = null, ?string $locale = null): Account
     {
         $request = CustomerRequestData::createFromAccount($account);
 
@@ -100,7 +100,7 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
      * @param string|null $locale
      * @return \Frontastic\Common\AccountApiBundle\Domain\Account
      */
-    public function update(Account $account, string $locale = null): Account
+    public function update(Account $account, ?string $locale = null): Account
     {
         $request = CustomerRequestData::createFromAccount($account);
 
@@ -123,7 +123,7 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
         Account $account,
         string $oldPassword,
         string $newPassword,
-        string $locale = null
+        ?string $locale = null
     ): Account {
         $request = new CustomerPasswordRequestData($oldPassword, $newPassword, $newPassword);
 
@@ -159,7 +159,7 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
      * @param string|null $locale
      * @return \Frontastic\Common\AccountApiBundle\Domain\Account
      */
-    public function resetPassword(string $token, string $newPassword, string $locale = null): Account
+    public function resetPassword(string $token, string $newPassword, ?string $locale = null): Account
     {
         $request = new RestorePasswordRequestData($token, $newPassword, $newPassword);
 
@@ -179,7 +179,7 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
      * @param string|null $locale
      * @return Account|null
      */
-    public function login(Account $account, ?Cart $cart = null, string $locale = null): ?Account
+    public function login(Account $account, ?Cart $cart = null, ?string $locale = null): ?Account
     {
         $request = new AccessTokenRequestData($account->email, $account->getPassword());
 
@@ -203,7 +203,7 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
      * @param string|null $locale
      * @return \Frontastic\Common\AccountApiBundle\Domain\Address[]
      */
-    public function getAddresses(Account $account, string $locale = null): array
+    public function getAddresses(Account $account, ?string $locale = null): array
     {
         $response = $this->client->get(
             sprintf('/customers/%s/addresses', $account->accountId),
@@ -219,7 +219,7 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
      * @param string|null $locale
      * @return \Frontastic\Common\AccountApiBundle\Domain\Account
      */
-    public function addAddress(Account $account, Address $address, string $locale = null): Account
+    public function addAddress(Account $account, Address $address, ?string $locale = null): Account
     {
         $request = CustomerAddressRequestData::createFromAddress($address);
 
@@ -238,7 +238,7 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
      * @param string|null $locale
      * @return \Frontastic\Common\AccountApiBundle\Domain\Account
      */
-    public function updateAddress(Account $account, Address $address, string $locale = null): Account
+    public function updateAddress(Account $account, Address $address, ?string $locale = null): Account
     {
         $request = CustomerAddressRequestData::createFromAddress($address);
 
@@ -257,7 +257,7 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
      * @param string|null $locale
      * @return \Frontastic\Common\AccountApiBundle\Domain\Account
      */
-    public function removeAddress(Account $account, string $addressId, string $locale = null): Account
+    public function removeAddress(Account $account, string $addressId, ?string $locale = null): Account
     {
         $this->client->delete(
             sprintf('/customers/%s/addresses/%s', $account->accountId, $addressId),
@@ -273,7 +273,7 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
      * @param string|null $locale
      * @return \Frontastic\Common\AccountApiBundle\Domain\Account
      */
-    public function setDefaultBillingAddress(Account $account, string $addressId, string $locale = null): Account
+    public function setDefaultBillingAddress(Account $account, string $addressId, ?string $locale = null): Account
     {
         $response = $this->client->get(
             sprintf('/customers/%s/addresses/%s', $account->accountId, $addressId),
@@ -292,7 +292,7 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
      * @param string|null $locale
      * @return \Frontastic\Common\AccountApiBundle\Domain\Account
      */
-    public function setDefaultShippingAddress(Account $account, string $addressId, string $locale = null): Account
+    public function setDefaultShippingAddress(Account $account, string $addressId, ?string $locale = null): Account
     {
         $response = $this->client->get(
             sprintf('/customers/%s/addresses/%s', $account->accountId, $addressId),
@@ -311,7 +311,7 @@ class SprykerAccountApi extends SprykerApiBase implements AccountApi
         return [SalutationHelper::DEFAULT_SPRYKER_SALUTATION];
     }
 
-    public function refreshAccount(Account $account, string $locale = null): Account
+    public function refreshAccount(Account $account, ?string $locale = null): Account
     {
         $apiToken = $account->apiToken;
 

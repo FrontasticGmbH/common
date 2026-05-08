@@ -8,7 +8,7 @@ class ClassToCatwalkPackageMigrationHandler
         string $className,
         string $originalNameSpace,
         string $newNameSpace,
-        string $newClassName = null
+        ?string $newClassName = null
     ) {
         $newClass = "$newNameSpace\\" . $newClassName ?? $className;
         $originalClass = "$originalNameSpace\\$className";

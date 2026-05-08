@@ -39,7 +39,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
     public function beforeGetContent(
         ContentApi $contentApi,
         string $contentId,
-        string $locale = null,
+        ?string $locale = null,
         string $mode = ContentApi::QUERY_SYNC
     ): ?array {
         $this->baseImplementation->beforeGetContent($contentApi, $contentId, $locale, $mode);
@@ -54,7 +54,7 @@ class BaseImplementationAdapterV2 extends BaseImplementationV2
     public function beforeQuery(
         ContentApi $contentApi,
         Query $query,
-        string $locale = null,
+        ?string $locale = null,
         string $mode = ContentApi::QUERY_SYNC
     ): ?array {
         $this->baseImplementation->beforeQuery($contentApi, $query, $locale, $mode);
