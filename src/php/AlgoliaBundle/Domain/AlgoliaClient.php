@@ -2,15 +2,21 @@
 
 namespace Frontastic\Common\AlgoliaBundle\Domain;
 
-use Algolia\AlgoliaSearch\SearchClient;
-use Algolia\AlgoliaSearch\SearchIndex;
+use Algolia\AlgoliaSearch\Api\SearchClient;
+use Algolia\AlgoliaSearch\Model\Search\SearchResponse;
+use Algolia\AlgoliaSearch\Model\Search\SettingsResponse;
 
 class AlgoliaClient
 {
     /**
-     * @var SearchIndex
+     * @var SearchClient
      */
-    private $index;
+    private $client;
+
+    /**
+     * @var string
+     */
+    private $indexName;
 
     /**
      * @var array
@@ -33,11 +39,10 @@ class AlgoliaClient
         $this->initIndex($this->defaultIndexConfig);
     }
 
-    protected function initIndex(AlgoliaIndexConfig $indexConfig, ?string $indexOverride = null)
+    protected function initIndex(AlgoliaIndexConfig $indexConfig, ?string $indexOverride = null): void
     {
-        $client = SearchClient::create($indexConfig->appId, $indexConfig->appKey);
-
-        $this->index = $client->initIndex($indexOverride ?? $indexConfig->indexName);
+        $this->client = SearchClient::create($indexConfig->appId, $indexConfig->appKey);
+        $this->indexName = $indexOverride ?? $indexConfig->indexName;
     }
 
     protected function getSortIndex(array $sortAttributes): ?string
@@ -77,7 +82,8 @@ class AlgoliaClient
     public function setLanguage(string $language): self
     {
         $indexConfig = $this->indexesConfig[$language] ?? $this->defaultIndexConfig;
-        if ($this->index->getIndexName() != $indexConfig->indexName) {
+
+        if ($this->indexName != $indexConfig->indexName) {
             $this->initIndex($indexConfig);
         }
 
@@ -95,13 +101,16 @@ class AlgoliaClient
         return $this;
     }
 
-    public function search(string $query, array $requestOptions)
+    public function search(string $query, array $requestOptions): array|SearchResponse
     {
-        return $this->index->search($query, $requestOptions);
+        $params = $requestOptions;
+        $params['query'] = $query;
+
+        return $this->client->searchSingleIndex($this->indexName, $params);
     }
 
-    public function getSettings()
+    public function getSettings(): array|SettingsResponse
     {
-        return $this->index->getSettings();
+        return $this->client->getSettings($this->indexName);
     }
 }

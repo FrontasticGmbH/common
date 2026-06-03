@@ -1,4 +1,14 @@
 
+## Version 2.50.0 (2026-06-03)
+
+** New Features & Improvements **
+
+- Update the `algolia/algoliasearch-client-php` library to version 4 and make
+  the dependency optional. The API client version 3 will soon reach its end of
+  support and SLA coverage. Since the Algolia integration is optional, the
+  library is no longer required but suggested. All users of the Algolia
+  integration need to add the library as a dependency to their `composer.json`.
+
 ## Version 2.49.3 (2026-05-08)
 
 ** Security Fixes **
