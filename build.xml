@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Frontastic Library Common" basedir="./" default="test">
 
+    <condition property="executable.php" value="/usr/bin/php8.3">
+      <available file="/usr/bin/php8.3"/>
+    </condition>
+
     <property name="frontastic_basedir" value="${basedir}/../../.." />
 
     <!--

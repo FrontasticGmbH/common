@@ -1,4 +1,10 @@
 
+## Version 2.50.1 (2026-07-21)
+
+** Bug Fixes **
+
+- Fix PHP 8.5 deprecations
+
 ## Version 2.50.0 (2026-06-03)
 
 ** New Features & Improvements **

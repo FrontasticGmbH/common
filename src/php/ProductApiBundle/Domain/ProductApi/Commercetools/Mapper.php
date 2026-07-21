@@ -356,7 +356,7 @@ class Mapper
 
     public function getLocalizedValue(CommercetoolsLocale $locale, array $localizedString)
     {
-        if (isset($localizedString[$locale->language])) {
+        if ($locale->language !== null && isset($localizedString[$locale->language])) {
             return $localizedString[$locale->language];
         }
 
