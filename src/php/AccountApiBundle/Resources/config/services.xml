@@ -9,6 +9,11 @@
 
         <prototype namespace="Frontastic\Common\AccountApiBundle\Command\" resource="../../Command" autoconfigure="true" />
 
+        <service id="Frontastic\Common\AccountApiBundle\Command\CreateAccountCommand" autoconfigure="true">
+            <argument type="service" id="Frontastic\Common\AccountApiBundle\Domain\AccountService" on-invalid="null" />
+            <argument type="service" id="Frontastic\Common\ReplicatorBundle\Domain\Project" on-invalid="null" />
+        </service>
+
         <service
             id="Frontastic\Common\AccountApiBundle\Domain\AccountApiFactory"
             alias="Frontastic\Common\AccountApiBundle\Domain\DefaultAccountApiFactory"

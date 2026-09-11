@@ -9,7 +9,7 @@
 
         <service id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\ClientFactory">
             <argument type="service">
-                <service class="Doctrine\Common\Cache\ApcuCache"/>
+                <service class="Frontastic\Common\CoreBundle\Domain\Cache\ApcuCache"/>
             </argument>
             <argument type="service" id="Frontastic\Common\HttpClient"/>
         </service>
@@ -20,7 +20,7 @@
         <service
                 id="Frontastic\Common\ProductApiBundle\Domain\ProductApi\Commercetools\Locale\DefaultCommercetoolsLocaleCreatorFactory">
             <argument type="service">
-                <service class="Doctrine\Common\Cache\ApcuCache"/>
+                <service class="Frontastic\Common\CoreBundle\Domain\Cache\ApcuCache"/>
             </argument>
         </service>
 

@@ -385,7 +385,7 @@ class CategoriesTest extends FrontasticApiTestCase
 
             if ($category->slug !== null) {
                 $this->assertNotEmptyString($category->slug);
-                $this->assertRegExp(self::URI_PATH_SEGMENT_REGEX, $category->slug);
+                $this->assertMatchesRegularExpression(self::URI_PATH_SEGMENT_REGEX, $category->slug);
             }
 
             $this->assertIsInt($category->depth);

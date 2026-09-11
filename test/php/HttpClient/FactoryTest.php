@@ -44,10 +44,6 @@ class FactoryTest extends TestCase
 
         $class = new \ReflectionClass(get_class($signingClient));
         $property = $class->getProperty('sharedSecret');
-        if (\PHP_VERSION_ID < 80100) {
-            $property->setAccessible(true);
-        }
-
 
         $this->assertEquals(
             'some_secret',
@@ -83,9 +79,6 @@ class FactoryTest extends TestCase
 
         while (($reflection = new \ReflectionObject($client)) && $reflection->hasProperty('aggregate')) {
             $property = $reflection->getProperty('aggregate');
-            if (\PHP_VERSION_ID < 80100) {
-                $property->setAccessible(true);
-            }
 
             $client = $property->getValue($client);
 

@@ -10,7 +10,7 @@ class EndpointCompilerPass implements CompilerPassInterface
 {
     protected $serviceId = 'Frontastic\Common\ReplicatorBundle\Domain\EndpointService';
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!$container->hasDefinition($this->serviceId)) {
             return;

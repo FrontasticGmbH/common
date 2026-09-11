@@ -151,7 +151,7 @@ class Account extends ApiDataObject implements UserInterface, PasswordAuthentica
         // Dummy method required by Symfony3, but makes no sense
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         unset($this->confirmationToken);
         unset($this->passwordHash);

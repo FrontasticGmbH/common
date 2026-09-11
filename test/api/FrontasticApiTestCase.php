@@ -74,7 +74,7 @@ class FrontasticApiTestCase extends KernelTestCase
         $contextMock->session = $session;
         $contextServiceMock = $this
             ->getMockBuilder(ContextService::class)
-            ->setMethods(['createContextFromRequest'])
+            ->onlyMethods(['createContextFromRequest'])
             ->disableOriginalConstructor()
             ->getMock();
         $contextServiceMock
@@ -83,7 +83,7 @@ class FrontasticApiTestCase extends KernelTestCase
 
         $sessionServiceMock = $this
             ->getMockBuilder(SessionService::class)
-            ->setMethods(['getSessionId'])
+            ->onlyMethods(['getSessionId'])
             ->getMock();
 
         $sessionServiceMock

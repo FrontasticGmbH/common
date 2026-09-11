@@ -25,7 +25,7 @@
         <service id="Frontastic\Common\ContentApiBundle\Domain\ContentApi\GraphCMS\GraphCMSClientFactory">
             <argument type="service" id="Frontastic\Common\HttpClient" />
             <argument type="service">
-                <service class="Doctrine\Common\Cache\ApcuCache" />
+                <service class="Frontastic\Common\CoreBundle\Domain\Cache\ApcuCache"/>
             </argument>
         </service>
 

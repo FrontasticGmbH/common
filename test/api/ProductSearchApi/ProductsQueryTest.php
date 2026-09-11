@@ -656,7 +656,7 @@ class ProductsQueryTest extends FrontasticApiTestCase
             $this->assertContainsNoHtml($product->name);
 
             $this->assertNotEmptyString($product->slug);
-            $this->assertRegExp(
+            $this->assertMatchesRegularExpression(
                 self::URI_PATH_SEGMENT_REGEX,
                 $product->slug,
                 sprintf(

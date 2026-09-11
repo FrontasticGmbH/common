@@ -124,7 +124,7 @@ class ViewListenerTest extends TestCase
         return new ViewEvent(
             \Phake::mock('Symfony\Component\HttpKernel\HttpKernelInterface'),
             $request,
-            HttpKernelInterface::MASTER_REQUEST,
+            HttpKernelInterface::MAIN_REQUEST,
             $controllerResult
         );
     }

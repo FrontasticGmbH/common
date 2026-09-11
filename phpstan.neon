@@ -16,5 +16,15 @@ parameters:
         - '#Result of method Kore\\DataObject\\DataObject::__get\(\) \(void\) is used.#'
         - '#Function debug not found.*#'
         - '#simdjson_decode not found#'
+        # algolia/algoliasearch-client-php is a suggest-only dependency,
+        # installed by projects that use the integration — never present in
+        # common's own dev vendor.
+        - '#Algolia\\AlgoliaSearch#'
         - '#Variable \$[a-zA-Z]+ on left side of \?\? always exists and is not nullable.#'
+        # phpstan 2.1 refuses unset() on public properties because a subclass
+        # might add property hooks; Account's DataObject-style credential
+        # scrubbing in eraseCredentials() is long-standing intended behavior.
+        -
+            identifier: unset.possiblyHookedProperty
+            path: src/php/AccountApiBundle/Domain/Account.php
     reportUnmatchedIgnoredErrors: false

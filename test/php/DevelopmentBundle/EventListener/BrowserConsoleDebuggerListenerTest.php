@@ -31,7 +31,7 @@ class BrowserConsoleDebuggerListenerTest extends TestCase
         $event = new ResponseEvent(
             $this->getMockBuilder(HttpKernelInterface::class)->getMock(),
             $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock(),
-            HttpKernelInterface::MASTER_REQUEST,
+            HttpKernelInterface::MAIN_REQUEST,
             $response
         );
 

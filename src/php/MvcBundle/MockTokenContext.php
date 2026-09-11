@@ -49,13 +49,7 @@ class MockTokenContext implements TokenContext
             throw new UnauthenticatedUserException();
         }
 
-        if (Versions::isSecurityVersion6()) {
-            /** @psalm-suppress UndefinedInterfaceMethod */
-            return $this->user->getUserIdentifier();
-        }
-
-        /** @psalm-suppress UndefinedInterfaceMethod */
-        return $this->user->getUsername();
+        return $this->user->getUserIdentifier();
     }
 
     /**

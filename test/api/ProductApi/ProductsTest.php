@@ -147,7 +147,7 @@ class ProductsTest extends FrontasticApiTestCase
         $this->assertProductsAreWellFormed($project, $language, $productsByCategory->items);
 
         foreach ($productsByCategory as $product) {
-            $this->assertArraySubset([$categoryId], $product->categories);
+            $this->assertContains($categoryId, $product->categories);
         }
     }
 
@@ -615,7 +615,7 @@ class ProductsTest extends FrontasticApiTestCase
             $this->assertContainsNoHtml($product->name);
 
             $this->assertNotEmptyString($product->slug);
-            $this->assertRegExp(
+            $this->assertMatchesRegularExpression(
                 self::URI_PATH_SEGMENT_REGEX,
                 $product->slug,
                 sprintf(

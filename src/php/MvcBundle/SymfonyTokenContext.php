@@ -7,7 +7,6 @@ use Frontastic\Common\Mvc\Exception;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -47,15 +46,7 @@ class SymfonyTokenContext implements TokenContext
      */
     public function getCurrentUsername(): string
     {
-        $token = $this->getToken(TokenInterface::class);
-
-        if (Versions::isSecurityVersion6()) {
-            /** @psalm-suppress UndefinedInterfaceMethod */
-            return $token->getUserIdentifier();
-        }
-
-        /** @psalm-suppress UndefinedInterfaceMethod */
-        return $token->getUsername();
+        return $this->getToken(TokenInterface::class)->getUserIdentifier();
     }
 
     /**
@@ -91,12 +82,9 @@ class SymfonyTokenContext implements TokenContext
 
     public function hasNonAnonymousToken(): bool
     {
-        if (Versions::isSecurityVersion6()) {
-            return $this->hasToken();
-        }
-
-        /** @psalm-suppress UndefinedClass */
-        return $this->hasToken() && ! ($this->getToken(TokenInterface::class) instanceof AnonymousToken);
+        // Since symfony 6 anonymous tokens no longer exist — unauthenticated
+        // requests simply have no token.
+        return $this->hasToken();
     }
 
     /**

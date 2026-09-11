@@ -129,6 +129,6 @@ class ParamConverterListenerTest extends TestCase
 
     public function createControllerEvent(callable $method, Request $request): object
     {
-        return new ControllerEvent($this->kernel, $method, $request, HttpKernelInterface::MASTER_REQUEST);
+        return new ControllerEvent($this->kernel, $method, $request, HttpKernelInterface::MAIN_REQUEST);
     }
 }

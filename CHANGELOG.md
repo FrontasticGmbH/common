@@ -1,4 +1,19 @@
 
+## Version 2.51.0 (2026-09-11)
+
+** New Features & Improvements **
+
+- Drop support for Symfony 5.4 and add support for Symfony 7.4
+- Require PHP 8.1
+- Drop support for Twig 2, Guzzle 6, ramsey/uuid 3 and contentful 6
+- Replace `Doctrine\Common\Cache\ApcuCache` with an own implementation for doctrine/cache 2
+- Remove the `Versions` helper and the Symfony Security 5.4 code paths from the token contexts
+- Remove `cache/filesystem-adapter` and `composer/package-versions-deprecated` dependencies
+
+** Bug Fixes **
+
+- Fix Findologic attribute completion with guzzlehttp/promises 2
+
 ## Version 2.50.1 (2026-07-21)
 
 ** Bug Fixes **
